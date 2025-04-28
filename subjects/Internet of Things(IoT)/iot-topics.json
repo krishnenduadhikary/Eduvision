@@ -1,0 +1,47 @@
+{
+    "title": "Internet of Things",
+    "subtitle": "Connecting the physical world with the digital universe",
+    "topics": [
+      {
+        "title": "Introduction to IoT",
+        "description": "Definition, evolution, and scope of IoT across industries.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "IoT Architecture",
+        "description": "Basic architecture and layers including perception, network, and application layers.",
+        "resources": ["Diagram", "Examples"]
+      },
+      {
+        "title": "IoT Communication Models",
+        "description": "Request-response, publish-subscribe, and push-pull communication paradigms.",
+        "resources": ["Notes", "Practice"]
+      },
+      {
+        "title": "IoT Protocols",
+        "description": "Overview of MQTT, CoAP, AMQP, and HTTP in IoT systems.",
+        "resources": ["Code", "Video"]
+      },
+      {
+        "title": "Sensors and Actuators",
+        "description": "Types of sensors, data acquisition, and control systems.",
+        "resources": ["Examples", "Diagram"]
+      },
+      {
+        "title": "IoT Platforms",
+        "description": "Cloud-based platforms like AWS IoT, Google Cloud IoT, and Azure IoT.",
+        "resources": ["Video", "Practice"]
+      },
+      {
+        "title": "IoT Security",
+        "description": "Challenges in security, privacy, and common attacks with mitigation strategies.",
+        "resources": ["Notes", "Examples"]
+      },
+      {
+        "title": "Applications of IoT",
+        "description": "Smart cities, healthcare, agriculture, industry 4.0, and more.",
+        "resources": ["Code", "Case Studies"]
+      }
+    ]
+  }
+  

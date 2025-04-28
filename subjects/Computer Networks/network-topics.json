@@ -1,0 +1,37 @@
+{
+    "title": "Computer Networks",
+    "subtitle": "Dive into network models, protocols, and security",
+    "topics": [
+      {
+        "title": "Introduction to CN",
+        "description": "Basics, types of networks, and OSI/TCP-IP models.",
+        "resources": ["Diagram", "Video"]
+      },
+      {
+        "title": "Data Link Layer",
+        "description": "Error detection, correction, and framing.",
+        "resources": ["Notes", "Examples"]
+      },
+      {
+        "title": "Network Layer",
+        "description": "IP addressing, routing algorithms, and fragmentation.",
+        "resources": ["Notes", "Diagram"]
+      },
+      {
+        "title": "Transport Layer",
+        "description": "TCP, UDP, flow control, and error handling.",
+        "resources": ["Examples", "Notes"]
+      },
+      {
+        "title": "Application Layer",
+        "description": "DNS, HTTP, FTP, and email protocols.",
+        "resources": ["Notes", "Practice"]
+      },
+      {
+        "title": "Network Security",
+        "description": "Encryption, firewalls, and authentication protocols.",
+        "resources": ["Video", "Notes"]
+      }
+    ]
+  }
+  

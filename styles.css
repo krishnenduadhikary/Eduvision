@@ -1,0 +1,360 @@
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #e0eafc, #cfdef3);
+    color: #333;
+    margin: 0; /* Remove default body margin */
+    padding-top: 50px; /* Add padding to prevent content from hiding behind sticky navbar */
+}
+
+/* Sticky Navbar Styles */
+.navbar {
+    position: fixed; /* Changed to fixed for better reliability */
+    top: 0;
+    left: 0;
+    width: 100%; /* Ensure it spans full width */
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    padding: 0 20px; /* Add horizontal padding */
+    height: 50px; /* Give it a fixed height */
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Center items vertically */
+}
+
+.navbar a {
+    display: inline-block;
+    padding: 10px 15px; /* Adjust padding */
+    text-decoration: none;
+    color: #004d99; /* Match header color */
+    font-weight: 600;
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+}
+
+.navbar a:hover {
+    background-color: #f0f0f0;
+    color: #0078d7;
+}
+
+/* Main Header Styles */
+header {
+    background: linear-gradient(135deg, #0078d7, #005bb5);
+    color: #fff;
+    padding: 15px 20px; /* Reduced padding slightly */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative; /* Needed for absolute positioning of children if any */
+    margin-top: 0; /* Adjusted because of fixed navbar */
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px; /* Constrain width */
+    margin: 0 auto; /* Center content */
+    position: relative; /* Context for burger menu absolute positioning */
+    min-height: 60px; /* Ensure header has some height */
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.2em; /* Slightly adjusted size */
+    color: #fff; /* Ensure contrast */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Softer shadow */
+}
+
+/* Search Input Styles */
+.search-container {
+    /* Removed absolute positioning, let flexbox handle it */
+    margin: 0 15px; /* Add some spacing */
+}
+
+.input {
+    border: 1px solid #ccc; /* Start with a subtle border */
+    width: 18em; /* Increased width slightly */
+    height: 2.5em;
+    padding-left: 0.8em;
+    outline: none;
+    background-color: #f3f3f3;
+    border-radius: 10px;
+    transition: all 0.3s ease-in-out; /* Smoother transition */
+}
+
+.input:hover {
+    border-color: #a0cfff; /* Lighter blue on hover */
+    background-color: white;
+}
+
+.input:focus {
+    border: 2px solid #4a9dec;
+    box-shadow: 0px 0px 0px 4px rgba(74, 157, 236, 0.2); /* Reduced shadow size */
+    background-color: white;
+}
+
+/* Burger Menu Container */
+.burger-container {
+    position: relative; /* Context for the dropdown menu */
+}
+
+/* Hide the checkbox */
+#burger-toggle {
+    display: none;
+}
+
+/* Burger Icon Styles */
+.burger {
+    position: relative;
+    width: 30px; /* Adjusted size */
+    height: 22px; /* Adjusted size */
+    background: transparent;
+    cursor: pointer;
+    display: block; /* Changed to block */
+    margin-left: 15px; /* Space from search bar */
+}
+
+.burger span {
+    display: block;
+    position: absolute;
+    height: 4px;
+    width: 100%;
+    background: #fff; /* White bars for contrast */
+    border-radius: 9px;
+    opacity: 1;
+    left: 0;
+    transform: rotate(0deg);
+    transition: all .25s ease-in-out; /* Use 'all' for smoother transitions */
+}
+
+/* Burger Span Positions */
+.burger span:nth-of-type(1) {
+    top: 0px;
+}
+
+.burger span:nth-of-type(2) {
+    top: 9px; /* Middle */
+}
+
+.burger span:nth-of-type(3) {
+    top: 18px; /* Bottom */
+}
+
+/* Burger Animation on Check */
+#burger-toggle:checked + .burger span:nth-of-type(1) {
+    top: 9px;
+    transform: rotate(135deg);
+}
+
+#burger-toggle:checked + .burger span:nth-of-type(2) {
+    opacity: 0;
+    left: -30px; /* Slide out */
+}
+
+#burger-toggle:checked + .burger span:nth-of-type(3) {
+    top: 9px;
+    transform: rotate(-135deg);
+}
+
+/* Burger Menu Options (Dropdown) */
+.menu-options {
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: 100%; /* Position below the burger container */
+    right: 0; /* Align to the right */
+    margin-top: 10px; /* Space from burger */
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    list-style: none;
+    padding: 10px 0;
+    width: 200px;
+    z-index: 1100; /* Ensure it's above other elements */
+}
+
+/* Show menu when checkbox is checked */
+#burger-toggle:checked ~ .menu-options {
+    display: block;
+}
+
+.menu-options li {
+    /* Removed padding here, apply to link */
+}
+
+.menu-options li a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+    padding: 10px 20px; /* Padding on the link for better click area */
+    transition: background-color 0.2s;
+}
+
+.menu-options li a:hover {
+    background-color: #f0f0f0;
+    color: #0078d7;
+}
+
+/* Main Site Navigation (Below Header) */
+.nav-container {
+    background-color: #005bb5; /* Slightly darker blue */
+    padding: 8px 0; /* Vertical padding */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-container nav {
+    display: flex;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.nav-container .menu {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    justify-content: center; /* Center items when wrapped */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-container .menu li {
+    margin: 5px 10px; /* Add vertical margin for wrap */
+}
+
+.nav-container .menu a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: color 0.3s;
+    padding: 5px 10px; /* Add padding */
+    border-radius: 5px; /* Optional rounded corners */
+}
+
+.nav-container .menu a:hover {
+    color: #e0eafc; /* Lighter color on hover */
+    background-color: rgba(255, 255, 255, 0.1); /* Subtle background hover */
+}
+
+
+/* Main Content Styles */
+main {
+    padding: 30px 20px; /* Increased padding */
+    max-width: 1200px;
+    margin: 20px auto 0 auto; /* Add top margin */
+}
+
+.subjects-intro h2 {
+    text-align: center;
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    color: #0078d7;
+}
+
+.subjects-intro p {
+    text-align: center;
+    font-size: 1.2em;
+    margin-bottom: 40px; /* Increased spacing */
+    color: #555;
+}
+
+.subject-category {
+    margin-bottom: 50px; /* Increased spacing */
+}
+
+.subject-category h2 {
+    font-size: 2em;
+    color: #005bb5;
+    margin-bottom: 25px; /* Increased spacing */
+    border-bottom: 3px solid #0078d7; /* Thicker border */
+    padding-bottom: 8px; /* Increased padding */
+    display: inline-block; /* Prevent border stretching full width */
+}
+
+.subject-cards {
+    display: grid;
+    /* Adjusted minmax for potentially smaller screens */
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px; /* Increased gap */
+}
+
+/* Unified Card Styles */
+.subject-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); /* Softer shadow */
+    padding: 25px; /* Increased padding */
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Added ease */
+    display: flex; /* Use flexbox for content alignment */
+    flex-direction: column; /* Stack content vertically */
+    justify-content: space-between; /* Push button to bottom */
+    min-height: 150px; /* Ensure minimum height */
+}
+
+.subject-card:hover {
+    transform: translateY(-8px); /* Slightly more lift */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
+}
+
+.subject-card h3 { /* Changed from H2 to H3 for better semantics */
+    font-size: 1.4em; /* Adjusted size */
+    margin-top: 0; /* Remove default margin */
+    margin-bottom: 15px; /* Spacing below title */
+    color: #0078d7;
+    flex-grow: 1; /* Allow title to take up space */
+}
+
+/* Button Styles within Cards (Specific) */
+.subject-card button {
+    /* Using the complex global button style for now */
+    /* If you want simpler buttons just for cards, override here: */
+    /* e.g., background: #0078d7; color: white; border: none; padding: 10px 20px; ... */
+    align-self: center; /* Center button horizontally */
+    margin-top: 15px; /* Space above button */
+}
+
+/* Global Button Style (Kept from original, affects all buttons) */
+button {
+    border-radius: .25rem;
+    text-transform: uppercase;
+    font-style: normal;
+    font-weight: 600; /* Slightly bolder */
+    padding: 0 25px; /* Adjusted padding slightly */
+    color: #fff;
+    -webkit-clip-path: polygon(0 0,0 0,100% 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,15px 100%,0 100%);
+    clip-path: polygon(0 0,0 0,100% 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,15px 100%,0 100%);
+    height: 40px;
+    font-size: 0.8rem; /* Slightly larger text */
+    line-height: 40px; /* Match height */
+    letter-spacing: 1.2px;
+    transition: .2s .1s;
+    background-image: linear-gradient(90deg,#1c1c1c,#6220fb);
+    border: 0 solid;
+    overflow: hidden;
+    cursor: pointer; /* Ensure cursor changes */
+}
+
+button:hover {
+    transition: all .3s ease-in;
+    padding-right: 30px;
+    padding-left: 30px;
+    background-image: linear-gradient(90deg,#333, #7a40ff); /* Slightly lighter hover */
+}
+
+
+/* Footer Styles */
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 15px 0; /* Increased padding */
+    margin-top: 40px; /* Increased spacing */
+}
+
+footer p {
+    margin: 0;
+    font-size: 0.9em;
+}
+
+/* --- Removed Unused/Conflicting CSS --- */
+/* Removed: .menu-bar, .toggle, .bars, .header (class), .overview, .topics-grid, .topic-card */
+/* Removed: Duplicate body styles */

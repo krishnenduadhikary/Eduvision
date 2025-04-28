@@ -1,0 +1,47 @@
+{
+    "title": "Database Management Systems",
+    "subtitle": "Understand data modeling, SQL, and transaction management",
+    "topics": [
+      {
+        "title": "Introduction to DBMS",
+        "description": "Need, applications, and types of database management systems.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "Relational Model",
+        "description": "Concepts of relations, schema, keys, and constraints.",
+        "resources": ["Examples", "Practice"]
+      },
+      {
+        "title": "Entity-Relationship Model",
+        "description": "ER diagrams, entities, relationships, and attributes.",
+        "resources": ["Diagram", "Notes"]
+      },
+      {
+        "title": "SQL",
+        "description": "Data definition, manipulation, and query languages.",
+        "resources": ["Practice", "Code"]
+      },
+      {
+        "title": "Normalization",
+        "description": "1NF to 5NF, BCNF, and dependency theory.",
+        "resources": ["Examples", "Notes"]
+      },
+      {
+        "title": "Transactions and Concurrency",
+        "description": "ACID properties, concurrency control, and schedules.",
+        "resources": ["Diagram", "Practice"]
+      },
+      {
+        "title": "Indexing and File Organization",
+        "description": "Primary, secondary indexes and B+ trees.",
+        "resources": ["Diagram", "Notes"]
+      },
+      {
+        "title": "NoSQL and Modern Databases",
+        "description": "Document-based, key-value, and graph databases.",
+        "resources": ["Notes", "Video"]
+      }
+    ]
+  }
+  

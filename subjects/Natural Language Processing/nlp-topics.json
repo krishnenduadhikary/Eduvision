@@ -1,0 +1,47 @@
+{
+    "title": "Natural Language Processing",
+    "subtitle": "Computational techniques for understanding and generating human language",
+    "topics": [
+      {
+        "title": "Introduction to NLP",
+        "description": "Definition, applications, and challenges of NLP in real-world systems.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "Text Preprocessing",
+        "description": "Tokenization, stemming, lemmatization, and stopword removal techniques.",
+        "resources": ["Code", "Examples"]
+      },
+      {
+        "title": "Syntax and Parsing",
+        "description": "POS tagging, dependency and constituency parsing with grammar rules.",
+        "resources": ["Diagram", "Practice"]
+      },
+      {
+        "title": "Semantic Analysis",
+        "description": "Word sense disambiguation, named entity recognition, and semantic role labeling.",
+        "resources": ["Notes", "Examples"]
+      },
+      {
+        "title": "Language Modeling",
+        "description": "N-gram models, smoothing, and probabilistic language modeling concepts.",
+        "resources": ["Code", "Video"]
+      },
+      {
+        "title": "Text Classification",
+        "description": "Spam detection, sentiment analysis using Naive Bayes, SVM, and deep learning.",
+        "resources": ["Practice", "Notes"]
+      },
+      {
+        "title": "Machine Translation",
+        "description": "Rule-based and statistical translation, neural machine translation (NMT).",
+        "resources": ["Video", "Diagram"]
+      },
+      {
+        "title": "Dialogue Systems and Chatbots",
+        "description": "Architecture of conversational agents, intent detection, and response generation.",
+        "resources": ["Examples", "Practice"]
+      }
+    ]
+  }
+  

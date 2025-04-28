@@ -1,0 +1,42 @@
+{
+    "title": "Python Programming Language",
+    "subtitle": "Explore syllabus, notes, projects, and more",
+    "topics": [
+      {
+        "title": "Introduction to Python",
+        "description": "Basics of Python programming, history, and features.",
+        "resources": ["Notes", "Examples", "Video"]
+      },
+      {
+        "title": "Data Types and Variables",
+        "description": "Learn about integers, floats, strings, lists, and more.",
+        "resources": ["Notes", "Practice"]
+      },
+      {
+        "title": "Control Structures",
+        "description": "Using `if`, `else`, `while`, and `for` loops in Python.",
+        "resources": ["Examples", "Video"]
+      },
+      {
+        "title": "Functions",
+        "description": "How to define and call functions in Python.",
+        "resources": ["Notes", "Code"]
+      },
+      {
+        "title": "Object-Oriented Programming",
+        "description": "Classes, objects, inheritance, and polymorphism.",
+        "resources": ["Diagram", "Notes"]
+      },
+      {
+        "title": "File Handling",
+        "description": "Read/write files using Python I/O operations.",
+        "resources": ["Examples", "Mini Project"]
+      },
+      {
+        "title": "Modules and Packages",
+        "description": "Importing, using libraries, and pip package management.",
+        "resources": ["Notes", "Code"]
+      }
+    ]
+  }
+  

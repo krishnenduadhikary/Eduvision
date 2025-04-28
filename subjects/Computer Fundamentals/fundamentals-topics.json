@@ -1,0 +1,71 @@
+{
+  "title": "Computer Fundamentals",
+  "subtitle": "A complete guide to understanding computer systems and operations",
+  "topics": [
+    {
+      "title": "Introduction to Computers",
+      "description": "Definition, characteristics, history, and applications of computers.",
+      "resources": ["Notes", "Video", "Quiz"]
+    },
+    {
+      "title": "Classification of Computers",
+      "description": "Types of computers (Supercomputers, Mainframes, PCs, etc.) and generations.",
+      "resources": ["Diagram", "Notes", "Examples"]
+    },
+    {
+      "title": "Computer Components & Architecture",
+      "description": "Hardware vs. Software, CPU, Memory (RAM/ROM), Storage Devices.",
+      "resources": ["Diagram", "Video", "Interactive Demo"]
+    },
+    {
+      "title": "Input and Output Devices",
+      "description": "Keyboard, mouse, scanners, monitors, printers, etc.",
+      "resources": ["Images", "Notes", "Examples"]
+    },
+    {
+      "title": "Memory and Storage",
+      "description": "Primary (RAM, ROM) & Secondary (HDD, SSD, USB) memory.",
+      "resources": ["Diagram", "Video", "Comparison Chart"]
+    },
+    {
+      "title": "Number Systems & Data Representation",
+      "description": "Binary, Decimal, Octal, Hexadecimal conversions. ASCII & Unicode.",
+      "resources": ["Practice Problems", "Examples", "Converter Tool"]
+    },
+    {
+      "title": "Software and Hardware",
+      "description": "System vs Application Software, Open Source vs Proprietary.",
+      "resources": ["Notes", "Examples", "Case Study"]
+    },
+    {
+      "title": "Operating Systems Basics",
+      "description": "Functions of OS, types (Windows, Linux, macOS), file systems.",
+      "resources": ["Code", "Notes", "Terminal Commands Guide"]
+    },
+    {
+      "title": "Computer Networks & Internet",
+      "description": "LAN/WAN, IP Addresses, DNS, Cloud Computing basics.",
+      "resources": ["Diagram", "Video", "Simulation"]
+    },
+    {
+      "title": "Data Security & Privacy",
+      "description": "Viruses, Encryption, Firewalls, Cybersecurity best practices.",
+      "resources": ["Case Study", "Notes", "Quiz"]
+    },
+    {
+      "title": "Database Fundamentals",
+      "description": "What is a Database? Types (SQL/NoSQL), Basic SQL commands.",
+      "resources": ["Examples", "Notes", "Online DB Sandbox"]
+    },
+    {
+      "title": "Emerging Technologies",
+      "description": "AI, ML, IoT, Blockchain - Basic concepts and applications.",
+      "resources": ["Video", "Infographic", "Research Paper"]
+    },
+    {
+      "title": "Ethical & Social Aspects",
+      "description": "Digital Ethics, Cyber Laws, Societal Impact of Computers.",
+      "resources": ["Case Study", "Debate Topics", "Notes"]
+    }
+  ]
+}

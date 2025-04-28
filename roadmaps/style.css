@@ -1,0 +1,244 @@
+/* --- Base Styles & Variables --- */
+:root {
+    --bg-color: #111827; /* Dark blue/grey background */
+    --card-bg-color: #1f2937; /* Slightly lighter card background */
+    --text-color: #d1d5db; /* Light grey text */
+    --text-strong-color: #f9fafb; /* White/very light grey for headings */
+    --border-color: #374151; /* Subtle border color */
+    --accent-color: #8b5cf6; /* Purple accent for badges/hovers */
+    --accent-hover-color: #7c3aed;
+    --font-family: 'Inter', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-family);
+    line-height: 1.6;
+}
+
+.main-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* --- Header --- */
+.page-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.page-header h1 {
+    font-size: 2.8em; /* Larger heading */
+    font-weight: 700;
+    color: var(--text-strong-color);
+    margin-bottom: 15px;
+    /* Optional gradient text effect */
+     background: linear-gradient(to right, #a78bfa, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent; /* Fallback for non-supporting browsers */
+}
+
+.page-header p {
+    font-size: 1.1em;
+    color: var(--text-color);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* --- Roadmap Category --- */
+.roadmap-category {
+    margin-bottom: 50px;
+}
+
+.category-title {
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: 500;
+    color: var(--text-color);
+    margin-bottom: 25px;
+    padding: 5px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 20px; /* Pill shape */
+    display: inline-block; /* Allows centering */
+    position: relative; /* Needed for centering */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* --- Roadmap Grid --- */
+.roadmap-grid {
+    display: grid;
+    /* Responsive grid: 3 columns on desktop, 2 on tablet, 1 on mobile */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px; /* Gap between cards */
+}
+
+/* --- Roadmap Card --- */
+.roadmap-card {
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center; /* Vertically center content */
+    text-decoration: none;
+    color: var(--text-color);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    font-weight: 500;
+}
+
+.roadmap-card:hover {
+    background-color: #374151; /* Slightly darker on hover */
+    border-color: #4b5563;
+    color: var(--text-strong-color); /* Text brighter on hover */
+}
+
+.roadmap-card:hover .card-icon {
+     color: var(--accent-color); /* Icon color change on hover */
+}
+
+.card-text {
+    flex-grow: 1; /* Text takes available space */
+    margin-right: 10px; /* Space between text and badge/icon */
+}
+
+.card-icon {
+    font-size: 0.9em;
+    color: #6b7280; /* Dimmer icon color */
+    transition: color 0.2s ease;
+}
+
+/* --- New Badge --- */
+.badge.new {
+    background-color: var(--accent-color);
+    color: var(--text-strong-color);
+    font-size: 0.7em;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 10px; /* Pill shape */
+    margin-right: 10px; /* Space between badge and icon */
+    text-transform: uppercase;
+    line-height: 1; /* Adjust line height for small badges */
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    .page-header h1 {
+        font-size: 2.2em;
+    }
+    .page-header p {
+        font-size: 1em;
+    }
+    .roadmap-grid {
+        /* Adjust minmax if needed for better fit on tablets */
+         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+     .main-container {
+         margin-top: 20px;
+         margin-bottom: 20px;
+     }
+}
+
+@media (max-width: 480px) {
+    .page-header h1 {
+        font-size: 1.8em;
+    }
+     .category-title {
+        font-size: 1em;
+     }
+     .roadmap-grid {
+         grid-template-columns: 1fr; /* Stack cards vertically */
+         gap: 10px;
+     }
+     .roadmap-card {
+         padding: 15px;
+     }
+}
+
+/* From Uiverse.io by SelfMadeSystem */
+.absolute {
+    position: absolute;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.loader {
+    display: flex;
+    margin: 0.25em 0;
+}
+
+.w-2 {
+    width: 0.5em;
+}
+
+.dash {
+    animation: dashArray 2s ease-in-out infinite, dashOffset 2s linear infinite;
+}
+
+.spin {
+    animation: spinDashArray 2s ease-in-out infinite, spin 8s ease-in-out infinite, dashOffset 2s linear infinite;
+    transform-origin: center;
+}
+
+@keyframes dashArray {
+    0% {
+        stroke-dasharray: 0 1 359 0;
+    }
+    50% {
+        stroke-dasharray: 0 359 1 0;
+    }
+    100% {
+        stroke-dasharray: 359 1 0 0;
+    }
+}
+
+@keyframes spinDashArray {
+    0% {
+        stroke-dasharray: 270 90;
+    }
+    50% {
+        stroke-dasharray: 0 360;
+    }
+    100% {
+        stroke-dasharray: 270 90;
+    }
+}
+
+@keyframes dashOffset {
+    0% {
+        stroke-dashoffset: 365;
+    }
+    100% {
+        stroke-dashoffset: 5;
+    }
+}
+
+@keyframes spin {
+    0% {
+        rotate: 0deg;
+    }
+    12.5%, 25% {
+        rotate: 270deg;
+    }
+    37.5%, 50% {
+        rotate: 540deg;
+    }
+    62.5%, 75% {
+        rotate: 810deg;
+    }
+    87.5%, 100% {
+        rotate: 1080deg;
+    }
+}

@@ -1,0 +1,47 @@
+{
+    "title": "Microprocessor",
+    "subtitle": "Understand the architecture, instruction sets, and programming of microprocessors",
+    "topics": [
+      {
+        "title": "Introduction to Microprocessors",
+        "description": "Definition, evolution, and applications of microprocessors.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "8085 Architecture",
+        "description": "Architecture, functional units, and operations of 8085.",
+        "resources": ["Diagram", "Notes"]
+      },
+      {
+        "title": "Instruction Set of 8085",
+        "description": "Classification and examples of instructions.",
+        "resources": ["Examples", "Practice"]
+      },
+      {
+        "title": "Addressing Modes",
+        "description": "Types of addressing modes used in 8085.",
+        "resources": ["Notes", "Examples"]
+      },
+      {
+        "title": "Timing Diagrams",
+        "description": "Machine cycles, instruction cycles, and timing diagrams.",
+        "resources": ["Diagram", "Notes"]
+      },
+      {
+        "title": "Assembly Language Programming",
+        "description": "Writing and executing 8085 programs.",
+        "resources": ["Code", "Practice"]
+      },
+      {
+        "title": "Interrupts in 8085",
+        "description": "Types of interrupts and their handling.",
+        "resources": ["Diagram", "Notes"]
+      },
+      {
+        "title": "Interfacing and Applications",
+        "description": "Interfacing peripherals like keyboard, display, ADC/DAC.",
+        "resources": ["Examples", "Video"]
+      }
+    ]
+  }
+  

@@ -1,0 +1,47 @@
+{
+    "title": "Numerical Methods",
+    "subtitle": "Learn techniques for solving mathematical problems computationally",
+    "topics": [
+      {
+        "title": "Introduction to Numerical Methods",
+        "description": "Overview, applications, and limitations of numerical techniques.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "Errors in Numerical Computation",
+        "description": "Types of errors, propagation, and error analysis.",
+        "resources": ["Examples", "Notes"]
+      },
+      {
+        "title": "Solutions of Nonlinear Equations",
+        "description": "Bisection, False Position, Newton-Raphson methods.",
+        "resources": ["Code", "Practice"]
+      },
+      {
+        "title": "Interpolation",
+        "description": "Newton's and Lagrange's interpolation techniques.",
+        "resources": ["Examples", "Notes"]
+      },
+      {
+        "title": "Numerical Differentiation and Integration",
+        "description": "Trapezoidal and Simpson’s rule.",
+        "resources": ["Practice", "Diagram"]
+      },
+      {
+        "title": "Solution of Linear Equations",
+        "description": "Gauss Elimination, Gauss-Seidel, LU decomposition.",
+        "resources": ["Code", "Practice"]
+      },
+      {
+        "title": "Eigenvalues and Eigenvectors",
+        "description": "Power method and Jacobi method.",
+        "resources": ["Examples", "Notes"]
+      },
+      {
+        "title": "Ordinary Differential Equations",
+        "description": "Euler’s method, Runge-Kutta methods.",
+        "resources": ["Code", "Video"]
+      }
+    ]
+  }
+  

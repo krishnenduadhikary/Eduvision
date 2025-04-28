@@ -1,0 +1,47 @@
+{
+    "title": "Data Structures",
+    "subtitle": "Explore linear and non-linear data structures with practical use cases",
+    "topics": [
+      {
+        "title": "Introduction to Data Structures",
+        "description": "Overview of types, importance, and real-world applications.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "Arrays and Strings",
+        "description": "Static and dynamic arrays, string operations and manipulations.",
+        "resources": ["Examples", "Practice"]
+      },
+      {
+        "title": "Linked Lists",
+        "description": "Singly, doubly, and circular linked lists with operations.",
+        "resources": ["Code", "Simulator"]
+      },
+      {
+        "title": "Stacks and Queues",
+        "description": "LIFO and FIFO structures, applications, and implementation.",
+        "resources": ["Notes", "Examples"]
+      },
+      {
+        "title": "Trees",
+        "description": "Binary trees, binary search trees, traversal techniques.",
+        "resources": ["Diagram", "Code"]
+      },
+      {
+        "title": "Heaps and Priority Queues",
+        "description": "Min-heaps, max-heaps, and heap operations.",
+        "resources": ["Examples", "Practice"]
+      },
+      {
+        "title": "Graphs",
+        "description": "Representation, traversal (BFS/DFS), and applications.",
+        "resources": ["Code", "Diagram"]
+      },
+      {
+        "title": "Hashing",
+        "description": "Hash tables, collision resolution techniques.",
+        "resources": ["Examples", "Notes"]
+      }
+    ]
+  }
+  

@@ -1,0 +1,47 @@
+{
+    "title": "Design and Analysis of Algorithms",
+    "subtitle": "Understand algorithm design techniques and complexity analysis",
+    "topics": [
+      {
+        "title": "Introduction to Algorithms",
+        "description": "What is an algorithm, characteristics, and importance.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "Asymptotic Notations",
+        "description": "Big O, Big Theta, and Big Omega with examples.",
+        "resources": ["Examples", "Notes"]
+      },
+      {
+        "title": "Divide and Conquer",
+        "description": "Techniques and examples like Merge Sort and Quick Sort.",
+        "resources": ["Simulation", "Code"]
+      },
+      {
+        "title": "Greedy Algorithms",
+        "description": "Strategies and problems like Activity Selection and Kruskal's algorithm.",
+        "resources": ["Notes", "Examples"]
+      },
+      {
+        "title": "Dynamic Programming",
+        "description": "Memoization, tabulation, and classic DP problems.",
+        "resources": ["Examples", "Video"]
+      },
+      {
+        "title": "Backtracking",
+        "description": "Recursive problem solving with pruning. Examples: N-Queens, Sudoku.",
+        "resources": ["Code", "Diagram"]
+      },
+      {
+        "title": "Graph Algorithms",
+        "description": "BFS, DFS, Dijkstra’s, and Floyd-Warshall.",
+        "resources": ["Simulation", "Notes"]
+      },
+      {
+        "title": "Complexity Analysis",
+        "description": "Time and space complexity, P vs NP, and NP-completeness.",
+        "resources": ["Theory", "Examples"]
+      }
+    ]
+  }
+  

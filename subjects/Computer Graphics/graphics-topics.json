@@ -1,0 +1,47 @@
+{
+    "title": "Computer Graphics",
+    "subtitle": "Learn the concepts behind 2D/3D graphics, transformations, and rendering",
+    "topics": [
+      {
+        "title": "Introduction to Computer Graphics",
+        "description": "Definition, applications, and history of graphics systems.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "Graphics Hardware and Software",
+        "description": "Input/output devices and graphics pipeline.",
+        "resources": ["Examples", "Diagram"]
+      },
+      {
+        "title": "2D Transformations",
+        "description": "Translation, scaling, rotation, and homogeneous coordinates.",
+        "resources": ["Practice", "Notes"]
+      },
+      {
+        "title": "3D Transformations",
+        "description": "3D rotation, scaling, translation, and viewing pipeline.",
+        "resources": ["Examples", "Diagram"]
+      },
+      {
+        "title": "Line and Circle Drawing Algorithms",
+        "description": "DDA and Bresenham’s algorithms for lines and circles.",
+        "resources": ["Code", "Practice"]
+      },
+      {
+        "title": "Clipping Algorithms",
+        "description": "Cohen-Sutherland and Liang-Barsky line clipping.",
+        "resources": ["Code", "Notes"]
+      },
+      {
+        "title": "Projection",
+        "description": "Orthographic and perspective projection techniques.",
+        "resources": ["Diagram", "Video"]
+      },
+      {
+        "title": "Shading and Rendering",
+        "description": "Flat, Gouraud, and Phong shading; basic rendering concepts.",
+        "resources": ["Notes", "Examples"]
+      }
+    ]
+  }
+  

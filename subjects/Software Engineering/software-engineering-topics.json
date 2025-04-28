@@ -1,0 +1,76 @@
+{
+  "title": "Software Engineering",
+  "subtitle": "Explore syllabus, notes, projects, and more ",
+  "topics": [
+    {
+      "title": "Introduction to Software Engineering",
+      "description": "Overview, history, and importance of software engineering. ",
+      "resources": ["Notes", "Examples", "Video"]
+    },
+    {
+      "title": "Software Development Life Cycle (SDLC)",
+      "description": "Phases of SDLC including planning, design, development, testing, and deployment. ",
+      "resources": ["Notes", "Diagram"]
+    },
+    {
+      "title": "Software Project Management",
+      "description": "Responsibilities of a software project manager,project planning,project estimation and many more. ",
+      "resources": ["Notes", "Examples", "Video"]
+    },
+    {
+      "title": "Requirements Analysis And Specifiaction",
+      "description": "Process of gathering and analysis,software requirements specification,formal system development techniques,axiomatic specification,algebraic specification. ",
+      "resources": ["Notes", "Videos"]
+    },
+    {
+      "title": "Software Design",
+      "description": "What is a good software design ? cohesion and coupling,neat arrangement,software design approaches, object-oriented vs function-oriented design. ",
+      "resources": ["Notes", "Videos", "Examples"]
+    },
+    {
+      "title": "Function Oriented Software Design",
+      "description": "Overview of sa/sd methodology,structured analysis,data flow diagram,extending dfd technique to real time systems,structured design,detailed design,design review. ",
+      "resources": ["Notes", "Videos"]
+    },
+    {
+      "title": "Object Modelling Using Uml",
+      "description": "Overview of object orieted concepts,unified modelling language,UML diagrams,use case model,class diagrams. ",
+      "resources": ["Notes", "Videos", "Diagram"]
+    },
+    {
+      "title": "Object-Oriented Software Development",
+      "description": "Design patterns,a generalized object oriented analysis and design. ",
+      "resources": ["Notes", "Examples", "Videos"]
+    }, 
+    {
+      "title": "User Interface Design",
+      "description": "Characteristics of a good user interface,basic concepts,types of user intrefaces,component-based GUI development and design methodology. ",
+      "resources": ["Notes", "Videos", "Diagram"]
+    }, 
+    {
+      "title": "Coding and Testing",
+      "description": "Coding,testing,testing in the large vs testing in the small, unit testing, black box testing,white box testing,debuggig,program analysis tools,integration testing,system testng,some general issues asociated with testing. ",
+      "resources": ["Notes", "Examples", "Videos"]
+    }, 
+    {
+      "title": "Softare Reliability and Quality Management",
+      "description": "Software reliability,statistical testing,software quality,quality management system,sei capability maturity model,personal software process,six sigma. ",
+      "resources": ["Notes", "Videos"]
+    }, 
+    {
+      "title": "Computer Aided Software Engineering",
+      "description": "Case and its scope,case enviornment,case support in software life cycle,other characteristics of case tools,architecture of a case enviornment. ",
+      "resources": ["Notes", "Videos", "Examples"]
+    }, 
+    {
+      "title": "Software Maintenance",
+      "description": "Characterisics,reverse engineering,maintenance process,process models,estimation of maintenance cost. ",
+      "resources": ["Notes", "Videos"]
+    },
+    {
+      "title": "Software Reuse",
+      "description": "What  can be reused? why almost no reuse so far? basic issues in any reuse program,a reuse approach,reuse at organization level",
+      "resources": ["Notes", "Videos"]
+    }
+  ]
+}

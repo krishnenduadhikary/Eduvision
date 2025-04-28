@@ -1,0 +1,47 @@
+{
+    "title": "Compiler Design",
+    "subtitle": "Understand the theory and implementation of compilers",
+    "topics": [
+      {
+        "title": "Introduction to Compilers",
+        "description": "Overview of compiler structure, phases, and differences from interpreters.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "Lexical Analysis",
+        "description": "Role of lexical analyzer, regular expressions, and finite automata.",
+        "resources": ["Diagram", "Examples"]
+      },
+      {
+        "title": "Syntax Analysis",
+        "description": "Parsing techniques including LL(1), LR(0), SLR, and parsing tables.",
+        "resources": ["Practice", "Code"]
+      },
+      {
+        "title": "Semantic Analysis",
+        "description": "Syntax-directed translation, type checking, and symbol table management.",
+        "resources": ["Notes", "Examples"]
+      },
+      {
+        "title": "Intermediate Code Generation",
+        "description": "Three-address code, syntax trees, and postfix notation.",
+        "resources": ["Code", "Video"]
+      },
+      {
+        "title": "Code Optimization",
+        "description": "Peephole optimization, DAGs, loops optimization techniques.",
+        "resources": ["Notes", "Diagram"]
+      },
+      {
+        "title": "Target Code Generation",
+        "description": "Translation of intermediate code to machine code with register allocation.",
+        "resources": ["Code", "Examples"]
+      },
+      {
+        "title": "Compiler Tools",
+        "description": "Overview of LEX and YACC for automating compiler components.",
+        "resources": ["Practice", "Video"]
+      }
+    ]
+  }
+  

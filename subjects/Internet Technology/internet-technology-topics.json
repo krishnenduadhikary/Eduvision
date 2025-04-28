@@ -1,0 +1,47 @@
+{
+    "title": "Internet Technology",
+    "subtitle": "Explore the foundations of web technologies, protocols, and development tools",
+    "topics": [
+      {
+        "title": "Introduction to Internet Technology",
+        "description": "Basics of the internet, web vs internet, evolution of the web.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "Internet Protocols",
+        "description": "HTTP, HTTPS, FTP, SMTP, DNS, and their roles.",
+        "resources": ["Examples", "Diagram"]
+      },
+      {
+        "title": "Web Architecture",
+        "description": "Client-server model, web servers, and browsers.",
+        "resources": ["Notes", "Diagram"]
+      },
+      {
+        "title": "HTML and CSS Basics",
+        "description": "Structure and styling of web pages using HTML5 and CSS3.",
+        "resources": ["Code", "Practice"]
+      },
+      {
+        "title": "JavaScript Fundamentals",
+        "description": "Interactivity using JS: syntax, DOM, and events.",
+        "resources": ["Examples", "Practice"]
+      },
+      {
+        "title": "Frontend Frameworks",
+        "description": "Overview of popular frontend frameworks like React, Angular.",
+        "resources": ["Video", "Notes"]
+      },
+      {
+        "title": "Backend Technologies",
+        "description": "Server-side scripting, databases, and Node.js.",
+        "resources": ["Code", "Examples"]
+      },
+      {
+        "title": "Web Security",
+        "description": "SSL, HTTPS, firewalls, and common web vulnerabilities.",
+        "resources": ["Notes", "Video"]
+      }
+    ]
+  }
+  

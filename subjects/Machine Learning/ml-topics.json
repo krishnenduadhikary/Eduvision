@@ -1,0 +1,47 @@
+{
+    "title": "Machine Learning",
+    "subtitle": "Explore algorithms that learn from data and make predictions",
+    "topics": [
+      {
+        "title": "Introduction to Machine Learning",
+        "description": "Definition, types of ML (supervised, unsupervised, reinforcement), applications.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "Supervised Learning",
+        "description": "Linear regression, logistic regression, k-NN, and decision trees.",
+        "resources": ["Code", "Practice"]
+      },
+      {
+        "title": "Unsupervised Learning",
+        "description": "K-means clustering, hierarchical clustering, dimensionality reduction.",
+        "resources": ["Examples", "Diagram"]
+      },
+      {
+        "title": "Model Evaluation",
+        "description": "Confusion matrix, accuracy, precision, recall, F1-score, ROC curve.",
+        "resources": ["Notes", "Examples"]
+      },
+      {
+        "title": "Overfitting and Underfitting",
+        "description": "Bias-variance tradeoff, regularization techniques like L1 and L2.",
+        "resources": ["Video", "Notes"]
+      },
+      {
+        "title": "Support Vector Machines",
+        "description": "SVM theory, kernel trick, applications in classification.",
+        "resources": ["Code", "Practice"]
+      },
+      {
+        "title": "Neural Networks & Deep Learning",
+        "description": "Perceptrons, multilayer perceptrons, backpropagation, CNNs, RNNs.",
+        "resources": ["Video", "Examples"]
+      },
+      {
+        "title": "Ensemble Methods",
+        "description": "Bagging, boosting, random forests, gradient boosting.",
+        "resources": ["Code", "Case Study"]
+      }
+    ]
+  }
+  

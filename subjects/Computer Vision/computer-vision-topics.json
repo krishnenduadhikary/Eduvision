@@ -1,0 +1,47 @@
+{
+    "title": "Computer Vision",
+    "subtitle": "Teaching machines to interpret and understand the visual world",
+    "topics": [
+      {
+        "title": "Introduction to Computer Vision",
+        "description": "Definition, history, and applications of computer vision in real-world systems.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "Image Formation & Representation",
+        "description": "Pixels, color models, and image representation using matrices.",
+        "resources": ["Diagram", "Examples"]
+      },
+      {
+        "title": "Image Filtering & Enhancement",
+        "description": "Smoothing, sharpening, and histogram equalization techniques.",
+        "resources": ["Code", "Practice"]
+      },
+      {
+        "title": "Edge & Feature Detection",
+        "description": "Sobel, Canny, corner detectors, and interest point detection.",
+        "resources": ["Video", "Code"]
+      },
+      {
+        "title": "Object Recognition",
+        "description": "Template matching, feature matching, and classification methods.",
+        "resources": ["Examples", "Notes"]
+      },
+      {
+        "title": "Image Segmentation",
+        "description": "Thresholding, region-based methods, and clustering for segmentation.",
+        "resources": ["Practice", "Diagram"]
+      },
+      {
+        "title": "Motion Analysis",
+        "description": "Optical flow, tracking, and motion segmentation concepts.",
+        "resources": ["Video", "Code"]
+      },
+      {
+        "title": "Deep Learning for Vision",
+        "description": "CNNs, transfer learning, and architectures like YOLO, ResNet for vision tasks.",
+        "resources": ["Notes", "Examples"]
+      }
+    ]
+  }
+  

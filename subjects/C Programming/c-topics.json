@@ -1,0 +1,51 @@
+{
+  "title": "C Programming",
+  "subtitle": "Build strong programming foundations using the C language",
+  "topics": [
+    {
+      "title": "Introduction to C",
+      "description": "History, structure of a C program, compiling, and execution.",
+      "resources": ["Notes", "Video"]
+    },
+    {
+      "title": "Data Types and Variables",
+      "description": "Basic data types, variable declaration, and constants.",
+      "resources": ["Code", "Examples"]
+    },
+    {
+      "title": "Operators and Expressions",
+      "description": "Arithmetic, relational, logical, and bitwise operators.",
+      "resources": ["Practice", "Notes"]
+    },
+    {
+      "title": "Control Statements",
+      "description": "if-else, switch-case, loops (for, while, do-while).",
+      "resources": ["Examples", "Diagram"]
+    },
+    {
+      "title": "Functions in C",
+      "description": "Creating and calling functions, arguments, and return values.",
+      "resources": ["Code", "Video"]
+    },
+    {
+      "title": "Arrays and Strings",
+      "description": "1D & 2D arrays, string manipulation using standard functions.",
+      "resources": ["Practice", "Notes"]
+    },
+    {
+      "title": "Pointers",
+      "description": "Pointer basics, arithmetic, and relationship with arrays.",
+      "resources": ["Code", "Examples"]
+    },
+    {
+      "title": "Structures and Unions",
+      "description": "User-defined data types, structures, and unions in C.",
+      "resources": ["Notes", "Practice"]
+    },
+    {
+      "title": "File Handling",
+      "description": "Reading/writing files using fopen, fclose, fprintf, fscanf.",
+      "resources": ["Code", "Examples"]
+    }
+  ]
+}

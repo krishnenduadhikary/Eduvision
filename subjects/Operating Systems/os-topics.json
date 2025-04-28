@@ -1,0 +1,37 @@
+{
+    "title": "Operating System",
+    "subtitle": "Explore concepts, notes, and diagrams of OS",
+    "topics": [
+      {
+        "title": "Introduction to OS",
+        "description": "Basic concepts, functions, and types of operating systems.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "Process Management",
+        "description": "Processes, scheduling algorithms, and inter-process communication.",
+        "resources": ["Notes", "Examples"]
+      },
+      {
+        "title": "Threads and Concurrency",
+        "description": "Multithreading, synchronization, and deadlocks.",
+        "resources": ["Simulation", "Diagram"]
+      },
+      {
+        "title": "Memory Management",
+        "description": "Paging, segmentation, and virtual memory concepts.",
+        "resources": ["Notes", "Examples"]
+      },
+      {
+        "title": "File Systems",
+        "description": "File organization, directory structures, and access methods.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "I/O Management",
+        "description": "I/O hardware, polling, interrupts, and DMA.",
+        "resources": ["Diagram", "Notes"]
+      }
+    ]
+  }
+  

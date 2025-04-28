@@ -1,0 +1,47 @@
+{
+    "title": "Combinatorial Optimization",
+    "subtitle": "Solving discrete optimization problems efficiently using combinatorial techniques",
+    "topics": [
+      {
+        "title": "Introduction to Combinatorial Optimization",
+        "description": "Definition, real-world applications, and complexity classes (P, NP, NP-Hard, NP-Complete).",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "Graph Theory Basics",
+        "description": "Graphs, trees, matchings, and cuts relevant to optimization.",
+        "resources": ["Examples", "Diagram"]
+      },
+      {
+        "title": "Greedy Algorithms",
+        "description": "Principles of greedy methods, activity selection, and Kruskal/Prim algorithms.",
+        "resources": ["Code", "Practice"]
+      },
+      {
+        "title": "Dynamic Programming",
+        "description": "DP approach to shortest paths, knapsack, and matrix chain multiplication.",
+        "resources": ["Code", "Video"]
+      },
+      {
+        "title": "Linear Programming",
+        "description": "Formulating LP problems, simplex method, and duality theory.",
+        "resources": ["Notes", "Examples"]
+      },
+      {
+        "title": "Network Flows",
+        "description": "Max flow-min cut theorem, Ford-Fulkerson algorithm, and applications.",
+        "resources": ["Diagram", "Code"]
+      },
+      {
+        "title": "Integer Programming",
+        "description": "Formulations and solving integer linear programs with branch and bound.",
+        "resources": ["Practice", "Notes"]
+      },
+      {
+        "title": "Approximation Algorithms",
+        "description": "Design and analysis of algorithms for NP-hard problems with provable guarantees.",
+        "resources": ["Video", "Examples"]
+      }
+    ]
+  }
+  

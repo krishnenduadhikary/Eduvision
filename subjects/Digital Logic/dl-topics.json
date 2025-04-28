@@ -1,0 +1,42 @@
+{
+    "title": "Digital Logic Design",
+    "subtitle": "Explore syllabus, notes, diagrams, and more",
+    "topics": [
+      {
+        "title": "Number Systems & Conversions",
+        "description": "Binary, Octal, Decimal, Hexadecimal systems and conversions.",
+        "resources": ["Notes", "Examples", "Video"]
+      },
+      {
+        "title": "Boolean Algebra",
+        "description": "Learn Boolean laws, theorems, and simplification techniques.",
+        "resources": ["Notes", "Truth Table", "Video"]
+      },
+      {
+        "title": "Logic Gates",
+        "description": "AND, OR, NOT, NAND, NOR, XOR, and XNOR gate operations.",
+        "resources": ["Diagram", "Simulation"]
+      },
+      {
+        "title": "Combinational Circuits",
+        "description": "Design and analysis of multiplexers, decoders, encoders, and adders.",
+        "resources": ["Examples", "Notes"]
+      },
+      {
+        "title": "Karnaugh Maps (K-Maps)",
+        "description": "Simplify Boolean expressions using 2, 3, and 4-variable K-Maps.",
+        "resources": ["Interactive", "Video"]
+      },
+      {
+        "title": "Sequential Circuits",
+        "description": "Flip-Flops, Counters, and Shift Registers.",
+        "resources": ["Diagram", "Notes", "Video"]
+      },
+      {
+        "title": "Finite State Machines",
+        "description": "Design of Moore and Mealy machines.",
+        "resources": ["Notes", "Simulation"]
+      }
+    ]
+  }
+  

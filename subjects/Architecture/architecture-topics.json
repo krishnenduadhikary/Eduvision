@@ -1,0 +1,42 @@
+{
+    "title": "Computer Architecture",
+    "subtitle": "Explore topics, notes, diagrams, and more",
+    "topics": [
+      {
+        "title": "Introduction to Architecture",
+        "description": "Overview of computer architecture, types, and performance metrics.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "Instruction Set Architecture (ISA)",
+        "description": "Understanding RISC vs CISC, instruction formats, and addressing modes.",
+        "resources": ["Notes", "Examples"]
+      },
+      {
+        "title": "CPU Organization",
+        "description": "Control unit, ALU, registers, and CPU performance.",
+        "resources": ["Diagram", "Notes"]
+      },
+      {
+        "title": "Pipelining",
+        "description": "Instruction pipeline stages, hazards, and performance improvements.",
+        "resources": ["Simulation", "Notes"]
+      },
+      {
+        "title": "Memory Hierarchy",
+        "description": "Cache memory, main memory, virtual memory, and their organizations.",
+        "resources": ["Diagram", "Examples"]
+      },
+      {
+        "title": "Input/Output Systems",
+        "description": "I/O techniques, interrupts, and DMA operations.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "Multiprocessors",
+        "description": "Concept of parallel processing and interconnection structures.",
+        "resources": ["Notes", "Simulation"]
+      }
+    ]
+  }
+  

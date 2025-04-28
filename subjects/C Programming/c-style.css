@@ -1,0 +1,67 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    background: #f1f5f9;
+    color: #222;
+  }
+  
+  .header {
+    background: #007acc;
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  .overview {
+    padding: 30px;
+  }
+  
+  .overview h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .topics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  
+  .topic-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease;
+  }
+  
+  .topic-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .topic-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #007acc;
+    margin-bottom: 10px;
+  }
+  
+  .topic-desc {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  
+  .resource-buttons button {
+    margin: 5px 5px 0 0;
+    padding: 6px 12px;
+    background-color: #007acc;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .resource-buttons button:hover {
+    background-color: #005f99;
+  }
+  

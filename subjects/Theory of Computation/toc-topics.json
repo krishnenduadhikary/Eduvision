@@ -1,0 +1,42 @@
+{
+    "title": "Theory of Computation",
+    "subtitle": "Study automata theory, formal languages, and computational models",
+    "topics": [
+      {
+        "title": "Introduction to TOC",
+        "description": "Scope, importance, and foundational concepts of computation.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "Finite Automata (FA)",
+        "description": "Deterministic and non-deterministic finite automata with examples.",
+        "resources": ["Examples", "Simulator"]
+      },
+      {
+        "title": "Regular Expressions",
+        "description": "Syntax, conversions between RE and FA, and simplification techniques.",
+        "resources": ["Practice", "Notes"]
+      },
+      {
+        "title": "Context-Free Grammars (CFG)",
+        "description": "Grammar rules, derivations, and parsing.",
+        "resources": ["Examples", "Diagram"]
+      },
+      {
+        "title": "Pushdown Automata (PDA)",
+        "description": "Definition, transition functions, and language recognition.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "Turing Machines (TM)",
+        "description": "Basic model, components, and language recognition.",
+        "resources": ["Simulator", "Examples"]
+      },
+      {
+        "title": "Decidability and Undecidability",
+        "description": "Decidable languages, Halting Problem, and Rice’s Theorem.",
+        "resources": ["Theory", "Notes"]
+      }
+    ]
+  }
+  

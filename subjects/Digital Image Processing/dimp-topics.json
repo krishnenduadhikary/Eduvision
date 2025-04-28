@@ -1,0 +1,47 @@
+{
+    "title": "Digital Image Processing",
+    "subtitle": "Learn the techniques to process and analyze digital images",
+    "topics": [
+      {
+        "title": "Introduction to Digital Image Processing",
+        "description": "Fundamentals, applications, and key concepts of image processing.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "Digital Image Fundamentals",
+        "description": "Image representation, resolution, pixel, gray level, and color models.",
+        "resources": ["Examples", "Diagram"]
+      },
+      {
+        "title": "Image Enhancement in Spatial Domain",
+        "description": "Contrast stretching, histogram equalization, and spatial filtering.",
+        "resources": ["Code", "Practice"]
+      },
+      {
+        "title": "Image Enhancement in Frequency Domain",
+        "description": "Fourier Transform, filtering techniques in frequency domain.",
+        "resources": ["Notes", "Diagram"]
+      },
+      {
+        "title": "Image Restoration",
+        "description": "Noise models, degradation models, and restoration techniques.",
+        "resources": ["Video", "Examples"]
+      },
+      {
+        "title": "Color Image Processing",
+        "description": "Color models, color transformations, and enhancements.",
+        "resources": ["Notes", "Diagram"]
+      },
+      {
+        "title": "Image Segmentation",
+        "description": "Edge detection, thresholding, region-based segmentation.",
+        "resources": ["Practice", "Code"]
+      },
+      {
+        "title": "Morphological Image Processing",
+        "description": "Erosion, dilation, opening, and closing operations.",
+        "resources": ["Code", "Examples"]
+      }
+    ]
+  }
+  

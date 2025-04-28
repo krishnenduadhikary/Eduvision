@@ -1,0 +1,47 @@
+{
+    "title": "Data Mining",
+    "subtitle": "Discover patterns, relationships, and insights from large datasets",
+    "topics": [
+      {
+        "title": "Introduction to Data Mining",
+        "description": "Definition, knowledge discovery, data mining vs. data warehousing.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "Data Preprocessing",
+        "description": "Data cleaning, integration, transformation, and reduction techniques.",
+        "resources": ["Examples", "Practice"]
+      },
+      {
+        "title": "Data Warehousing and OLAP",
+        "description": "Concept, architecture, OLAP operations, star and snowflake schemas.",
+        "resources": ["Notes", "Diagram"]
+      },
+      {
+        "title": "Association Rule Mining",
+        "description": "Apriori algorithm, FP-Growth algorithm, support, confidence, lift.",
+        "resources": ["Code", "Examples"]
+      },
+      {
+        "title": "Classification Techniques",
+        "description": "Decision trees, naïve Bayes, K-nearest neighbors, model evaluation.",
+        "resources": ["Notes", "Code"]
+      },
+      {
+        "title": "Clustering Techniques",
+        "description": "K-means, hierarchical clustering, DBSCAN, distance measures.",
+        "resources": ["Practice", "Examples"]
+      },
+      {
+        "title": "Web and Text Mining",
+        "description": "Techniques for mining web usage and unstructured text data.",
+        "resources": ["Video", "Notes"]
+      },
+      {
+        "title": "Applications of Data Mining",
+        "description": "Use cases in marketing, healthcare, finance, and security.",
+        "resources": ["Examples", "Case Study"]
+      }
+    ]
+  }
+  

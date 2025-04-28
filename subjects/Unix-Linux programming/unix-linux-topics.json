@@ -1,0 +1,47 @@
+{
+    "title": "UNIX/Linux Programming",
+    "subtitle": "Master the shell, scripting, and system-level programming",
+    "topics": [
+      {
+        "title": "Introduction to UNIX/Linux",
+        "description": "Overview of UNIX/Linux OS, architecture, distributions, and shell.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "Basic Shell Commands",
+        "description": "File operations, directory navigation, permissions, and process control.",
+        "resources": ["Examples", "Practice"]
+      },
+      {
+        "title": "File System & Permissions",
+        "description": "Understanding file structure, chmod, chown, and file types.",
+        "resources": ["Code", "Notes"]
+      },
+      {
+        "title": "Shell Scripting",
+        "description": "Writing shell scripts with variables, conditions, loops, and functions.",
+        "resources": ["Code", "Practice"]
+      },
+      {
+        "title": "Process Management",
+        "description": "Foreground/background jobs, ps, top, kill, signals, and process control.",
+        "resources": ["Examples", "Diagram"]
+      },
+      {
+        "title": "Text Processing Tools",
+        "description": "Using grep, sed, awk, cut, sort, uniq for powerful text operations.",
+        "resources": ["Practice", "Notes"]
+      },
+      {
+        "title": "VI Editor & Bash Customization",
+        "description": "Using VI editor, .bashrc customization, aliases, and environment variables.",
+        "resources": ["Video", "Examples"]
+      },
+      {
+        "title": "Networking & System Calls",
+        "description": "Basic networking commands, system programming in C with open, read, fork.",
+        "resources": ["Code", "Notes"]
+      }
+    ]
+  }
+  

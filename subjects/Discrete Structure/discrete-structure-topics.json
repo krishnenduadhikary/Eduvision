@@ -1,0 +1,42 @@
+{
+    "title": "Discrete Structures",
+    "subtitle": "Learn logic, sets, relations, graphs, and more",
+    "topics": [
+      {
+        "title": "Set Theory",
+        "description": "Operations on sets, Venn diagrams, Cartesian products.",
+        "resources": ["Notes", "Examples", "Video"]
+      },
+      {
+        "title": "Logic and Propositional Calculus",
+        "description": "Propositions, logical connectives, truth tables, and implications.",
+        "resources": ["Notes", "Truth Table Generator"]
+      },
+      {
+        "title": "Relations and Functions",
+        "description": "Types of relations, properties, composition, and functions.",
+        "resources": ["Diagram", "Examples"]
+      },
+      {
+        "title": "Mathematical Induction",
+        "description": "Principle of induction and its applications.",
+        "resources": ["Examples", "Notes"]
+      },
+      {
+        "title": "Combinatorics",
+        "description": "Permutations, combinations, and counting principles.",
+        "resources": ["Practice", "Video"]
+      },
+      {
+        "title": "Graph Theory",
+        "description": "Types of graphs, representations, and graph traversals.",
+        "resources": ["Diagram", "Notes", "Simulation"]
+      },
+      {
+        "title": "Recurrence Relations",
+        "description": "Solving linear recurrence relations with and without initial conditions.",
+        "resources": ["Notes", "Examples"]
+      }
+    ]
+  }
+  

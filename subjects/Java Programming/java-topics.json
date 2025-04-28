@@ -1,0 +1,47 @@
+{
+    "title": "Java Programming",
+    "subtitle": "Object-oriented programming with Java for scalable applications",
+    "topics": [
+      {
+        "title": "Introduction to Java",
+        "description": "History, features of Java, JDK, JVM, and basic syntax.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "Data Types and Variables",
+        "description": "Primitive data types, variables, constants, type casting.",
+        "resources": ["Examples", "Code"]
+      },
+      {
+        "title": "Control Statements",
+        "description": "if-else, switch-case, loops (for, while, do-while).",
+        "resources": ["Practice", "Notes"]
+      },
+      {
+        "title": "Object-Oriented Programming",
+        "description": "Classes, objects, constructors, inheritance, polymorphism.",
+        "resources": ["Code", "Video"]
+      },
+      {
+        "title": "Exception Handling",
+        "description": "Try-catch block, throw, throws, and custom exceptions.",
+        "resources": ["Examples", "Diagram"]
+      },
+      {
+        "title": "Packages and Interfaces",
+        "description": "Java packages, access modifiers, interfaces and implementation.",
+        "resources": ["Notes", "Code"]
+      },
+      {
+        "title": "File I/O and Streams",
+        "description": "Reading and writing files using FileReader, FileWriter, Buffered streams.",
+        "resources": ["Code", "Practice"]
+      },
+      {
+        "title": "Multithreading in Java",
+        "description": "Thread class, Runnable interface, thread lifecycle, synchronization.",
+        "resources": ["Examples", "Video"]
+      }
+    ]
+  }
+  

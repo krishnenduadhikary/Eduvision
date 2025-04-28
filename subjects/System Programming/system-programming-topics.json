@@ -1,0 +1,47 @@
+{
+    "title": "System Programming",
+    "subtitle": "Explore low-level programming and interaction with system software",
+    "topics": [
+      {
+        "title": "Introduction to System Programming",
+        "description": "Definition, scope, and differences between system and application programming.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "Assemblers",
+        "description": "Two-pass assembler, data structures, and algorithm used in assembler design.",
+        "resources": ["Diagram", "Examples"]
+      },
+      {
+        "title": "Loaders and Linkers",
+        "description": "Loading, relocation, linking concepts and types of loaders (absolute, relocating, dynamic).",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "Macro Processors",
+        "description": "Macro definitions, expansion, nested macros, and macro processors design.",
+        "resources": ["Examples", "Code"]
+      },
+      {
+        "title": "Compilers and Interpreters",
+        "description": "Differences between compiler and interpreter, overview of phases of compiler.",
+        "resources": ["Notes", "Practice"]
+      },
+      {
+        "title": "System Calls",
+        "description": "Working with system calls for file handling, process control and device management.",
+        "resources": ["Code", "Examples"]
+      },
+      {
+        "title": "Device Drivers",
+        "description": "Basics of device drivers and their role in OS-device communication.",
+        "resources": ["Diagram", "Notes"]
+      },
+      {
+        "title": "Operating System Interface",
+        "description": "Interaction between user programs and OS via APIs and shell.",
+        "resources": ["Video", "Practice"]
+      }
+    ]
+  }
+  

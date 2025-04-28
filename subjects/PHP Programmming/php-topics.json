@@ -1,0 +1,47 @@
+{
+    "title": "PHP Programming",
+    "subtitle": "Build dynamic web applications using server-side scripting",
+    "topics": [
+      {
+        "title": "Introduction to PHP",
+        "description": "Overview of PHP, syntax, variables, data types, and setup.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "Control Structures",
+        "description": "Conditional statements and loops (if, else, switch, while, for).",
+        "resources": ["Code", "Practice"]
+      },
+      {
+        "title": "Functions in PHP",
+        "description": "Creating and using functions, parameters, return values.",
+        "resources": ["Examples", "Notes"]
+      },
+      {
+        "title": "Working with Forms",
+        "description": "Handling form input with GET and POST methods.",
+        "resources": ["Code", "Practice"]
+      },
+      {
+        "title": "Arrays and Strings",
+        "description": "PHP array functions, string manipulation techniques.",
+        "resources": ["Examples", "Diagram"]
+      },
+      {
+        "title": "File Handling",
+        "description": "Reading and writing files in PHP.",
+        "resources": ["Code", "Video"]
+      },
+      {
+        "title": "PHP and MySQL",
+        "description": "Connecting PHP with MySQL database for CRUD operations.",
+        "resources": ["Examples", "Practice"]
+      },
+      {
+        "title": "Sessions and Cookies",
+        "description": "Managing state using cookies and sessions.",
+        "resources": ["Notes", "Code"]
+      }
+    ]
+  }
+  

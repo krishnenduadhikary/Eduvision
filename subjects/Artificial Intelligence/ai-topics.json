@@ -1,0 +1,71 @@
+{
+  "title": "Artificial Intelligence",
+  "subtitle": "Explore the foundations of intelligent systems and algorithms",
+  "topics": [
+    {
+      "title": "Introduction to AI",
+      "description": "Definition, importance, history, milestones, types, and applications of AI.",
+      "resources": ["Notes", "Video"]
+    },
+    {
+      "title": "Fundamentals of AI",
+      "description": "Intelligent agents, problem-solving, search strategies, and game playing.",
+      "resources": ["Examples", "Simulation"]
+    },
+    {
+      "title": "Knowledge Representation and Reasoning",
+      "description": "Logic, inference mechanisms, knowledge-based systems, and ontologies.",
+      "resources": ["Notes", "Examples"]
+    },
+    {
+      "title": "Machine Learning Basics",
+      "description": "Introduction to ML, workflow, overfitting, underfitting, and bias-variance tradeoff.",
+      "resources": ["Video", "Examples"]
+    },
+    {
+      "title": "Supervised Learning",
+      "description": "Regression, classification, ensemble methods, and evaluation metrics.",
+      "resources": ["Practice", "Notes"]
+    },
+    {
+      "title": "Unsupervised Learning",
+      "description": "Clustering, dimensionality reduction, and association rule learning.",
+      "resources": ["Examples", "Notes"]
+    },
+    {
+      "title": "Reinforcement Learning",
+      "description": "Basics, MDPs, Q-learning, and deep reinforcement learning.",
+      "resources": ["Simulation", "Practice"]
+    },
+    {
+      "title": "Neural Networks and Deep Learning",
+      "description": "Artificial neurons, backpropagation, CNNs, RNNs, GANs, and transfer learning.",
+      "resources": ["Video", "Examples"]
+    },
+    {
+      "title": "Natural Language Processing (NLP)",
+      "description": "Text preprocessing, language modeling, transformers, and NLP applications.",
+      "resources": ["Notes", "Practice"]
+    },
+    {
+      "title": "Computer Vision",
+      "description": "Image processing, classification, object detection, and segmentation.",
+      "resources": ["Examples", "Video"]
+    },
+    {
+      "title": "Advanced AI Topics",
+      "description": "Explainable AI, ethics, privacy, and autonomous systems.",
+      "resources": ["Notes", "Case Studies"]
+    },
+    {
+      "title": "Tools, Libraries, and Frameworks",
+      "description": "Python, essential libraries, ML/DL frameworks, deployment, and version control.",
+      "resources": ["Tutorials", "Documentation"]
+    },
+    {
+      "title": "AI Trends and Future Scope",
+      "description": "AI in industries, AGI, emerging trends, and career paths.",
+      "resources": ["Articles", "Videos"]
+    }
+  ]
+}

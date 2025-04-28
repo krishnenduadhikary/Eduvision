@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduVishion - Learn Computer Science</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Main Header -->
+    <header>
+        <div class="header-content" style="display: flex; justify-content: space-between; align-items: center;">
+            <h1 style="margin: 0;">EduVishion</h1>
+            <div style="display: flex; align-items: left; gap: 15px;">
+
+                <div class="search-container">
+                    <input placeholder="Search subjects..." class="input" name="search" />
+                </div>
+
+                <!-- Burger Menu -->
+                <div class="burger-container">
+                    <input type="checkbox" id="burger-toggle">
+                    <label class="burger" for="burger-toggle">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </label>
+                    <ul class="menu-options">
+                        <li><a href="#">My Profile</a></li>
+                        <li><a href="#">My Subjects</a></li>
+                        <li><a href="#">Achievements</a></li>
+                        <li><a href="#">Settings</a></li>
+                        <li><a href="#">Support/Feedback</a></li>
+                        <li><a href="#">Log Out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Site Navigation -->
+        <div class="nav-container">
+            <nav>
+                <ul class="menu">
+                    <li><a href="roadmaps/roadmaps.html">Roadmaps</a></li>
+                    <li><a href="interview/interview.html">Interview Qs</a></li>
+                    <li><a href="#quiz">Quizzes</a></li>
+                    <li><a href="#exams">Mock Tests</a></li>
+                    <li><a href="#certifications">Certificates</a></li>
+                    <li><a href="#resources">Resources</a></li>
+                    <li><a href="#career">Career</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Homepage Content -->
+    <main id="subjects"> <!-- Added ID for potential linking -->
+        <section class="subjects-intro">
+            <h2>Welcome to EduVishion</h2>
+            <p>Start your journey from beginner to pro in Computer Science:</p>
+        </section>
+
+        <!-- Subject Categories -->
+        <section class="subject-category">
+            <h2>Beginner Level</h2>
+            <div class="subject-cards">
+                <!-- Standardized to 'subject-card' class, added AOS -->
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Computer Fundamentals</h3>
+                    <button onclick="location.href='subjects/Computer Fundamentals/fundamentals.html'">GET
+                        STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Introduction to Programming</h3>
+                    <button onclick="location.href='subjects/Introduction to Programming/itp.html'">GET STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>C Programming</h3>
+                    <button onclick="location.href='subjects/C Programming/c-programming.html'">GET STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Digital Logic</h3>
+                    <button onclick="location.href='subjects/Digital Logic/dl.html'">GET STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Architecture</h3>
+                    <button onclick="location.href='subjects/Architecture/arhitecture.html'">GET STARTED</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="subject-category">
+            <h2>Intermediate Level</h2>
+            <div class="subject-cards">
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Discrete Structures</h3>
+                    <button onclick="location.href='subjects/Discrete Structure/discrete-structure.html'">GET
+                        STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Data Structures</h3>
+                    <button onclick="location.href='subjects/Data Structure/ds.html'">GET STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Object Oriented Programming</h3>
+                    <button onclick="location.href='subjects/Object Oriented Programming/oop.html'">GET STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Operating Systems</h3>
+                    <button onclick="location.href='subjects/Operating Systems/os.html'">GET STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Database Management Systems</h3>
+                    <button onclick="location.href='subjects/Database Management Systems/dbms.html'">GET
+                        STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Software Engineering</h3>
+                    <button onclick="location.href='subjects/Software Engineering/software-engineering.html'">GET
+                        STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>UNIX/Linux Programming</h3>
+                    <button onclick="location.href='subjects/Unix-Linux programming/unix-linux.html'">GET
+                        STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>R Programming</h3>
+                    <button onclick="location.href='subjects/R-programming/r-programming.html'">GET STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Python Programming</h3>
+                    <button onclick="location.href='subjects/Python Programming/python.html'">GET STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>PHP Programming</h3>
+                    <button onclick="location.href='subjects/PHP Programmming/php.html'">GET STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>System Programming</h3>
+                    <button onclick="location.href='subjects/System Programming/system-programming.html'">GET
+                        STARTED</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="subject-category">
+            <h2>Advanced Level</h2>
+            <div class="subject-cards">
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Design and Analysis of Algorithms</h3>
+                    <button onclick="location.href='subjects/Design and Analysis of Algorithms/algorithm.html'">GET
+                        STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Computer Networks</h3>
+                    <button onclick="location.href='subjects/Computer Networks/network.html'">GET STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Microprocessors</h3>
+                    <button onclick="location.href='subjects/Microprocessor/microprocessor.html'">GET STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Digital Image Processing</h3>
+                    <button onclick="location.href='subjects/Digital Image Processing/dimp.html'">GET STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Numerical Methods</h3>
+                    <button onclick="location.href='subjects/Numerical Methods/numerical-methods.html'">GET
+                        STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Computer Graphics</h3>
+                    <button onclick="location.href='subjects/Computer Graphics/graphics.html'">GET STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Soft Computing</h3>
+                    <button onclick="location.href='subjects/Soft Computing/soft-computing.html'">GET STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Combinatorial Optimization</h3>
+                    <button
+                        onclick="location.href='subjects/Combinatorial Optimization/combinatorial-optimization.html'">GET
+                        STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Data Mining</h3>
+                    <button onclick="location.href='subjects/Data Minimg/data-mining.html'">GET STARTED</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="subject-category">
+            <h2>Pro Level</h2>
+            <div class="subject-cards">
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Internet Technology</h3>
+                    <button onclick="location.href='subjects/Internet Technology/internet-technology.html'">GET
+                        STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Theory of Computation</h3>
+                    <button onclick="location.href='subjects/Theory of Computation/toc.html'">GET STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Artificial Intelligence</h3>
+                    <button onclick="location.href='subjects/Artificial Intelligence/ai.html'">GET STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Internet of Things (IoT)</h3>
+                    <button onclick="location.href='subjects/Internet of Things(IoT)/iot.html'">GET STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Machine Learning</h3>
+                    <button onclick="location.href='subjects/Machine Learning/ml.html'">GET STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Computer Vision</h3>
+                    <button onclick="location.href='subjects/Computer Vision/computer-vision.html'">GET STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Natural Language Processing</h3>
+                    <button onclick="location.href='subjects/Natural Language Processing/nlp.html'">GET STARTED</button>
+                </div>
+                <div class="subject-card" data-aos="fade-up">
+                    <h3>Compiler Design</h3>
+                    <button onclick="location.href='subjects/Compiler Design/compiler-design.html'">GET STARTED</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 EduVishion. All rights reserved.</p>
+    </footer>
+
+    <!-- AOS Script -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800, // Optional: Add animation duration
+            once: true // Optional: Animate elements only once
+        });
+    </script>
+</body>
+
+</html>

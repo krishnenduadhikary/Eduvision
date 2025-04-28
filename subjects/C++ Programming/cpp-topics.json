@@ -1,0 +1,47 @@
+{
+    "title": "C++ Programming",
+    "subtitle": "Master the fundamentals and OOP concepts of C++ language",
+    "topics": [
+      {
+        "title": "Introduction to C++",
+        "description": "History, features, and structure of a C++ program.",
+        "resources": ["Notes", "Video"]
+      },
+      {
+        "title": "Data Types and Variables",
+        "description": "Built-in types, variable declaration, and scope.",
+        "resources": ["Examples", "Practice"]
+      },
+      {
+        "title": "Control Structures",
+        "description": "Conditionals and loops: if, switch, while, for, do-while.",
+        "resources": ["Examples", "Practice"]
+      },
+      {
+        "title": "Functions in C++",
+        "description": "Function declaration, definition, and recursion.",
+        "resources": ["Notes", "Examples"]
+      },
+      {
+        "title": "Object-Oriented Programming",
+        "description": "Classes, objects, constructors, and destructors.",
+        "resources": ["Code", "Diagram"]
+      },
+      {
+        "title": "Inheritance and Polymorphism",
+        "description": "Single, multiple, and multilevel inheritance with virtual functions.",
+        "resources": ["Examples", "Video"]
+      },
+      {
+        "title": "Pointers and Memory Management",
+        "description": "Dynamic memory allocation and pointer arithmetic.",
+        "resources": ["Code", "Practice"]
+      },
+      {
+        "title": "STL (Standard Template Library)",
+        "description": "Vectors, maps, sets, stacks, and algorithms.",
+        "resources": ["Examples", "Notes"]
+      }
+    ]
+  }
+  

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Interview Preparation</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="interview-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header id="main-header">
+        <div class="logo">
+            <h1>InterviewPrep</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../about.html">About</a></li>
+                <li><a href="../contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="interview-page">
+        <section class="company-tabs">
+            <div class="tab-container">
+                <button class="tab-btn active" data-company="global">Global Tech</button>
+                <button class="tab-btn" data-company="indian">Indian Tech</button>
+            </div>
+        </section>
+
+        <section class="company-content">
+            <div class="company-list" id="global-companies">
+                <div class="company-card">
+                    <img src="logos/google-logo.png" alt="Google">
+                    <h3>Google</h3>
+                    <div class="company-stats">
+                        <span>Questions: 150+</span>
+                        <span>Success Rate: 85%</span>
+                    </div>
+                    <div class="difficulty-bars">
+                        <div class="bar">
+                            <span>Easy</span>
+                            <div class="progress" style="width: 40%"></div>
+                        </div>
+                        <div class="bar">
+                            <span>Medium</span>
+                            <div class="progress" style="width: 35%"></div>
+                        </div>
+                        <div class="bar">
+                            <span>Hard</span>
+                            <div class="progress" style="width: 25%"></div>
+                        </div>
+                    </div>
+                    <a href="companies/google.html" class="prep-btn">Start Prep</a>
+                </div>
+                <!-- Add similar cards for other companies -->
+            </div>
+
+            <div class="company-list hidden" id="indian-companies">
+                <!-- Similar structure for Indian companies -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 InterviewPrep. All rights reserved.</p>
+    </footer>
+
+    <script src="interview-script.js"></script>
+</body>
+
+</html>
