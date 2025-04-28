@@ -1,164 +1,216 @@
-/* General Styles */
-body {
-    font-family: 'Poppins', sans-serif;
+/* Basic Reset and Body Style */
+* {
     margin: 0;
     padding: 0;
-    background-color: #f9f9f9;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f0f4f8; /* Light background like the image */
+    padding: 20px;
     color: #333;
 }
 
-h1, h2 {
-    font-weight: 600;
-    color: #222;
+/* Section Styling */
+.preparation-section {
+    max-width: 1200px;
+    margin: 40px auto; /* Center section with margin */
+    padding: 20px;
 }
 
-button.cta-btn {
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 20px;
+/* Section Title Styling */
+.section-title {
+    font-size: 2rem; /* Adjust size as needed */
+    font-weight: bold;
+    color: #007bff; /* Blue color */
+    text-align: center;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid #007bff; /* Underline effect */
+    display: inline-block; /* To make border only width of text */
+    position: relative; /* Needed for centering with text-align */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Card Grid Layout */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    padding: 10px 0;
+    justify-items: center;
+}
+
+/* From Uiverse.io by Spacious74 */
+.outer {
+  width: 300px;
+  height: 250px;
+  border-radius: 10px;
+  padding: 1px;
+  background: radial-gradient(circle 230px at 0% 0%, #ffffff, #0c0d0d);
+  position: relative;
+}
+
+.dot {
+  width: 5px;
+  aspect-ratio: 1;
+  position: absolute;
+  background-color: #fff;
+  box-shadow: 0 0 10px #ffffff;
+  border-radius: 100px;
+  z-index: 2;
+  right: 10%;
+  top: 10%;
+  animation: moveDot 6s linear infinite;
+}
+
+@keyframes moveDot {
+  0%,
+  100% {
+    top: 10%;
+    right: 10%;
+  }
+  25% {
+    top: 10%;
+    right: calc(100% - 35px);
+  }
+  50% {
+    top: calc(100% - 30px);
+    right: calc(100% - 35px);
+  }
+  75% {
+    top: calc(100% - 30px);
+    right: 10%;
+  }
+}
+
+.card {
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  border-radius: 9px;
+  border: solid 1px #202222;
+  background-size: 20px 20px;
+  background: radial-gradient(circle 280px at 0% 0%, #444444, #0c0d0d);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-direction: column;
+  color: #fff;
+}
+.ray {
+  width: 220px;
+  height: 45px;
+  border-radius: 100px;
+  position: absolute;
+  background-color: #c7c7c7;
+  opacity: 0.4;
+  box-shadow: 0 0 50px #fff;
+  filter: blur(10px);
+  transform-origin: 10%;
+  top: 0%;
+  left: 0;
+  transform: rotate(40deg);
+}
+
+.card .text {
+  font-weight: bolder;
+  font-size: 2.2rem;
+  background: linear-gradient(45deg, #000000 4%, #fff, #000);
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.line {
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  background-color: #2c2c2c;
+}
+.topl {
+  top: 10%;
+  background: linear-gradient(90deg, #888888 30%, #1d1f1f 70%);
+}
+.bottoml {
+  bottom: 10%;
+}
+.leftl {
+  left: 10%;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(180deg, #747474 30%, #222424 70%);
+}
+.rightl {
+  right: 10%;
+  width: 1px;
+  height: 100%;
+}
+
+/* Card Button Styling (reuse, but adjust for dark bg) */
+.card-button {
+    background-color: #6f42c1;
+    color: #ffffff;
     border: none;
+    padding: 10px 25px;
+    font-size: 0.9rem;
+    font-weight: bold;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: background-color 0.2s ease;
+    margin-top: 1.2rem;
 }
 
-button.cta-btn:hover {
-    background-color: #0056b3;
+.card-button:hover {
+    background-color: #5a379a;
 }
 
-/* Hero Section */
-.hero-section {
-    text-align: center;
-    padding: 50px 20px;
-    background: linear-gradient(135deg, #007bff, #0056b3);
-    color: #fff;
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .card-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+    .section-title {
+        font-size: 1.8rem;
+    }
 }
 
-.hero-section h1 {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
+@media (max-width: 768px) {
+    .card-grid {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 20px;
+    }
+    .section-title {
+        font-size: 1.6rem;
+    }
+    .outer {
+        width: 240px;
+        height: 200px;
+    }
+    .card .text {
+        font-size: 1.4rem;
+    }
 }
 
-.hero-section p {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-}
-
-/* Testimonials Section */
-.testimonials {
-    padding: 40px 20px;
-    background-color: #fff;
-    text-align: center;
-}
-
-.testimonials h2 {
-    margin-bottom: 20px;
-}
-
-.testimonial-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-}
-
-.testimonial-card {
-    background-color: #f1f1f1;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.testimonial-card p {
-    font-size: 1rem;
-    margin-bottom: 10px;
-}
-
-.testimonial-card span {
-    font-size: 0.9rem;
-    color: #555;
-}
-
-.company-tabs {
-    padding: 20px 0;
-    text-align: center;
-}
-
-.tab-container {
-    display: inline-flex;
-    background: #f0f0f0;
-    padding: 5px;
-    border-radius: 30px;
-}
-
-.tab-btn {
-    padding: 10px 20px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    border-radius: 25px;
-    font-weight: 500;
-}
-
-.tab-btn.active {
-    background: #007bff;
-    color: white;
-}
-
-.company-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-    padding: 20px;
-}
-
-.company-card {
-    background: white;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    transition: transform 0.2s;
-}
-
-.company-card:hover {
-    transform: translateY(-5px);
-}
-
-.company-card img {
-    width: 60px;
-    height: 60px;
-    object-fit: contain;
-    margin-bottom: 15px;
-}
-
-.company-stats {
-    display: flex;
-    justify-content: space-between;
-    margin: 15px 0;
-    font-size: 0.9rem;
-    color: #666;
-}
-
-.difficulty-bars .bar {
-    margin: 10px 0;
-}
-
-.bar .progress {
-    height: 6px;
-    background: #007bff;
-    border-radius: 3px;
-}
-
-.prep-btn {
-    display: block;
-    background: #007bff;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    border-radius: 5px;
-    text-decoration: none;
-    margin-top: 15px;
-}
-
-.hidden {
-    display: none;
+@media (max-width: 576px) {
+    .card-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    .section-title {
+        font-size: 1.4rem;
+    }
+    .outer {
+        width: 100%;
+        min-width: 0;
+        height: 160px;
+    }
+    .card .text {
+        font-size: 1.1rem;
+    }
 }
