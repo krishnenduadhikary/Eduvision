@@ -4,44 +4,68 @@
     "topics": [
       {
         "title": "Introduction to Data Structures",
-        "description": "Overview of types, importance, and real-world applications.",
-        "resources": ["Notes", "Video"]
+        "description": "Definition, need, Abstract Data Types (ADT), types (linear vs non-linear), static vs dynamic structures, memory management (stack vs heap).",
+        "resources": ["Notes", "Video", "Examples"]
       },
       {
-        "title": "Arrays and Strings",
-        "description": "Static and dynamic arrays, string operations and manipulations.",
-        "resources": ["Examples", "Practice"]
+        "title": "Arrays",
+        "description": "Declaration, initialization, operations (traverse, insert, delete, search, update), multidimensional arrays, applications and limitations.",
+        "resources": ["Notes", "Examples", "Practice"]
+      },
+      {
+        "title": "Strings",
+        "description": "Representation (C-style, character arrays, objects), string operations (compare, concatenate, substring), pattern matching algorithms (Naive, KMP, Rabin-Karp).",
+        "resources": ["Notes", "Examples", "Practice"]
       },
       {
         "title": "Linked Lists",
-        "description": "Singly, doubly, and circular linked lists with operations.",
-        "resources": ["Code", "Simulator"]
+        "description": "Singly, doubly, and circular linked lists; insertion, deletion, traversal; applications and use-cases.",
+        "resources": ["Examples"]
       },
       {
-        "title": "Stacks and Queues",
-        "description": "LIFO and FIFO structures, applications, and implementation.",
-        "resources": ["Notes", "Examples"]
+        "title": "Stacks",
+        "description": "Implementation (array, linked list), operations (push, pop, peek), applications (expression evaluation, balanced parenthesis, backtracking).",
+        "resources": ["Notes", "Examples", "Practice"]
+      },
+      {
+        "title": "Queues",
+        "description": "Types (simple, circular, deque, priority queue), operations, applications (job scheduling, resource sharing).",
+        "resources": ["Notes", "Examples", "Practice"]
       },
       {
         "title": "Trees",
-        "description": "Binary trees, binary search trees, traversal techniques.",
-        "resources": ["Diagram", "Code"]
+        "description": "Terminology, types (binary trees, BST, AVL, B-Trees, B+ Trees, heaps), traversals (inorder, preorder, postorder, level-order).",
+        "resources": ["Diagram", "Examples"]
       },
       {
-        "title": "Heaps and Priority Queues",
-        "description": "Min-heaps, max-heaps, and heap operations.",
+        "title": "Heaps",
+        "description": "Min-heap, max-heap, heap operations, applications.",
         "resources": ["Examples", "Practice"]
       },
       {
         "title": "Graphs",
-        "description": "Representation, traversal (BFS/DFS), and applications.",
-        "resources": ["Code", "Diagram"]
+        "description": "Representation (adjacency matrix/list), types (directed, undirected, weighted), traversal (DFS, BFS), shortest path (Dijkstra, Bellman-Ford, Floyd-Warshall), MST (Prim's, Kruskal's).",
+        "resources": ["Diagram", "Examples"]
+      },
+      {
+        "title": "Searching Algorithms",
+        "description": "Linear search, binary search, interpolation search, hashing (hash tables, collision resolution: chaining, open addressing).",
+        "resources": ["Notes", "Examples", "Practice"]
+      },
+      {
+        "title": "Sorting Algorithms",
+        "description": "Comparison-based (bubble, selection, insertion, merge, quick, heap sort), non-comparison-based (counting, radix, bucket sort).",
+        "resources": ["Examples", "Practice"]
       },
       {
         "title": "Hashing",
-        "description": "Hash tables, collision resolution techniques.",
-        "resources": ["Examples", "Notes"]
+        "description": "Hash functions, collision resolution (chaining, open addressing: linear, quadratic, double hashing), applications (dictionaries, databases).",
+        "resources": ["Examples", "Notes", "Practice"]
+      },
+      {
+        "title": "Advanced Topics",
+        "description": "Tries, segment trees, Fenwick tree (binary indexed tree), disjoint set/union-find, suffix trees/arrays, LRU cache.",
+        "resources": ["Notes", "Examples"]
       }
     ]
   }
-  

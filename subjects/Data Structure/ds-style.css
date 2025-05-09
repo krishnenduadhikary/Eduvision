@@ -1,67 +1,279 @@
+:root {
+  --bg-color: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+  --card-bg: #ffffffcc;
+  --shadow-light: #f8fafc;
+  --shadow-dark: #b6c6e0;
+  --gradient-start: #27ae60;
+  --gradient-end: #16a085;
+  --gradient-accent: #6a82fb;
+  --gradient-accent2: #fc5c7d;
+  --text-title: #1a2a3a;
+  --text-body: #3a4a5a;
+  --text-button: #fff;
+  --resource-tag-bg: #e8f6ef;
+  --resource-tag-text: #27ae60;
+  --card-border: #e0eafc;
+}
+
 body {
-    font-family: 'Segoe UI', sans-serif;
-    margin: 0;
-    background: #f8f9fa;
-    color: #222;
+  font-family: 'Nunito', 'Segoe UI', sans-serif;
+  margin: 0;
+  background: var(--bg-color);
+  color: var(--text-body);
+  min-height: 100vh;
+  background-attachment: fixed;
+}
+
+.header {
+  background: linear-gradient(90deg, var(--gradient-accent), var(--gradient-accent2), var(--gradient-end));
+  color: white;
+  padding: 32px 20px 22px 20px; /* reduced padding for a more compact header */
+  text-align: center;
+  border-radius: 0 0 28px 28px; /* slightly less rounded */
+  box-shadow: 0 8px 32px rgba(106,130,251,0.08);
+  margin-bottom: 18px;
+  min-height: 80px; /* ensure a minimum height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.header h1 {
+  font-size: 2.6rem;
+  font-weight: 900;
+  letter-spacing: 0.01em;
+  margin-bottom: 10px;
+  font-family: 'Nunito', 'Segoe UI', sans-serif;
+  text-shadow: 0 2px 12px rgba(22,160,133,0.09);
+}
+
+.header p {
+  font-size: 1.18rem;
+  font-weight: 500;
+  color: #f3f3f3;
+  text-shadow: 0 1px 8px rgba(39,174,96,0.08);
+}
+
+.overview {
+  padding: 36px 18px 24px 18px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.overview h2 {
+  font-size: 1.5rem;
+  margin-bottom: 28px;
+  color: var(--gradient-end);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.topics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 36px;
+  background: none;
+}
+
+.topic-card {
+  background: var(--card-bg);
+  border-radius: 22px;
+  padding: 28px 22px 24px 22px;
+  min-height: 240px;
+  box-shadow:
+    0 8px 32px 0 rgba(106,130,251,0.10),
+    0 1.5px 8px 0 var(--shadow-dark);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+  border: 1.5px solid var(--card-border);
+  transition: box-shadow 0.22s, transform 0.22s, border-color 0.22s;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Move card number badge to top-right corner */
+.card-number-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+  background: rgba(255,255,255,0.98);
+  color: var(--gradient-accent2);
+  font-size: 1.13rem;
+  font-weight: 900;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 12px rgba(39,174,96,0.13);
+  border: 2.5px solid var(--gradient-accent2);
+  letter-spacing: 0.01em;
+  transition: box-shadow 0.2s;
+  background-image: radial-gradient(circle at 60% 40%, #fff 70%, #e0eafc 100%);
+}
+
+/* Remove badge from icon-graphic, keep icon centered */
+.icon-graphic {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--gradient-accent), var(--gradient-end));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 2px 2px 8px rgba(106,130,251,0.10);
+}
+
+.topic-title {
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: var(--gradient-accent2);
+  line-height: 1.3;
+  margin: 0;
+  font-family: 'Nunito', 'Segoe UI', sans-serif;
+  z-index: 1;
+}
+
+.topic-desc {
+  font-size: 1.01rem;
+  color: var(--text-body);
+  line-height: 1.7;
+  margin: 0 0 10px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-grow: 1;
+  z-index: 1;
+}
+
+.topic-resources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+  z-index: 1;
+}
+
+.resource-tag {
+  background: linear-gradient(90deg, #e0eafc 60%, #e8f6ef 100%);
+  color: var(--gradient-end);
+  padding: 5px 13px;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  box-shadow: 0 1px 4px #b6c6e022;
+}
+
+.explore-btn {
+  background: linear-gradient(90deg, var(--gradient-accent2), var(--gradient-accent), var(--gradient-end));
+  color: var(--text-button);
+  border: none;
+  border-radius: 14px;
+  padding: 10px 18px;
+  height: 40px;
+  font-size: 1.01rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 16px rgba(252,92,125, 0.13), -2px -2px 4px rgba(255,255,255, 0.04);
+  transition: transform 0.22s, box-shadow 0.22s, background 0.22s;
+  margin-top: auto;
+  align-self: flex-start;
+  z-index: 1;
+}
+
+.explore-btn:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 8px 24px rgba(106,130,251, 0.18), -3px -3px 6px rgba(255,255,255, 0.06);
+  background: linear-gradient(90deg, var(--gradient-accent), var(--gradient-accent2), var(--gradient-end));
+}
+
+.explore-btn:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: inset 2px 2px 4px rgba(0,0,0,0.09), inset -1px -1px 2px rgba(255,255,255,0.09);
+}
+
+.explore-btn svg {
+  width: 19px;
+  height: 19px;
+  fill: currentColor;
+}
+
+/* EduVision logo styles */
+.eduvishion-logo .text-2xl {
+  font-size: 1.7rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  letter-spacing: 0.01em;
+}
+.eduvishion-logo .text-white {
+  color: #fff !important;
+}
+.eduvishion-logo .text-yellow-300 {
+  color: #fde047 !important;
+}
+.eduvishion-logo .group:hover .text-yellow-300 {
+  color: #fef08a !important;
+}
+.eduvishion-logo a {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.eduvishion-logo svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Responsive: prevent overlap with header on small screens */
+@media (max-width: 600px) {
+  .eduvishion-logo {
+    top: 8px !important;
+    left: 8px !important;
+    font-size: 1.1rem !important;
   }
-  
   .header {
-    background: #27ae60;
-    color: white;
-    padding: 40px 20px;
-    text-align: center;
+    padding: 14px 6px 10px 6px;
+    min-height: 48px;
+    border-radius: 0 0 16px 16px;
   }
-  
+  .header h1 {
+    font-size: 1.2rem;
+  }
   .overview {
-    padding: 30px;
+    padding: 12px 2px 8px 2px;
   }
-  
-  .overview h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  
   .topics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
+    gap: 12px;
   }
-  
   .topic-card {
-    background: white;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    transition: transform 0.2s ease;
+    padding: 12px 4px 10px 4px;
+    min-height: 120px;
   }
-  
-  .topic-card:hover {
-    transform: translateY(-5px);
+  .card-number-badge {
+    top: 8px;
+    right: 8px;
+    width: 22px;
+    height: 22px;
+    font-size: 0.85rem;
   }
-  
-  .topic-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: #27ae60;
-    margin-bottom: 10px;
-  }
-  
-  .topic-desc {
-    font-size: 14px;
-    margin-bottom: 10px;
-  }
-  
-  .resource-buttons button {
-    margin: 5px 5px 0 0;
-    padding: 6px 12px;
-    background-color: #27ae60;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  
-  .resource-buttons button:hover {
-    background-color: #1e8449;
-  }
-  
+}

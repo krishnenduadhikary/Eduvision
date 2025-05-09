@@ -185,3 +185,40 @@ body {
   height: 18px;
   fill: currentColor;
 }
+
+/* EduVision logo styles */
+.eduvishion-logo .text-2xl {
+  font-size: 1.6rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.eduvishion-logo .text-white {
+  color: #fff !important;
+}
+.eduvishion-logo .text-yellow-300 {
+  color: #fde047 !important;
+}
+.eduvishion-logo .group:hover .text-yellow-300 {
+  color: #fef08a !important;
+}
+.eduvishion-logo a {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.eduvishion-logo svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Responsive: prevent overlap with header on small screens */
+@media (max-width: 600px) {
+  .eduvishion-logo {
+    top: 8px !important;
+    left: 8px !important;
+    font-size: 1.1rem !important;
+  }
+}
