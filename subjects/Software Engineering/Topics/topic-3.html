@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Topic 3: SDLC Models - EduVision</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex-grow: 1;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 font-sans">
+    <header class="bg-blue-600 text-white p-4 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto flex flex-row items-center justify-between">
+            <div class="text-2xl font-bold">
+                <a href="../index.html" class="flex items-center group">
+                    <span>Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span>ision</span>
+                </a>
+            </div>
+            <div class="flex-1 flex flex-col items-center">
+                <h1 class="text-2xl font-bold">Software Engineering</h1>
+                <p class="text-sm">Explore each topic in depth</p>
+            </div>
+            <div style="width:2.5rem;"></div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-6">
+            <a href="../software-engineering.html" class="text-blue-500 hover:underline">← Back to Syllabus</a>
+            <div class="bg-blue-600 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-md">
+                Topic 3
+            </div>
+        </div>
+
+        <section class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+            <h2 class="text-3xl font-semibold mb-4 text-gray-900">Software Development Life Cycle Models</h2>
+
+            <img src="../Assets/sdlc-models-overview.webp" alt="Overview of SDLC Models"
+                class="rounded-lg shadow-md mb-6 w-full max-w-4xl mx-auto">
+
+            <p class="text-gray-700 text-lg mb-6 leading-relaxed">
+                Software Development Life Cycle (SDLC) models are frameworks that define the process used by
+                organizations to build software applications. Each model provides a structured sequence of stages in
+                software engineering. Here are the most common models, their characteristics, and when to use them:
+            </p>
+
+            <div class="space-y-10">
+
+                <div>
+                    <h3 class="text-2xl font-semibold text-blue-700">1. Waterfall Model</h3>
+                    <img src="../Assets/waterfall-model.png" alt="Waterfall Model Diagram"
+                        class="rounded shadow mt-2 mb-4 w-full max-w-md">
+                    <p>The Waterfall model is a linear and sequential approach where each phase must be completed before
+                        the next begins. It’s simple but lacks flexibility for changes later in the process.</p>
+                    <ul class="list-disc ml-6 mt-2 text-gray-700">
+                        <li>Easy to understand and manage</li>
+                        <li>Best suited for projects with well-defined requirements</li>
+                        <li>Not ideal for complex or changing requirements</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-semibold text-blue-700">2. Spiral Model</h3>
+                    <img src="../Assets/spiral-model.webp" alt="Spiral Model Diagram"
+                        class="rounded shadow mt-2 mb-4 w-full max-w-md">
+                    <p>The Spiral model combines iterative development with risk analysis. Each loop (spiral) represents
+                        a development phase.</p>
+                    <ul class="list-disc ml-6 mt-2 text-gray-700">
+                        <li>Risk-driven approach</li>
+                        <li>Highly flexible and iterative</li>
+                        <li>Best for large, high-risk projects</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-semibold text-blue-700">3. V-Model (Validation & Verification)</h3>
+                    <img src="../Assets/v-model.webp" alt="V-Model Diagram"
+                        class="rounded shadow mt-2 mb-4 w-full max-w-md">
+                    <p>This model emphasizes testing at each development stage. It’s an extension of the Waterfall model
+                        with a strong focus on validation and verification.</p>
+                    <ul class="list-disc ml-6 mt-2 text-gray-700">
+                        <li>Each development phase has a corresponding testing phase</li>
+                        <li>Improves quality and reliability</li>
+                        <li>Best for projects with clear testing requirements</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-semibold text-blue-700">4. Agile Model</h3>
+                    <img src="../Assets/agile-model.png" alt="Agile Model Diagram"
+                        class="rounded shadow mt-2 mb-4 w-full max-w-md">
+                    <p>Agile promotes continuous iteration and collaboration. Work is divided into small increments
+                        (sprints) with frequent feedback.</p>
+                    <ul class="list-disc ml-6 mt-2 text-gray-700">
+                        <li>Highly flexible and adaptive</li>
+                        <li>Promotes teamwork and user involvement</li>
+                        <li>Best for dynamic and fast-changing environments</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-semibold text-blue-700">5. Prototype Model</h3>
+                    <img src="../Assets/prototype-model.png" alt="Prototype Model Diagram"
+                        class="rounded shadow mt-2 mb-4 w-full max-w-md">
+                    <p>A working prototype is built early to understand user needs. Feedback helps refine the system
+                        before full development.</p>
+                    <ul class="list-disc ml-6 mt-2 text-gray-700">
+                        <li>Useful when requirements are unclear</li>
+                        <li>Improves client-developer communication</li>
+                        <li>Can lead to quicker user acceptance</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-semibold text-blue-700">6. Incremental Model</h3>
+                    <img src="../Assets/incremental-model.png" alt="Incremental Model Diagram"
+                        class="rounded shadow mt-2 mb-4 w-full max-w-md">
+                    <p>Software is developed in increments with each release adding functionality. Ideal for systems
+                        needing quick delivery of basic functions.</p>
+                    <ul class="list-disc ml-6 mt-2 text-gray-700">
+                        <li>Delivers working software early</li>
+                        <li>Easier testing and debugging</li>
+                        <li>Requires good initial planning</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-semibold text-blue-700">7. Iterative Model</h3>
+                    <img src="../Assets/iterative-model.png" alt="Iterative Model Diagram"
+                        class="rounded shadow mt-2 mb-4 w-full max-w-md">
+                    <p>Software is developed through repeated cycles (iterations). Feedback is incorporated at each
+                        stage.</p>
+                    <ul class="list-disc ml-6 mt-2 text-gray-700">
+                        <li>Focuses on evolving requirements</li>
+                        <li>Ideal for large systems developed over time</li>
+                        <li>Can identify issues early</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-semibold text-blue-700">8. RAD (Rapid Application Development)</h3>
+                    <img src="../Assets/rad-model.png" alt="RAD Model Diagram"
+                        class="rounded shadow mt-2 mb-4 w-full max-w-md">
+                    <p>RAD emphasizes quick development using reusable components, user feedback, and iterative
+                        prototypes.</p>
+                    <ul class="list-disc ml-6 mt-2 text-gray-700">
+                        <li>Rapid delivery using component-based design</li>
+                        <li>Active user participation</li>
+                        <li>Best for projects with tight deadlines</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div
+                class="mt-10 pt-6 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <a href="topic-2.html"
+                    class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition font-medium text-sm shadow-md hover:shadow-lg">
+                    ← Previous Topic: SDLC Phases
+                </a>
+                <a href="topic-4.html"
+                    class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition font-medium text-sm shadow-md hover:shadow-lg">
+                    Next Topic → Requirement Engineering
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-center text-sm text-gray-500 py-6 mt-10 bg-gray-100 border-t border-gray-200">
+        © <span id="currentYear"></span> <a href="../index.html" class="text-blue-600 hover:underline">EduVision</a>.
+        All rights reserved.
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>

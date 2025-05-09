@@ -13,6 +13,11 @@
       "resources": ["Notes", "Diagram"]
     },
     {
+      "title": "SDLC Model",
+      "description": "Different models of SDLC such as Waterfall, Spiral, V-Model, Agile,Prototype, Incremental, Iterative, RAD Model and their characteristics.",
+      "resources": ["Notes", "Diagram", "Examples"]
+    },
+    {
       "title": "Software Project Management",
       "description": "Responsibilities of a software project manager,project planning,project estimation and many more. ",
       "resources": ["Notes", "Examples", "Video"]
@@ -41,27 +46,27 @@
       "title": "Object-Oriented Software Development",
       "description": "Design patterns,a generalized object oriented analysis and design. ",
       "resources": ["Notes", "Examples", "Videos"]
-    }, 
+    },
     {
       "title": "User Interface Design",
       "description": "Characteristics of a good user interface,basic concepts,types of user intrefaces,component-based GUI development and design methodology. ",
       "resources": ["Notes", "Videos", "Diagram"]
-    }, 
+    },
     {
       "title": "Coding and Testing",
       "description": "Coding,testing,testing in the large vs testing in the small, unit testing, black box testing,white box testing,debuggig,program analysis tools,integration testing,system testng,some general issues asociated with testing. ",
       "resources": ["Notes", "Examples", "Videos"]
-    }, 
+    },
     {
       "title": "Softare Reliability and Quality Management",
       "description": "Software reliability,statistical testing,software quality,quality management system,sei capability maturity model,personal software process,six sigma. ",
       "resources": ["Notes", "Videos"]
-    }, 
+    },
     {
       "title": "Computer Aided Software Engineering",
       "description": "Case and its scope,case enviornment,case support in software life cycle,other characteristics of case tools,architecture of a case enviornment. ",
       "resources": ["Notes", "Videos", "Examples"]
-    }, 
+    },
     {
       "title": "Software Maintenance",
       "description": "Characterisics,reverse engineering,maintenance process,process models,estimation of maintenance cost. ",

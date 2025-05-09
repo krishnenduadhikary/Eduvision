@@ -1,360 +1,680 @@
+/* CSS Custom Properties (Variables) */
+:root {
+  --primary-color: #0078d7;
+  --primary-color-darker: #005bb5;
+  --primary-color-hover: #005bb5;
+  --secondary-color: #6220fb; /* From original button */
+  --accent-color: #cf30aa;   /* From original search feedback */
+
+  --text-color-light: #ffffff;
+  --text-color-dark: #333333;
+  --text-color-muted: #5f5f5f;
+  --text-color-nav-link: var(--text-color-light);
+  --text-color-header-logo: var(--text-color-light);
+
+  --bg-body-light: #e9eef2; /* Lighter, cleaner background */
+  --bg-body-light-gradient: linear-gradient(to right, #f0f4f8, #e9eef2);
+  --bg-card-light: #ffffff;
+  --bg-header-top-light: var(--primary-color); /* Solid color for top bar */
+  --bg-nav-container-light: var(--primary-color-darker); /* Slightly darker for nav */
+  --bg-menu-options-light: var(--bg-card-light);
+
+  --font-primary: 'Poppins', sans-serif;
+  --font-weight-normal: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --header-top-min-height: 60px;
+  --nav-container-min-height: 45px;
+
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+
+  --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.12);
+
+  --transition-fast: 0.2s ease-in-out;
+  --transition-normal: 0.3s ease-in-out;
+
+  /* Uiverse Search Bar - Retains its own dark aesthetic */
+  --search-input-bg: #010201;
+  --search-input-text: #f0f0f0;
+  --search-input-placeholder: #c0b9c0;
+
+  /* Theme Toggle */
+  --theme-toggle-icon-color: var(--text-color-light); /* Initially white on blue header */
+  --theme-toggle-sunmoon-fill: var(--text-color-light);
+  --theme-toggle-sunray-fill: var(--text-color-light);
+}
+
+body.dark-theme {
+  --primary-color: #3f51b5; /* Adjusted primary for dark */
+  --primary-color-darker: #303f9f;
+  --primary-color-hover: #303f9f;
+  --secondary-color: #7e57c2; /* Adjusted secondary for dark */
+  --accent-color: #ff4081;   /* Adjusted accent for dark */
+
+  --text-color-light: #121212; /* Dark text on light elements in dark mode (rare) */
+  --text-color-dark: #e0e6eb;  /* Light text for dark backgrounds */
+  --text-color-muted: #a0a0a0;
+  --text-color-nav-link: var(--text-color-dark);
+  --text-color-header-logo: var(--text-color-dark);
+
+  --bg-body-light: #1a1d24; /* Dark background for body */
+  --bg-body-light-gradient: linear-gradient(to right, #1f232b, #1a1d24);
+  --bg-card-light: #252932;   /* Dark background for cards */
+  --bg-header-top-light: #1e222a;
+  --bg-nav-container-light: #171a21;
+  --bg-menu-options-light: var(--bg-card-light);
+
+  /* Theme Toggle in Dark Mode */
+  --theme-toggle-icon-color: #ffd700; /* Gold for dark theme toggle */
+  --theme-toggle-sunmoon-fill: var(--theme-toggle-icon-color);
+  --theme-toggle-sunray-fill: var(--theme-toggle-icon-color);
+}
+
 /* General Styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(to right, #e0eafc, #cfdef3);
-    color: #333;
-    margin: 0; /* Remove default body margin */
-    padding-top: 50px; /* Add padding to prevent content from hiding behind sticky navbar */
-}
-
-/* Sticky Navbar Styles */
-.navbar {
-    position: fixed; /* Changed to fixed for better reliability */
-    top: 0;
-    left: 0;
-    width: 100%; /* Ensure it spans full width */
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    padding: 0 20px; /* Add horizontal padding */
-    height: 50px; /* Give it a fixed height */
-    display: flex; /* Use flexbox for alignment */
-    align-items: center; /* Center items vertically */
-}
-
-.navbar a {
-    display: inline-block;
-    padding: 10px 15px; /* Adjust padding */
-    text-decoration: none;
-    color: #004d99; /* Match header color */
-    font-weight: 600;
-    transition: background-color 0.3s, color 0.3s; /* Smooth transition */
-}
-
-.navbar a:hover {
-    background-color: #f0f0f0;
-    color: #0078d7;
+  font-family: var(--font-primary);
+  background: var(--bg-body-light-gradient);
+  color: var(--text-color-dark);
+  margin: 0;
+  font-weight: var(--font-weight-normal);
+  line-height: 1.6;
+  /* padding-top will be set by JavaScript */
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Main Header Styles */
-header {
-    background: linear-gradient(135deg, #0078d7, #005bb5);
-    color: #fff;
-    padding: 15px 20px; /* Reduced padding slightly */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    position: relative; /* Needed for absolute positioning of children if any */
-    margin-top: 0; /* Adjusted because of fixed navbar */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: var(--shadow-md);
+  /* Backgrounds are set on inner elements */
 }
 
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px; /* Constrain width */
-    margin: 0 auto; /* Center content */
-    position: relative; /* Context for burger menu absolute positioning */
-    min-height: 60px; /* Ensure header has some height */
+.header-content-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+  margin: 0 auto;
+  padding: 0 20px;
+  min-height: var(--header-top-min-height);
+  background-color: var(--bg-header-top-light);
+  transition: background-color var(--transition-normal);
 }
 
-header h1 {
-    margin: 0;
-    font-size: 2.2em; /* Slightly adjusted size */
-    color: #fff; /* Ensure contrast */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Softer shadow */
+.site-logo h1 {
+  margin: 0;
+  font-size: 1.8em; /* Adjusted for better balance */
+  color: var(--text-color-header-logo);
+  font-weight: var(--font-weight-bold);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-/* Search Input Styles */
-.search-container {
-    /* Removed absolute positioning, let flexbox handle it */
-    margin: 0 15px; /* Add some spacing */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
-.input {
-    border: 1px solid #ccc; /* Start with a subtle border */
-    width: 18em; /* Increased width slightly */
-    height: 2.5em;
-    padding-left: 0.8em;
-    outline: none;
-    background-color: #f3f3f3;
-    border-radius: 10px;
-    transition: all 0.3s ease-in-out; /* Smoother transition */
+/* Theme Toggle Styles */
+.themeToggle {
+/* color is set by --theme-toggle-icon-color for the container, actual SVG fill is separate */
+width: 2.5em; /* Adjusted size */
+height: 2.5em;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.st-sunMoonThemeToggleBtn {
+position: relative;
+cursor: pointer;
+}
+.st-sunMoonThemeToggleBtn .themeToggleInput {
+opacity: 0;
+width: 100%;
+height: 100%; /* Changed from aspect-ratio to ensure it fills label */
+position: absolute; /* Ensure it covers the SVG for click */
+top:0; left: 0;
+}
+.st-sunMoonThemeToggleBtn svg {
+position: absolute;
+left: 50%; top: 50%; /* Center SVG */
+transform: translate(-50%, -50%) rotate(40deg); /* Center and initial rotation */
+width: 1.5em; /* Control SVG size */
+height: 1.5em;
+transition: transform 0.4s ease;
+pointer-events: none; /* SVG shouldn't capture clicks, label/input does */
+}
+.st-sunMoonThemeToggleBtn svg .sunMoon {
+transform-origin: center center;
+transition: inherit;
+transform: scale(1);
+fill: var(--theme-toggle-sunmoon-fill); /* Themed fill */
+}
+.st-sunMoonThemeToggleBtn svg .sunRay-g { /* Group for rays */
+fill: var(--theme-toggle-sunray-fill); /* Themed fill for rays */
+}
+.st-sunMoonThemeToggleBtn svg .sunRay {
+transform-origin: center center;
+transform: scale(0);
+}
+.st-sunMoonThemeToggleBtn svg mask > circle {
+transition: transform 0.64s cubic-bezier(0.41, 0.64, 0.32, 1.575);
+transform: translate(0px, 0px);
+}
+.st-sunMoonThemeToggleBtn svg .sunRay2 { animation-delay: 0.05s !important; }
+.st-sunMoonThemeToggleBtn svg .sunRay3 { animation-delay: 0.1s !important; }
+.st-sunMoonThemeToggleBtn svg .sunRay4 { animation-delay: 0.17s !important; }
+.st-sunMoonThemeToggleBtn svg .sunRay5 { animation-delay: 0.25s !important; }
+.st-sunMoonThemeToggleBtn svg .sunRay6 { animation-delay: 0.29s !important; } /* Corrected from sunRay5 */
+
+.st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg {
+transform: translate(-50%, -50%) rotate(90deg); /* Maintain centering */
+}
+.st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg mask > circle {
+transform: translate(16px, -3px);
+}
+.st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg .sunMoon {
+transform: scale(0.55);
+}
+.st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg .sunRay {
+animation: showRay1832 0.4s ease 0s 1 forwards;
+}
+@keyframes showRay1832 {
+0% { transform: scale(0); }
+100% { transform: scale(1); }
 }
 
-.input:hover {
-    border-color: #a0cfff; /* Lighter blue on hover */
-    background-color: white;
-}
 
-.input:focus {
-    border: 2px solid #4a9dec;
-    box-shadow: 0px 0px 0px 4px rgba(74, 157, 236, 0.2); /* Reduced shadow size */
-    background-color: white;
-}
-
-/* Burger Menu Container */
+/* Burger Menu */
 .burger-container {
-    position: relative; /* Context for the dropdown menu */
+  position: relative;
 }
-
-/* Hide the checkbox */
 #burger-toggle {
-    display: none;
+  display: none;
 }
-
-/* Burger Icon Styles */
 .burger {
-    position: relative;
-    width: 30px; /* Adjusted size */
-    height: 22px; /* Adjusted size */
-    background: transparent;
-    cursor: pointer;
-    display: block; /* Changed to block */
-    margin-left: 15px; /* Space from search bar */
+  position: relative;
+  width: 28px; /* Slightly adjusted */
+  height: 20px;
+  background: transparent;
+  cursor: pointer;
+  display: block;
 }
-
 .burger span {
-    display: block;
-    position: absolute;
-    height: 4px;
-    width: 100%;
-    background: #fff; /* White bars for contrast */
-    border-radius: 9px;
-    opacity: 1;
-    left: 0;
-    transform: rotate(0deg);
-    transition: all .25s ease-in-out; /* Use 'all' for smoother transitions */
+  display: block;
+  position: absolute;
+  height: 3px; /* Thinner lines */
+  width: 100%;
+  background: var(--text-color-header-logo); /* Use logo color for consistency */
+  border-radius: var(--border-radius-sm);
+  opacity: 1;
+  left: 0;
+  transform: rotate(0deg);
+  transition: all .25s ease-in-out;
 }
+.burger span:nth-of-type(1) { top: 0px; }
+.burger span:nth-of-type(2) { top: 8px; } /* Adjusted middle position */
+.burger span:nth-of-type(3) { top: 16px; } /* Adjusted bottom position */
 
-/* Burger Span Positions */
-.burger span:nth-of-type(1) {
-    top: 0px;
-}
-
-.burger span:nth-of-type(2) {
-    top: 9px; /* Middle */
-}
-
-.burger span:nth-of-type(3) {
-    top: 18px; /* Bottom */
-}
-
-/* Burger Animation on Check */
 #burger-toggle:checked + .burger span:nth-of-type(1) {
-    top: 9px;
-    transform: rotate(135deg);
+  top: 8px;
+  transform: rotate(135deg);
 }
-
 #burger-toggle:checked + .burger span:nth-of-type(2) {
-    opacity: 0;
-    left: -30px; /* Slide out */
+  opacity: 0;
+  left: -30px;
 }
-
 #burger-toggle:checked + .burger span:nth-of-type(3) {
-    top: 9px;
-    transform: rotate(-135deg);
+  top: 8px;
+  transform: rotate(-135deg);
 }
 
-/* Burger Menu Options (Dropdown) */
 .menu-options {
-    display: none; /* Hidden by default */
-    position: absolute;
-    top: 100%; /* Position below the burger container */
-    right: 0; /* Align to the right */
-    margin-top: 10px; /* Space from burger */
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    list-style: none;
-    padding: 10px 0;
-    width: 200px;
-    z-index: 1100; /* Ensure it's above other elements */
+  display: none;
+  position: absolute;
+  top: calc(100% + 10px); /* Position below burger with space */
+  right: 0;
+  background: var(--bg-menu-options-light);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-lg);
+  list-style: none;
+  padding: 10px 0;
+  width: 220px; /* Slightly wider */
+  z-index: 1100;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
 }
-
-/* Show menu when checkbox is checked */
 #burger-toggle:checked ~ .menu-options {
-    display: block;
+  display: block;
 }
-
-.menu-options li {
-    /* Removed padding here, apply to link */
-}
-
 .menu-options li a {
-    text-decoration: none;
-    color: #333;
-    display: block;
-    padding: 10px 20px; /* Padding on the link for better click area */
-    transition: background-color 0.2s;
+  text-decoration: none;
+  color: var(--text-color-dark);
+  display: block;
+  padding: 12px 20px; /* Increased padding */
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  font-weight: var(--font-weight-semibold);
+  font-size: 0.9em;
 }
-
 .menu-options li a:hover {
-    background-color: #f0f0f0;
-    color: #0078d7;
+  background-color: var(--primary-color-hover);
+  color: var(--text-color-light); /* White text on primary hover */
+}
+body.dark-theme .menu-options li a:hover {
+  background-color: var(--primary-color-hover);
+  color: var(--text-color-dark); /* Dark theme text color on hover */
 }
 
-/* Main Site Navigation (Below Header) */
+
+/* Main Site Navigation (Below Header Top) */
 .nav-container {
-    background-color: #005bb5; /* Slightly darker blue */
-    padding: 8px 0; /* Vertical padding */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: var(--bg-nav-container-light);
+  transition: background-color var(--transition-normal);
+  /* box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.1); Optional subtle inner shadow */
 }
-
 .nav-container nav {
-    display: flex;
-    justify-content: center;
-    max-width: 1200px;
-    margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 10px; /* Horizontal padding for the nav bar itself */
+  min-height: var(--nav-container-min-height);
+  align-items: center;
 }
-
 .nav-container .menu {
-    display: flex;
-    flex-wrap: wrap; /* Allow wrapping on smaller screens */
-    justify-content: center; /* Center items when wrapped */
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
-
 .nav-container .menu li {
-    margin: 5px 10px; /* Add vertical margin for wrap */
+  margin: 0 5px; /* Spacing between items */
 }
-
 .nav-container .menu a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 1rem;
-    font-weight: bold;
-    transition: color 0.3s;
-    padding: 5px 10px; /* Add padding */
-    border-radius: 5px; /* Optional rounded corners */
+  color: var(--text-color-nav-link);
+  text-decoration: none;
+  font-size: 0.95rem; /* Slightly adjusted */
+  font-weight: var(--font-weight-semibold);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+  padding: 8px 15px; /* Generous padding for click targets */
+  border-radius: var(--border-radius-sm);
+  display: inline-block; /* Ensure padding is applied correctly */
 }
-
 .nav-container .menu a:hover {
-    color: #e0eafc; /* Lighter color on hover */
-    background-color: rgba(255, 255, 255, 0.1); /* Subtle background hover */
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-color-light); /* Ensure high contrast on hover */
+}
+body.dark-theme .nav-container .menu a:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: var(--accent-color); /* Brighter hover color in dark mode */
 }
 
 
 /* Main Content Styles */
 main {
-    padding: 30px 20px; /* Increased padding */
-    max-width: 1200px;
-    margin: 20px auto 0 auto; /* Add top margin */
+  padding: 40px 20px; /* Increased padding */
+  max-width: 1200px;
+  margin: 0 auto; /* Centered, top margin handled by body padding */
 }
 
 .subjects-intro h2 {
-    text-align: center;
-    font-size: 2.5em;
-    margin-bottom: 10px;
-    color: #0078d7;
+  text-align: center;
+  font-size: 2.6em;
+  margin-bottom: 15px;
+  color: var(--primary-color);
+  font-weight: var(--font-weight-bold);
+}
+body.dark-theme .subjects-intro h2 {
+  color: var(--accent-color);
 }
 
 .subjects-intro p {
-    text-align: center;
-    font-size: 1.2em;
-    margin-bottom: 40px; /* Increased spacing */
-    color: #555;
+  text-align: center;
+  font-size: 1.25em;
+  margin-bottom: 50px;
+  color: var(--text-color-muted);
+  font-weight: var(--font-weight-normal);
 }
 
 .subject-category {
-    margin-bottom: 50px; /* Increased spacing */
+  margin-bottom: 60px;
 }
 
 .subject-category h2 {
-    font-size: 2em;
-    color: #005bb5;
-    margin-bottom: 25px; /* Increased spacing */
-    border-bottom: 3px solid #0078d7; /* Thicker border */
-    padding-bottom: 8px; /* Increased padding */
-    display: inline-block; /* Prevent border stretching full width */
+  font-size: 2.1em;
+  color: var(--primary-color-darker);
+  margin-bottom: 30px;
+  border-bottom: 3px solid var(--primary-color);
+  padding-bottom: 10px;
+  display: inline-block;
+  font-weight: var(--font-weight-bold);
+}
+body.dark-theme .subject-category h2 {
+  color: var(--primary-color);
+  border-bottom-color: var(--accent-color);
 }
 
 .subject-cards {
-    display: grid;
-    /* Adjusted minmax for potentially smaller screens */
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 25px; /* Increased gap */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Slightly larger min card width */
+  gap: 30px;
 }
 
-/* Unified Card Styles */
 .subject-card {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); /* Softer shadow */
-    padding: 25px; /* Increased padding */
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Added ease */
-    display: flex; /* Use flexbox for content alignment */
-    flex-direction: column; /* Stack content vertically */
-    justify-content: space-between; /* Push button to bottom */
-    min-height: 150px; /* Ensure minimum height */
+  background-color: var(--bg-card-light);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 30px;
+  text-align: center;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 200px; /* Ensure cards have enough height */
 }
 
 .subject-card:hover {
-    transform: translateY(-8px); /* Slightly more lift */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
+  transform: translateY(-10px); /* More pronounced lift */
+  box-shadow: var(--shadow-lg);
 }
 
-.subject-card h3 { /* Changed from H2 to H3 for better semantics */
-    font-size: 1.4em; /* Adjusted size */
-    margin-top: 0; /* Remove default margin */
-    margin-bottom: 15px; /* Spacing below title */
-    color: #0078d7;
-    flex-grow: 1; /* Allow title to take up space */
+.subject-card h3 {
+  font-size: 1.4em;
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: var(--primary-color);
+  flex-grow: 1; /* Allows title to take up available space */
+  font-weight: var(--font-weight-semibold);
+}
+body.dark-theme .subject-card h3 {
+  color: var(--accent-color);
 }
 
-/* Button Styles within Cards (Specific) */
+/* Global Button Style (for "GET STARTED" in cards, themed with variables) */
 .subject-card button {
-    /* Using the complex global button style for now */
-    /* If you want simpler buttons just for cards, override here: */
-    /* e.g., background: #0078d7; color: white; border: none; padding: 10px 20px; ... */
-    align-self: center; /* Center button horizontally */
-    margin-top: 15px; /* Space above button */
+  border-radius: .25rem;
+  text-transform: uppercase;
+  font-style: normal;
+  font-weight: var(--font-weight-bold); /* Bolder */
+  padding: 0 25px;
+  color: var(--text-color-light);
+  -webkit-clip-path: polygon(0 0,0 0,100% 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,15px 100%,0 100%);
+  clip-path: polygon(0 0,0 0,100% 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,15px 100%,0 100%);
+  height: 44px; /* Slightly taller */
+  font-size: 0.85rem;
+  line-height: 44px;
+  letter-spacing: 1.2px;
+  transition: all .3s ease-in-out; /* Unified transition */
+  background-image: linear-gradient(90deg, var(--primary-color-darker), var(--secondary-color));
+  border: 0 solid;
+  overflow: hidden;
+  cursor: pointer;
+  align-self: center;
+  margin-top: 20px; /* More space above button */
 }
 
-/* Global Button Style (Kept from original, affects all buttons) */
-button {
-    border-radius: .25rem;
-    text-transform: uppercase;
-    font-style: normal;
-    font-weight: 600; /* Slightly bolder */
-    padding: 0 25px; /* Adjusted padding slightly */
-    color: #fff;
-    -webkit-clip-path: polygon(0 0,0 0,100% 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,15px 100%,0 100%);
-    clip-path: polygon(0 0,0 0,100% 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,15px 100%,0 100%);
-    height: 40px;
-    font-size: 0.8rem; /* Slightly larger text */
-    line-height: 40px; /* Match height */
-    letter-spacing: 1.2px;
-    transition: .2s .1s;
-    background-image: linear-gradient(90deg,#1c1c1c,#6220fb);
-    border: 0 solid;
-    overflow: hidden;
-    cursor: pointer; /* Ensure cursor changes */
+.subject-card button:hover {
+  padding-right: 30px;
+  padding-left: 30px;
+  background-image: linear-gradient(90deg, var(--secondary-color), var(--accent-color)); /* More vibrant hover */
+  transform: scale(1.03); /* Subtle scale on hover */
 }
 
-button:hover {
-    transition: all .3s ease-in;
-    padding-right: 30px;
-    padding-left: 30px;
-    background-image: linear-gradient(90deg,#333, #7a40ff); /* Slightly lighter hover */
+body.dark-theme .subject-card button {
+  background-image: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  color: var(--text-color-dark); /* Ensure contrast for text on button */
 }
-
+body.dark-theme .subject-card button:hover {
+  background-image: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+  color: var(--text-color-light); /* Light text on vibrant hover in dark mode */
+}
 
 /* Footer Styles */
 footer {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 15px 0; /* Increased padding */
-    margin-top: 40px; /* Increased spacing */
+  background-color: var(--text-color-dark); /* Using text color as dark bg for footer */
+  color: var(--bg-body-light); /* Using body bg as light text for footer */
+  text-align: center;
+  padding: 25px 0;
+  margin-top: 50px;
+  font-size: 0.9em;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
 }
-
+body.dark-theme footer {
+  background-color: #171a21; /* Specific dark footer bg */
+  color: var(--text-color-muted);
+}
 footer p {
-    margin: 0;
-    font-size: 0.9em;
+  margin: 0;
 }
 
-/* --- Removed Unused/Conflicting CSS --- */
-/* Removed: .menu-bar, .toggle, .bars, .header (class), .overview, .topics-grid, .topic-card */
-/* Removed: Duplicate body styles */
+
+/* Styles for Uiverse Search Bar - #poda */
+/* These are mostly from your original CSS to preserve its unique look */
+/* The search bar is inherently dark-themed, so its colors are mostly fixed */
+.search-widget-container {
+  position: relative; /* For positioning context of #poda if needed */
+}
+#poda {
+display: flex;
+align-items: center;
+justify-content: center;
+position: relative; /* Important for its ::before/::after effects */
+}
+#poda .input { /* This is the Uiverse input, not a generic one */
+background-color: var(--search-input-bg);
+border: none;
+width: 301px; /* Original width */
+height: 56px; /* Original height */
+border-radius: 10px;
+color: var(--search-input-text);
+padding-inline: 59px;
+font-size: 18px;
+outline: none;
+}
+#poda .input::placeholder {
+color: var(--search-input-placeholder);
+}
+/* Other #poda styles (glow, borders, masks etc.) from original CSS */
+.grid { /* This style was present but unused, kept in case it's part of #poda's JS or intended elsewhere */
+height: 800px; width: 800px;
+background-image: linear-gradient(to right, #0f0f10 1px, transparent 1px),
+  linear-gradient(to bottom, #0f0f10 1px, transparent 1px);
+background-size: 1rem 1rem; background-position: center center;
+position: absolute; z-index: -1; filter: blur(1px);
+}
+.white, .border, .darkBorderBg, .glow {
+max-height: 70px; max-width: 314px; height: 100%; width: 100%;
+position: absolute; overflow: hidden; z-index: -1;
+border-radius: 12px; filter: blur(3px);
+}
+#main:focus-within > #input-mask { display: none; }
+#input-mask {
+pointer-events: none; width: 100px; height: 20px; position: absolute;
+background: linear-gradient(90deg, transparent, black);
+top: 18px; left: 70px;
+}
+#pink-mask {
+pointer-events: none; width: 30px; height: 20px; position: absolute;
+background: #cf30aa; top: 10px; left: 5px;
+filter: blur(20px); opacity: 0.8; transition: all 2s;
+}
+#main:hover > #pink-mask { opacity: 0; }
+.white { max-height: 63px; max-width: 307px; border-radius: 10px; filter: blur(2px); }
+.white::before {
+content: ""; z-index: -2; text-align: center; top: 50%; left: 50%;
+transform: translate(-50%, -50%) rotate(83deg); position: absolute;
+width: 600px; height: 600px; background-repeat: no-repeat;
+background-position: 0 0; filter: brightness(1.4);
+background-image: conic-gradient(rgba(0,0,0,0) 0%, #a099d8, rgba(0,0,0,0) 8%, rgba(0,0,0,0) 50%, #dfa2da, rgba(0,0,0,0) 58%);
+transition: all 2s;
+}
+.border { max-height: 59px; max-width: 303px; border-radius: 11px; filter: blur(0.5px); }
+.border::before {
+content: ""; z-index: -2; text-align: center; top: 50%; left: 50%;
+transform: translate(-50%, -50%) rotate(70deg); position: absolute;
+width: 600px; height: 600px; filter: brightness(1.3);
+background-repeat: no-repeat; background-position: 0 0;
+background-image: conic-gradient(#1c191c, #402fb5 5%, #1c191c 14%, #1c191c 50%, #cf30aa 60%, #1c191c 64%);
+transition: all 2s;
+}
+.darkBorderBg { max-height: 65px; max-width: 312px; }
+.darkBorderBg::before {
+content: ""; z-index: -2; text-align: center; top: 50%; left: 50%;
+transform: translate(-50%, -50%) rotate(82deg); position: absolute;
+width: 600px; height: 600px; background-repeat: no-repeat;
+background-position: 0 0;
+background-image: conic-gradient(rgba(0,0,0,0), #18116a, rgba(0,0,0,0) 10%, rgba(0,0,0,0) 50%, #6e1b60, rgba(0,0,0,0) 60%);
+transition: all 2s;
+}
+#poda:hover > .darkBorderBg::before { transform: translate(-50%, -50%) rotate(262deg); }
+#poda:hover > .glow::before { transform: translate(-50%, -50%) rotate(240deg); }
+#poda:hover > .white::before { transform: translate(-50%, -50%) rotate(263deg); }
+#poda:hover > .border::before { transform: translate(-50%, -50%) rotate(250deg); }
+#poda:focus-within > .darkBorderBg::before { transform: translate(-50%, -50%) rotate(442deg); transition: all 4s; }
+#poda:focus-within > .glow::before { transform: translate(-50%, -50%) rotate(420deg); transition: all 4s; }
+#poda:focus-within > .white::before { transform: translate(-50%, -50%) rotate(443deg); transition: all 4s; }
+#poda:focus-within > .border::before { transform: translate(-50%, -50%) rotate(430deg); transition: all 4s; }
+.glow { overflow: hidden; filter: blur(30px); opacity: 0.4; max-height: 130px; max-width: 354px; }
+.glow:before {
+content: ""; z-index: -2; text-align: center; top: 50%; left: 50%;
+transform: translate(-50%, -50%) rotate(60deg); position: absolute;
+width: 999px; height: 999px; background-repeat: no-repeat;
+background-position: 0 0;
+background-image: conic-gradient(#000, #402fb5 5%, #000 38%, #000 50%, #cf30aa 60%, #000 87%);
+transition: all 2s;
+}
+#filter-icon {
+position: absolute; top: 8px; right: 8px; display: flex;
+align-items: center; justify-content: center; z-index: 2;
+max-height: 40px; max-width: 38px; height: 100%; width: 100%;
+isolation: isolate; overflow: hidden; border-radius: 10px;
+background: linear-gradient(180deg, #161329, black, #1d1b4b);
+border: 1px solid transparent;
+}
+.filterBorder {
+height: 42px; width: 40px; position: absolute; overflow: hidden;
+top: 7px; right: 7px; border-radius: 10px;
+}
+.filterBorder::before {
+content: ""; text-align: center; top: 50%; left: 50%;
+transform: translate(-50%, -50%) rotate(90deg); position: absolute;
+width: 600px; height: 600px; background-repeat: no-repeat;
+background-position: 0 0; filter: brightness(1.35);
+background-image: conic-gradient(rgba(0,0,0,0), #3d3a4f, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 50%, #3d3a4f, rgba(0,0,0,0) 100%);
+animation: rotate 4s linear infinite;
+}
+#main { position: relative; }
+#search-icon { position: absolute; left: 20px; top: 15px; }
+@keyframes rotate { 100% { transform: translate(-50%, -50%) rotate(450deg); } }
+
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .subject-cards {
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+  }
+  .site-logo h1 {
+      font-size: 1.6em;
+  }
+  .header-actions {
+      gap: 10px;
+  }
+  #poda .input { /* Shrink search bar on medium screens */
+      width: 200px;
+      height: 48px;
+      font-size: 16px;
+      padding-inline: 45px 10px; /* Adjust padding for smaller input */
+  }
+  #poda #search-icon {
+      left: 15px; top: 12px; /* Adjust icon position */
+      transform: scale(0.9);
+  }
+   #poda #filter-icon {
+      transform: scale(0.9);
+      top: 6px; right: 6px;
+  }
+  .nav-container .menu a {
+      font-size: 0.9rem;
+      padding: 8px 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-content-top {
+      padding: 0 15px;
+  }
+  .site-logo h1 {
+      font-size: 1.5em;
+  }
+  /* Hide the full Uiverse search bar, show a simpler icon or nothing */
+  .search-widget-container {
+      display: none; 
+  }
+  .nav-container .menu {
+      justify-content: space-around; /* Better distribution if items wrap */
+  }
+  .nav-container .menu li {
+      margin: 3px;
+  }
+  .subjects-intro h2 { font-size: 2.2em; }
+  .subjects-intro p { font-size: 1.1em; margin-bottom: 40px; }
+  .subject-category h2 { font-size: 1.8em; margin-bottom: 25px; }
+}
+
+@media (max-width: 480px) {
+  .site-logo h1 {
+      font-size: 1.3em;
+  }
+  .header-actions .themeToggle { /* Make theme toggle smaller */
+      width: 2em; height: 2em;
+  }
+  .header-actions .themeToggle svg {
+      width: 1.2em; height: 1.2em;
+  }
+  .nav-container {
+      /* Optionally hide this nav and move links to burger, or let it wrap aggressively */
+      min-height: auto; /* Allow it to shrink if content wraps a lot */
+  }
+  .nav-container .menu a {
+      font-size: 0.8rem;
+      padding: 6px 8px;
+  }
+  .menu-options {
+      width: 180px; /* Smaller dropdown */
+  }
+  .subject-card {
+      padding: 20px;
+      min-height: 180px;
+  }
+  .subject-card h3 {
+      font-size: 1.2em;
+  }
+  .subject-card button {
+      height: 40px;
+      line-height: 40px;
+      font-size: 0.75rem;
+      padding: 0 20px;
+  }
+  .subject-card button:hover {
+      padding-right: 25px;
+      padding-left: 25px;
+  }
+}

@@ -150,6 +150,62 @@ body {
   height: 100%;
 }
 
+/* Header and Navbar Styles */
+.main-header {
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    padding: 0;
+    margin-bottom: 30px;
+}
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 18px 24px;
+}
+.nav-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #6f42c1;
+    text-decoration: none;
+    letter-spacing: 1px;
+}
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 28px;
+}
+.nav-links li a {
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: color 0.2s;
+}
+.nav-links li a:hover,
+.nav-links li a[aria-current="page"] {
+    color: #6f42c1;
+    border-bottom: 2px solid #6f42c1;
+    padding-bottom: 2px;
+}
+
+/* Footer Styles */
+.main-footer {
+    background: #222;
+    color: #fff;
+    text-align: center;
+    padding: 18px 0;
+    margin-top: 40px;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+}
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
 /* Card Button Styling (reuse, but adjust for dark bg) */
 .card-button {
     background-color: #6f42c1;
@@ -164,10 +220,14 @@ body {
     letter-spacing: 0.5px;
     transition: background-color 0.2s ease;
     margin-top: 1.2rem;
+    outline: none;
 }
-
 .card-button:hover {
     background-color: #5a379a;
+}
+.card-button:focus {
+    background-color: #4b2c7a;
+    box-shadow: 0 0 0 3px #bfa7e6;
 }
 
 /* Responsive Adjustments */
@@ -194,6 +254,15 @@ body {
     }
     .card .text {
         font-size: 1.4rem;
+    }
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 12px 10px;
+    }
+    .nav-links {
+        gap: 16px;
+        margin-top: 8px;
     }
 }
 

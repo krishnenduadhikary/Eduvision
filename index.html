@@ -6,22 +6,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduVishion - Learn Computer Science</title>
     <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
 </head>
 
 <body>
 
-    <!-- Main Header -->
-    <header>
-        <div class="header-content" style="display: flex; justify-content: space-between; align-items: center;">
-            <h1 style="margin: 0;">EduVishion</h1>
-            <div style="display: flex; align-items: left; gap: 15px;">
-
-                <div class="search-container">
-                    <input placeholder="Search subjects..." class="input" name="search" />
+    <!-- Main Header - Now Sticky -->
+    <header class="site-header">
+        <div class="header-content-top">
+            <div class="site-logo">
+                <h1>EduVishion</h1>
+            </div>
+            <div class="header-actions">
+                <!-- Theme toggle button -->
+                <label for="themeToggle" class="themeToggle st-sunMoonThemeToggleBtn" type="checkbox">
+                    <input type="checkbox" id="themeToggle" class="themeToggleInput" />
+                    <svg width="18" height="18" viewBox="0 0 20 20" stroke="none">
+                        <mask id="moon-mask">
+                            <rect x="0" y="0" width="20" height="20" fill="white"></rect>
+                            <circle cx="11" cy="3" r="8" fill="black"></circle>
+                        </mask>
+                        <circle class="sunMoon" cx="10" cy="10" r="8" mask="url(#moon-mask)"></circle>
+                        <g class="sunRay-g">
+                            <circle class="sunRay sunRay1" cx="18" cy="10" r="1.5"></circle>
+                            <circle class="sunRay sunRay2" cx="14" cy="16.928" r="1.5"></circle>
+                            <circle class="sunRay sunRay3" cx="6" cy="16.928" r="1.5"></circle>
+                            <circle class="sunRay sunRay4" cx="2" cy="10" r="1.5"></circle>
+                            <circle class="sunRay sunRay5" cx="6" cy="3.1718" r="1.5"></circle>
+                            <circle class="sunRay sunRay6" cx="14" cy="3.1718" r="1.5"></circle>
+                        </g>
+                    </svg>
+                </label>
+                <!-- Animated Search Bar (Uiverse.io) -->
+                <div id="poda" class="search-widget-container">
+                    <div class="glow"></div>
+                    <div class="darkBorderBg"></div>
+                    <div class="darkBorderBg"></div>
+                    <div class="darkBorderBg"></div>
+                    <div class="white"></div>
+                    <div class="border"></div>
+                    <div id="main">
+                        <input placeholder="Search..." type="text" name="text" class="input" />
+                        <div id="input-mask"></div>
+                        <div id="pink-mask"></div>
+                        <div class="filterBorder"></div>
+                        <div id="filter-icon">
+                            <svg preserveAspectRatio="none" height="27" width="27" viewBox="4.8 4.56 14.832 15.408"
+                                fill="none">
+                                <path
+                                    d="M8.16 6.65002H15.83C16.47 6.65002 16.99 7.17002 16.99 7.81002V9.09002C16.99 9.56002 16.7 10.14 16.41 10.43L13.91 12.64C13.56 12.93 13.33 13.51 13.33 13.98V16.48C13.33 16.83 13.1 17.29 12.81 17.47L12 17.98C11.24 18.45 10.2 17.92 10.2 16.99V13.91C10.2 13.5 9.97 12.98 9.73 12.69L7.52 10.36C7.23 10.08 7 9.55002 7 9.20002V7.87002C7 7.17002 7.52 6.65002 8.16 6.65002Z"
+                                    stroke="#d6d6e6" stroke-width="1" stroke-miterlimit="10" stroke-linecap="round"
+                                    stroke-linejoin="round"></path>
+                            </svg>
+                        </div>
+                        <div id="search-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2"
+                                stroke-linejoin="round" stroke-linecap="round" height="24" fill="none"
+                                class="feather feather-search">
+                                <circle stroke="url(#search)" r="8" cy="11" cx="11"></circle>
+                                <line stroke="url(#searchl)" y2="16.65" y1="22" x2="16.65" x1="22"></line>
+                                <defs>
+                                    <linearGradient gradientTransform="rotate(50)" id="search">
+                                        <stop stop-color="#f8e7f8" offset="0%"></stop>
+                                        <stop stop-color="#b6a9b7" offset="50%"></stop>
+                                    </linearGradient>
+                                    <linearGradient id="searchl">
+                                        <stop stop-color="#b6a9b7" offset="0%"></stop>
+                                        <stop stop-color="#837484" offset="50%"></stop>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
-
                 <!-- Burger Menu -->
                 <div class="burger-container">
                     <input type="checkbox" id="burger-toggle">
@@ -42,7 +100,7 @@
             </div>
         </div>
 
-        <!-- Main Site Navigation -->
+        <!-- Main Site Navigation (Part of Sticky Header) -->
         <div class="nav-container">
             <nav>
                 <ul class="menu">
@@ -60,8 +118,8 @@
     </header>
 
     <!-- Homepage Content -->
-    <main id="subjects"> <!-- Added ID for potential linking -->
-        <section class="subjects-intro">
+    <main id="subjects">
+        <section class="subjects-intro" data-aos="fade-in">
             <h2>Welcome to EduVishion</h2>
             <p>Start your journey from beginner to pro in Computer Science:</p>
         </section>
@@ -70,25 +128,24 @@
         <section class="subject-category">
             <h2>Beginner Level</h2>
             <div class="subject-cards">
-                <!-- Standardized to 'subject-card' class, added AOS -->
                 <div class="subject-card" data-aos="fade-up">
                     <h3>Computer Fundamentals</h3>
                     <button onclick="location.href='subjects/Computer Fundamentals/fundamentals.html'">GET
                         STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="50">
                     <h3>Introduction to Programming</h3>
                     <button onclick="location.href='subjects/Introduction to Programming/itp.html'">GET STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="100">
                     <h3>C Programming</h3>
                     <button onclick="location.href='subjects/C Programming/c-programming.html'">GET STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="150">
                     <h3>Digital Logic</h3>
                     <button onclick="location.href='subjects/Digital Logic/dl.html'">GET STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="200">
                     <h3>Architecture</h3>
                     <button onclick="location.href='subjects/Architecture/arhitecture.html'">GET STARTED</button>
                 </div>
@@ -103,46 +160,46 @@
                     <button onclick="location.href='subjects/Discrete Structure/discrete-structure.html'">GET
                         STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="50">
                     <h3>Data Structures</h3>
                     <button onclick="location.href='subjects/Data Structure/ds.html'">GET STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="100">
                     <h3>Object Oriented Programming</h3>
                     <button onclick="location.href='subjects/Object Oriented Programming/oop.html'">GET STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="150">
                     <h3>Operating Systems</h3>
                     <button onclick="location.href='subjects/Operating Systems/os.html'">GET STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="200">
                     <h3>Database Management Systems</h3>
                     <button onclick="location.href='subjects/Database Management Systems/dbms.html'">GET
                         STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="250">
                     <h3>Software Engineering</h3>
                     <button onclick="location.href='subjects/Software Engineering/software-engineering.html'">GET
                         STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="300">
                     <h3>UNIX/Linux Programming</h3>
                     <button onclick="location.href='subjects/Unix-Linux programming/unix-linux.html'">GET
                         STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="350">
                     <h3>R Programming</h3>
                     <button onclick="location.href='subjects/R-programming/r-programming.html'">GET STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="400">
                     <h3>Python Programming</h3>
                     <button onclick="location.href='subjects/Python Programming/python.html'">GET STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="450">
                     <h3>PHP Programming</h3>
                     <button onclick="location.href='subjects/PHP Programmming/php.html'">GET STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="500">
                     <h3>System Programming</h3>
                     <button onclick="location.href='subjects/System Programming/system-programming.html'">GET
                         STARTED</button>
@@ -158,38 +215,38 @@
                     <button onclick="location.href='subjects/Design and Analysis of Algorithms/algorithm.html'">GET
                         STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="50">
                     <h3>Computer Networks</h3>
                     <button onclick="location.href='subjects/Computer Networks/network.html'">GET STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="100">
                     <h3>Microprocessors</h3>
                     <button onclick="location.href='subjects/Microprocessor/microprocessor.html'">GET STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="150">
                     <h3>Digital Image Processing</h3>
                     <button onclick="location.href='subjects/Digital Image Processing/dimp.html'">GET STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="200">
                     <h3>Numerical Methods</h3>
                     <button onclick="location.href='subjects/Numerical Methods/numerical-methods.html'">GET
                         STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="250">
                     <h3>Computer Graphics</h3>
                     <button onclick="location.href='subjects/Computer Graphics/graphics.html'">GET STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="300">
                     <h3>Soft Computing</h3>
                     <button onclick="location.href='subjects/Soft Computing/soft-computing.html'">GET STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="350">
                     <h3>Combinatorial Optimization</h3>
                     <button
                         onclick="location.href='subjects/Combinatorial Optimization/combinatorial-optimization.html'">GET
                         STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="400">
                     <h3>Data Mining</h3>
                     <button onclick="location.href='subjects/Data Minimg/data-mining.html'">GET STARTED</button>
                 </div>
@@ -204,31 +261,31 @@
                     <button onclick="location.href='subjects/Internet Technology/internet-technology.html'">GET
                         STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="50">
                     <h3>Theory of Computation</h3>
                     <button onclick="location.href='subjects/Theory of Computation/toc.html'">GET STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="100">
                     <h3>Artificial Intelligence</h3>
                     <button onclick="location.href='subjects/Artificial Intelligence/ai.html'">GET STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="150">
                     <h3>Internet of Things (IoT)</h3>
                     <button onclick="location.href='subjects/Internet of Things(IoT)/iot.html'">GET STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="200">
                     <h3>Machine Learning</h3>
                     <button onclick="location.href='subjects/Machine Learning/ml.html'">GET STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="250">
                     <h3>Computer Vision</h3>
                     <button onclick="location.href='subjects/Computer Vision/computer-vision.html'">GET STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="300">
                     <h3>Natural Language Processing</h3>
                     <button onclick="location.href='subjects/Natural Language Processing/nlp.html'">GET STARTED</button>
                 </div>
-                <div class="subject-card" data-aos="fade-up">
+                <div class="subject-card" data-aos="fade-up" data-aos-delay="350">
                     <h3>Compiler Design</h3>
                     <button onclick="location.href='subjects/Compiler Design/compiler-design.html'">GET STARTED</button>
                 </div>
@@ -238,16 +295,71 @@
 
     <!-- Footer -->
     <footer>
-        <p>© 2025 EduVishion. All rights reserved.</p>
+        <p>© <span id="currentYear">2025</span> EduVishion. All rights reserved.</p>
     </footer>
 
     <!-- AOS Script -->
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script>
+        // Initialize AOS (Animate On Scroll)
         AOS.init({
-            duration: 800, // Optional: Add animation duration
-            once: true // Optional: Animate elements only once
+            duration: 600, // Slightly faster animations
+            once: true,    // Animation happens only once
+            offset: 50     // Offset (in px) from the original trigger point
         });
+
+        // Theme toggle logic
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        // Function to apply theme
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                body.classList.add('dark-theme');
+                themeToggle.checked = true;
+            } else {
+                body.classList.remove('dark-theme');
+                themeToggle.checked = false;
+            }
+        }
+
+        // On load, check localStorage for saved theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            applyTheme(savedTheme);
+        } else {
+            // Optional: Check user's system preference if no theme is saved
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                applyTheme('dark');
+                localStorage.setItem('theme', 'dark'); // Save preference
+            } else {
+                applyTheme('light'); // Default to light
+            }
+        }
+
+        themeToggle.addEventListener('change', function () {
+            if (this.checked) {
+                applyTheme('dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                applyTheme('light');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Dynamic Body Padding for Fixed Header
+        function setBodyPadding() {
+            const header = document.querySelector('.site-header');
+            if (header) {
+                document.body.style.paddingTop = header.offsetHeight + 'px';
+            }
+        }
+        window.addEventListener('DOMContentLoaded', setBodyPadding);
+        window.addEventListener('resize', setBodyPadding);
+
+        // Update Copyright Year Dynamically
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
     </script>
 </body>
 

@@ -8,6 +8,7 @@
     --accent-color: #8b5cf6; /* Purple accent for badges/hovers */
     --accent-hover-color: #7c3aed;
     --font-family: 'Inter', sans-serif;
+    --logo-color: var(--accent-color); /* Color for the EduVishion logo text */
 }
 
 * {
@@ -23,9 +24,32 @@ body {
     line-height: 1.6;
 }
 
+/* --- Site Branding (New Logo Area) --- */
+.site-branding {
+    padding: 20px 25px; /* Add some padding around the logo */
+    background-color: var(--bg-color); /* Can be same as body or slightly different */
+    /* If you want a border at the bottom:
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 20px; Allow some space if there's a border */
+}
+
+.logo-text {
+    font-size: 1.8em; /* Adjust size as needed */
+    font-weight: 700;
+    color: var(--logo-color);
+    letter-spacing: -0.5px; /* Optional: tighten letter spacing */
+    /* You can use a gradient for the logo text too if desired:
+    background: linear-gradient(to right, #a78bfa, #6366f1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    */
+}
+
+
 .main-container {
     max-width: 1100px;
-    margin: 40px auto;
+    margin: 20px auto 40px auto; /* Adjusted top margin to account for site-branding */
     padding: 0 20px;
 }
 
@@ -45,7 +69,7 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    color: transparent; /* Fallback for non-supporting browsers */
+    /* color: transparent; /* Fallback for non-supporting browsers - This was causing issues with non-gradient text */
 }
 
 .page-header p {
@@ -78,7 +102,6 @@ body {
 /* --- Roadmap Grid --- */
 .roadmap-grid {
     display: grid;
-    /* Responsive grid: 3 columns on desktop, 2 on tablet, 1 on mobile */
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 15px; /* Gap between cards */
 }
@@ -93,7 +116,7 @@ body {
     align-items: center; /* Vertically center content */
     text-decoration: none;
     color: var(--text-color);
-    transition: background-color 0.2s ease, border-color 0.2s ease;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease; /* Added transform */
     font-weight: 500;
 }
 
@@ -101,6 +124,7 @@ body {
     background-color: #374151; /* Slightly darker on hover */
     border-color: #4b5563;
     color: var(--text-strong-color); /* Text brighter on hover */
+    transform: translateY(-3px); /* Subtle lift on hover */
 }
 
 .roadmap-card:hover .card-icon {
@@ -133,6 +157,12 @@ body {
 
 /* --- Responsive Adjustments --- */
 @media (max-width: 768px) {
+    .site-branding {
+        padding: 15px 20px;
+    }
+    .logo-text {
+        font-size: 1.6em;
+    }
     .page-header h1 {
         font-size: 2.2em;
     }
@@ -140,16 +170,19 @@ body {
         font-size: 1em;
     }
     .roadmap-grid {
-        /* Adjust minmax if needed for better fit on tablets */
          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     }
      .main-container {
-         margin-top: 20px;
+         margin-top: 15px; /* Adjust if site-branding has margin-bottom */
          margin-bottom: 20px;
      }
 }
 
 @media (max-width: 480px) {
+    .logo-text {
+        font-size: 1.4em;
+        text-align: center; /* Center logo on small screens if desired */
+    }
     .page-header h1 {
         font-size: 1.8em;
     }
@@ -165,80 +198,5 @@ body {
      }
 }
 
-/* From Uiverse.io by SelfMadeSystem */
-.absolute {
-    position: absolute;
-}
-
-.inline-block {
-    display: inline-block;
-}
-
-.loader {
-    display: flex;
-    margin: 0.25em 0;
-}
-
-.w-2 {
-    width: 0.5em;
-}
-
-.dash {
-    animation: dashArray 2s ease-in-out infinite, dashOffset 2s linear infinite;
-}
-
-.spin {
-    animation: spinDashArray 2s ease-in-out infinite, spin 8s ease-in-out infinite, dashOffset 2s linear infinite;
-    transform-origin: center;
-}
-
-@keyframes dashArray {
-    0% {
-        stroke-dasharray: 0 1 359 0;
-    }
-    50% {
-        stroke-dasharray: 0 359 1 0;
-    }
-    100% {
-        stroke-dasharray: 359 1 0 0;
-    }
-}
-
-@keyframes spinDashArray {
-    0% {
-        stroke-dasharray: 270 90;
-    }
-    50% {
-        stroke-dasharray: 0 360;
-    }
-    100% {
-        stroke-dasharray: 270 90;
-    }
-}
-
-@keyframes dashOffset {
-    0% {
-        stroke-dashoffset: 365;
-    }
-    100% {
-        stroke-dashoffset: 5;
-    }
-}
-
-@keyframes spin {
-    0% {
-        rotate: 0deg;
-    }
-    12.5%, 25% {
-        rotate: 270deg;
-    }
-    37.5%, 50% {
-        rotate: 540deg;
-    }
-    62.5%, 75% {
-        rotate: 810deg;
-    }
-    87.5%, 100% {
-        rotate: 1080deg;
-    }
-}
+/* --- REMOVED Uiverse.io loader styles --- */
+/* Removed .absolute, .inline-block, .loader, .w-2, .dash, .spin, and keyframes */
