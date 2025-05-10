@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Topic 10: User Interface Design - EduVision</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 100%);
+            color: #1e293b;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        main {
+            flex-grow: 1;
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 2.5rem 1rem 1rem 1rem;
+        }
+
+        .content-section {
+            background: linear-gradient(120deg, #fff 60%, #f3e8ff 100%);
+            padding: 2.2rem 1.7rem;
+            border-radius: 1.3rem;
+            box-shadow: 0 8px 36px rgba(139, 92, 246, 0.10), 0 2px 8px rgba(99, 102, 241, 0.08);
+            margin-bottom: 2.7rem;
+            border: 1.5px solid #e0e7ff;
+            transition: box-shadow 0.3s, border-color 0.2s, transform 0.18s cubic-bezier(.4, 2, .6, 1);
+        }
+
+        .content-section:hover {
+            box-shadow: 0 16px 48px rgba(139, 92, 246, 0.18), 0 4px 16px rgba(99, 102, 241, 0.13);
+            border-color: #a5b4fc;
+            transform: translateY(-4px) scale(1.012);
+        }
+
+        .content-section h2 {
+            font-size: 2.3rem;
+            font-weight: 700;
+            color: #7c3aed;
+            margin-bottom: 2.2rem;
+            border-bottom: 4px solid #c4b5fd;
+            padding-bottom: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: linear-gradient(90deg, #6366f1 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .content-section h3 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #6366f1;
+            margin-bottom: 1.3rem;
+            margin-top: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.22rem;
+            font-weight: 600;
+            color: #8b5cf6;
+            margin-bottom: 1.1rem;
+            margin-top: 2rem;
+        }
+
+        .content-section h5 {
+            font-size: 1.08rem;
+            font-weight: 600;
+            color: #6366f1;
+            margin-bottom: 0.5rem;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .content-section h6 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #f59e42;
+            margin-bottom: 0.4rem;
+            margin-top: 1.2rem;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section ol {
+            color: #334155;
+            font-size: 1.09rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.7;
+        }
+
+        .content-section ul.custom-bullets,
+        .content-section ul.simple-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul.custom-bullets li {
+            margin-bottom: 0.7rem;
+            padding-left: 1.7em;
+            position: relative;
+        }
+
+        .content-section ul.custom-bullets li::before {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: #6366f1;
+            position: absolute;
+            left: 0;
+            top: 0.1em;
+            font-size: 1em;
+        }
+
+        .content-section ul.simple-list li {
+            margin-bottom: 0.7rem;
+            padding-left: 1.5em;
+            position: relative;
+        }
+
+        .content-section ul.simple-list li::before {
+            content: "\2022";
+            color: #8b5cf6;
+            position: absolute;
+            left: 0;
+            font-size: 1.2em;
+            top: 0.1em;
+        }
+
+        .content-section ol.styled-list {
+            list-style: decimal inside;
+            padding-left: 1.2em;
+        }
+
+        .content-section ol li {
+            margin-bottom: 0.5rem;
+        }
+
+        .info-box {
+            background: linear-gradient(90deg, #ede9fe 0%, #e0e7ff 100%);
+            padding: 1.2rem 1rem;
+            border-left: 5px solid #a78bfa;
+            color: #3730a3;
+            border-radius: 0.7rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.07);
+        }
+
+        .info-box strong {
+            color: #7c3aed;
+        }
+
+        .diagram-container {
+            background: #f8fafc;
+            padding: 1.2rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 12px rgba(139, 92, 246, 0.07);
+            border: 1px solid #e0e7ef;
+            margin: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .diagram-container img {
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.09);
+            max-width: 100%;
+            height: auto;
+            border: 1.5px solid #e0e7ef;
+        }
+
+        .diagram-container figcaption {
+            color: #64748b;
+            font-size: 0.98rem;
+            margin-top: 0.7rem;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .diagram-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            align-items: start;
+        }
+
+        /* Styling for Golden Rules */
+        .golden-rule-card {
+            background: linear-gradient(90deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 5px solid #f59e42;
+            padding: 1.2rem 1rem;
+            border-radius: 0.7rem;
+            box-shadow: 0 2px 8px rgba(251, 191, 36, 0.07);
+            margin-bottom: 1.2rem;
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .golden-rule-card:hover {
+            box-shadow: 0 6px 20px rgba(251, 191, 36, 0.13);
+            border-color: #fbbf24;
+        }
+
+        .rule-title {
+            color: #f59e42;
+            font-size: 1.08rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .rule-description {
+            color: #92400e;
+            font-size: 0.98rem;
+        }
+
+        pre {
+            background: #1e293b;
+            color: #fbbf24;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-size: 1rem;
+            margin: 1.2rem 0;
+            font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+        }
+
+        code {
+            background: #ede9fe;
+            color: #7c3aed;
+            padding: 0.1em 0.4em;
+            border-radius: 0.3em;
+            font-size: 0.98em;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            border-radius: 0;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(90deg, #6366f1 0%, #a78bfa 100%);
+            color: #fff;
+            border-radius: 9999px;
+            font-weight: 500;
+            font-size: 1rem;
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.13);
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+
+        .nav-button:hover {
+            background: linear-gradient(90deg, #7c3aed 0%, #6366f1 100%);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.18);
+        }
+
+        header {
+            background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+            color: #fff;
+            padding: 1.5rem 0.5rem;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.10);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        footer {
+            text-align: center;
+            color: #7c3aed;
+            font-size: 1.02rem;
+            padding: 2rem 0 1rem 0;
+            background: #f3e8ff;
+            border-top: 1px solid #e0e7ef;
+            margin-top: 2rem;
+        }
+
+        footer a {
+            color: #6366f1;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: #7c3aed;
+        }
+
+        @media (max-width: 700px) {
+            main {
+                padding: 1.2rem 0.3rem;
+            }
+
+            .content-section {
+                padding: 1.2rem 0.7rem;
+            }
+
+            .diagram-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <!-- Header content from previous examples -->
+        <div class="container mx-auto flex flex-row items-center justify-between">
+            <div class="text-3xl font-bold logo" style="font-family: 'Nunito', sans-serif;">
+                <a href="../../../index.html" class="flex items-center group">
+                    <span>Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="h-8 w-8 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-all duration-300 group-hover:rotate-12"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span>ision</span>
+                </a>
+            </div>
+            <div class="flex-1 flex flex-col items-center">
+                <h1 class="text-3xl font-bold">Software Engineering</h1>
+                <p class="text-base opacity-90">Explore each topic in depth</p>
+            </div>
+            <div style="width:3rem;"></div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-10">
+        <div class="flex justify-between items-center mb-8">
+            <a href="../software-engineering.html"
+                class="text-indigo-600 hover:text-indigo-800 hover:underline font-medium text-lg transition-colors duration-300">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Syllabus
+            </a>
+            <div class="bg-indigo-600 text-white text-base font-semibold px-5 py-2 rounded-lg shadow-md">
+                Topic 10
+            </div>
+        </div>
+
+        <section class="content-section">
+            <h2><i class="fas fa-desktop icon"></i>User Interface (UI) Design</h2>
+            <p class="text-xl mb-8 text-slate-600">The user interface is the critical portion of a software product
+                responsible for all interactions with the user. In an era of highly interactive software, users often
+                judge a product by its UI. A well-designed UI enhances usability, reduces errors, and increases user
+                satisfaction, while a poor UI can lead to frustration and inefficiency.</p>
+            <div class="info-box">
+                <p><i class="fas fa-exclamation-triangle mr-2"></i>Development of a good UI can consume a significant
+                    portion (up to 50%) of the total system development effort. Therefore, a systematic approach to UI
+                    design is essential.</p>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-star icon"></i>9.1 Characteristics of a Good User Interface</h3>
+            <p>A good user interface is more than just aesthetically pleasing; it possesses several key characteristics
+                that contribute to a positive user experience:</p>
+            <ul class="custom-bullets">
+                <li><strong>Speed of Learning:</strong> Easy to learn, avoiding complex syntax. Uses metaphors (e.g.,
+                    shopping cart, cut/paste) and intuitive command names. Consistency and component-based design also
+                    aid learning.</li>
+                <li><strong>Speed of Use:</strong> Efficient interaction, minimizing time and effort for tasks.
+                    Frequently used commands should be easily accessible.</li>
+                <li><strong>Speed of Recall:</strong> Easy for intermittent users to remember command procedures.
+                    Metaphors and intuitive names help.</li>
+                <li><strong>Error Prevention & Handling:</strong> Minimizes scope for errors. Prevents wrong value
+                    entry. Provides clear, polite, and specific error messages.</li>
+                <li><strong>Attractiveness:</strong> Visually appealing and engaging. Graphics-based UIs often have an
+                    edge here.</li>
+                <li><strong>Consistency:</strong> Uniform command names, procedures, and behavior across the interface
+                    helps users generalize knowledge.</li>
+                <li><strong>Feedback:</strong> Provides timely system responses to user actions, especially for
+                    long-running processes.</li>
+                <li><strong>Support for Multiple Skill Levels:</strong> Caters to both novice (ease of learning) and
+                    expert users (efficiency, shortcuts, macros).</li>
+                <li><strong>Error Recovery (Undo Facility):</strong> Allows users to easily reverse actions, reducing
+                    anxiety and encouraging exploration.</li>
+                <li><strong>User Guidance and Online Help:</strong> Provides assistance when users are stuck or want to
+                    learn more.</li>
+            </ul>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-book-reader icon"></i>9.2 Basic Concepts in UI Design</h3>
+            <h4>9.2.1 User Guidance and Online Help</h4>
+            <p>Effective help systems are crucial for user support.</p>
+            <ul class="simple-list">
+                <li><strong>Online Help System:</strong> Should be context-dependent (tailored to what the user is
+                    doing) and adapt to the user's experience level. It should leverage graphics/animation and not just
+                    be a copy of manual text.</li>
+                <li><strong>Guidance Messages:</strong> Prompt users about next actions, system status, and progress of
+                    commands. Should be configurable for different user levels.</li>
+                <li><strong>Error Messages:</strong> Must be polite, specific, and avoid ambiguity (e.g., "Invalid
+                    input" is poor). They should clearly state the problem and ideally suggest a solution.</li>
+            </ul>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-mouse-pointer icon"></i>9.3 Types of User Interfaces</h3>
+            <p>User interfaces can be broadly classified into three categories, though modern applications often use a
+                combination.</p>
+
+            <h4>9.3.1 Command Language-Based Interface (CLI)</h4>
+            <p>Users interact by typing commands using a specific language syntax. Was prevalent before graphical
+                monitors. Still favored by many technical users.</p>
+            <div class="diagram-container">
+                <img src="image-7.png" alt="CLI Elements: Command Prompt, Cursor, Command, Parameters, Output"
+                    class="max-w-xl">
+                <figcaption>Elements of a Command Line Interface.</figcaption>
+            </div>
+            <ul class="simple-list">
+                <li><strong>Advantages:</strong> Fast interaction for experts, efficient for complex commands
+                    (composition), implementable on cheap terminals, easier to develop (using tools like lex/yacc). Uses
+                    fewer computer resources than GUI.</li>
+                <li><strong>Disadvantages:</strong> Difficult to learn, requires memorization, prone to typing errors,
+                    keyboard-only interaction, unsuitable for casual users.</li>
+                <li><strong>Design Issues:</strong> Meaningful mnemonics, user-defined aliases, command composition
+                    facility.</li>
+            </ul>
+
+            <h4>9.3.2 Menu-Based Interfaces</h4>
+            <p>Users select commands from lists (menus), reducing the need to remember exact syntax. Interaction is
+                often via a pointing device.</p>
+            <ul class="simple-list">
+                <li><strong>Advantages:</strong> No need to remember command syntax (recognition vs. recall), minimal
+                    typing. Good for occasional users.</li>
+                <li><strong>Disadvantages:</strong> Slower for experts, command composition is difficult or impossible,
+                    can be cumbersome if the number of choices is large.</li>
+            </ul>
+            <h6>Structuring Menu Items:</h6>
+            <div class="diagram-grid">
+                <div class="diagram-container">
+                    <img src="image.png" alt="Scrolling Menu for Font Size Selection" class="max-w-sm">
+                    <figcaption>Figure 9.1: Scrolling Menu.</figcaption>
+                </div>
+                <div class="diagram-container">
+                    <img src="image-2.png" alt="Example of a Walking Menu" class="max-w-lg">
+                    <figcaption>Figure 9.2: Walking Menu (sub-menus appear adjacent).</figcaption>
+                </div>
+            </div>
+            <ul class="simple-list mt-4">
+                <li><strong>Scrolling Menu:</strong> Used when all choices don't fit on screen. Commands should be
+                    highly correlated for easy location.</li>
+                <li><strong>Walking Menu:</strong> Selecting a menu item causes a further menu (sub-menu) to appear,
+                    often adjacent. Can become a hierarchical tree.</li>
+                <li><strong>Hierarchical Menu:</strong> Menu items organized in a tree. Can manage many choices but
+                    users might lose track if the tree is deep.</li>
+            </ul>
+
+            <h4>9.3.3 Direct Manipulation Interfaces (Iconic Interfaces)</h4>
+            <p>Present the interface as visual models of objects. Users issue commands by performing actions directly on
+                these visual representations (e.g., dragging a file icon to a trash icon).</p>
+            <ul class="simple-list">
+                <li><strong>Advantages:</strong> Icons easily recognized, often language-independent.</li>
+                <li><strong>Disadvantages:</strong> Can be slow for experienced users, difficult for complex commands
+                    (e.g., deleting all files matching a pattern).</li>
+            </ul>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-window-maximize icon"></i>Graphical User Interface (GUI) - General Concepts</h3>
+            <p>GUIs provide graphical means for users to interact with systems, combining hardware and software. While
+                often more resource-consuming than CLIs, they allow for complex, efficient, and accurate interactions.
+            </p>
+            <div class="diagram-container">
+                <img src="image-8.png" alt="Common GUI Elements" class="max-w-2xl">
+                <figcaption>Typical GUI Elements: Window, Tabs, Icons, Slider, Status-bar.</figcaption>
+            </div>
+            <h5>Common GUI Elements:</h5>
+            <ul class="simple-list">
+                <li><strong>Window:</strong> A primary area for displaying application content. Can be moved, resized,
+                    minimized. May contain child windows.</li>
+                <li><strong>Tabs:</strong> Allow multiple documents or views within a single window (Tabbed Document
+                    Interface).</li>
+                <li><strong>Menu:</strong> Standard list of commands, usually at the top, can be hidden/shown.</li>
+                <li><strong>Icon:</strong> Small picture representing an application or file. Double-clicking often
+                    opens it.</li>
+                <li><strong>Cursor:</strong> Interacting device (mouse, touch pointer) representation on screen.</li>
+            </ul>
+            <div class="diagram-container">
+                <img src="image-9.png" alt="Application Specific GUI Components" class="max-w-lg">
+                <figcaption>Application-specific components like Dialogue Boxes.</figcaption>
+            </div>
+            <h5>Application Specific GUI Components:</h5>
+            <ul class="simple-list">
+                <li><strong>Application Window:</strong> Main window using OS-supplied constructs or custom elements.
+                </li>
+                <li><strong>Dialogue Box:</strong> Child window for messages or user input (e.g., confirmation for
+                    deletion).</li>
+                <li><strong>Text-Box:</strong> Area for user to type text-based data.</li>
+                <li><strong>Buttons:</strong> Imitate real-life buttons for submitting inputs.</li>
+            </ul>
+            <div class="diagram-container">
+                <img src="image-10.png" alt="Input GUI Components like Radio Buttons, Check Boxes, List Boxes"
+                    class="max-w-md">
+                <figcaption>Input selection components.</figcaption>
+            </div>
+            <h5>Other Impressive GUI Components:</h5>
+            <ul class="simple-list">
+                <li><strong>Radio Buttons:</strong> Select one option from a mutually exclusive set.</li>
+                <li><strong>Check Boxes:</strong> Select one or more options.</li>
+                <li><strong>List Box:</strong> Select one or more items from a displayed list.</li>
+                <li><strong>Sliders:</strong> Adjust a value along a continuous range.</li>
+                <li><strong>Combo Box:</strong> Button-like, expands to show a list of choices. Useful for space saving
+                    or run-time computed menus.</li>
+                <li><strong>Data Grid:</strong> Displays data in a tabular (rows and columns) format.</li>
+                <li><strong>Drop-down List:</strong> Similar to a combo box, presents a list of options when clicked.
+                </li>
+            </ul>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-puzzle-piece icon"></i>9.4 Component-Based GUI Development</h3>
+            <p>Modern GUI development relies heavily on pre-defined components (widgets). This approach became popular
+                with the advent of graphical terminals and iconic interfaces in the 1980s (e.g., Apple Macintosh).</p>
+
+            <h4>9.4.1 Window System</h4>
+            <p>Most GUIs are built using a window system that manages displays through windows.</p>
+            <div class="diagram-container">
+                <img src="image-3.png" alt="Window with client and user (window manager) areas" class="max-w-xl">
+                <figcaption>Figure 9.3: Window structure with client and window manager areas.</figcaption>
+            </div>
+            <ul class="simple-list">
+                <li><strong>Window:</strong> A rectangular screen area, a "virtual screen" for independent activities.
+                    Divided into a client area (for application display) and a non-client area (borders, scroll bars,
+                    managed by the window manager).</li>
+                <li><strong>Window Management System (WMS):</strong> Manages multiple windows, screen resources, and
+                    basic window behaviors (create, move, resize, iconify). Consists of a Window Manager and a Window
+                    System.</li>
+            </ul>
+            <div class="diagram-container">
+                <img src="image-4.png" alt="Window Management System architecture" class="max-w-lg">
+                <figcaption>Figure 9.4: User interaction with Window Manager, Window System, and Application Program.
+                </figcaption>
+            </div>
+            <p>The **Window Manager** is the component the end-user interacts with for window operations. The **Window
+                System** determines how windows look and behave, providing services to application programmers.
+                **Widgets** are standard UI components (abstractions of window objects) used for development.</p>
+            <p>Component-based (widget-based) development helps users learn interfaces faster due to consistency across
+                applications and significantly reduces the application programmer's work, making them more of an
+                "interface integrator."</p>
+
+            <h4>9.4.3 An Overview of X-Window/Motif</h4>
+            <p>The X-Window system is notable for allowing development of network-independent GUIs. Applications
+                developed with X-Window are device-independent and can run on one computer while displaying on another
+                across a network.</p>
+            <div class="diagram-container">
+                <img src="image-5.png" alt="Network-independent GUI with X-Window System" class="max-w-2xl">
+                <figcaption>Figure 9.5: Application A running on one computer, displaying on computer B via LAN.
+                </figcaption>
+            </div>
+
+            <h4>9.4.4 X-Architecture</h4>
+            <div class="diagram-container">
+                <img src="image-6.png" alt="Architecture of the X-System" class="max-w-md">
+                <figcaption>Figure 9.6: Layered architecture of the X-Window System.</figcaption>
+            </div>
+            <ul class="simple-list">
+                <li><strong>X-server:</strong> Runs on hardware, manages display and input devices. Performs low-level
+                    graphics, window, and input functions. Controls access to bit-mapped display.</li>
+                <li><strong>X-protocol:</strong> Defines request format between client applications and display servers
+                    over the network. Independent of hardware, OS, and programming language.</li>
+                <li><strong>X-library (Xlib):</strong> C library providing routines for applications to make requests
+                    (via X-protocol) to the X-server. Low-level primitives for displaying windows, drawing graphics,
+                    handling events.</li>
+                <li><strong>Xtoolkit (Xt):</strong> Higher-level library built on Xlib. Consists of:
+                    <ul>
+                        <li><strong>Intrinsics:</strong> Library routines to combine widgets into a UI.</li>
+                        <li><strong>Widgets:</strong> Pre-defined UI components (scroll bars, buttons). X/Motif is a
+                            popular widget set. DECWindows used X-Window for its look and feel.</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h4>9.4.5 Visual Programming</h4>
+            <p>A drag-and-drop style of UI development. Visual objects (icons) representing GUI components are provided
+                by the programming environment. The developer builds the UI by dragging and placing these components.
+                Examples: Visual Basic, Visual C++.</p>
+
+            <h6>Size Measurement of Component-Based GUI:</h6>
+            <p>Lines of Code (LOC) is not suitable. **Widget Points (WP)** (total number of widgets) is a better metric,
+                representing intricacy and being relatively environment-independent.</p>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-tasks icon"></i>9.5 A User Interface Design Methodology</h3>
+            <p>While no strict step-by-step methodology exists, user-centered design principles guide the process. This
+                is distinct from design *by* users; developers leverage user knowledge but apply design expertise.</p>
+            <h6>Implications of Human Cognition:</h6>
+            <ul class="simple-list">
+                <li><strong>Limited Short-Term Memory:</strong> Humans remember ~7 unrelated items. UI should display
+                    necessary info, not require recall across screens.</li>
+                <li><strong>Frequent Task Closure:</strong> Break complex tasks into subtasks with clear completion
+                    feedback for user satisfaction.</li>
+                <li><strong>Recognition Rather Than Recall:</strong> Presenting options is better than requiring users
+                    to remember commands.</li>
+            </ul>
+            <div class="diagram-container">
+                <img src="image-11.png" alt="GUI Design and Development Cycle" class="max-w-md">
+                <figcaption>A model for GUI design and development specific steps.</figcaption>
+            </div>
+            <h6>GUI Design Activities:</h6>
+            <ol class="styled-list">
+                <li><strong>GUI Requirement Gathering:</strong> Collect functional and non-functional UI requirements.
+                </li>
+                <li><strong>User Analysis:</strong> Understand the target audience (technical savvy, experience) to
+                    tailor complexity.</li>
+                <li><strong>GUI Task Analysis:</strong> Analyze tasks to be done (what, not how). Represent
+                    hierarchically.</li>
+                <li><strong>GUI Design and Implementation:</strong> Design the UI based on requirements, tasks, user
+                    environment. Implement with working or dummy software.</li>
+                <li><strong>GUI Testing:</strong> In-house inspection, user involvement, beta releases. Test usability,
+                    compatibility, user acceptance.</li>
+            </ol>
+            <p>GUI implementation tools (e.g., FLUID, AppInventor, Visual Studio) provide controls and allow code
+                customization.</p>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-gem icon"></i>User Interface Golden Rules (Shneiderman & Plaisant)</h3>
+            <p>These widely recognized principles provide a strong foundation for creating effective user interfaces:
+            </p>
+            <div class="space-y-4 mt-6">
+                <div class="golden-rule-card">
+                    <h5 class="rule-title"><i class="fas fa-equals icon"></i>Strive for consistency.</h5>
+                    <p class="rule-description">Consistent actions, terminology, and commands throughout.</p>
+                </div>
+                <div class="golden-rule-card">
+                    <h5 class="rule-title"><i class="fas fa-bolt icon"></i>Enable frequent users to use shortcuts.</h5>
+                    <p class="rule-description">Abbreviations, function keys, macros for expert users.</p>
+                </div>
+                <div class="golden-rule-card">
+                    <h5 class="rule-title"><i class="fas fa-comment-dots icon"></i>Offer informative feedback.</h5>
+                    <p class="rule-description">System response for every user action; modest for minor, substantial for
+                        major.</p>
+                </div>
+                <div class="golden-rule-card">
+                    <h5 class="rule-title"><i class="fas fa-flag-checkered icon"></i>Design dialogs to yield closure.
+                    </h5>
+                    <p class="rule-description">Organize actions into groups with clear beginnings, middles, and ends
+                        for a sense of accomplishment.</p>
+                </div>
+                <div class="golden-rule-card">
+                    <h5 class="rule-title"><i class="fas fa-shield-alt icon"></i>Offer simple error handling.</h5>
+                    <p class="rule-description">Prevent serious errors; provide simple, comprehensible error detection
+                        and handling.</p>
+                </div>
+                <div class="golden-rule-card">
+                    <h5 class="rule-title"><i class="fas fa-undo icon"></i>Permit easy reversal of actions.</h5>
+                    <p class="rule-description">Relieves anxiety and encourages exploration; allows undoing of single
+                        actions or groups.</p>
+                </div>
+                <div class="golden-rule-card">
+                    <h5 class="rule-title"><i class="fas fa-user-cog icon"></i>Support internal locus of control.</h5>
+                    <p class="rule-description">Make users feel in charge, initiating actions rather than just
+                        responding.</p>
+                </div>
+                <div class="golden-rule-card">
+                    <h5 class="rule-title"><i class="fas fa-brain icon"></i>Reduce short-term memory load.</h5>
+                    <p class="rule-description">Keep displays simple, consolidate multiple pages, reduce window motion,
+                        allow training time.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="mt-12 pt-8 border-t border-slate-300 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <a href="topic-9.html" class="nav-button" aria-label="Previous Topic">
+                <i class="fas fa-arrow-left icon"></i> Previous Topic
+            </a>
+            <a href="../software-engineering.html" class="nav-button" aria-label="Back to Syllabus">
+                Back to Syllabus <i class="fas fa-list-alt icon"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <!-- Footer content -->
+        © <span id="currentYear"></span> <a href="../../../index.html">EduVision</a>.
+        All rights reserved. Crafted with <i class="fas fa-heart text-red-500"></i> for learning.
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>

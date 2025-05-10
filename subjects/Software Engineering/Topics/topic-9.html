@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Topic 9: Object-Oriented Software Development - EduVision</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 100%);
+            color: #1e293b;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        main {
+            flex-grow: 1;
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 2.5rem 1rem 1rem 1rem;
+        }
+
+        .content-section {
+            background: linear-gradient(120deg, #fff 60%, #f3e8ff 100%);
+            padding: 2.2rem 1.7rem;
+            border-radius: 1.3rem;
+            box-shadow: 0 8px 36px rgba(139, 92, 246, 0.10), 0 2px 8px rgba(99, 102, 241, 0.08);
+            margin-bottom: 2.7rem;
+            border: 1.5px solid #e0e7ff;
+            transition: box-shadow 0.3s, border-color 0.2s, transform 0.18s cubic-bezier(.4, 2, .6, 1);
+        }
+
+        .content-section:hover {
+            box-shadow: 0 16px 48px rgba(139, 92, 246, 0.18), 0 4px 16px rgba(99, 102, 241, 0.13);
+            border-color: #a5b4fc;
+            transform: translateY(-4px) scale(1.012);
+        }
+
+        .content-section h2 {
+            font-size: 2.3rem;
+            font-weight: 700;
+            color: #7c3aed;
+            margin-bottom: 2.2rem;
+            border-bottom: 4px solid #c4b5fd;
+            padding-bottom: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: linear-gradient(90deg, #6366f1 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .content-section h3 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #6366f1;
+            margin-bottom: 1.3rem;
+            margin-top: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.22rem;
+            font-weight: 600;
+            color: #8b5cf6;
+            margin-bottom: 1.1rem;
+            margin-top: 2rem;
+        }
+
+        .content-section h5 {
+            font-size: 1.08rem;
+            font-weight: 600;
+            color: #6366f1;
+            margin-bottom: 0.5rem;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .content-section h6 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #14b8a6;
+            margin-bottom: 0.4rem;
+            margin-top: 1.2rem;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section ol {
+            color: #334155;
+            font-size: 1.09rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.7;
+        }
+
+        .content-section ul.custom-bullets,
+        .content-section ul.simple-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul.custom-bullets li {
+            margin-bottom: 0.7rem;
+            padding-left: 1.7em;
+            position: relative;
+        }
+
+        .content-section ul.custom-bullets li::before {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: #6366f1;
+            position: absolute;
+            left: 0;
+            top: 0.1em;
+            font-size: 1em;
+        }
+
+        .content-section ul.simple-list li {
+            margin-bottom: 0.7rem;
+            padding-left: 1.5em;
+            position: relative;
+        }
+
+        .content-section ul.simple-list li::before {
+            content: "\2022";
+            color: #8b5cf6;
+            position: absolute;
+            left: 0;
+            font-size: 1.2em;
+            top: 0.1em;
+        }
+
+        .content-section ol.styled-list {
+            list-style: decimal inside;
+            padding-left: 1.2em;
+        }
+
+        .content-section ol li {
+            margin-bottom: 0.5rem;
+        }
+
+        .info-box {
+            background: linear-gradient(90deg, #ede9fe 0%, #e0e7ff 100%);
+            padding: 1.2rem 1rem;
+            border-left: 5px solid #a78bfa;
+            color: #3730a3;
+            border-radius: 0.7rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.07);
+        }
+
+        .info-box strong {
+            color: #7c3aed;
+        }
+
+        .diagram-container {
+            background: #f8fafc;
+            padding: 1.2rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 12px rgba(139, 92, 246, 0.07);
+            border: 1px solid #e0e7ef;
+            margin: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .diagram-container img {
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.09);
+            max-width: 100%;
+            height: auto;
+            border: 1.5px solid #e0e7ef;
+        }
+
+        .diagram-container figcaption {
+            color: #64748b;
+            font-size: 0.98rem;
+            margin-top: 0.7rem;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .diagram-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            align-items: start;
+        }
+
+        /* Pattern Card Styling */
+        .pattern-card {
+            background: linear-gradient(120deg, #f3e8ff 60%, #fff 100%);
+            padding: 1.2rem 1rem;
+            border-radius: 0.8rem;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.07);
+            border: 1px solid #e0e7ef;
+            transition: box-shadow 0.2s, border-color 0.2s;
+            margin-bottom: 1.2rem;
+        }
+
+        .pattern-card:hover {
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.13);
+            border-color: #a78bfa;
+        }
+
+        .pattern-title {
+            color: #7c3aed;
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .pattern-problem strong,
+        .pattern-card .pattern-solution strong {
+            color: #a21caf;
+        }
+
+
+        pre {
+            background: #1e293b;
+            color: #fbbf24;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-size: 1rem;
+            margin: 1.2rem 0;
+            font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+        }
+
+        code {
+            background: #ede9fe;
+            color: #7c3aed;
+            padding: 0.1em 0.4em;
+            border-radius: 0.3em;
+            font-size: 0.98em;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            border-radius: 0;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(90deg, #6366f1 0%, #a78bfa 100%);
+            color: #fff;
+            border-radius: 9999px;
+            font-weight: 500;
+            font-size: 1rem;
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.13);
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+
+        .nav-button:hover {
+            background: linear-gradient(90deg, #7c3aed 0%, #6366f1 100%);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.18);
+        }
+
+        header {
+            background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+            color: #fff;
+            padding: 1.5rem 0.5rem;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.10);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        footer {
+            text-align: center;
+            color: #7c3aed;
+            font-size: 1.02rem;
+            padding: 2rem 0 1rem 0;
+            background: #f3e8ff;
+            border-top: 1px solid #e0e7ef;
+            margin-top: 2rem;
+        }
+
+        footer a {
+            color: #6366f1;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: #7c3aed;
+        }
+
+        @media (max-width: 700px) {
+            main {
+                padding: 1.2rem 0.3rem;
+            }
+
+            .content-section {
+                padding: 1.2rem 0.7rem;
+            }
+
+            .diagram-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <!-- Header content from previous examples -->
+        <div class="container mx-auto flex flex-row items-center justify-between">
+            <div class="text-3xl font-bold logo" style="font-family: 'Nunito', sans-serif;">
+                <a href="../../../index.html" class="flex items-center group">
+                    <span>Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="h-8 w-8 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-all duration-300 group-hover:rotate-12"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span>ision</span>
+                </a>
+            </div>
+            <div class="flex-1 flex flex-col items-center">
+                <h1 class="text-3xl font-bold">Software Engineering</h1>
+                <p class="text-base opacity-90">Explore each topic in depth</p>
+            </div>
+            <div style="width:3rem;"></div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-10">
+        <div class="flex justify-between items-center mb-8">
+            <a href="../software-engineering.html"
+                class="text-indigo-600 hover:text-indigo-800 hover:underline font-medium text-lg transition-colors duration-300">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Syllabus
+            </a>
+            <div class="bg-indigo-600 text-white text-base font-semibold px-5 py-2 rounded-lg shadow-md">
+                Topic 9
+            </div>
+        </div>
+
+        <section class="content-section">
+            <h2><i class="fas fa-drafting-compass icon"></i>Object-Oriented Software Development</h2>
+            <p class="text-xl mb-8 text-slate-600">Object-Oriented Design (OOD) is a paradigm that shifts the focus from
+                functions to the natural objects (entities) within a problem domain. This chapter builds upon
+                object-modeling concepts to explore a comprehensive object-oriented analysis and design methodology.</p>
+            <div class="info-box">
+                <p><i class="fas fa-lightbulb mr-2"></i>Grady Booch famously summarized the core difference: "Read the
+                    specification. If you want procedural code, find the verbs. If you want object-oriented programs,
+                    find the nouns."</p>
+            </div>
+            <p>Object-Oriented Analysis (OOA) develops an object model from requirements, which is then refined into a
+                design model (OOD) suitable for implementation using Object-Oriented Programming (OOP).</p>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-puzzle-piece icon"></i>8.1 Design Patterns</h3>
+            <p>Design patterns are reusable, well-documented solutions to commonly occurring problems within a given
+                context in software design. They act as guides for creating good designs, based on fundamental
+                principles and experience. Knowing patterns helps in developing robust solutions more quickly.</p>
+            <h6>A pattern typically has four important parts:</h6>
+            <ul class="simple-list">
+                <li>The **Problem** it addresses.</li>
+                <li>The **Context** in which the problem occurs.</li>
+                <li>The **Solution** (often described in terms of class interactions).</li>
+                <li>The **Context** within which the solution works (and sometimes, where it might not).</li>
+            </ul>
+
+            <div class="mt-8 space-y-6">
+                <div class="pattern-card">
+                    <h4 class="pattern-title">Expert Pattern</h4>
+                    <p class="pattern-problem"><strong>Problem:</strong> Which class should be responsible for certain
+                        information or tasks?</p>
+                    <p class="pattern-solution"><strong>Solution:</strong> Assign responsibility to the **information
+                        expert** – the class that has the information necessary to fulfill the required responsibility.
+                        This aligns with the intuition that objects "do" things related to the information they possess.
+                    </p>
+                    <div class="diagram-container">
+                        <img src="image.png" alt="Expert Pattern: Class and Collaboration Diagram" class="max-w-lg">
+                        <figcaption>Figure 8.1: Expert pattern example showing `SaleTransaction` as expert for `total`
+                            and `SaleItem` for `subTotal`.</figcaption>
+                    </div>
+                </div>
+
+                <div class="pattern-card">
+                    <h4 class="pattern-title">Creator Pattern</h4>
+                    <p class="pattern-problem"><strong>Problem:</strong> Which class should be responsible for creating
+                        an instance of class C2?</p>
+                    <p class="pattern-solution"><strong>Solution:</strong> Assign class C1 the responsibility to create
+                        an instance of C2 if one or more of these apply:
+                    <ul class="simple-list ml-4 mt-2">
+                        <li>C1 aggregates objects of type C2.</li>
+                        <li>C1 contains objects of type C2.</li>
+                        <li>C1 closely uses objects of type C2.</li>
+                        <li>C1 has the data that will be required to initialize objects of type C2 when they are
+                            created.</li>
+                    </ul>
+                    </p>
+                </div>
+
+                <div class="pattern-card">
+                    <h4 class="pattern-title">Controller Pattern</h4>
+                    <p class="pattern-problem"><strong>Problem:</strong> Who should be responsible for handling actor
+                        requests (system events)?</p>
+                    <p class="pattern-solution"><strong>Solution:</strong> For each use case, there should typically be
+                        a separate controller object responsible for handling all actor requests pertaining to that use
+                        case. This controller maintains necessary information about the state of the use case and can
+                        identify out-of-sequence requests. It decouples boundary objects (UI) from entity objects
+                        (domain logic).</p>
+                </div>
+
+                <div class="pattern-card">
+                    <h4 class="pattern-title">Facade Pattern</h4>
+                    <p class="pattern-problem"><strong>Problem:</strong> How should services be requested from a complex
+                        package or subsystem?</p>
+                    <p class="pattern-solution"><strong>Solution:</strong> Create a Facade class that provides a single,
+                        simplified, common interface to the services of the package. A package is a cohesive set of
+                        classes with strong responsibilities (e.g., an RDBMS interface). The Facade hides the complexity
+                        of the subsystem.</p>
+                </div>
+
+                <div class="pattern-card">
+                    <h4 class="pattern-title">Model-View Separation Pattern</h4>
+                    <p class="pattern-problem"><strong>Problem:</strong> How should non-GUI (model/domain) classes
+                        communicate with GUI (view) classes without direct coupling?</p>
+                    <p class="pattern-solution"><strong>Solution:</strong> Model objects should not have direct
+                        knowledge of or be directly coupled to view objects. This results in a reusable model. Two
+                        common approaches:
+                    <ol class="styled-list ml-4 mt-2">
+                        <li><strong>Polling (Pull from above):</strong> GUI objects are responsible for asking (pulling)
+                            relevant information from model objects when needed. Efficient for some applications but not
+                            for real-time visualizations or monitoring.</li>
+                        <li><strong>Publish-Subscribe Pattern (Push from below):</strong> An event notification system
+                            is implemented. An Event Manager class tracks subscribers and event types. Publishers send
+                            messages to the Event Manager, which then notifies all registered subscribers (often via
+                            callbacks). Java's `EventListener` interface supports this.</li>
+                    </ol>
+                    </p>
+                </div>
+                <div class="pattern-card">
+                    <h4 class="pattern-title">Intermediary Pattern (Proxy)</h4>
+                    <p class="pattern-problem"><strong>Problem:</strong> How should client and server objects (software
+                        components, possibly across a network) interact?</p>
+                    <p class="pattern-solution"><strong>Solution:</strong> Define a Proxy object on the client side that
+                        acts as a local stand-in for the remote server object. The Proxy hides network transmission
+                        details, determines server address, communicates requests, obtains responses, and passes them to
+                        the client. It can also augment or filter exchanged information and may have the same interface
+                        as the remote server, abstracting network complexities from the client.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-project-diagram icon"></i>A Generalized Object-Oriented Analysis and Design Process
+            </h3>
+            <p>This process begins by making an analysis model, which is then refined into a design model through
+                iterations. It explains how to define system requirements and translate them into a logical solution
+                that can be implemented.</p>
+            <div class="diagram-container">
+                <img src="image-2.png" alt="An object-oriented analysis and design process" class="max-w-2xl">
+                <figcaption>Figure 8.2: Schematic of an object-oriented analysis and design process flow.</figcaption>
+            </div>
+
+            <h4>8.2.1 Overview</h4>
+            <p>The process typically starts with developing a **Use Case Model**. This model, along with the **SRS
+                document**, informs the construction of a **Domain Model**. The Domain Model is then refined into a
+                **Class Diagram** through iterations involving **Interaction Diagrams**. A **Glossary** of terms is
+                continuously maintained to ensure clear communication and reduce misunderstandings. User interface
+                prototypes often evolve in parallel.</p>
+
+            <h4>8.2.2 Use Case Model Development</h4>
+            <p>The essence is to capture user requirements by detailing all scenarios of user interactions. There's a
+                strong correlation between the user manual's content and the use case model. Iterating on GUI design and
+                use cases in parallel is an excellent approach, but use cases should remain independent of specific GUI
+                elements (e.g., radio buttons), as UI can change more frequently than core functionality. State use
+                cases from the actor's perspective using active voice verb phrases (e.g., "Admit patient," "Issue
+                book").</p>
+            <h6>Common Mistakes in Use Case Model Development:</h6>
+            <ul class="simple-list">
+                <li><strong>Clutter:</strong> Too many use cases in the top-level diagram. Organize using packages.</li>
+                <li><strong>Confusing Sub-steps:</strong> Mistaking sub-steps of a use case (e.g., "print receipt") for
+                    separate, top-level use cases.</li>
+                <li><strong>Omitting Text Descriptions:</strong> Makes it hard to fully understand behavior and leads to
+                    implementation difficulties.</li>
+                <li><strong>Missing Alternative Scenarios:</strong> Leads to incomplete functionality or late discovery
+                    of issues.</li>
+            </ul>
+
+            <h4>8.2.3 Domain Modelling (Conceptual Modelling)</h4>
+            <p>A domain model represents the concepts or objects appearing in the problem domain and their
+                relationships. A recommended strategy is to quickly create a rough conceptual model focusing on obvious
+                concepts, then refine and extend it.</p>
+            <h5>Classifying Objects in the Domain Model:</h5>
+            <div class="diagram-container">
+                <img src="image-3.png"
+                    alt="Typical realization of a use case through boundary, controller, and entity objects"
+                    class="max-w-xl">
+                <figcaption>Figure 8.3: Interaction of Boundary, Controller, and Entity objects for a use case.
+                </figcaption>
+            </div>
+            <ul class="simple-list">
+                <li><strong>Boundary Objects:</strong> Objects with which actors interact (e.g., screens, menus,
+                    dialogs). Responsible for user interaction, input validation, output formatting, but typically not
+                    processing logic. A common heuristic is one boundary class per actor/use case pair.</li>
+                <li><strong>Entity Objects:</strong> Hold information that needs to outlive use case execution (e.g.,
+                    data tables, files like `Book`, `BookRegister`). Often "dumb servers" for storing and fetching data.
+                </li>
+                <li><strong>Controller Objects:</strong> Coordinate activities of boundary and entity objects to provide
+                    overall system behavior for a use case. They decouple boundary and entity objects, embodying much of
+                    the use case realization logic. Often, one controller object per use case, though complex use cases
+                    might need more, or trivial ones might omit it.</li>
+            </ul>
+
+            <h4>8.2.4 Identification of Entity Objects</h4>
+            <p>This is a crucial step. Grammatical analysis of the problem description (processing narrative) is a
+                common approach (originated by Booch):</p>
+            <ul class="simple-list">
+                <li>Nouns are potential objects.</li>
+                <li>Verbs are potential methods.</li>
+            </ul>
+            <p>Eliminate synonyms. Distinguish between objects in the solution space (needed for implementation) and
+                problem space (descriptive). An imperative verb form (e.g., "move") represents an action, not an object.
+            </p>
+            <h6>Criteria for Legitimate Objects:</h6>
+            <ul class="simple-list">
+                <li><strong>Retained Information:</strong> Object needs to store some private data.</li>
+                <li><strong>Multiple Attributes & Operations:</strong> Useful objects typically have several attributes
+                    and support multiple methods.</li>
+                <li><strong>Common Operations:</strong> Defined operations must apply to all instances. If not, consider
+                    subclasses.</li>
+            </ul>
+            <p><strong>Actor Surrogates:</strong> Classes needed to store information about an actor within the system
+                (e.g., `LibraryMember` class for a library member actor).</p>
+            <p>While grammatical analysis is simple, high-quality abstractions often result from deeper insight into the
+                problem.</p>
+            <h6>Example 8.1: Tic-Tac-Toe Entity Object Identification</h6>
+            <p>Problem description nouns: Tic-tac-toe, game, human player, computer, moves, square, mark, straight line,
+                board, row, column, diagonal. After eliminating synonyms, problem-domain-only nouns (human player), and
+                action-nouns (move), the primary entity object identified is often `Board` (or `Square` as part of
+                Board).</p>
+
+            <h4>8.2.5 Interaction Modelling</h4>
+            <p>Aims to allocate responsibilities to classes and show detailed interactions over time for each use case.
+                This is typically done using **Sequence Diagrams**. One sequence diagram per use case is often needed,
+                potentially split for complex scenarios or alternative flows.</p>
+
+            <h4>8.2.7 CRC (Class-Responsibility-Collaborator) Cards</h4>
+            <p>A simple, effective technique for determining class responsibilities in a use case realization. Pioneered
+                by Ward Cunningham and Kent Beck.</p>
+            <ul class="simple-list">
+                <li>Index cards, one per class.</li>
+                <li>Lists class name, its responsibilities, and collaborator classes it needs to fulfill those
+                    responsibilities.</li>
+                <li>Developed in small group sessions with role-playing.</li>
+                <li>Cards are deliberately small to limit responsibilities per class.</li>
+            </ul>
+            <div class="diagram-container">
+                <img src="image-4.png" alt="CRC card for the BookRegister class" class="max-w-md">
+                <figcaption>Figure 8.4: Example CRC card for `BookRegister`.</figcaption>
+            </div>
+            <p>Interaction diagrams can often be developed by "flipping through" CRC cards.</p>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-microscope icon"></i>8.3 Examples of OOA&D Process</h3>
+
+            <h4>Example 8.2: Tic-Tac-Toe Computer Game</h4>
+            <div class="diagram-grid">
+                <div class="diagram-container">
+                    <img src="image-5.png" alt="Use case model for Tic-Tac-Toe" class="max-w-xs">
+                    <figcaption>Figure 8.5: Use Case - "Play move".</figcaption>
+                </div>
+                <div class="diagram-container">
+                    <img src="image-6.png" alt="Initial and refined domain model for Tic-Tac-Toe" class="max-w-md">
+                    <figcaption>Figure 8.6: (a) Initial Domain (`Board`), (b) Refined with Boundary & Controller.
+                    </figcaption>
+                </div>
+            </div>
+            <div class="diagram-container">
+                <img src="image-7.png" alt="Sequence diagram for play move use case" class="max-w-lg">
+                <figcaption>Figure 8.7: Sequence Diagram for "Play move".</figcaption>
+            </div>
+            <div class="diagram-container">
+                <img src="image-8.png" alt="Class diagram for Tic-Tac-Toe" class="max-w-lg">
+                <figcaption>Figure 8.8: Class Diagram showing `Board`, `PlayMoveBoundary`, `Controller`.</figcaption>
+            </div>
+
+            <h4 class="mt-10">Example 8.3: Supermarket Prize Scheme</h4>
+            <div class="diagram-grid">
+                <div class="diagram-container">
+                    <img src="image-9.png" alt="Use case model for Supermarket Prize Scheme" class="max-w-md">
+                    <figcaption>Figure 8.9: Use Cases - `register-customer`, `register-sales`, `select-winners`.
+                    </figcaption>
+                </div>
+                <div class="diagram-container">
+                    <!-- Interpreting Figure 8.10 from your scan -->
+                    <img src="image-10.png" alt="Domain/Class model elements for Supermarket Prize Scheme"
+                        class="max-w-xl">
+                    <figcaption>Figure 8.10 (interpretation): (a) Entities like `SalesHistory`, `CustomerRegister`. (b)
+                        Boundary & Controller classes.</figcaption>
+                </div>
+            </div>
+            <p>The text mentions sequence diagrams (Figures 8.11, 8.12, 8.13 - not provided in image set) and a final
+                class diagram (Figure 8.15 - not provided) would be developed similarly, populating methods based on
+                sequence diagram messages.</p>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-award icon"></i>8.4 OOD Goodness Criteria</h3>
+            <p>Arriving at a good object-oriented design involves subjective judgments. Therefore, accepted criteria are
+                needed to judge design quality.</p>
+            <ul class="custom-bullets">
+                <li><strong>Coupling Guidelines:</strong> Minimize coupling between objects or groups of objects.
+                    Excessive coupling is detrimental to modularity and prevents reuse.</li>
+                <li><strong>Cohesion Guidelines:</strong> Aim for high cohesion at three levels:
+                    <ol class="simple-list ml-6">
+                        <li>Cohesiveness of individual methods (each method does one well-defined function).</li>
+                        <li>Cohesiveness of data and methods within a class (methods act on data for which the object is
+                            naturally responsible).</li>
+                        <li>Cohesiveness of an entire class hierarchy (promotes encapsulation).</li>
+                    </ol>
+                </li>
+                <li><strong>Hierarchy and Factoring Guidelines:</strong> A base class should not have too many
+                    subclasses (approx. 7±2 is a heuristic). This aids understandability.</li>
+                <li><strong>Keeping Message Protocols Simple:</strong> Complex message protocols (e.g., more than three
+                    parameters) can indicate excessive coupling.</li>
+                <li><strong>Number of Methods per Class:</strong> Objects with too many methods (e.g., >7) are likely
+                    application-specific, complex, and less reusable.</li>
+                <li><strong>Depth of Inheritance Tree:</strong> Very deep trees can make classes complex due to many
+                    inherited methods. Keep height manageable.</li>
+                <li><strong>Number of Messages per Use Case:</strong> A single message triggering an excessive chain of
+                    messages across many objects complicates testing and debugging.</li>
+                <li><strong>Response For a Class (RFC):</strong> The maximum number of different methods an instance of
+                    this class would call (counting a method only once if called multiple times). A class calling >7
+                    different methods might be error-prone.</li>
+            </ul>
+        </section>
+
+        <div class="mt-12 pt-8 border-t border-slate-300 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <a href="topic-8.html" class="nav-button" aria-label="Previous Topic">
+                <i class="fas fa-arrow-left icon"></i> Previous Topic
+            </a>
+            <a href="topic-10.html" class="nav-button" aria-label="Next Topic">
+                Next Topic <i class="fas fa-arrow-right icon"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <!-- Footer content -->
+        © <span id="currentYear"></span> <a href="../../../index.html">EduVision</a>.
+        All rights reserved. Crafted with <i class="fas fa-heart text-red-500"></i> for learning.
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Topic 7: Function-Oriented Software Design - EduVision</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 100%);
+            color: #1e293b;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+            color: #fff;
+            padding: 1.5rem 0.5rem;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.10);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .logo a {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .logo a:hover span {
+            opacity: 0.8;
+        }
+
+        .logo svg {
+            margin: 0 0.25rem;
+            color: #fde047;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .logo a:hover svg {
+            color: #fef08a;
+            transform: rotate(12deg);
+        }
+
+        main {
+            flex-grow: 1;
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 2.5rem 1rem 1rem 1rem;
+        }
+
+        .content-section {
+            background: linear-gradient(120deg, #fff 60%, #f3e8ff 100%);
+            padding: 2.2rem 1.7rem;
+            border-radius: 1.3rem;
+            box-shadow: 0 8px 36px rgba(139, 92, 246, 0.10), 0 2px 8px rgba(99, 102, 241, 0.08);
+            margin-bottom: 2.7rem;
+            border: 1.5px solid #e0e7ff;
+            transition: box-shadow 0.3s, border-color 0.2s, transform 0.18s cubic-bezier(.4, 2, .6, 1);
+        }
+
+        .content-section:hover {
+            box-shadow: 0 16px 48px rgba(139, 92, 246, 0.18), 0 4px 16px rgba(99, 102, 241, 0.13);
+            border-color: #a5b4fc;
+            transform: translateY(-4px) scale(1.012);
+        }
+
+        .content-section h2 {
+            font-size: 2.3rem;
+            font-weight: 700;
+            color: #7c3aed;
+            margin-bottom: 2.2rem;
+            border-bottom: 4px solid #c4b5fd;
+            padding-bottom: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: linear-gradient(90deg, #6366f1 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .content-section h3 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #6366f1;
+            margin-bottom: 1.3rem;
+            margin-top: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.22rem;
+            font-weight: 600;
+            color: #8b5cf6;
+            margin-bottom: 1.1rem;
+            margin-top: 2rem;
+        }
+
+        .content-section h5 {
+            font-size: 1.08rem;
+            font-weight: 600;
+            color: #6366f1;
+            margin-bottom: 0.5rem;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .content-section h6 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #14b8a6;
+            margin-bottom: 0.4rem;
+            margin-top: 1.2rem;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section ol {
+            color: #334155;
+            font-size: 1.09rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.7;
+        }
+
+        .content-section ul.custom-bullets,
+        .content-section ul.simple-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul.custom-bullets li {
+            margin-bottom: 0.7rem;
+            padding-left: 1.7em;
+            position: relative;
+        }
+
+        .content-section ul.custom-bullets li::before {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: #6366f1;
+            position: absolute;
+            left: 0;
+            top: 0.1em;
+            font-size: 1em;
+        }
+
+        .content-section ul.simple-list li {
+            margin-bottom: 0.7rem;
+            padding-left: 1.5em;
+            position: relative;
+        }
+
+        .content-section ul.simple-list li::before {
+            content: "\2022";
+            color: #8b5cf6;
+            position: absolute;
+            left: 0;
+            font-size: 1.2em;
+            top: 0.1em;
+        }
+
+        .content-section ol.styled-list {
+            list-style: none;
+            padding-left: 0;
+            counter-reset: styled-list-counter;
+        }
+
+        .content-section ol.styled-list li {
+            margin-bottom: 1.1rem;
+            padding-left: 2.2em;
+            position: relative;
+            counter-increment: styled-list-counter;
+        }
+
+        .content-section ol.styled-list li::before {
+            content: counter(styled-list-counter) ".";
+            position: absolute;
+            left: 0;
+            top: 0.1em;
+            font-weight: bold;
+            color: #6366f1;
+            font-size: 1.1em;
+        }
+
+        .info-box {
+            background: linear-gradient(90deg, #ede9fe 0%, #e0e7ff 100%);
+            padding: 1.2rem 1rem;
+            border-left: 5px solid #a78bfa;
+            color: #3730a3;
+            border-radius: 0.7rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.07);
+        }
+
+        .info-box strong {
+            color: #7c3aed;
+        }
+
+        .diagram-container {
+            background: #f8fafc;
+            padding: 1.2rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 12px rgba(139, 92, 246, 0.07);
+            border: 1px solid #e0e7ef;
+            margin: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .diagram-container img {
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.09);
+            max-width: 100%;
+            height: auto;
+            border: 1.5px solid #e0e7ef;
+        }
+
+        .diagram-container figcaption {
+            color: #64748b;
+            font-size: 0.98rem;
+            margin-top: 0.7rem;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .diagram-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            align-items: start;
+        }
+
+        table.styled-table,
+        .decision-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            background: #f1f5f9;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.07);
+        }
+
+        .styled-table thead,
+        .decision-table thead {
+            background: #ede9fe;
+        }
+
+        .styled-table th,
+        .styled-table td,
+        .decision-table th,
+        .decision-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+        }
+
+        .styled-table th,
+        .decision-table th {
+            color: #7c3aed;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .styled-table td,
+        .decision-table td {
+            color: #334155;
+            font-size: 0.98rem;
+        }
+
+        .styled-table tbody tr:nth-child(even),
+        .decision-table tbody tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        .styled-table tbody tr:hover,
+        .decision-table tbody tr:hover {
+            background: #ede9fe;
+        }
+
+        .approach-card {
+            background: linear-gradient(120deg, #fff 60%, #f3e8ff 100%);
+            padding: 1.2rem 1rem;
+            border-radius: 0.8rem;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.07);
+            border: 1px solid #e0e7ef;
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .approach-card:hover {
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.13);
+            border-color: #a78bfa;
+        }
+
+        .approach-card h4 {
+            border-bottom: 2px solid #a5b4fc;
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.7rem;
+        }
+
+        pre {
+            background: #1e293b;
+            color: #fbbf24;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-size: 1rem;
+            margin: 1.2rem 0;
+            font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+        }
+
+        code {
+            background: #ede9fe;
+            color: #7c3aed;
+            padding: 0.1em 0.4em;
+            border-radius: 0.3em;
+            font-size: 0.98em;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            border-radius: 0;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(90deg, #6366f1 0%, #a78bfa 100%);
+            color: #fff;
+            border-radius: 9999px;
+            font-weight: 500;
+            font-size: 1rem;
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.13);
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+
+        .nav-button:hover {
+            background: linear-gradient(90deg, #7c3aed 0%, #6366f1 100%);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.18);
+        }
+
+        footer {
+            text-align: center;
+            color: #7c3aed;
+            font-size: 1.02rem;
+            padding: 2rem 0 1rem 0;
+            background: #f3e8ff;
+            border-top: 1px solid #e0e7ef;
+            margin-top: 2rem;
+        }
+
+        footer a {
+            color: #6366f1;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: #7c3aed;
+        }
+
+        @media (max-width: 700px) {
+            main {
+                padding: 1.2rem 0.3rem;
+            }
+
+            .content-section {
+                padding: 1.2rem 0.7rem;
+            }
+
+            .diagram-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <!-- Header content from previous examples -->
+        <div class="container mx-auto flex flex-row items-center justify-between">
+            <div class="text-3xl font-bold" style="font-family: 'Nunito', sans-serif;">
+                <a href="../../../index.html" class="flex items-center group">
+                    <span>Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="h-8 w-8 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-all duration-300 group-hover:rotate-12"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span>ision</span>
+                </a>
+            </div>
+            <div class="flex-1 flex flex-col items-center">
+                <h1 class="text-3xl font-bold">Software Engineering</h1>
+                <p class="text-base opacity-90">Explore each topic in depth</p>
+            </div>
+            <div style="width:3rem;"></div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-10">
+        <div class="flex justify-between items-center mb-8">
+            <a href="../software-engineering.html"
+                class="text-indigo-600 hover:text-indigo-800 hover:underline font-medium text-lg transition-colors duration-300">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Syllabus
+            </a>
+            <div class="bg-indigo-600 text-white text-base font-semibold px-5 py-2 rounded-lg shadow-md">
+                Topic 7
+            </div>
+        </div>
+
+        <section class="content-section">
+            <h2><i class="fas fa-cogs icon"></i>Function-Oriented Software Design</h2>
+            <p class="text-xl mb-8 text-slate-600">Function-oriented design techniques view a system as a collection of
+                functions. The system is initially seen as a black box performing high-level functions, which are then
+                successively decomposed into more detailed sub-functions. This top-down decomposition is a hallmark of
+                this approach, mapping functions to modules for implementation.</p>
+
+            <h3><i class="fas fa-project-diagram icon"></i>Overview of SA/SD Methodology</h3>
+            <p>The Structured Analysis/Structured Design (SA/SD) methodology is a prominent function-oriented technique
+                that integrates the essential features of several influential design methodologies, including those by
+                Constantine & Yourdon, Hatley & Pirbhai, Gane & Sarson, and DeMarco & Yourdon. SA/SD is used for the
+                high-level design of software and consists of two distinct activities:</p>
+            <ul class="custom-bullets">
+                <li><strong>Structured Analysis (SA):</strong> Transforms a textual problem description into a graphical
+                    model. It involves functional decomposition, where high-level functions are hierarchically broken
+                    down into detailed functions. The focus is on capturing the detailed structure of the system as
+                    perceived by the user, using user-centric terminology.</li>
+                <li><strong>Structured Design (SD):</strong> Maps all functions identified during SA to a module
+                    structure (software architecture). This structure is suitable for direct implementation using
+                    conventional programming languages. The focus is on defining the solution structure.</li>
+            </ul>
+            <div class="info-box">
+                <p><i class="fas fa-users mr-2"></i>A key aspect is that SA results are easily understood and reviewable
+                    by users, ensuring requirements are accurately captured, while SD provides the blueprint for
+                    developers.</p>
+            </div>
+        </section>
+
+        <section class="content-section methodology-section">
+            <h3><i class="fas fa-search-plus icon"></i>Structured Analysis (SA)</h3>
+            <p>During SA, major processing tasks (functions) of the system and the data flows among them are analyzed
+                and represented graphically. Key principles include:</p>
+            <ul class="custom-bullets">
+                <li>Top-down decomposition approach.</li>
+                <li>Divide and conquer principle (each function decomposed independently).</li>
+                <li>Graphical representation using Data Flow Diagrams (DFDs).</li>
+            </ul>
+
+            <h4><i class="fas fa-exchange-alt icon"></i>Data Flow Diagrams (DFDs)</h4>
+            <p>A DFD is a hierarchical graphical model showing the different processing activities (functions) a system
+                performs and the data interchanged among these functions. It depicts incoming/outgoing data flow and
+                stored data, but not how data flows (control flow).</p>
+            <div class="info-box">
+                <p><strong>DFD vs. Flowchart:</strong> Flowcharts depict control flow in program modules, including
+                    branches and loops. DFDs depict data flow at various system levels without control elements.</p>
+            </div>
+
+            <h5>Types of DFD:</h5>
+            <ul class="simple-list">
+                <li><strong>Logical DFD:</strong> Concentrates on the system process and data flow (e.g., how data moves
+                    between entities in a banking system), abstracting from physical implementation.</li>
+                <li><strong>Physical DFD:</strong> Shows how data flow is actually implemented. It's more specific and
+                    closer to the implementation details.</li>
+            </ul>
+
+            <h5>DFD Components:</h5>
+            <div class="diagram-container">
+                <img src="image.png" alt="DFD Components: Entity, Process, Data Store, Data Flow" class="max-w-xl">
+                <figcaption>Standard symbols used in Data Flow Diagrams.</figcaption>
+            </div>
+            <ul class="simple-list">
+                <li><strong>Entities (Terminators/Sources/Sinks):</strong> Represented by rectangles. They are sources
+                    or destinations of information data (e.g., Customers, Accounts).</li>
+                <li><strong>Process:</strong> Represented by circles or round-edged rectangles. They are activities or
+                    actions taken on data (e.g., Order Processing, Verify Finance).</li>
+                <li><strong>Data Store:</strong> Represented by two parallel lines or an open-sided rectangle. They are
+                    repositories of data (e.g., Customer Data, Stores Inventory).</li>
+                <li><strong>Data Flow:</strong> Represented by pointed arrows. They show the movement of data from its
+                    source (base of arrow) to its destination (head of arrow).</li>
+            </ul>
+
+            <h5>Levels of DFD:</h5>
+            <div class="diagram-grid">
+                <div>
+                    <h6>Level 0 DFD (Context Diagram):</h6>
+                    <p class="text-base">The highest abstraction level, depicting the entire system as a single process
+                        with its inputs and outputs from/to external entities. It conceals all underlying details. Also
+                        known as a context-level DFD.</p>
+                    <div class="diagram-container">
+                        <img src="image-2.png" alt="Level 0 DFD for Online Shopping System" class="max-w-md">
+                        <figcaption>Level 0 DFD: Online Shopping System.</figcaption>
+                    </div>
+                </div>
+                <div>
+                    <h6>Level 1 DFD:</h6>
+                    <p class="text-base">Breaks down the Level 0 DFD into more specific modules (major processes) and
+                        shows data flow among them. It also mentions basic processes and sources of information.</p>
+                    <div class="diagram-container">
+                        <img src="image-3.png" alt="Level 1 DFD for Online Shopping System" class="max-w-md">
+                        <figcaption>Level 1 DFD: Decomposing the Online Shopping System.</figcaption>
+                    </div>
+                </div>
+            </div>
+            <h6>Level 2 DFD (and lower):</h6>
+            <p>Further decomposes processes from Level 1 (or higher levels) into more detailed DFDs. This hierarchical
+                decomposition continues until the desired level of specification and understanding is achieved, where
+                each process is a simple, well-understood function.</p>
+
+            <h5>DFD Examples:</h5>
+            <div class="diagram-grid">
+                <div class="diagram-container">
+                    <img src="image-6.png" alt="Context Diagram and Level 1 DFD for RMS Calculator">
+                    <figcaption>Figure 6.5: RMS Calculator - Context and Level 1 DFD.</figcaption>
+                </div>
+                <div class="diagram-container">
+                    <img src="image-7.png" alt="Level 2 DFD for RMS Calculator">
+                    <figcaption>Figure 6.5 (cont.): RMS Calculator - Level 2 DFD.</figcaption>
+                </div>
+                <div class="diagram-container">
+                    <img src="image-8.png" alt="Context Diagram and Level 1 DFD for Tic-Tac-Toe Game">
+                    <figcaption>Figure 6.6: Tic-Tac-Toe Game - Context and Level 1 DFD.</figcaption>
+                </div>
+                <div class="diagram-container">
+                    <img src="image-9.png" alt="Context Diagram for Supermarket Prize Scheme">
+                    <figcaption>Figure 6.7: Supermarket Prize Scheme - Context Diagram.</figcaption>
+                </div>
+                <div class="diagram-container">
+                    <img src="image-10.png" alt="Level 1 DFD for Supermarket Prize Scheme">
+                    <figcaption>Figure 6.8: Supermarket Prize Scheme - Level 1 DFD.</figcaption>
+                </div>
+                <div class="diagram-container">
+                    <img src="image-11.png" alt="Level 2 DFD for Supermarket Prize Scheme">
+                    <figcaption>Figure 6.9: Supermarket Prize Scheme - Level 2 DFD.</figcaption>
+                </div>
+            </div>
+
+            <h5>Synchronous and Asynchronous Operations:</h5>
+            <div class="diagram-container">
+                <img src="image-4.png" alt="Synchronous and Asynchronous Data Flow in DFDs" class="max-w-lg">
+                <figcaption>Figure 6.2: Illustrating synchronous and asynchronous operations.</figcaption>
+            </div>
+            <ul class="simple-list">
+                <li><strong>Synchronous:</strong> If two processes (bubbles) are directly connected by a data flow
+                    arrow, they operate synchronously. The consumer process often waits for the producer to supply data.
+                </li>
+                <li><strong>Asynchronous:</strong> If two processes are connected via a data store, their operations can
+                    be independent (asynchronous). The producer can store data, and the consumer can retrieve it later,
+                    without direct temporal coupling.</li>
+            </ul>
+
+            <h5>Balancing DFDs:</h5>
+            <p>The data that flows into or out of a process (bubble) at one level must match the data flow at the next,
+                more detailed level of decomposition for that process. This ensures consistency across DFD levels. For
+                example, if data items `d1` and `d3` flow out of bubble `0.1` in a Level 1 DFD, and `d2` flows in, then
+                the Level 2 DFD that decomposes bubble `0.1` must collectively show `d1` and `d3` flowing out and `d2`
+                flowing in.</p>
+            <div class="diagram-container">
+                <img src="image-5.png" alt="Example of Balancing DFDs across levels" class="max-w-lg">
+                <figcaption>Figure 6.3: An example showing balanced decomposition.</figcaption>
+            </div>
+
+            <h4><i class="fas fa-book icon"></i>Data Dictionary</h4>
+            <p>A centralized collection of information about data, acting as a meta-data repository. It stores the
+                meaning, origin, relationships, and format of data. It's created alongside DFDs and updated with them.
+            </p>
+            <h6>Purpose:</h6>
+            <ul class="simple-list">
+                <li>Removes ambiguity in data definitions.</li>
+                <li>Synchronizes work of designers and programmers using consistent object references.</li>
+                <li>Provides comprehensive documentation for the database system.</li>
+                <li>Used for DFD validation.</li>
+            </ul>
+            <h6>Contents:</h6>
+            <ul class="simple-list">
+                <li><strong>Data Flow:</strong> Described by DFDs and often represented algebraically (e.g., `Address =
+                    HouseNo + (Street/Area) + City + State`).
+                    <pre><code class="language-none">Address = HouseNo + (Street / Area) + City + State
+CourseID = CourseNumber + CourseName + CourseLevel + CourseGrades</code></pre>
+                </li>
+                <li><strong>Data Structure:</strong> How data items are composed (using notations for composition,
+                    repetition, optionals).</li>
+                <li><strong>Data Elements:</strong> Name, description, aliases, use-cases, content description
+                    (notations), supplementary info (preset values, constraints).</li>
+                <li><strong>Data Stores:</strong> Information about files (internal/external) and tables (naming,
+                    indexing).</li>
+                <li><strong>Data Processing:</strong> Description of logical (user view) and physical (software view)
+                    data processing.</li>
+            </ul>
+
+            <h4><i class="fas fa-pen-alt icon"></i>Structured English</h4>
+            <p>A tool to describe what needs to be coded and how, using plain English words within a structured
+                programming paradigm (IF-THEN-ELSE, DO-WHILE-UNTIL). It bridges the understanding gap between analysts
+                and programmers, is independent of programming language, and uses data names from the Data Dictionary.
+            </p>
+            <pre><code class="language-none">Example: Customer Authentication
+Enter Customer_Name
+SEEK Customer_Name in Customer_Name_DB file
+IF Customer_Name found THEN
+    CALL procedure Authenticate_User
+ELSE
+    PRINT error message "Invalid Customer"
+    CALL procedure Handle_Invalid_Login
+ENDIF</code></pre>
+
+            <h4><i class="fas fa-code icon"></i>Pseudo-Code</h4>
+            <p>Written closer to actual programming language, like an augmented programming language with comments and
+                descriptions. It avoids strict variable declarations but uses constructs from languages like C or
+                Pascal. It provides more programming detail than Structured English.</p>
+            <pre><code class="language-none">Example: Fibonacci Series
+PROCEDURE Fibonacci(n)
+  GET value of n;
+  a = 1;
+  b = 1;
+  PRINT a; /* Assuming first two are printed if n >= 1 */
+  PRINT b; /* Assuming first two are printed if n >= 2 */
+  FOR i = 3 TO n LOOP
+    IF a > b THEN
+      b = b + a;
+      PRINT b;
+    ELSE
+      a = a + b;
+      PRINT a;
+    END IF;
+  END LOOP;
+END PROCEDURE;</code></pre>
+        </section>
+
+        <section class="content-section methodology-section">
+            <h3><i class="fas fa-sitemap icon"></i>Structured Design (SD)</h3>
+            <p>Structured Design is concerned with conceptualizing the problem's solution into several well-organized
+                elements (modules). It focuses on the solution design, aiming for better understanding and accuracy.
+                It's based on the 'divide and conquer' strategy, breaking the problem into smaller, individually
+                solvable pieces (modules) arranged hierarchically and communicating with each other under defined rules
+                (high cohesion, low coupling).</p>
+
+            <h4><i class="fas fa-network-wired icon"></i>Structure Charts</h4>
+            <p>A Structure Chart is derived from DFDs and represents the system in more detail. It breaks down the
+                entire system into the lowest functional modules, describing functions and sub-functions hierarchically.
+                Each layer performs a specific task.</p>
+            <div class="diagram-container">
+                <img src="image-14.png"
+                    alt="Structure Chart Symbols: Control Module, Sub-Module, Library Module, Condition, Jump, Loop, Data Flow, Control Flow"
+                    class="max-w-2xl">
+                <figcaption>Symbols used in constructing Structure Charts.</figcaption>
+            </div>
+            <h6>Structure Chart vs. Flow Chart:</h6>
+            <ul class="simple-list">
+                <li>Difficult to identify modules from flow charts.</li>
+                <li>Data interchange is not shown in flow charts.</li>
+                <li>Sequential ordering in flow charts is suppressed in structure charts (focus is on hierarchy and
+                    calls).</li>
+            </ul>
+            <h5>Structure Chart Examples:</h5>
+            <div class="diagram-container">
+                <img src="image-17.png"
+                    alt="Structure Chart for Example 6.7 (Supermarket) and Example 6.8 (Order processing)"
+                    class="max-w-xl">
+                <figcaption>Figure 6.15 & 6.16: Example Structure Charts.</figcaption>
+            </div>
+
+
+            <h4><i class="fas fa-bars icon"></i>HIPO Diagrams (Hierarchical Input Process Output)</h4>
+            <p>Developed by IBM in 1970, HIPO diagrams combine two organized methods to analyze and document systems.
+                They represent the hierarchy of modules, providing a high-level view of system functions. A HIPO package
+                typically includes a visual table of contents (hierarchy chart) and functional diagrams (IPO charts) for
+                each module.</p>
+            <div class="diagram-container">
+                <img src="image-15.png" alt="HIPO Diagram Example for Online Sales and IPO Chart" class="max-w-xl">
+                <figcaption>HIPO Hierarchy and IPO Chart Example.</figcaption>
+            </div>
+            <p>In contrast to an IPO (Input Process Output) diagram which depicts control/data flow within a module,
+                HIPO itself (the hierarchy part) doesn't detail data/control flow between modules in the same way DFDs
+                or Structure Charts do for inter-module communication.</p>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas  fa-tools icon"></i>Other Supporting Tools & Concepts</h3>
+
+            <h4><i class="fas fa-database icon"></i>Entity-Relationship Model (ERM)</h4>
+            <p>While primarily a database design tool, ER Models are relevant in function-oriented design as they help
+                understand the data structures the functions will operate upon. An ER Model represents real-world
+                entities, their attributes, and the relationships among them.</p>
+            <div class="diagram-container">
+                <img src="image-16.png" alt="ER Model Components: Entity, Attribute, Relationship" class="max-w-md">
+                <figcaption>Basic components of an Entity-Relationship Model.</figcaption>
+            </div>
+            <ul class="simple-list">
+                <li><strong>Entity:</strong> A real-world being with properties (attributes). E.g., Student, Course.
+                </li>
+                <li><strong>Attribute:</strong> A property of an entity. E.g., Student Name, Course ID.</li>
+                <li><strong>Relationship:</strong> Logical association among entities. Cardinalities (one-to-one,
+                    one-to-many, many-to-many) define these associations.</li>
+            </ul>
+
+            <h4><i class="fas fa-table icon"></i>Decision Tables</h4>
+            <p>Represents conditions and respective actions in a structured tabular format. It's a powerful tool for
+                debugging, preventing errors, and simplifying complex decision-making by grouping similar information.
+            </p>
+            <h6>Creating Decision Tables:</h6>
+            <ol class="simple-list">
+                <li>Identify all possible conditions.</li>
+                <li>Determine actions for all identified conditions.</li>
+                <li>Create maximum possible rules (combinations of conditions).</li>
+                <li>Define actions for each rule.</li>
+                <li>Verify by end-users and simplify by eliminating duplicate rules/actions.</li>
+            </ol>
+            <div class="diagram-container">
+                <img src="image-12.png" alt="Example Decision Table for Internet Troubleshooting" class="max-w-xl">
+                <figcaption>Example: Decision Table for In-house Internet Troubleshooting.</figcaption>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-cogs icon"></i>Extending DFD Technique to Real-Time Systems</h3>
+            <p>Standard DFDs are excellent for information processing systems but lack mechanisms to represent
+                time-critical behavior and control aspects essential in real-time systems. Extensions, like those
+                proposed by Ward and Mellor or Hatley and Pirbhai, introduce:</p>
+            <ul class="custom-bullets">
+                <li><strong>Control Flows:</strong> Represent signals, events, or conditions that trigger or modify
+                    processes (often shown as dashed lines).</li>
+                <li><strong>Control Processes (Control Transformations):</strong> Processes that specifically manage
+                    control flows and system states (often shown as a dashed circle or a specific symbol).</li>
+                <li><strong>State Transition Diagrams (STDs):</strong> Used in conjunction with DFDs to model the
+                    dynamic behavior of control processes, showing how the system transitions between states based on
+                    events.</li>
+                <li><strong>Process Activation/Deactivation:</strong> Mechanisms to show how control flows can enable or
+                    disable data processes.</li>
+            </ul>
+            <p>These extensions allow for modeling of systems where timing, sequencing of events, and system states are
+                critical (e.g., embedded systems, process control systems).</p>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-file-invoice icon"></i>Detailed Design</h3>
+            <p>Following the high-level structured design, detailed design elaborates on the specifics. During this
+                phase, the pseudo-code descriptions for the processing logic of each module and the detailed data
+                structures are finalized. This phase bridges the gap between the architectural design and the actual
+                coding.</p>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-clipboard-check icon"></i>Design Review</h3>
+            <p>After a design (both high-level and detailed) is complete, it undergoes a rigorous review. The review
+                team typically includes members with diverse perspectives: design, implementation, testing, and
+                maintenance. They may or may not be part of the original development team.</p>
+            <h6>Key Aspects Checked During Design Review:</h6>
+            <ul class="custom-bullets">
+                <li><strong>Traceability:</strong> Ensuring each DFD bubble can be traced to a module in the structure
+                    chart and vice-versa. Also, functional requirements in the SRS should trace to DFD elements.</li>
+                <li><strong>Correctness:</strong> Verifying that all algorithms and data structures in the detailed
+                    design are accurate and sound.</li>
+                <li><strong>Maintainability:</strong> Assessing if the design will be easy to maintain, modify, and
+                    enhance in the future.</li>
+                <li><strong>Implementation:</strong> Checking if the design can be easily and efficiently implemented
+                    with the chosen technologies and resources.</li>
+                <li><strong>Completeness & Consistency:</strong> Ensuring all requirements are addressed and there are
+                    no contradictions within the design.</li>
+            </ul>
+        </section>
+
+        <div class="mt-12 pt-8 border-t border-slate-300 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <a href="topic-6.html" class="nav-button" aria-label="Previous Topic">
+                <i class="fas fa-arrow-left icon"></i> Previous Topic
+            </a>
+            <a href="topic-8.html" class="nav-button" aria-label="Next Topic">
+                Next Topic <i class="fas fa-arrow-right icon"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <!-- Footer content -->
+        © <span id="currentYear"></span> <a href="../../../index.html">EduVision</a>.
+        All rights reserved. Crafted with <i class="fas fa-heart text-red-500"></i> for learning.
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Topic 5: Requirements Analysis & Specification - EduVision</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 100%);
+            color: #1e293b;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+            color: #fff;
+            padding: 1.5rem 0.5rem;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.10);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .logo a {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .logo a:hover span {
+            opacity: 0.8;
+        }
+
+        .logo svg {
+            margin: 0 0.25rem;
+            color: #fde047;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .logo a:hover svg {
+            color: #fef08a;
+            transform: rotate(12deg);
+        }
+
+        main {
+            flex-grow: 1;
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 2.5rem 1rem 1rem 1rem;
+        }
+
+        .content-section {
+            background: linear-gradient(120deg, #fff 60%, #f3e8ff 100%);
+            padding: 2.2rem 1.7rem;
+            border-radius: 1.3rem;
+            box-shadow: 0 8px 36px rgba(139, 92, 246, 0.10), 0 2px 8px rgba(99, 102, 241, 0.08);
+            margin-bottom: 2.7rem;
+            border: 1.5px solid #e0e7ff;
+            transition: box-shadow 0.3s, border-color 0.2s, transform 0.18s cubic-bezier(.4, 2, .6, 1);
+        }
+
+        .content-section:hover {
+            box-shadow: 0 16px 48px rgba(139, 92, 246, 0.18), 0 4px 16px rgba(99, 102, 241, 0.13);
+            border-color: #a5b4fc;
+            transform: translateY(-4px) scale(1.012);
+        }
+
+        .content-section h2 {
+            font-size: 2.3rem;
+            font-weight: 700;
+            color: #7c3aed;
+            margin-bottom: 2.2rem;
+            border-bottom: 4px solid #c4b5fd;
+            padding-bottom: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: linear-gradient(90deg, #6366f1 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .content-section h3 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #6366f1;
+            margin-bottom: 1.3rem;
+            margin-top: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.22rem;
+            font-weight: 600;
+            color: #8b5cf6;
+            margin-bottom: 1.1rem;
+            margin-top: 2rem;
+        }
+
+        .content-section h5 {
+            font-size: 1.08rem;
+            font-weight: 600;
+            color: #6366f1;
+            margin-bottom: 0.5rem;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section ol {
+            color: #334155;
+            font-size: 1.09rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.7;
+        }
+
+        .content-section ul.custom-bullets,
+        .content-section ul.srs-features-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul.custom-bullets li,
+        .content-section ul.srs-features-list li {
+            margin-bottom: 0.7rem;
+            padding-left: 1.7em;
+            position: relative;
+        }
+
+        .content-section ul.custom-bullets li::before {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: #6366f1;
+            position: absolute;
+            left: 0;
+            top: 0.1em;
+            font-size: 1em;
+        }
+
+        .content-section ul.srs-features-list li::before {
+            content: "\f0da";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: #a78bfa;
+            position: absolute;
+            left: 0;
+            top: 0.1em;
+            font-size: 1em;
+        }
+
+        .content-section ol.styled-list {
+            list-style: none;
+            padding-left: 0;
+            counter-reset: styled-list-counter;
+        }
+
+        .content-section ol.styled-list li {
+            margin-bottom: 1.1rem;
+            padding-left: 2.2em;
+            position: relative;
+            counter-increment: styled-list-counter;
+        }
+
+        .content-section ol.styled-list li::before {
+            content: counter(styled-list-counter) ".";
+            position: absolute;
+            left: 0;
+            top: 0.1em;
+            font-weight: bold;
+            color: #6366f1;
+            font-size: 1.1em;
+        }
+
+        .info-box {
+            background: linear-gradient(90deg, #ede9fe 0%, #e0e7ff 100%);
+            padding: 1.2rem 1rem;
+            border-left: 5px solid #a78bfa;
+            color: #3730a3;
+            border-radius: 0.7rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.07);
+        }
+
+        .info-box strong {
+            color: #7c3aed;
+        }
+
+        .diagram-container {
+            background: #f8fafc;
+            padding: 1.2rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 12px rgba(139, 92, 246, 0.07);
+            border: 1px solid #e0e7ef;
+            margin: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .diagram-container img {
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.09);
+            max-width: 100%;
+            height: auto;
+        }
+
+        .diagram-container figcaption {
+            color: #64748b;
+            font-size: 0.98rem;
+            margin-top: 0.7rem;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .characteristics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+            margin-top: 1.5rem;
+        }
+
+        .characteristic-item {
+            background: linear-gradient(120deg, #f3e8ff 60%, #fff 100%);
+            padding: 1.1rem 1rem;
+            border-radius: 0.8rem;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.07);
+            border: 1px solid #e0e7ef;
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .characteristic-item:hover {
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.13);
+            border-color: #a78bfa;
+        }
+
+        .char-title {
+            color: #7c3aed;
+            font-size: 1.08rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .char-description {
+            color: #4b5563;
+            font-size: 0.98rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            background: #f1f5f9;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.07);
+        }
+
+        thead {
+            background: #ede9fe;
+        }
+
+        th,
+        td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+        }
+
+        th {
+            color: #7c3aed;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        td {
+            color: #334155;
+            font-size: 0.98rem;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        tbody tr:hover {
+            background: #ede9fe;
+        }
+
+        pre {
+            background: #1e293b;
+            color: #fbbf24;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-size: 1rem;
+            margin: 1.2rem 0;
+            font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(90deg, #6366f1 0%, #a78bfa 100%);
+            color: #fff;
+            border-radius: 9999px;
+            font-weight: 500;
+            font-size: 1rem;
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.13);
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+
+        .nav-button:hover {
+            background: linear-gradient(90deg, #7c3aed 0%, #6366f1 100%);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.18);
+        }
+
+        footer {
+            text-align: center;
+            color: #7c3aed;
+            font-size: 1.02rem;
+            padding: 2rem 0 1rem 0;
+            background: #f3e8ff;
+            border-top: 1px solid #e0e7ef;
+            margin-top: 2rem;
+        }
+
+        footer a {
+            color: #6366f1;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: #7c3aed;
+        }
+
+        @media (max-width: 700px) {
+            main {
+                padding: 1.2rem 0.3rem;
+            }
+
+            .content-section {
+                padding: 1.2rem 0.7rem;
+            }
+
+            .characteristics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-slate-100 text-slate-800 font-sans">
+    <header>
+        <div class="container mx-auto flex flex-row items-center justify-between">
+            <div class="text-3xl font-bold" style="font-family: 'Nunito', sans-serif;">
+                <a href="../../../index.html" class="flex items-center group">
+                    <span>Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="h-8 w-8 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-all duration-300 group-hover:rotate-12"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span>ision</span>
+                </a>
+            </div>
+            <div class="flex-1 flex flex-col items-center">
+                <h1 class="text-3xl font-bold">Software Engineering</h1>
+                <p class="text-base opacity-90">Explore each topic in depth</p>
+            </div>
+            <div style="width:3rem;"></div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-10">
+        <div class="flex justify-between items-center mb-8">
+            <a href="../software-engineering.html"
+                class="text-indigo-600 hover:text-indigo-800 hover:underline font-medium text-lg transition-colors duration-300">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Syllabus
+            </a>
+            <div class="bg-indigo-600 text-white text-base font-semibold px-5 py-2 rounded-lg shadow-md">
+                Topic 5
+            </div>
+        </div>
+
+        <section class="content-section">
+            <h2><i class="fas fa-file-alt icon"></i>Requirements Analysis & Specification</h2>
+            <p class="text-xl mb-8 text-slate-600">Software requirements are detailed descriptions of the features,
+                functionalities, and constraints of the target system. They articulate user expectations and form the
+                foundation for successful software development. Requirements can range from obvious to hidden, known to
+                unknown, and expected to unexpected from the client's perspective.</p>
+
+            <div class="info-box">
+                <p><i class="fas fa-cogs mr-2"></i><strong>Requirement Engineering:</strong> This is the systematic
+                    process of gathering software requirements from clients, analyzing them, and meticulously
+                    documenting them. The primary goal is to develop and maintain a comprehensive and descriptive
+                    'System Requirements Specification' (SRS) document.</p>
+            </div>
+
+            <h3><i class="fas fa-project-diagram icon"></i>Requirement Engineering Process</h3>
+            <p>This is a structured, four-step process crucial for defining a clear path for development:</p>
+            <ol class="styled-list mt-6">
+                <li>
+                    <h5><i class="fas fa-search-dollar icon text-green-500"></i>Feasibility Study</h5>
+                    <p>When a client approaches an organization for software development, they typically provide a
+                        high-level idea of the desired functions and features. Analysts then conduct a detailed study to
+                        determine if developing the proposed system and its functionalities is viable. This study
+                        considers:</p>
+                    <ul class="list-disc list-inside pl-4 text-slate-600 text-base">
+                        <li>Alignment with organizational goals.</li>
+                        <li>Practicality of implementation.</li>
+                        <li>Potential contribution of the project to the organization.</li>
+                        <li>Cost constraints and budget adherence.</li>
+                        <li>Technical aspects like usability, maintainability, productivity, and integration
+                            capabilities.</li>
+                    </ul>
+                    <p class="mt-3">The output is a feasibility study report, offering recommendations to management on
+                        whether to proceed with the project.</p>
+                </li>
+                <li>
+                    <h5><i class="fas fa-users-cog icon text-blue-500"></i>Requirement Gathering (Elicitation)</h5>
+                    <p>If the feasibility study is positive, this phase begins. Analysts and engineers engage directly
+                        with the client and end-users to understand their vision for the software, including desired
+                        functionalities and features. This involves various techniques to extract all relevant
+                        information.</p>
+                </li>
+                <li>
+                    <h5><i class="fas fa-file-signature icon text-purple-500"></i>Software Requirement Specification
+                        (SRS)</h5>
+                    <p>After requirements are collected, system analysts create an SRS document. This document
+                        formalizes the requirements in a structured manner.</p>
+                </li>
+                <li>
+                    <h5><i class="fas fa-check-double icon text-teal-500"></i>Software Requirement Validation</h5>
+                    <p>Once the SRS is developed, the specified requirements are validated. This step is critical
+                        because users might request impractical solutions, or experts might misinterpret needs, leading
+                        to significant cost overruns if not addressed early. Requirements are checked for conditions
+                        like:</p>
+                    <ul class="list-disc list-inside pl-4 text-slate-600 text-base">
+                        <li>Practical implementability.</li>
+                        <li>Validity concerning software functionality and domain.</li>
+                        <li>Absence of ambiguities.</li>
+                        <li>Completeness.</li>
+                        <li>Demonstrability (can it be shown to work?).</li>
+                    </ul>
+                </li>
+            </ol>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-microscope icon"></i>Requirement Elicitation Process</h3>
+            <p>The process of discovering, reviewing, documenting, and understanding the user's needs and constraints
+                for the system. It's a critical early step within Requirement Gathering.</p>
+            <div class="diagram-container">
+                <img src="image.png"
+                    alt="Requirement Elicitation Process Diagram: Requirement Gathering -> Requirement Organisation -> Negotiation & Discussion -> Requirement Specification"
+                    class="max-w-2xl">
+                <figcaption>The flow of the Requirement Elicitation Process.</figcaption>
+            </div>
+            <ul class="custom-bullets mt-6">
+                <li><strong>Requirements Gathering:</strong> Developers engage with clients and end-users to understand
+                    their expectations and needs from the software. This involves interviews, workshops, surveys, etc.
+                </li>
+                <li><strong>Organizing Requirements:</strong> Developers prioritize and arrange the gathered
+                    requirements based on importance, urgency, and convenience. This helps in structuring the vast
+                    amount of information.</li>
+                <li><strong>Negotiation & Discussion:</strong> If requirements are ambiguous, conflicting, or
+                    unrealistic, they are discussed and negotiated with stakeholders. Requirements may be prioritized or
+                    reasonably compromised to achieve clarity and correctness.</li>
+                <li><strong>Documentation (leading to Specification):</strong> All formal and informal, functional and
+                    non-functional requirements are meticulously documented. This documentation forms the basis for the
+                    SRS and subsequent development phases.</li>
+            </ul>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-book-open icon"></i>Software Requirements Specification (SRS)</h3>
+            <p>An SRS is a comprehensive document created by a system analyst after collecting requirements from various
+                stakeholders. It serves as a blueprint for development, defining how the intended software will interact
+                with hardware, external interfaces, and users, along with performance criteria, portability,
+                maintainability, security, and other quality attributes.</p>
+            <p>While requirements from clients are often in natural language, the SRS translates these into a more
+                structured, technical language understandable by the development team.</p>
+
+            <h4>Key Features of an SRS:</h4>
+            <ul class="list-disc list-inside srs-features-list">
+                <li>User Requirements are expressed in natural language for client understanding.</li>
+                <li>Technical requirements are expressed in a structured language used within the organization.</li>
+                <li>Design descriptions may be written in pseudocode.</li>
+                <li>Includes formats of forms and GUI screen prints where applicable.</li>
+                <li>May use conditional and mathematical notations for Data Flow Diagrams (DFDs) and other models.</li>
+            </ul>
+
+            <h4>Purpose of an SRS Document:</h4>
+            <ul class="custom-bullets">
+                <li>Establishes clear communication between the Customer, Analyst, system developers, and maintainers.
+                </li>
+                <li>Provides a firm foundation for the design phase.</li>
+                <li>Supports system testing activities by defining expected outcomes.</li>
+                <li>Aids in project management and control.</li>
+                <li>Facilitates controlled evolution of the system by documenting agreed-upon functionalities.</li>
+            </ul>
+
+            <div class="info-box mt-8">
+                <p><i class="fas fa-info-circle mr-2"></i>An SRS is a detailed description of a software system to be
+                    developed, encompassing both its functional and non-functional requirements. It's based on the
+                    agreement between the customer and contractors and often includes use cases illustrating user
+                    interactions. A clear understanding of the SRS is vital for QA teams to create effective test plans
+                    and avoid faults.</p>
+            </div>
+
+            <h4>Characteristics of a Good SRS:</h4>
+            <p>A high-quality SRS document exhibits several key characteristics that contribute to project success. The
+                diagram below illustrates these qualities, followed by detailed explanations.</p>
+            <div class="diagram-container">
+                <img src="image-3.png"
+                    alt="Characteristics of a good SRS: Correctness, Completeness, Consistency, Unambiguousness, Ranking for importance, Modifiability, Verifiability, Traceability, Testability, Design Independence, Understandable by customer, Right level of Abstraction"
+                    class="max-w-2xl">
+                <figcaption>Key characteristics that define a robust Software Requirements Specification.</figcaption>
+            </div>
+            <div class="characteristics-grid">
+                <div class="characteristic-item">
+                    <h5 class="char-title"><i class="fas fa-check-circle icon"></i>Correctness</h5>
+                    <p class="char-description">Ensures all stated requirements accurately reflect what is expected from
+                        the system. User reviews are key to verifying correctness.</p>
+                </div>
+                <div class="characteristic-item">
+                    <h5 class="char-title"><i class="fas fa-puzzle-piece icon"></i>Completeness</h5>
+                    <p class="char-description">Indicates all aspects are covered, including page numbering, resolution
+                        of "To Be Determined" (TBD) sections, and comprehensive coverage of functional and
+                        non-functional requirements.</p>
+                </div>
+                <div class="characteristic-item">
+                    <h5 class="char-title"><i class="fas fa-link icon"></i>Consistency</h5>
+                    <p class="char-description">Requires no conflicts between any set of requirements. Terminology
+                        should be uniform, and logical contradictions (e.g., in report generation times) must be
+                        avoided.</p>
+                </div>
+                <div class="characteristic-item">
+                    <h5 class="char-title"><i class="fas fa-glasses icon"></i>Unambiguousness</h5>
+                    <p class="char-description">Means each requirement has only one interpretation. This prevents
+                        misunderstandings. Modeling techniques like ER diagrams and peer reviews help achieve this.</p>
+                </div>
+                <div class="characteristic-item">
+                    <h5 class="char-title"><i class="fas fa-sort-amount-down icon"></i>Ranking for Importance &
+                        Stability</h5>
+                    <p class="char-description">Requirements should be classified (e.g., essential, desirable) to
+                        indicate their priority and stability (likelihood of change).</p>
+                </div>
+                <div class="characteristic-item">
+                    <h5 class="char-title"><i class="fas fa-edit icon"></i>Modifiability</h5>
+                    <p class="char-description">The SRS should be structured to easily accept changes. Modifications
+                        should be properly indexed and cross-referenced.</p>
+                </div>
+                <div class="characteristic-item">
+                    <h5 class="char-title"><i class="fas fa-search icon"></i>Verifiability</h5>
+                    <p class="char-description">Each requirement should be quantifiable and testable. Vague statements
+                        like "user-friendly" should be avoided or refined into measurable criteria.</p>
+                </div>
+                <div class="characteristic-item">
+                    <h5 class="char-title"><i class="fas fa-shoe-prints icon"></i>Traceability</h5>
+                    <p class="char-description">Allows tracing a requirement to design components, code segments, and
+                        corresponding test cases, and vice-versa.</p>
+                </div>
+                <div class="characteristic-item">
+                    <h5 class="char-title"><i class="fas fa-object-ungroup icon"></i>Design Independence</h5>
+                    <p class="char-description">The SRS should focus on *what* the system must do, not *how* it will be
+                        implemented, allowing flexibility in design choices.</p>
+                </div>
+                <div class="characteristic-item">
+                    <h5 class="char-title"><i class="fas fa-vial icon"></i>Testability</h5>
+                    <p class="char-description">Written to facilitate the easy generation of test cases and test plans
+                        from the document.</p>
+                </div>
+                <div class="characteristic-item">
+                    <h5 class="char-title"><i class="fas fa-user-check icon"></i>Understandable by the Customer</h5>
+                    <p class="char-description">Uses clear, simple language, minimizing formal notations and technical
+                        jargon to ensure end-users can comprehend it.</p>
+                </div>
+                <div class="characteristic-item">
+                    <h5 class="char-title"><i class="fas fa-layer-group icon"></i>Right Level of Abstraction</h5>
+                    <p class="char-description">The level of detail should match the purpose of the SRS (e.g., more
+                        detail for the requirements phase, less for a feasibility study).</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-list-alt icon"></i>Parts of an SRS Document</h3>
+            <p>An SRS document typically includes the following main sections:</p>
+            <ol class="styled-list mt-6">
+                <li>
+                    <h5><i class="fas fa-cogs icon text-blue-500"></i>Functional Requirements</h5>
+                    <p>These describe the functionalities the system must perform – what the system should *do*. They
+                        detail the interactions between the system and its environment and specify the inputs, outputs,
+                        processing, and behavior under various conditions. Each function (Fi) can be seen as
+                        transforming a set of inputs (Ii) into a set of outputs (Oi).</p>
+                    <div class="diagram-container">
+                        <img src="image-2.png"
+                            alt="View of a system performing a set of functions: Inputs (I1, I2, I3...IN) -> {Fi} -> Outputs (O1, O2, O3...ON)"
+                            class="max-w-md">
+                        <figcaption>Conceptual view of system functions transforming inputs to outputs.</figcaption>
+                    </div>
+                    <p>These requirements define how the user will get a purposeful piece of labor done by employing the
+                        system.</p>
+                </li>
+                <li>
+                    <h5><i class="fas fa-sliders-h icon text-green-500"></i>Non-Functional Requirements (NFRs)</h5>
+                    <p>These describe the qualities or constraints of the system, rather than specific functions. They
+                        define *how well* the system should perform its functions. NFRs accommodate characteristics not
+                        directly expressed as functions, such as:</p>
+                    <ul class="list-disc list-inside pl-4 text-slate-600 text-base">
+                        <li>Maintainability of the system</li>
+                        <li>Movability (Portability) of the system</li>
+                        <li>Usability of the system</li>
+                        <li>Reliability issues (e.g., Mean Time Between Failures - MTBF)</li>
+                        <li>Accuracy of results</li>
+                        <li>Human-computer interface issues (e.g., ease of learning, response time)</li>
+                        <li>Constraints on system implementation (e.g., programming language, database choice)</li>
+                        <li>Performance (e.g., response time, throughput)</li>
+                        <li>Security (e.g., access control, data encryption)</li>
+                        <li>Scalability</li>
+                    </ul>
+                </li>
+                <li>
+                    <h5><i class="fas fa-bullseye icon text-purple-500"></i>Goals of Implementation</h5>
+                    <p>This section documents general suggestions and trade-offs related to development. It guides
+                        decisions about style, potential future revisions (e.g., new devices to be supported),
+                        reusability concerns, and other long-term considerations. These are aspects developers should
+                        keep in mind throughout development to ensure the system not only meets current needs but is
+                        also adaptable for the future.</p>
+                </li>
+            </ol>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-brain icon"></i>Formal System Development Techniques</h3>
+            <p>While many requirements are captured in natural language or semi-formal models, formal methods use
+                mathematical notations and techniques to specify and verify system properties. These techniques aim for
+                precision, unambiguity, and the ability to prove correctness.</p>
+            <p>Two common categories of formal specification include:</p>
+            <ul class="custom-bullets mt-4">
+                <li>
+                    <strong>Axiomatic Specification:</strong>
+                    <p>This approach defines a system's behavior by stating axioms (pre-conditions and post-conditions)
+                        about its operations. Pre-conditions describe the state before an operation is executed, and
+                        post-conditions describe the state after. Hoare logic is a well-known example of an axiomatic
+                        approach, often used for program verification.</p>
+                </li>
+                <li>
+                    <strong>Algebraic Specification:</strong>
+                    <p>This technique specifies a system (often abstract data types) by defining its operations and the
+                        algebraic relationships (equations or axioms) between these operations. It focuses on the "what"
+                        (the observable behavior) rather than the "how" (the implementation). For example, a stack can
+                        be defined by operations like `push`, `pop`, `top`, `isEmpty`, and axioms like `pop(push(s, x))
+                        = s`.</p>
+                </li>
+            </ul>
+            <div class="info-box mt-6">
+                <p><i class="fas fa-lightbulb mr-2"></i>Formal methods can be complex and require specialized expertise
+                    but offer significant benefits in developing highly reliable and safety-critical systems by enabling
+                    rigorous analysis and verification of requirements and design.</p>
+            </div>
+        </section>
+
+
+        <div class="mt-12 pt-8 border-t border-slate-300 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <a href="topic-4.html" class="nav-button" aria-label="Previous Topic">
+                <i class="fas fa-arrow-left icon"></i> Previous Topic
+            </a>
+            <a href="topic-6.html" class="nav-button" aria-label="Next Topic">
+                Next Topic <i class="fas fa-arrow-right icon"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        © <span id="currentYear"></span> <a href="../../../index.html">EduVision</a>.
+        All rights reserved. Crafted with <i class="fas fa-heart text-red-500"></i> for learning.
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>

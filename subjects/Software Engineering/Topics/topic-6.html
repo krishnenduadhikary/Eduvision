@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Topic 6: Software Design - EduVision</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 100%);
+            color: #1e293b;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+            color: #fff;
+            padding: 1.5rem 0.5rem;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.10);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .logo a {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .logo a:hover span {
+            opacity: 0.8;
+        }
+
+        .logo svg {
+            margin: 0 0.25rem;
+            color: #fde047;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .logo a:hover svg {
+            color: #fef08a;
+            transform: rotate(12deg);
+        }
+
+        main {
+            flex-grow: 1;
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 2.5rem 1rem 1rem 1rem;
+        }
+
+        .content-section {
+            background: linear-gradient(120deg, #fff 60%, #f3e8ff 100%);
+            padding: 2.2rem 1.7rem;
+            border-radius: 1.3rem;
+            box-shadow: 0 8px 36px rgba(139, 92, 246, 0.10), 0 2px 8px rgba(99, 102, 241, 0.08);
+            margin-bottom: 2.7rem;
+            border: 1.5px solid #e0e7ff;
+            transition: box-shadow 0.3s, border-color 0.2s, transform 0.18s cubic-bezier(.4, 2, .6, 1);
+        }
+
+        .content-section:hover {
+            box-shadow: 0 16px 48px rgba(139, 92, 246, 0.18), 0 4px 16px rgba(99, 102, 241, 0.13);
+            border-color: #a5b4fc;
+            transform: translateY(-4px) scale(1.012);
+        }
+
+        .content-section h2 {
+            font-size: 2.3rem;
+            font-weight: 700;
+            color: #7c3aed;
+            margin-bottom: 2.2rem;
+            border-bottom: 4px solid #c4b5fd;
+            padding-bottom: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: linear-gradient(90deg, #6366f1 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .content-section h3 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #6366f1;
+            margin-bottom: 1.3rem;
+            margin-top: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.22rem;
+            font-weight: 600;
+            color: #8b5cf6;
+            margin-bottom: 1.1rem;
+            margin-top: 2rem;
+        }
+
+        .content-section h5 {
+            font-size: 1.08rem;
+            font-weight: 600;
+            color: #6366f1;
+            margin-bottom: 0.5rem;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section ol {
+            color: #334155;
+            font-size: 1.09rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.7;
+        }
+
+        .content-section ul.custom-bullets,
+        .content-section ul.simple-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul.custom-bullets li {
+            margin-bottom: 0.7rem;
+            padding-left: 1.7em;
+            position: relative;
+        }
+
+        .content-section ul.custom-bullets li::before {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: #6366f1;
+            position: absolute;
+            left: 0;
+            top: 0.1em;
+            font-size: 1em;
+        }
+
+        .content-section ul.simple-list li {
+            margin-bottom: 0.7rem;
+            padding-left: 1.5em;
+            position: relative;
+        }
+
+        .content-section ul.simple-list li::before {
+            content: "\2022";
+            color: #8b5cf6;
+            position: absolute;
+            left: 0;
+            font-size: 1.2em;
+            top: 0.1em;
+        }
+
+        .content-section ol {
+            list-style: decimal inside;
+            padding-left: 1.2em;
+        }
+
+        .content-section ol li {
+            margin-bottom: 0.5rem;
+        }
+
+        .info-box {
+            background: linear-gradient(90deg, #ede9fe 0%, #e0e7ff 100%);
+            padding: 1.2rem 1rem;
+            border-left: 5px solid #a78bfa;
+            color: #3730a3;
+            border-radius: 0.7rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.07);
+        }
+
+        .info-box strong {
+            color: #7c3aed;
+        }
+
+        .diagram-container {
+            background: #f8fafc;
+            padding: 1.2rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 12px rgba(139, 92, 246, 0.07);
+            border: 1px solid #e0e7ef;
+            margin: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .diagram-container img {
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.09);
+            max-width: 100%;
+            height: auto;
+        }
+
+        .diagram-container figcaption {
+            color: #64748b;
+            font-size: 0.98rem;
+            margin-top: 0.7rem;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .level-item {
+            background: linear-gradient(120deg, #f3e8ff 60%, #fff 100%);
+            padding: 1.1rem 1rem;
+            border-radius: 0.8rem;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.07);
+            border: 1px solid #e0e7ef;
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .level-item:hover {
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.13);
+            border-color: #a78bfa;
+        }
+
+        .level-title {
+            color: #7c3aed;
+            font-size: 1.08rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .level-description {
+            color: #4b5563;
+            font-size: 0.98rem;
+        }
+
+        .level-rank {
+            font-size: 0.9em;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-right: 0.5em;
+        }
+
+        .level-rank.best {
+            color: #22c55e;
+        }
+
+        .level-rank.good {
+            color: #10b981;
+        }
+
+        .level-rank.moderate {
+            color: #f59e42;
+        }
+
+        .level-rank.poor {
+            color: #f59e42;
+        }
+
+        .level-rank.worst {
+            color: #ef4444;
+        }
+
+        table.comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            background: #f1f5f9;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.07);
+        }
+
+        .comparison-table thead {
+            background: #ede9fe;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+        }
+
+        .comparison-table th {
+            color: #7c3aed;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .comparison-table td {
+            color: #334155;
+            font-size: 0.98rem;
+        }
+
+        .comparison-table tbody tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: #ede9fe;
+        }
+
+        .approach-card {
+            background: linear-gradient(120deg, #fff 60%, #f3e8ff 100%);
+            padding: 1.2rem 1rem;
+            border-radius: 0.8rem;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.07);
+            border: 1px solid #e0e7ef;
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .approach-card:hover {
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.13);
+            border-color: #a78bfa;
+        }
+
+        .approach-card h4 {
+            border-bottom: 2px solid #a5b4fc;
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.7rem;
+        }
+
+        pre {
+            background: #1e293b;
+            color: #fbbf24;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-size: 1rem;
+            margin: 1.2rem 0;
+            font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+        }
+
+        code {
+            background: #ede9fe;
+            color: #7c3aed;
+            padding: 0.1em 0.4em;
+            border-radius: 0.3em;
+            font-size: 0.98em;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            border-radius: 0;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(90deg, #6366f1 0%, #a78bfa 100%);
+            color: #fff;
+            border-radius: 9999px;
+            font-weight: 500;
+            font-size: 1rem;
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.13);
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+
+        .nav-button:hover {
+            background: linear-gradient(90deg, #7c3aed 0%, #6366f1 100%);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.18);
+        }
+
+        footer {
+            text-align: center;
+            color: #7c3aed;
+            font-size: 1.02rem;
+            padding: 2rem 0 1rem 0;
+            background: #f3e8ff;
+            border-top: 1px solid #e0e7ef;
+            margin-top: 2rem;
+        }
+
+        footer a {
+            color: #6366f1;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: #7c3aed;
+        }
+
+        @media (max-width: 700px) {
+            main {
+                padding: 1.2rem 0.3rem;
+            }
+
+            .content-section {
+                padding: 1.2rem 0.7rem;
+            }
+
+            .characteristics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <!-- Header content from previous examples -->
+        <div class="container mx-auto flex flex-row items-center justify-between">
+            <div class="text-3xl font-bold" style="font-family: 'Nunito', sans-serif;">
+                <a href="../../../index.html" class="flex items-center group">
+                    <span>Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="h-8 w-8 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-all duration-300 group-hover:rotate-12"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span>ision</span>
+                </a>
+            </div>
+            <div class="flex-1 flex flex-col items-center">
+                <h1 class="text-3xl font-bold">Software Engineering</h1>
+                <p class="text-base opacity-90">Explore each topic in depth</p>
+            </div>
+            <div style="width:3rem;"></div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-10">
+        <div class="flex justify-between items-center mb-8">
+            <a href="../software-engineering.html"
+                class="text-indigo-600 hover:text-indigo-800 hover:underline font-medium text-lg transition-colors duration-300">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Syllabus
+            </a>
+            <div class="bg-indigo-600 text-white text-base font-semibold px-5 py-2 rounded-lg shadow-md">
+                Topic 6
+            </div>
+        </div>
+
+        <section class="content-section">
+            <h2><i class="fas fa-drafting-compass icon"></i>Software Design Fundamentals</h2>
+            <p class="text-xl mb-8 text-slate-600">Software design is the process of envisioning and defining software
+                solutions to one or more sets of problems. It involves problem-solving and planning for a software
+                solution, including low-level component and algorithm design and high-level architecture design.</p>
+
+            <h3><i class="fas fa-check-circle icon"></i>What is Good Software Design?</h3>
+            <p>A good software design aims to create a system that is:</p>
+            <ul class="custom-bullets">
+                <li><strong>Correct:</strong> Implements all specified requirements accurately.</li>
+                <li><strong>Understandable:</strong> Easy for developers to comprehend its structure and behavior.</li>
+                <li><strong>Efficient:</strong> Performs its tasks without wasting resources (time, memory).</li>
+                <li><strong>Maintainable:</strong> Easy to modify, fix bugs, and adapt to new requirements.</li>
+                <li><strong>Reusable:</strong> Components can be used in other systems or parts of the same system.</li>
+                <li><strong>Reliable:</strong> Performs its intended functions consistently under stated conditions.
+                </li>
+                <li><strong>Testable:</strong> Can be easily and thoroughly tested.</li>
+            </ul>
+            <p>Two fundamental concepts that significantly influence the quality of a software design are **Cohesion**
+                and **Coupling**. A "neat arrangement" or good modularity is achieved by striving for high cohesion
+                within modules and low coupling between modules.</p>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-puzzle-piece icon"></i>Cohesion and Coupling</h3>
+            <p>Cohesion and coupling are metrics that measure the quality of modular design. They help in assessing how
+                well a system is structured into manageable and independent components.</p>
+
+            <div class="diagram-container">
+                <img src="image.png" alt="Diagram illustrating Cohesion within modules and Coupling between modules"
+                    class="max-w-lg">
+                <figcaption>Cohesion represents internal strength, while Coupling represents inter-module dependency.
+                </figcaption>
+            </div>
+
+            <div class="info-box">
+                <p><i class="fas fa-balance-scale mr-2"></i>**The Goal:** Strive for **High Cohesion** (modules are
+                    focused and self-contained) and **Low Coupling** (modules are independent of each other as much as
+                    possible).</p>
+            </div>
+
+            <h4><i class="fas fa-link icon"></i>Cohesion (Intra-Module Binding)</h4>
+            <p>Cohesion is a measure of the degree to which the elements within a single module are functionally related
+                and work together to perform a single, well-defined task. It represents the internal "glue" that holds a
+                module together. High cohesion is desirable as it leads to more robust, reliable, understandable, and
+                reusable modules.</p>
+
+            <div class="diagram-container">
+                <img src="image-2.png"
+                    alt="Types of Modules Cohesion ranked from Best (Functional) to Worst (Coincidental)"
+                    class="max-w-xl">
+                <figcaption>Hierarchy of Cohesion Types: Aim for the types higher up the scale.</figcaption>
+            </div>
+
+            <h5>Types of Cohesion (from Best to Worst):</h5>
+            <div class="mt-6 space-y-4">
+                <div class="level-item">
+                    <h5 class="level-title"><span class="level-rank best mr-2">[BEST]</span>1. Functional Cohesion</h5>
+                    <p class="level-description">All elements of the module cooperate to achieve a single, well-defined
+                        function. Every essential element for a single computation is contained in the component. This
+                        is the ideal and most desirable type of cohesion.</p>
+                </div>
+                <div class="level-item">
+                    <h5 class="level-title"><span class="level-rank good mr-2">[GOOD]</span>2. Sequential Cohesion</h5>
+                    <p class="level-description">Elements are grouped because the output of one element serves as input
+                        to another. Data flows sequentially through the parts. It occurs naturally in functional
+                        programming.</p>
+                </div>
+                <div class="level-item">
+                    <h5 class="level-title"><span class="level-rank good mr-2">[GOOD]</span>3. Communicational
+                        (Informational) Cohesion</h5>
+                    <p class="level-description">All elements of the module operate on the same input data or contribute
+                        towards the same output data structure (e.g., functions defined on an array or stack, or tasks
+                        that update and send the same database record).</p>
+                </div>
+                <div class="level-item">
+                    <h5 class="level-title"><span class="level-rank moderate mr-2">[MODERATE]</span>4. Procedural
+                        Cohesion</h5>
+                    <p class="level-description">Elements are grouped because they are executed in a specific sequence
+                        to perform a task or achieve a goal (e.g., an algorithm for decoding a message). Actions are
+                        still weakly connected and may not be highly reusable. Example: calculate student GPA, then
+                        print student record.</p>
+                </div>
+                <div class="level-item">
+                    <h5 class="level-title"><span class="level-rank poor mr-2">[POOR]</span>5. Temporal Cohesion</h5>
+                    <p class="level-description">Elements are related by their timing; they are processed at a similar
+                        point in time (e.g., a module that initializes all parts of a system at startup). Many different
+                        activities occur, all at the same time, often leading to modules that are hard to maintain.</p>
+                </div>
+                <div class="level-item">
+                    <h5 class="level-title"><span class="level-rank poor mr-2">[POOR]</span>6. Logical Cohesion</h5>
+                    <p class="level-description">Elements are logically related and perform similar kinds of operations,
+                        but the functions are significantly different (e.g., a module that reads inputs from tape, disk,
+                        and network). The choice of which element to execute is often made outside the module.</p>
+                </div>
+                <div class="level-item">
+                    <h5 class="level-title"><span class="level-rank worst mr-2">[WORST]</span>7. Coincidental Cohesion
+                    </h5>
+                    <p class="level-description">Elements are unrelated and have no conceptual relationship other than
+                        their location in the source code. This is unplanned, accidental, and the worst form of
+                        cohesion, often resulting from arbitrary modularization. Example: a module that prints the next
+                        line and reverses the characters of a string.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h4><i class="fas fa-unlink icon"></i>Coupling (Inter-Module Binding)</h4>
+            <p>Coupling is a measure of the degree of interdependence between modules. It indicates how much one module
+                relies on, interferes with, or interacts with another module. Low coupling is desirable because it means
+                changes in one module are less likely to affect others, making the system easier to maintain, test, and
+                understand.</p>
+
+            <div class="diagram-container">
+                <img src="image-3.png"
+                    alt="Types of Coupling ranked from Best (Data Coupling) to Worst (Content Coupling)"
+                    class="max-w-xs">
+                <figcaption>Hierarchy of Coupling Types: Aim for the types higher up (less coupling).</figcaption>
+            </div>
+
+            <h5>Types of Coupling (from Best/Lowest to Worst/Highest):</h5>
+            <div class="mt-6 space-y-4">
+                <div class="level-item">
+                    <h5 class="level-title"><span class="level-rank best mr-2">[BEST - LOWEST]</span>1. Data Coupling
+                    </h5>
+                    <p class="level-description">Modules interact by passing only necessary data as parameters.
+                        Components are independent and communicate through simple data. Module communications don't
+                        contain "tramp data" (unnecessary data). Example: A function that calculates a square root takes
+                        a number and returns the root.</p>
+                </div>
+                <div class="level-item">
+                    <h5 class="level-title"><span class="level-rank good mr-2">[GOOD]</span>2. Stamp Coupling</h5>
+                    <p class="level-description">Modules share a common data structure (e.g., a record or object) but
+                        work on different parts of it. The complete data structure is passed, even if only a portion is
+                        needed. This can be an efficiency choice but involves passing potentially unused data.</p>
+                </div>
+                <div class="level-item">
+                    <h5 class="level-title"><span class="level-rank moderate mr-2">[MODERATE]</span>3. Control Coupling
+                    </h5>
+                    <p class="level-description">One module decides the function of another module or changes its flow
+                        of execution by passing control information (e.g., a flag). This is bad if parameters dictate
+                        completely different behaviors, but can be acceptable if parameters allow factoring and reuse
+                        (e.g., a sort function taking a comparison function as an argument).</p>
+                </div>
+                <div class="level-item">
+                    <h5 class="level-title"><span class="level-rank poor mr-2">[POOR]</span>4. External Coupling</h5>
+                    <p class="level-description">Modules depend on other modules external to the software being
+                        developed or on a particular type of hardware (e.g., dependency on an external file format,
+                        protocol, or device).</p>
+                </div>
+                <div class="level-item">
+                    <h5 class="level-title"><span class="level-rank poor mr-2">[POOR]</span>5. Common Coupling</h5>
+                    <p class="level-description">Multiple modules have read and write access to some global data.
+                        Changes in global data can trace back to many modules, making it hard to evaluate the effect of
+                        changes, reducing reusability, and control over data access.</p>
+                </div>
+                <div class="level-item">
+                    <h5 class="level-title"><span class="level-rank worst mr-2">[WORST - HIGHEST]</span>6. Content
+                        Coupling</h5>
+                    <p class="level-description">One module directly accesses, modifies, or refers to the content
+                        (internal data or code) of another module. This is the worst form of coupling and should be
+                        strictly avoided as it breaks encapsulation and makes modules highly dependent.</p>
+                </div>
+            </div>
+            <p class="mt-6">Ideally, **no coupling** is considered the absolute best, but in practice, some level of
+                coupling is necessary for modules to collaborate. Data coupling is generally the most desirable form.
+            </p>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-exchange-alt icon"></i>Differentiate between Coupling and Cohesion</h3>
+            <table class="comparison-table mt-6">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Coupling</th>
+                        <th>Cohesion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Also Known As</strong></td>
+                        <td>Inter-Module Binding</td>
+                        <td>Intra-Module Binding</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Focus</strong></td>
+                        <td>Shows the relationships and dependencies <strong>between</strong> modules.</td>
+                        <td>Shows the relationship and functional relatedness <strong>within</strong> a single module.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Indicates</strong></td>
+                        <td>The relative independence between modules.</td>
+                        <td>The module's relative functional strength and single-mindedness.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Design Goal</strong></td>
+                        <td>Aim for <strong>Low Coupling</strong> (dependency among modules should be less).</td>
+                        <td>Aim for <strong>High Cohesion</strong> (a module focuses on a single function with minimal
+                            interaction with others).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Interaction</strong></td>
+                        <td>Modules are linked to other modules.</td>
+                        <td>The module focuses on a single, well-defined thing/task.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-sitemap icon"></i>Software Design Approaches</h3>
+            <p>There are fundamentally two primary approaches to software design, each with its own philosophy and
+                techniques. While radically different, they can be complementary rather than strictly competing.</p>
+
+            <div class="grid md:grid-cols-2 gap-8 mt-8">
+                <div class="approach-card">
+                    <h4><i class="fas fa-stream mr-2 text-blue-500"></i>1. Function-Oriented Design (FOD)</h4>
+                    <p class="mt-4">This traditional approach views a system as a collection of functions that perform
+                        specific tasks. The design process typically involves decomposing high-level functions into more
+                        detailed sub-functions.</p>
+                    <h5 class="text-md font-semibold text-indigo-600 mt-4 mb-2">Salient Features:</h5>
+                    <ul class="simple-list">
+                        <li>System is seen as performing a set of functions.</li>
+                        <li>Top-down decomposition: High-level functions are successively refined into detailed
+                            sub-functions (e.g., `create-new-library-member` might break down into
+                            `assign-membership-number`, `create-member-record`, `print-bill`).</li>
+                        <li>System state (data) is often centralized and shared among different functions (e.g.,
+                            `member-records` accessible by `create-new-member`, `delete-member`,
+                            `update-member-record`).</li>
+                    </ul>
+                    <h5 class="text-md font-semibold text-indigo-600 mt-4 mb-2">Examples of FOD Methodologies:</h5>
+                    <ul class="simple-list">
+                        <li>Structured Design (Constantine & Yourdon)</li>
+                        <li>Jackson's Structured Design (JSD)</li>
+                        <li>Warnier-Orr Methodology</li>
+                        <li>Step-wise Refinement (Wirth)</li>
+                        <li>Hatley and Pirbhai's Methodology</li>
+                    </ul>
+                </div>
+
+                <div class="approach-card">
+                    <h4><i class="fas fa-object-group mr-2 text-green-500"></i>2. Object-Oriented Design (OOD)</h4>
+                    <p class="mt-4">This approach views a system as a collection of interacting objects, where each
+                        object is an instance of a class and encapsulates both data (attributes) and behavior (methods)
+                        that operate on that data.</p>
+                    <h5 class="text-md font-semibold text-indigo-600 mt-4 mb-2">Salient Features:</h5>
+                    <ul class="simple-list">
+                        <li>System is seen as a collection of objects (real-world or conceptual entities).</li>
+                        <li>State information is distributed among objects; each object manages its own state.</li>
+                        <li>Objects communicate by passing messages to each other.</li>
+                        <li>Emphasizes concepts like encapsulation, inheritance, and polymorphism.</li>
+                        <li>Classes define blueprints for objects.</li>
+                    </ul>
+                    <h5 class="text-md font-semibold text-indigo-600 mt-4 mb-2">Example: Fire Alarm System (OOD View)
+                    </h5>
+                    <pre><code class="language-none">class Detector {
+  attributes: status, location, neighbours
+  operations: create, senseStatus, getLocation, findNeighbours
+}
+
+class Alarm {
+  attributes: location, status
+  operations: create, ringAlarm, getLocation, resetAlarm
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-balance-scale-left icon"></i>Object-Oriented vs. Function-Oriented Design</h3>
+            <p>While both aim to produce quality software, their core philosophies and resulting structures differ
+                significantly.</p>
+            <ul class="custom-bullets">
+                <li><strong>Basic Abstractions:</strong>
+                    <ul class="simple-list ml-6 my-2">
+                        <li><strong>FOD:</strong> Real-world functions (e.g., `sort`, `display`, `track`).</li>
+                        <li><strong>OOD:</strong> Real-world entities or concepts (e.g., `Employee`, `Picture`,
+                            `Machine`, `RadarSystem`). An employee payroll system in OOD is designed around `Employee`
+                            or `Department` objects, not just `update-employee-record` functions.</li>
+                    </ul>
+                </li>
+                <li><strong>State Information:</strong>
+                    <ul class="simple-list ml-6 my-2">
+                        <li><strong>FOD:</strong> Typically centralized and shared (e.g., global data).</li>
+                        <li><strong>OOD:</strong> Distributed among objects. Each object maintains its own state.
+                            Objects discover other objects' states via message passing (interrogation).</li>
+                    </ul>
+                </li>
+                <li><strong>Grouping of Functions:</strong>
+                    <ul class="simple-list ml-6 my-2">
+                        <li><strong>FOD:</strong> Functions are grouped if they constitute a higher-level function.</li>
+                        <li><strong>OOD:</strong> Functions (methods) are grouped with the data they operate on, within
+                            a class.</li>
+                    </ul>
+                </li>
+                <li><strong>Implementation Language:</strong>
+                    <p class="my-2">An OOD can be implemented using conventional procedural languages, but
+                        object-oriented languages (like C++, Java, Python) provide direct support for OOD concepts
+                        (classes, inheritance, polymorphism), making implementation more straightforward and natural.
+                    </p>
+                </li>
+                <li><strong>Complementary Nature:</strong>
+                    <p class="my-2">Despite their differences, these approaches can complement each other. For instance,
+                        function-oriented techniques (like top-down refinement) are often used to design the internal
+                        logic of methods within a class in an OOD. So, a system might be object-oriented at a high
+                        level, but individual methods within objects might be designed using functional decomposition.
+                    </p>
+                </li>
+            </ul>
+            <div class="info-box mt-6">
+                <p><i class="fas fa-fire-extinguisher mr-2"></i><strong>Example: Fire Alarm System Comparison</strong>
+                </p>
+                <p>Consider an automated fire alarm system:</p>
+                <p class="mt-2"><strong>Function-Oriented Approach:</strong></p>
+                <pre class="text-xs"><code class="language-c">BOOL detector_status[MAX_ROOMS];
+int detector_loc[MAX_ROOMS];
+// ... other global data ...
+
+void interrogate_detectors();
+void get_detector_location();
+// ... other global functions ...</code></pre>
+                <p class="mt-2">Here, data like `detector_status` is global, and functions like `interrogate_detectors`
+                    operate on this shared state.</p>
+                <p class="mt-2"><strong>Object-Oriented Approach (as seen before):</strong></p>
+                <pre class="text-xs"><code class="language-pseudocode">class Detector { status, location, ...; senseStatus(), ... }
+class Alarm { location, status, ...; ringAlarm(), ... }</code></pre>
+                <p>State is encapsulated within `Detector` and `Alarm` objects. Interaction happens through method calls
+                    on these objects.</p>
+            </div>
+        </section>
+
+        <div class="mt-12 pt-8 border-t border-slate-300 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <a href="topic-5.html" class="nav-button" aria-label="Previous Topic">
+                <i class="fas fa-arrow-left icon"></i> Previous Topic
+            </a>
+            <a href="topic-7.html" class="nav-button" aria-label="Next Topic">
+                Next Topic <i class="fas fa-arrow-right icon"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <!-- Footer content from previous examples -->
+        © <span id="currentYear"></span> <a href="../../../index.html">EduVision</a>.
+        All rights reserved. Crafted with <i class="fas fa-heart text-red-500"></i> for learning.
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>

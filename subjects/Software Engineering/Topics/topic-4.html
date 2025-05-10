@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Topic 2: Software Project Management - EduVision</title>
+    <!-- Google Fonts: Inter and Nunito -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito:wght@700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            min-height: 100vh;
+            background: #f1f5f9;
+            color: #1e293b;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(90deg, #4f46e5 0%, #2563eb 100%);
+            color: #fff;
+            padding: 1.5rem 0.5rem;
+            box-shadow: 0 4px 16px rgba(79, 70, 229, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .logo a {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .logo a:hover span {
+            opacity: 0.8;
+        }
+
+        .logo svg {
+            margin: 0 0.25rem;
+            color: #fde047;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .logo a:hover svg {
+            color: #fef08a;
+            transform: rotate(12deg);
+        }
+
+        main {
+            flex-grow: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2.5rem 1rem 1rem 1rem;
+        }
+
+        .content-section {
+            background: #fff;
+            padding: 2rem 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 6px 32px rgba(79, 70, 229, 0.07);
+            margin-bottom: 2.5rem;
+            transition: box-shadow 0.3s;
+        }
+
+        .content-section:hover {
+            box-shadow: 0 12px 40px rgba(79, 70, 229, 0.13);
+        }
+
+        .content-section h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #4338ca;
+            margin-bottom: 2rem;
+            border-bottom: 4px solid #a5b4fc;
+            padding-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .content-section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #6366f1;
+            margin-bottom: 1.25rem;
+            margin-top: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #6366f1;
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+        }
+
+        .content-section h5 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #6366f1;
+            margin-bottom: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section ol {
+            color: #334155;
+            font-size: 1.08rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.7;
+        }
+
+        .content-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul li {
+            margin-bottom: 0.7rem;
+            padding-left: 1.7em;
+            position: relative;
+        }
+
+        .content-section ul li::before {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: #6366f1;
+            position: absolute;
+            left: 0;
+            top: 0.1em;
+            font-size: 1em;
+        }
+
+        .content-section ol {
+            list-style: decimal inside;
+            padding-left: 1.2em;
+        }
+
+        .content-section ol li {
+            margin-bottom: 0.5rem;
+        }
+
+        .info-box {
+            background: #eef2ff;
+            padding: 1.2rem 1rem;
+            border-left: 4px solid #6366f1;
+            color: #3730a3;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.07);
+        }
+
+        .info-box strong {
+            color: #4338ca;
+        }
+
+        .diagram-container {
+            background: #f8fafc;
+            padding: 1.2rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 12px rgba(51, 65, 85, 0.07);
+            border: 1px solid #e0e7ef;
+            margin: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .diagram-container img {
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.09);
+            max-width: 100%;
+            height: auto;
+        }
+
+        .diagram-container figcaption {
+            color: #64748b;
+            font-size: 0.98rem;
+            margin-top: 0.7rem;
+            font-style: italic;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            background: #f1f5f9;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.07);
+        }
+
+        thead {
+            background: #e0e7ef;
+        }
+
+        th,
+        td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+        }
+
+        th {
+            color: #4338ca;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        td {
+            color: #334155;
+            font-size: 0.98rem;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        tbody tr:hover {
+            background: #e0e7ef;
+        }
+
+        pre {
+            background: #1e293b;
+            color: #fbbf24;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-size: 1rem;
+            margin: 1.2rem 0;
+            font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: #6366f1;
+            color: #fff;
+            border-radius: 9999px;
+            font-weight: 500;
+            font-size: 1rem;
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.13);
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+
+        .nav-button:hover {
+            background: #4338ca;
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.18);
+        }
+
+        .responsibility-card {
+            background: #f8fafc;
+            padding: 1.2rem 1rem;
+            border-radius: 0.7rem;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.07);
+            margin-bottom: 1.2rem;
+        }
+
+        .responsibility-card h5 {
+            color: #6366f1;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .responsibility-card ul li::before {
+            content: "\f105";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: #6366f1;
+            position: absolute;
+            left: 0;
+            top: 0.1em;
+            font-size: 1em;
+        }
+
+        footer {
+            text-align: center;
+            color: #64748b;
+            font-size: 0.98rem;
+            padding: 2rem 0 1rem 0;
+            background: #f1f5f9;
+            border-top: 1px solid #e0e7ef;
+            margin-top: 2rem;
+        }
+
+        footer a {
+            color: #6366f1;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: #4338ca;
+        }
+
+        @media (max-width: 700px) {
+            main {
+                padding: 1.2rem 0.3rem;
+            }
+
+            .content-section {
+                padding: 1.2rem 0.7rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container mx-auto flex flex-row items-center justify-between">
+            <div class="logo">
+                <a href="../../../index.html">
+                    <span>Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-0.5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span>ision</span>
+                </a>
+            </div>
+            <div class="flex-1 flex flex-col items-center">
+                <h1 class="text-3xl font-bold">Software Engineering</h1>
+                <p class="text-base opacity-90">Explore each topic in depth</p>
+            </div>
+            <div style="width:3rem;"></div>
+        </div>
+    </header>
+
+    <main lang="en">
+        <div class="flex justify-between items-center mb-8">
+            <a href="../software-engineering.html" class="nav-button" aria-label="Back to Syllabus">
+                <i class="fas fa-arrow-left icon"></i>Back to Syllabus
+            </a>
+            <div class="bg-indigo-600 text-white text-base font-semibold px-5 py-2 rounded-lg shadow-md">
+                Topic 2
+            </div>
+        </div>
+
+        <section class="content-section">
+            <h2><i class="fas fa-tasks icon"></i>Software Project Management</h2>
+
+            <p class="text-xl mb-8 text-slate-600">Software project management is the art and science of planning and
+                leading software projects. It's a sub-discipline of project management where software projects are
+                meticulously planned, implemented, monitored, and controlled to achieve specific goals.</p>
+
+            <div class="info-box">
+                <p><i class="fas fa-lightbulb mr-2"></i><strong>What is a Software Project?</strong> A Software Project
+                    encompasses the entire software development lifecycle, from initial requirement gathering through to
+                    testing and ongoing maintenance. It's executed using defined methodologies within a specific
+                    timeframe to deliver an intended software product.</p>
+            </div>
+
+            <h3><i class="fas fa-question-circle icon"></i>Need for Software Project Management</h3>
+            <p>Software, an intangible product, presents unique development complexities. The domain is marked by
+                rapidly evolving technologies and custom client needs, introducing inherent risks. Effective project
+                management is crucial to navigate these hurdles and ensure the delivery of successful, high-quality
+                software.</p>
+            <p>Key reasons for robust SPM:</p>
+            <ul>
+                <li>The relative newness of software development means limited historical data for accurate estimation.
+                </li>
+                <li>Most software products are bespoke, increasing their uniqueness and inherent complexity.</li>
+                <li>Rapid technological advancements can render past experiences less applicable to new projects.</li>
+                <li>To effectively manage the "Triple Constraints": Scope, Time, and Cost, without compromising Quality.
+                </li>
+            </ul>
+
+            <div class="diagram-container">
+                <img src="image.png"
+                    alt="Triple Constraints of Project Management - Scope, Time, Cost, with Quality in the center"
+                    class="max-w-md">
+                <figcaption>The Triple Constraints: A delicate balance where changes in Time, Cost, or Scope invariably
+                    affect the others and the overall project Quality.</figcaption>
+            </div>
+            <p>The diagram illustrates the fundamental triple constraints in software projects. Delivering a quality
+                product within budget and on schedule is paramount. Various internal and external factors can influence
+                this delicate balance, underscoring the necessity of skilled project management to align user
+                requirements with budgetary and time limitations.</p>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-user-tie icon"></i>The Software Project Manager</h3>
+            <p>A software project manager orchestrates the execution of a software project. They possess a comprehensive
+                understanding of the SDLC phases. While not always directly coding, the project manager is the linchpin,
+                controlling and managing all activities essential for product creation.</p>
+            <p>Key activities include diligent monitoring of the development process, crafting and executing plans,
+                securing resources, and fostering clear communication among team members to proactively address
+                challenges related to cost, budget, resources, timelines, quality, and client satisfaction.</p>
+
+            <h4>Responsibilities of a Project Manager:</h4>
+            <div class="grid md:grid-cols-2 gap-8 mt-6">
+                <div class="responsibility-card">
+                    <h5><i class="fas fa-users icon"></i>Managing People</h5>
+                    <ul>
+                        <li>Serve as an inspiring project leader</li>
+                        <li>Effectively liaise with all stakeholders</li>
+                        <li>Strategically manage human resources</li>
+                        <li>Establish clear reporting hierarchies</li>
+                    </ul>
+                </div>
+                <div class="responsibility-card">
+                    <h5><i class="fas fa-project-diagram icon"></i>Managing Project</h5>
+                    <ul>
+                        <li>Define and establish clear project scope</li>
+                        <li>Oversee project management activities</li>
+                        <li>Monitor progress and performance diligently</li>
+                        <li>Conduct thorough risk analysis at each phase</li>
+                        <li>Implement corrective actions for issues</li>
+                        <li>Act as the primary project spokesperson</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-cogs icon"></i>Software Management Activities</h3>
+            <p>Effective software project management involves a spectrum of activities such as meticulous planning,
+                precise scope definition, robust cost estimation, strategic task scheduling, and efficient resource
+                management.</p>
+
+            <h4><i class="fas fa-clipboard-list-check icon"></i>1. Project Planning</h4>
+            <p>This foundational phase precedes actual software production. It encompasses processes that facilitate
+                efficient software development, rather than direct coding tasks. Key components include:</p>
+            <ul>
+                <li><strong>Scope Management:</strong> Crucial for defining all activities and processes required for
+                    the final software product. It establishes clear project boundaries by delineating what is included
+                    and excluded, thus preventing scope creep and subsequent cost/time overruns.
+                    <ul>
+                        <li>Define project scope</li>
+                        <li>Establish verification and control mechanisms</li>
+                        <li>Decompose project into manageable sub-parts</li>
+                        <li>Verify scope adherence</li>
+                        <li>Control scope through formal change management</li>
+                    </ul>
+                </li>
+                <li><strong>Project Estimation:</strong> Accurate estimation is fundamental for effective project
+                    control.
+                    <ul>
+                        <li><strong>Software Size Estimation:</strong> Typically measured in KLOC (Kilo Lines of Code)
+                            or Function Points (FP). KLOC is influenced by coding standards, while FP correlates with
+                            user requirements.</li>
+                        <li><strong>Effort Estimation:</strong> Quantified in person-months or man-hours. It depends on
+                            software size, managerial experience, historical organizational data, or established
+                            formulas.</li>
+                        <li><strong>Time Estimation:</strong> Derived from size and effort estimates. Tasks are broken
+                            down (Work Breakdown Structure - WBS) and scheduled. The cumulative time for all tasks
+                            determines the total project duration.</li>
+                        <li><strong>Cost Estimation:</strong> The most intricate estimation, influenced by:
+                            <ul>
+                                <li>Software size & desired quality</li>
+                                <li>Hardware & supplementary software/tools/licenses</li>
+                                <li>Availability of skilled personnel</li>
+                                <li>Travel & communication overheads</li>
+                                <li>Training & ongoing support needs</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h4><i class="fas fa-calculator icon"></i>Project Estimation Techniques</h4>
+            <div class="info-box">
+                <p><i class="fas fa-tools mr-2"></i>Project managers employ various techniques for estimation, broadly
+                    categorized into:</p>
+            </div>
+            <ul>
+                <li>
+                    <strong>Decomposition Technique:</strong> Views software as an aggregation of components.
+                    <ul>
+                        <li><strong>Line of Code (LOC):</strong> Estimation based on the projected number of lines of
+                            code.</li>
+                        <li><strong>Function Points (FP):</strong> Estimation driven by the count of functional units in
+                            the software.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Empirical Estimation Technique:</strong> Utilizes empirically derived formulas, often based
+                    on LOC or FPs.
+                    <ul>
+                        <li><strong>Putnam Model:</strong> Developed by Lawrence H. Putnam, leveraging Norden's
+                            frequency distribution (Rayleigh curve). It correlates time and effort with software size.
+                        </li>
+                        <li>
+                            <strong>COCOMO (Constructive Cost Model):</strong> Conceived by Barry W. Boehm, classifying
+                            software into three types:
+                            <ol class="my-3">
+                                <li><strong>Organic:</strong> Small, experienced teams, stable environment,
+                                    well-understood requirements (e.g., simple inventory systems).</li>
+                                <li><strong>Semi-detached:</strong> Mixed team experience, less defined requirements,
+                                    medium scale (e.g., a new utility tool).</li>
+                                <li><strong>Embedded:</strong> Operates under stringent constraints (hardware, software,
+                                    operational), highly complex, often safety-critical (e.g., avionics software).</li>
+                            </ol>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h5>Basic COCOMO Model</h5>
+            <p>The basic COCOMO model offers an initial approximation of key project parameters.</p>
+            <p><strong>Effort Estimation:</strong></p>
+            <pre><code class="language-none">Effort = a1 * (KLOC)^a2  Person-Months (PM)</code></pre>
+            <p><strong>Development Time (Tdev) Estimation:</strong></p>
+            <pre><code class="language-none">Tdev = b1 * (Effort)^b2  Months</code></pre>
+            <p>KLOC represents the estimated size in Kilo Lines of Code. Constants (a1, a2, b1, b2) are specific to each
+                software category:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Software Project</th>
+                        <th>a1</th>
+                        <th>a2</th>
+                        <th>b1</th>
+                        <th>b2</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Organic</td>
+                        <td>2.4</td>
+                        <td>1.05</td>
+                        <td>2.5</td>
+                        <td>0.38</td>
+                    </tr>
+                    <tr>
+                        <td>Semi-detached</td>
+                        <td>3.0</td>
+                        <td>1.12</td>
+                        <td>2.5</td>
+                        <td>0.35</td>
+                    </tr>
+                    <tr>
+                        <td>Embedded</td>
+                        <td>3.6</td>
+                        <td>1.20</td>
+                        <td>2.5</td>
+                        <td>0.32</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box mt-6">
+                <p><i class="fas fa-laptop-code mr-2"></i><strong>COCOMO Example:</strong></p>
+                <p>Consider an organic software product estimated at 32,000 lines of code (32 KLOC). The average
+                    software engineer salary is Rs. 15,000/month.</p>
+                <p><strong>Solution:</strong></p>
+                <p>Effort = 2.4 * (32)<sup>1.05</sup> PM ≈ 2.4 * 36.38 ≈ 87.3 PM (Using 91 PM from your example for
+                    consistency in Tdev below)</p>
+                <p>Nominal development time (Tdev) using 91 PM: <br> Tdev = 2.5 * (91)<sup>0.38</sup> Months ≈ 14 Months
+                    (as per your example)</p>
+                <p>Total Cost = 14 Months * Rs. 15,000/Month = <strong>Rs. 210,000</strong></p>
+            </div>
+
+            <h4><i class="fas fa-calendar-alt icon"></i>2. Project Scheduling</h4>
+            <p>Defines the roadmap for all project activities, their sequence, and allocated timeframes. Managers
+                identify tasks, set milestones, and organize them considering interdependencies. "Critical path" tasks
+                are pivotal and demand strict adherence to schedules.</p>
+            <p>Essential scheduling steps:</p>
+            <ul>
+                <li>Decompose project tasks into smaller, manageable units (Work Breakdown Structure - WBS).</li>
+                <li>Identify and map task dependencies.</li>
+                <li>Accurately estimate the duration for each task.</li>
+                <li>Allocate appropriate work-units.</li>
+                <li>Calculate the overall project duration from start to finish.</li>
+            </ul>
+            <p><strong>Common Scheduling Tools:</strong></p>
+            <ul>
+                <li><strong>Gantt Charts:</strong> Visual timelines using horizontal bars to represent activities
+                    against time.</li>
+                <div class="diagram-container">
+                    <img src="image-4.png" alt="Gantt Chart example" class="max-w-2xl">
+                    <figcaption>Gantt Chart: Visualizing project timelines and task durations.</figcaption>
+                </div>
+                <li><strong>PERT Charts (Program Evaluation & Review Technique):</strong> Network diagrams illustrating
+                    task sequences, dependencies, and critical paths.</li>
+                <div class="diagram-container">
+                    <img src="image-3.png" alt="PERT Chart example" class="max-w-lg">
+                    <figcaption>PERT Chart: Mapping project events, tasks, and their interdependencies.</figcaption>
+                </div>
+                <li><strong>Critical Path Analysis (CPA):</strong> A method used with PERT to identify the longest
+                    sequence of dependent tasks (critical path) that determines the minimum project duration. Tasks on
+                    this path have zero float or slack.</li>
+            </ul>
+
+            <h4><i class="fas fa-users-cog icon"></i>3. Resource Management</h4>
+            <p>Encompasses all assets used for software development, including personnel, development tools, and
+                software libraries. Given their finite nature, precise estimation and allocation are vital to prevent
+                delays or budget escalations.</p>
+            <p>Key aspects:</p>
+            <ul>
+                <li>Structuring the project organization (forming teams, assigning clear responsibilities).</li>
+                <li>Determining resource needs and their availability at various project stages.</li>
+            </ul>
+            <p><strong>Resource Histogram:</strong> A graphical tool (bar chart) displaying the quantity of resources
+                (e.g., developers, testers) required over time for specific project phases or events, aiding in
+                effective staff planning and coordination.</p>
+            <div class="diagram-container">
+                <img src="image-2.png" alt="Resource Histogram example showing staff required per day" class="max-w-lg">
+                <figcaption>Resource Histogram: Illustrating daily staff allocation across different roles.</figcaption>
+            </div>
+            <p>Tabular representation of daily resource requirements:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Staff Role</th>
+                        <th>Day 1</th>
+                        <th>Day 2</th>
+                        <th>Day 3</th>
+                        <th>Day 4</th>
+                        <th>Day 5</th>
+                        <th>Day 6</th>
+                        <th>Day 7</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Designer</td>
+                        <td>4</td>
+                        <td>4</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td>2</td>
+                        <td>2</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>Developer</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>4</td>
+                        <td>4</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>Tester</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>2</td>
+                        <td>2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr class="bg-slate-200 font-semibold text-indigo-700">
+                        <td><strong>Total</strong></td>
+                        <td><strong>4</strong></td>
+                        <td><strong>4</strong></td>
+                        <td><strong>4</strong></td>
+                        <td><strong>5</strong></td>
+                        <td><strong>8</strong></td>
+                        <td><strong>8</strong></td>
+                        <td><strong>6</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4><i class="fas fa-shield-alt icon"></i>4. Project Risk Management</h4>
+            <p>Involves systematic identification, analysis, and provisioning for both predictable and unpredictable
+                risks. Common project risks include:</p>
+            <ul>
+                <li>Attrition of experienced staff.</li>
+                <li>Changes in organizational leadership or strategy.</li>
+                <li>Evolving requirements or misinterpretations.</li>
+                <li>Underestimation of required time or resources.</li>
+                <li>Unforeseen technological shifts or competitive pressures.</li>
+            </ul>
+            <h5>Risk Management Process:</h5>
+            <ol class="mt-4">
+                <li><strong>Identification:</strong> Proactively list all conceivable risks that might affect the
+                    project.</li>
+                <li><strong>Categorization:</strong> Classify identified risks by severity (e.g., high, medium, low)
+                    based on their potential impact.</li>
+                <li><strong>Management:</strong> Analyze the likelihood of risk occurrence. Develop mitigation plans to
+                    avoid or address risks, minimizing their adverse effects.</li>
+                <li><strong>Monitoring:</strong> Continuously track potential risks, their early warning signs, and the
+                    efficacy of implemented mitigation strategies.</li>
+            </ol>
+
+            <h4><i class="fas fa-play-circle icon"></i>5. Project Execution and Monitoring</h4>
+            <p>This phase involves carrying out the tasks outlined in the project plan according to their defined
+                schedules. Vigilant monitoring is essential to ensure adherence to the plan, promptly identify emerging
+                risks, and accurately report on task status.</p>
+            <p>Monitoring measures:</p>
+            <ul>
+                <li><strong>Activity Monitoring:</strong> Daily or regular tracking of scheduled activities within each
+                    task.</li>
+                <li><strong>Status Reports:</strong> Periodic (e.g., weekly) reports detailing the status of activities
+                    and tasks (e.g., completed, pending, in-progress).</li>
+                <li><strong>Milestones Checklist:</strong> Regular verification of the completion of major project
+                    milestones, often aligned with SDLC phases.</li>
+            </ul>
+
+            <h4><i class="fas fa-comments icon"></i>6. Project Communication Management</h4>
+            <p>Effective and timely communication is critical for project success. It bridges understanding gaps between
+                the client and the organization, among team members, and with other project stakeholders (e.g., hardware
+                vendors).</p>
+            <h5>Communication Management Process:</h5>
+            <ol class="mt-4">
+                <li><strong>Planning:</strong> Identify all project stakeholders and establish appropriate communication
+                    channels and frequencies.</li>
+                <li><strong>Sharing:</strong> Ensure the right information reaches the right people at the right time,
+                    keeping everyone informed of project progress and status.</li>
+                <li><strong>Feedback:</strong> Implement mechanisms to gather input from stakeholders and generate
+                    comprehensive status and performance reports.</li>
+                <li><strong>Closure:</strong> Formally announce the completion of major project events, SDLC phases, or
+                    the project itself to all stakeholders.</li>
+            </ol>
+
+            <h4><i class="fas fa-sync-alt icon"></i>7. Configuration Management</h4>
+            <p>A systematic process for tracking and controlling changes to software artifacts, including requirements,
+                design, functionalities, and the evolving product. The IEEE defines it as "the process of identifying
+                and defining the items in the system, controlling the change of these items throughout their life cycle,
+                recording and reporting the status of items and change requests, and verifying the completeness and
+                correctness of items".</p>
+            <p>Once the Software Requirements Specification (SRS) is finalized, subsequent changes are typically managed
+                rigorously, often requiring approval from higher management to prevent uncontrolled scope creep and
+                impacts on cost or schedule.</p>
+            <h5>Change Control Process:</h5>
+            <p>A core function of configuration management, ensuring that all modifications to the software system are
+                consistent, authorized, and adhere to organizational protocols.</p>
+            <ol class="mt-4">
+                <li><strong>Identification:</strong> A change request (CR) originates from internal or external sources
+                    and is formally documented.</li>
+                <li><strong>Validation:</strong> The legitimacy of the CR and its handling procedure are confirmed.</li>
+                <li><strong>Analysis:</strong> The potential impact of the CR on schedule, cost, effort, and the overall
+                    system is thoroughly assessed.</li>
+                <li><strong>Control:</strong> If the change has significant implications or is unavoidable, approval
+                    from designated authorities is sought. A decision is made on whether the change is justifiable.</li>
+                <li><strong>Execution:</strong> If approved, the change is implemented, possibly involving a
+                    comprehensive system revision.</li>
+                <li><strong>Close Request:</strong> The implemented change is verified for correctness and successful
+                    integration. The modification is documented, and the CR is formally closed.</li>
+            </ol>
+        </section>
+
+        <div class="mt-12 pt-8 border-t border-slate-300 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <a href="topic-1.html" class="nav-button" aria-label="Previous Topic">
+                <i class="fas fa-arrow-left icon"></i> Previous: Intro to SE
+            </a>
+            <a href="topic-3.html" class="nav-button" aria-label="Next Topic">
+                Next: SDLC Models <i class="fas fa-arrow-right icon"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        © <span id="currentYear"></span> <a href="../../../index.html">EduVision</a>.
+        All rights reserved. Crafted with <i class="fas fa-heart text-red-500"></i> for learning.
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>
