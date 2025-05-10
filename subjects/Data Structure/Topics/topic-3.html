@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Topic 3: Strings - EduVision</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.7;
+            color: #374151;
+            /* text-gray-700 */
+        }
+
+        main {
+            flex-grow: 1;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+        }
+
+        h2.page-title {
+            /* Specific for main topic title */
+            font-size: 2.25rem;
+            /* text-4xl */
+            font-weight: 800;
+            color: #111827;
+            /* text-gray-900 */
+            border-bottom: 2px solid #3b82f6;
+            /* border-blue-500 */
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+            /* mb-6 */
+        }
+
+        h3.section-title {
+            font-size: 1.875rem;
+            /* text-3xl */
+            font-weight: 700;
+            color: #1d4ed8;
+            /* text-blue-700 */
+            margin-top: 2.5rem;
+            /* mt-10 */
+            margin-bottom: 1rem;
+            /* mb-4 */
+        }
+
+        h3.section-title:first-child {
+            margin-top: 0;
+        }
+
+        h4.subsection-title {
+            font-size: 1.5rem;
+            /* text-2xl */
+            font-weight: 600;
+            color: #1f2937;
+            /* text-gray-800 */
+            margin-top: 1.5rem;
+            /* mt-6 */
+            margin-bottom: 0.75rem;
+            /* mb-3 */
+        }
+
+        p {
+            margin-bottom: 1rem;
+            /* mb-4 */
+            color: #4b5567;
+            /* text-gray-600 */
+            line-height: 1.75;
+            /* leading-relaxed */
+        }
+
+        pre {
+            background-color: #1f2937;
+            /* gray-800 */
+            color: #f3f4f6;
+            /* gray-100 */
+            padding: 1.5rem;
+            /* p-6 */
+            border-radius: 0.5rem;
+            /* rounded-lg */
+            overflow-x: auto;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            /* text-sm */
+        }
+
+        code.language-c,
+        code.language-cpp,
+        code.language-java,
+        code.language-python,
+        code.language-pseudocode {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+        }
+
+        .diagram-caption {
+            text-align: center;
+            font-style: italic;
+            color: #6b7280;
+            /* gray-500 */
+            margin-top: 0.5rem;
+            /* mt-2 */
+            margin-bottom: 1.5rem;
+            /* mb-6 */
+            font-size: 0.875rem;
+            /* text-sm */
+        }
+
+        .content-card {
+            background-color: #ffffff;
+            /* bg-white */
+            border: 1px solid #e5e7eb;
+            /* border-gray-200 */
+            padding: 1.5rem;
+            /* p-6 */
+            border-radius: 0.75rem;
+            /* rounded-xl */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+            /* shadow-lg */
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        .content-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            /* shadow-xl */
+        }
+
+        .algorithm-block {
+            background-color: #f9fafb;
+            /* bg-gray-50 */
+            padding: 1.5rem;
+            /* p-6 */
+            border-radius: 0.5rem;
+            /* rounded-lg */
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            /* shadow-md */
+            margin-top: 2rem;
+            /* mt-8 */
+            border-left: 4px solid #3b82f6;
+            /* border-blue-500 */
+        }
+
+        .custom-list {
+            list-style-type: disc;
+            margin-left: 1.25rem;
+            /* ml-5 */
+            margin-bottom: 1rem;
+            /* mb-4 */
+            padding-left: 0.5rem;
+        }
+
+        .custom-list li {
+            margin-bottom: 0.5rem;
+            /* space-y-2 equivalent for li */
+            color: #4b5567;
+            /* text-gray-600 */
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            /* px-6 py-3 */
+            background-color: #2563eb;
+            /* bg-blue-600 */
+            color: white;
+            border-radius: 9999px;
+            /* rounded-full */
+            font-weight: 500;
+            /* font-medium */
+            font-size: 0.875rem;
+            /* text-sm */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            /* shadow-md */
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background-color: #1d4ed8;
+            /* bg-blue-700 */
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            /* shadow-lg */
+        }
+
+        .header-eduvision .text-2xl {
+            /* Ensure logo font is applied */
+            font-family: 'Nunito', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+    <header class="bg-blue-600 text-white p-4 shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto flex flex-row items-center justify-between">
+            <div class="text-2xl font-bold header-eduvision">
+                <a href="../../../index.html" class="flex items-center group">
+                    <span class="text-white">Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span class="text-white">ision</span>
+                </a>
+            </div>
+            <div class="flex-1 flex flex-col items-center">
+                <h1 class="text-2xl font-bold">Data Structures</h1>
+                <p class="text-sm opacity-90">Explore each topic in depth</p>
+            </div>
+            <div style="width:2.5rem;"></div> <!-- Spacer to balance the title -->
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-10">
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-8">
+            <a href="../data-structures-syllabus.html"
+                class="text-blue-600 hover:text-blue-800 hover:underline font-medium mb-4 sm:mb-0">
+                ← Back to Data Structures Syllabus
+            </a>
+            <div class="bg-blue-600 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-md">
+                Topic 3
+            </div>
+        </div>
+
+        <section class="bg-white p-6 md:p-10 rounded-xl shadow-2xl">
+            <h2 class="page-title">Strings</h2>
+
+            <p class="text-lg leading-relaxed">
+                Strings are fundamental data structures in computer science, representing sequences of characters. They
+                are used extensively in various applications, from storing simple text like names and messages to
+                complex data like source code, web pages, and genetic sequences. Understanding string representations,
+                operations, and algorithms for pattern matching is crucial for any programmer.
+            </p>
+
+            <img src="../Assets/strings-conceptual-overview.webp" alt="Conceptual Overview of Strings"
+                class="rounded-lg shadow-lg border border-gray-200 my-6 w-full max-w-2xl mx-auto">
+            <p class="diagram-caption">Fig: Strings are used to represent textual data in various forms.</p>
+
+
+            <div class="space-y-10">
+
+                <!-- String Representations -->
+                <section>
+                    <h3 class="section-title">1. String Representations</h3>
+                    <p>How strings are stored in memory can vary, impacting performance, safety, and ease of use. The
+                        primary ways include C-style strings, general character arrays, and string objects.</p>
+
+                    <div class="space-y-8">
+                        <div class="algorithm-block">
+                            <h4 class="subsection-title">a. C-style Strings (Null-terminated)</h4>
+                            <p>In C and C++, a string is traditionally represented as an array of characters ending with
+                                a special null character (<code>\0</code>). This null terminator signals the end of the
+                                string.</p>
+                            <img src="../Assets/c-string-representation.webp" alt="C-style String Representation"
+                                class="rounded-lg shadow-md border border-gray-200 my-4 w-full max-w-md mx-auto">
+                            <p class="diagram-caption">Fig: C-style string "HELLO" stored with a null terminator.</p>
+                            <p class="font-semibold text-gray-700">Characteristics:</p>
+                            <ul class="custom-list">
+                                <li><strong>Memory:</strong> Stored contiguously. Length is determined by scanning for
+                                    <code>\0</code>.</li>
+                                <li><strong>Manipulation:</strong> Requires manual memory management. Functions from
+                                    <code><string.h></code> (like <code>strcpy</code>, <code>strlen</code>) are used.
+                                </li>
+                                <li><strong>Pros:</strong> Memory efficient, direct memory access.</li>
+                                <li><strong>Cons:</strong> Prone to buffer overflows, finding length can be slow (O(n)).
+                                </li>
+                            </ul>
+                            <pre><code class="language-c">// Example of a C-style string
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char greeting[6] = {'H', 'e', 'l', 'l', 'o', '\0'};
+    char another_greeting[] = "World"; // Compiler adds \0 automatically
+
+    printf("Greeting: %s\n", greeting);
+    printf("Length of another_greeting: %zu\n", strlen(another_greeting));
+    return 0;
+}</code></pre>
+                        </div>
+
+                        <div class="algorithm-block">
+                            <h4 class="subsection-title">b. Character Arrays (General)</h4>
+                            <p>Some languages or specific use cases might use character arrays that are not necessarily
+                                null-terminated. The length might be stored separately or implied by the array's fixed
+                                size. This is less common for general-purpose string manipulation but can be found in
+                                fixed-buffer scenarios.</p>
+                        </div>
+
+                        <div class="algorithm-block">
+                            <h4 class="subsection-title">c. String Objects/Classes</h4>
+                            <p>Modern languages (Java, Python, C++ with <code>std::string</code>, C#) provide string
+                                objects or classes. These are higher-level abstractions that manage memory automatically
+                                and offer a rich set of built-in methods.</p>
+                            <img src="../Assets/string-object-representation.webp" alt="String Object Representation"
+                                class="rounded-lg shadow-md border border-gray-200 my-4 w-full max-w-lg mx-auto">
+                            <p class="diagram-caption">Fig: Conceptual model of a string object storing data, length,
+                                and possibly capacity.</p>
+                            <p class="font-semibold text-gray-700">Characteristics:</p>
+                            <ul class="custom-list">
+                                <li><strong>Memory Management:</strong> Handled internally; strings can often grow or
+                                    shrink dynamically.</li>
+                                <li><strong>Functionality:</strong> Include methods for length, concatenation,
+                                    substring, search, etc. Length is typically stored, making access O(1).</li>
+                                <li><strong>Pros:</strong> Safer (reduced risk of buffer overflows), easier to use, more
+                                    features.</li>
+                                <li><strong>Cons:</strong> Can have more memory overhead, operations might involve
+                                    hidden allocations.</li>
+                            </ul>
+                            <pre><code class="language-python"># Example of string objects in Python
+my_string = "Hello, EduVision!"
+another_string = " Students"
+
+# Concatenation
+combined_string = my_string + another_string
+print(combined_string)
+
+# Length
+print(f"Length: {len(combined_string)}")
+
+# Substring (slicing)
+substring = my_string[7:16] # Extracts "EduVision"
+print(f"Substring: {substring}")</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="my-10 border-gray-300">
+
+                <!-- String Operations -->
+                <section>
+                    <h3 class="section-title">2. Common String Operations</h3>
+                    <p>Regardless of representation, several operations are commonly performed on strings:</p>
+                    <img src="../Assets/string-operations-examples.webp" alt="Examples of String Operations"
+                        class="rounded-lg shadow-lg border border-gray-200 my-6 w-full max-w-2xl mx-auto">
+                    <p class="diagram-caption">Fig: Visual examples of common string operations.</p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="content-card">
+                            <h4 class="text-lg font-semibold text-gray-800 mb-2">Comparison</h4>
+                            <p class="text-sm">Determines if two strings are identical or their lexicographical order
+                                (e.g., <code>"apple" < "banana"</code>).</p>
+                        </div>
+                        <div class="content-card">
+                            <h4 class="text-lg font-semibold text-gray-800 mb-2">Concatenation</h4>
+                            <p class="text-sm">Joins two or more strings to form a new string (e.g.,
+                                <code>"Hello" + " " + "World" = "Hello World"</code>).</p>
+                        </div>
+                        <div class="content-card">
+                            <h4 class="text-lg font-semibold text-gray-800 mb-2">Substring</h4>
+                            <p class="text-sm">Extracts a portion of a string (e.g., substring of
+                                <code>"EduVision"</code> from index 3 of length 3 is <code>"Vis"</code>).</p>
+                        </div>
+                        <div class="content-card">
+                            <h4 class="text-lg font-semibold text-gray-800 mb-2">Length/Size</h4>
+                            <p class="text-sm">Finds the number of characters in a string.</p>
+                        </div>
+                        <div class="content-card">
+                            <h4 class="text-lg font-semibold text-gray-800 mb-2">Search (Find)</h4>
+                            <p class="text-sm">Locates the first occurrence of a character or a substring within another
+                                string.</p>
+                        </div>
+                        <div class="content-card">
+                            <h4 class="text-lg font-semibold text-gray-800 mb-2">Modification</h4>
+                            <p class="text-sm">Includes operations like replacing characters/substrings, converting
+                                case, trimming whitespace.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="my-10 border-gray-300">
+
+                <!-- Pattern Matching Algorithms -->
+                <section>
+                    <h3 class="section-title">3. Pattern Matching Algorithms</h3>
+                    <p>Pattern matching involves finding all occurrences of a given pattern string (P) within a larger
+                        text string (T). This is a classic problem with numerous applications.</p>
+
+                    <div class="space-y-8">
+                        <div class="algorithm-block">
+                            <h4 class="subsection-title">a. Naive Algorithm (Brute-Force)</h4>
+                            <p>The Naive algorithm checks for the pattern at every possible starting position in the
+                                text. It slides the pattern one character at a time and compares characters.</p>
+                            <img src="../Assets/naive-pattern-matching.webp" alt="Naive Pattern Matching"
+                                class="rounded-lg shadow-md border border-gray-200 my-4 w-full max-w-xl mx-auto">
+                            <p class="diagram-caption">Fig: The Naive algorithm slides the pattern P across text T.</p>
+                            <p class="font-semibold text-gray-700">Process:</p>
+                            <ul class="custom-list">
+                                <li>Align pattern P with the start of text T.</li>
+                                <li>Compare P with the corresponding segment of T, character by character.</li>
+                                <li>If all characters match, a pattern occurrence is found.</li>
+                                <li>Slide P one position to the right in T and repeat.</li>
+                            </ul>
+                            <p class="font-semibold text-gray-700">Complexity:</p>
+                            <ul class="custom-list">
+                                <li>Time: O(m * (n-m+1)) or O(m*n) in the worst case.</li>
+                                <li>Space: O(1).</li>
+                            </ul>
+                            <p class="font-semibold text-gray-700">When to use:</p>
+                            <p>Simple to implement, efficient for small texts/patterns.</p>
+                            <pre><code class="language-pseudocode">NaiveSearch(Text T, Pattern P)
+  n = length(T)
+  m = length(P)
+  for s = 0 to n-m
+    match = true
+    for j = 0 to m-1
+      if T[s+j] != P[j]
+        match = false
+        break
+    if match == true
+      print "Pattern found at index " + s
+</code></pre>
+                        </div>
+
+                        <div class="algorithm-block">
+                            <h4 class="subsection-title">b. Knuth-Morris-Pratt (KMP) Algorithm</h4>
+                            <p>The KMP algorithm improves by using information from previous matches via an LPS (Longest
+                                Proper Prefix which is also Suffix) array to avoid redundant comparisons.</p>
+                            <img src="../Assets/kmp-pattern-matching.webp" alt="KMP Pattern Matching with LPS shift"
+                                class="rounded-lg shadow-md border border-gray-200 my-4 w-full max-w-xl mx-auto">
+                            <p class="diagram-caption">Fig: KMP uses an LPS array for intelligent shifts.</p>
+                            <p class="font-semibold text-gray-700">LPS Array:</p>
+                            <p><code>lps[i]</code> stores the length of the longest proper prefix of
+                                <code>P[0...i]</code> that is also a suffix of <code>P[0...i]</code>.</p>
+                            <p class="font-semibold text-gray-700">Process:</p>
+                            <ul class="custom-list">
+                                <li>Preprocessing: Compute the LPS array for P (O(m)).</li>
+                                <li>Searching: On mismatch at <code>P[j]</code>, shift P using <code>lps[j-1]</code>.
+                                </li>
+                            </ul>
+                            <p class="font-semibold text-gray-700">Complexity:</p>
+                            <ul class="custom-list">
+                                <li>Time: O(n + m).</li>
+                                <li>Space: O(m) for LPS array.</li>
+                            </ul>
+                            <p class="font-semibold text-gray-700">When to use:</p>
+                            <p>General-purpose string searching, effective with repeating sub-patterns.</p>
+                        </div>
+
+                        <div class="algorithm-block">
+                            <h4 class="subsection-title">c. Rabin-Karp Algorithm</h4>
+                            <p>Rabin-Karp uses hashing. It calculates hash values for the pattern and text substrings.
+                                Matching hashes trigger character-by-character verification.</p>
+                            <img src="../Assets/rabin-karp-pattern-matching.webp"
+                                alt="Rabin-Karp Hashing and Rolling Hash"
+                                class="rounded-lg shadow-md border border-gray-200 my-4 w-full max-w-xl mx-auto">
+                            <p class="diagram-caption">Fig: Rabin-Karp compares hash values, using a rolling hash.</p>
+                            <p class="font-semibold text-gray-700">Rolling Hash:</p>
+                            <p>Efficiently computes the hash of the next substring from the current one in O(1) time.
+                            </p>
+                            <p class="font-semibold text-gray-700">Process:</p>
+                            <ul class="custom-list">
+                                <li>Calculate hash(P).</li>
+                                <li>Calculate hash for the first m-length segment of T.</li>
+                                <li>Compare hashes. If equal, verify.</li>
+                                <li>"Roll" hash to the next segment and repeat.</li>
+                            </ul>
+                            <p class="font-semibold text-gray-700">Complexity:</p>
+                            <ul class="custom-list">
+                                <li>Time: Average O(n + m). Worst Case O(nm).</li>
+                                <li>Space: O(1).</li>
+                            </ul>
+                            <p class="font-semibold text-gray-700">When to use:</p>
+                            <p>Multiple pattern matching, plagiarism detection, large alphabets.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="my-10 border-gray-300">
+
+                <!-- Summary of Pattern Matching Algorithms -->
+                <section>
+                    <h3 class="section-title">4. Summary of Pattern Matching Algorithms</h3>
+                    <p>Choosing the right algorithm depends on factors like text/pattern length, number of patterns, and
+                        data nature.</p>
+                    <div class="overflow-x-auto shadow-lg rounded-lg border border-gray-200 mt-6">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th scope="col"
+                                        class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Algorithm</th>
+                                    <th scope="col"
+                                        class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Preprocessing</th>
+                                    <th scope="col"
+                                        class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Matching (Worst)</th>
+                                    <th scope="col"
+                                        class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Space</th>
+                                    <th scope="col"
+                                        class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Key Idea</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                    <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Naive</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">None (O(1))</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">O(m(n-m+1))</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">O(1)</td>
+                                    <td class="px-6 py-4 text-gray-600 text-sm">Simple character-by-character sliding
+                                        window.</td>
+                                </tr>
+                                <tr class="bg-gray-50 hover:bg-gray-100 transition-colors duration-150">
+                                    <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">KMP</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">O(m)</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">O(n)</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">O(m)</td>
+                                    <td class="px-6 py-4 text-gray-600 text-sm">Uses LPS array to skip redundant
+                                        comparisons.</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                    <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Rabin-Karp</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">O(m) (hash)</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">O(nm) (Avg O(n+m))</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">O(1)</td>
+                                    <td class="px-6 py-4 text-gray-600 text-sm">Hashing and rolling hash for quick
+                                        comparisons.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <div
+                class="mt-12 pt-8 border-t border-gray-300 flex flex-col sm:flex-row justify-between items-center gap-6">
+                <a href="topic-2.html" class="nav-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Previous: SDLC
+                </a>
+                <a href="topic-4.html" class="nav-button">
+                    Next: Arrays
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-center text-sm text-gray-600 py-8 mt-12 bg-gray-200 border-t border-gray-300">
+        © <span id="currentYear"></span> <a href="../../../index.html"
+            class="text-blue-600 hover:underline">EduVision</a>.
+        All rights reserved.
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>

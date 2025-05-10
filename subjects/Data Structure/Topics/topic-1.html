@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Topic 1: Introduction to Data Structures - EduVision</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f8fafc;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        main {
+            flex-grow: 1;
+        }
+
+        .shadow-subtle {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+        }
+
+        .shadow-strong {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.07);
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+        }
+
+        .data-structure-card {
+            transition: all 0.3s ease;
+        }
+
+        .data-structure-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-gray-800">
+    <!-- Header -->
+    <header class="hero-gradient text-white p-4 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto flex items-center justify-between">
+            <div class="text-xl sm:text-2xl font-bold flex-shrink-0">
+                <a href="../../../index.html" class="flex items-center group">
+                    <span>Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5 sm:h-6 sm:w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span>ision</span>
+                </a>
+            </div>
+            <div class="flex-1 flex flex-col items-center text-center px-2 sm:px-4">
+                <h1 class="text-lg sm:text-xl md:text-2xl font-bold leading-tight">Data Structures</h1>
+                <p class="text-xs sm:text-sm opacity-90 hidden sm:block">Foundation of efficient programming</p>
+            </div>
+            <div class="w-20 sm:w-28 flex-shrink-0"></div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-8 p-3 bg-white rounded-lg shadow-subtle">
+            <a href="../data-structures.html"
+                class="flex items-center text-sm text-blue-600 hover:text-blue-700 font-medium py-2 px-3 rounded-md hover:bg-blue-50 transition-colors mb-2 sm:mb-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1.5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                        clip-rule="evenodd" />
+                </svg>
+                Back to Syllabus
+            </a>
+            <div class="bg-blue-600 text-white text-xs sm:text-sm font-semibold px-4 py-1.5 rounded-full shadow-sm">
+                Topic 1
+            </div>
+        </div>
+
+        <section class="bg-white p-6 sm:p-8 md:p-10 rounded-xl shadow-strong">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6 text-gray-900">Introduction to Data Structures</h2>
+
+            <p class="text-gray-700 text-lg mb-8 leading-relaxed">
+                Data structures are specialized formats for organizing, processing, retrieving and storing data. They
+                enable efficient access and modification of data, serving as the foundation for creating powerful
+                algorithms
+                and solving complex problems in computer science.
+            </p>
+
+            <div class="my-10 p-6 bg-indigo-50 border-l-4 border-indigo-500 rounded-r-lg shadow-sm">
+                <p class="text-indigo-800">
+                    <strong class="block text-lg font-semibold mb-2">Why Data Structures Matter</strong>
+                    Choosing the right data structure can dramatically affect:
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2 text-sm">
+                    <span class="bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full font-medium">Performance</span>
+                    <span class="bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full font-medium">Memory Usage</span>
+                    <span class="bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full font-medium">Code
+                        Readability</span>
+                    <span class="bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full font-medium">Problem-Solving
+                        Efficiency</span>
+                </div>
+            </div>
+
+            <div class="my-12 py-8 bg-sky-50 rounded-xl shadow-subtle text-center">
+                <h3 class="text-xl sm:text-2xl font-semibold text-sky-700 mb-2">Data Structure Classification</h3>
+                <p class="text-sm text-sky-600 mb-8 max-w-xl mx-auto px-4">Understanding how different data structures
+                    are categorized helps in selecting the right one for your needs.</p>
+                <div class="px-4">
+                    <img src="../Assets/data-structure-types.webp" alt="Data Structure Classification Diagram"
+                        class="max-w-lg w-full mx-auto rounded-lg shadow-md border border-gray-200">
+                </div>
+            </div>
+
+            <div class="space-y-12">
+                <div>
+                    <h3 class="text-2xl font-semibold mt-8 mb-4 text-blue-700 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2.5 text-blue-500" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Definition and Need
+                    </h3>
+                    <div class="pl-9">
+                        <p class="text-gray-700 mb-4 leading-relaxed">
+                            A <strong>data structure</strong> is a particular way of organizing data in a computer so
+                            that it can be used effectively.
+                            The need for data structures arises from the requirement to store and retrieve data
+                            efficiently, both in terms of time and space.
+                        </p>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mt-4">
+                            <h4 class="font-semibold text-gray-800 mb-2">Key Reasons for Using Data Structures:</h4>
+                            <ul class="list-disc pl-5 space-y-2 text-gray-700">
+                                <li>Efficient data storage and retrieval</li>
+                                <li>Optimal memory utilization</li>
+                                <li>Reduced complexity in algorithms</li>
+                                <li>Better organization of data</li>
+                                <li>Faster processing of information</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-semibold mt-8 mb-5 text-blue-700 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2.5 text-blue-500" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                        Abstract Data Types (ADT)
+                    </h3>
+                    <div class="pl-9">
+                        <div class="bg-purple-50 p-6 rounded-lg border-l-4 border-purple-500 mb-6">
+                            <p class="text-purple-800 font-medium mb-3">Abstract Data type (ADT) is a type (or class)
+                                for objects whose behavior is defined by a set of value and a set of operations.</p>
+                            <p class="text-purple-700 text-sm">
+                                The definition of ADT only mentions what operations are to be performed but not how
+                                these operations will be implemented.
+                                It does not specify how data will be organized in memory and what algorithms will be
+                                used for implementing the operations.
+                                It is called "abstract" because it gives an implementation-independent view. The process
+                                of providing only the essentials
+                                and hiding the details is known as abstraction.
+                            </p>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6 mt-6">
+                            <div class="bg-white p-5 rounded-lg border border-gray-200 shadow-subtle">
+                                <h4 class="font-semibold text-gray-800 mb-3">ADT Characteristics</h4>
+                                <ul class="space-y-2 text-gray-700 text-sm">
+                                    <li class="flex items-start">
+                                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        Defines what operations are possible
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        Hides implementation details
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        Provides a clean interface
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-5 rounded-lg border border-gray-200 shadow-subtle">
+                                <h4 class="font-semibold text-gray-800 mb-3">Common ADT Examples</h4>
+                                <ul class="space-y-2 text-gray-700 text-sm">
+                                    <li class="flex items-start">
+                                        <svg class="h-4 w-4 text-blue-500 mr-2 mt-0.5 flex-shrink-0" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        List (ordered collection)
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="h-4 w-4 text-blue-500 mr-2 mt-0.5 flex-shrink-0" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        Stack (LIFO structure)
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="h-4 w-4 text-blue-500 mr-2 mt-0.5 flex-shrink-0" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        Queue (FIFO structure)
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="h-4 w-4 text-blue-500 mr-2 mt-0.5 flex-shrink-0" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        Map (key-value pairs)
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-semibold mt-8 mb-5 text-blue-700 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2.5 text-blue-500" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                        </svg>
+                        Linear vs Non-linear Data Structures
+                    </h3>
+                    <div class="pl-9">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-green-50 p-5 rounded-lg border-l-4 border-green-500 data-structure-card">
+                                <h4 class="font-bold text-green-800 mb-3 text-lg">Linear Data Structures</h4>
+                                <ul class="space-y-3 text-sm text-gray-700">
+                                    <li class="flex items-start">
+                                        <div class="bg-green-100 text-green-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        Data arranged in linear order where each element is attached to its previous and
+                                        next adjacent
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="bg-green-100 text-green-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        Single level is involved
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="bg-green-100 text-green-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        Easier to implement compared to non-linear structures
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="bg-green-100 text-green-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        Can be traversed in a single run
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="bg-green-100 text-green-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        Examples: Array, Stack, Queue, Linked List
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-orange-50 p-5 rounded-lg border-l-4 border-orange-500 data-structure-card">
+                                <h4 class="font-bold text-orange-800 mb-3 text-lg">Non-linear Data Structures</h4>
+                                <ul class="space-y-3 text-sm text-gray-700">
+                                    <li class="flex items-start">
+                                        <div class="bg-orange-100 text-orange-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        Data elements are attached hierarchically
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="bg-orange-100 text-orange-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        Multiple levels are involved
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="bg-orange-100 text-orange-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        More complex to implement
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="bg-orange-100 text-orange-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        Cannot be traversed in a single run
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="bg-orange-100 text-orange-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        Examples: Trees, Graphs
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 bg-blue-50 p-6 rounded-lg border border-blue-200">
+                            <h4 class="font-semibold text-blue-800 mb-3">Applications</h4>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <h5 class="text-sm font-medium text-blue-700 mb-2">Linear Structures</h5>
+                                    <p class="text-sm text-gray-700">Mainly used in application software development for
+                                        sequential data processing.</p>
+                                </div>
+                                <div>
+                                    <h5 class="text-sm font-medium text-blue-700 mb-2">Non-linear Structures</h5>
+                                    <p class="text-sm text-gray-700">Widely used in Artificial Intelligence and image
+                                        processing for hierarchical data representation.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-semibold mt-8 mb-5 text-blue-700 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2.5 text-blue-500" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                        </svg>
+                        Static vs Dynamic Structures
+                    </h3>
+                    <div class="pl-9">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div
+                                class="bg-white p-6 rounded-lg border border-gray-200 shadow-subtle data-structure-card">
+                                <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                                    <svg class="h-5 w-5 text-gray-500 mr-2" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+                                    </svg>
+                                    Static Structures
+                                </h4>
+                                <ul class="space-y-3 text-gray-700">
+                                    <li class="flex items-start">
+                                        <div class="bg-gray-100 text-gray-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        Fixed size (memory allocated at compile time)
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="bg-gray-100 text-gray-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        Cannot be resized during program execution
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="bg-gray-100 text-gray-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        Faster access as memory is contiguous
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="bg-gray-100 text-gray-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        Example: Arrays
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div
+                                class="bg-white p-6 rounded-lg border border-gray-200 shadow-subtle data-structure-card">
+                                <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                                    <svg class="h-5 w-5 text-blue-500 mr-2" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                    </svg>
+                                    Dynamic Structures
+                                </h4>
+                                <ul class="space-y-3 text-gray-700">
+                                    <li class="flex items-start">
+                                        <div class="bg-blue-100 text-blue-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        Flexible size (memory allocated at runtime)
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="bg-blue-100 text-blue-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        Can grow or shrink as needed
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="bg-blue-100 text-blue-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        More memory efficient but slightly slower access
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="bg-blue-100 text-blue-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        Examples: Linked Lists, Trees, Graphs
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-semibold mt-8 mb-5 text-blue-700 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2.5 text-blue-500" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                        </svg>
+                        Memory Management: Stack vs Heap
+                    </h3>
+                    <div class="pl-9">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-red-50 p-6 rounded-lg border-l-4 border-red-500 data-structure-card">
+                                <h4 class="font-bold text-red-800 mb-4">Stack Memory</h4>
+                                <ul class="space-y-3 text-gray-700">
+                                    <li class="flex items-start">
+                                        <div class="bg-red-100 text-red-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        Stores local variables and function calls
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="bg-red-100 text-red-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        Memory allocation/deallocation is automatic
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="bg-red-100 text-red-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        Limited size (can cause stack overflow)
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="bg-red-100 text-red-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        Faster access (LIFO principle)
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-purple-50 p-6 rounded-lg border-l-4 border-purple-500 data-structure-card">
+                                <h4 class="font-bold text-purple-800 mb-4">Heap Memory</h4>
+                                <ul class="space-y-3 text-gray-700">
+                                    <li class="flex items-start">
+                                        <div class="bg-purple-100 text-purple-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        Stores dynamically allocated memory
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="bg-purple-100 text-purple-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        Manual memory management required
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="bg-purple-100 text-purple-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        Larger size available (limited by system)
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="bg-purple-100 text-purple-800 rounded-full p-1 mr-3 flex-shrink-0">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        Slower access but more flexible
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 bg-gray-50 p-6 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-gray-800 mb-3">Comparison Table</h4>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full bg-white text-sm">
+                                    <thead class="bg-gray-100">
+                                        <tr>
+                                            <th class="py-2 px-4 text-left text-gray-700">Parameter</th>
+                                            <th class="py-2 px-4 text-left text-gray-700">Stack</th>
+                                            <th class="py-2 px-4 text-left text-gray-700">Heap</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="py-2 px-4 text-gray-700">Memory Allocation</td>
+                                            <td class="py-2 px-4 text-gray-700">Automatic</td>
+                                            <td class="py-2 px-4 text-gray-700">Manual</td>
+                                        </tr>
+                                        <tr class="bg-gray-50">
+                                            <td class="py-2 px-4 text-gray-700">Size</td>
+                                            <td class="py-2 px-4 text-gray-700">Fixed</td>
+                                            <td class="py-2 px-4 text-gray-700">Flexible</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 px-4 text-gray-700">Access Speed</td>
+                                            <td class="py-2 px-4 text-gray-700">Faster</td>
+                                            <td class="py-2 px-4 text-gray-700">Slower</td>
+                                        </tr>
+                                        <tr class="bg-gray-50">
+                                            <td class="py-2 px-4 text-gray-700">Management</td>
+                                            <td class="py-2 px-4 text-gray-700">Compiler</td>
+                                            <td class="py-2 px-4 text-gray-700">Programmer</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 px-4 text-gray-700">Lifetime</td>
+                                            <td class="py-2 px-4 text-gray-700">Function scope</td>
+                                            <td class="py-2 px-4 text-gray-700">Until freed</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="mt-16 pt-10 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <span class="sm:w-1/3"></span>
+                <a href="topic-2.html"
+                    class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all font-medium text-sm shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    Next Topic: Arrays and Linked Lists
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-center text-sm text-gray-600 py-8 mt-12 bg-slate-100 border-t border-slate-200">
+        © <span id="currentYear"></span> <a href="../index.html" class="text-blue-600 hover:underline">EduVision</a>.
+        All rights reserved.
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>

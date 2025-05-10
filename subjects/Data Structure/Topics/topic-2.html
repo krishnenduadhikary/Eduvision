@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Topic 2: Arrays - EduVision</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f8fafc;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        main {
+            flex-grow: 1;
+        }
+
+        .shadow-subtle {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+        }
+
+        .shadow-strong {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.07);
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+        }
+
+        .array-card {
+            transition: all 0.3s ease;
+        }
+
+        .array-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .memory-cell {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #cbd5e1;
+            background-color: #f8fafc;
+        }
+
+        .memory-address {
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-gray-800">
+    <!-- Header -->
+    <header class="hero-gradient text-white p-4 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto flex items-center justify-between">
+            <div class="text-xl sm:text-2xl font-bold flex-shrink-0">
+                <a href="../../../index.html" class="flex items-center group">
+                    <span>Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5 sm:h-6 sm:w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span>ision</span>
+                </a>
+            </div>
+            <div class="flex-1 flex flex-col items-center text-center px-2 sm:px-4">
+                <h1 class="text-lg sm:text-xl md:text-2xl font-bold leading-tight">Data Structures</h1>
+                <p class="text-xs sm:text-sm opacity-90 hidden sm:block">Master the fundamentals of programming</p>
+            </div>
+            <div class="w-20 sm:w-28 flex-shrink-0"></div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-8 p-3 bg-white rounded-lg shadow-subtle">
+            <a href="../data-structures.html"
+                class="flex items-center text-sm text-blue-600 hover:text-blue-700 font-medium py-2 px-3 rounded-md hover:bg-blue-50 transition-colors mb-2 sm:mb-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1.5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                        clip-rule="evenodd" />
+                </svg>
+                Back to Syllabus
+            </a>
+            <div class="bg-blue-600 text-white text-xs sm:text-sm font-semibold px-4 py-1.5 rounded-full shadow-sm">
+                Topic 2
+            </div>
+        </div>
+
+        <section class="bg-white p-6 sm:p-8 md:p-10 rounded-xl shadow-strong">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6 text-gray-900">Arrays</h2>
+
+            <p class="text-gray-700 text-lg mb-8 leading-relaxed">
+                Arrays are fundamental data structures in computer programming that store a collection of elements of
+                the same data type under a single name. These elements are stored in contiguous memory locations, and
+                each element is accessed using an index or a subscript.
+            </p>
+
+            <div class="my-10 p-6 bg-indigo-50 border-l-4 border-indigo-500 rounded-r-lg shadow-sm">
+                <p class="text-indigo-800">
+                    <strong class="block text-lg font-semibold mb-2">Key Characteristics of Arrays</strong>
+                    Understanding these core concepts will help you master array operations:
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2 text-sm">
+                    <span class="bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full font-medium">Contiguous
+                        Memory</span>
+                    <span class="bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full font-medium">Fixed Size</span>
+                    <span class="bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full font-medium">Random
+                        Access</span>
+                    <span class="bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full font-medium">Homogeneous
+                        Elements</span>
+                </div>
+            </div>
+
+            <div class="space-y-12">
+                <!-- Array Basics Section -->
+                <div>
+                    <h3 class="text-2xl font-semibold mt-8 mb-5 text-blue-700 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2.5 text-blue-500" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        Array Basics
+                    </h3>
+                    <div class="pl-9">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-subtle array-card">
+                                <h4 class="font-bold text-gray-800 mb-4">Declaration & Initialization</h4>
+                                <div
+                                    class="bg-gray-800 rounded-lg p-4 text-green-400 font-mono text-sm overflow-x-auto">
+                                    <p>// C++ array declaration</p>
+                                    <p>int numbers[5]; // Declaration</p>
+                                    <p>int values[] = {10, 20, 30}; // Initialization</p>
+                                    <br>
+                                    <p>// Java array declaration</p>
+                                    <p>int[] numbers = new int[5];</p>
+                                    <p>int[] values = {10, 20, 30};</p>
+                                </div>
+                                <p class="mt-4 text-gray-700 text-sm">Arrays can be declared with or without
+                                    initialization. The size must be specified (either explicitly or implicitly during
+                                    initialization).</p>
+                            </div>
+
+                            <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-subtle array-card">
+                                <h4 class="font-bold text-gray-800 mb-4">Memory Representation</h4>
+                                <div class="flex justify-center space-x-1 mb-3">
+                                    <div class="text-center">
+                                        <div class="memory-cell">15</div>
+                                        <div class="memory-address">1100</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="memory-cell">7</div>
+                                        <div class="memory-address">1104</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="memory-cell">11</div>
+                                        <div class="memory-address">1108</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="memory-cell">44</div>
+                                        <div class="memory-address">1112</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="memory-cell">93</div>
+                                        <div class="memory-address">1116</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="memory-cell">20</div>
+                                        <div class="memory-address">1120</div>
+                                    </div>
+                                </div>
+                                <p class="text-gray-700 text-sm">Elements are stored in contiguous memory locations. The
+                                    address of any element can be calculated using: <span
+                                        class="font-mono bg-gray-100 px-2 py-1 rounded">Address = Base + (Index ×
+                                        ElementSize)</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Array Operations Section -->
+                <div>
+                    <h3 class="text-2xl font-semibold mt-8 mb-5 text-blue-700 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2.5 text-blue-500" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                        </svg>
+                        Array Operations
+                    </h3>
+                    <div class="pl-9">
+                        <!-- Traversal -->
+                        <div class="mb-8 bg-green-50 p-6 rounded-lg border-l-4 border-green-500 array-card">
+                            <h4 class="font-bold text-green-800 mb-4">Traversal</h4>
+                            <p class="text-gray-700 mb-4">Systematically visiting each element within the array using
+                                loops.</p>
+
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h5 class="font-medium text-gray-800 mb-2">Forward Traversal</h5>
+                                    <div class="bg-gray-800 rounded-lg p-4 text-green-400 font-mono text-sm">
+                                        <p>for(int i = 0; i < length; i++) {</p>
+                                                <p class="ml-4">// Access array[i]</p>
+                                                <p>}</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium text-gray-800 mb-2">Backward Traversal</h5>
+                                    <div class="bg-gray-800 rounded-lg p-4 text-green-400 font-mono text-sm">
+                                        <p>for(int i = length-1; i >= 0; i--) {</p>
+                                        <p class="ml-4">// Access array[i]</p>
+                                        <p>}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Insertion -->
+                        <div class="mb-8 bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500 array-card">
+                            <h4 class="font-bold text-blue-800 mb-4">Insertion</h4>
+                            <p class="text-gray-700 mb-4">Adding an element at a specific position requires shifting
+                                subsequent elements.</p>
+
+                            <div class="flex flex-col md:flex-row gap-6">
+                                <div class="flex-1">
+                                    <h5 class="font-medium text-gray-800 mb-2">Insertion Steps</h5>
+                                    <ol class="list-decimal pl-5 space-y-2 text-gray-700">
+                                        <li>Check if array has space</li>
+                                        <li>Shift elements from insertion point to right</li>
+                                        <li>Insert new element</li>
+                                        <li>Update array length</li>
+                                    </ol>
+                                </div>
+                                <div class="flex-1">
+                                    <h5 class="font-medium text-gray-800 mb-2">Example Code</h5>
+                                    <div
+                                        class="bg-gray-800 rounded-lg p-4 text-green-400 font-mono text-sm overflow-x-auto">
+                                        <p>// Insert 6 where element > 5</p>
+                                        <p>for(int i = 0; i < length; i++) {</p>
+                                                <p class="ml-4">if(array[i] > 5) {</p>
+                                                <p class="ml-8">// Shift elements</p>
+                                                <p class="ml-8">for(int j = length; j > i; j--) {</p>
+                                                <p class="ml-12">array[j] = array[j-1];</p>
+                                                <p class="ml-8">}</p>
+                                                <p class="ml-8">array[i] = 6; // Insert</p>
+                                                <p class="ml-8">length++;</p>
+                                                <p class="ml-8">break;</p>
+                                                <p class="ml-4">}</p>
+                                                <p>}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Deletion -->
+                        <div class="mb-8 bg-red-50 p-6 rounded-lg border-l-4 border-red-500 array-card">
+                            <h4 class="font-bold text-red-800 mb-4">Deletion</h4>
+                            <p class="text-gray-700 mb-4">Removing an element requires shifting subsequent elements to
+                                fill the gap.</p>
+
+                            <div class="flex flex-col md:flex-row gap-6">
+                                <div class="flex-1">
+                                    <h5 class="font-medium text-gray-800 mb-2">Deletion Steps</h5>
+                                    <ol class="list-decimal pl-5 space-y-2 text-gray-700">
+                                        <li>Find element to delete</li>
+                                        <li>Shift subsequent elements left</li>
+                                        <li>Decrement array length</li>
+                                        <li>Adjust index if needed</li>
+                                    </ol>
+                                </div>
+                                <div class="flex-1">
+                                    <h5 class="font-medium text-gray-800 mb-2">Example Code</h5>
+                                    <div
+                                        class="bg-gray-800 rounded-lg p-4 text-green-400 font-mono text-sm overflow-x-auto">
+                                        <p>// Delete elements > 5</p>
+                                        <p>for(int i = 0; i < length; i++) {</p>
+                                                <p class="ml-4">if(array[i] > 5) {</p>
+                                                <p class="ml-8">// Shift elements</p>
+                                                <p class="ml-8">for(int j = i; j < length-1; j++) {</p>
+                                                        <p class="ml-12">array[j] = array[j+1];</p>
+                                                        <p class="ml-8">}</p>
+                                                        <p class="ml-8">length--;</p>
+                                                        <p class="ml-8">i--; // Recheck current position</p>
+                                                        <p class="ml-4">}</p>
+                                                        <p>}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Search and Update -->
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-purple-50 p-6 rounded-lg border-l-4 border-purple-500 array-card">
+                                <h4 class="font-bold text-purple-800 mb-4">Searching</h4>
+                                <p class="text-gray-700 mb-3">Finding an element in an array can be done through:</p>
+                                <ul class="list-disc pl-5 space-y-1 text-gray-700">
+                                    <li><strong>Linear Search:</strong> Check each element sequentially</li>
+                                    <li><strong>Binary Search:</strong> For sorted arrays (much faster)</li>
+                                </ul>
+                                <div class="bg-gray-800 rounded-lg p-4 text-green-400 font-mono text-sm mt-3">
+                                    <p>// Linear search example</p>
+                                    <p>for(int i = 0; i < length; i++) {</p>
+                                            <p class="ml-4">if(array[i] == target) {</p>
+                                            <p class="ml-8">return i; // Found at index i</p>
+                                            <p class="ml-4">}</p>
+                                            <p>}</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-500 array-card">
+                                <h4 class="font-bold text-yellow-800 mb-4">Updating</h4>
+                                <p class="text-gray-700 mb-3">Modifying an element at a specific position is
+                                    straightforward with direct access.</p>
+                                <div class="bg-gray-800 rounded-lg p-4 text-green-400 font-mono text-sm">
+                                    <p>// Update element at index 2</p>
+                                    <p>array[2] = newValue;</p>
+                                    <br>
+                                    <p>// Conditional update example</p>
+                                    <p>for(int i = 0; i < length; i++) {</p>
+                                            <p class="ml-4">if(array[i] == oldValue) {</p>
+                                            <p class="ml-8">array[i] = newValue;</p>
+                                            <p class="ml-4">}</p>
+                                            <p>}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Multidimensional Arrays Section -->
+                <div>
+                    <h3 class="text-2xl font-semibold mt-8 mb-5 text-blue-700 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2.5 text-blue-500" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                        </svg>
+                        Multidimensional Arrays
+                    </h3>
+                    <div class="pl-9">
+                        <div class="mb-8 bg-white p-6 rounded-lg border border-gray-200 shadow-subtle">
+                            <h4 class="font-bold text-gray-800 mb-4">2D Array Representation</h4>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h5 class="font-medium text-gray-800 mb-2">Visualization</h5>
+                                    <div class="border border-gray-200 p-4 rounded-lg">
+                                        <table class="border-collapse mx-auto">
+                                            <tr>
+                                                <th class="border border-gray-300 p-2 bg-gray-100">Row\Col</th>
+                                                <th class="border border-gray-300 p-2 bg-gray-100">0</th>
+                                                <th class="border border-gray-300 p-2 bg-gray-100">1</th>
+                                                <th class="border border-gray-300 p-2 bg-gray-100">2</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="border border-gray-300 p-2 bg-gray-100">0</td>
+                                                <td class="border border-gray-300 p-2 text-center">8</td>
+                                                <td class="border border-gray-300 p-2 text-center">6</td>
+                                                <td class="border border-gray-300 p-2 text-center">5</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border border-gray-300 p-2 bg-gray-100">1</td>
+                                                <td class="border border-gray-300 p-2 text-center">2</td>
+                                                <td class="border border-gray-300 p-2 text-center">1</td>
+                                                <td class="border border-gray-300 p-2 text-center">9</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border border-gray-300 p-2 bg-gray-100">2</td>
+                                                <td class="border border-gray-300 p-2 text-center">3</td>
+                                                <td class="border border-gray-300 p-2 text-center">6</td>
+                                                <td class="border border-gray-300 p-2 text-center">4</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium text-gray-800 mb-2">Declaration</h5>
+                                    <div class="bg-gray-800 rounded-lg p-4 text-green-400 font-mono text-sm">
+                                        <p>// C++ 2D array</p>
+                                        <p>int matrix[3][3] = {</p>
+                                        <p class="ml-4">{8, 6, 5},</p>
+                                        <p class="ml-4">{2, 1, 9},</p>
+                                        <p class="ml-4">{3, 6, 4}</p>
+                                        <p>};</p>
+                                        <br>
+                                        <p>// Java 2D array</p>
+                                        <p>int[][] matrix = {</p>
+                                        <p class="ml-4">{8, 6, 5},</p>
+                                        <p class="ml-4">{2, 1, 9},</p>
+                                        <p class="ml-4">{3, 6, 4}</p>
+                                        <p>};</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-8 bg-white p-6 rounded-lg border border-gray-200 shadow-subtle">
+                            <h4 class="font-bold text-gray-800 mb-4">Memory Layout</h4>
+                            <p class="text-gray-700 mb-4">Multidimensional arrays are stored linearly in memory. The two
+                                most common layouts are:</p>
+
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="bg-blue-50 p-4 rounded-lg">
+                                    <h5 class="font-bold text-blue-800 mb-2">Row-Major Order</h5>
+                                    <p class="text-gray-700 mb-3">Consecutive elements of a row reside next to each
+                                        other.</p>
+                                    <div class="flex flex-wrap gap-1 mb-3">
+                                        <div class="memory-cell bg-blue-100">8</div>
+                                        <div class="memory-cell bg-blue-100">6</div>
+                                        <div class="memory-cell bg-blue-100">5</div>
+                                        <div class="memory-cell bg-blue-100">4</div>
+                                        <div class="memory-cell bg-blue-100">2</div>
+                                        <div class="memory-cell bg-blue-100">1</div>
+                                        <div class="memory-cell bg-blue-100">9</div>
+                                        <div class="memory-cell bg-blue-100">7</div>
+                                        <div class="memory-cell bg-blue-100">3</div>
+                                        <div class="memory-cell bg-blue-100">6</div>
+                                        <div class="memory-cell bg-blue-100">4</div>
+                                        <div class="memory-cell bg-blue-100">2</div>
+                                    </div>
+                                    <p class="text-xs text-gray-600">Row 0 | Row 1 | Row 2</p>
+                                </div>
+
+                                <div class="bg-green-50 p-4 rounded-lg">
+                                    <h5 class="font-bold text-green-800 mb-2">Column-Major Order</h5>
+                                    <p class="text-gray-700 mb-3">Consecutive elements of a column reside next to each
+                                        other.</p>
+                                    <div class="flex flex-wrap gap-1 mb-3">
+                                        <div class="memory-cell bg-green-100">8</div>
+                                        <div class="memory-cell bg-green-100">2</div>
+                                        <div class="memory-cell bg-green-100">3</div>
+                                        <div class="memory-cell bg-green-100">6</div>
+                                        <div class="memory-cell bg-green-100">1</div>
+                                        <div class="memory-cell bg-green-100">6</div>
+                                        <div class="memory-cell bg-green-100">5</div>
+                                        <div class="memory-cell bg-green-100">9</div>
+                                        <div class="memory-cell bg-green-100">4</div>
+                                        <div class="memory-cell bg-green-100">4</div>
+                                        <div class="memory-cell bg-green-100">7</div>
+                                        <div class="memory-cell bg-green-100">2</div>
+                                    </div>
+                                    <p class="text-xs text-gray-600">Column 0 | Column 1 | Column 2 | Column 3</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-subtle">
+                            <h4 class="font-bold text-gray-800 mb-4">Address Calculation</h4>
+                            <p class="text-gray-700 mb-4">The address of an element in a 2D array can be calculated
+                                using these formulas:</p>
+
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="bg-purple-50 p-4 rounded-lg">
+                                    <h5 class="font-bold text-purple-800 mb-2">Row-Major Formula</h5>
+                                    <div class="bg-white p-3 rounded border border-purple-200 mb-3">
+                                        <p class="font-mono text-sm">Address = B + W × [N × (I - Lr) + (J - Lc)]</p>
+                                    </div>
+                                    <ul class="list-disc pl-5 space-y-1 text-gray-700 text-sm">
+                                        <li>B = Base address</li>
+                                        <li>W = Element size (bytes)</li>
+                                        <li>N = Number of columns</li>
+                                        <li>I = Row index</li>
+                                        <li>J = Column index</li>
+                                        <li>Lr = Lower row bound (usually 0)</li>
+                                        <li>Lc = Lower column bound (usually 0)</li>
+                                    </ul>
+                                </div>
+
+                                <div class="bg-teal-50 p-4 rounded-lg">
+                                    <h5 class="font-bold text-teal-800 mb-2">Column-Major Formula</h5>
+                                    <div class="bg-white p-3 rounded border border-teal-200 mb-3">
+                                        <p class="font-mono text-sm">Address = B + W × [(I - Lr) + M × (J - Lc)]</p>
+                                    </div>
+                                    <ul class="list-disc pl-5 space-y-1 text-gray-700 text-sm">
+                                        <li>B = Base address</li>
+                                        <li>W = Element size (bytes)</li>
+                                        <li>M = Number of rows</li>
+                                        <li>I = Row index</li>
+                                        <li>J = Column index</li>
+                                        <li>Lr = Lower row bound (usually 0)</li>
+                                        <li>Lc = Lower column bound (usually 0)</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-500">
+                                <h5 class="font-bold text-yellow-800 mb-2">Example Calculation</h5>
+                                <p class="text-gray-700 mb-2">Given array B[1300..1900] with base address 1020 and
+                                    element size 2 bytes, find B[1700]:</p>
+                                <div class="bg-white p-3 rounded border border-yellow-200 mb-2">
+                                    <p class="font-mono text-sm">Address = 1020 + 2 × (1700 - 1300) = 1020 + 800 = 1820
+                                    </p>
+                                </div>
+                                <p class="text-xs text-gray-600">This calculation works for both row-major and
+                                    column-major in 1D arrays.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Applications and Limitations -->
+                <div>
+                    <h3 class="text-2xl font-semibold mt-8 mb-5 text-blue-700 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2.5 text-blue-500" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                        Applications & Limitations
+                    </h3>
+                    <div class="pl-9">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-green-50 p-6 rounded-lg border-l-4 border-green-500 array-card">
+                                <h4 class="font-bold text-green-800 mb-4">Applications</h4>
+                                <ul class="list-disc pl-5 space-y-2 text-gray-700">
+                                    <li><strong>Mathematical computations:</strong> Matrices, vectors</li>
+                                    <li><strong>Image processing:</strong> Pixel data storage</li>
+                                    <li><strong>Game development:</strong> Game boards, maps</li>
+                                    <li><strong>Database systems:</strong> Table representations</li>
+                                    <li><strong>CPU scheduling:</strong> Process queues</li>
+                                    <li><strong>Sorting algorithms:</strong> QuickSort, MergeSort</li>
+                                    <li><strong>Lookup tables:</strong> Efficient data retrieval</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-red-50 p-6 rounded-lg border-l-4 border-red-500 array-card">
+                                <h4 class="font-bold text-red-800 mb-4">Limitations</h4>
+                                <ul class="list-disc pl-5 space-y-2 text-gray-700">
+                                    <li><strong>Fixed size:</strong> Cannot grow/shrink dynamically</li>
+                                    <li><strong>Memory waste:</strong> May allocate unused space</li>
+                                    <li><strong>Insertion/deletion:</strong> Costly operations due to shifting</li>
+                                    <li><strong>Homogeneous:</strong> Only one data type allowed</li>
+                                    <li><strong>Memory allocation:</strong> Needs contiguous block</li>
+                                    <li><strong>Search complexity:</strong> O(n) for unsorted arrays</li>
+                                    <li><strong>No built-in methods:</strong> Manual implementation needed</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="mt-16 pt-10 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <a href="topic-1.html"
+                    class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all font-medium text-sm shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    ← Previous Topic: Introduction to Data Structures
+                </a>
+                <a href="topic-3.html"
+                    class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all font-medium text-sm shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    Next Topic: Linked Lists →
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-center text-sm text-gray-600 py-8 mt-12 bg-slate-100 border-t border-slate-200">
+        © <span id="currentYear"></span> <a href="../index.html" class="text-blue-600 hover:underline">EduVision</a>.
+        All rights reserved.
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About EduVishion</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- Global Styles & Variables --- */
+        :root {
+            --primary-blue: #007bff;
+            --darker-blue: #0056b3;
+            --accent-purple: #6f42c1;
+            /* Similar to your button accents */
+            --light-purple: #c2b1e1;
+            --text-dark: #333;
+            --text-light: #f8f9fa;
+            --bg-light-gray: #f4f7f6;
+            /* Lighter than the original, more contrast */
+            --bg-white: #ffffff;
+            --border-color: #e0e0e0;
+            --shadow-light: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --shadow-medium: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-light-gray);
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            color: var(--primary-blue);
+            margin-bottom: 0.75em;
+            line-height: 1.2;
+        }
+
+        h1 {
+            font-size: 2.8em;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 2.2em;
+            text-align: center;
+            border-bottom: 3px solid var(--accent-purple);
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            color: var(--darker-blue);
+        }
+
+        p {
+            margin-bottom: 1em;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        section {
+            padding: 60px 0;
+            text-align: center;
+            /* Center section titles */
+        }
+
+        section:nth-child(even) {
+            background-color: var(--bg-white);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            background-image: linear-gradient(to right, var(--primary-blue) 0%, var(--accent-purple) 70%, var(--accent-purple) 100%);
+            color: var(--text-light);
+            text-decoration: none;
+            border-radius: 25px;
+            /* More rounded like original */
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 123, 255, 0.2), 0 1px 3px rgba(111, 66, 193, 0.1);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 6px 10px rgba(0, 123, 255, 0.3), 0 3px 6px rgba(111, 66, 193, 0.2);
+            background-image: linear-gradient(to right, var(--darker-blue) 0%, var(--accent-purple) 70%, var(--accent-purple) 100%);
+        }
+
+
+        /* --- Header (Simplified) --- */
+        .main-header {
+            background-color: var(--primary-blue);
+            color: var(--text-light);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .main-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .main-header .logo {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .main-header .logo .vision {
+            color: var(--light-purple);
+            /* Or a brighter accent */
+        }
+
+        .main-nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        .main-nav ul li {
+            margin-left: 20px;
+        }
+
+        .main-nav ul li a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 0;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .main-nav ul li a:hover,
+        .main-nav ul li a.active {
+            border-bottom-color: var(--accent-purple);
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--darker-blue) 100%);
+            color: var(--text-light);
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            color: var(--text-light);
+            font-size: 3.5em;
+            margin-bottom: 0.3em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero .tagline {
+            font-size: 1.5em;
+            margin-bottom: 1em;
+            font-weight: 300;
+        }
+
+        .hero .intro-text {
+            font-size: 1.1em;
+            max-width: 700px;
+            margin: 0 auto 20px auto;
+            font-weight: 300;
+        }
+
+        /* --- Mission & Vision Section --- */
+        .mission-vision-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            text-align: left;
+            margin-top: 40px;
+        }
+
+        .mission-item,
+        .vision-item {
+            background-color: var(--bg-white);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .mission-item:hover,
+        .vision-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .mission-item .icon,
+        .vision-item .icon {
+            font-size: 2.5em;
+            color: var(--accent-purple);
+            margin-bottom: 15px;
+            display: block;
+            /* Center icon above text */
+            text-align: center;
+        }
+
+        .mission-item h3,
+        .vision-item h3 {
+            text-align: center;
+        }
+
+
+        /* --- Why EduVishion Section --- */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            text-align: left;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background-color: var(--bg-white);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-light);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .feature-card .icon {
+            font-size: 2.8em;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+        }
+
+        .feature-card h4 {
+            font-size: 1.3em;
+            color: var(--darker-blue);
+            margin-bottom: 10px;
+        }
+
+        /* --- Meet Our Team Section --- */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .team-card {
+            background-color: var(--bg-white);
+            border-radius: 10px;
+            box-shadow: var(--shadow-light);
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            padding-bottom: 20px;
+            /* Space for social links */
+        }
+
+        .team-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .team-card img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 25px auto 15px;
+            border: 4px solid var(--accent-purple);
+            display: block;
+        }
+
+        .team-card h3 {
+            font-size: 1.4em;
+            margin-bottom: 5px;
+        }
+
+        .team-card .role {
+            color: var(--accent-purple);
+            font-style: italic;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .team-card .bio {
+            font-size: 0.9em;
+            padding: 0 20px;
+            margin-bottom: 15px;
+            min-height: 60px;
+            /* Ensure cards have similar height */
+        }
+
+        .social-links a {
+            color: var(--primary-blue);
+            margin: 0 8px;
+            font-size: 1.5em;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-purple);
+            transform: scale(1.2);
+        }
+
+        /* --- Call to Action Section --- */
+        .cta-section {
+            background: linear-gradient(135deg, var(--accent-purple) 0%, var(--primary-blue) 100%);
+            color: var(--text-light);
+            padding: 70px 0;
+        }
+
+        .cta-section h2 {
+            color: var(--text-light);
+            border-bottom-color: var(--text-light);
+            /* White underline for contrast */
+        }
+
+        .cta-section p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-section .btn {
+            background-image: linear-gradient(to right, var(--text-light) 0%, #e0e0e0 70%, #e0e0e0 100%);
+            color: var(--primary-blue);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-section .btn:hover {
+            background-image: linear-gradient(to right, #f8f9fa 0%, #d0d0d0 70%, #d0d0d0 100%);
+            color: var(--darker-blue);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+        }
+
+
+        /* --- Footer --- */
+        .main-footer {
+            background-color: var(--text-dark);
+            color: #ccc;
+            text-align: center;
+            padding: 25px 0;
+            font-size: 0.9em;
+        }
+
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 992px) {
+            h1 {
+                font-size: 2.5em;
+            }
+
+            .hero h1 {
+                font-size: 3em;
+            }
+
+            h2 {
+                font-size: 2em;
+            }
+
+            .hero .tagline {
+                font-size: 1.3em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-header .container {
+                flex-direction: column;
+            }
+
+            .main-header .logo {
+                margin-bottom: 10px;
+            }
+
+            .main-nav ul {
+                justify-content: center;
+            }
+
+            .main-nav ul li {
+                margin: 0 10px;
+            }
+
+            h1 {
+                font-size: 2.2em;
+            }
+
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            h2 {
+                font-size: 1.8em;
+                margin-bottom: 30px;
+            }
+
+            section {
+                padding: 40px 0;
+            }
+
+            .mission-vision-grid,
+            .features-grid,
+            .team-grid {
+                grid-template-columns: 1fr;
+                /* Stack on smaller screens */
+            }
+
+            .mission-item,
+            .vision-item,
+            .feature-card,
+            .team-card {
+                margin-bottom: 20px;
+                /* Add space when stacked */
+            }
+
+            .team-card:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .hero h1 {
+                font-size: 2.2em;
+            }
+
+            h2 {
+                font-size: 1.6em;
+            }
+
+            .hero .tagline {
+                font-size: 1.1em;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9em;
+            }
+
+            .team-card img {
+                width: 120px;
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">Edu<span class="vision">Vishion</span></div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#home">Roadmaps</a></li>
+                    <li><a href="#interviews">Interview Qs</a></li>
+                    <li><a href="#quizzes">Quizzes</a></li>
+                    <li><a href="#about" class="active">About</a></li>
+                    <li><a href="#career">Career</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero" id="about-hero">
+            <div class="container">
+                <h1>About EduVishion</h1>
+                <p class="tagline">Empowering the Next Generation of Tech Innovators.</p>
+                <p class="intro-text">
+                    At EduVishion, we believe that quality computer science education should be accessible to everyone.
+                    We're passionate about breaking down complex concepts into understandable, actionable knowledge,
+                    guiding learners from their first line of code to professional mastery.
+                </p>
+            </div>
+        </section>
+
+        <section class="mission-vision" id="mission">
+            <div class="container">
+                <h2>Our Guiding Principles</h2>
+                <div class="mission-vision-grid">
+                    <div class="mission-item">
+                        <span class="icon"><i class="fas fa-bullseye"></i></span>
+                        <h3>Our Mission</h3>
+                        <p>To provide a comprehensive, engaging, and practical learning platform that equips individuals
+                            with the skills and confidence to excel in the ever-evolving world of computer science and
+                            technology.</p>
+                    </div>
+                    <div class="vision-item">
+                        <span class="icon"><i class="fas fa-lightbulb"></i></span>
+                        <h3>Our Vision</h3>
+                        <p>To be the leading global destination for computer science education, fostering a vibrant
+                            community of learners, creators, and innovators who shape the future of technology.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="why-us" id="why-eduvishion">
+            <div class="container">
+                <h2>What Makes Us Different?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <span class="icon"><i class="fas fa-graduation-cap"></i></span>
+                        <h4>Structured Learning Paths</h4>
+                        <p>From beginner fundamentals to pro-level specializations, our curated roadmaps ensure a clear
+                            and progressive learning journey.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="icon"><i class="fas fa-code"></i></span>
+                        <h4>Practical, Hands-On Approach</h4>
+                        <p>Learn by doing with real-world projects, interactive coding environments, and challenging
+                            assignments designed by industry experts.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="icon"><i class="fas fa-users"></i></span>
+                        <h4>Supportive Community</h4>
+                        <p>Connect with fellow learners, mentors, and instructors. Share knowledge, collaborate on
+                            projects, and grow together.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="icon"><i class="fas fa-rocket"></i></span>
+                        <h4>Cutting-Edge Content</h4>
+                        <p>Our curriculum is constantly updated to reflect the latest advancements and industry demands
+                            in computer science.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="team" id="team">
+            <div class="container">
+                <h2>Meet the Dev Dream Team</h2>
+                <p
+                    style="max-width: 700px; margin-left:auto; margin-right:auto; margin-bottom: 40px; text-align:center;">
+                    EduVishion is brought to life by a dedicated team passionate about education and technology. Meet
+                    the core developers driving our platform forward:
+                </p>
+                <div class="team-grid">
+                    <div class="team-card">
+                        <!-- Replace with actual image -->
+                        <img src="https://via.placeholder.com/150/007BFF/FFFFFF?Text=Dev1" alt="Developer 1 Name">
+                        <h3>Alex Chen</h3>
+                        <p class="role">Lead Full-Stack Developer</p>
+                        <p class="bio">With a decade of experience in building scalable web applications, Alex is the
+                            visionary architect behind EduVishion's robust platform. Passionate about clean code and
+                            seamless UX.</p>
+                        <div class="social-links">
+                            <a href="#" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                            <a href="#" target="_blank" title="Portfolio"><i class="fas fa-globe"></i></a>
+                        </div>
+                    </div>
+                    <div class="team-card">
+                        <!-- Replace with actual image -->
+                        <img src="https://via.placeholder.com/150/6F42C1/FFFFFF?Text=Dev2" alt="Developer 2 Name">
+                        <h3>Priya Sharma</h3>
+                        <p class="role">Frontend Maestro & UI/UX Lead</p>
+                        <p class="bio">Priya crafts the beautiful and intuitive interfaces you interact with. A
+                            pixel-perfectionist, she ensures EduVishion is not just functional but a joy to use.</p>
+                        <div class="social-links">
+                            <a href="#" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                            <a href="#" target="_blank" title="Dribbble"><i class="fab fa-dribbble"></i></a>
+                        </div>
+                    </div>
+                    <div class="team-card">
+                        <!-- Replace with actual image -->
+                        <img src="https://via.placeholder.com/150/28A745/FFFFFF?Text=Dev3" alt="Developer 3 Name">
+                        <h3>Ben Carter</h3>
+                        <p class="role">Backend Sorcerer & Data Architect</p>
+                        <p class="bio">Ben is the master of data and server-side logic, ensuring everything runs
+                            smoothly. He thrives on solving complex problems and optimizing performance.</p>
+                        <div class="social-links">
+                            <a href="#" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                            <a href="#" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section" id="join-us">
+            <div class="container">
+                <h2>Ready to Start Your Tech Journey?</h2>
+                <p>Explore our courses, join our community, and take the next step in your computer science career with
+                    EduVishion.</p>
+                <a href="#courses" class="btn">Explore Courses</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>© <span id="currentYear"></span> EduVishion. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+
+</body>
+
+</html>

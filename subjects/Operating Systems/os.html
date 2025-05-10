@@ -1,24 +1,265 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Operating Systems - EduVision</title>
   <link rel="stylesheet" href="os-style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Extra styles for gorgeous syllabus cards */
+    .syllabus-section {
+      padding: 32px 0 0 0;
+    }
+
+    .syllabus-title {
+      font-size: 2em;
+      color: #4b3f72;
+      text-align: center;
+      margin-bottom: 10px;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+
+    .syllabus-subtitle {
+      text-align: center;
+      color: #6c63ff;
+      font-size: 1.1em;
+      margin-bottom: 32px;
+      font-weight: 500;
+    }
+
+    .syllabus-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 28px;
+      margin-bottom: 32px;
+    }
+
+    .syllabus-card {
+      background: linear-gradient(120deg, #f8f7fa 60%, #e9e6f7 100%);
+      border-radius: 16px;
+      box-shadow: 0 6px 24px rgba(76, 63, 114, 0.08), 0 1.5px 4px rgba(76, 63, 114, 0.06);
+      padding: 28px 28px 20px 28px;
+      transition: transform 0.18s cubic-bezier(.4, 2, .6, 1), box-shadow 0.18s;
+      border: 1.5px solid #e0d7f3;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .syllabus-card:hover {
+      transform: translateY(-6px) scale(1.025);
+      box-shadow: 0 10px 32px rgba(76, 63, 114, 0.13), 0 2px 8px rgba(76, 63, 114, 0.09);
+      border-color: #b39ddb;
+    }
+
+    .syllabus-icon {
+      font-size: 2.2em;
+      color: #6c63ff;
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+
+    .syllabus-card-title {
+      font-size: 1.25em;
+      font-weight: 600;
+      color: #4b3f72;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .syllabus-list {
+      margin: 0 0 12px 0;
+      padding-left: 18px;
+      color: #333;
+      font-size: 1em;
+    }
+
+    .syllabus-list li {
+      margin-bottom: 5px;
+      line-height: 1.5;
+    }
+
+    .syllabus-resources {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .syllabus-resource-btn {
+      background: #6c63ff;
+      color: #fff;
+      border: none;
+      border-radius: 18px;
+      padding: 5px 16px;
+      font-size: 0.95em;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(108, 99, 255, 0.08);
+    }
+
+    .syllabus-resource-btn:hover {
+      background: #4b3f72;
+    }
+
+    @media (max-width: 600px) {
+      .syllabus-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .syllabus-card {
+        padding: 18px 10px 14px 14px;
+      }
+    }
+  </style>
 </head>
+
 <body>
   <header class="header">
     <h1 id="main-title">Operating Systems</h1>
-    <p id="subtitle">Explore syllabus, notes, projects, and more</p>
+    <p id="subtitle">📘 Full Syllabus with Concepts, Notes, and Diagrams</p>
   </header>
 
-  <section class="overview">
-    <h2>📌 Syllabus Overview</h2>
-    <div class="topics-grid" id="topics-container">
-      <!-- Topics will be injected here -->
+  <section class="syllabus-section">
+    <div class="syllabus-title">Operating System Syllabus</div>
+    <div class="syllabus-subtitle">Comprehensive modules with resources for every topic</div>
+    <div class="syllabus-grid">
+      <!-- 1. Introduction to OS -->
+      <div class="syllabus-card">
+        <div class="syllabus-card-title">
+          <span class="syllabus-icon"><i class="fa-solid fa-circle-info"></i></span>
+          Introduction to Operating Systems
+        </div>
+        <ul class="syllabus-list">
+          <li>Definition and Purpose of OS</li>
+          <li>Types: Batch, Time-sharing, Distributed, Real-time, Network, Mobile</li>
+          <li>Functions: Process, Memory, File, I/O, Security, Command Interpretation</li>
+          <li>System Components: Kernel, Shell, Hardware Interface</li>
+          <li>System Calls & OS Structure: Monolithic, Microkernel, Layered, Modular</li>
+        </ul>
+        <div class="syllabus-resources">
+          <button class="syllabus-resource-btn">Notes</button>
+          <button class="syllabus-resource-btn">Video Lecture</button>
+          <button class="syllabus-resource-btn">Diagram (OS Structure)</button>
+        </div>
+      </div>
+      <!-- 2. Process Management -->
+      <div class="syllabus-card">
+        <div class="syllabus-card-title">
+          <span class="syllabus-icon"><i class="fa-solid fa-gears"></i></span>
+          Process Management
+        </div>
+        <ul class="syllabus-list">
+          <li>Processes: Definition, States, PCB</li>
+          <li>Scheduling: Criteria & Algorithms (FCFS, SJF, RR, Priority)</li>
+          <li>Operations: Creation, Termination</li>
+          <li>Inter-Process Communication: Shared Memory, Message Passing</li>
+          <li>Context Switching</li>
+        </ul>
+        <div class="syllabus-resources">
+          <button class="syllabus-resource-btn">Notes</button>
+          <button class="syllabus-resource-btn">Example Problems</button>
+          <button class="syllabus-resource-btn">Diagrams (State Transition)</button>
+        </div>
+      </div>
+      <!-- 3. Threads and Concurrency -->
+      <div class="syllabus-card">
+        <div class="syllabus-card-title">
+          <span class="syllabus-icon"><i class="fa-solid fa-code-branch"></i></span>
+          Threads and Concurrency
+        </div>
+        <ul class="syllabus-list">
+          <li>Threads: User vs Kernel, Multithreading Models</li>
+          <li>Concurrency: Race Conditions, Critical Section</li>
+          <li>Synchronization: Mutex, Semaphores, Monitors</li>
+          <li>Deadlocks: Conditions, Prevention, Avoidance, Detection, Recovery</li>
+        </ul>
+        <div class="syllabus-resources">
+          <button class="syllabus-resource-btn">Simulation</button>
+          <button class="syllabus-resource-btn">Diagrams (Deadlock, Thread Models)</button>
+          <button class="syllabus-resource-btn">Notes</button>
+        </div>
+      </div>
+      <!-- 4. Memory Management -->
+      <div class="syllabus-card">
+        <div class="syllabus-card-title">
+          <span class="syllabus-icon"><i class="fa-solid fa-memory"></i></span>
+          Memory Management
+        </div>
+        <ul class="syllabus-list">
+          <li>Memory Allocation: Contiguous, Non-Contiguous</li>
+          <li>Paging: Page Table, TLB, Replacement Algorithms (FIFO, LRU, Optimal)</li>
+          <li>Segmentation</li>
+          <li>Virtual Memory: Demand Paging, Thrashing, Page Faults, Working Set</li>
+        </ul>
+        <div class="syllabus-resources">
+          <button class="syllabus-resource-btn">Notes</button>
+          <button class="syllabus-resource-btn">Examples</button>
+          <button class="syllabus-resource-btn">Diagrams (Paging, Segmentation)</button>
+        </div>
+      </div>
+      <!-- 5. File Systems -->
+      <div class="syllabus-card">
+        <div class="syllabus-card-title">
+          <span class="syllabus-icon"><i class="fa-solid fa-folder-open"></i></span>
+          File Systems
+        </div>
+        <ul class="syllabus-list">
+          <li>File Concepts: Attributes, Operations, Types</li>
+          <li>Access Methods: Sequential, Direct, Indexed</li>
+          <li>Directory Structures: Single, Two-level, Tree, DAG, Acyclic Graph</li>
+          <li>Implementation: FCB, Allocation (Contiguous, Linked, Indexed)</li>
+          <li>Free Space Management</li>
+        </ul>
+        <div class="syllabus-resources">
+          <button class="syllabus-resource-btn">Notes</button>
+          <button class="syllabus-resource-btn">Video</button>
+          <button class="syllabus-resource-btn">Diagrams (Directory, Allocation)</button>
+        </div>
+      </div>
+      <!-- 6. I/O Management -->
+      <div class="syllabus-card">
+        <div class="syllabus-card-title">
+          <span class="syllabus-icon"><i class="fa-solid fa-plug-circle-bolt"></i></span>
+          I/O Management
+        </div>
+        <ul class="syllabus-list">
+          <li>I/O Devices and Hardware</li>
+          <li>I/O Techniques: Programmed, Interrupt-driven, DMA</li>
+          <li>I/O Software Layers: Interrupt Handlers, Device Drivers</li>
+          <li>Disk Scheduling: FCFS, SSTF, SCAN, C-SCAN, LOOK</li>
+        </ul>
+        <div class="syllabus-resources">
+          <button class="syllabus-resource-btn">Notes</button>
+          <button class="syllabus-resource-btn">Diagrams (I/O Stack, DMA Flow)</button>
+        </div>
+      </div>
+      <!-- 7. Optional Advanced Topics -->
+      <div class="syllabus-card">
+        <div class="syllabus-card-title">
+          <span class="syllabus-icon"><i class="fa-solid fa-shield-halved"></i></span>
+          Advanced Topics (Optional)
+        </div>
+        <ul class="syllabus-list">
+          <li>Security and Protection</li>
+          <li>System Booting Process</li>
+          <li>Case Studies: Linux, Windows, Android OS</li>
+        </ul>
+        <div class="syllabus-resources">
+          <button class="syllabus-resource-btn">Notes</button>
+          <button class="syllabus-resource-btn">Case Studies</button>
+        </div>
+      </div>
     </div>
   </section>
 
-  <script src="os-script.js"></script>
+  <!-- ...existing code for overview, if you want to keep it, or remove if not needed... -->
+
 </body>
+
 </html>
