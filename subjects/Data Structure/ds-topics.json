@@ -9,7 +9,7 @@
       },
       {
         "title": "Arrays",
-        "description": "Declaration, initialization, operations (traverse, insert, delete, search, update), multidimensional arrays, applications and limitations.",
+        "description": "Declaration, initialization, operations (traverse, insert, delete, search, update), multidimensional arrays, applications and limitations,Sparse Matrix",
         "resources": ["Notes", "Examples", "Practice"]
       },
       {

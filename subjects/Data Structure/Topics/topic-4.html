@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Topic 4: Linked Lists - EduVision</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 100%);
+            color: #1e293b;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+            color: #fff;
+            padding: 1.5rem 0.5rem;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.10);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .logo a {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .logo a:hover span {
+            opacity: 0.8;
+        }
+
+        .logo svg {
+            margin: 0 0.25rem;
+            color: #fde047;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .logo a:hover svg {
+            color: #fef08a;
+            transform: rotate(12deg);
+        }
+
+        main {
+            flex-grow: 1;
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 2.5rem 1rem 1rem 1rem;
+        }
+
+        .content-section {
+            background: linear-gradient(120deg, #fff 60%, #f3e8ff 100%);
+            padding: 2.2rem 1.7rem;
+            border-radius: 1.3rem;
+            box-shadow: 0 8px 36px rgba(139, 92, 246, 0.10), 0 2px 8px rgba(99, 102, 241, 0.08);
+            margin-bottom: 2.7rem;
+            border: 1.5px solid #e0e7ff;
+            transition: box-shadow 0.3s, border-color 0.2s, transform 0.18s cubic-bezier(.4, 2, .6, 1);
+        }
+
+        .content-section:hover {
+            box-shadow: 0 16px 48px rgba(139, 92, 246, 0.18), 0 4px 16px rgba(99, 102, 241, 0.13);
+            border-color: #a5b4fc;
+            transform: translateY(-4px) scale(1.012);
+        }
+
+        .content-section h2 {
+            font-size: 2.3rem;
+            font-weight: 700;
+            color: #7c3aed;
+            margin-bottom: 2.2rem;
+            border-bottom: 4px solid #c4b5fd;
+            padding-bottom: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: linear-gradient(90deg, #6366f1 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .content-section h3 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #6366f1;
+            margin-bottom: 1.3rem;
+            margin-top: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.22rem;
+            font-weight: 600;
+            color: #8b5cf6;
+            margin-bottom: 1.1rem;
+            margin-top: 2rem;
+        }
+
+        .content-section h5 {
+            font-size: 1.08rem;
+            font-weight: 600;
+            color: #6366f1;
+            margin-bottom: 0.5rem;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .content-section h6 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #14b8a6;
+            margin-bottom: 0.4rem;
+            margin-top: 1.2rem;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section ol {
+            color: #334155;
+            font-size: 1.09rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.7;
+        }
+
+        .content-section ul.custom-bullets,
+        .content-section ul.simple-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul.custom-bullets li {
+            margin-bottom: 0.7rem;
+            padding-left: 1.7em;
+            position: relative;
+        }
+
+        .content-section ul.custom-bullets li::before {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: #6366f1;
+            position: absolute;
+            left: 0;
+            top: 0.1em;
+            font-size: 1em;
+        }
+
+        .content-section ul.simple-list li {
+            margin-bottom: 0.7rem;
+            padding-left: 1.5em;
+            position: relative;
+        }
+
+        .content-section ul.simple-list li::before {
+            content: "\2022";
+            color: #8b5cf6;
+            position: absolute;
+            left: 0;
+            font-size: 1.2em;
+            top: 0.1em;
+        }
+
+        .content-section ol.operation-steps {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 1.2em;
+        }
+
+        .content-section ol.operation-steps li {
+            background: #f8fafc;
+            padding: 1em 1em 1em 1.5em;
+            border-radius: 0.6em;
+            border: 1px solid #e0e7ef;
+            color: #334155;
+            font-size: 1.01em;
+            margin-bottom: 0.7em;
+            position: relative;
+        }
+
+        .content-section ol.operation-steps li strong {
+            color: #6366f1;
+            font-weight: 600;
+        }
+
+        .content-section ol.operation-steps li code {
+            background: #ede9fe;
+            color: #7c3aed;
+            padding: 0.1em 0.4em;
+            border-radius: 0.3em;
+            font-size: 0.98em;
+        }
+
+        .info-box {
+            background: linear-gradient(90deg, #ede9fe 0%, #e0e7ff 100%);
+            padding: 1.2rem 1rem;
+            border-left: 5px solid #a78bfa;
+            color: #3730a3;
+            border-radius: 0.7rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.07);
+        }
+
+        .info-box strong {
+            color: #7c3aed;
+        }
+
+        .highlight-box {
+            background: linear-gradient(90deg, #fce7f3 0%, #f3e8ff 100%);
+            padding: 1.1rem 1rem;
+            border-left: 5px solid #ec4899;
+            color: #be185d;
+            border-radius: 0.7rem;
+            margin: 1.2em 0;
+            box-shadow: 0 2px 8px rgba(236, 72, 153, 0.07);
+        }
+
+        .highlight-box p {
+            color: #be185d;
+            font-weight: 500;
+        }
+
+        .diagram-container {
+            background: #f8fafc;
+            padding: 1.2rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 12px rgba(139, 92, 246, 0.07);
+            border: 1px solid #e0e7ef;
+            margin: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .diagram-container img {
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.09);
+            max-width: 100%;
+            height: auto;
+            border: 1.5px solid #e0e7ef;
+        }
+
+        .diagram-container figcaption {
+            color: #64748b;
+            font-size: 0.98rem;
+            margin-top: 0.7rem;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .grid {
+            display: grid;
+            gap: 1.5em;
+        }
+
+        .md\:grid-cols-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .md\:grid-cols-2>div {
+            min-width: 0;
+        }
+
+        @media (max-width: 900px) {
+            main {
+                padding: 1.2rem 0.3rem;
+            }
+
+            .content-section {
+                padding: 1.2rem 0.7rem;
+            }
+
+            .md\:grid-cols-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        pre {
+            background: #1e293b;
+            color: #fbbf24;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-size: 1rem;
+            margin: 1.2rem 0;
+            font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+        }
+
+        code {
+            background: #ede9fe;
+            color: #7c3aed;
+            padding: 0.1em 0.4em;
+            border-radius: 0.3em;
+            font-size: 0.98em;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            border-radius: 0;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(90deg, #6366f1 0%, #a78bfa 100%);
+            color: #fff;
+            border-radius: 9999px;
+            font-weight: 500;
+            font-size: 1rem;
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.13);
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+
+        .nav-button:hover {
+            background: linear-gradient(90deg, #7c3aed 0%, #6366f1 100%);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.18);
+        }
+
+        footer {
+            text-align: center;
+            color: #7c3aed;
+            font-size: 1.02rem;
+            padding: 2rem 0 1rem 0;
+            background: #f3e8ff;
+            border-top: 1px solid #e0e7ef;
+            margin-top: 2rem;
+        }
+
+        footer a {
+            color: #6366f1;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: #7c3aed;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <!-- Header content from previous topic pages -->
+        <div class="container mx-auto flex flex-row items-center justify-between">
+            <div class="text-3xl font-bold" style="font-family: 'Nunito', sans-serif;">
+                <a href="../../../index.html" class="flex items-center group">
+                    <span>Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="h-8 w-8 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-all duration-300 group-hover:rotate-12"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span>ision</span>
+                </a>
+            </div>
+            <div class="flex-1 flex flex-col items-center">
+                <h1 class="text-3xl font-bold">Data Structures</h1> <!-- Changed to Data Structures -->
+                <p class="text-base opacity-90">Explore each topic in depth</p>
+            </div>
+            <div style="width:3rem;"></div>
+        </div>
+    </header>
+
+    <main>
+        <div class="flex justify-between items-center mb-8">
+            <a href="../data-structures-syllabus.html"
+                class="text-indigo-600 hover:text-indigo-800 hover:underline font-medium text-lg transition-colors duration-300">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Syllabus
+            </a>
+            <div class="bg-indigo-600 text-white text-base font-semibold px-5 py-2 rounded-lg shadow-md">
+                Topic 4
+            </div>
+        </div>
+
+        <section class="content-section">
+            <h2><i class="fas fa-link icon"></i>Linked Lists</h2>
+            <p class="text-xl mb-6 text-slate-600">When dealing with an unknown number of data values or data that
+                requires frequent insertions and deletions, linked lists offer a flexible alternative to static arrays.
+                A linked list is a linear data structure where elements are not stored at contiguous memory locations
+                but are linked using pointers.</p>
+
+            <div class="info-box">
+                <p><i class="fas fa-exclamation-circle mr-2"></i>Arrays are static and can be expensive to resize or
+                    maintain with new insertions/deletions. Linked lists address these limitations by providing dynamic
+                    memory allocation.</p>
+            </div>
+
+            <h4 class="mt-8">What is a Linked List?</h4>
+            <p>A linked list is a sequence of elements, called **Nodes**, where each node contains two parts:</p>
+            <ul class="simple-list">
+                <li>**Data:** The actual value stored in the node.</li>
+                <li>**Next (Pointer/Reference):** An address that points to the next node in the sequence.</li>
+            </ul>
+            <p>The entry point to a linked list is called the **head**, which is a reference to the first node. If the
+                list is empty, the head is typically `NULL`.</p>
+
+            <div class="diagram-container">
+                <img src="singly-linked-list-basic.png"
+                    alt="Basic structure of a singly linked list node and a list example" class="max-w-lg">
+                <figcaption>Figure SLL-1: Node structure (Data, Next) and a simple linked list (H -> E -> A -> P ->
+                    null).</figcaption>
+            </div>
+
+            <h6>Key Characteristics:</h6>
+            <ul class="simple-list">
+                <li>**Dynamic Data Structure:** Can grow or shrink on demand as memory is allocated/deallocated at
+                    runtime.</li>
+                <li>**Non-contiguous Memory:** Nodes can be scattered anywhere in memory.</li>
+                <li>**Sequential Access:** To access an element, one must traverse the list from the head. Direct/random
+                    access (like in arrays) is not possible.</li>
+            </ul>
+
+            <div class="grid md:grid-cols-2 gap-6 mt-8">
+                <div>
+                    <h6>Advantages of Linked Lists:</h6>
+                    <ul class="custom-bullets">
+                        <li>Dynamic nature: Allocates memory only when required.</li>
+                        <li>Easy insertion and deletion operations compared to arrays (no shifting of elements).</li>
+                        <li>Can be used to implement other data structures like stacks, queues, and graphs.</li>
+                        <li>Can reduce access time in certain scenarios where dynamic resizing is frequent.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h6>Disadvantages of Linked Lists:</h6>
+                    <ul class="custom-bullets">
+                        <li>Extra memory is wasted for storing pointers.</li>
+                        <li>No random access to elements; requires sequential traversal.</li>
+                        <li>Reverse traversing is difficult or inefficient in singly linked lists.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h6>Applications of Linked Lists:</h6>
+            <ul class="simple-list">
+                <li>Implementation of stacks and queues.</li>
+                <li>Implementation of graphs (adjacency lists).</li>
+                <li>Dynamic memory allocation.</li>
+                <li>Maintaining directories of files.</li>
+                <li>Polynomial representation and arithmetic.</li>
+                <li>Image viewer (next/previous images).</li>
+                <li>Music player playlists.</li>
+            </ul>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-list-ol icon"></i>Types of Linked Lists</h3>
+            <p>There are several variations of linked lists, each with specific properties and use-cases.</p>
+
+            <!-- Singly Linked List Section -->
+            <h3 id="singly-ll"><i class="fas fa-long-arrow-alt-right icon"></i>Singly Linked List</h3>
+            <div class="highlight-box">
+                <p>A singly linked list is a sequence of elements in which every element has a link (pointer) to its
+                    next element in the sequence, and the last element points to NULL.</p>
+            </div>
+            <p>Each node contains a data field and a 'next' field pointing to the subsequent node. The `head` pointer
+                references the first node.</p>
+            <div class="diagram-container">
+                <img src="singly-linked-list-example.png" alt="Example of a Singly Linked List with node addresses"
+                    class="max-w-lg">
+                <figcaption>Figure SLL-2: Example of a Singly Linked List showing data and next pointers.</figcaption>
+            </div>
+
+            <h4>Operations on Singly Linked List:</h4>
+            <p>Before performing operations, an empty list is set up (<code>head = NULL</code>). A `Node` structure is
+                defined (typically with `data` and `*next`).</p>
+
+            <h5>Insertion:</h5>
+            <ol class="operation-steps">
+                <li><strong>Inserting At Beginning:</strong>
+                    <ol class="simple-list ml-4">
+                        <li>Create a `newNode` with the given value.</li>
+                        <li>If list is Empty (<code>head == NULL</code>), set <code>newNode->next = NULL</code> and
+                            <code>head = newNode</code>.
+                        </li>
+                        <li>If Not Empty, set <code>newNode->next = head</code> and <code>head = newNode</code>.</li>
+                    </ol>
+                </li>
+                <li><strong>Inserting At End:</strong>
+                    <ol class="simple-list ml-4">
+                        <li>Create a `newNode` with the given value and <code>newNode->next = NULL</code>.</li>
+                        <li>If list is Empty, set <code>head = newNode</code>.</li>
+                        <li>If Not Empty, traverse (using a `temp` pointer) to the last node
+                            (<code>temp->next == NULL</code>). Set <code>temp->next = newNode</code>.</li>
+                    </ol>
+                </li>
+                <li><strong>Inserting At Specific Location (After a Node with 'location' value):</strong>
+                    <ol class="simple-list ml-4">
+                        <li>Create `newNode` with given value.</li>
+                        <li>If list is Empty, make `newNode` the head.</li>
+                        <li>Else, traverse with `temp` until `temp->data == location` or end of list.</li>
+                        <li>If `location` node not found, display error.</li>
+                        <li>Else, set `newNode->next = temp->next` and `temp->next = newNode`.</li>
+                    </ol>
+                </li>
+            </ol>
+
+            <h5>Deletion:</h5>
+            <ol class="operation-steps">
+                <li><strong>Deleting from Beginning:</strong>
+                    <ol class="simple-list ml-4">
+                        <li>If list is Empty, display error.</li>
+                        <li>Else, store `head` in a `temp` pointer. Set `head = head->next`. Free `temp`.</li>
+                    </ol>
+                </li>
+                <li><strong>Deleting from End:</strong>
+                    <ol class="simple-list ml-4">
+                        <li>If list is Empty, display error.</li>
+                        <li>If only one node, set `head = NULL` and free the node.</li>
+                        <li>Else, use two pointers `temp1` (to traverse) and `temp2` (to trail `temp1`). Traverse until
+                            `temp1->next == NULL`. Set `temp2->next = NULL`. Free `temp1`.</li>
+                    </ol>
+                </li>
+                <li><strong>Deleting a Specific Node (with 'delValue'):</strong>
+                    <ol class="simple-list ml-4">
+                        <li>If list is Empty, display error.</li>
+                        <li>If `head->data == delValue`, delete from beginning.</li>
+                        <li>Else, traverse with `temp1` and `temp2` (trailing). If `temp1->data == delValue`, set
+                            `temp2->next = temp1->next` and free `temp1`.</li>
+                        <li>If node not found, display error.</li>
+                    </ol>
+                </li>
+            </ol>
+
+            <h5>Display:</h5>
+            <ol class="operation-steps">
+                <li>If list is Empty, display "List is Empty".</li>
+                <li>Else, initialize `temp = head`. Traverse while `temp != NULL`, printing `temp->data` at each step
+                    and moving `temp = temp->next`.</li>
+            </ol>
+            <div class="info-box mt-6">
+                <p><i class="fab fa-cuttlefish mr-2"></i>C implementations involve `struct Node { int data; struct Node
+                    *next; }` and `malloc` for node creation. Your provided OCR includes detailed C code for these
+                    operations.</p>
+            </div>
+        </section>
+
+
+        <!-- Doubly Linked List Section -->
+        <h3 id="doubly-ll"><i class="fas fa-exchange-alt icon"></i>Doubly Linked List</h3>
+        <div class="highlight-box">
+            <p>A doubly linked list is a sequence of elements in which every element has links to both its previous
+                element and its next element in the sequence.</p>
+        </div>
+        <p>This allows traversal in both forward and backward directions. Each node contains three fields: `previous`
+            (pointer to the previous node), `data`, and `next` (pointer to the next node).</p>
+        <div class="diagram-container">
+            <img src="doubly-linked-list-node.png" alt="Structure of a Doubly Linked List Node" class="max-w-md">
+            <figcaption>Figure DLL-1: Node structure in a Doubly Linked List (Link1/previous, Data, Link2/next).
+            </figcaption>
+        </div>
+        <div class="diagram-container">
+            <img src="doubly-linked-list-example.png" alt="Example of a Doubly Linked List" class="max-w-lg">
+            <figcaption>Figure DLL-2: Example of a Doubly Linked List (N <-> 10 <-> 29 <-> 35 <-> 55 <-> N).
+            </figcaption>
+        </div>
+        <p>Important points: The `previous` field of the first node is `NULL`, and the `next` field of the last node is
+            `NULL`. The `head` points to the first node.</p>
+
+        <h6>Advantages over Singly Linked List:</h6>
+        <ul class="simple-list">
+            <li>Can be traversed in both forward and backward directions.</li>
+            <li>Deletion is more efficient if a pointer to the node to be deleted is given (no need to find the previous
+                node by traversal).</li>
+            <li>Can quickly insert a new node before a given node.</li>
+        </ul>
+        <h6>Disadvantages over Singly Linked List:</h6>
+        <ul class="simple-list">
+            <li>Requires extra space for the `previous` pointer in each node.</li>
+            <li>Operations require maintaining an extra pointer (`previous`), adding complexity and steps to
+                insertion/deletion.</li>
+        </ul>
+
+        <h4>Operations on Doubly Linked List:</h4>
+        <h5>Insertion:</h5>
+        <ol class="operation-steps">
+            <li><strong>Inserting At Beginning:</strong>
+                <ol class="simple-list ml-4">
+                    <li>Create `newNode`; `newNode->previous = NULL`.</li>
+                    <li>If Empty, `newNode->next = NULL`, `head = newNode`.</li>
+                    <li>Else, `newNode->next = head`, `head->previous = newNode`, `head = newNode`.</li>
+                </ol>
+            </li>
+            <li><strong>Inserting At End:</strong>
+                <ol class="simple-list ml-4">
+                    <li>Create `newNode`; `newNode->next = NULL`.</li>
+                    <li>If Empty, `newNode->previous = NULL`, `head = newNode`.</li>
+                    <li>Else, traverse with `temp` to last node. Set `temp->next = newNode`, `newNode->previous = temp`.
+                    </li>
+                </ol>
+            </li>
+            <li><strong>Inserting At Specific Location (After a Node with 'location' value):</strong>
+                <ol class="simple-list ml-4">
+                    <li>Create `newNode`.</li>
+                    <li>Traverse with `temp` to node with `data == location`. If not found, error.</li>
+                    <li>Set `newNode->next = temp->next`, `newNode->previous = temp`.</li>
+                    <li>If `temp->next` is not `NULL`, set `temp->next->previous = newNode`.</li>
+                    <li>Set `temp->next = newNode`.</li>
+                </ol>
+            </li>
+        </ol>
+        <!-- Deletion and Display similar logic to Singly but with prev pointers -->
+        <p>Deletion and Display operations follow similar logic to singly linked lists but involve updating both `next`
+            and `previous` pointers carefully.</p>
+        <div class="info-box mt-6">
+            <p><i class="fab fa-cuttlefish mr-2"></i>Your provided OCR includes detailed step-by-step logic for Doubly
+                Linked List operations and C code examples.</p>
+        </div>
+        </section>
+
+        <!-- Circular Linked List Section -->
+        <h3 id="circular-ll"><i class="fas fa-sync-alt icon"></i>Circular Linked List</h3>
+        <div class="highlight-box">
+            <p>A circular linked list is a sequence of elements in which every element has a link to its next element in
+                the sequence, and the last element has a link back to the first element (head).</p>
+        </div>
+        <p>This means there is no `NULL` at the end; the list forms a circle. It's similar to a singly linked list, but
+            the last node points to the `head`.</p>
+        <div class="diagram-container">
+            <img src="circular-linked-list-example.png" alt="Example of a Circular Linked List" class="max-w-lg">
+            <figcaption>Figure CLL-1: Circular Linked List example (*head -> 10 -> 15 -> 22 -> 50 -> *head).
+            </figcaption>
+        </div>
+
+        <h6>Advantages of Circular Linked Lists:</h6>
+        <ul class="custom-bullets">
+            <li>Any node can be a starting point for traversal. Traversal stops when the starting node is visited again.
+            </li>
+            <li>Useful for implementing queues where only one pointer (to the last inserted node) is needed, and `front`
+                can be `last->next`.</li>
+            <li>Ideal for applications requiring repeated cycling through a list (e.g., OS task scheduling, round-robin
+                algorithms).</li>
+            <li>Circular Doubly Linked Lists are used for advanced data structures like Fibonacci Heaps.</li>
+        </ul>
+
+        <h4>Operations on Circular Linked List:</h4>
+        <p>Setup involves defining a `Node` structure and a `head` pointer, initially `NULL`.</p>
+        <h5>Insertion:</h5>
+        <ol class="operation-steps">
+            <li><strong>Inserting At Beginning:</strong>
+                <ol class="simple-list ml-4">
+                    <li>Create `newNode`.</li>
+                    <li>If Empty (<code>head == NULL</code>), `head = newNode`, `newNode->next = head`.</li>
+                    <li>Else, traverse with `temp` to last node (<code>temp->next == head</code>). Set `newNode->next =
+                        head`, `temp->next = newNode`, `head = newNode`.</li>
+                </ol>
+            </li>
+            <li><strong>Inserting At End:</strong>
+                <ol class="simple-list ml-4">
+                    <li>Create `newNode`.</li>
+                    <li>If Empty, `head = newNode`, `newNode->next = head`.</li>
+                    <li>Else, traverse with `temp` to last node. Set `temp->next = newNode`, `newNode->next = head`.
+                    </li>
+                </ol>
+            </li>
+            <li><strong>Inserting At Specific Location (After a Node with 'location' value):</strong>
+                <ol class="simple-list ml-4">
+                    <li>Create `newNode`.</li>
+                    <li>If Empty, treat as insertion at beginning (or error if location matters).</li>
+                    <li>Else, traverse with `temp` until `temp->data == location`. If not found (or `temp` reaches last
+                        node before finding), error.</li>
+                    <li>Set `newNode->next = temp->next`, `temp->next = newNode`.</li>
+                </ol>
+            </li>
+        </ol>
+
+        <h5>Deletion:</h5>
+        <ol class="operation-steps">
+            <li><strong>Deleting from Beginning:</strong>
+                <ol class="simple-list ml-4">
+                    <li>If Empty, error.</li>
+                    <li>If only one node (<code>head->next == head</code>), set `head = NULL`, free node.</li>
+                    <li>Else, traverse with `temp1` to last node. Let `temp2 = head`. Set `head = head->next`,
+                        `temp1->next = head`. Free `temp2`.</li>
+                </ol>
+            </li>
+            <li><strong>Deleting from End:</strong>
+                <ol class="simple-list ml-4">
+                    <li>If Empty, error.</li>
+                    <li>If only one node, set `head = NULL`, free node.</li>
+                    <li>Else, traverse with `temp1` and `temp2` (trailing `temp1`) until `temp1->next == head`. Set
+                        `temp2->next = head`. Free `temp1`.</li>
+                </ol>
+            </li>
+            <!-- Deleting specific node similar logic -->
+        </ol>
+
+        <h5>Display:</h5>
+        <ol class="operation-steps">
+            <li>If Empty, display "List is Empty".</li>
+            <li>Else, initialize `temp = head`. Do-while loop: print `temp->data`, `temp = temp->next`. Continue until
+                `temp == head`.</li>
+        </ol>
+        <div class="info-box mt-6">
+            <p><i class="fab fa-cuttlefish mr-2"></i>Your OCR'd content provides extensive C code and step-by-step logic
+                for all Circular Linked List operations, including a sample output from a Turbo C++ IDE.</p>
+        </div>
+        <div class="diagram-container">
+            <img src="circular-linked-list-output.png" alt="Output of Circular Linked List C Program" class="max-w-xl">
+            <figcaption>Figure CLL-2: Sample output of a C program implementing Circular Linked List operations.
+            </figcaption>
+        </div>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-cogs icon"></i>Advanced Linked List Concepts & Applications</h3>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h4>Sorting a Linked List</h4>
+                    <p>Sorting a linked list is non-trivial due to lack of random access. Common approaches:</p>
+                    <ul class="simple-list">
+                        <li>**Insertion Sort Style:** Remove nodes from the old list and insert them into a new list in
+                            sorted order. Inefficient (O(n<sup>2</sup>)) for large lists.</li>
+                        <li>**Convert to Array:** Convert the list to an array, apply an efficient sorting algorithm
+                            (e.g., Quick Sort, Merge Sort), then convert the sorted array back to a linked list. More
+                            practical for larger lists.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Reversing a Linked List</h4>
+                    <p>Involves iteratively changing the `next` pointers to point to the previous node, and updating the
+                        `head`.</p>
+                    <div class="diagram-container">
+                        <img src="reversing-linked-list.png" alt="Conceptual diagram of reversing a linked list"
+                            class="max-w-sm">
+                        <figcaption>Reversing involves redirecting pointers.</figcaption>
+                    </div>
+                </div>
+                <div>
+                    <h4>Cloning a Linked List</h4>
+                    <p>Creating a copy of a linked list. Distinguish between:</p>
+                    <ul class="simple-list">
+                        <li>**Shallow Copy:** New list points to the same objects (nodes) as the original. Changes in
+                            one list affect the other. (e.g., <code>list2 = list1;</code>).</li>
+                        <li>**Deep Copy:** Creates new nodes with copies of the data from the original list. Both lists
+                            are independent. Requires iterating through the original list and creating new nodes.</li>
+                    </ul>
+                    <pre><code class="language-java">// Conceptual Java-like deep clone
+public Object clone() {
+    LinkedList twin = new LinkedList();
+    if (head == null) return twin;
+    Node tmp = head;
+    for (int i = 0; i < size; i++) {
+        twin.append(tmp.data); // Assuming append adds to end
+        tmp = tmp.getNext();
+    }
+    return twin;
+}</code></pre>
+                </div>
+                <div>
+                    <h4>Application: Sparse Matrices</h4>
+                    <p>Linked lists (often multi-linked) can efficiently represent sparse matrices (matrices with many
+                        zero elements) by only storing non-zero elements along with their row and column indices.</p>
+                    <div class="diagram-container">
+                        <img src="sparse-matrix-linked-list.png"
+                            alt="Conceptual representation of a sparse matrix using linked lists" class="max-w-md">
+                        <figcaption>Representing sparse matrices using linked structures.</figcaption>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <div class="mt-12 pt-8 border-t border-slate-300 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <a href="topic-3.html" class="nav-button" aria-label="Previous Topic">
+                <i class="fas fa-arrow-left icon"></i> Previous Topic
+            </a>
+            <a href="topic-5.html" class="nav-button" aria-label="Next Topic">
+                Next Topic <i class="fas fa-arrow-right icon"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <!-- Footer content -->
+        © <span id="currentYear"></span> <a href="../../../index.html">EduVision</a>.
+        All rights reserved. Crafted with <i class="fas fa-heart text-red-500"></i> for learning.
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>

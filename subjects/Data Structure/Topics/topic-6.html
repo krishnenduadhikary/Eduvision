@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Topic 6: Queues - EduVision</title> <!-- Assuming Topic 6 for Queues -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 100%);
+            color: #1e293b;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        main {
+            flex-grow: 1;
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 2.5rem 1rem 1rem 1rem;
+        }
+
+        .content-section {
+            background: linear-gradient(120deg, #fff 60%, #f3e8ff 100%);
+            padding: 2.2rem 1.7rem;
+            border-radius: 1.3rem;
+            box-shadow: 0 8px 36px rgba(139, 92, 246, 0.10), 0 2px 8px rgba(99, 102, 241, 0.08);
+            margin-bottom: 2.7rem;
+            border: 1.5px solid #e0e7ff;
+            transition: box-shadow 0.3s, border-color 0.2s, transform 0.18s cubic-bezier(.4, 2, .6, 1);
+        }
+
+        .content-section:hover {
+            box-shadow: 0 16px 48px rgba(139, 92, 246, 0.18), 0 4px 16px rgba(99, 102, 241, 0.13);
+            border-color: #a5b4fc;
+            transform: translateY(-4px) scale(1.012);
+        }
+
+        .content-section h2 {
+            font-size: 2.3rem;
+            font-weight: 700;
+            color: #7c3aed;
+            margin-bottom: 2.2rem;
+            border-bottom: 4px solid #c4b5fd;
+            padding-bottom: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: linear-gradient(90deg, #6366f1 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .content-section h3 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #6366f1;
+            margin-bottom: 1.3rem;
+            margin-top: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.22rem;
+            font-weight: 600;
+            color: #8b5cf6;
+            margin-bottom: 1.1rem;
+            margin-top: 2rem;
+        }
+
+        .content-section h5 {
+            font-size: 1.08rem;
+            font-weight: 600;
+            color: #6366f1;
+            margin-bottom: 0.5rem;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .content-section h6 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #14b8a6;
+            margin-bottom: 0.4rem;
+            margin-top: 1.2rem;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section ol {
+            color: #334155;
+            font-size: 1.09rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.7;
+        }
+
+        .content-section ul.custom-bullets,
+        .content-section ul.simple-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul.custom-bullets li {
+            margin-bottom: 0.7rem;
+            padding-left: 1.7em;
+            position: relative;
+        }
+
+        .content-section ul.custom-bullets li::before {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: #6366f1;
+            position: absolute;
+            left: 0;
+            top: 0.1em;
+            font-size: 1em;
+        }
+
+        .content-section ul.simple-list li {
+            margin-bottom: 0.7rem;
+            padding-left: 1.5em;
+            position: relative;
+        }
+
+        .content-section ul.simple-list li::before {
+            content: "\2022";
+            color: #8b5cf6;
+            position: absolute;
+            left: 0;
+            font-size: 1.2em;
+            top: 0.1em;
+        }
+
+        .content-section ol.styled-list {
+            list-style: decimal inside;
+            padding-left: 1.2em;
+        }
+
+        .content-section ol li {
+            margin-bottom: 0.5rem;
+        }
+
+        .info-box {
+            background: linear-gradient(90deg, #ede9fe 0%, #e0e7ff 100%);
+            padding: 1.2rem 1rem;
+            border-left: 5px solid #a78bfa;
+            color: #3730a3;
+            border-radius: 0.7rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.07);
+        }
+
+        .info-box strong {
+            color: #7c3aed;
+        }
+
+        .summary-box {
+            background: linear-gradient(90deg, #bbf7d0 0%, #f0fdf4 100%);
+            padding: 1.5rem 1.2rem;
+            border-left: 5px solid #22c55e;
+            color: #166534;
+            border-radius: 0.8rem;
+            margin: 2rem 0;
+            box-shadow: 0 2px 8px rgba(34, 197, 94, 0.07);
+        }
+
+        .diagram-container {
+            background: #f8fafc;
+            padding: 1.2rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 12px rgba(139, 92, 246, 0.07);
+            border: 1px solid #e0e7ef;
+            margin: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .diagram-container img {
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.09);
+            max-width: 100%;
+            height: auto;
+            border: 1.5px solid #e0e7ef;
+        }
+
+        .diagram-container figcaption {
+            color: #64748b;
+            font-size: 0.98rem;
+            margin-top: 0.7rem;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .diagram-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            align-items: start;
+        }
+
+        pre {
+            background: #1e293b;
+            color: #fbbf24;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-size: 1rem;
+            margin: 1.2rem 0;
+            font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+        }
+
+        code {
+            background: #ede9fe;
+            color: #7c3aed;
+            padding: 0.1em 0.4em;
+            border-radius: 0.3em;
+            font-size: 0.98em;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            border-radius: 0;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(90deg, #6366f1 0%, #a78bfa 100%);
+            color: #fff;
+            border-radius: 9999px;
+            font-weight: 500;
+            font-size: 1rem;
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.13);
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+
+        .nav-button:hover {
+            background: linear-gradient(90deg, #7c3aed 0%, #6366f1 100%);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.18);
+        }
+
+        header {
+            background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+            color: #fff;
+            padding: 1.5rem 0.5rem;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.10);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .logo a {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .logo a:hover span {
+            opacity: 0.8;
+        }
+
+        .logo svg {
+            margin: 0 0.25rem;
+            color: #fde047;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .logo a:hover svg {
+            color: #fef08a;
+            transform: rotate(12deg);
+        }
+
+        footer {
+            text-align: center;
+            color: #7c3aed;
+            font-size: 1.02rem;
+            padding: 2rem 0 1rem 0;
+            background: #f3e8ff;
+            border-top: 1px solid #e0e7ef;
+            margin-top: 2rem;
+        }
+
+        footer a {
+            color: #6366f1;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: #7c3aed;
+        }
+
+        @media (max-width: 900px) {
+            main {
+                padding: 1.2rem 0.3rem;
+            }
+
+            .content-section {
+                padding: 1.2rem 0.7rem;
+            }
+
+            .diagram-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <!-- Header content from previous examples -->
+        <div class="container mx-auto flex flex-row items-center justify-between">
+            <div class="text-3xl font-bold logo" style="font-family: 'Nunito', sans-serif;">
+                <a href="../../../index.html" class="flex items-center group">
+                    <span>Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="h-8 w-8 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-all duration-300 group-hover:rotate-12"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span>ision</span>
+                </a>
+            </div>
+            <div class="flex-1 flex flex-col items-center">
+                <h1 class="text-3xl font-bold">Data Structures</h1>
+                <p class="text-base opacity-90">Explore each topic in depth</p>
+            </div>
+            <div style="width:3rem;"></div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-10">
+        <div class="flex justify-between items-center mb-8">
+            <a href="../data-structures-syllabus.html"
+                class="text-indigo-600 hover:text-indigo-800 hover:underline font-medium text-lg transition-colors duration-300">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Syllabus
+            </a>
+            <div class="bg-indigo-600 text-white text-base font-semibold px-5 py-2 rounded-lg shadow-md">
+                Topic 6 <!-- Assuming Queues is Topic 6 -->
+            </div>
+        </div>
+
+        <section class="content-section">
+            <h2><i class="fas fa-users icon"></i>Queues</h2>
+            <p class="text-xl mb-6 text-slate-600">A queue is a fundamental linear data structure that follows the
+                **First-In, First-Out (FIFO)** principle. This means the element that is inserted first will be the
+                first one to be removed, much like a queue of people waiting for a service.</p>
+
+            <div class="diagram-container">
+                <img src="queue-basic-concept.png" alt="Basic concept of a Queue with Front and Rear" class="max-w-lg">
+                <figcaption>Fig. Queue: Elements are inserted at REAR and deleted from FRONT.</figcaption>
+            </div>
+
+            <ul class="simple-list">
+                <li>Elements are inserted at one end, called the **REAR** (or tail). This operation is known as
+                    **Enqueue**.</li>
+                <li>Elements are deleted from the other end, called the **FRONT** (or head). This operation is known as
+                    **Dequeue**.</li>
+                <li>A queue is open at both ends.</li>
+            </ul>
+            <div class="diagram-container">
+                <img src="queue-real-world-analogy.png" alt="Real-world analogy of a Queue" class="max-w-xl">
+                <figcaption>Real-world examples: A single-lane one-way road, queues at ticket windows or bus stops.
+                </figcaption>
+            </div>
+
+            <h4 class="mt-8">Complexity Analysis of Queue Operations</h4>
+            <p>For efficiently implemented queues (e.g., using a circular array or linked list with direct pointers to
+                front and rear):</p>
+            <ul class="simple-list">
+                <li><strong>Enqueue:</strong> O(1) - Adding an element to the rear is a single step.</li>
+                <li><strong>Dequeue:</strong> O(1) - Removing an element from the front is a single step.</li>
+                <li><strong>Size:</strong> O(1) - If size is maintained as a variable. O(N) if traversal is needed.</li>
+                <li><strong>Peek (Get Front):</strong> O(1) - Accessing the front element.</li>
+            </ul>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-cogs icon"></i>Queue Implementation</h3>
+            <p>Queues can be implemented using arrays or linked lists.</p>
+
+            <h4>Array Implementation</h4>
+            <p>This is often the easiest way. However, a simple array implementation can lead to issues where the queue
+                appears full even if space is available (if elements are only dequeued from the front without shifting,
+                and new elements are always added at the end).</p>
+            <div class="diagram-container">
+                <img src="queue-array-implementation.png" alt="Implementation of Queue using Array" class="max-w-lg">
+                <figcaption>Fig. Implementation of Queue using Array, showing Front and Rear pointers.</figcaption>
+            </div>
+            <pre><code class="language-c">// Conceptual C Structure for Array Queue
+#define MAX 50
+int queue_array[MAX];
+int rear = -1;
+int front = -1;
+
+void insert() { // Enqueue
+    if (rear == MAX - 1) printf("Queue Overflow\n");
+    else {
+        if (front == -1) front = 0;
+        // ... get item ...
+        rear = rear + 1;
+        queue_array[rear] = add_item;
+    }
+}
+
+void delete_element() { // Dequeue
+    if (front == -1 || front > rear) {
+        printf("Queue Underflow\n");
+        return;
+    }
+    // ... process queue_array[front] ...
+    front = front + 1;
+}
+// ... display() function ...
+</code></pre>
+            <p class="mt-4">The limitation of fixed size and potential for "false full" scenarios in simple array queues
+                leads to the concept of Circular Queues.</p>
+
+            <h4>Linked List Implementation</h4>
+            <p>Each element (node) stores the data and a pointer to the next element. Two pointers, `FRONT` and `REAR`,
+                track the beginning and end of the queue.</p>
+            <div class="diagram-grid">
+                <div class="diagram-container">
+                    <img src="linked-queue-fig8.6.png" alt="Linked queue representation">
+                    <figcaption>Figure 8.6: Basic Linked Queue.</figcaption>
+                </div>
+                <div class="diagram-container">
+                    <img src="linked-queue-fig8.8.png" alt="Linked queue after inserting a new node">
+                    <figcaption>Figure 8.8: Linked Queue after inserting a new node (9).</figcaption>
+                </div>
+            </div>
+            <div class="diagram-grid">
+                <div class="diagram-container">
+                    <img src="linked-queue-fig8.10.png" alt="Linked queue - another view">
+                    <figcaption>Figure 8.10: Linked Queue (empty or with elements).</figcaption>
+                </div>
+                <div class="diagram-container">
+                    <img src="linked-queue-fig8.11.png" alt="Linked queue after deletion of an element">
+                    <figcaption>Figure 8.11: Linked Queue after deleting an element.</figcaption>
+                </div>
+            </div>
+
+            <h6>Insert Operation (Enqueue) - Steps (Ref: Fig 8.9):</h6>
+            <ol class="simple-list">
+                <li>Allocate memory for the new node (`PTR`) and set its data.</li>
+                <li>If `FRONT == NULL` (queue is empty), set `FRONT = REAR = PTR`, and `PTR->NEXT = NULL`.</li>
+                <li>Else, set `REAR->NEXT = PTR`, `REAR = PTR`, and `PTR->NEXT = NULL`.</li>
+            </ol>
+
+            <h6>Delete Operation (Dequeue) - Steps (Ref: Fig 8.12):</h6>
+            <ol class="simple-list">
+                <li>If `FRONT == NULL`, write "Underflow" and exit.</li>
+                <li>Set `PTR = FRONT`.</li>
+                <li>Set `FRONT = FRONT->NEXT`.</li>
+                <li>Free `PTR`.</li>
+            </ol>
+            <pre><code class="language-c">// Conceptual C Structure for Linked List Queue
+struct Node {
+    int data;
+    struct Node *next;
+};
+struct Queue {
+    struct Node *front, *rear;
+};
+// ... functions like create_queue, enqueue, dequeue, peek, display ...
+</code></pre>
+            <div class="info-box">
+                <p>Linked list implementation offers dynamic sizing, overcoming the fixed-size limitation of arrays. The
+                    storage requirement is O(n), and typical operations are O(1).</p>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-recycle icon"></i>Types of Queues</h3>
+
+            <h4>Circular Queue</h4>
+            <p>Addresses the limitation of linear array queues where the queue might become full even if there's space
+                at the beginning (after several dequeues). In a circular queue, the last position is conceptually
+                followed by the first position, forming a circle.</p>
+            <div class="diagram-container">
+                <img src="circular-queue-problem.png" alt="Problem with linear queue becoming full" class="max-w-xl">
+                <figcaption>Linear queue full issue, even after dequeuing.</figcaption>
+            </div>
+            <p>It follows FIFO, but instead of ending the queue at the last position, it "wraps around."</p>
+            <div class="diagram-grid">
+                <div class="diagram-container">
+                    <img src="circular-queue-concept1.png" alt="Simple circular queue diagram" class="max-w-sm">
+                    <figcaption>A simple circular queue concept.</figcaption>
+                </div>
+                <div class="diagram-container">
+                    <img src="circular-queue-concept2.png" alt="Circular queue head and tail movement" class="max-w-sm">
+                    <figcaption>Tail pointer points to new data location.</figcaption>
+                </div>
+            </div>
+            <h6>Basic Features:</h6>
+            <ul class="simple-list">
+                <li>`head` (or `front`) pointer always points to the front of the queue.</li>
+                <li>`tail` (or `rear`) pointer always points to the end of the queue where new data is added.</li>
+                <li>Initially, `head` and `tail` might be at the same location (e.g., -1 or 0) for an empty queue.</li>
+                <li>Data is not actually removed on dequeue; the `head` pointer is incremented. Data is considered
+                    between `head` and `tail`.</li>
+                <li>`head` and `tail` pointers "wrap around" to 0 when they reach the end of the array using modulo
+                    arithmetic: `head = (head + 1) % MAX_SIZE`, `tail = (tail + 1) % MAX_SIZE`.</li>
+                <li>`head` and `tail` can cross each other.</li>
+            </ul>
+            <div class="diagram-container">
+                <img src="circular-queue-array-example.png" alt="Circular queue implemented using array"
+                    class="max-w-md">
+                <figcaption>Circular queue using an array representation.</figcaption>
+            </div>
+            <pre><code class="language-c">// Conceptual C implementation for Circular Queue (Array)
+#define MAX 5
+int cqueue_arr[MAX];
+int front = -1;
+int rear = -1;
+
+void insert(int item) { // Enqueue
+    if ((front == 0 && rear == MAX - 1) || (front == rear + 1)) {
+        printf("Queue Overflow\n"); return;
+    }
+    if (front == -1) { front = 0; rear = 0; }
+    else {
+        if (rear == MAX - 1) rear = 0;
+        else rear = rear + 1;
+    }
+    cqueue_arr[rear] = item;
+}
+// ... del() and display() functions as per OCR ...
+</code></pre>
+            <h6>Applications:</h6> CPU scheduling, memory management, traffic signal control.
+
+            <h4 class="mt-10">Deque (Double-Ended Queue)</h4>
+            <p>Pronounced "deck," a deque allows insertion and deletion of elements at both ends (front/head and
+                back/tail). It's also known as a head-tail linked list. Implemented using a circular array or circular
+                doubly linked list.</p>
+            <div class="diagram-container">
+                <img src="deque-example.png" alt="Example of Deques" class="max-w-lg">
+                <figcaption>Figure 8.24: Double-ended queues with LEFT and RIGHT pointers.</figcaption>
+            </div>
+            <h6>Variants:</h6>
+            <ul class="simple-list">
+                <li><strong>Input Restricted Deque:</strong> Insertions at one end, deletions from both.</li>
+                <li><strong>Output Restricted Deque:</strong> Deletions at one end, insertions at both.</li>
+            </ul>
+            <div class="info-box">
+                <p>Your OCR contains a C program example for implementing input and output restricted deques.</p>
+            </div>
+
+
+            <h4 class="mt-10">Priority Queue</h4>
+            <p>An abstract data type where each element has an associated "priority." Elements with higher priority are
+                served before elements with lower priority. If priorities are equal, they are served based on their
+                order in the queue (FIFO) or as per a defined rule.</p>
+            <div class="diagram-grid">
+                <div class="diagram-container">
+                    <img src="priority-queue-concept.png" alt="Concept of a Priority Queue" class="max-w-lg">
+                    <figcaption>Priority Queue: Elements are dequeued based on priority.</figcaption>
+                </div>
+                <div class="diagram-container">
+                    <img src="priority-queue-operations-table.png" alt="Priority Queue operations and content"
+                        class="max-w-lg">
+                    <figcaption>Example of Priority Queue operations.</figcaption>
+                </div>
+            </div>
+            <h6>Representations and Complexity:</h6>
+            <ul class="simple-list">
+                <li><strong>Unsorted Array/List:</strong> Add O(1), Peek/Remove O(n).</li>
+                <li><strong>Sorted Array:</strong> Add O(n) (to find spot and shift), Peek/Remove O(1).</li>
+                <li><strong>Sorted Linked List:</strong> Add O(n) (to find spot), Peek/Remove O(1).</li>
+                <li>**Heap (Commonly used):** Add O(log n), Peek O(1), Remove O(log n).</li>
+            </ul>
+            <div class="diagram-container">
+                <img src="priority-queue-array-insertion.png"
+                    alt="Priority Queue insertion at rear in an array-like structure" class="max-w-md">
+                <figcaption>Conceptual insertion in a priority queue (maintaining order).</figcaption>
+            </div>
+
+
+            <h4 class="mt-10">Multiple Queues</h4>
+            <p>To overcome fixed-size limitations and memory wastage of single array queues, multiple logical queues can
+                be implemented within a single, larger physical array. Queues might grow towards each other or be
+                allocated fixed segments.</p>
+            <div class="diagram-grid">
+                <div class="diagram-container">
+                    <img src="multiple-queues-fig8.31.png" alt="Multiple queues (A and B) in a single array"
+                        class="max-w-md">
+                    <figcaption>Figure 8.31: Two queues (QUEUE A, QUEUE B) in one array.</figcaption>
+                </div>
+                <div class="diagram-container">
+                    <img src="multiple-queues-fig8.32.png" alt="N queues in a single array" class="max-w-md">
+                    <figcaption>Figure 8.32: N queues, each allocated space.</figcaption>
+                </div>
+            </div>
+            <div class="info-box">
+                <p>Your OCR includes a C program example implementing two queues (A and B) within a single array,
+                    growing from opposite ends.</p>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-cogs icon"></i>Applications of Queues</h3>
+            <ul class="custom-bullets">
+                <li>Widely used as waiting lists for shared resources (printers, disks, CPU).</li>
+                <li>Asynchronous data transfer between processes (IO buffers, pipes, file IO, sockets).</li>
+                <li>Buffers in media players (MP3, CD players), playlists for jukeboxes.</li>
+                <li>Operating system task scheduling (e.g., Round Robin), interrupt handling.</li>
+                <li>File server request management in networks.</li>
+                <li>Breadth-First Search (BFS) in graph algorithms.</li>
+                <li>Simulations.</li>
+                <li>**Josephus Problem:** A classical problem where people in a circle are eliminated based on a count,
+                    solvable using a circular queue.</li>
+            </ul>
+            <div class="diagram-container">
+                <img src="josephus-problem-example.png" alt="Josephus problem example" class="max-w-lg">
+                <figcaption>Josephus Problem: Simulating elimination using a circular queue.</figcaption>
+            </div>
+            <div class="info-box">
+                <p>Your OCR contains a C program for solving the Josephus problem using a circular linked list (which
+                    functions like a queue in this context).</p>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="summary-box">
+                <h3 class="text-2xl font-semibold text-green-700 mb-4"><i class="fas fa-check-double mr-2"></i>Key
+                    Points to Remember</h3>
+                <ul class="list-disc list-inside space-y-2 text-green-700">
+                    <li>A queue is a FIFO data structure: first element inserted is the first taken out.</li>
+                    <li>Elements are added at REAR (enqueue) and removed from FRONT (dequeue).</li>
+                    <li>Implementable using arrays (simple or circular) and linked lists.</li>
+                    <li>Linked representation offers dynamic size; array is fixed but can be efficient.</li>
+                    <li>Circular queues prevent "false full" state in array implementations by wrapping around.</li>
+                    <li>Deques allow insertion/deletion at both ends.</li>
+                    <li>Priority queues serve elements based on priority, not just arrival order.</li>
+                    <li>Multiple queues can share a single array to optimize space.</li>
+                </ul>
+            </div>
+        </section>
+
+        <div class="mt-12 pt-8 border-t border-slate-300 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <a href="topic-5.html" class="nav-button" aria-label="Previous Topic">
+                <i class="fas fa-arrow-left icon"></i> Previous Topic
+            </a>
+            <a href="topic-7.html" class="nav-button" aria-label="Next Topic">
+                Next Topic <i class="fas fa-arrow-right icon"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <!-- Footer content -->
+        © <span id="currentYear"></span> <a href="../../../index.html">EduVision</a>.
+        All rights reserved. Crafted with <i class="fas fa-heart text-red-500"></i> for learning.
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>
