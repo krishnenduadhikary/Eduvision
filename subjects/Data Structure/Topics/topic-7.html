@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Topic 7: Trees - Comprehensive Guide - EduVision</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            @apply bg-slate-100 text-slate-800;
+            font-family: 'Inter', sans-serif;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        main {
+            flex-grow: 1;
+        }
+
+        .content-section {
+            @apply bg-white p-6 md:p-10 rounded-xl shadow-2xl mb-10 transition-all duration-300 hover:shadow-indigo-100;
+        }
+
+        .content-section h2 {
+            /* Main Topic Heading */
+            @apply text-4xl font-bold mb-8 text-indigo-700 border-b-4 border-indigo-300 pb-4 flex items-center;
+        }
+
+        .content-section h2 .icon {
+            @apply mr-3 text-3xl text-indigo-500;
+        }
+
+        .content-section h3 {
+            /* Major Sections like Types of Trees, Basic Terminology */
+            @apply text-3xl font-semibold text-indigo-600 mb-6 mt-10 pt-6 border-t-2 border-indigo-200 flex items-center;
+        }
+
+        .content-section h3 .icon {
+            @apply mr-3 text-2xl text-indigo-500;
+        }
+
+        .content-section h4 {
+            /* Sub-sections like Binary Tree, BST, B-Tree */
+            @apply text-2xl font-semibold text-indigo-500 mb-4 mt-8;
+        }
+
+        .content-section h5 {
+            /* Further sub-divisions like Types of Binary Trees, Operations on BST */
+            @apply text-xl font-semibold text-purple-600 mb-3 mt-6;
+        }
+
+        .content-section h6 {
+            /* Smaller headings, e.g., Terminology Item, Specific BST Operation, B-Tree Properties */
+            @apply text-lg font-semibold text-teal-600 mb-2 mt-5;
+        }
+
+        .content-section .sub-h6 {
+            /* For even smaller distinctions like properties */
+            @apply text-md font-semibold text-sky-600 mb-1 mt-4;
+        }
+
+
+        .content-section p,
+        .content-section ul,
+        .content-section ol {
+            @apply text-slate-700 text-lg mb-5 leading-relaxed;
+        }
+
+        .content-section ul.custom-bullets li::before {
+            content: "\f00c";
+            /* FontAwesome check icon */
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            @apply absolute left-0 top-1 text-indigo-500;
+        }
+
+        .content-section ul.simple-list {
+            @apply list-disc list-inside pl-4 text-slate-600;
+        }
+
+        .content-section ol.styled-list {
+            @apply list-decimal list-inside pl-4;
+        }
+
+
+        .info-box {
+            @apply bg-indigo-50 p-5 rounded-lg border-l-4 border-indigo-500 text-indigo-800 mb-6 shadow-md;
+        }
+
+        .info-box strong {
+            @apply font-semibold text-indigo-700;
+        }
+
+        .highlight-box {
+            /* For definitions like the pink box in your image */
+            @apply bg-pink-50 p-4 rounded-md border-l-4 border-pink-500 text-pink-800 my-6 shadow;
+        }
+
+        .highlight-box p {
+            @apply text-pink-700 font-medium;
+        }
+
+        .property-box {
+            @apply bg-yellow-50 p-4 rounded-md border-l-4 border-yellow-500 text-yellow-800 my-4 shadow-sm;
+        }
+
+        .definition-box {
+            @apply bg-sky-50 p-4 rounded-md border-l-4 border-sky-500 text-sky-800 my-4 shadow-sm;
+        }
+
+
+        .diagram-container {
+            @apply my-8 p-4 sm:p-6 bg-slate-50 rounded-xl shadow-lg border border-slate-200 flex flex-col items-center;
+        }
+
+        .diagram-container img {
+            @apply rounded-lg shadow-md max-w-full h-auto border border-slate-300;
+        }
+
+        .diagram-container figcaption {
+            @apply text-sm text-slate-600 mt-3 italic text-center;
+        }
+
+        .diagram-grid {
+            @apply grid md:grid-cols-2 gap-x-8 gap-y-6 items-start;
+        }
+
+        .diagram-gallery {
+            @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6;
+        }
+
+
+        pre {
+            @apply bg-slate-800 text-slate-100 p-5 rounded-lg overflow-x-auto text-sm shadow-lg my-6 font-mono;
+        }
+
+        code {
+            @apply bg-slate-200 text-purple-700 px-1 py-0.5 rounded text-sm;
+        }
+
+        pre code {
+            @apply bg-transparent text-inherit p-0 rounded-none text-sm;
+        }
+
+        .nav-button {
+            @apply inline-flex items-center px-6 py-3 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-all duration-300 font-medium text-base shadow-md hover:shadow-lg transform hover:-translate-y-0.5;
+        }
+
+        header {
+            @apply bg-gradient-to-r from-indigo-700 to-blue-600 text-white p-5 shadow-lg sticky top-0 z-50;
+        }
+
+        footer {
+            @apply text-center text-sm text-slate-500 py-8 mt-12 bg-slate-200 border-t border-slate-300;
+        }
+
+        /* Terminology Card */
+        .term-card {
+            @apply bg-slate-50 p-4 rounded-lg shadow-sm border border-slate-200 mb-3;
+        }
+
+        .term-card strong {
+            @apply text-indigo-700;
+        }
+
+        /* Traversal Table */
+        table.traversal-table {
+            @apply min-w-full divide-y divide-slate-200 mb-6 shadow rounded-lg;
+        }
+
+        .traversal-table th {
+            @apply px-4 py-3 text-left text-xs font-semibold text-indigo-700 uppercase tracking-wider bg-slate-100;
+        }
+
+        .traversal-table td {
+            @apply px-4 py-3 text-sm text-slate-600;
+        }
+
+        /* --- Enhanced Looks --- */
+        body {
+            background: linear-gradient(120deg, #f8fafc 0%, #e0e7ff 100%);
+        }
+
+        header {
+            box-shadow: 0 6px 24px 0 rgba(67, 56, 202, 0.10);
+            border-bottom: 2px solid #a5b4fc;
+        }
+
+        .content-section {
+            border: 1.5px solid #e0e7ff;
+            box-shadow: 0 8px 32px 0 rgba(99, 102, 241, 0.08);
+            background: linear-gradient(120deg, #fff 80%, #f1f5f9 100%);
+        }
+
+        .content-section h2,
+        .content-section h3,
+        .content-section h4,
+        .content-section h5,
+        .content-section h6 {
+            letter-spacing: 0.01em;
+        }
+
+        .content-section h2 {
+            background: linear-gradient(90deg, #6366f1 60%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        .content-section h3 {
+            background: linear-gradient(90deg, #818cf8 60%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        .content-section h4 {
+            color: #7c3aed;
+        }
+
+        .content-section h5 {
+            color: #f472b6;
+        }
+
+        .content-section h6,
+        .content-section .sub-h6 {
+            color: #0ea5e9;
+        }
+
+        .diagram-container {
+            background: linear-gradient(120deg, #f1f5f9 60%, #e0e7ff 100%);
+            border: 1.5px solid #c7d2fe;
+            box-shadow: 0 4px 16px 0 rgba(99, 102, 241, 0.07);
+        }
+
+        .diagram-container img {
+            border: 1.5px solid #a5b4fc;
+            box-shadow: 0 2px 8px 0 rgba(99, 102, 241, 0.08);
+        }
+
+        .term-card {
+            border: 1.5px solid #e0e7ff;
+            background: linear-gradient(120deg, #f8fafc 80%, #e0e7ff 100%);
+            box-shadow: 0 2px 8px 0 rgba(99, 102, 241, 0.05);
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .term-card:hover {
+            border-color: #818cf8;
+            box-shadow: 0 8px 24px 0 rgba(99, 102, 241, 0.13);
+        }
+
+        .highlight-box {
+            border-left-width: 6px;
+            background: linear-gradient(90deg, #fce7f3 60%, #fdf2f8 100%);
+            border-color: #f472b6;
+        }
+
+        .property-box,
+        .definition-box {
+            border-left-width: 6px;
+            background: linear-gradient(90deg, #fef9c3 60%, #f1f5f9 100%);
+            border-color: #facc15;
+        }
+
+        .definition-box {
+            background: linear-gradient(90deg, #e0f2fe 60%, #f1f5f9 100%);
+            border-color: #38bdf8;
+        }
+
+        .info-box {
+            border-left-width: 6px;
+            background: linear-gradient(90deg, #ede9fe 60%, #f1f5f9 100%);
+            border-color: #6366f1;
+        }
+
+        .nav-button {
+            box-shadow: 0 2px 8px 0 rgba(99, 102, 241, 0.10);
+            border: 1.5px solid #a5b4fc;
+            background: linear-gradient(90deg, #6366f1 60%, #818cf8 100%);
+        }
+
+        .nav-button:hover {
+            background: linear-gradient(90deg, #818cf8 0%, #6366f1 100%);
+            border-color: #6366f1;
+            color: #fff;
+        }
+
+        .traversal-table {
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 2px 8px 0 rgba(99, 102, 241, 0.08);
+        }
+
+        .traversal-table th {
+            background: linear-gradient(90deg, #e0e7ff 60%, #f1f5f9 100%);
+            color: #6366f1;
+        }
+
+        .traversal-table td {
+            background: #fff;
+        }
+
+        /* Responsive tweaks */
+        @media (max-width: 640px) {
+            .content-section {
+                padding: 1.25rem !important;
+            }
+
+            .diagram-container {
+                padding: 0.5rem !important;
+            }
+
+            .term-card {
+                padding: 0.75rem !important;
+            }
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(90deg, #e0e7ff 60%, #f1f5f9 100%);
+            border-top: 2px solid #a5b4fc;
+            color: #6366f1;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <!-- Header content from previous examples -->
+        <div class="container mx-auto flex flex-row items-center justify-between">
+            <div class="text-3xl font-bold" style="font-family: 'Nunito', sans-serif;">
+                <a href="../../../index.html" class="flex items-center group">
+                    <span>Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="h-8 w-8 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-all duration-300 group-hover:rotate-12"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span>ision</span>
+                </a>
+            </div>
+            <div class="flex-1 flex flex-col items-center">
+                <h1 class="text-3xl font-bold">Data Structures</h1>
+                <p class="text-base opacity-90">Explore each topic in depth</p>
+            </div>
+            <div style="width:3rem;"></div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-10">
+        <div class="flex justify-between items-center mb-8">
+            <a href="../data-structures-syllabus.html"
+                class="text-indigo-600 hover:text-indigo-800 hover:underline font-medium text-lg transition-colors duration-300">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Syllabus
+            </a>
+            <div class="bg-indigo-600 text-white text-base font-semibold px-5 py-2 rounded-lg shadow-md">
+                Topic 7 <!-- Assuming Trees is Topic 7 -->
+            </div>
+        </div>
+
+        <section class="content-section">
+            <h2><i class="fas fa-tree icon"></i>Trees: A Hierarchical Data Structure</h2>
+            <p class="text-xl mb-6 text-slate-600">A tree is a widely used non-linear data structure that organizes data
+                in a hierarchical structure. It's a recursive data structure containing a set of one or more data nodes,
+                where one node is designated as the root, and the remaining nodes (children of the root) form disjoint
+                sub-trees.</p>
+
+            <div class="highlight-box">
+                <p>A Tree is a non-linear data structure which organizes data in hierarchical structure and this is a
+                    recursive definition.</p>
+            </div>
+            <ul class="simple-list">
+                <li>Nodes other than the root are partitioned into non-empty sets, each forming a sub-tree.</li>
+                <li>Nodes maintain parent-child relationships or are sister (sibling) nodes.</li>
+                <li>In a general tree, a node can have any number of children but only a single parent.</li>
+                <li>In any tree with 'N' nodes, there will be a maximum of 'N-1' edges.</li>
+            </ul>
+            <div class="diagram-container">
+                <img src="tree-general-example.png" alt="General Tree Example with Levels" class="max-w-lg">
+                <figcaption>Figure T-1: Example of a general tree showing root, children, and levels.</figcaption>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-tags icon"></i>Basic Tree Terminology</h3>
+            <p>Understanding the following terms is crucial for working with trees:</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+                <div class="term-card"><strong>Root Node:</strong> The topmost node in the tree hierarchy; it has no
+                    parent. (e.g., 'A' in Figure T-1 & T-2)</div>
+                <div class="term-card"><strong>Edge:</strong> The connecting link between any two nodes.</div>
+                <div class="term-card"><strong>Parent Node:</strong> A predecessor of a node; a node that has a branch
+                    to another node. (e.g., A is parent of B & C in T-2)</div>
+                <div class="term-card"><strong>Child Node:</strong> A descendant of a node; a node that has a link from
+                    its parent. (e.g., B & C are children of A in T-2)</div>
+                <div class="term-card"><strong>Siblings:</strong> Nodes that belong to the same parent. (e.g., B & C are
+                    siblings in T-2)</div>
+                <div class="term-card"><strong>Leaf Node (External/Terminal Node):</strong> A node with no children.
+                    (e.g., E, F, G, H, I, J, K in T-2)</div>
+                <div class="term-card"><strong>Internal Node (Non-Terminal Node):</strong> A node with at least one
+                    child. The root is internal if the tree has more than one node. (e.g., A, B, C, D in T-2)</div>
+                <div class="term-card"><strong>Sub Tree:</strong> If the root is not null, its children and their
+                    descendants form sub-trees. (e.g., T1, T2, T3 are sub-trees of A in Figure T-1)</div>
+                <div class="term-card"><strong>Path:</strong> A sequence of consecutive edges between nodes. (e.g., A →
+                    B → E in Figure T-1) Length of path is number of nodes.</div>
+                <div class="term-card"><strong>Ancestor Node:</strong> Any predecessor node on a path from the root to a
+                    given node. (e.g., Ancestors of F in Figure T-1 are B and A)</div>
+                <div class="term-card"><strong>Degree of a Node:</strong> The number of children a node has. Degree of a
+                    leaf is 0.</div>
+                <div class="term-card"><strong>Degree of a Tree:</strong> The highest degree of a node among all nodes
+                    in the tree.</div>
+                <div class="term-card"><strong>Level Number:</strong> Root is at Level 0. Children of a node at Level
+                    'L' are at Level 'L+1'.</div>
+                <div class="term-card"><strong>Height of a Node:</strong> Total number of edges from that node to the
+                    furthest leaf node in its longest path. Height of all leaf nodes is 0.</div>
+                <div class="term-card"><strong>Height of a Tree:</strong> Height of the root node.</div>
+                <div class="term-card"><strong>Depth of a Node:</strong> Total number of edges from the root node to
+                    that particular node. Depth of the root node is 0.</div>
+                <div class="term-card"><strong>Depth of a Tree:</strong> The highest depth of any leaf node (length of
+                    the longest path from root to a leaf).</div>
+            </div>
+            <div class="diagram-container">
+                <img src="tree-terminology-example.png"
+                    alt="Tree illustrating various terminologies like Root, Edge, Parent, Child, etc." class="max-w-xl">
+                <figcaption>Figure T-2: Tree with 11 nodes and 10 edges, illustrating common terminology.</figcaption>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-project-diagram icon"></i>Representations of Trees</h3>
+            <h6>Static Representation (Array-based):</h6>
+            <pre><code class="language-c">#define MAXNODE 500
+struct treenode {
+    int data;     // Assuming data is int, can be generic
+    int father;   // Index of parent (or special value if root)
+    int son;      // Index of first child (or special value if leaf)
+    int next;     // Index of next sibling (or special value if last sibling)
+};</code></pre>
+            <p>This representation can be complex to manage for general trees due to varying numbers of children.</p>
+
+            <h6>Dynamic Representation (Pointer-based / Linked List):</h6>
+            <pre><code class="language-c">struct treenode {
+    int data;                 // Assuming data is int
+    struct treenode *father;  // Pointer to parent (optional, for easier upward traversal)
+    struct treenode *firstChild; // Pointer to the first child
+    struct treenode *nextSibling; // Pointer to the next sibling
+};</code></pre>
+            <p>This is more flexible, especially for general trees where the number of children per node can vary. For
+                binary trees, a simpler structure with `left_child` and `right_child` pointers is common.</p>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-network-wired icon"></i>Types of Trees</h3>
+            <div class="diagram-container">
+                <img src="tree-types-classification.png" alt="Classification of Tree Data Structures" class="max-w-xl">
+                <figcaption>Figure T-3: Common categories of tree data structures.</figcaption>
+            </div>
+
+            <h4>General Tree</h4>
+            <p>Stores elements hierarchically. The top element (root) is at level 0. Nodes at the same level are
+                siblings; nodes at different levels exhibit parent-child relationships. A node can have any number of
+                sub-trees. A tree where each node has at most 3 sub-trees is a ternary tree.</p>
+
+            <h4>Forests</h4>
+            <p>A set of disjoint trees. Can be obtained by deleting the root node of a general tree and the edges
+                connecting the root to its first-level children.</p>
+            <div class="diagram-container">
+                <img src="general-tree-and-forests.png" alt="General Tree and its corresponding Forests"
+                    class="max-w-2xl">
+                <figcaption>Figure T-4: A General Tree and its decomposition into Forests.</figcaption>
+            </div>
+
+            <!-- BINARY TREES Sub-Section -->
+            <h4 id="binary-tree"><i class="fas fa-code-branch icon"></i>Binary Tree</h4>
+            <p>A special type of tree where each node can have at most two children, typically referred to as the left
+                child and the right child. It's partitioned into three disjoint subsets: the root, a left sub-tree
+                (which is also a binary tree), and a right sub-tree (also a binary tree).</p>
+            <div class="diagram-container">
+                <img src="binary-tree-example.png" alt="Example of a Binary Tree" class="max-w-md">
+                <figcaption>Figure BT-1: A simple Binary Tree structure.</figcaption>
+            </div>
+
+            <h5>Types of Binary Trees:</h5>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="term-card">
+                    <h6>1. Strictly Binary Tree (or Full Binary Tree by some definitions / 2-Tree)</h6>
+                    <p class="text-sm">Every node has either 0 or 2 children. Every non-leaf (internal) node has
+                        non-empty left and right sub-trees. A strictly binary tree with 'n' leaves has (2n - 1) nodes.
+                    </p>
+                    <div class="diagram-container p-2">
+                        <img src="strictly-binary-tree-example.png" alt="Strictly Binary Tree Example" class="max-w-xs">
+                        <figcaption>Figure BT-2: Strictly Binary Tree.</figcaption>
+                    </div>
+                </div>
+                <div class="term-card">
+                    <h6>2. Full Binary Tree (as per another common definition)</h6>
+                    <p class="text-sm">Every node has 0 or 2 children. All nodes except leaf nodes have two children.
+                        Property: Number of leaf nodes (L) = Number of internal nodes (I) + 1. (L = I + 1)</p>
+                    <div class="diagram-container p-2">
+                        <img src="full-binary-tree-examples.png" alt="Examples of Full Binary Trees" class="max-w-sm">
+                        <figcaption>Figure BT-3: Examples of Full Binary Trees.</figcaption>
+                    </div>
+                </div>
+                <div class="term-card">
+                    <h6>3. Complete Binary Tree</h6>
+                    <p class="text-sm">All levels are completely filled except possibly the last level, and the last
+                        level has all keys as left as possible. A practical example is a Binary Heap.</p>
+                    <div class="diagram-container p-2">
+                        <img src="complete-binary-tree-example.png" alt="Example of a Complete Binary Tree"
+                            class="max-w-sm">
+                        <figcaption>Figure BT-4: Complete Binary Tree.</figcaption>
+                    </div>
+                </div>
+                <div class="term-card">
+                    <h6>4. Perfect Binary Tree</h6>
+                    <p class="text-sm">All internal nodes have two children, and all leaf nodes are at the same level. A
+                        perfect binary tree of height 'h' has 2<sup>h+1</sup> – 1 nodes.</p>
+                    <div class="diagram-container p-2">
+                        <img src="perfect-binary-tree-example.png" alt="Example of a Perfect Binary Tree"
+                            class="max-w-xs">
+                        <figcaption>Figure BT-5: Perfect Binary Tree.</figcaption>
+                    </div>
+                </div>
+                <div class="term-card md:col-span-2">
+                    <h6>5. Extended Binary Tree</h6>
+                    <p class="text-sm">A binary tree converted into a Full Binary Tree by adding dummy (external) nodes
+                        to existing (internal) nodes wherever required (e.g., to replace NULL child pointers).</p>
+                    <div class="diagram-container p-2">
+                        <img src="extended-binary-tree-example.png"
+                            alt="Converting a normal binary tree to an Extended Binary Tree" class="max-w-lg">
+                        <figcaption>Figure BT-6: Extended Binary Tree creation.</figcaption>
+                    </div>
+                </div>
+            </div>
+
+            <h5>Binary Tree Representations:</h5>
+            <div class="diagram-grid">
+                <div class="term-card">
+                    <h6>1. Linked Representation</h6>
+                    <p class="text-sm">Nodes stored non-contiguously. Each node: `left_pointer`, `data`,
+                        `right_pointer`. Root pointer points to the root node (or NULL if empty). Leaf nodes have NULL
+                        left/right pointers.</p>
+                    <div class="diagram-container p-2">
+                        <img src="binary-tree-linked-representation.png" alt="Linked Representation of a Binary Tree"
+                            class="max-w-md">
+                        <figcaption>Figure BT-7: Linked Representation with node structure.</figcaption>
+                    </div>
+                    <div class="diagram-container p-2">
+                        <img src="binary-tree-memory-allocation-linked.png"
+                            alt="Memory Allocation for Linked Representation" class="max-w-sm">
+                        <figcaption>Figure BT-8: Memory Allocation example.</figcaption>
+                    </div>
+                </div>
+                <div class="term-card">
+                    <h6>2. Sequential (Array) Representation</h6>
+                    <p class="text-sm">Uses a 1D array. Root typically at index 0 (or 1). If a node is at index `i`:
+                        <br>- Left child at `2i + 1` (or `2i` if 1-indexed).
+                        <br>- Right child at `2i + 2` (or `2i + 1` if 1-indexed).
+                        <br>Inefficient if the tree is skewed, as it requires space proportional to the maximum possible
+                        nodes for a given height.
+                    </p>
+                    <div class="diagram-container p-2">
+                        <img src="binary-tree-sequential-representation.png"
+                            alt="Sequential (Array) Representation of a Binary Tree" class="max-w-lg">
+                        <figcaption>Figure BT-9: Sequential Array Representation.</figcaption>
+                    </div>
+                </div>
+            </div>
+
+            <h5>Binary Tree Traversal:</h5>
+            <p>The process of visiting each node in the tree exactly once in a systematic way. Common recursive
+                traversals:</p>
+            <table class="traversal-table">
+                <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>Traversal</th>
+                        <th>Order of Visit</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td class="font-semibold text-indigo-700">Pre-order</td>
+                        <td>Root → Left → Right</td>
+                        <td>Visit the root, then recursively traverse the left sub-tree, then recursively traverse the
+                            right sub-tree.</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td class="font-semibold text-indigo-700">In-order</td>
+                        <td>Left → Root → Right</td>
+                        <td>Recursively traverse the left sub-tree, visit the root, then recursively traverse the right
+                            sub-tree. (For BST, yields sorted order).</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td class="font-semibold text-indigo-700">Post-order</td>
+                        <td>Left → Right → Root</td>
+                        <td>Recursively traverse the left sub-tree, then recursively traverse the right sub-tree,
+                            finally visit the root.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="diagram-container">
+                <img src="tree-traversal-example.png"
+                    alt="Example illustrating In-order, Pre-order, and Post-order traversals" class="max-w-lg">
+                <figcaption>Figure BT-10: Visualizing different traversal orders.</figcaption>
+            </div>
+            <p><strong>Level-order Traversal (Breadth-First Traversal):</strong> Visits nodes level by level, from left
+                to right at each level. Typically implemented using a queue.</p>
+            <h6>Constructing Tree from Traversals:</h6>
+            <p>A unique binary tree can be constructed if its In-order traversal is given along with either its
+                Pre-order or Post-order traversal.</p>
+            <div class="diagram-container">
+                <img src="constructing-tree-from-traversals.png"
+                    alt="Steps to construct a tree from Inorder and Preorder traversals" class="max-w-xl">
+                <figcaption>Figure BT-11: Constructing a Binary Tree from Inorder and Preorder traversals.</figcaption>
+            </div>
+
+
+            <!-- BINARY SEARCH TREES (BST) Sub-Section -->
+            <h4 id="bst"><i class="fas fa-search-plus icon"></i>Binary Search Tree (BST) / Binary Sorted Tree</h4>
+            <p>A BST is an ordered binary tree that facilitates fast searching, insertion, and deletion operations. It
+                adheres to specific properties:</p>
+            <div class="property-box">
+                <strong>Binary Search Tree Properties:</strong>
+                <ul class="simple-list text-sm">
+                    <li>Every element has a unique key.</li>
+                    <li>The key in any node is greater than or equal to all keys in its left sub-tree.</li>
+                    <li>The key in any node is less than or equal to all keys in its right sub-tree.</li>
+                    <li>Both the left and right sub-trees are also binary search trees.</li>
+                </ul>
+            </div>
+            <div class="diagram-container">
+                <img src="bst-example-and-node-structure.png"
+                    alt="Example of a Binary Search Tree and its node structure" class="max-w-lg">
+                <figcaption>Figure BST-1 (Fig 9.1): A Binary Search Tree and typical node structure (Parent, Key, Left,
+                    Right).</figcaption>
+            </div>
+
+            <h5>Operations on a Binary Search Tree:</h5>
+            <p>BSTs support many operations efficiently, typically O(h) where 'h' is the height of the tree (O(log n) on
+                average, O(n) in worst-case for skewed trees).</p>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="term-card">
+                    <h6>Searching for a Node (TREE-SEARCH (x, k))</h6>
+                    <p class="text-sm">Compare key 'k' with current node 'x'. If equal, found. If k < x.key, search
+                            left. If k> x.key, search right. If x is NULL, not found.</p>
+                    <div class="diagram-container p-1">
+                        <img src="bst-searching-example.png" alt="Searching for a node in BST" class="max-w-xs">
+                        <figcaption>Figure BST-2 (Fig 10.5, 10.6, 10.7): Searching examples.</figcaption>
+                    </div>
+                </div>
+                <div class="term-card">
+                    <h6>Inserting a New Node</h6>
+                    <p class="text-sm">Find the correct position by searching. Insert new node as a leaf, maintaining
+                        BST properties.</p>
+                    <div class="diagram-container p-1">
+                        <img src="bst-insertion-example.png" alt="Inserting nodes into a BST" class="max-w-sm">
+                        <figcaption>Figure BST-3 (Fig 10.10): Insertion examples.</figcaption>
+                    </div>
+                </div>
+                <div class="term-card md:col-span-2">
+                    <h6>Deleting a Node</h6>
+                    <p class="text-sm">Three cases:</p>
+                    <ul class="simple-list text-xs">
+                        <li>**Node has no children (leaf):** Simply remove it.</li>
+                        <li>**Node has one child:** Replace the node with its child.</li>
+                        <li>**Node has two children:** Find its in-order successor (smallest in right sub-tree) or
+                            in-order predecessor (largest in left sub-tree). Copy its value to the node to be deleted,
+                            then delete the successor/predecessor (which will have 0 or 1 child).</li>
+                    </ul>
+                    <div class="diagram-container p-1">
+                        <img src="bst-deletion-examples.png" alt="Deleting nodes from a BST" class="max-w-lg">
+                        <figcaption>Figure BST-4 (Fig 10.11-10.14): Deletion examples.</figcaption>
+                    </div>
+                </div>
+                <!-- Other operations like Height, Count Nodes, Mirror Image, Smallest/Largest can be listed similarly -->
+            </div>
+            <div class="info-box">
+                <p>Your OCR data includes detailed algorithms (Figures 10.8-10.26) and C code examples for these BST
+                    operations.</p>
+            </div>
+
+            <!-- Other Tree Types as per your list -->
+            <h4>Expression Tree</h4>
+            <p>A binary tree used to represent arithmetic expressions. Internal nodes are operators, and leaf nodes are
+                operands.</p>
+            <div class="diagram-container">
+                <img src="expression-tree-example.png" alt="Constructing an Expression Tree" class="max-w-lg">
+                <figcaption>Figure T-5: Example of constructing an Expression Tree for (a+b)/((a*b)-c)+d.</figcaption>
+            </div>
+
+            <h4>Tournament Tree (Selection/Winner Tree)</h4>
+            <p>Used to record the winner of matches in a tournament. External nodes are players, internal nodes are
+                winners of matches. Root is the overall tournament winner.</p>
+            <!-- Add diagram for tournament tree if available -->
+
+
+            <h4 id="threaded-binary-tree"><i class="fas fa-route icon"></i>Threaded Binary Trees</h4>
+            <p>In many binary tree representations (especially linked lists), numerous child pointers are NULL. Threaded
+                binary trees utilize these NULL pointers to store information about the inorder predecessor or successor
+                of a node, facilitating non-recursive inorder traversal and efficient navigation.</p>
+            <div class="diagram-gallery">
+                <div class="diagram-container"><img src="threaded-bst-definition.png"
+                        alt="Defining Threaded Binary Trees">
+                    <figcaption>Defining Threaded Trees</figcaption>
+                </div>
+                <div class="diagram-container"><img src="one-way-threaded-bst.png" alt="One Way Threaded Binary Tree">
+                    <figcaption>One-Way Threading</figcaption>
+                </div>
+                <div class="diagram-container"><img src="two-way-threaded-bst.png" alt="Two Way Threaded Binary Tree">
+                    <figcaption>Two-Way Threading</figcaption>
+                </div>
+                <div class="diagram-container"><img src="threaded-bst-header-node.png"
+                        alt="Two way Threaded Binary Trees with header Node">
+                    <figcaption>With Header Node</figcaption>
+                </div>
+                <div class="diagram-container"><img src="threaded-bst-node-structure.png"
+                        alt="Representing a Threaded Binary Tree Node">
+                    <figcaption>Node Structure</figcaption>
+                </div>
+            </div>
+            <ul class="simple-list">
+                <li>An empty left child field can point to the inorder predecessor.</li>
+                <li>An empty right child field can point to the inorder successor.</li>
+                <li>**Threads:** The pointers to predecessors/successors.
+                <li>Node structure includes flags (booleans) to indicate if a child pointer is a normal link or a
+                    thread.</li>
+            </ul>
+
+
+            <h4 id="balanced-trees"><i class="fas fa-balance-scale icon"></i>Balanced Binary Trees</h4>
+            <p>Standard BSTs can become skewed (resembling a linked list) in worst-case scenarios, leading to O(n)
+                operation times. Balanced binary trees use mechanisms to ensure the tree remains relatively balanced,
+                keeping the height close to O(log n).</p>
+            <h6>Balance Factor (BF):</h6>
+            <p>BF(node) = Height(Left Subtree of node) - Height(Right Subtree of node). For a balanced tree, BF is
+                typically -1, 0, or +1 for every node.</p>
+            <div class="diagram-container">
+                <img src="balance-factor-example.png" alt="Calculating Balance Factor of a Binary Tree"
+                    class="max-w-sm">
+                <figcaption>Figure AVL-1 (Fig 7.31): Calculating Balance Factor.</figcaption>
+            </div>
+
+            <h5>AVL Trees (Adelson-Velskii and Landis Trees)</h5>
+            <p>A self-balancing binary search tree where the heights of the two child subtrees of any node differ by at
+                most one (BF is -1, 0, or +1). Insertions and deletions may unbalance the tree, requiring **rotations**
+                to restore balance.</p>
+            <div class="diagram-container">
+                <img src="avl-skewed-vs-balanced.png" alt="Skewed vs Balanced (AVL) Search Trees" class="max-w-lg">
+                <figcaption>Figure AVL-2 (Fig 7.34): Skewed trees vs. balanced structure.</figcaption>
+            </div>
+            <h6>AVL Rotations:</h6>
+            <p>When an imbalance occurs (BF becomes -2 or +2), rotations are performed:</p>
+            <ul class="simple-list">
+                <li>**LL Rotation:** Caused by an insertion into the left subtree of the left child.</li>
+                <li>**RR Rotation:** Caused by an insertion into the right subtree of the right child.</li>
+                <li>**LR Rotation:** Caused by an insertion into the right subtree of the left child (Double rotation:
+                    RR on left child, then LL on current node).</li>
+                <li>**RL Rotation:** Caused by an insertion into the left subtree of the right child (Double rotation:
+                    LL on right child, then RR on current node).</li>
+            </ul>
+            <div class="diagram-gallery">
+                <div class="diagram-container"><img src="avl-ll-rotation.png" alt="AVL LL Rotation">
+                    <figcaption>Fig 7.36: LL Rotation</figcaption>
+                </div>
+                <div class="diagram-container"><img src="avl-rr-rotation.png" alt="AVL RR Rotation">
+                    <figcaption>Fig 7.38: RR Rotation</figcaption>
+                </div>
+                <div class="diagram-container"><img src="avl-lr-rotation.png" alt="AVL LR Rotation">
+                    <figcaption>Fig 7.40: LR Rotation</figcaption>
+                </div>
+                <!-- Add more rotation example diagrams here from image-39 to image-44 -->
+                <div class="diagram-container"><img src="avl-insertion-example1.png"
+                        alt="AVL Insertion and Rotation Example 1">
+                    <figcaption>Fig 7.37, 7.39: Insertion Examples</figcaption>
+                </div>
+                <div class="diagram-container"><img src="avl-insertion-example2.png"
+                        alt="AVL Insertion and Rotation Example 2">
+                    <figcaption>Fig 7.41, 7.42: More Insertion Examples</figcaption>
+                </div>
+            </div>
+            <p>Deletion in AVL trees also involves rotations (R0, R1, R-1) to maintain balance.</p>
+            <div class="diagram-gallery">
+                <div class="diagram-container"><img src="avl-deletion-r0.png" alt="AVL Deletion R0 Rotation">
+                    <figcaption>Fig 7.43, 7.44: R0 Rotation on Deletion</figcaption>
+                </div>
+                <div class="diagram-container"><img src="avl-deletion-r1.png" alt="AVL Deletion R1 Rotation">
+                    <figcaption>Fig 7.45, 7.46: R1 Rotation on Deletion</figcaption>
+                </div>
+                <div class="diagram-container"><img src="avl-deletion-r-1.png" alt="AVL Deletion R-1 Rotation">
+                    <figcaption>Fig 7.47, 7.48: R-1 Rotation on Deletion</figcaption>
+                </div>
+            </div>
+
+            <!-- NEW: B-Trees Section -->
+            <h4 id="b-trees"><i class="fas fa-database icon"></i>B-Trees</h4>
+            <p>B-Trees are self-balancing m-way search trees, designed to minimize disk accesses for large datasets.
+                They are commonly used in databases and file systems.</p>
+            <div class="definition-box">
+                <strong>Definition of B-Tree (Order m):</strong>
+                <ol class="styled-list text-sm">
+                    <li>The root has at least two child nodes (if not a leaf) and at most m child nodes.</li>
+                    <li>Internal nodes (except the root) have at least ⌈m/2⌉ child nodes and at most m child nodes.</li>
+                    <li>The number of keys in each internal node is one less than the number of its child nodes. These
+                        keys partition the keys in the subtrees.</li>
+                    <li>All leaf nodes are on the same level.</li>
+                </ol>
+                <p class="text-sm mt-2">A B-Tree of order 3 is a 2-3 tree (internal nodes have degree 2 or 3).</p>
+            </div>
+            <div class="diagram-container">
+                <img src="b-tree-example-order-5.png" alt="Example of a B-Tree of order 5" class="max-w-xl">
+                <figcaption>Figure 7.57: B-Tree of order 5. Note key fields and pointers to subtrees.</figcaption>
+            </div>
+
+            <h6>Searching, Insertion, and Deletion in a B-Tree:</h6>
+            <ul class="simple-list">
+                <li><strong>Searching:</strong> Similar to an m-way search tree. Number of accesses depends on height
+                    'h'.</li>
+                <li><strong>Insertion:</strong> Search for the key. If leaf node is not full, insert. If full, split the
+                    node, push median key to parent. Splitting may propagate upwards, potentially creating a new root
+                    and increasing height.</li>
+                <div class="diagram-container">
+                    <img src="b-tree-insertion-example.png" alt="Insertion into a B-Tree" class="max-w-2xl">
+                    <figcaption>Figure 7.58 & 7.59: Example of inserting elements 4, 5, 58, 6 into a B-Tree of order 5.
+                    </figcaption>
+                </div>
+                <li><strong>Deletion:</strong> Desirable to delete from a leaf. If key is in an internal node, promote
+                    successor/predecessor. If leaf node becomes less than half-full after deletion, try to borrow from a
+                    sibling or merge with a sibling. Merging can propagate upwards, potentially reducing height.</li>
+                <div class="diagram-container">
+                    <img src="b-tree-deletion-example.png" alt="Deletion from a B-Tree" class="max-w-2xl">
+                    <figcaption>Figure 7.60 & 7.61: Examples of deleting keys from a B-Tree, showing merging and height
+                        reduction.</figcaption>
+                </div>
+            </ul>
+
+
+            <!-- NEW: B+ Trees Section -->
+            <h4 id="bplus-trees"><i class="fas fa-folder-open icon"></i>B+ Trees</h4>
+            <p>A variation of B-Trees, optimized for systems that process large files randomly and sequentially. Data is
+                processed randomly using the B+ tree index, but sequential processing benefits from linked leaf nodes.
+                All paths from root to leaf are of the same length.</p>
+            <div class="definition-box">
+                <strong>Definition of B+ Tree:</strong>
+                <ol class="styled-list text-sm">
+                    <li>From the root to the leaf, all paths should be of the same length.</li>
+                    <li>A node (not root or leaf) has children between ⌈n/2⌉ and n.</li>
+                    <li>Special Conditions:
+                        <ul class="simple-list ml-4 text-xs">
+                            <li>When a root is not a leaf, it has a minimum of 2 children.</li>
+                            <li>When a root is a leaf (i.e., no other nodes in the tree), it can have children between 0
+                                and (n-1) values.</li>
+                        </ul>
+                    </li>
+                </ol>
+                <p class="text-sm mt-2">A key difference from B-Trees: In B+ Trees, all data records are stored only at
+                    the leaf nodes. Internal nodes store only keys for routing. Leaf nodes are usually linked together
+                    to provide ordered sequential access.</p>
+            </div>
+            <div class="diagram-container">
+                <img src="bplus-tree-example.png" alt="Example of a B+ Tree structure" class="max-w-lg">
+                <figcaption>Figure 7.63: B+ Tree Example.</figcaption>
+            </div>
+            <pre><code class="language-c">// Typical B+ Tree Node Structure (Conceptual)
+typedef struct node {
+    void **ptr;        // Pointers to children or data records
+    bool leaf_node;
+    int N_Keys;        // Number of keys currently in node
+    Keys *keys;        // Array of keys
+    struct node *next, *parent; // For leaf linkage and parent pointer
+} node;</code></pre>
+
+            <h6>Insertion into a B+ Tree:</h6>
+            <p>Similar to B-Trees, insertions happen at leaf nodes. If a leaf node is full, it splits, and a copy of the
+                median key is moved to the parent. This can propagate upwards.</p>
+            <div class="diagram-gallery">
+                <div class="diagram-container"><img src="bplus-tree-insertion1.png" alt="B+ Tree Insertion Step 1">
+                    <figcaption>Fig 7.64-7.65: Leaf node has space.</figcaption>
+                </div>
+                <div class="diagram-container"><img src="bplus-tree-insertion2.png"
+                        alt="B+ Tree Insertion Step 2 - Split">
+                    <figcaption>Fig 7.66: Leaf node full, split and insert.</figcaption>
+                </div>
+            </div>
+
+            <h6>Deletion from a B+ Tree:</h6>
+            <p>Deletion occurs at leaf nodes. If a leaf becomes less than half-full, redistribution (borrowing) from a
+                sibling is attempted. If that fails, the leaf is merged with a sibling. Merges can propagate up the
+                tree, potentially reducing height.</p>
+            <div class="diagram-container">
+                <img src="bplus-tree-deletion.png" alt="Deletion in a B+ Tree showing redistribution and merging"
+                    class="max-w-2xl">
+                <figcaption>Figure 7.67: Deletion examples in a B+ Tree.</figcaption>
+            </div>
+
+
+            <!-- NEW: Heaps Section -->
+            <h4 id="heaps"><i class="fas fa-layer-group icon"></i>Heaps (Max-Heaps & Min-Heaps)</h4>
+            <p>A heap is a specialized tree-based data structure, typically a complete binary tree, that satisfies the
+                heap property:
+            <ul class="simple-list">
+                <li>**Max-Heap:** The value at any node N is greater than or equal to the values at each of its
+                    children. The largest element is at the root.</li>
+                <li>**Min-Heap:** The value at any node N is less than or equal to the values at each of its children.
+                    The smallest element is at the root.</li>
+            </ul>
+            Heaps are commonly represented sequentially using arrays.
+            </p>
+            <div class="diagram-container">
+                <img src="heap-example-and-array.png"
+                    alt="Example of a Max-Heap and its sequential array representation" class="max-w-xl">
+                <figcaption>Figure 7.77: (a) A Max-Heap. (b) Its sequential array representation.</figcaption>
+            </div>
+
+            <h6>Inserting into a Heap (INSHEAP):</h6>
+            <ol class="styled-list text-sm">
+                <li>Add the new item at the end of the heap (maintaining completeness).</li>
+                <li>"Sift-up" or "Bubble-up": Compare the new item with its parent. If it violates the heap property,
+                    swap them. Repeat this process until the item reaches its appropriate place or becomes the root.
+                </li>
+            </ol>
+            <div class="diagram-gallery">
+                <div class="diagram-container"><img src="heap-insertion-process.png"
+                        alt="Heap Insertion Process for ITEM = 70">
+                    <figcaption>Fig 7.78: Item=70 inserted and sifted up.</figcaption>
+                </div>
+                <div class="diagram-container"><img src="heap-building-example.png"
+                        alt="Building a Heap by inserting elements">
+                    <figcaption>Fig 7.79: Building a heap step-by-step.</figcaption>
+                </div>
+            </div>
+
+
+            <h6>Deleting the Root of a Heap (DELHEAP - typically for Max-Heap):</h6>
+            <ol class="styled-list text-sm">
+                <li>Store the root item (the one to be deleted).</li>
+                <li>Replace the root with the last element of the heap (maintaining completeness).</li>
+                <li>"Sift-down" or "Bubble-down" or "Reheapify": Compare the new root with its children. If it violates
+                    heap property with the larger (for max-heap) or smaller (for min-heap) child, swap them. Repeat this
+                    process until the item reaches its appropriate place or becomes a leaf.</li>
+            </ol>
+            <div class="diagram-container">
+                <img src="heap-deletion-process.png" alt="Deleting the root from a Max-Heap and Reheaping"
+                    class="max-w-xl">
+                <figcaption>Figure 7.80: Reheaping after deleting the root (95).</figcaption>
+            </div>
+            <p>Heaps are fundamental for implementing **Heapsort** and **Priority Queues**.</p>
+
+            <!-- NEW: Red-Black Trees Section -->
+            <h4 id="red-black-trees"><i class="fas fa-adjust icon"></i>Red-Black Trees</h4>
+            <p>A Red-Black Tree is a self-balancing binary search tree where each node has an extra bit for storing
+                color (red or black). By enforcing specific properties regarding node colors, it ensures that the
+                longest path from the root to any leaf is no more than twice as long as the shortest path, guaranteeing
+                O(log n) time for search, insert, and delete operations.</p>
+            <div class="property-box">
+                <strong>Red-Black Tree Properties:</strong>
+                <ol class="styled-list text-sm">
+                    <li>Every node is either red or black.</li>
+                    <li>The root is always black.</li>
+                    <li>All leaf nodes (NIL or nulls) are black.</li>
+                    <li>If a node is red, then both its children are black. (No two red nodes in a row on any simple
+                        path).</li>
+                    <li>Every simple path from a given node to any of its descendant leaf nodes contains the same number
+                        of black nodes (the "black-height").</li>
+                </ol>
+            </div>
+            <div class="diagram-container">
+                <img src="red-black-tree-example.png" alt="Example of a Red-Black Tree" class="max-w-lg">
+                <figcaption>Figure 10.55: A Red-Black Tree (Black and Red nodes indicated).</figcaption>
+            </div>
+            <p>These constraints enforce a balanced structure. Non-Red-Black examples are shown in Figure 10.56.</p>
+            <div class="diagram-container">
+                <img src="non-red-black-examples.png" alt="Binary search trees that are not red-black trees"
+                    class="max-w-xl">
+                <figcaption>Figure 10.56: Examples of trees violating Red-Black properties.</figcaption>
+            </div>
+            <h6>Operations on Red-Black Trees:</h6>
+            <p>Insertion and deletion start like in a standard BST. After modification, the Red-Black properties might
+                be violated. To restore them, a series of color changes and tree rotations (at most O(log n) rotations)
+                are performed.</p>
+            <h6 class="mt-4">Inserting a Node:</h6>
+            <p>New nodes are initially colored RED (with black NIL children). This might violate property 2 (if new node
+                is root) or property 4 (if parent is red). Cases are checked: Grandparent (G), Parent (P), Uncle (U) of
+                new node (N).</p>
+            <div class="diagram-gallery">
+                <div class="diagram-container"><img src="rb-tree-insertion-case3.png"
+                        alt="Red-Black Tree Insertion Case 3">
+                    <figcaption>Fig 10.57: Insertion Case 3 (P & U are Red)</figcaption>
+                </div>
+                <div class="diagram-container"><img src="rb-tree-insertion-case4.png"
+                        alt="Red-Black Tree Insertion Case 4">
+                    <figcaption>Fig 10.58: Insertion Case 4 (P is Red, U is Black, N is "inside" child)</figcaption>
+                </div>
+                <div class="diagram-container"><img src="rb-tree-insertion-case5.png"
+                        alt="Red-Black Tree Insertion Case 5">
+                    <figcaption>Fig 10.59: Insertion Case 5 (P is Red, U is Black, N is "outside" child)</figcaption>
+                </div>
+            </div>
+
+            <h6 class="mt-4">Deleting a Node:</h6>
+            <p>Deletion is more complex. After standard BST deletion, if a black node was removed or replaced by a red
+                node that became black, property 5 (equal black nodes on paths) might be violated. Cases involving the
+                sibling (S) of the node that replaced the deleted node are considered.</p>
+            <div class="diagram-gallery">
+                <div class="diagram-container"><img src="rb-tree-deletion-case2.png"
+                        alt="Red-Black Tree Deletion Case 2">
+                    <figcaption>Fig 10.60: Deletion Case 2 (Sibling S is Red)</figcaption>
+                </div>
+                <div class="diagram-container"><img src="rb-tree-deletion-case3.png"
+                        alt="Red-Black Tree Deletion Case 3">
+                    <figcaption>Fig 10.61: Deletion Case 3 (P,S,S's children Black)</figcaption>
+                </div>
+                <div class="diagram-container"><img src="rb-tree-deletion-case4.png"
+                        alt="Red-Black Tree Deletion Case 4">
+                    <figcaption>Fig 10.62: Deletion Case 4 (S, S's children Black, P is Red)</figcaption>
+                </div>
+                <div class="diagram-container"><img src="rb-tree-deletion-case5.png"
+                        alt="Red-Black Tree Deletion Case 5">
+                    <figcaption>Fig 10.63: Deletion Case 5 (S is Black, S's appropriate child is Red)</figcaption>
+                </div>
+                <div class="diagram-container"><img src="rb-tree-deletion-case6.png"
+                        alt="Red-Black Tree Deletion Case 6">
+                    <figcaption>Fig 10.64: Deletion Case 6 (S is Black, S's other child is Red)</figcaption>
+                </div>
+            </div>
+            <p>Red-Black trees are used in many practical applications, including the `std::map` and `std::set` in C++
+                STL, and CFS scheduler in Linux.</p>
+
+            <h5>Other Balanced Trees (Brief Mention from previous section):</h5>
+            <ul class="simple-list">
+                <li><strong>Weight-Balanced Tree.</strong></li>
+            </ul>
+        </section>
+
+        <div class="mt-12 pt-8 border-t border-slate-300 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <a href="topic-6.html" class="nav-button"> <!-- Assuming previous topic is 6 -->
+                <i class="fas fa-arrow-left icon"></i> Previous Topic
+            </a>
+            <a href="topic-8.html" class="nav-button"> <!-- Assuming next topic is 8 -->
+                Next Topic <i class="fas fa-arrow-right icon"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <!-- Footer content -->
+        © <span id="currentYear"></span> <a href="../../../index.html"
+            class="hover:text-indigo-700 font-semibold transition-colors duration-200">EduVision</a>.
+        All rights reserved.
+        <span class="inline-block align-middle ml-1 text-red-500 animate-pulse"><i class="fas fa-heart"></i></span>
+        <span class="ml-1 text-slate-600">for learning.</span>
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+    <style>
+        /* --- Enhanced Looks --- */
+        body {
+            background: linear-gradient(120deg, #f8fafc 0%, #e0e7ff 100%);
+        }
+
+        header {
+            box-shadow: 0 6px 24px 0 rgba(67, 56, 202, 0.10);
+            border-bottom: 2px solid #a5b4fc;
+        }
+
+        .content-section {
+            border: 1.5px solid #e0e7ff;
+            box-shadow: 0 8px 32px 0 rgba(99, 102, 241, 0.08);
+            background: linear-gradient(120deg, #fff 80%, #f1f5f9 100%);
+        }
+
+        .content-section h2,
+        .content-section h3,
+        .content-section h4,
+        .content-section h5,
+        .content-section h6 {
+            letter-spacing: 0.01em;
+        }
+
+        .content-section h2 {
+            background: linear-gradient(90deg, #6366f1 60%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        .content-section h3 {
+            background: linear-gradient(90deg, #818cf8 60%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        .content-section h4 {
+            color: #7c3aed;
+        }
+
+        .content-section h5 {
+            color: #f472b6;
+        }
+
+        .content-section h6,
+        .content-section .sub-h6 {
+            color: #0ea5e9;
+        }
+
+        .diagram-container {
+            background: linear-gradient(120deg, #f1f5f9 60%, #e0e7ff 100%);
+            border: 1.5px solid #c7d2fe;
+            box-shadow: 0 4px 16px 0 rgba(99, 102, 241, 0.07);
+        }
+
+        .diagram-container img {
+            border: 1.5px solid #a5b4fc;
+            box-shadow: 0 2px 8px 0 rgba(99, 102, 241, 0.08);
+        }
+
+        .term-card {
+            border: 1.5px solid #e0e7ff;
+            background: linear-gradient(120deg, #f8fafc 80%, #e0e7ff 100%);
+            box-shadow: 0 2px 8px 0 rgba(99, 102, 241, 0.05);
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .term-card:hover {
+            border-color: #818cf8;
+            box-shadow: 0 8px 24px 0 rgba(99, 102, 241, 0.13);
+        }
+
+        .highlight-box {
+            border-left-width: 6px;
+            background: linear-gradient(90deg, #fce7f3 60%, #fdf2f8 100%);
+            border-color: #f472b6;
+        }
+
+        .property-box,
+        .definition-box {
+            border-left-width: 6px;
+            background: linear-gradient(90deg, #fef9c3 60%, #f1f5f9 100%);
+            border-color: #facc15;
+        }
+
+        .definition-box {
+            background: linear-gradient(90deg, #e0f2fe 60%, #f1f5f9 100%);
+            border-color: #38bdf8;
+        }
+
+        .info-box {
+            border-left-width: 6px;
+            background: linear-gradient(90deg, #ede9fe 60%, #f1f5f9 100%);
+            border-color: #6366f1;
+        }
+
+        .nav-button {
+            box-shadow: 0 2px 8px 0 rgba(99, 102, 241, 0.10);
+            border: 1.5px solid #a5b4fc;
+            background: linear-gradient(90deg, #6366f1 60%, #818cf8 100%);
+        }
+
+        .nav-button:hover {
+            background: linear-gradient(90deg, #818cf8 0%, #6366f1 100%);
+            border-color: #6366f1;
+            color: #fff;
+        }
+
+        .traversal-table {
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 2px 8px 0 rgba(99, 102, 241, 0.08);
+        }
+
+        .traversal-table th {
+            background: linear-gradient(90deg, #e0e7ff 60%, #f1f5f9 100%);
+            color: #6366f1;
+        }
+
+        .traversal-table td {
+            background: #fff;
+        }
+
+        /* Responsive tweaks */
+        @media (max-width: 640px) {
+            .content-section {
+                padding: 1.25rem !important;
+            }
+
+            .diagram-container {
+                padding: 0.5rem !important;
+            }
+
+            .term-card {
+                padding: 0.75rem !important;
+            }
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(90deg, #e0e7ff 60%, #f1f5f9 100%);
+            border-top: 2px solid #a5b4fc;
+            color: #6366f1;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+        }
+    </style>
+    </head>
+
+    <body>
+        <header>
+            <!-- Header content from previous examples -->
+            <div class="container mx-auto flex flex-row items-center justify-between">
+                <div class="text-3xl font-bold" style="font-family: 'Nunito', sans-serif;">
+                    <a href="../../../index.html" class="flex items-center group">
+                        <span>Edu</span>
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="h-8 w-8 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-all duration-300 group-hover:rotate-12"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                        <span>ision</span>
+                    </a>
+                </div>
+                <div class="flex-1 flex flex-col items-center">
+                    <h1 class="text-3xl font-bold">Data Structures</h1>
+                    <p class="text-base opacity-90">Explore each topic in depth</p>
+                </div>
+                <div style="width:3rem;"></div>
+            </div>
+        </header>
+
+        <main class="container mx-auto px-4 py-10">
+            <div class="flex justify-between items-center mb-8">
+                <a href="../data-structures-syllabus.html"
+                    class="text-indigo-600 hover:text-indigo-800 hover:underline font-medium text-lg transition-colors duration-300">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Syllabus
+                </a>
+                <div class="bg-indigo-600 text-white text-base font-semibold px-5 py-2 rounded-lg shadow-md">
+                    Topic 7 <!-- Assuming Trees is Topic 7 -->
+                </div>
+            </div>
+
+            <section class="content-section">
+                <h2><i class="fas fa-tree icon"></i>Trees: A Hierarchical Data Structure</h2>
+                <p class="text-xl mb-6 text-slate-600">A tree is a widely used non-linear data structure that organizes
+                    data
+                    in a hierarchical structure. It's a recursive data structure containing a set of one or more data
+                    nodes,
+                    where one node is designated as the root, and the remaining nodes (children of the root) form
+                    disjoint
+                    sub-trees.</p>
+
+                <div class="highlight-box">
+                    <p>A Tree is a non-linear data structure which organizes data in hierarchical structure and this is
+                        a
+                        recursive definition.</p>
+                </div>
+                <ul class="simple-list">
+                    <li>Nodes other than the root are partitioned into non-empty sets, each forming a sub-tree.</li>
+                    <li>Nodes maintain parent-child relationships or are sister (sibling) nodes.</li>
+                    <li>In a general tree, a node can have any number of children but only a single parent.</li>
+                    <li>In any tree with 'N' nodes, there will be a maximum of 'N-1' edges.</li>
+                </ul>
+                <div class="diagram-container">
+                    <img src="tree-general-example.png" alt="General Tree Example with Levels" class="max-w-lg">
+                    <figcaption>Figure T-1: Example of a general tree showing root, children, and levels.</figcaption>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h3><i class="fas fa-tags icon"></i>Basic Tree Terminology</h3>
+                <p>Understanding the following terms is crucial for working with trees:</p>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+                    <div class="term-card"><strong>Root Node:</strong> The topmost node in the tree hierarchy; it has no
+                        parent. (e.g., 'A' in Figure T-1 & T-2)</div>
+                    <div class="term-card"><strong>Edge:</strong> The connecting link between any two nodes.</div>
+                    <div class="term-card"><strong>Parent Node:</strong> A predecessor of a node; a node that has a
+                        branch
+                        to another node. (e.g., A is parent of B & C in T-2)</div>
+                    <div class="term-card"><strong>Child Node:</strong> A descendant of a node; a node that has a link
+                        from
+                        its parent. (e.g., B & C are children of A in T-2)</div>
+                    <div class="term-card"><strong>Siblings:</strong> Nodes that belong to the same parent. (e.g., B & C
+                        are
+                        siblings in T-2)</div>
+                    <div class="term-card"><strong>Leaf Node (External/Terminal Node):</strong> A node with no children.
+                        (e.g., E, F, G, H, I, J, K in T-2)</div>
+                    <div class="term-card"><strong>Internal Node (Non-Terminal Node):</strong> A node with at least one
+                        child. The root is internal if the tree has more than one node. (e.g., A, B, C, D in T-2)</div>
+                    <div class="term-card"><strong>Sub Tree:</strong> If the root is not null, its children and their
+                        descendants form sub-trees. (e.g., T1, T2, T3 are sub-trees of A in Figure T-1)</div>
+                    <div class="term-card"><strong>Path:</strong> A sequence of consecutive edges between nodes. (e.g.,
+                        A →
+                        B → E in Figure T-1) Length of path is number of nodes.</div>
+                    <div class="term-card"><strong>Ancestor Node:</strong> Any predecessor node on a path from the root
+                        to a
+                        given node. (e.g., Ancestors of F in Figure T-1 are B and A)</div>
+                    <div class="term-card"><strong>Degree of a Node:</strong> The number of children a node has. Degree
+                        of a
+                        leaf is 0.</div>
+                    <div class="term-card"><strong>Degree of a Tree:</strong> The highest degree of a node among all
+                        nodes
+                        in the tree.</div>
+                    <div class="term-card"><strong>Level Number:</strong> Root is at Level 0. Children of a node at
+                        Level
+                        'L' are at Level 'L+1'.</div>
+                    <div class="term-card"><strong>Height of a Node

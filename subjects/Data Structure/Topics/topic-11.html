@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Topic 11: Sorting Algorithms - EduVision</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Nunito:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(120deg, #f4f7fa 0%, #e9eafc 100%);
+            color: #232946;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(90deg, #4f46e5 0%, #2563eb 100%);
+            color: #fff;
+            padding: 28px 0 20px 0;
+            box-shadow: 0 4px 16px rgba(79, 70, 229, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .header-brand {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.1rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-brand a {
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-brand svg {
+            margin: 0 4px;
+            color: #fde047;
+            transition: transform 0.2s;
+        }
+
+        .header-brand a:hover svg {
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        .header-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+        }
+
+        .header-desc {
+            font-size: 1.08rem;
+            opacity: 0.92;
+            margin-bottom: 0;
+        }
+
+        main {
+            flex: 1 1 auto;
+            padding: 40px 0 0 0;
+        }
+
+        .content-section {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 6px 32px rgba(79, 70, 229, 0.08), 0 1.5px 6px rgba(79, 70, 229, 0.03);
+            padding: 38px 32px;
+            margin-bottom: 38px;
+            transition: box-shadow 0.2s;
+        }
+
+        .content-section:hover {
+            box-shadow: 0 12px 36px rgba(79, 70, 229, 0.13), 0 2px 8px rgba(79, 70, 229, 0.06);
+        }
+
+        .content-section h2 {
+            font-size: 2.3rem;
+            font-weight: 800;
+            color: #4338ca;
+            border-bottom: 3px solid #a5b4fc;
+            padding-bottom: 12px;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .content-section h2 .icon {
+            color: #6366f1;
+            font-size: 2.1rem;
+        }
+
+        .content-section h3 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #2563eb;
+            margin-top: 38px;
+            margin-bottom: 18px;
+            border-top: 2px solid #dbeafe;
+            padding-top: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .content-section h3 .icon {
+            color: #6366f1;
+            font-size: 1.4rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #6366f1;
+            margin-top: 28px;
+            margin-bottom: 10px;
+        }
+
+        .content-section h5 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #a21caf;
+            margin-top: 22px;
+            margin-bottom: 8px;
+        }
+
+        .content-section h6,
+        .algo-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0891b2;
+            margin-top: 18px;
+            margin-bottom: 8px;
+            background: #e0f2fe;
+            padding: 6px 14px;
+            border-radius: 7px;
+            display: inline-block;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section ol {
+            color: #3b3b4f;
+            font-size: 1.08rem;
+            margin-bottom: 18px;
+            line-height: 1.7;
+        }
+
+        .content-section ul.simple-list {
+            list-style: disc inside;
+            padding-left: 18px;
+            color: #444;
+        }
+
+        .content-section ul.simple-list ul {
+            list-style: circle inside;
+            margin-top: 6px;
+        }
+
+        .content-section ol.styled-list {
+            list-style: decimal inside;
+            padding-left: 18px;
+        }
+
+        .algorithm-box {
+            background: #f1f5f9;
+            border-radius: 8px;
+            border: 1px solid #e0e7ef;
+            padding: 18px 22px;
+            margin: 18px 0 28px 0;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.06);
+        }
+
+        .algorithm-box .algo-title {
+            color: #0891b2;
+            font-size: 1.08rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: #e0f2fe;
+            padding: 6px 14px;
+            border-radius: 7px;
+            display: inline-block;
+        }
+
+        .algorithm-box ol {
+            list-style: decimal inside;
+            padding-left: 18px;
+            margin: 0;
+        }
+
+        .algorithm-box li {
+            color: #3b3b4f;
+            font-size: 1.01rem;
+            margin-bottom: 8px;
+        }
+
+        .algorithm-box li strong {
+            font-family: 'Fira Mono', 'Consolas', monospace;
+            color: #6366f1;
+        }
+
+        .info-box {
+            background: #eef2ff;
+            border-left: 5px solid #6366f1;
+            color: #3730a3;
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin: 24px 0 28px 0;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.06);
+            font-size: 1.05rem;
+        }
+
+        .info-box strong {
+            color: #3730a3;
+        }
+
+        .complexity-box {
+            background: #fef9c3;
+            border-left: 5px solid #facc15;
+            color: #a16207;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 24px 0 28px 0;
+            box-shadow: 0 2px 8px rgba(250, 204, 21, 0.08);
+            font-size: 1.05rem;
+        }
+
+        .complexity-box h6 {
+            color: #a16207;
+            background: transparent;
+            padding: 0;
+            margin: 0 0 6px 0;
+            font-size: 1.08rem;
+        }
+
+        .advantages-box {
+            background: #dcfce7;
+            border-left: 5px solid #22c55e;
+            color: #166534;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 18px 0 18px 0;
+            box-shadow: 0 2px 8px rgba(34, 197, 94, 0.08);
+            font-size: 1.01rem;
+        }
+
+        .disadvantages-box {
+            background: #fee2e2;
+            border-left: 5px solid #ef4444;
+            color: #991b1b;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 18px 0 18px 0;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.08);
+            font-size: 1.01rem;
+        }
+
+        .diagram-container {
+            background: #f8fafc;
+            border: 1.5px solid #e0e7ef;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(99, 102, 241, 0.06);
+            padding: 18px 18px 12px 18px;
+            margin: 32px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .diagram-container img {
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e0e7ef;
+        }
+
+        .diagram-container figcaption {
+            color: #64748b;
+            font-size: 0.98rem;
+            margin-top: 10px;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .example-walkthrough {
+            background: #e0f2fe;
+            border-left: 5px solid #0ea5e9;
+            color: #0369a1;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 24px 0 28px 0;
+            box-shadow: 0 2px 8px rgba(14, 165, 233, 0.08);
+            font-size: 1.01rem;
+        }
+
+        pre {
+            background: #232946;
+            color: #f4f7fa;
+            padding: 18px 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 1rem;
+            margin: 22px 0;
+            font-family: 'Fira Mono', 'Consolas', monospace;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.08);
+        }
+
+        code {
+            background: #e0e7ef;
+            color: #a21caf;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            border-radius: 0;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            background: linear-gradient(90deg, #6366f1 0%, #2563eb 100%);
+            color: #fff;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 1.08rem;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.10);
+            border: none;
+            text-decoration: none;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+        }
+
+        .nav-button:hover,
+        .nav-button:focus {
+            background: linear-gradient(90deg, #4338ca 0%, #1e40af 100%);
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.18);
+            color: #fff;
+            transform: translateY(-2px) scale(1.03);
+            text-decoration: none;
+        }
+
+        .nav-button .icon {
+            font-size: 1.1em;
+        }
+
+        .topic-nav {
+            margin-top: 48px;
+            padding-top: 28px;
+            border-top: 1.5px solid #e0e7ef;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            align-items: center;
+        }
+
+        @media (min-width: 640px) {
+            .topic-nav {
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 0;
+            }
+        }
+
+        footer {
+            text-align: center;
+            font-size: 1.01rem;
+            color: #64748b;
+            padding: 32px 0 18px 0;
+            margin-top: 48px;
+            background: #f1f5f9;
+            border-top: 1.5px solid #e0e7ef;
+            letter-spacing: 0.02em;
+        }
+
+        footer a {
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+            color: #4338ca;
+        }
+
+        .fa-heart {
+            color: #ef4444;
+            vertical-align: middle;
+        }
+
+        .mt-12 {
+            margin-top: 3rem;
+        }
+
+        .pt-8 {
+            padding-top: 2rem;
+        }
+
+        .mb-8 {
+            margin-bottom: 2rem;
+        }
+
+        .gap-6 {
+            gap: 1.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container"
+            style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
+            <div class="header-brand">
+                <a href="../../../index.html">
+                    <span>Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-0.5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2" style="color:#fde047;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span>ision</span>
+                </a>
+            </div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
+                <span class="header-title">Data Structures</span>
+                <span class="header-desc">Explore each topic in depth</span>
+            </div>
+            <div style="width:3rem;"></div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="flex justify-between items-center mb-8">
+            <a href="../data-structures-syllabus.html"
+                class="text-indigo-600 hover:text-indigo-800 hover:underline font-medium text-lg transition-colors duration-300">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Syllabus
+            </a>
+            <div class="bg-indigo-600 text-white text-base font-semibold px-5 py-2 rounded-lg shadow-md">
+                Topic 11 <!-- Assuming Sorting is Topic 11 -->
+            </div>
+        </div>
+
+        <section class="content-section">
+            <h2><i class="fas fa-sort-alpha-down icon"></i>Sorting Algorithms</h2>
+            <p class="text-xl mb-6 text-slate-600">Sorting involves arranging the elements of a collection (like an
+                array) into a specific order, typically ascending or descending. Efficient sorting is crucial for
+                optimizing other algorithms, such as searching and merging, which often require data to be sorted.</p>
+
+            <h4 class="mt-8">14.6 Introduction to Sorting</h4>
+            <p>If an array <code>A[] = {21, 34, 11, 9, 1, 0, 22}</code>, its sorted (ascending) form would be
+                <code>A[] = {0, 1, 9, 11, 21, 22, 34}</code>.
+            </p>
+            <p>Sorting algorithms can be broadly categorized into:</p>
+            <ul class="simple-list">
+                <li><strong>Internal Sorting:</strong> Sorts data residing entirely within the computer's main memory.
+                </li>
+                <li><strong>External Sorting:</strong> Deals with sorting voluminous data stored on external storage
+                    devices (like files) that cannot fit entirely in memory.</li>
+            </ul>
+
+            <h5 class="mt-6">14.6.1 Sorting on Multiple Keys</h5>
+            <p>Often, records need to be sorted based on more than one criterion or key. A primary sort key is used
+                first, and then a secondary sort key is used to order records that have the same primary key value.</p>
+            <div class="info-box">
+                <p>Example: Sorting employee records first by 'Department' (primary key), then alphabetically by 'Name'
+                    (secondary key) within each department.</p>
+            </div>
+            <div class="diagram-container">
+                <img src="sorting-multiple-keys-example.png"
+                    alt="Table showing data sorted by Department and then by Name" class="max-w-2xl">
+                <figcaption>Data records sorted first by Department, then by Name.</figcaption>
+            </div>
+
+            <h5 class="mt-6">14.6.2 Practical Considerations for Internal Sorting</h5>
+            <p>When analyzing sorting algorithms, consider:</p>
+            <ul class="simple-list">
+                <li>Number of key comparisons.</li>
+                <li>Number of times records/elements are moved/swapped.</li>
+                <li>Performance: Best case, worst case, and average case.</li>
+                <li>**Stability:** A sorting algorithm is stable if equivalent elements (or records with equal keys)
+                    retain their relative positions after sorting.</li>
+            </ul>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-exchange-alt icon"></i>Comparison-Based Sorting Algorithms</h3>
+            <p>These algorithms sort elements by comparing them to each other.</p>
+
+            <!-- Bubble Sort -->
+            <h4 id="bubble-sort">14.7 Bubble Sort</h4>
+            <p>A simple algorithm that repeatedly steps through the list, compares adjacent elements, and swaps them if
+                they are in the wrong order. The largest (or smallest) elements "bubble" to their correct positions with
+                each pass.</p>
+            <h5>Technique:</h5>
+            <p class="text-sm">In each pass, adjacent pairs are compared. If sorting ascending, and
+                <code>A[j] > A[j+1]</code>, they are swapped. After pass 1, the largest element is at the end. After
+                pass 2, the second largest is in its place, and so on.
+            </p>
+            <div class="example-walkthrough">
+                <h6 class="font-semibold text-sky-700 mb-2">Example 14.2 Walkthrough: Sorting
+                    <code>{30, 52, 29, 87, 63, 27, 19, 54}</code>
+                </h6>
+                <p class="text-xs text-slate-600">Pass 1: Compares (30,52) no swap; (52,29) swap -> {...,29,52,...}; ...
+                    Results in 87 at the end. <br> (Your OCR provides a very detailed pass-by-pass breakdown which can
+                    be visualized or linked here).</p>
+            </div>
+            <div class="algorithm-box">
+                <span class="algo-title">Figure 14.6 Algorithm for Bubble Sort</span>
+                <ol>
+                    <li><strong>Step 1:</strong> Repeat Step 2 For I = 0 to N-2
+                        <!-- Adjusted for typical 0-indexed N-1 passes -->
+                    </li>
+                    <li><strong>Step 2:</strong> Repeat For J = 0 to N-I-2 <!-- N-I-1 comparisons in pass I -->
+                        <br>             IF A[J] > A[J+1]
+                        <br>                 SWAP A[J] and A[J+1]
+                        <br>             [END OF IF]
+                        <br>        [END OF INNER LOOP]
+                    </li>
+                    <li><strong>Step 3:</strong> EXIT <!-- Outer loop was Step 3 in OCR --></li>
+                </ol>
+            </div>
+            <div class="complexity-box">
+                <p class="text-sm"><strong>Complexity:</strong> O(N<sup>2</sup>) in all cases (best, average, worst) for
+                    comparisons. Can be optimized to O(N) best case if no swaps occur in a pass.</p>
+            </div>
+
+            <!-- Insertion Sort -->
+            <h4 id="insertion-sort">14.8 Insertion Sort</h4>
+            <p>Builds the final sorted array one item at a time. It iterates through an input array and removes one
+                element per iteration, finds the place the element belongs in the array, and then places it there.</p>
+            <h5>Technique:</h5>
+            <p class="text-sm">The array is virtually split into a sorted and an unsorted part. Values from the unsorted
+                part are picked and placed into the correct position in the sorted part by shifting elements.</p>
+            <div class="example-walkthrough">
+                <h6 class="font-semibold text-sky-700 mb-2">Example 14.3 Walkthrough: Sorting
+                    <code>{39, 9, 45, 63, 18, 81, 108, 54, 72, 36}</code>
+                </h6>
+                <div class="diagram-container">
+                    <img src="insertion-sort-passes.png" alt="Passes of Insertion Sort" class="max-w-full">
+                    <figcaption>Example of Insertion Sort Passes (Conceptual, based on Figure 14.7 from text).
+                    </figcaption>
+                </div>
+                <p class="text-xs text-slate-600">Pass 1: {9, 39, 45, ...} (9 inserted before 39). <br> Pass 2: {9, 39,
+                    45, ...} (45 is in place). <br> Pass 3: {9, 39, 45, 63, ...} (63 is in place). <br> Pass 4: {9, 18,
+                    39, 45, 63, ...} (18 inserted). And so on.</p>
+            </div>
+            <div class="algorithm-box">
+                <span class="algo-title">Figure 14.7 Algorithm for Insertion Sort: INSERTION-SORT (ARR, N)</span>
+                <ol>
+                    <li><strong>Step 1:</strong> Repeat Steps 2 to 5 for K = 1 to N-1</li>
+                    <li><strong>Step 2:</strong> SET TEMP = ARR[K]</li>
+                    <li><strong>Step 3:</strong> SET J = K - 1</li>
+                    <li><strong>Step 4:</strong> Repeat while TEMP < ARR[J] AND J>= 0
+                            <br>             SET ARR[J+1] = ARR[J]
+                            <br>             SET J = J - 1
+                            <br>         [END OF INNER LOOP]</li>
+                    <li><strong>Step 5:</strong> SET ARR[J+1] = TEMP
+                        <br>        [END OF LOOP]
+                    </li>
+                    <li><strong>Step 6:</strong> EXIT</li>
+                </ol>
+            </div>
+            <div class="complexity-box">
+                <p class="text-sm"><strong>Complexity:</strong> Best Case O(N) (already sorted), Average/Worst Case
+                    O(N<sup>2</sup>).</p>
+            </div>
+            <div class="advantages-box">
+                <p class="text-sm"><strong>Advantages:</strong> Simple, efficient for small or nearly sorted data,
+                    stable, online, O(1) extra space.</p>
+            </div>
+
+            <!-- Selection Sort -->
+            <h4 id="selection-sort">14.9 Selection Sort</h4>
+            <p>Repeatedly finds the minimum element from the unsorted part of the list and puts it at the beginning of
+                the sorted part. Maintains two subarrays: one sorted, one unsorted.</p>
+            <h5>Technique:</h5>
+            <p class="text-sm">Pass 1: Find smallest in A[0...N-1], swap with A[0]. <br> Pass 2: Find smallest in
+                A[1...N-1], swap with A[1]. And so on.</p>
+            <div class="example-walkthrough">
+                <h6 class="font-semibold text-sky-700 mb-2">Example 14.4 Walkthrough: Sorting
+                    <code>{39, 9, 81, 45, 90, 27, 72, 18}</code>
+                </h6>
+                <div class="diagram-container">
+                    <img src="selection-sort-passes-table.png" alt="Table showing passes of Selection Sort"
+                        class="max-w-xl">
+                    <figcaption>Table illustrating passes of Selection Sort.</figcaption>
+                </div>
+            </div>
+            <div class="algorithm-box">
+                <span class="algo-title">Figure 14.8 Algorithm for Selection Sort</span>
+                <p class="text-xs mb-1">SMALLEST (ARR, K, N, POS)</p>
+                <ol class="mb-2">
+                    <li><strong>Step 1:</strong> [INITIALIZE] SET SMALL = ARR[K], POS = K</li>
+                    <li><strong>Step 2:</strong> Repeat for J = K+1 to N-1 <br>
+                                     IF SMALL > ARR[J] <br>
+                                         SET SMALL = ARR[J] <br>
+                                         SET POS = J <br>
+                                     [END OF IF] <br>
+                                 [END OF LOOP]</li>
+                    <li><strong>Step 3:</strong> RETURN POS</li>
+                </ol>
+                <p class="text-xs mb-1">SELECTION_SORT (ARR, N)</p>
+                <ol>
+                    <li><strong>Step 1:</strong> Repeat Steps 2 and 3 for K = 0 to N-2</li>
+                    <li><strong>Step 2:</strong> CALL SMALLEST(ARR, K, N, POS)</li>
+                    <li><strong>Step 3:</strong> SWAP A[K] with A[POS] <br>
+                                 [END OF LOOP]</li>
+                    <li><strong>Step 4:</strong> EXIT</li>
+                </ol>
+            </div>
+            <div class="complexity-box">
+                <p class="text-sm"><strong>Complexity:</strong> O(N<sup>2</sup>) for comparisons in all cases. Number of
+                    swaps is O(N).</p>
+            </div>
+            <div class="advantages-box">
+                <p class="text-sm"><strong>Advantages:</strong> Simple, easy to implement, performs well on small
+                    datasets, minimal swaps (O(N)).</p>
+            </div>
+
+            <!-- Merge Sort -->
+            <h4 id="merge-sort">14.10 Merge Sort</h4>
+            <p>A divide-and-conquer algorithm. It divides the input array into two halves, calls itself for the two
+                halves, and then merges the two sorted halves.</p>
+            <h5>Technique:</h5>
+            <ul class="simple-list text-sm">
+                <li>**Divide:** Partition n-element array into two sub-arrays of n/2 elements.</li>
+                <li>**Conquer:** Recursively sort the two sub-arrays using merge sort.</li>
+                <li>**Combine:** Merge the two sorted sub-arrays of size n/2 to produce a sorted array of n elements.
+                </li>
+            </ul>
+            <div class="example-walkthrough">
+                <h6 class="font-semibold text-sky-700 mb-2">Example 14.5 Walkthrough: Sorting
+                    <code>{39, 9, 81, 45, 90, 27, 72, 18}</code>
+                </h6>
+                <div class="diagram-container">
+                    <img src="merge-sort-divide-combine.png" alt="Divide and Conquer and Combine steps in Merge Sort"
+                        class="max-w-full">
+                    <figcaption>Figure 14.9 (Top Part): Divide and Conquer, Combine elements to form sorted array.
+                    </figcaption>
+                </div>
+                <div class="diagram-container">
+                    <img src="merge-sort-merge-process.png" alt="Merge process of two sub-lists in Merge Sort"
+                        class="max-w-full">
+                    <figcaption>Figure 14.9 (Bottom Part) & Text Explanation: How two sub-lists are merged using a TEMP
+                        array.</figcaption>
+                </div>
+            </div>
+            <div class="algorithm-box">
+                <span class="algo-title">Algorithm for Merge Sort (Conceptual based on Figure 14.9)</span>
+                <p class="text-xs mb-1">MERGE (ARR, BEG, MID, END)</p>
+                <ol class="mb-2">
+                    <li><strong>Step 1:</strong> [INITIALIZE] SET I = BEG, J = MID + 1, INDEX = 0 (for TEMP array)</li>
+                    <li><strong>Step 2:</strong> Repeat while (I <= MID) AND (J <=END) <br>
+                                         IF ARR[I] < ARR[J] THEN SET TEMP[INDEX]=ARR[I], SET I=I + 1 <br>
+                                             ELSE SET TEMP[INDEX] = ARR[J], SET J = J + 1 <br>
+                                             SET INDEX = INDEX + 1 <br>
+                                         [END OF LOOP]</li>
+                    <li><strong>Step 3:</strong> [Copy remaining elements of left sub-array, if any] <br>
+                                     IF I > MID THEN Repeat while J <= END: SET TEMP[INDEX]=ARR[J], SET INDEX=INDEX + 1,
+                            SET J=J + 1 <br>
+                                         ELSE Repeat while I <= MID: SET TEMP[INDEX]=ARR[I], SET INDEX=INDEX + 1, SET
+                                I=I + 1</li>
+                    <li><strong>Step 4:</strong> [Copy contents of TEMP back to ARR] Repeat for K=0 to INDEX-1: SET
+                        ARR[BEG+K] = TEMP[K]</li>
+                    <li><strong>Step 5:</strong> END</li>
+                </ol>
+                <p class="text-xs mt-3 mb-1">MERGE_SORT (ARR, BEG, END)</p>
+                <ol>
+                    <li><strong>Step 1:</strong> IF BEG < END THEN <br>
+                                         SET MID = (BEG + END)/2 <br>
+                                         CALL MERGE_SORT (ARR, BEG, MID) <br>
+                                         CALL MERGE_SORT (ARR, MID + 1, END) <br>
+                                         CALL MERGE (ARR, BEG, MID, END) <br>
+                                     [END OF IF]</li>
+                    <li><strong>Step 2:</strong> END</li>
+                </ol>
+            </div>
+            <div class="complexity-box">
+                <p class="text-sm"><strong>Complexity:</strong> O(N log N) in all cases. Requires O(N) additional space
+                    for the temporary array.</p>
+            </div>
+
+            <!-- Quick Sort -->
+            <h4 id="quick-sort">14.11 Quick Sort</h4>
+            <p>A widely used divide-and-conquer algorithm. It picks an element as a pivot and partitions the array
+                around the pivot. Elements smaller than the pivot go to its left, larger elements to its right.</p>
+            <h5>Technique:</h5>
+            <ol class="simple-list text-sm">
+                <li>Select a pivot element (e.g., first, last, median, or random).</li>
+                <li>Partition: Rearrange array elements such that all elements smaller than pivot are before it, and all
+                    elements greater are after it. Pivot is now in its final sorted position.</li>
+                <li>Recursively apply Quick Sort to the sub-array of elements smaller than pivot and the sub-array of
+                    elements larger than pivot.</li>
+            </ol>
+            <div class="example-walkthrough">
+                <h6 class="font-semibold text-sky-700 mb-2">Example 14.6 Walkthrough: Sorting
+                    <code>{27, 10, 36, 18, 25, 45}</code> (first element as pivot)
+                </h6>
+                <div class="diagram-container">
+                    <img src="quick-sort-partition-example.png" alt="Partitioning steps in Quick Sort"
+                        class="max-w-full">
+                    <figcaption>Figure 14.9 (from your OCR, though labeled for Merge Sort, it shows a partitioning idea
+                        that is similar conceptually to Quick Sort's aim. I'll use the textual description for the
+                        specific Quick Sort example).</figcaption>
+                </div>
+                <p class="text-xs text-slate-600">Detailed steps involve selecting pivot, using two pointers (left/right
+                    or loc/right as in text) to scan and swap elements until pivot is placed correctly. Then recursively
+                    sort sub-arrays. (Your OCR Figure 14.10 describes the PARTITION logic.)</p>
+            </div>
+            <div class="algorithm-box">
+                <span class="algo-title">Figure 14.10 Algorithm for Quick Sort</span>
+                <p class="text-xs mb-1">PARTITION (ARR, BEG, END, LOC)</p>
+                <ol class="mb-2">
+                    <li><strong>Step 1:</strong> [INITIALIZE] SET LEFT = BEG, RIGHT = END, LOC = BEG, FLAG = 0</li>
+                    <li><strong>Step 2:</strong> Repeat Steps 3 to 6 while FLAG = 0</li>
+                    <li><strong>Step 3:</strong> Repeat while ARR[LOC] <= ARR[RIGHT] AND LOC !=RIGHT <br>
+                                         SET RIGHT = RIGHT - 1 <br>
+                                     [END OF LOOP]</li>
+                    <li><strong>Step 4:</strong> IF LOC = RIGHT THEN SET FLAG = 1 <br>
+                                     ELSE IF ARR[LOC] > ARR[RIGHT] <br>
+                                         SWAP ARR[LOC] with ARR[RIGHT] <br>
+                                         SET LOC = RIGHT <br>
+                                     [END OF IF]</li>
+                    <li><strong>Step 5:</strong> IF FLAG = 0 THEN <br>
+                                     Repeat while ARR[LOC] >= ARR[LEFT] AND LOC != LEFT <br>
+                                         SET LEFT = LEFT + 1 <br>
+                                     [END OF LOOP]</li>
+                    <li><strong>Step 6:</strong> IF LOC = LEFT THEN SET FLAG = 1 <br>
+                                     ELSE IF ARR[LOC] < ARR[LEFT] <br>
+                                             SWAP ARR[LOC] with ARR[LEFT] <br>
+                                             SET LOC = LEFT <br>
+                                         [END OF IF] <br>
+                                     [END OF IF] <br>
+                                     [END OF LOOP]</li>
+                    <li><strong>Step 7:</strong> END</li>
+                </ol>
+                <p class="text-xs mt-3 mb-1">QUICK_SORT (ARR, BEG, END)</p>
+                <ol>
+                    <li><strong>Step 1:</strong> IF (BEG < END) <br>
+                                         CALL PARTITION(ARR, BEG, END, LOC) <br>
+                                         CALL QUICKSORT(ARR, BEG, LOC - 1) <br>
+                                         CALL QUICKSORT(ARR, LOC + 1, END) <br>
+                                     [END OF IF]</li>
+                    <li><strong>Step 2:</strong> END</li>
+                </ol>
+            </div>
+            <div class="complexity-box">
+                <p class="text-sm"><strong>Complexity:</strong> Average Case O(N log N), Worst Case O(N<sup>2</sup>)
+                    (e.g., already sorted array with bad pivot choice). Randomized pivot helps achieve average case.</p>
+            </div>
+            <div class="advantages-box">
+                <p class="text-sm"><strong>Pros:</strong> Generally very fast in practice, in-place (O(log N) stack
+                    space for recursion).</p>
+            </div>
+            <div class="disadvantages-box">
+                <p class="text-sm"><strong>Cons:</strong> Complex, massively recursive, worst-case performance can be
+                    poor.</p>
+            </div>
+
+
+            <!-- Heap Sort -->
+            <h4 id="heap-sort">14.13 Heap Sort</h4>
+            <p>Uses a binary heap data structure. It involves two phases: first, build a max-heap (for ascending sort)
+                from the input data. Then, repeatedly extract the maximum element from the heap (which is the root) and
+                place it at the end of the sorted portion of the array.</p>
+            <div class="algorithm-box">
+                <span class="algo-title">Figure 14.12 Algorithm for Heap Sort: HEAPSORT (ARR, N)</span>
+                <ol>
+                    <li><strong>Step 1:</strong> [Build Heap H] <br>
+                                     Repeat for I = 0 to N-1 <br>
+                                         CALL Insert_Heap(ARR, N, ARR[I]) <!-- Conceptual, actual build heap is O(N) -->
+                        <br>             [END OF LOOP]
+                    </li>
+                    <li><strong>Step 2:</strong> [Repeatedly delete the root element] <br>
+                                     Repeat while N > 0 <br>
+                                         CALL Delete_Heap(ARR, N, VAL) <!-- Deletes root, N is decremented inside -->
+                        <br>                 SET ARR[N] = VAL <!-- Place at end, N is already N-1 effectively -->
+                        <br>             [END OF LOOP]
+                    </li>
+                    <li><strong>Step 3:</strong> END</li>
+                </ol>
+            </div>
+            <div class="complexity-box">
+                <p class="text-sm"><strong>Complexity:</strong> O(N log N) in all cases (best, average, worst). It is an
+                    in-place sorting algorithm (requires O(1) auxiliary space, not counting stack space for recursion if
+                    implemented recursively, though typically iterative).</p>
+            </div>
+            <div class="info-box">
+                <p class="text-sm">Heap sort uses heap operations (insertion and root deletion). Each heap operation
+                    (sift-up/sift-down) takes O(log m) time where m is heap size. Building heap takes O(N). N deletions
+                    take N * O(log N). Detailed C code is in your OCR.</p>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-tachometer-alt icon"></i>Non-Comparison-Based Sorting Algorithms</h3>
+            <p>These algorithms sort elements without direct comparisons between them, often by using properties of the
+                elements themselves (like digit values or counts).</p>
+
+            <!-- Radix Sort -->
+            <h4 id="radix-sort">14.12 Radix Sort</h4>
+            <p>A linear sorting algorithm for integers (or strings lexicographically). It sorts numbers digit by digit,
+                starting from the least significant digit (LSD) to the most significant digit (MSD), using buckets for
+                each possible digit value (0-9 for decimal).</p>
+            <h5>Technique:</h5>
+            <ol class="simple-list text-sm">
+                <li>Determine the maximum number of digits (d) in the input numbers.</li>
+                <li>For each digit position i from 1 to d (LSD to MSD):
+                    <ul class="simple-list ml-4">
+                        <li>Distribute numbers into 10 buckets based on their i<sup>th</sup> digit.</li>
+                        <li>Collect numbers from buckets (0 to 9) back into the array in order.</li>
+                    </ul>
+                </li>
+            </ol>
+            <div class="example-walkthrough">
+                <h6 class="font-semibold text-sky-700 mb-2">Example 14.7 Walkthrough: Sorting
+                    <code>{345, 654, 924, 123, 567, 472, 555, 808, 911}</code>
+                </h6>
+                <div class="diagram-container">
+                    <img src="radix-sort-passes.png" alt="Passes of Radix Sort showing bucketing by digit"
+                        class="max-w-full">
+                    <figcaption>Figure 14.11 (Conceptual based on text): Radix Sort passes (ones digit, then tens
+                        digit).</figcaption>
+                </div>
+            </div>
+            <div class="algorithm-box">
+                <span class="algo-title">Figure 14.11 Algorithm for Radix Sort: RADIX_SORT (ARR, N)</span>
+                <ol>
+                    <li><strong>Step 1:</strong> Find the largest number in ARR (MAX_VAL) to determine number of digits
+                        (NUM_DIGITS).</li>
+                    <li><strong>Step 2:</strong> [INITIALIZE] SET NOP = Number of digits in MAX_VAL. SET PASS = 0.</li>
+                    <li><strong>Step 3:</strong> Repeat Step 4 while PASS < NOP.</li>
+                    <li><strong>Step 4:</strong> [INITIALIZE buckets] SET I = 0 and INITIALIZE 10 buckets (0-9).</li>
+                    <li><strong>Step 5:</strong> Repeat Steps 6 to 8 while I < N:</li>
+                    <li><strong>Step 6:</strong> SET DIGIT = digit at PASS<sup>th</sup> place in A[I] (e.g.,
+                        (A[I]/divisor) % 10).</li>
+                    <li><strong>Step 7:</strong> Add A[I] to bucket numbered DIGIT.</li>
+                    <li><strong>Step 8:</strong> INCREMENT bucket count for bucket numbered DIGIT. <br>
+                                 [END OF LOOP for Step 5]</li>
+                    <li><strong>Step 9:</strong> Collect the numbers from the buckets (0 through 9) back into ARR.</li>
+                    <li><strong>Step 10:</strong> SET PASS = PASS + 1. <br>
+                                 [END OF LOOP for Step 3]</li>
+                    <li><strong>Step 11:</strong> END.</li>
+                </ol>
+            </div>
+            <div class="complexity-box">
+                <p class="text-sm"><strong>Complexity:</strong> O(d * (N + k)), where d is the number of digits in the
+                    largest number, N is the number of elements, and k is the base (radix, usually 10). If d and k are
+                    constant, it's O(N).</p>
+            </div>
+
+            <!-- Counting Sort -->
+            <h4 id="counting-sort" class="mt-10">Counting Sort (Brief Mention)</h4>
+            <p>Efficient for sorting elements within a specific, relatively small integer range. It works by counting
+                the number of occurrences of each distinct element and then using these counts to determine the
+                positions of each element in the sorted output sequence.</p>
+            <div class="complexity-box">
+                <p class="text-sm"><strong>Complexity:</strong> O(N + k), where N is the number of elements and k is the
+                    range of input values (max_value - min_value + 1). Stable.</p>
+            </div>
+
+            <!-- Bucket Sort -->
+            <h4 id="bucket-sort" class="mt-10">Bucket Sort (Brief Mention)</h4>
+            <p>Works by distributing elements into a number of "buckets." Each bucket is then sorted individually,
+                either using a different sorting algorithm or by recursively applying bucket sort. It's particularly
+                effective if the input data is uniformly distributed over a range.</p>
+            <div class="complexity-box">
+                <p class="text-sm"><strong>Complexity:</strong> Average Case O(N + k) (where k is number of buckets), if
+                    input is uniform. Worst Case O(N<sup>2</sup>) if all elements fall into a single bucket and a slow
+                    sort is used for buckets.</p>
+            </div>
+        </section>
+
+        <div class="mt-12 pt-8 border-t border-slate-300 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <a href="topic-10.html" class="nav-button">
+                <i class="fas fa-arrow-left icon"></i> Previous Topic
+            </a>
+            <a href="topic-12.html" class="nav-button">
+                Next Topic <i class="fas fa-arrow-right icon"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        © <span id="currentYear"></span> <a href="../../../index.html">EduVision</a>.
+        All rights reserved. Crafted with <i class="fas fa-heart"></i> for learning.
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>

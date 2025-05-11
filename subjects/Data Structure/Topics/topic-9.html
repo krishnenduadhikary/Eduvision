@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Topic 9: Graphs - Comprehensive Guide - EduVision</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Nunito:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(120deg, #f4f7fa 0%, #e9eafc 100%);
+            color: #232946;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(90deg, #4f46e5 0%, #2563eb 100%);
+            color: #fff;
+            padding: 28px 0 20px 0;
+            box-shadow: 0 4px 16px rgba(79, 70, 229, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .header-brand {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.1rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-brand a {
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-brand svg {
+            margin: 0 4px;
+            color: #fde047;
+            transition: transform 0.2s;
+        }
+
+        .header-brand a:hover svg {
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        .header-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+        }
+
+        .header-desc {
+            font-size: 1.08rem;
+            opacity: 0.92;
+            margin-bottom: 0;
+        }
+
+        main {
+            flex: 1 1 auto;
+            padding: 40px 0 0 0;
+        }
+
+        .content-section {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 6px 32px rgba(79, 70, 229, 0.08), 0 1.5px 6px rgba(79, 70, 229, 0.03);
+            padding: 38px 32px;
+            margin-bottom: 38px;
+            transition: box-shadow 0.2s;
+        }
+
+        .content-section:hover {
+            box-shadow: 0 12px 36px rgba(79, 70, 229, 0.13), 0 2px 8px rgba(79, 70, 229, 0.06);
+        }
+
+        .content-section h2 {
+            font-size: 2.3rem;
+            font-weight: 800;
+            color: #4338ca;
+            border-bottom: 3px solid #a5b4fc;
+            padding-bottom: 12px;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .content-section h2 .icon {
+            color: #6366f1;
+            font-size: 2.1rem;
+        }
+
+        .content-section h3 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #2563eb;
+            margin-top: 38px;
+            margin-bottom: 18px;
+            border-top: 2px solid #dbeafe;
+            padding-top: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .content-section h3 .icon {
+            color: #6366f1;
+            font-size: 1.4rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #6366f1;
+            margin-top: 28px;
+            margin-bottom: 10px;
+        }
+
+        .content-section h5 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #a21caf;
+            margin-top: 22px;
+            margin-bottom: 8px;
+        }
+
+        .content-section h6,
+        .algorithm-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0891b2;
+            margin-top: 18px;
+            margin-bottom: 8px;
+            background: #e0f2fe;
+            padding: 6px 14px;
+            border-radius: 7px;
+            display: inline-block;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section ol {
+            color: #3b3b4f;
+            font-size: 1.08rem;
+            margin-bottom: 18px;
+            line-height: 1.7;
+        }
+
+        .content-section ul.simple-list {
+            list-style: disc inside;
+            padding-left: 18px;
+            color: #444;
+        }
+
+        .content-section ul.simple-list ul {
+            list-style: circle inside;
+            margin-top: 6px;
+        }
+
+        .content-section ul.custom-bullets {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul.custom-bullets li {
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 10px;
+        }
+
+        .content-section ul.custom-bullets li::before {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            top: 2px;
+            color: #6366f1;
+            font-size: 1em;
+        }
+
+        .content-section ol.styled-list {
+            list-style: decimal inside;
+            padding-left: 18px;
+        }
+
+        .content-section ol.simple-list {
+            list-style: decimal inside;
+            padding-left: 18px;
+        }
+
+        .content-section ol.algorithm-steps {
+            background: #f1f5f9;
+            border-radius: 8px;
+            border: 1px solid #e0e7ef;
+            padding: 18px 22px;
+            margin: 18px 0 28px 0;
+            counter-reset: step-counter;
+        }
+
+        .content-section ol.algorithm-steps li {
+            position: relative;
+            padding-left: 38px;
+            margin-bottom: 10px;
+            font-size: 1.01rem;
+        }
+
+        .content-section ol.algorithm-steps li::before {
+            content: "Step " counter(step-counter) ":";
+            counter-increment: step-counter;
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #6366f1;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background: #eef2ff;
+            border-left: 5px solid #6366f1;
+            color: #3730a3;
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin: 24px 0 28px 0;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.06);
+            font-size: 1.05rem;
+        }
+
+        .info-box strong {
+            color: #3730a3;
+        }
+
+        .definition-box {
+            background: #e0f2fe;
+            border-left: 5px solid #0ea5e9;
+            color: #0369a1;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 24px 0 28px 0;
+            box-shadow: 0 2px 8px rgba(14, 165, 233, 0.08);
+            font-size: 1.05rem;
+        }
+
+        .diagram-container {
+            background: #f8fafc;
+            border: 1.5px solid #e0e7ef;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(99, 102, 241, 0.06);
+            padding: 18px 18px 12px 18px;
+            margin: 32px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .diagram-container img {
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e0e7ef;
+        }
+
+        .diagram-container figcaption {
+            color: #64748b;
+            font-size: 0.98rem;
+            margin-top: 10px;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .diagram-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            margin-top: 18px;
+        }
+
+        @media (min-width: 700px) {
+            .diagram-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .diagram-gallery {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 18px;
+        }
+
+        @media (min-width: 640px) {
+            .diagram-gallery {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .diagram-gallery {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+        }
+
+        pre {
+            background: #232946;
+            color: #f4f7fa;
+            padding: 18px 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 1rem;
+            margin: 22px 0;
+            font-family: 'Fira Mono', 'Consolas', monospace;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.08);
+        }
+
+        code {
+            background: #e0e7ef;
+            color: #a21caf;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            border-radius: 0;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            background: linear-gradient(90deg, #6366f1 0%, #2563eb 100%);
+            color: #fff;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 1.08rem;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.10);
+            border: none;
+            text-decoration: none;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+        }
+
+        .nav-button:hover,
+        .nav-button:focus {
+            background: linear-gradient(90deg, #4338ca 0%, #1e40af 100%);
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.18);
+            color: #fff;
+            transform: translateY(-2px) scale(1.03);
+            text-decoration: none;
+        }
+
+        .nav-button .icon {
+            font-size: 1.1em;
+        }
+
+        .topic-nav {
+            margin-top: 48px;
+            padding-top: 28px;
+            border-top: 1.5px solid #e0e7ef;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            align-items: center;
+        }
+
+        @media (min-width: 640px) {
+            .topic-nav {
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 0;
+            }
+        }
+
+        footer {
+            text-align: center;
+            font-size: 1.01rem;
+            color: #64748b;
+            padding: 32px 0 18px 0;
+            margin-top: 48px;
+            background: #f1f5f9;
+            border-top: 1.5px solid #e0e7ef;
+            letter-spacing: 0.02em;
+        }
+
+        footer a {
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+            color: #4338ca;
+        }
+
+        .fa-heart {
+            color: #ef4444;
+            vertical-align: middle;
+        }
+
+        /* Table styling */
+        .styled-table {
+            border-collapse: collapse;
+            margin: 18px 0;
+            font-size: 1em;
+            min-width: 320px;
+            width: 100%;
+            background: #f8fafc;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.06);
+        }
+
+        .styled-table th,
+        .styled-table td {
+            border: 1px solid #e0e7ef;
+            padding: 10px 14px;
+            text-align: left;
+        }
+
+        .styled-table th {
+            background: #e0e7ef;
+            color: #4338ca;
+            font-weight: 700;
+        }
+
+        .styled-table tr:nth-child(even) {
+            background: #f1f5f9;
+        }
+
+        .styled-table tr:hover {
+            background: #e0e7ef;
+        }
+
+        /* Term cards for terminology grid */
+        .term-card {
+            background: #f1f5f9;
+            border-radius: 8px;
+            border-left: 4px solid #6366f1;
+            padding: 14px 18px;
+            margin-bottom: 10px;
+            color: #232946;
+            font-size: 1.01rem;
+            box-shadow: 0 1px 4px rgba(99, 102, 241, 0.04);
+        }
+
+        .grid {
+            display: grid;
+            gap: 14px;
+        }
+
+        @media (min-width: 768px) {
+            .grid.md\:grid-cols-2 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .grid.lg\:grid-cols-3 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .mt-6 {
+            margin-top: 1.5rem;
+        }
+
+        .mt-8 {
+            margin-top: 2rem;
+        }
+
+        .mt-12 {
+            margin-top: 3rem;
+        }
+
+        .pt-8 {
+            padding-top: 2rem;
+        }
+
+        .mb-8 {
+            margin-bottom: 2rem;
+        }
+
+        .mb-6 {
+            margin-bottom: 1.5rem;
+        }
+
+        .mb-10 {
+            margin-bottom: 2.5rem;
+        }
+
+        .gap-4 {
+            gap: 1rem;
+        }
+
+        .gap-6 {
+            gap: 1.5rem;
+        }
+
+        .gap-18 {
+            gap: 4.5rem;
+        }
+
+        .max-w-sm {
+            max-width: 340px;
+        }
+
+        .max-w-xs {
+            max-width: 260px;
+        }
+
+        .max-w-lg {
+            max-width: 520px;
+        }
+
+        .max-w-xl {
+            max-width: 700px;
+        }
+
+        .max-w-2xl {
+            max-width: 900px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-xs {
+            font-size: 0.92em;
+        }
+
+        .italic {
+            font-style: italic;
+        }
+
+        .ml-4 {
+            margin-left: 1.2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container"
+            style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
+            <div class="header-brand">
+                <a href="../../../index.html">
+                    <span>Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-0.5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2" style="color:#fde047;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span>ision</span>
+                </a>
+            </div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
+                <span class="header-title">Data Structures</span>
+                <span class="header-desc">Explore each topic in depth</span>
+            </div>
+            <div style="width:3rem;"></div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="flex justify-between items-center mb-8">
+            <a href="../data-structures-syllabus.html"
+                class="text-indigo-600 hover:text-indigo-800 hover:underline font-medium text-lg transition-colors duration-300">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Syllabus
+            </a>
+            <div class="bg-indigo-600 text-white text-base font-semibold px-5 py-2 rounded-lg shadow-md">
+                Topic 9 <!-- Assuming Graphs is Topic 9 -->
+            </div>
+        </div>
+
+        <section class="content-section">
+            <h2><i class="fas fa-project-diagram icon"></i>Graphs</h2>
+            <p class="text-xl mb-6 text-slate-600">A graph is an abstract data structure used to implement the
+                mathematical concept of graphs. It consists of a collection of **vertices** (or nodes) and **edges**
+                that connect these vertices. Graphs are powerful tools for modeling situations where entities are
+                related in pairs and can represent complex relationships beyond simple hierarchies.</p>
+
+            <div class="definition-box">
+                <p>A graph G is defined as an ordered set (V, E), where V(G) represents the set of vertices and E(G)
+                    represents the set of edges that connect these vertices.</p>
+            </div>
+            <div class="diagram-container">
+                <img src="graph-fig13.1-undirected.png" alt="Undirected Graph Example" class="max-w-sm">
+                <figcaption>Figure 13.1: An Undirected Graph with 5 vertices and 6 edges.</figcaption>
+            </div>
+
+            <h4 class="mt-8">Why are Graphs Useful?</h4>
+            <ul class="simple-list">
+                <li>Modeling family trees (parent-child relationships).</li>
+                <li>Representing transportation networks (airports, roads, shipping routes as nodes; flights, paths as
+                    edges).</li>
+                <li>Social networks, circuit designs, program flow, and much more.</li>
+            </ul>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-tags icon"></i>13.2 Graph Terminology</h3>
+            <div class="diagram-container">
+                <img src="graph-fig13.2-directed.png" alt="Directed Graph Example" class="max-w-xs">
+                <figcaption>Figure 13.2: Directed Graph (edges have direction).</figcaption>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+                <div class="term-card"><strong>Adjacent nodes/Neighbours:</strong> For an edge (u, v), nodes u and v are
+                    adjacent.</div>
+                <div class="term-card"><strong>Degree of a node (deg(u)):</strong> Total number of edges connected to
+                    node u. An isolated node has degree 0.</div>
+                <div class="term-card"><strong>Regular graph:</strong> A graph where each vertex has the same number of
+                    neighbours (same degree). A k-regular graph has vertices of degree k. (See Figure 13.3)</div>
+                <div class="term-card"><strong>Path P = (v<sub>0</sub>, v<sub>1</sub>, ..., v<sub>k</sub>):</strong> A
+                    sequence of (k+1) nodes where v<sub>i-1</sub> is adjacent to v<sub>i</sub> for i=1 to k. Length of
+                    path is k.</div>
+                <div class="term-card"><strong>Closed path:</strong> A path where the start and end points are the same
+                    (v<sub>0</sub> = v<sub>k</sub>).</div>
+                <div class="term-card"><strong>Simple path:</strong> All nodes are distinct, except possibly
+                    v<sub>0</sub> = v<sub>k</sub>. If v<sub>0</sub> = v<sub>k</sub>, it's a closed simple path.</div>
+                <div class="term-card"><strong>Cycle:</strong> A path in which the first and last vertices are the same.
+                    A simple cycle has no repeated edges or vertices (except first/last).</div>
+                <div class="term-card"><strong>Connected graph:</strong> There is a path between any two vertices (u,
+                    v). A tree is a special connected graph with no cycles.</div>
+                <div class="term-card"><strong>Complete graph (K<sub>n</sub>):</strong> All its n nodes are fully
+                    connected (a path from one node to every other node). Has n(n-1)/2 edges.</div>
+                <div class="term-card"><strong>Clique:</strong> A subset of vertices V' ⊆ V such that for every two
+                    vertices in V', there is an edge connecting them (i.e., a complete subgraph).</div>
+                <div class="term-card"><strong>Labelled/Weighted graph:</strong> Edges are assigned data/weights
+                    (positive values representing cost/length). (See Figure 13.4(c))</div>
+                <div class="term-card"><strong>Multiple edges:</strong> Distinct edges connecting the same end-points.
+                </div>
+                <div class="term-card"><strong>Loop:</strong> An edge with identical end-points, e = (u, u).</div>
+                <div class="term-card"><strong>Multi-graph:</strong> A graph with multiple edges and/or loops. (See
+                    Figure 13.4(a))</div>
+                <div class="term-card"><strong>Size of a graph:</strong> Total number of edges.</div>
+            </div>
+            <div class="diagram-grid mt-6">
+                <div class="diagram-container"><img src="graph-fig13.3-regular.png" alt="Regular Graphs">
+                    <figcaption>Figure 13.3: Regular Graphs.</figcaption>
+                </div>
+                <div class="diagram-container"><img src="graph-fig13.4-multigraph-tree-weighted.png"
+                        alt="Multigraph, Tree, Weighted Graph">
+                    <figcaption>Figure 13.4: (a) Multi-graph, (b) Tree, (c) Weighted Graph.</figcaption>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sections for Directed Graphs, Representations, Traversals, MST, Shortest Paths, Applications will follow -->
+        <!-- ... (Content from previous response, now integrating new OCR details) ... -->
+
+        <section class="content-section">
+            <h3 id="directed-graphs"><i class="fas fa-route icon"></i>13.3 Directed Graphs (Digraphs)</h3>
+            <p>A directed graph (digraph) is a graph where every edge has an assigned direction, represented as an
+                ordered pair (u, v), meaning the edge starts at u (origin/initial) and ends at v (destination/terminal).
+                Here, u is a predecessor of v, and v is a successor of u.</p>
+            <h6>Terminology for Directed Graphs:</h6>
+            <ul class="simple-list">
+                <li><strong>Out-degree (outdeg(u)):</strong> Number of edges originating at u.</li>
+                <li><strong>In-degree (indeg(u)):</strong> Number of edges terminating at u.</li>
+                <li><strong>Degree (deg(u)):</strong> indeg(u) + outdeg(u).</li>
+                <li><strong>Source:</strong> Node with positive out-degree and zero in-degree.</li>
+                <li><strong>Sink:</strong> Node with positive in-degree and zero out-degree.</li>
+                <li><strong>Reachability:</strong> Node v is reachable from u if a directed path exists from u to v.
+                </li>
+                <li><strong>Strongly Connected:</strong> A path exists between every pair of nodes (u to v AND v to u).
+                </li>
+                <li><strong>Unilaterally Connected:</strong> For any pair of nodes u, v, there's a path from u to v OR
+                    from v to u (but not necessarily both).</li>
+                <li><strong>Weakly Connected:</strong> Connected if edge directions are ignored. Nodes must have either
+                    out-degree or in-degree of at least 1.</li>
+                <li><strong>Simple Directed Graph:</strong> No parallel edges, but may have cycles (loops are generally
+                    allowed if not more than one at a node).</li>
+            </ul>
+            <div class="diagram-container">
+                <img src="graph-fig13.5-directed-connectivity.png"
+                    alt="Directed acyclic graph and strongly connected directed acyclic graph" class="max-w-lg">
+                <figcaption>Figure 13.5: (a) Directed graph. (b) Strongly connected directed acyclic graph (Note: text
+                    says "acyclic" but diagram (b) could be cyclic if interpreted differently, typically "strongly
+                    connected" implies cycles are possible. The term "strongly connected acyclic graph" usually means a
+                    DAG where for every pair u,v, if u can reach v, v cannot reach u, unless u=v, or it might refer to
+                    components). The description refers to graph (a) for connectivity examples.</figcaption>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h3 id="graph-representations"><i class="fas fa-table icon"></i>13.5 Representation of Graphs</h3>
+            <p>Common ways to store graphs in computer memory:</p>
+            <h5 class="mt-6">13.5.1 Adjacency Matrix Representation</h5>
+            <p>An n x n matrix where n is the number of vertices. An entry a<sub>ij</sub> = 1 if there's an edge from
+                vertex v<sub>i</sub> to v<sub>j</sub>, and 0 otherwise. For weighted graphs, a<sub>ij</sub> stores the
+                weight (or infinity if no edge).</p>
+            <div class="diagram-container">
+                <img src="graph-fig13.13-adj-matrix-entry.png" alt="Adjacency matrix entry definition" class="max-w-xs">
+                <figcaption>Figure 13.13: Adjacency matrix entry.</figcaption>
+            </div>
+            <div class="diagram-grid">
+                <div class="diagram-container"><img src="graph-fig13.14a-directed-adj-matrix.png"
+                        alt="Directed graph and its adjacency matrix">
+                    <figcaption>Fig 13.14(a): Directed graph.</figcaption>
+                </div>
+                <div class="diagram-container"><img src="graph-fig13.14b-directed-loop-adj-matrix.png"
+                        alt="Directed graph with loop and its adjacency matrix">
+                    <figcaption>Fig 13.14(b): Directed with loop.</figcaption>
+                </div>
+                <div class="diagram-container"><img src="graph-fig13.14c-undirected-adj-matrix.png"
+                        alt="Undirected graph and its adjacency matrix">
+                    <figcaption>Fig 13.14(c): Undirected graph.</figcaption>
+                </div>
+                <div class="diagram-container"><img src="graph-fig13.14d-weighted-adj-matrix.png"
+                        alt="Weighted graph and its adjacency matrix">
+                    <figcaption>Fig 13.14(d): Weighted graph.</figcaption>
+                </div>
+            </div>
+            <h6>Conclusions from Adjacency Matrix:</h6>
+            <ul class="simple-list">
+                <li>For simple graphs (no loops), diagonal is all 0s.</li>
+                <li>Symmetric for undirected graphs.</li>
+                <li>Memory: O(n<sup>2</sup>).</li>
+                <li>Number of 1s (non-zero entries) equals number of edges (for unweighted).</li>
+                <li>Powers of Adjacency Matrix: A<sup>k</sup>[i][j] gives the number of paths of length k from
+                    v<sub>i</sub> to v<sub>j</sub>.</li>
+            </ul>
+            <div class="diagram-container">
+                <img src="graph-fig13.15-adj-matrix-powers.png"
+                    alt="Directed graph and powers of its adjacency matrix (A^2, A^3, A^4)" class="max-w-xl">
+                <figcaption>Figure 13.15: Directed graph and calculations of A<sup>2</sup>, A<sup>3</sup>,
+                    A<sup>4</sup>.</figcaption>
+            </div>
+            <h6>Path Matrix (B<sup>*</sup> or P):</h6>
+            <p>P<sub>ij</sub> = 1 if there is a path from v<sub>i</sub> to v<sub>j</sub>, 0 otherwise. Can be found by
+                B<sup>*</sup> = A + A<sup>2</sup> + ... + A<sup>n</sup> (where addition is boolean OR, multiplication is
+                boolean AND) or using Warshall's algorithm.</p>
+            <div class="diagram-container">
+                <img src="graph-fig13.16-path-matrix.png" alt="Path matrix calculation example" class="max-w-xl">
+                <figcaption>Figure 13.16: Path matrix entry and calculation example.</figcaption>
+            </div>
+
+            <h5 class="mt-8">13.5.2 Adjacency List Representation</h5>
+            <p>An array of linked lists. Each index `i` in the array corresponds to vertex `v_i`, and the linked list at
+                `Adj[i]` stores all vertices adjacent to `v_i`. Preferred for sparse graphs. Adding new nodes/edges is
+                generally easier than with matrices.</p>
+            <div class="diagram-grid">
+                <div class="diagram-container"><img src="graph-fig13.17-undirected-adj-list.png"
+                        alt="Undirected graph and its adjacency list">
+                    <figcaption>Figure 13.17: Undirected graph & Adjacency List.</figcaption>
+                </div>
+                <div class="diagram-container"><img src="graph-fig13.18-weighted-adj-list.png"
+                        alt="Weighted graph and its adjacency list">
+                    <figcaption>Figure 13.18: Weighted graph & Adjacency List.</figcaption>
+                </div>
+            </div>
+            <p>For directed graphs, sum of list lengths = total edges. For undirected, sum = 2 * total edges.</p>
+
+            <h5 class="mt-8">13.5.3 Adjacency Multi-list Representation</h5>
+            <p>An edge-based rather than vertex-based representation. Consists of a directory of nodes and a set of
+                linked lists storing edge information. Each edge appears in two adjacency lists (one for each end
+                vertex). Useful for operations requiring easy access to edges.</p>
+            <div class="diagram-container">
+                <img src="graph-fig13.19-adj-multi-list.png"
+                    alt="Undirected graph and its Adjacency Multi-list representation" class="max-w-xl">
+                <figcaption>Figure 13.19: Undirected graph and its Adjacency Multi-list representation including edge
+                    and vertex lists.</figcaption>
+            </div>
+        </section>
+
+        <!-- Graph Traversal Algorithms -->
+        <section class="content-section">
+            <h3 id="graph-traversals"><i class="fas fa-shoe-prints icon"></i>13.6 Graph Traversal Algorithms</h3>
+            <p>Examining nodes and edges systematically. Node states during traversal:</p>
+            <table class="styled-table w-full md:w-2/3 mx-auto">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>State of the node</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Ready</td>
+                        <td>Initial state.</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Waiting</td>
+                        <td>Node on queue/stack, waiting to be processed.</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Processed</td>
+                        <td>Node has been completely processed.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <figcaption class="text-center text-xs mt-1">Table 13.1: Value of status and its significance.</figcaption>
+
+            <h5 class="mt-8">13.6.1 Breadth-First Search (BFS)</h5>
+            <p>Uses a queue. Explores starting node, then all its neighbours, then their unvisited neighbours, and so
+                on, layer by layer.</p>
+            <h6 class="algorithm-title">Algorithm for Breadth-First Search (Figure 13.20)</h6>
+            <ol class="algorithm-steps">
+                <li>SET STATUS = 1 (ready state) for each node N.</li>
+                <li>Enqueue the starting node A and set its STATUS = 2 (waiting).</li>
+                <li>Repeat Steps 4 and 5 until QUEUE is empty:</li>
+                <li>Dequeue a node N. Process it and set its STATUS = 3 (processed).</li>
+                <li>Enqueue all neighbours of N that are in the ready state (STATUS = 1) and set their STATUS = 2
+                    (waiting).</li>
+                <li>EXIT.</li>
+            </ol>
+            <div class="diagram-container">
+                <img src="graph-fig13.21-bfs-example.png" alt="BFS example on graph G for shortest path from A to I"
+                    class="max-w-2xl">
+                <figcaption>Figure 13.21: Graph G and BFS execution to find shortest path A to I.</figcaption>
+            </div>
+            <h6>Features of BFS:</h6>
+            <ul class="simple-list">
+                <li>**Space Complexity:** O(|V| + |E|) or O(b<sup>d</sup>) (b=branching factor, d=depth).</li>
+                <li>**Time Complexity:** O(|V| + |E|).</li>
+                <li>**Completeness:** Yes, finds a solution if one exists.</li>
+                <li>**Optimality:** Finds shortest path in terms of number of edges (for unweighted graphs).</li>
+                <li>**Applications:** Finding connected components, shortest path in unweighted graphs.</li>
+            </ul>
+
+            <h5 class="mt-8">13.6.2 Depth-First Search (DFS)</h5>
+            <p>Uses a stack. Expands starting node, then goes deeper along a path until goal or dead-end. Backtracks if
+                dead-end or already visited node encountered.</p>
+            <h6 class="algorithm-title">Algorithm for Depth-First Search (Figure 13.22)</h6>
+            <ol class="algorithm-steps">
+                <li>SET STATUS = 1 (ready state) for each node in G.</li>
+                <li>Push the starting node A on the stack and set its STATUS = 2 (waiting state).</li>
+                <li>Repeat Steps 4 and 5 until STACK is empty:</li>
+                <li>Pop the top node N. Process it and set its STATUS = 3 (processed state).</li>
+                <li>Push on the stack all the neighbours of N that are in the ready state (STATUS = 1) and set their
+                    STATUS = 2 (waiting state).</li>
+                <li>EXIT.</li>
+            </ol>
+            <h6>Features of DFS:</h6>
+            <ul class="simple-list">
+                <li>**Space Complexity:** O(|V|) or O(b*d) in worst case (lower than BFS usually).</li>
+                <li>**Time Complexity:** O(|V| + |E|).</li>
+                <li>**Completeness:** Yes (if graph is finite).</li>
+                <li>**Applications:** Finding paths, cycle detection, topological sorting, computing spanning trees.
+                </li>
+            </ul>
+        </section>
+
+        <!-- Shortest Path Algorithms -->
+        <section class="content-section">
+            <h3 id="shortest-path"><i class="fas fa-road icon"></i>13.8 Shortest Path Algorithms</h3>
+
+            <h5 class="mt-6">13.8.1 Minimum Spanning Trees (MST)</h5>
+            <p>A spanning tree of a connected, undirected graph G is a subgraph that is a tree and connects all
+                vertices. An MST has a weight less than or equal to the weight of every other spanning tree. The total
+                weight is the sum of its edge weights.</p>
+            <div class="diagram-grid">
+                <div class="diagram-container"><img src="graph-fig13.28-unweighted-spanning-trees.png"
+                        alt="Unweighted graph and some of its spanning trees">
+                    <figcaption>Figure 13.28: Unweighted graph & spanning trees.</figcaption>
+                </div>
+                <div class="diagram-container"><img src="graph-fig13.29-weighted-mst.png"
+                        alt="Weighted graph and its MST">
+                    <figcaption>Figure 13.29: Weighted graph & its MST.</figcaption>
+                </div>
+            </div>
+            <h6>Applications of MSTs:</h6> Connecting distances with minimum cost (networks, pipelines, roads).
+
+            <h6 class="mt-6">Prim's Algorithm</h6>
+            <p>A greedy algorithm that forms an MST by starting with an arbitrary vertex and iteratively adding the
+                cheapest edge connecting a vertex in the MST to a vertex not yet in the MST, until all vertices are
+                included.</p>
+            <h6 class="algorithm-title">Prim's Algorithm Steps (Figure 13.30)</h6>
+            <ol class="algorithm-steps">
+                <li>Select a starting vertex.</li>
+                <li>Repeat Steps 3 and 4 until all vertices are in the MST:</li>
+                <li>Select an edge (u,v) connecting the tree vertex u to a fringe vertex v that has minimum weight.</li>
+                <li>Add the selected edge and vertex v to the minimum spanning tree T.</li>
+                <li>EXIT.</li>
+            </ol>
+            <div class="diagram-container">
+                <img src="graph-fig13.31-prim-example1.png" alt="Prim's algorithm example steps on Graph G"
+                    class="max-w-2xl">
+                <figcaption>Figure 13.31: Constructing an MST using Prim's algorithm (Example 13.7).</figcaption>
+            </div>
+            <div class="diagram-container">
+                <img src="graph-fig13.32-prim-example2.png" alt="Prim's algorithm example from vertex b"
+                    class="max-w-sm">
+                <figcaption>Figure 13.32: Constructing an MST using Prim's from vertex b (Example 13.8).</figcaption>
+            </div>
+            <p>Time Complexity: O(E log V) with a binary heap or O(V<sup>2</sup>) with adjacency matrix.</p>
+
+            <h6 class="mt-6">Kruskal's Algorithm</h6>
+            <p>A greedy algorithm that finds an MST by adding edges in increasing order of weight, ensuring no cycles
+                are formed. Uses a disjoint set data structure (Union-Find) to track connected components.</p>
+            <h6 class="algorithm-title">Kruskal's Algorithm Steps (Figure 13.33)</h6>
+            <ol class="algorithm-steps">
+                <li>Create a forest where each vertex is a separate tree.</li>
+                <li>Create a priority queue Q containing all edges of the graph.</li>
+                <li>Repeat Steps 4 and 5 while Q is NOT EMPTY:</li>
+                <li>Remove an edge (u,v) from Q (edge with minimum weight).</li>
+                <li>IF the edge obtained connects two different trees, then add it to the forest (MST). (Combine the two
+                    trees into one). ELSE Discard the edge.</li>
+                <li>END.</li>
+            </ol>
+            <div class="diagram-container">
+                <img src="graph-fig13.34-kruskal-example.png" alt="Kruskal's algorithm example steps" class="max-w-2xl">
+                <figcaption>Figure 13.34 & continuation: Applying Kruskal's algorithm (Example 13.9).</figcaption>
+            </div>
+            <p>Time Complexity: O(E log E) or O(E log V) mainly due to sorting edges and Union-Find operations.</p>
+
+            <h5 class="mt-8">13.8.4 Dijkstra's Algorithm</h5>
+            <p>Finds the shortest path from a single source vertex to all other vertices in a weighted graph with
+                non-negative edge weights. Widely used in network routing (IS-IS, OSPF).</p>
+            <h6 class="algorithm-title">Dijkstra's Algorithm (Figure 13.35)</h6>
+            <ol class="algorithm-steps">
+                <li>Select the initial node (source). Set its distance to 0, all others to infinity.</li>
+                <li>Define an empty set N for visited nodes. Add source to N.</li>
+                <li>Repeat until destination is in N or no more reachable nodes:
+                    <ol class="simple-list ml-4">
+                        <li>For each neighbor of the newly added node not in N: Calculate new distance (current node's
+                            dist + edge weight). If less than current label, update.</li>
+                        <li>Pick node not in N with smallest temporary label, add to N. Make it current.</li>
+                    </ol>
+                </li>
+            </ol>
+            <div class="diagram-container">
+                <img src="graph-fig13.36-dijkstra-example.png" alt="Dijkstra's algorithm example execution"
+                    class="max-w-lg">
+                <figcaption>Figure 13.36: Example 13.10 - Dijkstra's algorithm execution.</figcaption>
+            </div>
+            <p>Time Complexity: O(V<sup>2</sup>) with adjacency matrix, O((V+E) log V) with adjacency list and binary
+                heap.</p>
+
+            <h5 class="mt-8">Bellman-Ford Algorithm</h5>
+            <p>Finds single-source shortest paths in a weighted digraph, capable of handling negative edge weights and
+                detecting negative weight cycles.</p>
+            <div class="diagram-container">
+                <img src="bellman-ford-example.png" alt="Bellman-Ford Algorithm example" class="max-w-lg">
+                <figcaption>Bellman-Ford Algorithm: Calculating shortest paths with potential negative edges.
+                </figcaption>
+            </div>
+            <h6>How it works:</h6>
+            <p>Calculates shortest paths in a bottom-up manner. After i-th iteration, shortest paths with at most i
+                edges are found. Outer loop runs |V|-1 times. An additional iteration detects negative cycles if
+                distances still improve.</p>
+            <h6 class="algorithm-title">Bellman-Ford Algorithm Steps</h6>
+            <ol class="algorithm-steps">
+                <li>Initialize distances: dist[src] = 0, all other dist[v] = ∞.</li>
+                <li>Repeat |V|-1 times: For each edge (u,v) with weight w: RELAX(u,v,w) i.e., if dist[u] + w < dist[v],
+                        then dist[v]=dist[u] + w.</li>
+                <li>For each edge (u,v): If dist[u] + w < dist[v], then graph contains a negative-weight cycle.</li>
+            </ol>
+            <p>Time Complexity: O(VE).</p>
+            <div class="diagram-container">
+                <img src="dijkstra-vs-bellmanford.png" alt="Comparison between Bellman-Ford and Dijkstra's Algorithm"
+                    class="max-w-xl">
+                <figcaption>Comparison: Dijkstra vs. Bellman-Ford.</figcaption>
+            </div>
+
+            <h5 class="mt-8">13.8.5 Warshall's Algorithm (All-Pairs Shortest Path / Transitive Closure)</h5>
+            <p>Determines if a path exists between all pairs of vertices. Generates the path matrix P (transitive
+                closure) from the adjacency matrix A.</p>
+            <h6 class="algorithm-title">Warshall's Algorithm Steps (Figure 13.38)</h6>
+            <ol class="algorithm-steps">
+                <li>Initialize P with the adjacency matrix A (P<sub>0</sub> = A). Add self-loops (P[i][i]=1).</li>
+                <li>For k = 0 to n-1 (intermediate vertex):</li>
+                <li>For i = 0 to n-1 (source vertex):</li>
+                <li>For j = 0 to n-1 (destination vertex):</li>
+                <li>P<sub>k</sub>[i][j] = P<sub>k-1</sub>[i][j] OR (P<sub>k-1</sub>[i][k] AND P<sub>k-1</sub>[k][j]).
+                </li>
+                <li>EXIT.</li>
+            </ol>
+            <div class="diagram-container">
+                <img src="graph-fig13.39-warshall-example.png" alt="Warshall's algorithm example" class="max-w-lg">
+                <figcaption>Figure 13.39: Example graph and its path matrix using Warshall's.</figcaption>
+            </div>
+            <p>Time Complexity: O(V<sup>3</sup>).</p>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-project-diagram icon"></i>13.9 Applications of Graphs</h3>
+            <ul class="custom-bullets">
+                <li>Circuit networks (vertices = connection points, edges = wires).</li>
+                <li>Transport networks (vertices = stations/airports, edges = routes).</li>
+                <li>Maps (vertices = cities/regions, edges = adjacency).</li>
+                <li>Program flow analysis (vertices = modules, edges = calls).</li>
+                <li>Project management (Activity Network Diagrams / PERT charts - Figure 13.43).</li>
+                <li>State transition diagrams (nodes = states, edges = transitions).</li>
+                <li>Social networks, web graphs, chemical compound structures.</li>
+            </ul>
+            <div class="diagram-container">
+                <img src="graph-fig13.43-activity-network.png" alt="Activity Network Diagram (AND) / PERT Chart"
+                    class="max-w-lg">
+                <figcaption>Figure 13.43: Activity Network Diagram for project management.</figcaption>
+            </div>
+            <div class="info-box">
+                <p>Your OCR includes C programming examples for creating graphs (adjacency list), BFS, DFS, finding MST
+                    cost, and Warshall's algorithm, which provide practical implementation insights.</p>
+            </div>
+        </section>
+
+
+        <div class="mt-12 pt-8 border-t border-slate-300 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <a href="topic-8.html" class="nav-button">
+                <i class="fas fa-arrow-left icon"></i> Previous Topic
+            </a>
+            <a href="topic-10.html" class="nav-button">
+                Next Topic <i class="fas fa-arrow-right icon"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        © <span id="currentYear"></span> <a href="../../../index.html">EduVision</a>.
+        All rights reserved. Crafted with <i class="fas fa-heart"></i> for learning.
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>

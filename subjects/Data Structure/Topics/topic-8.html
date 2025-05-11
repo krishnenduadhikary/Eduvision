@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Topic 8: Heaps - EduVision</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Nunito:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(120deg, #f4f7fa 0%, #e9eafc 100%);
+            color: #232946;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(90deg, #4f46e5 0%, #2563eb 100%);
+            color: #fff;
+            padding: 28px 0 20px 0;
+            box-shadow: 0 4px 16px rgba(79, 70, 229, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .header-brand {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.1rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-brand a {
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-brand svg {
+            margin: 0 4px;
+            color: #fde047;
+            transition: transform 0.2s;
+        }
+
+        .header-brand a:hover svg {
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        .header-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+        }
+
+        .header-desc {
+            font-size: 1.08rem;
+            opacity: 0.92;
+            margin-bottom: 0;
+        }
+
+        main {
+            flex: 1 1 auto;
+            padding: 40px 0 0 0;
+        }
+
+        .content-section {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 6px 32px rgba(79, 70, 229, 0.08), 0 1.5px 6px rgba(79, 70, 229, 0.03);
+            padding: 38px 32px;
+            margin-bottom: 38px;
+            transition: box-shadow 0.2s;
+        }
+
+        .content-section:hover {
+            box-shadow: 0 12px 36px rgba(79, 70, 229, 0.13), 0 2px 8px rgba(79, 70, 229, 0.06);
+        }
+
+        .content-section h2 {
+            font-size: 2.3rem;
+            font-weight: 800;
+            color: #4338ca;
+            border-bottom: 3px solid #a5b4fc;
+            padding-bottom: 12px;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .content-section h2 .icon {
+            color: #6366f1;
+            font-size: 2.1rem;
+        }
+
+        .content-section h3 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #2563eb;
+            margin-top: 38px;
+            margin-bottom: 18px;
+            border-top: 2px solid #dbeafe;
+            padding-top: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .content-section h3 .icon {
+            color: #6366f1;
+            font-size: 1.4rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #6366f1;
+            margin-top: 28px;
+            margin-bottom: 10px;
+        }
+
+        .content-section h5 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #a21caf;
+            margin-top: 22px;
+            margin-bottom: 8px;
+        }
+
+        .content-section h6,
+        .procedure-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0891b2;
+            margin-top: 18px;
+            margin-bottom: 8px;
+            background: #e0f2fe;
+            padding: 6px 14px;
+            border-radius: 7px;
+            display: inline-block;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section ol {
+            color: #3b3b4f;
+            font-size: 1.08rem;
+            margin-bottom: 18px;
+            line-height: 1.7;
+        }
+
+        .content-section ul.simple-list {
+            list-style: disc inside;
+            padding-left: 18px;
+            color: #444;
+        }
+
+        .content-section ul.simple-list ul {
+            list-style: circle inside;
+            margin-top: 6px;
+        }
+
+        .content-section ol.styled-list {
+            list-style: decimal inside;
+            padding-left: 18px;
+        }
+
+        .content-section ol.simple-list {
+            list-style: decimal inside;
+            padding-left: 18px;
+        }
+
+        .content-section ol.procedure-steps {
+            background: #f1f5f9;
+            border-radius: 8px;
+            border: 1px solid #e0e7ef;
+            padding: 18px 22px;
+            margin: 18px 0 28px 0;
+            counter-reset: step-counter;
+        }
+
+        .content-section ol.procedure-steps li {
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 10px;
+            font-size: 1.01rem;
+        }
+
+        .content-section ol.procedure-steps li::before {
+            content: counter(step-counter) ".";
+            counter-increment: step-counter;
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #6366f1;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background: #eef2ff;
+            border-left: 5px solid #6366f1;
+            color: #3730a3;
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin: 24px 0 28px 0;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.06);
+        }
+
+        .info-box strong {
+            color: #3730a3;
+        }
+
+        .highlight-box {
+            background: #fef9c3;
+            border-left: 5px solid #facc15;
+            color: #a16207;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 24px 0 28px 0;
+            box-shadow: 0 2px 8px rgba(250, 204, 21, 0.08);
+        }
+
+        .highlight-box p {
+            color: #a16207;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .diagram-container {
+            background: #f8fafc;
+            border: 1.5px solid #e0e7ef;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(99, 102, 241, 0.06);
+            padding: 18px 18px 12px 18px;
+            margin: 32px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .diagram-container img {
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e0e7ef;
+        }
+
+        .diagram-container figcaption {
+            color: #64748b;
+            font-size: 0.98rem;
+            margin-top: 10px;
+            font-style: italic;
+            text-align: center;
+        }
+
+        pre {
+            background: #232946;
+            color: #f4f7fa;
+            padding: 18px 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 1rem;
+            margin: 22px 0;
+            font-family: 'Fira Mono', 'Consolas', monospace;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.08);
+        }
+
+        code {
+            background: #e0e7ef;
+            color: #a21caf;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            border-radius: 0;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            background: linear-gradient(90deg, #6366f1 0%, #2563eb 100%);
+            color: #fff;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 1.08rem;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.10);
+            border: none;
+            text-decoration: none;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+        }
+
+        .nav-button:hover,
+        .nav-button:focus {
+            background: linear-gradient(90deg, #4338ca 0%, #1e40af 100%);
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.18);
+            color: #fff;
+            transform: translateY(-2px) scale(1.03);
+            text-decoration: none;
+        }
+
+        .nav-button .icon {
+            font-size: 1.1em;
+        }
+
+        .topic-nav {
+            margin-top: 48px;
+            padding-top: 28px;
+            border-top: 1.5px solid #e0e7ef;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            align-items: center;
+        }
+
+        @media (min-width: 640px) {
+            .topic-nav {
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 0;
+            }
+        }
+
+        footer {
+            text-align: center;
+            font-size: 1.01rem;
+            color: #64748b;
+            padding: 32px 0 18px 0;
+            margin-top: 48px;
+            background: #f1f5f9;
+            border-top: 1.5px solid #e0e7ef;
+            letter-spacing: 0.02em;
+        }
+
+        footer a {
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+            color: #4338ca;
+        }
+
+        .fa-heart {
+            color: #ef4444;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container"
+            style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
+            <div class="header-brand">
+                <a href="../../../index.html">
+                    <span>Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-0.5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2" style="color:#fde047;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span>ision</span>
+                </a>
+            </div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
+                <span class="header-title">Data Structures</span>
+                <span class="header-desc">Explore each topic in depth</span>
+            </div>
+            <div style="width:3rem;"></div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="flex justify-between items-center mb-8">
+            <a href="../data-structures-syllabus.html"
+                class="text-indigo-600 hover:text-indigo-800 hover:underline font-medium text-lg transition-colors duration-300">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Syllabus
+            </a>
+            <div class="bg-indigo-600 text-white text-base font-semibold px-5 py-2 rounded-lg shadow-md">
+                Topic 8 <!-- Assuming Heaps is Topic 8 -->
+            </div>
+        </div>
+
+        <section class="content-section">
+            <h2><i class="fas fa-layer-group icon"></i>Heaps</h2>
+            <p class="text-xl mb-6 text-slate-600">A heap is a specialized tree-based data structure that satisfies the
+                heap property. It is typically implemented as a complete binary tree and often stored efficiently in an
+                array using sequential representation. Heaps are fundamental for algorithms like Heapsort and for
+                implementing Priority Queues.</p>
+
+            <div class="highlight-box">
+                <p>Suppose H is a complete binary tree with n elements. H is called a **heap** if each node N of H has
+                    the following property: The value at N is either greater than or equal to (Max-Heap) or less than or
+                    equal to (Min-Heap) the value at each of its children.</p>
+            </div>
+
+            <h6>Key Characteristics:</h6>
+            <ul class="simple-list">
+                <li>**Complete Binary Tree:** All levels are completely filled except possibly the last level, which is
+                    filled from left to right.
+                <li>**Heap Property:**
+                    <ul>
+                        <li><strong>Max-Heap:</strong> The key of a node is greater than or equal to the keys of its
+                            children. The largest element is at the root.</li>
+                        <li><strong>Min-Heap:</strong> The key of a node is less than or equal to the keys of its
+                            children. The smallest element is at the root.</li>
+                    </ul>
+                </li>
+                <li>**Array Representation:** Due to its complete binary tree structure, a heap can be efficiently
+                    stored in an array where, for a node at index `i`:
+                    <ul>
+                        <li>Parent is at index `floor((i-1)/2)` (for 0-indexed array) or `floor(i/2)` (for 1-indexed
+                            array).</li>
+                        <li>Left child is at index `2*i + 1` (0-indexed) or `2*i` (1-indexed).</li>
+                        <li>Right child is at index `2*i + 2` (0-indexed) or `2*i + 1` (1-indexed).</li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="diagram-container">
+                <img src="heap-example-and-array.png"
+                    alt="Example of a Max-Heap and its sequential array representation" class="max-w-xl">
+                <figcaption>Figure 7.77: (a) A Max-Heap. (b) Its sequential array representation (1-indexed as per
+                    text).</figcaption>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-cogs icon"></i>Heap Operations</h3>
+            <p>The primary operations involve maintaining the heap property after insertions or deletions.</p>
+
+            <h4>Inserting into a Heap (INSHEAP / Sift-Up / Bubble-Up)</h4>
+            <p>To insert a new ITEM into a heap H with N elements:</p>
+            <ol class="simple-list">
+                <li>First, add ITEM at the end of H so that H is still a complete tree (but not necessarily a heap).
+                    This means placing it in the next available spot in the array representation, incrementing N.</li>
+                <li>Then, let ITEM "rise" or "sift-up" to its appropriate place in H so that H is finally a heap. This
+                    involves comparing ITEM with its parent; if ITEM is greater (for max-heap) or smaller (for min-heap)
+                    than its parent, swap them. Repeat this process until ITEM is no longer violating the heap property
+                    with its parent, or it becomes the root.</li>
+            </ol>
+            <div class="diagram-container">
+                <img src="heap-insertion-process.png" alt="Heap Insertion Process for ITEM = 70 into a Max-Heap"
+                    class="max-w-2xl">
+                <figcaption>Figure 7.78: Example 7.38 - Item = 70 is inserted. (a) Initial comparison. (b) After first
+                    swap. (c) After second swap, 70 reaches its place. (d) Final heap.</figcaption>
+            </div>
+            <h6 class="procedure-title">Procedure 7.9: INSHEAP(TREE, N, ITEM)</h6>
+            <ol class="procedure-steps">
+                <li>[Add new node to H and initialize PTR.] Set N := N + 1 and PTR := N.</li>
+                <li>[Find location to insert ITEM.] Repeat Steps 3 to 6 while PTR > 1:</li>
+                <li>Set PAR := [PTR/2]. [Location of parent node.]</li>
+                <li>If ITEM ≤ TREE[PAR], then: Set TREE[PTR] := ITEM, and Return. [End of If structure.]</li>
+                <li>Set TREE[PTR] := TREE[PAR]. [Moves node down.]</li>
+                <li>Set PTR := PAR. [Updates PTR.] [End of Step 2 loop.]</li>
+                <li>[Assign ITEM as the root of H.] Set TREE[1] := ITEM.</li>
+                <li>Return.</li>
+            </ol>
+            <div class="diagram-container">
+                <img src="heap-building-example.png" alt="Building a Heap by inserting elements one by one"
+                    class="max-w-2xl">
+                <figcaption>Figure 7.79: Example 7.39 - Building a Heap from the list: 44, 30, 50, 22, 60, 55, 77, 55.
+                </figcaption>
+            </div>
+
+            <h4>Deleting the Root of a Heap (DELHEAP / Sift-Down / Reheapify)</h4>
+            <p>To delete the root R (which holds the max/min element) from a heap H with N elements:</p>
+            <ol class="simple-list">
+                <li>Assign the root R to some variable ITEM (this is the element being "deleted").</li>
+                <li>Replace the deleted root R with the last element L of H, so H is still a complete tree but not
+                    necessarily a heap. Decrement N.</li>
+                <li>(Reheap) Let L sink to its appropriate place in H so that H is finally a heap. This involves
+                    comparing L with its children. If L is smaller (for max-heap) or larger (for min-heap) than its
+                    largest/smallest child, swap L with that child. Repeat this process until L no longer violates the
+                    heap property with its children, or it becomes a leaf node.</li>
+            </ol>
+            <div class="diagram-container">
+                <img src="heap-deletion-process.png" alt="Deleting the root from a Max-Heap and Reheaping process"
+                    class="max-w-2xl">
+                <figcaption>Figure 7.80: Example 7.40 - Reheaping after deleting root (95) and replacing with last
+                    element (22).</figcaption>
+            </div>
+            <h6 class="procedure-title">Procedure 7.10: DELHEAP(TREE, N, ITEM)</h6>
+            <ol class="procedure-steps">
+                <li>Set ITEM := TREE[1]. [Removes root of H.]</li>
+                <li>Set LAST := TREE[N] and N := N - 1. [Removes last node of H.]</li>
+                <li>Set PTR := 1, LEFT := 2, and RIGHT := 3. [Initializes pointers.]</li>
+                <li>Repeat steps 5 to 7 while RIGHT ≤ N:</li>
+                <li>If LAST ≥ TREE[LEFT] and LAST ≥ TREE[RIGHT], then: Set TREE[PTR] := LAST and Return. [End of If
+                    structure.]</li>
+                <li>IF TREE[RIGHT] ≤ TREE[LEFT], then: Set TREE[PTR] := TREE[LEFT] and PTR := LEFT. Else: Set TREE[PTR]
+                    := TREE[RIGHT] and PTR := RIGHT. [End of If structure.]</li>
+                <li>Set LEFT := 2*PTR and RIGHT := 2*PTR + 1. [End of Step 4 loop.]</li>
+                <li>If LEFT = N and if LAST < TREE[LEFT], then: Set PTR :=LEFT.</li>
+                <li>Set TREE[PTR] := LAST.</li>
+                <li>Return.</li>
+            </ol>
+            <div class="info-box">
+                <p><strong>Remark:</strong> One must verify that the above procedures always yield a heap as a final
+                    tree. Step 3 of DELHEAP (reheaping) may not end until the node L reaches the bottom of the tree.</p>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-sort-amount-up icon"></i>Applications of Heaps</h3>
+
+            <h4>Heapsort</h4>
+            <p>Heapsort is an efficient, comparison-based sorting algorithm that uses a heap data structure. It involves
+                two main phases:</p>
+            <ol class="styled-list">
+                <li><strong>Phase A: Build a Heap.</strong> Convert the input array A with N elements into a max-heap
+                    (for ascending sort) or min-heap (for descending sort). This can be done by repeatedly calling
+                    INSHEAP for each element, or more efficiently using a bottom-up heapify approach.</li>
+                <li><strong>Phase B: Repeatedly Delete the Root.</strong>
+                    <ul class="simple-list">
+                        <li>Swap the root element (largest in max-heap / smallest in min-heap) with the last element of
+                            the heap.</li>
+                        <li>Reduce the heap size by one (effectively placing the extracted element at its sorted
+                            position at the end of the array).</li>
+                        <li>Call DELHEAP (or reheapify/sift-down) on the new root to restore the heap property for the
+                            reduced heap.</li>
+                        <li>Repeat until the heap size is 1.</li>
+                    </ul>
+                </li>
+            </ol>
+            <h6 class="procedure-title">Algorithm 7.11: HEAPSORT(A, N)</h6>
+            <ol class="procedure-steps">
+                <li>[Build a heap H, using Procedure 7.9 INSHEAP.] Repeat for J = 1 to N-1: Call INSHEAP(A, J, A[J+1]).
+                    (Note: Text refers to A[J+1] for 1-indexed array style, adjust for 0-indexed if needed)</li>
+                <li>[Sort A by repeatedly deleting the root of H, using Procedure 7.10 DELHEAP.] Repeat while N > 1: (a)
+                    Call DELHEAP(A, N, ITEM). (b) Set A[N+1] := ITEM. (Again, N+1 is for 1-indexed; for 0-indexed, it
+                    would be A[N]).</li>
+                <li>Exit.</li>
+            </ol>
+            <p>The purpose of Step 2(b) is to save space by placing the sorted elements back into the original array
+                from the end.</p>
+            <h5>Complexity of Heapsort:</h5>
+            <p>Both Phase A (heap construction) and Phase B (repeated deletions) take time proportional to O(n log n).
+                Therefore, the running time for Heapsort on an n-element array is **O(n log n)** in the worst-case,
+                average-case, and best-case scenarios. This is an advantage over Quicksort, which has an
+                O(n<sup>2</sup>) worst-case.</p>
+
+            <h4 class="mt-8">Priority Queues</h4>
+            <p>Heaps are the most common and efficient way to implement Priority Queues. In a max-heap, `extract-max`
+                (deleting the root) is O(log n), and `insert` is O(log n). In a min-heap, `extract-min` and `insert` are
+                similarly O(log n).</p>
+
+            <h4 class="mt-8">Other Applications</h4>
+            <ul class="simple-list">
+                <li>Graph algorithms like Dijkstra's shortest path algorithm and Prim's algorithm for minimum spanning
+                    trees often use min-priority queues implemented with heaps.</li>
+                <li>Event simulation systems.</li>
+                <li>Efficiently finding the k<sup>th</sup> largest or smallest element in a collection.</li>
+                <li>Operating system schedulers.</li>
+            </ul>
+        </section>
+
+
+        <div class="topic-nav">
+            <a href="topic-7.html" class="nav-button">
+                <i class="fas fa-arrow-left icon"></i> Previous Topic
+            </a>
+            <a href="topic-9.html" class="nav-button">
+                Next Topic <i class="fas fa-arrow-right icon"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        © <span id="currentYear"></span> <a href="../../../index.html">EduVision</a>.
+        All rights reserved. Crafted with <i class="fas fa-heart"></i> for learning.
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>

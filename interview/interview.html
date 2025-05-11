@@ -6,12 +6,412 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Companywise Preparation</title>
     <link rel="stylesheet" href="interview-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Extra fun and modern enhancements */
+        .prep-card .text.card-title {
+            letter-spacing: 1px;
+            font-size: 2.3rem;
+            background: linear-gradient(90deg, #6366f1 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .prep-card .ray {
+            background: linear-gradient(90deg, #fbbf24 0%, #f472b6 100%);
+            opacity: 0.25;
+            filter: blur(18px);
+        }
+
+        .prep-card .card-button {
+            margin-top: 1.5rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            background: linear-gradient(90deg, #6366f1 0%, #a78bfa 100%);
+            border: none;
+            box-shadow: 0 2px 12px rgba(139, 92, 246, 0.10);
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .prep-card .card-button:hover {
+            background: linear-gradient(90deg, #7c3aed 0%, #6366f1 100%);
+            transform: scale(1.06);
+        }
+
+        .prep-card .card-button:active {
+            background: #6366f1;
+        }
+
+        .prep-card .fa-arrow-right {
+            margin-left: 0.5em;
+        }
+
+        .prep-card .fa-arrow-right {
+            color: #fbbf24;
+            font-size: 1.1em;
+            vertical-align: middle;
+        }
+
+        .prep-card .fa-building {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-star {
+            color: #fbbf24;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-trophy {
+            color: #22c55e;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-laptop-code {
+            color: #a78bfa;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-rocket {
+            color: #f472b6;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-briefcase {
+            color: #f59e42;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-lightbulb {
+            color: #fde047;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-heart {
+            color: #ef4444;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-graduation-cap {
+            color: #10b981;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-code {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-user-astronaut {
+            color: #f472b6;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-apple {
+            color: #111;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-amazon {
+            color: #f59e42;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-google {
+            color: #34a853;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-facebook {
+            color: #1877f3;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-microsoft {
+            color: #0078d4;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-netflix {
+            color: #e50914;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-tower-broadcast {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-building-columns {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-cloud {
+            color: #38bdf8;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-people-group {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-nodes {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-check {
+            color: #22c55e;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-dot {
+            color: #fbbf24;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-exclamation {
+            color: #ef4444;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-question {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-user {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-up {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-down {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-plus {
+            color: #22c55e;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-minus {
+            color: #ef4444;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-play {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-pause {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-stop {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-xmark {
+            color: #ef4444;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-info {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-chevron-right {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-chevron-left {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-chevron-up {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-chevron-down {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-arrow-right {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-arrow-left {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-arrow-up {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-arrow-down {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-dollar-to-slot {
+            color: #22c55e;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-user {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-check {
+            color: #22c55e;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-xmark {
+            color: #ef4444;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-info {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-question {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-exclamation {
+            color: #ef4444;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-dot {
+            color: #fbbf24;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-nodes {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-up {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-down {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-plus {
+            color: #22c55e;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-minus {
+            color: #ef4444;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-play {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-pause {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-stop {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-chevron-right {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-chevron-left {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-chevron-up {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-chevron-down {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-arrow-right {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-arrow-left {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-arrow-up {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        .prep-card .fa-circle-arrow-down {
+            color: #6366f1;
+            margin-right: 0.5em;
+        }
+
+        /* Responsive: shrink card title on small screens */
+        @media (max-width: 600px) {
+            .prep-card .text.card-title {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <header class="main-header">
         <nav class="navbar" aria-label="Main navigation">
-            <a href="/" class="nav-logo">Eduvishion</a>
+            <a href="../index.html" class="nav-logo">Eduvishion</a>
             <ul class="nav-links">
                 <li><a href="/">Home</a></li>
                 <li><a href="/interview/interview.html" aria-current="page">Companywise Prep</a></li>
@@ -23,178 +423,8 @@
 
     <section class="preparation-section">
         <h2 class="section-title">Companywise Preparation</h2>
-        <div class="card-grid">
-            <!-- Company Cards with new style -->
-            <div class="outer">
-                <div class="dot"></div>
-                <div class="card prep-card">
-                    <div class="ray"></div>
-                    <div class="text card-title">Google</div>
-                    <div>Preparation</div>
-                    <button class="card-button" data-company="Google" aria-label="Start Google Preparation">GET STARTED
-                    </button>
-                    <div class="line topl"></div>
-                    <div class="line leftl"></div>
-                    <div class="line bottoml"></div>
-                    <div class="line rightl"></div>
-                </div>
-            </div>
-            <div class="outer">
-                <div class="dot"></div>
-                <div class="card prep-card">
-                    <div class="ray"></div>
-                    <div class="text card-title">Meta (Facebook)</div>
-                    <div>Preparation</div>
-                    <button class="card-button" data-company="Meta (Facebook)" aria-label="Start Meta Preparation">GET
-                        STARTED</button>
-                    <div class="line topl"></div>
-                    <div class="line leftl"></div>
-                    <div class="line bottoml"></div>
-                    <div class="line rightl"></div>
-                </div>
-            </div>
-            <div class="outer">
-                <div class="dot"></div>
-                <div class="card prep-card">
-                    <div class="ray"></div>
-                    <div class="text card-title">Amazon</div>
-                    <div>Preparation</div>
-                    <button class="card-button" data-company="Amazon" aria-label="Start Amazon Preparation">GET
-                        STARTED</button>
-                    <div class="line topl"></div>
-                    <div class="line leftl"></div>
-                    <div class="line bottoml"></div>
-                    <div class="line rightl"></div>
-                </div>
-            </div>
-            <div class="outer">
-                <div class="dot"></div>
-                <div class="card prep-card">
-                    <div class="ray"></div>
-                    <div class="text card-title">Microsoft</div>
-                    <div>Preparation</div>
-                    <button class="card-button" data-company="Microsoft" aria-label="Start Microsoft Preparation">GET
-                        STARTED</button>
-                    <div class="line topl"></div>
-                    <div class="line leftl"></div>
-                    <div class="line bottoml"></div>
-                    <div class="line rightl"></div>
-                </div>
-            </div>
-            <div class="outer">
-                <div class="dot"></div>
-                <div class="card prep-card">
-                    <div class="ray"></div>
-                    <div class="text card-title">Apple</div>
-                    <div>Preparation</div>
-                    <button class="card-button" data-company="Apple" aria-label="Start Apple Preparation">GET STARTED
-                    </button>
-                    <div class="line topl"></div>
-                    <div class="line leftl"></div>
-                    <div class="line bottoml"></div>
-                    <div class="line rightl"></div>
-                </div>
-            </div>
-            <div class="outer">
-                <div class="dot"></div>
-                <div class="card prep-card">
-                    <div class="ray"></div>
-                    <div class="text card-title">Netflix</div>
-                    <div>Preparation</div>
-                    <button class="card-button" data-company="Netflix" aria-label="Start Netflix Preparation">GET
-                        STARTED</button>
-                    <div class="line topl"></div>
-                    <div class="line leftl"></div>
-                    <div class="line bottoml"></div>
-                    <div class="line rightl"></div>
-                </div>
-            </div>
-            <div class="outer">
-                <div class="dot"></div>
-                <div class="card prep-card">
-                    <div class="ray"></div>
-                    <div class="text card-title">TCS</div>
-                    <div>Preparation</div>
-                    <button class="card-button" data-company="TCS" aria-label="Start TCS Preparation">GET STARTED
-                    </button>
-                    <div class="line topl"></div>
-                    <div class="line leftl"></div>
-                    <div class="line bottoml"></div>
-                    <div class="line rightl"></div>
-                </div>
-            </div>
-            <div class="outer">
-                <div class="dot"></div>
-                <div class="card prep-card">
-                    <div class="ray"></div>
-                    <div class="text card-title">Infosys</div>
-                    <div>Preparation</div>
-                    <button class="card-button" data-company="Infosys" aria-label="Start Infosys Preparation">GET
-                        STARTED</button>
-                    <div class="line topl"></div>
-                    <div class="line leftl"></div>
-                    <div class="line bottoml"></div>
-                    <div class="line rightl"></div>
-                </div>
-            </div>
-            <div class="outer">
-                <div class="dot"></div>
-                <div class="card prep-card">
-                    <div class="ray"></div>
-                    <div class="text card-title">Wipro</div>
-                    <div>Preparation</div>
-                    <button class="card-button" data-company="Wipro" aria-label="Start Wipro Preparation">GET STARTED
-                    </button>
-                    <div class="line topl"></div>
-                    <div class="line leftl"></div>
-                    <div class="line bottoml"></div>
-                    <div class="line rightl"></div>
-                </div>
-            </div>
-            <div class="outer">
-                <div class="dot"></div>
-                <div class="card prep-card">
-                    <div class="ray"></div>
-                    <div class="text card-title">Accenture</div>
-                    <div>Preparation</div>
-                    <button class="card-button" data-company="Accenture" aria-label="Start Accenture Preparation">GET
-                        STARTED</button>
-                    <div class="line topl"></div>
-                    <div class="line leftl"></div>
-                    <div class="line bottoml"></div>
-                    <div class="line rightl"></div>
-                </div>
-            </div>
-            <div class="outer">
-                <div class="dot"></div>
-                <div class="card prep-card">
-                    <div class="ray"></div>
-                    <div class="text card-title">Adobe</div>
-                    <div>Preparation</div>
-                    <button class="card-button" data-company="Adobe" aria-label="Start Adobe Preparation">GET STARTED
-                    </button>
-                    <div class="line topl"></div>
-                    <div class="line leftl"></div>
-                    <div class="line bottoml"></div>
-                    <div class="line rightl"></div>
-                </div>
-            </div>
-            <div class="outer">
-                <div class="dot"></div>
-                <div class="card prep-card">
-                    <div class="ray"></div>
-                    <div class="text card-title">Salesforce</div>
-                    <div>Preparation</div>
-                    <button class="card-button" data-company="Salesforce" aria-label="Start Salesforce Preparation">GET
-                        STARTED</button>
-                    <div class="line topl"></div>
-                    <div class="line leftl"></div>
-                    <div class="line bottoml"></div>
-                    <div class="line rightl"></div>
-                </div>
-            </div>
-            <!-- Add more company cards as needed -->
-
+        <div class="card-grid" id="company-cards">
+            <!-- Cards will be rendered by JS -->
         </div>
     </section>
 
@@ -204,7 +434,67 @@
         </div>
     </footer>
 
-    <script src="interview-script.js"></script>
+    <script>
+        // Company data (could be loaded from a JSON file)
+        const companies = [
+            { name: "Google", icon: "fa-google", color: "#34a853" },
+            { name: "Meta (Facebook)", icon: "fa-facebook", color: "#1877f3" },
+            { name: "Amazon", icon: "fa-amazon", color: "#f59e42" },
+            { name: "Microsoft", icon: "fa-microsoft", color: "#0078d4" },
+            { name: "Apple", icon: "fa-apple", color: "#111" },
+            { name: "Netflix", icon: "fa-netflix", color: "#e50914" },
+            { name: "TCS", icon: "fa-building", color: "#6366f1" },
+            { name: "Infosys", icon: "fa-building-columns", color: "#6366f1" },
+            { name: "Wipro", icon: "fa-building", color: "#6366f1" },
+            { name: "Accenture", icon: "fa-briefcase", color: "#f59e42" },
+            { name: "Adobe", icon: "fa-laptop-code", color: "#a78bfa" },
+            { name: "Salesforce", icon: "fa-cloud", color: "#38bdf8" }
+        ];
+
+        function renderCompanyCards() {
+            const grid = document.getElementById('company-cards');
+            grid.innerHTML = '';
+            companies.forEach(company => {
+                const outer = document.createElement('div');
+                outer.className = 'outer';
+                outer.innerHTML = `
+                    <div class="dot"></div>
+                    <div class="card prep-card">
+                        <div class="ray"></div>
+                        <div class="text card-title">
+                            <i class="fab ${company.icon}" style="color:${company.color};"></i>
+                            ${company.name}
+                        </div>
+                        <div>Preparation</div>
+                        <button class="card-button" data-company="${company.name}" aria-label="Start ${company.name} Preparation">
+                            GET STARTED <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <div class="line topl"></div>
+                        <div class="line leftl"></div>
+                        <div class="line bottoml"></div>
+                        <div class="line rightl"></div>
+                    </div>
+                `;
+                grid.appendChild(outer);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCompanyCards();
+            // Add click event listeners to all card buttons
+            document.querySelectorAll('.card-button').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const companyName = button.getAttribute('data-company');
+                    if (companyName) {
+                        // Example: Redirect to a company-specific prep page (if exists)
+                        // window.location.href = `/interview/${companyName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.html`;
+                        alert(`Starting preparation guide for ${companyName}!`);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
