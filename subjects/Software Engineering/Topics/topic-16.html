@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Topic 16: Software Reuse - EduVision</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Nunito:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(120deg, #f4f7fa 0%, #e9eafc 100%);
+            color: #232946;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(90deg, #4f46e5 0%, #2563eb 100%);
+            color: #fff;
+            padding: 28px 0 20px 0;
+            box-shadow: 0 4px 16px rgba(79, 70, 229, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .header-brand {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.1rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-brand a {
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-brand svg {
+            margin: 0 4px;
+            color: #fde047;
+            transition: transform 0.2s;
+        }
+
+        .header-brand a:hover svg {
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        .header-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+        }
+
+        .header-desc {
+            font-size: 1.08rem;
+            opacity: 0.92;
+            margin-bottom: 0;
+        }
+
+        main {
+            flex: 1 1 auto;
+            padding: 40px 0 0 0;
+        }
+
+        .content-section {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 6px 32px rgba(79, 70, 229, 0.08), 0 1.5px 6px rgba(79, 70, 229, 0.03);
+            padding: 38px 32px;
+            margin-bottom: 38px;
+            transition: box-shadow 0.2s;
+        }
+
+        .content-section:hover {
+            box-shadow: 0 12px 36px rgba(79, 70, 229, 0.13), 0 2px 8px rgba(79, 70, 229, 0.06);
+        }
+
+        .content-section h2 {
+            font-size: 2.3rem;
+            font-weight: 800;
+            color: #4338ca;
+            border-bottom: 3px solid #a5b4fc;
+            padding-bottom: 12px;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .content-section h2 .icon {
+            color: #6366f1;
+            font-size: 2.1rem;
+        }
+
+        .content-section h3 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #2563eb;
+            margin-top: 38px;
+            margin-bottom: 18px;
+            border-top: 2px solid #dbeafe;
+            padding-top: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .content-section h3 .icon {
+            color: #6366f1;
+            font-size: 1.4rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #6366f1;
+            margin-top: 28px;
+            margin-bottom: 10px;
+        }
+
+        .content-section h5 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #a21caf;
+            margin-top: 22px;
+            margin-bottom: 8px;
+        }
+
+        .content-section h6,
+        .sub-h6 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0891b2;
+            margin-top: 18px;
+            margin-bottom: 8px;
+            background: #e0f2fe;
+            padding: 6px 14px;
+            border-radius: 7px;
+            display: inline-block;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section ol {
+            color: #3b3b4f;
+            font-size: 1.08rem;
+            margin-bottom: 18px;
+            line-height: 1.7;
+        }
+
+        .content-section ul.simple-list {
+            list-style: disc inside;
+            padding-left: 18px;
+            color: #444;
+        }
+
+        .content-section ul.simple-list ul {
+            list-style: circle inside;
+            margin-top: 6px;
+        }
+
+        .content-section ol.styled-list {
+            list-style: decimal inside;
+            padding-left: 18px;
+        }
+
+        .content-section ul.custom-bullets li,
+        .content-section ul.checklist li {
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 10px;
+        }
+
+        .content-section ul.custom-bullets li::before {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            top: 2px;
+            color: #6366f1;
+            font-size: 1em;
+        }
+
+        .content-section ul.checklist li::before {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            top: 2px;
+            color: #22c55e;
+            font-size: 1em;
+        }
+
+        .content-section ul.checklist {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-box {
+            background: #eef2ff;
+            border-left: 5px solid #6366f1;
+            color: #3730a3;
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin: 24px 0 28px 0;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.06);
+            font-size: 1.05rem;
+        }
+
+        .info-box strong {
+            color: #3730a3;
+        }
+
+        .challenge-box {
+            background: #fee2e2;
+            border-left: 5px solid #ef4444;
+            color: #991b1b;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 18px 0 18px 0;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.08);
+            font-size: 1.01rem;
+        }
+
+        .benefit-box {
+            background: #dcfce7;
+            border-left: 5px solid #22c55e;
+            color: #166534;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 18px 0 18px 0;
+            box-shadow: 0 2px 8px rgba(34, 197, 94, 0.08);
+            font-size: 1.01rem;
+        }
+
+        .stage-card {
+            background: #e0f2fe;
+            border-radius: 8px;
+            border: 1.5px solid #bae6fd;
+            padding: 14px 18px;
+            margin-bottom: 10px;
+            color: #0369a1;
+            font-size: 1.01rem;
+            box-shadow: 0 1px 4px rgba(14, 165, 233, 0.04);
+        }
+
+        .diagram-container {
+            background: #f8fafc;
+            border: 1.5px solid #e0e7ef;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(99, 102, 241, 0.06);
+            padding: 18px 18px 12px 18px;
+            margin: 32px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .diagram-container img {
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e0e7ef;
+        }
+
+        .diagram-container figcaption {
+            color: #64748b;
+            font-size: 0.98rem;
+            margin-top: 10px;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            background: linear-gradient(90deg, #6366f1 0%, #2563eb 100%);
+            color: #fff;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 1.08rem;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.10);
+            border: none;
+            text-decoration: none;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+        }
+
+        .nav-button:hover,
+        .nav-button:focus {
+            background: linear-gradient(90deg, #4338ca 0%, #1e40af 100%);
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.18);
+            color: #fff;
+            transform: translateY(-2px) scale(1.03);
+            text-decoration: none;
+        }
+
+        .nav-button .icon {
+            font-size: 1.1em;
+        }
+
+        .topic-nav {
+            margin-top: 48px;
+            padding-top: 28px;
+            border-top: 1.5px solid #e0e7ef;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            align-items: center;
+        }
+
+        @media (min-width: 640px) {
+            .topic-nav {
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 0;
+            }
+        }
+
+        footer {
+            text-align: center;
+            font-size: 1.01rem;
+            color: #64748b;
+            padding: 32px 0 18px 0;
+            margin-top: 48px;
+            background: #f1f5f9;
+            border-top: 1.5px solid #e0e7ef;
+            letter-spacing: 0.02em;
+        }
+
+        footer a {
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+            color: #4338ca;
+        }
+
+        .fa-heart {
+            color: #ef4444;
+            vertical-align: middle;
+        }
+
+        .mt-12 {
+            margin-top: 3rem;
+        }
+
+        .pt-8 {
+            padding-top: 2rem;
+        }
+
+        .mb-8 {
+            margin-bottom: 2rem;
+        }
+
+        .gap-6 {
+            gap: 1.5rem;
+        }
+
+        .max-w-xs {
+            max-width: 260px;
+        }
+
+        .max-w-sm {
+            max-width: 340px;
+        }
+
+        .max-w-md {
+            max-width: 480px;
+        }
+
+        .max-w-lg {
+            max-width: 700px;
+        }
+
+        .max-w-xl {
+            max-width: 900px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-xs {
+            font-size: 0.92em;
+        }
+
+        .italic {
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container"
+            style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
+            <div class="header-brand">
+                <a href="../../../index.html">
+                    <span>Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-0.5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2" style="color:#fde047;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span>ision</span>
+                </a>
+            </div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
+                <span class="header-title">Software Engineering</span>
+                <span class="header-desc">Explore each topic in depth</span>
+            </div>
+            <div style="width:3rem;"></div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="flex justify-between items-center mb-8">
+            <a href="../software-engineering.html"
+                class="text-indigo-600 hover:text-indigo-800 hover:underline font-medium text-lg transition-colors duration-300">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Syllabus
+            </a>
+            <div class="bg-indigo-600 text-white text-base font-semibold px-5 py-2 rounded-lg shadow-md">
+                Topic 16 <!-- Assuming Software Reuse is Topic 16 -->
+            </div>
+        </div>
+
+        <section class="content-section">
+            <h2><i class="fas fa-recycle icon"></i>Software Reuse</h2>
+            <p class="text-xl mb-6 text-slate-600">Software products are expensive, and project managers are constantly
+                seeking ways to cut development costs. Software reuse, the practice of using parts from previously
+                developed software, is a promising approach. It's analogous to building electronic circuits with
+                standard ICs and hardware components.</p>
+            <div class="benefit-box">
+                <p><strong class="block mb-1">Benefits of Reuse:</strong> Beyond reducing development cost and time,
+                    reuse ensures higher quality as reusable components have typically already undergone rigorous
+                    testing and proven their reliability.</p>
+            </div>
+            <p>Component-based software development, which emphasizes assembling software from off-the-shelf components,
+                is distinct from traditional development and is heavily reliant on effective reuse.</p>
+        </section>
+
+        <section class="content-section">
+            <h3 id="what-can-be-reused"><i class="fas fa-box-open icon"></i>14.1 What Can Be Reused?</h3>
+            <p>Many artifacts associated with software development can potentially be reused, including project plans
+                and test plans. The prominent items that can be effectively reused are:</p>
+            <ul class="checklist mt-4 text-lg">
+                <li><i class="fas fa-file-alt mr-2"></i>Requirements specification</li>
+                <li><i class="fas fa-drafting-compass mr-2"></i>Design</li>
+                <li><i class="fas fa-code mr-2"></i>Code</li>
+                <li><i class="fas fa-tasks mr-2"></i>Test cases</li>
+                <li><i class="fas fa-brain mr-2"></i>Knowledge</li>
+            </ul>
+            <p class="mt-6">**Knowledge** is the most abstract development artifact that can be reused. While some
+                knowledge reuse occurs automatically without conscious effort, effectively reusing potentially reusable
+                development knowledge is difficult. It requires systematic extraction and documentation, which is often
+                challenging.</p>
+        </section>
+
+        <section class="content-section">
+            <h3 id="why-no-reuse"><i class="fas fa-question-circle icon"></i>14.2 Why Almost No Reuse So Far?
+                (Challenges)</h3>
+            <div class="challenge-box">
+                <p>A common scenario in software development is the frustration of engineers realizing their current
+                    system is being built from scratch, without leveraging lessons or components from past, similar
+                    systems. This "reinvention of the wheel" often occurs because no one has the time to analyze
+                    similarities and exploit past work.</p>
+            </div>
+            <p>Even when organizations embark on reuse programs, they face significant challenges:</p>
+            <ul class="simple-list text-sm">
+                <li>Creating components that are genuinely reusable across different applications is inherently
+                    difficult.</li>
+                <li>It's hard to anticipate the exact components that can be widely reused.</li>
+                <li>Even when reusable components are available, programmers often prefer to create their own due to
+                    difficulties in understanding or adapting existing ones.</li>
+            </ul>
+            <div class="info-box">
+                <p><i class="fas fa-calculator mr-2"></i>**Observation:** Mathematical routines (e.g., `sin`, `cos`) are
+                    reused very successfully. This is because they are well-understood (everyone knows what `cosine`
+                    means), have a small, standardized interface (e.g., `cosine` takes one parameter), and standard data
+                    formats. These are fundamental lessons for broader reuse efforts.</p>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h3 id="basic-issues-reuse"><i class="fas fa-cogs icon"></i>14.3 Basic Issues in Any Reuse Program</h3>
+            <p>Successfully implementing a reuse program requires addressing several key issues:</p>
+            <ul class="checklist mt-4 text-lg">
+                <li><i class="fas fa-plus-square mr-2"></i>Component creation (identifying and designing for
+                    reusability).</li>
+                <li><i class="fas fa-archive mr-2"></i>Component indexing and storing (for efficient search, e.g., in
+                    RDBMS/ODBMS).</li>
+                <li><i class="fas fa-search mr-2"></i>Component searching (matching requirements with available
+                    components).</li>
+                <li><i class="fas fa-book-reader mr-2"></i>Component understanding (clear documentation and well-defined
+                    functionality).</li>
+                <li><i class="fas fa-edit mr-2"></i>Component adaptation (modifying components to fit new contexts,
+                    which can be risky).</li>
+                <li><i class="fas fa-database mr-2"></i>Repository maintenance (adding new, tracking faulty, retiring
+                    obsolete components).</li>
+            </ul>
+        </section>
+
+        <section class="content-section">
+            <h3 id="reuse-approach"><i class="fas fa-sitemap icon"></i>14.4 A Reuse Approach</h3>
+            <p>A promising approach is to introduce a "building block" methodology. Reusable components are identified
+                after each project, enhanced for reusability, and cataloged into a component library.</p>
+
+            <h4 class="mt-8">14.4.1 Domain Analysis</h4>
+            <p>The aim of domain analysis is to identify reusable components relevant to a specific problem domain (a
+                technically related set of applications, e.g., accounting software, banking software). A reuse domain
+                shows coherence through shared concepts, techniques, and terminologies.</p>
+            <p class="text-sm">Example: In an airline reservation system, reusable objects could be seats, flights,
+                airports, crew; reusable operations could be scheduling a flight, reserving a seat, assigning crew.
+                Domain analysis helps generalize application domains.</p>
+            <p>**Domain Engineering** is the actual construction of reusable components for a domain, often involving a
+                community of developers discussing common solutions.</p>
+            <h6 class="mt-6">Evolution of a Reuse Domain (Stages):</h6>
+            <div class="space-y-3 mt-4">
+                <div class="stage-card"><strong>Stage 1:</strong> No clear/consistent notations; no reusable components.
+                    All software from scratch.</div>
+                <div class="stage-card"><strong>Stage 2:</strong> Experience from similar projects; only knowledge reuse
+                    exists.</div>
+                <div class="stage-card"><strong>Stage 3:</strong> Domain concepts stabilized, notations standardized.
+                    Standard solutions to standard problems available. Ripe for both knowledge and component reuse.
+                </div>
+                <div class="stage-card"><strong>Stage 4:</strong> Domain fully explored. Software development largely
+                    automated using domain-specific languages (DSLs) or application generators.</div>
+            </div>
+
+            <h4 class="mt-8">14.4.2 Component Classification</h4>
+            <p>Proper classification is crucial for effective indexing and storage. Components can be described by
+                natural language, logic schema, timing information, etc. Higher-level descriptions often have more
+                ambiguity.</p>
+            <h6 class="mt-6">Prieto-Diaz's Classification Scheme:</h6>
+            <p>A faceted classification where each component is described by a number of characteristics or facets, such
+                as:</p>
+            <ul class="simple-list text-sm">
+                <li>Actions they embody</li>
+                <li>Objects they manipulate</li>
+                <li>Data structures used</li>
+                <li>Systems they are part of</li>
+            </ul>
+            <p class="text-sm">This requires enumerating an n-tuple that best fits the component, forcing a predefined
+                hierarchy and making it easier to classify and search than purely enumerative schemes. Cross-referencing
+                can handle complex relationships.</p>
+
+            <h4 class="mt-8">14.4.3 Searching</h4>
+            <p>For large repositories, efficient searching is key. A popular method involves a web interface to the
+                repository, using approximate automated search (keywords) and then browsing related items. This allows
+                users to start with a broad search and progressively refine it. Remember that items to be searched can
+                be components, designs, models, requirements, or even knowledge.</p>
+
+            <h4 class="mt-8">14.4.4 Repository Maintenance</h4>
+            <p>This involves entering new items, retiring obsolete items, and modifying search attributes to improve
+                search effectiveness. It's an ongoing process critical to the health of the reuse program.</p>
+
+            <h4 class="mt-8">14.4.5 Reuse without Modifications & Application Generators</h4>
+            <p>The ideal is "plug-and-play" reuse where standard solutions emerge that require no modification. This is
+                more useful than traditional program libraries and can be supported by compilers through linkage to
+                run-time support routines (often called **application generators**).</p>
+            <p>Application generators translate specifications (which can be textual using a 4GL or visual using
+                standard symbols) into application programs. They excel at parameterizing routines (defining what's
+                variant vs. invariant).</p>
+            <h6 class="mt-6">Advantages of Application Generators:</h6>
+            <ul class="simple-list text-sm">
+                <li>Express variant information appropriately.</li>
+                <li>Result in fewer errors.</li>
+                <li>Easier to maintain programs.</li>
+                <li>Abstract away substantial development effort for implementation details.</li>
+            </ul>
+            <h6 class="mt-6">Handicaps:</h6>
+            <ul class="simple-list text-sm">
+                <li>May not support all necessary new concepts/features (requiring an "escape mechanism" to a 3GL).</li>
+                <li>More successful for data processing and UI development; less so for applications with close hardware
+                    interaction or real-time systems.</li>
+            </ul>
+        </section>
+
+        <section class="content-section">
+            <h3 id="reuse-organization-level"><i class="fas fa-building icon"></i>14.5 Reuse at Organization Level</h3>
+            <p>Reusability should be a standard part of all software development activities (design, implementation,
+                testing, etc.), fostering a steady flow of reusable components. However, extracting reusable components
+                from ongoing projects can be difficult for original developers.</p>
+            <h6 class="mt-4">Steps to Achieve Organization-Level Reuse:</h6>
+            <ol class="styled-list text-sm">
+                <li><strong>Assessing a product's potential for reuse:</strong> Often via questionnaires circulated
+                    among developers. Questions might include:
+                    <ul class="simple-list ml-4 text-xs">
+                        <li>Would the component's functionality be required for future systems?</li>
+                        <li>How common is its function within its domain?</li>
+                        <li>Would there be duplication if this component isn't taken up?</li>
+                        <li>Is it hardware dependent? Is the design optimized enough?</li>
+                        <li>If non-reusable, can it be decomposed into reusable parts?</li>
+                        <li>Can we parameterize a non-reusable component to make it reusable?</li>
+                    </ul>
+                </li>
+                <li><strong>Refining a product for greater reusability:</strong> Must be relatively easy to adapt.
+                    <ul class="simple-list ml-4 text-xs">
+                        <li><strong>Name generalization:</strong> General names, not application-specific.</li>
+                        <li><strong>Operation generalization:</strong> Add operations to make it more general; remove
+                            application-specific operations.</li>
+                        <li><strong>Exception generalization:</strong> Handle a broader range of exceptions.</li>
+                    </ul>
+                </li>
+                <li><strong>Handling portability problems:</strong> Programs often make assumptions about the underlying
+                    machine or OS. These machine dependencies (e.g., data representation, OS calls, function libraries)
+                    must be abstracted or localized.
+                    <div class="diagram-container">
+                        <img src="fig14.1-portability-interface.png"
+                            alt="Improving reusability using a portability interface" class="max-w-md">
+                        <figcaption>Figure 14.1: A portability interface abstracts platform-related calls, routing them
+                            appropriately. This adds overhead but enhances portability.</figcaption>
+                    </div>
+                </li>
+            </ol>
+
+            <h5 class="mt-8">14.5.1 Current State of Reuse (Inhibiting Factors)</h5>
+            <p>Despite benefits, many organizations struggle with effective reuse programs. Non-technical factors are
+                often the culprits:</p>
+            <div class="challenge-box">
+                <ul class="simple-list text-sm">
+                    <li>**Need for commitment from top management.**</li>
+                    <li>**Adequate documentation to support reuse.** (Crucial for understanding and trusting
+                        components).</li>
+                    <li>**Incentives to reward those who contribute reusable components AND those who reuse existing
+                        components.**</li>
+                    <li>**Providing access to and information about the reuse repository.** (Fear of competitors
+                        accessing proprietary components can be a barrier if not managed).</li>
+                    <li>Restricting reuse to highly mature components can stifle creative potential. Making a product
+                        available before thorough assessment can be counterproductive ("Negative experiences tend to
+                        make one distrustful of the entire reuse framework").</li>
+                </ul>
+            </div>
+        </section>
+
+        <div class="mt-12 pt-8 border-t border-slate-300 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <a href="topic-15.html" class="nav-button"> <!-- Assuming previous topic is 15 -->
+                <i class="fas fa-arrow-left icon"></i> Previous Topic
+            </a>
+            <!-- Add next topic link if applicable, or link back to syllabus -->
+            <a href="../software-engineering.html" class="nav-button">
+                Back to Syllabus <i class="fas fa-list-alt icon"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <!-- Footer content -->
+        © <span id="currentYear"></span> <a href="../../../index.html">EduVision</a>.
+        All rights reserved. Crafted with <i class="fas fa-heart"></i> for learning.
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>

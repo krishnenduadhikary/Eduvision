@@ -5,38 +5,79 @@
       {
         "title": "Number Systems & Conversions",
         "description": "Binary, Octal, Decimal, Hexadecimal systems and conversions.",
-        "resources": ["Notes", "Examples", "Video"]
+        "subtopics": [
+          "Types of number systems: Binary (Base-2), Octal (Base-8), Decimal (Base-10), Hexadecimal (Base-16)",
+          "Conversions: Decimal ↔ Binary, Binary ↔ Octal, Binary ↔ Hexadecimal, Decimal ↔ Octal/Hexadecimal (via binary)",
+          "Binary arithmetic: Addition, Subtraction, Multiplication, Division, 1’s and 2’s Complement"
+        ],
+        "resources": []
       },
       {
         "title": "Boolean Algebra",
         "description": "Learn Boolean laws, theorems, and simplification techniques.",
-        "resources": ["Notes", "Truth Table", "Video"]
+        "subtopics": [
+          "Basic Boolean operations and variables",
+          "Laws and Theorems: Identity, Null, Idempotent, Inverse, Commutative, Associative, Distributive, DeMorgan’s Theorems",
+          "Boolean expressions: Simplification techniques, Duality principle",
+          "Canonical forms: Sum of Products (SOP), Product of Sums (POS)"
+        ],
+        "resources": []
       },
       {
         "title": "Logic Gates",
         "description": "AND, OR, NOT, NAND, NOR, XOR, and XNOR gate operations.",
-        "resources": ["Diagram", "Simulation"]
+        "subtopics": [
+          "Basic gates: AND, OR, NOT",
+          "Universal gates: NAND, NOR",
+          "Other gates: XOR, XNOR",
+          "Gate-level implementation of Boolean expressions",
+          "Truth tables and logic diagrams"
+        ],
+        "resources": []
       },
       {
         "title": "Combinational Circuits",
         "description": "Design and analysis of multiplexers, decoders, encoders, and adders.",
-        "resources": ["Examples", "Notes"]
+        "subtopics": [
+          "Overview and characteristics",
+          "Design and analysis of: Multiplexers (MUX), Demultiplexers (DEMUX), Encoders, Decoders, Half Adder & Full Adder, Subtractor",
+          "Binary comparators and parity generators"
+        ],
+        "resources": []
       },
       {
         "title": "Karnaugh Maps (K-Maps)",
         "description": "Simplify Boolean expressions using 2, 3, and 4-variable K-Maps.",
-        "resources": ["Interactive", "Video"]
+        "subtopics": [
+          "Purpose and use in simplification",
+          "K-Maps for: 2-variable, 3-variable, 4-variable functions",
+          "Grouping techniques: Pairs, Quads, Octets",
+          "Don’t Care conditions",
+          "Minimization of SOP and POS expressions"
+        ],
+        "resources": []
       },
       {
         "title": "Sequential Circuits",
         "description": "Flip-Flops, Counters, and Shift Registers.",
-        "resources": ["Diagram", "Notes", "Video"]
+        "subtopics": [
+          "Difference from combinational circuits",
+          "Flip-Flops: SR, JK, D, T flip-flops, Truth tables and characteristic equations, Master-slave and edge-triggered types",
+          "Counters: Asynchronous (Ripple) counters, Synchronous counters, Up, Down, and Up/Down counters",
+          "Shift Registers: SISO, SIPO, PISO, PIPO, Applications"
+        ],
+        "resources": []
       },
       {
         "title": "Finite State Machines",
         "description": "Design of Moore and Mealy machines.",
-        "resources": ["Notes", "Simulation"]
+        "subtopics": [
+          "Definition and classification",
+          "Design of: Moore Machines (Output depends on state), Mealy Machines (Output depends on state and input)",
+          "State diagrams and transition tables",
+          "Applications in control circuits and pattern recognition"
+        ],
+        "resources": []
       }
     ]
   }
-  

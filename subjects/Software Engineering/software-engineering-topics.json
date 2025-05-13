@@ -38,6 +38,11 @@
       "resources": ["Notes", "Videos"]
     },
     {
+      "title": "Data Flow Diagram",
+      "description": "Introduction to Data Flow Diagrams (DFD), symbols and conventions, levels of DFD (context, level 1, level 2), balancing and decomposition, practical examples and case studies.",
+      "resources": ["Notes", "Diagram", "Examples", "Videos"]
+    },
+    {
       "title": "Object Modelling Using Uml",
       "description": "Overview of object orieted concepts,unified modelling language,UML diagrams,use case model,class diagrams. ",
       "resources": ["Notes", "Videos", "Diagram"]

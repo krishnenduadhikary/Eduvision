@@ -1,66 +1,258 @@
 body {
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Segoe UI', 'Inter', 'Nunito', sans-serif;
   margin: 0;
-  background: #f1f5f9;
-  color: #222;
+  background: linear-gradient(120deg, #f4f7fa 0%, #e9eafc 100%);
+  color: #232946;
+  min-height: 100vh;
 }
 
+.eduvishion-logo .text-2xl {
+  font-size: 1.7rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  letter-spacing: 0.01em;
+}
+.eduvishion-logo .text-white {
+  color: #fff !important;
+}
+.eduvishion-logo .text-yellow-300 {
+  color: #fde047 !important;
+}
+.eduvishion-logo .group:hover .text-yellow-300 {
+  color: #fef08a !important;
+}
+.eduvishion-logo a {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.eduvishion-logo svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+
 .header {
-  background: #007acc;
+  background: linear-gradient(90deg, #4f46e5 0%, #2563eb 100%);
   color: white;
-  padding: 40px 20px;
+  padding: 56px 20px 40px 20px;
   text-align: center;
+  box-shadow: 0 6px 24px rgba(79,70,229,0.10);
+  letter-spacing: 0.02em;
+  border-bottom-left-radius: 32px;
+  border-bottom-right-radius: 32px;
+}
+
+.header h1 {
+  font-family: 'Nunito', 'Segoe UI', sans-serif;
+  font-size: 2.6rem;
+  font-weight: 900;
+  margin-bottom: 10px;
+  letter-spacing: 1.5px;
+  text-shadow: 0 2px 12px #6366f1cc;
+}
+
+.header p {
+  font-size: 1.18rem;
+  opacity: 0.96;
+  margin: 0;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 .overview {
-  padding: 30px;
+  padding: 48px 24px 0 24px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .overview h2 {
-  font-size: 24px;
-  margin-bottom: 20px;
+  font-size: 1.6rem;
+  margin-bottom: 28px;
+  color: #4338ca;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .topics-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 36px;
+  background: none;
+  margin-bottom: 48px;
 }
 
 .topic-card {
-  background: white;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-  transition: transform 0.2s ease;
+  background: linear-gradient(120deg, #f8fafc 60%, #e0e7ff 100%);
+  border-radius: 22px;
+  padding: 32px 26px 26px 26px;
+  min-height: 260px;
+  box-shadow: 0 8px 36px rgba(99,102,241,0.10), 0 2px 12px rgba(99,102,241,0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  border: none;
+  transition: box-shadow 0.22s, transform 0.22s, background 0.22s;
+  position: relative;
+  border-top: 4px solid #6366f1;
+  overflow: hidden;
 }
 
 .topic-card:hover {
-  transform: translateY(-5px);
+  box-shadow: 0 16px 48px rgba(99,102,241,0.18), 0 4px 18px rgba(99,102,241,0.08);
+  transform: translateY(-3px) scale(1.025);
+  background: linear-gradient(120deg, #e0e7ff 60%, #f8fafc 100%);
+  border-top: 4px solid #4338ca;
 }
 
 .topic-title {
-  font-size: 18px;
-  font-weight: bold;
-  color: #007acc;
-  margin-bottom: 10px;
+  font-size: 1.22rem;
+  font-weight: 800;
+  color: #2563eb;
+  margin-bottom: 4px;
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 4px #e0e7ff;
 }
 
 .topic-desc {
-  font-size: 14px;
-  margin-bottom: 10px;
+  font-size: 1.04rem;
+  color: #3b3b4f;
+  margin-bottom: 8px;
+  line-height: 1.7;
+  flex-grow: 1;
+  font-weight: 500;
+}
+
+.topic-card ul {
+  margin: 10px 0 12px 0;
+  padding-left: 20px;
+  font-size: 1.01rem;
+  color: #6366f1;
+  list-style: disc inside;
+}
+
+.topic-card ul li {
+  color: #444;
+  margin-bottom: 4px;
+  font-size: 0.99em;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.resource-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .resource-buttons button {
-  margin: 5px 5px 0 0;
-  padding: 6px 12px;
-  background-color: #007acc;
+  margin: 0;
+  padding: 7px 18px;
+  background: linear-gradient(90deg, #6366f1 0%, #2563eb 100%);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 999px;
+  font-size: 1.01rem;
+  font-weight: 700;
   cursor: pointer;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.10);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+  letter-spacing: 0.01em;
 }
 
 .resource-buttons button:hover {
-  background-color: #005f99;
+  background: linear-gradient(90deg, #4338ca 0%, #1e40af 100%);
+  box-shadow: 0 4px 16px rgba(99,102,241,0.18);
+  color: #fff;
+  transform: translateY(-2px) scale(1.04);
+}
+
+.card-number-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  background: linear-gradient(135deg, #6366f1 60%, #a5b4fc 100%);
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 900;
+  border-radius: 0 0 0 18px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(99,102,241,0.13);
+  border-bottom: 2px solid #6366f1;
+  border-left: 2px solid #6366f1;
+  letter-spacing: 0.02em;
+  z-index: 2;
+}
+
+.explore-btn {
+  background: linear-gradient(90deg, #6366f1 0%, #2563eb 100%);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 9px 22px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.10);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: 0.01em;
+}
+.explore-btn:hover {
+  background: linear-gradient(90deg, #4338ca 0%, #1e40af 100%);
+  box-shadow: 0 4px 16px rgba(99,102,241,0.18);
+  color: #fff;
+  transform: translateY(-2px) scale(1.04);
+}
+.explore-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  margin-left: 2px;
+}
+
+@media (max-width: 1100px) {
+  .overview {
+    padding: 28px 8px 0 8px;
+  }
+  .topics-grid {
+    gap: 20px;
+  }
+  .topic-card {
+    padding: 18px 10px 16px 10px;
+  }
+}
+
+@media (max-width: 700px) {
+  .header {
+    padding: 32px 8px 18px 8px;
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 18px;
+  }
+  .overview {
+    padding: 12px 2vw 0 2vw;
+  }
+  .topics-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .topic-card {
+    padding: 14px 6px 10px 6px;
+  }
 }

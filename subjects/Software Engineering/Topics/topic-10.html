@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Topic 10: User Interface Design - EduVision</title>
+    <title>Topic 9: Object-Oriented Software Development - EduVision</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito:wght@700&display=swap"
@@ -93,7 +93,7 @@
         .content-section h6 {
             font-size: 1.05rem;
             font-weight: 600;
-            color: #f59e42;
+            color: #14b8a6;
             margin-bottom: 0.4rem;
             margin-top: 1.2rem;
         }
@@ -203,36 +203,34 @@
             align-items: start;
         }
 
-        /* Styling for Golden Rules */
-        .golden-rule-card {
-            background: linear-gradient(90deg, #fef3c7 0%, #fde68a 100%);
-            border-left: 5px solid #f59e42;
+        /* Pattern Card Styling */
+        .pattern-card {
+            background: linear-gradient(120deg, #f3e8ff 60%, #fff 100%);
             padding: 1.2rem 1rem;
-            border-radius: 0.7rem;
-            box-shadow: 0 2px 8px rgba(251, 191, 36, 0.07);
-            margin-bottom: 1.2rem;
+            border-radius: 0.8rem;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.07);
+            border: 1px solid #e0e7ef;
             transition: box-shadow 0.2s, border-color 0.2s;
+            margin-bottom: 1.2rem;
         }
 
-        .golden-rule-card:hover {
-            box-shadow: 0 6px 20px rgba(251, 191, 36, 0.13);
-            border-color: #fbbf24;
+        .pattern-card:hover {
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.13);
+            border-color: #a78bfa;
         }
 
-        .rule-title {
-            color: #f59e42;
-            font-size: 1.08rem;
+        .pattern-title {
+            color: #7c3aed;
+            font-size: 1.15rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
         }
 
-        .rule-description {
-            color: #92400e;
-            font-size: 0.98rem;
+        .pattern-problem strong,
+        .pattern-card .pattern-solution strong {
+            color: #a21caf;
         }
+
 
         pre {
             background: #1e293b;
@@ -360,341 +358,313 @@
                 <i class="fas fa-arrow-left mr-2"></i>Back to Syllabus
             </a>
             <div class="bg-indigo-600 text-white text-base font-semibold px-5 py-2 rounded-lg shadow-md">
-                Topic 10
+                Topic 9
             </div>
         </div>
 
         <section class="content-section">
-            <h2><i class="fas fa-desktop icon"></i>User Interface (UI) Design</h2>
-            <p class="text-xl mb-8 text-slate-600">The user interface is the critical portion of a software product
-                responsible for all interactions with the user. In an era of highly interactive software, users often
-                judge a product by its UI. A well-designed UI enhances usability, reduces errors, and increases user
-                satisfaction, while a poor UI can lead to frustration and inefficiency.</p>
+            <h2><i class="fas fa-drafting-compass icon"></i>Object-Oriented Software Development</h2>
+            <p class="text-xl mb-8 text-slate-600">Object-Oriented Design (OOD) is a paradigm that shifts the focus from
+                functions to the natural objects (entities) within a problem domain. This chapter builds upon
+                object-modeling concepts to explore a comprehensive object-oriented analysis and design methodology.</p>
             <div class="info-box">
-                <p><i class="fas fa-exclamation-triangle mr-2"></i>Development of a good UI can consume a significant
-                    portion (up to 50%) of the total system development effort. Therefore, a systematic approach to UI
-                    design is essential.</p>
+                <p><i class="fas fa-lightbulb mr-2"></i>Grady Booch famously summarized the core difference: "Read the
+                    specification. If you want procedural code, find the verbs. If you want object-oriented programs,
+                    find the nouns."</p>
+            </div>
+            <p>Object-Oriented Analysis (OOA) develops an object model from requirements, which is then refined into a
+                design model (OOD) suitable for implementation using Object-Oriented Programming (OOP).</p>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-puzzle-piece icon"></i>8.1 Design Patterns</h3>
+            <p>Design patterns are reusable, well-documented solutions to commonly occurring problems within a given
+                context in software design. They act as guides for creating good designs, based on fundamental
+                principles and experience. Knowing patterns helps in developing robust solutions more quickly.</p>
+            <h6>A pattern typically has four important parts:</h6>
+            <ul class="simple-list">
+                <li>The **Problem** it addresses.</li>
+                <li>The **Context** in which the problem occurs.</li>
+                <li>The **Solution** (often described in terms of class interactions).</li>
+                <li>The **Context** within which the solution works (and sometimes, where it might not).</li>
+            </ul>
+
+            <div class="mt-8 space-y-6">
+                <div class="pattern-card">
+                    <h4 class="pattern-title">Expert Pattern</h4>
+                    <p class="pattern-problem"><strong>Problem:</strong> Which class should be responsible for certain
+                        information or tasks?</p>
+                    <p class="pattern-solution"><strong>Solution:</strong> Assign responsibility to the **information
+                        expert** – the class that has the information necessary to fulfill the required responsibility.
+                        This aligns with the intuition that objects "do" things related to the information they possess.
+                    </p>
+                    <div class="diagram-container">
+                        <img src="image.png" alt="Expert Pattern: Class and Collaboration Diagram" class="max-w-lg">
+                        <figcaption>Figure 8.1: Expert pattern example showing `SaleTransaction` as expert for `total`
+                            and `SaleItem` for `subTotal`.</figcaption>
+                    </div>
+                </div>
+
+                <div class="pattern-card">
+                    <h4 class="pattern-title">Creator Pattern</h4>
+                    <p class="pattern-problem"><strong>Problem:</strong> Which class should be responsible for creating
+                        an instance of class C2?</p>
+                    <p class="pattern-solution"><strong>Solution:</strong> Assign class C1 the responsibility to create
+                        an instance of C2 if one or more of these apply:
+                    <ul class="simple-list ml-4 mt-2">
+                        <li>C1 aggregates objects of type C2.</li>
+                        <li>C1 contains objects of type C2.</li>
+                        <li>C1 closely uses objects of type C2.</li>
+                        <li>C1 has the data that will be required to initialize objects of type C2 when they are
+                            created.</li>
+                    </ul>
+                    </p>
+                </div>
+
+                <div class="pattern-card">
+                    <h4 class="pattern-title">Controller Pattern</h4>
+                    <p class="pattern-problem"><strong>Problem:</strong> Who should be responsible for handling actor
+                        requests (system events)?</p>
+                    <p class="pattern-solution"><strong>Solution:</strong> For each use case, there should typically be
+                        a separate controller object responsible for handling all actor requests pertaining to that use
+                        case. This controller maintains necessary information about the state of the use case and can
+                        identify out-of-sequence requests. It decouples boundary objects (UI) from entity objects
+                        (domain logic).</p>
+                </div>
+
+                <div class="pattern-card">
+                    <h4 class="pattern-title">Facade Pattern</h4>
+                    <p class="pattern-problem"><strong>Problem:</strong> How should services be requested from a complex
+                        package or subsystem?</p>
+                    <p class="pattern-solution"><strong>Solution:</strong> Create a Facade class that provides a single,
+                        simplified, common interface to the services of the package. A package is a cohesive set of
+                        classes with strong responsibilities (e.g., an RDBMS interface). The Facade hides the complexity
+                        of the subsystem.</p>
+                </div>
+
+                <div class="pattern-card">
+                    <h4 class="pattern-title">Model-View Separation Pattern</h4>
+                    <p class="pattern-problem"><strong>Problem:</strong> How should non-GUI (model/domain) classes
+                        communicate with GUI (view) classes without direct coupling?</p>
+                    <p class="pattern-solution"><strong>Solution:</strong> Model objects should not have direct
+                        knowledge of or be directly coupled to view objects. This results in a reusable model. Two
+                        common approaches:
+                    <ol class="styled-list ml-4 mt-2">
+                        <li><strong>Polling (Pull from above):</strong> GUI objects are responsible for asking (pulling)
+                            relevant information from model objects when needed. Efficient for some applications but not
+                            for real-time visualizations or monitoring.</li>
+                        <li><strong>Publish-Subscribe Pattern (Push from below):</strong> An event notification system
+                            is implemented. An Event Manager class tracks subscribers and event types. Publishers send
+                            messages to the Event Manager, which then notifies all registered subscribers (often via
+                            callbacks). Java's `EventListener` interface supports this.</li>
+                    </ol>
+                    </p>
+                </div>
+                <div class="pattern-card">
+                    <h4 class="pattern-title">Intermediary Pattern (Proxy)</h4>
+                    <p class="pattern-problem"><strong>Problem:</strong> How should client and server objects (software
+                        components, possibly across a network) interact?</p>
+                    <p class="pattern-solution"><strong>Solution:</strong> Define a Proxy object on the client side that
+                        acts as a local stand-in for the remote server object. The Proxy hides network transmission
+                        details, determines server address, communicates requests, obtains responses, and passes them to
+                        the client. It can also augment or filter exchanged information and may have the same interface
+                        as the remote server, abstracting network complexities from the client.</p>
+                </div>
             </div>
         </section>
 
         <section class="content-section">
-            <h3><i class="fas fa-star icon"></i>9.1 Characteristics of a Good User Interface</h3>
-            <p>A good user interface is more than just aesthetically pleasing; it possesses several key characteristics
-                that contribute to a positive user experience:</p>
-            <ul class="custom-bullets">
-                <li><strong>Speed of Learning:</strong> Easy to learn, avoiding complex syntax. Uses metaphors (e.g.,
-                    shopping cart, cut/paste) and intuitive command names. Consistency and component-based design also
-                    aid learning.</li>
-                <li><strong>Speed of Use:</strong> Efficient interaction, minimizing time and effort for tasks.
-                    Frequently used commands should be easily accessible.</li>
-                <li><strong>Speed of Recall:</strong> Easy for intermittent users to remember command procedures.
-                    Metaphors and intuitive names help.</li>
-                <li><strong>Error Prevention & Handling:</strong> Minimizes scope for errors. Prevents wrong value
-                    entry. Provides clear, polite, and specific error messages.</li>
-                <li><strong>Attractiveness:</strong> Visually appealing and engaging. Graphics-based UIs often have an
-                    edge here.</li>
-                <li><strong>Consistency:</strong> Uniform command names, procedures, and behavior across the interface
-                    helps users generalize knowledge.</li>
-                <li><strong>Feedback:</strong> Provides timely system responses to user actions, especially for
-                    long-running processes.</li>
-                <li><strong>Support for Multiple Skill Levels:</strong> Caters to both novice (ease of learning) and
-                    expert users (efficiency, shortcuts, macros).</li>
-                <li><strong>Error Recovery (Undo Facility):</strong> Allows users to easily reverse actions, reducing
-                    anxiety and encouraging exploration.</li>
-                <li><strong>User Guidance and Online Help:</strong> Provides assistance when users are stuck or want to
-                    learn more.</li>
-            </ul>
-        </section>
-
-        <section class="content-section">
-            <h3><i class="fas fa-book-reader icon"></i>9.2 Basic Concepts in UI Design</h3>
-            <h4>9.2.1 User Guidance and Online Help</h4>
-            <p>Effective help systems are crucial for user support.</p>
-            <ul class="simple-list">
-                <li><strong>Online Help System:</strong> Should be context-dependent (tailored to what the user is
-                    doing) and adapt to the user's experience level. It should leverage graphics/animation and not just
-                    be a copy of manual text.</li>
-                <li><strong>Guidance Messages:</strong> Prompt users about next actions, system status, and progress of
-                    commands. Should be configurable for different user levels.</li>
-                <li><strong>Error Messages:</strong> Must be polite, specific, and avoid ambiguity (e.g., "Invalid
-                    input" is poor). They should clearly state the problem and ideally suggest a solution.</li>
-            </ul>
-        </section>
-
-        <section class="content-section">
-            <h3><i class="fas fa-mouse-pointer icon"></i>9.3 Types of User Interfaces</h3>
-            <p>User interfaces can be broadly classified into three categories, though modern applications often use a
-                combination.</p>
-
-            <h4>9.3.1 Command Language-Based Interface (CLI)</h4>
-            <p>Users interact by typing commands using a specific language syntax. Was prevalent before graphical
-                monitors. Still favored by many technical users.</p>
+            <h3><i class="fas fa-project-diagram icon"></i>A Generalized Object-Oriented Analysis and Design Process
+            </h3>
+            <p>This process begins by making an analysis model, which is then refined into a design model through
+                iterations. It explains how to define system requirements and translate them into a logical solution
+                that can be implemented.</p>
             <div class="diagram-container">
-                <img src="image-7.png" alt="CLI Elements: Command Prompt, Cursor, Command, Parameters, Output"
-                    class="max-w-xl">
-                <figcaption>Elements of a Command Line Interface.</figcaption>
+                <img src="image-2.png" alt="An object-oriented analysis and design process" class="max-w-2xl">
+                <figcaption>Figure 8.2: Schematic of an object-oriented analysis and design process flow.</figcaption>
             </div>
+
+            <h4>8.2.1 Overview</h4>
+            <p>The process typically starts with developing a **Use Case Model**. This model, along with the **SRS
+                document**, informs the construction of a **Domain Model**. The Domain Model is then refined into a
+                **Class Diagram** through iterations involving **Interaction Diagrams**. A **Glossary** of terms is
+                continuously maintained to ensure clear communication and reduce misunderstandings. User interface
+                prototypes often evolve in parallel.</p>
+
+            <h4>8.2.2 Use Case Model Development</h4>
+            <p>The essence is to capture user requirements by detailing all scenarios of user interactions. There's a
+                strong correlation between the user manual's content and the use case model. Iterating on GUI design and
+                use cases in parallel is an excellent approach, but use cases should remain independent of specific GUI
+                elements (e.g., radio buttons), as UI can change more frequently than core functionality. State use
+                cases from the actor's perspective using active voice verb phrases (e.g., "Admit patient," "Issue
+                book").</p>
+            <h6>Common Mistakes in Use Case Model Development:</h6>
             <ul class="simple-list">
-                <li><strong>Advantages:</strong> Fast interaction for experts, efficient for complex commands
-                    (composition), implementable on cheap terminals, easier to develop (using tools like lex/yacc). Uses
-                    fewer computer resources than GUI.</li>
-                <li><strong>Disadvantages:</strong> Difficult to learn, requires memorization, prone to typing errors,
-                    keyboard-only interaction, unsuitable for casual users.</li>
-                <li><strong>Design Issues:</strong> Meaningful mnemonics, user-defined aliases, command composition
-                    facility.</li>
+                <li><strong>Clutter:</strong> Too many use cases in the top-level diagram. Organize using packages.</li>
+                <li><strong>Confusing Sub-steps:</strong> Mistaking sub-steps of a use case (e.g., "print receipt") for
+                    separate, top-level use cases.</li>
+                <li><strong>Omitting Text Descriptions:</strong> Makes it hard to fully understand behavior and leads to
+                    implementation difficulties.</li>
+                <li><strong>Missing Alternative Scenarios:</strong> Leads to incomplete functionality or late discovery
+                    of issues.</li>
             </ul>
 
-            <h4>9.3.2 Menu-Based Interfaces</h4>
-            <p>Users select commands from lists (menus), reducing the need to remember exact syntax. Interaction is
-                often via a pointing device.</p>
+            <h4>8.2.3 Domain Modelling (Conceptual Modelling)</h4>
+            <p>A domain model represents the concepts or objects appearing in the problem domain and their
+                relationships. A recommended strategy is to quickly create a rough conceptual model focusing on obvious
+                concepts, then refine and extend it.</p>
+            <h5>Classifying Objects in the Domain Model:</h5>
+            <div class="diagram-container">
+                <img src="image-3.png"
+                    alt="Typical realization of a use case through boundary, controller, and entity objects"
+                    class="max-w-xl">
+                <figcaption>Figure 8.3: Interaction of Boundary, Controller, and Entity objects for a use case.
+                </figcaption>
+            </div>
             <ul class="simple-list">
-                <li><strong>Advantages:</strong> No need to remember command syntax (recognition vs. recall), minimal
-                    typing. Good for occasional users.</li>
-                <li><strong>Disadvantages:</strong> Slower for experts, command composition is difficult or impossible,
-                    can be cumbersome if the number of choices is large.</li>
+                <li><strong>Boundary Objects:</strong> Objects with which actors interact (e.g., screens, menus,
+                    dialogs). Responsible for user interaction, input validation, output formatting, but typically not
+                    processing logic. A common heuristic is one boundary class per actor/use case pair.</li>
+                <li><strong>Entity Objects:</strong> Hold information that needs to outlive use case execution (e.g.,
+                    data tables, files like `Book`, `BookRegister`). Often "dumb servers" for storing and fetching data.
+                </li>
+                <li><strong>Controller Objects:</strong> Coordinate activities of boundary and entity objects to provide
+                    overall system behavior for a use case. They decouple boundary and entity objects, embodying much of
+                    the use case realization logic. Often, one controller object per use case, though complex use cases
+                    might need more, or trivial ones might omit it.</li>
             </ul>
-            <h6>Structuring Menu Items:</h6>
+
+            <h4>8.2.4 Identification of Entity Objects</h4>
+            <p>This is a crucial step. Grammatical analysis of the problem description (processing narrative) is a
+                common approach (originated by Booch):</p>
+            <ul class="simple-list">
+                <li>Nouns are potential objects.</li>
+                <li>Verbs are potential methods.</li>
+            </ul>
+            <p>Eliminate synonyms. Distinguish between objects in the solution space (needed for implementation) and
+                problem space (descriptive). An imperative verb form (e.g., "move") represents an action, not an object.
+            </p>
+            <h6>Criteria for Legitimate Objects:</h6>
+            <ul class="simple-list">
+                <li><strong>Retained Information:</strong> Object needs to store some private data.</li>
+                <li><strong>Multiple Attributes & Operations:</strong> Useful objects typically have several attributes
+                    and support multiple methods.</li>
+                <li><strong>Common Operations:</strong> Defined operations must apply to all instances. If not, consider
+                    subclasses.</li>
+            </ul>
+            <p><strong>Actor Surrogates:</strong> Classes needed to store information about an actor within the system
+                (e.g., `LibraryMember` class for a library member actor).</p>
+            <p>While grammatical analysis is simple, high-quality abstractions often result from deeper insight into the
+                problem.</p>
+            <h6>Example 8.1: Tic-Tac-Toe Entity Object Identification</h6>
+            <p>Problem description nouns: Tic-tac-toe, game, human player, computer, moves, square, mark, straight line,
+                board, row, column, diagonal. After eliminating synonyms, problem-domain-only nouns (human player), and
+                action-nouns (move), the primary entity object identified is often `Board` (or `Square` as part of
+                Board).</p>
+
+            <h4>8.2.5 Interaction Modelling</h4>
+            <p>Aims to allocate responsibilities to classes and show detailed interactions over time for each use case.
+                This is typically done using **Sequence Diagrams**. One sequence diagram per use case is often needed,
+                potentially split for complex scenarios or alternative flows.</p>
+
+            <h4>8.2.7 CRC (Class-Responsibility-Collaborator) Cards</h4>
+            <p>A simple, effective technique for determining class responsibilities in a use case realization. Pioneered
+                by Ward Cunningham and Kent Beck.</p>
+            <ul class="simple-list">
+                <li>Index cards, one per class.</li>
+                <li>Lists class name, its responsibilities, and collaborator classes it needs to fulfill those
+                    responsibilities.</li>
+                <li>Developed in small group sessions with role-playing.</li>
+                <li>Cards are deliberately small to limit responsibilities per class.</li>
+            </ul>
+            <div class="diagram-container">
+                <img src="image-4.png" alt="CRC card for the BookRegister class" class="max-w-md">
+                <figcaption>Figure 8.4: Example CRC card for `BookRegister`.</figcaption>
+            </div>
+            <p>Interaction diagrams can often be developed by "flipping through" CRC cards.</p>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-microscope icon"></i>8.3 Examples of OOA&D Process</h3>
+
+            <h4>Example 8.2: Tic-Tac-Toe Computer Game</h4>
             <div class="diagram-grid">
                 <div class="diagram-container">
-                    <img src="image.png" alt="Scrolling Menu for Font Size Selection" class="max-w-sm">
-                    <figcaption>Figure 9.1: Scrolling Menu.</figcaption>
+                    <img src="image-5.png" alt="Use case model for Tic-Tac-Toe" class="max-w-xs">
+                    <figcaption>Figure 8.5: Use Case - "Play move".</figcaption>
                 </div>
                 <div class="diagram-container">
-                    <img src="image-2.png" alt="Example of a Walking Menu" class="max-w-lg">
-                    <figcaption>Figure 9.2: Walking Menu (sub-menus appear adjacent).</figcaption>
+                    <img src="image-6.png" alt="Initial and refined domain model for Tic-Tac-Toe" class="max-w-md">
+                    <figcaption>Figure 8.6: (a) Initial Domain (`Board`), (b) Refined with Boundary & Controller.
+                    </figcaption>
                 </div>
             </div>
-            <ul class="simple-list mt-4">
-                <li><strong>Scrolling Menu:</strong> Used when all choices don't fit on screen. Commands should be
-                    highly correlated for easy location.</li>
-                <li><strong>Walking Menu:</strong> Selecting a menu item causes a further menu (sub-menu) to appear,
-                    often adjacent. Can become a hierarchical tree.</li>
-                <li><strong>Hierarchical Menu:</strong> Menu items organized in a tree. Can manage many choices but
-                    users might lose track if the tree is deep.</li>
-            </ul>
+            <div class="diagram-container">
+                <img src="image-7.png" alt="Sequence diagram for play move use case" class="max-w-lg">
+                <figcaption>Figure 8.7: Sequence Diagram for "Play move".</figcaption>
+            </div>
+            <div class="diagram-container">
+                <img src="image-8.png" alt="Class diagram for Tic-Tac-Toe" class="max-w-lg">
+                <figcaption>Figure 8.8: Class Diagram showing `Board`, `PlayMoveBoundary`, `Controller`.</figcaption>
+            </div>
 
-            <h4>9.3.3 Direct Manipulation Interfaces (Iconic Interfaces)</h4>
-            <p>Present the interface as visual models of objects. Users issue commands by performing actions directly on
-                these visual representations (e.g., dragging a file icon to a trash icon).</p>
-            <ul class="simple-list">
-                <li><strong>Advantages:</strong> Icons easily recognized, often language-independent.</li>
-                <li><strong>Disadvantages:</strong> Can be slow for experienced users, difficult for complex commands
-                    (e.g., deleting all files matching a pattern).</li>
-            </ul>
+            <h4 class="mt-10">Example 8.3: Supermarket Prize Scheme</h4>
+            <div class="diagram-grid">
+                <div class="diagram-container">
+                    <img src="image-9.png" alt="Use case model for Supermarket Prize Scheme" class="max-w-md">
+                    <figcaption>Figure 8.9: Use Cases - `register-customer`, `register-sales`, `select-winners`.
+                    </figcaption>
+                </div>
+                <div class="diagram-container">
+                    <!-- Interpreting Figure 8.10 from your scan -->
+                    <img src="image-10.png" alt="Domain/Class model elements for Supermarket Prize Scheme"
+                        class="max-w-xl">
+                    <figcaption>Figure 8.10 (interpretation): (a) Entities like `SalesHistory`, `CustomerRegister`. (b)
+                        Boundary & Controller classes.</figcaption>
+                </div>
+            </div>
+            <p>The text mentions sequence diagrams (Figures 8.11, 8.12, 8.13 - not provided in image set) and a final
+                class diagram (Figure 8.15 - not provided) would be developed similarly, populating methods based on
+                sequence diagram messages.</p>
         </section>
 
         <section class="content-section">
-            <h3><i class="fas fa-window-maximize icon"></i>Graphical User Interface (GUI) - General Concepts</h3>
-            <p>GUIs provide graphical means for users to interact with systems, combining hardware and software. While
-                often more resource-consuming than CLIs, they allow for complex, efficient, and accurate interactions.
-            </p>
-            <div class="diagram-container">
-                <img src="image-8.png" alt="Common GUI Elements" class="max-w-2xl">
-                <figcaption>Typical GUI Elements: Window, Tabs, Icons, Slider, Status-bar.</figcaption>
-            </div>
-            <h5>Common GUI Elements:</h5>
-            <ul class="simple-list">
-                <li><strong>Window:</strong> A primary area for displaying application content. Can be moved, resized,
-                    minimized. May contain child windows.</li>
-                <li><strong>Tabs:</strong> Allow multiple documents or views within a single window (Tabbed Document
-                    Interface).</li>
-                <li><strong>Menu:</strong> Standard list of commands, usually at the top, can be hidden/shown.</li>
-                <li><strong>Icon:</strong> Small picture representing an application or file. Double-clicking often
-                    opens it.</li>
-                <li><strong>Cursor:</strong> Interacting device (mouse, touch pointer) representation on screen.</li>
-            </ul>
-            <div class="diagram-container">
-                <img src="image-9.png" alt="Application Specific GUI Components" class="max-w-lg">
-                <figcaption>Application-specific components like Dialogue Boxes.</figcaption>
-            </div>
-            <h5>Application Specific GUI Components:</h5>
-            <ul class="simple-list">
-                <li><strong>Application Window:</strong> Main window using OS-supplied constructs or custom elements.
+            <h3><i class="fas fa-award icon"></i>8.4 OOD Goodness Criteria</h3>
+            <p>Arriving at a good object-oriented design involves subjective judgments. Therefore, accepted criteria are
+                needed to judge design quality.</p>
+            <ul class="custom-bullets">
+                <li><strong>Coupling Guidelines:</strong> Minimize coupling between objects or groups of objects.
+                    Excessive coupling is detrimental to modularity and prevents reuse.</li>
+                <li><strong>Cohesion Guidelines:</strong> Aim for high cohesion at three levels:
+                    <ol class="simple-list ml-6">
+                        <li>Cohesiveness of individual methods (each method does one well-defined function).</li>
+                        <li>Cohesiveness of data and methods within a class (methods act on data for which the object is
+                            naturally responsible).</li>
+                        <li>Cohesiveness of an entire class hierarchy (promotes encapsulation).</li>
+                    </ol>
                 </li>
-                <li><strong>Dialogue Box:</strong> Child window for messages or user input (e.g., confirmation for
-                    deletion).</li>
-                <li><strong>Text-Box:</strong> Area for user to type text-based data.</li>
-                <li><strong>Buttons:</strong> Imitate real-life buttons for submitting inputs.</li>
+                <li><strong>Hierarchy and Factoring Guidelines:</strong> A base class should not have too many
+                    subclasses (approx. 7±2 is a heuristic). This aids understandability.</li>
+                <li><strong>Keeping Message Protocols Simple:</strong> Complex message protocols (e.g., more than three
+                    parameters) can indicate excessive coupling.</li>
+                <li><strong>Number of Methods per Class:</strong> Objects with too many methods (e.g., >7) are likely
+                    application-specific, complex, and less reusable.</li>
+                <li><strong>Depth of Inheritance Tree:</strong> Very deep trees can make classes complex due to many
+                    inherited methods. Keep height manageable.</li>
+                <li><strong>Number of Messages per Use Case:</strong> A single message triggering an excessive chain of
+                    messages across many objects complicates testing and debugging.</li>
+                <li><strong>Response For a Class (RFC):</strong> The maximum number of different methods an instance of
+                    this class would call (counting a method only once if called multiple times). A class calling >7
+                    different methods might be error-prone.</li>
             </ul>
-            <div class="diagram-container">
-                <img src="image-10.png" alt="Input GUI Components like Radio Buttons, Check Boxes, List Boxes"
-                    class="max-w-md">
-                <figcaption>Input selection components.</figcaption>
-            </div>
-            <h5>Other Impressive GUI Components:</h5>
-            <ul class="simple-list">
-                <li><strong>Radio Buttons:</strong> Select one option from a mutually exclusive set.</li>
-                <li><strong>Check Boxes:</strong> Select one or more options.</li>
-                <li><strong>List Box:</strong> Select one or more items from a displayed list.</li>
-                <li><strong>Sliders:</strong> Adjust a value along a continuous range.</li>
-                <li><strong>Combo Box:</strong> Button-like, expands to show a list of choices. Useful for space saving
-                    or run-time computed menus.</li>
-                <li><strong>Data Grid:</strong> Displays data in a tabular (rows and columns) format.</li>
-                <li><strong>Drop-down List:</strong> Similar to a combo box, presents a list of options when clicked.
-                </li>
-            </ul>
-        </section>
-
-        <section class="content-section">
-            <h3><i class="fas fa-puzzle-piece icon"></i>9.4 Component-Based GUI Development</h3>
-            <p>Modern GUI development relies heavily on pre-defined components (widgets). This approach became popular
-                with the advent of graphical terminals and iconic interfaces in the 1980s (e.g., Apple Macintosh).</p>
-
-            <h4>9.4.1 Window System</h4>
-            <p>Most GUIs are built using a window system that manages displays through windows.</p>
-            <div class="diagram-container">
-                <img src="image-3.png" alt="Window with client and user (window manager) areas" class="max-w-xl">
-                <figcaption>Figure 9.3: Window structure with client and window manager areas.</figcaption>
-            </div>
-            <ul class="simple-list">
-                <li><strong>Window:</strong> A rectangular screen area, a "virtual screen" for independent activities.
-                    Divided into a client area (for application display) and a non-client area (borders, scroll bars,
-                    managed by the window manager).</li>
-                <li><strong>Window Management System (WMS):</strong> Manages multiple windows, screen resources, and
-                    basic window behaviors (create, move, resize, iconify). Consists of a Window Manager and a Window
-                    System.</li>
-            </ul>
-            <div class="diagram-container">
-                <img src="image-4.png" alt="Window Management System architecture" class="max-w-lg">
-                <figcaption>Figure 9.4: User interaction with Window Manager, Window System, and Application Program.
-                </figcaption>
-            </div>
-            <p>The **Window Manager** is the component the end-user interacts with for window operations. The **Window
-                System** determines how windows look and behave, providing services to application programmers.
-                **Widgets** are standard UI components (abstractions of window objects) used for development.</p>
-            <p>Component-based (widget-based) development helps users learn interfaces faster due to consistency across
-                applications and significantly reduces the application programmer's work, making them more of an
-                "interface integrator."</p>
-
-            <h4>9.4.3 An Overview of X-Window/Motif</h4>
-            <p>The X-Window system is notable for allowing development of network-independent GUIs. Applications
-                developed with X-Window are device-independent and can run on one computer while displaying on another
-                across a network.</p>
-            <div class="diagram-container">
-                <img src="image-5.png" alt="Network-independent GUI with X-Window System" class="max-w-2xl">
-                <figcaption>Figure 9.5: Application A running on one computer, displaying on computer B via LAN.
-                </figcaption>
-            </div>
-
-            <h4>9.4.4 X-Architecture</h4>
-            <div class="diagram-container">
-                <img src="image-6.png" alt="Architecture of the X-System" class="max-w-md">
-                <figcaption>Figure 9.6: Layered architecture of the X-Window System.</figcaption>
-            </div>
-            <ul class="simple-list">
-                <li><strong>X-server:</strong> Runs on hardware, manages display and input devices. Performs low-level
-                    graphics, window, and input functions. Controls access to bit-mapped display.</li>
-                <li><strong>X-protocol:</strong> Defines request format between client applications and display servers
-                    over the network. Independent of hardware, OS, and programming language.</li>
-                <li><strong>X-library (Xlib):</strong> C library providing routines for applications to make requests
-                    (via X-protocol) to the X-server. Low-level primitives for displaying windows, drawing graphics,
-                    handling events.</li>
-                <li><strong>Xtoolkit (Xt):</strong> Higher-level library built on Xlib. Consists of:
-                    <ul>
-                        <li><strong>Intrinsics:</strong> Library routines to combine widgets into a UI.</li>
-                        <li><strong>Widgets:</strong> Pre-defined UI components (scroll bars, buttons). X/Motif is a
-                            popular widget set. DECWindows used X-Window for its look and feel.</li>
-                    </ul>
-                </li>
-            </ul>
-
-            <h4>9.4.5 Visual Programming</h4>
-            <p>A drag-and-drop style of UI development. Visual objects (icons) representing GUI components are provided
-                by the programming environment. The developer builds the UI by dragging and placing these components.
-                Examples: Visual Basic, Visual C++.</p>
-
-            <h6>Size Measurement of Component-Based GUI:</h6>
-            <p>Lines of Code (LOC) is not suitable. **Widget Points (WP)** (total number of widgets) is a better metric,
-                representing intricacy and being relatively environment-independent.</p>
-        </section>
-
-        <section class="content-section">
-            <h3><i class="fas fa-tasks icon"></i>9.5 A User Interface Design Methodology</h3>
-            <p>While no strict step-by-step methodology exists, user-centered design principles guide the process. This
-                is distinct from design *by* users; developers leverage user knowledge but apply design expertise.</p>
-            <h6>Implications of Human Cognition:</h6>
-            <ul class="simple-list">
-                <li><strong>Limited Short-Term Memory:</strong> Humans remember ~7 unrelated items. UI should display
-                    necessary info, not require recall across screens.</li>
-                <li><strong>Frequent Task Closure:</strong> Break complex tasks into subtasks with clear completion
-                    feedback for user satisfaction.</li>
-                <li><strong>Recognition Rather Than Recall:</strong> Presenting options is better than requiring users
-                    to remember commands.</li>
-            </ul>
-            <div class="diagram-container">
-                <img src="image-11.png" alt="GUI Design and Development Cycle" class="max-w-md">
-                <figcaption>A model for GUI design and development specific steps.</figcaption>
-            </div>
-            <h6>GUI Design Activities:</h6>
-            <ol class="styled-list">
-                <li><strong>GUI Requirement Gathering:</strong> Collect functional and non-functional UI requirements.
-                </li>
-                <li><strong>User Analysis:</strong> Understand the target audience (technical savvy, experience) to
-                    tailor complexity.</li>
-                <li><strong>GUI Task Analysis:</strong> Analyze tasks to be done (what, not how). Represent
-                    hierarchically.</li>
-                <li><strong>GUI Design and Implementation:</strong> Design the UI based on requirements, tasks, user
-                    environment. Implement with working or dummy software.</li>
-                <li><strong>GUI Testing:</strong> In-house inspection, user involvement, beta releases. Test usability,
-                    compatibility, user acceptance.</li>
-            </ol>
-            <p>GUI implementation tools (e.g., FLUID, AppInventor, Visual Studio) provide controls and allow code
-                customization.</p>
-        </section>
-
-        <section class="content-section">
-            <h3><i class="fas fa-gem icon"></i>User Interface Golden Rules (Shneiderman & Plaisant)</h3>
-            <p>These widely recognized principles provide a strong foundation for creating effective user interfaces:
-            </p>
-            <div class="space-y-4 mt-6">
-                <div class="golden-rule-card">
-                    <h5 class="rule-title"><i class="fas fa-equals icon"></i>Strive for consistency.</h5>
-                    <p class="rule-description">Consistent actions, terminology, and commands throughout.</p>
-                </div>
-                <div class="golden-rule-card">
-                    <h5 class="rule-title"><i class="fas fa-bolt icon"></i>Enable frequent users to use shortcuts.</h5>
-                    <p class="rule-description">Abbreviations, function keys, macros for expert users.</p>
-                </div>
-                <div class="golden-rule-card">
-                    <h5 class="rule-title"><i class="fas fa-comment-dots icon"></i>Offer informative feedback.</h5>
-                    <p class="rule-description">System response for every user action; modest for minor, substantial for
-                        major.</p>
-                </div>
-                <div class="golden-rule-card">
-                    <h5 class="rule-title"><i class="fas fa-flag-checkered icon"></i>Design dialogs to yield closure.
-                    </h5>
-                    <p class="rule-description">Organize actions into groups with clear beginnings, middles, and ends
-                        for a sense of accomplishment.</p>
-                </div>
-                <div class="golden-rule-card">
-                    <h5 class="rule-title"><i class="fas fa-shield-alt icon"></i>Offer simple error handling.</h5>
-                    <p class="rule-description">Prevent serious errors; provide simple, comprehensible error detection
-                        and handling.</p>
-                </div>
-                <div class="golden-rule-card">
-                    <h5 class="rule-title"><i class="fas fa-undo icon"></i>Permit easy reversal of actions.</h5>
-                    <p class="rule-description">Relieves anxiety and encourages exploration; allows undoing of single
-                        actions or groups.</p>
-                </div>
-                <div class="golden-rule-card">
-                    <h5 class="rule-title"><i class="fas fa-user-cog icon"></i>Support internal locus of control.</h5>
-                    <p class="rule-description">Make users feel in charge, initiating actions rather than just
-                        responding.</p>
-                </div>
-                <div class="golden-rule-card">
-                    <h5 class="rule-title"><i class="fas fa-brain icon"></i>Reduce short-term memory load.</h5>
-                    <p class="rule-description">Keep displays simple, consolidate multiple pages, reduce window motion,
-                        allow training time.</p>
-                </div>
-            </div>
         </section>
 
         <div class="mt-12 pt-8 border-t border-slate-300 flex flex-col sm:flex-row justify-between items-center gap-6">
-            <a href="topic-9.html" class="nav-button" aria-label="Previous Topic">
+            <a href="topic-8.html" class="nav-button" aria-label="Previous Topic">
                 <i class="fas fa-arrow-left icon"></i> Previous Topic
             </a>
-            <a href="../software-engineering.html" class="nav-button" aria-label="Back to Syllabus">
-                Back to Syllabus <i class="fas fa-list-alt icon"></i>
+            <a href="topic-10.html" class="nav-button" aria-label="Next Topic">
+                Next Topic <i class="fas fa-arrow-right icon"></i>
             </a>
         </div>
     </main>

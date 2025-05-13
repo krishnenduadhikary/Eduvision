@@ -4,389 +4,430 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Topic 8: Object Modelling Using UML - EduVision</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Topic 8: Data Flow Diagrams (DFD) - EduVision</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito:wght@700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Nunito:wght@700&display=swap"
         rel="stylesheet">
     <style>
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 100%);
-            color: #1e293b;
+            margin: 0;
             font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(120deg, #f4f7fa 0%, #e9eafc 100%);
+            color: #232946;
             display: flex;
             flex-direction: column;
         }
 
         header {
-            background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+            background: linear-gradient(90deg, #4f46e5 0%, #2563eb 100%);
             color: #fff;
-            padding: 1.5rem 0.5rem;
-            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.10);
+            padding: 28px 0 20px 0;
+            box-shadow: 0 4px 16px rgba(79, 70, 229, 0.08);
             position: sticky;
             top: 0;
-            z-index: 50;
+            z-index: 10;
         }
 
-        .logo a {
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .header-brand {
             font-family: 'Nunito', sans-serif;
-            font-size: 2rem;
-            font-weight: 700;
-            color: #fff;
+            font-size: 2.1rem;
+            font-weight: 800;
+            letter-spacing: 1px;
             display: flex;
             align-items: center;
+            gap: 2px;
+        }
+
+        .header-brand a {
+            color: #fff;
             text-decoration: none;
-            transition: opacity 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 2px;
         }
 
-        .logo a:hover span {
-            opacity: 0.8;
-        }
-
-        .logo svg {
-            margin: 0 0.25rem;
+        .header-brand svg {
+            margin: 0 4px;
             color: #fde047;
-            transition: color 0.3s, transform 0.3s;
+            transition: transform 0.2s;
         }
 
-        .logo a:hover svg {
-            color: #fef08a;
-            transform: rotate(12deg);
+        .header-brand a:hover svg {
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        .header-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+        }
+
+        .header-desc {
+            font-size: 1.08rem;
+            opacity: 0.92;
+            margin-bottom: 0;
         }
 
         main {
-            flex-grow: 1;
-            max-width: 950px;
-            margin: 0 auto;
-            padding: 2.5rem 1rem 1rem 1rem;
+            flex: 1 1 auto;
+            padding: 40px 0 0 0;
         }
 
         .content-section {
-            background: linear-gradient(120deg, #fff 60%, #f3e8ff 100%);
-            padding: 2.2rem 1.7rem;
-            border-radius: 1.3rem;
-            box-shadow: 0 8px 36px rgba(139, 92, 246, 0.10), 0 2px 8px rgba(99, 102, 241, 0.08);
-            margin-bottom: 2.7rem;
-            border: 1.5px solid #e0e7ff;
-            transition: box-shadow 0.3s, border-color 0.2s, transform 0.18s cubic-bezier(.4, 2, .6, 1);
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 6px 32px rgba(79, 70, 229, 0.08), 0 1.5px 6px rgba(79, 70, 229, 0.03);
+            padding: 38px 32px;
+            margin-bottom: 38px;
+            transition: box-shadow 0.2s;
         }
 
         .content-section:hover {
-            box-shadow: 0 16px 48px rgba(139, 92, 246, 0.18), 0 4px 16px rgba(99, 102, 241, 0.13);
-            border-color: #a5b4fc;
-            transform: translateY(-4px) scale(1.012);
+            box-shadow: 0 12px 36px rgba(79, 70, 229, 0.13), 0 2px 8px rgba(79, 70, 229, 0.06);
         }
 
         .content-section h2 {
             font-size: 2.3rem;
-            font-weight: 700;
-            color: #7c3aed;
-            margin-bottom: 2.2rem;
-            border-bottom: 4px solid #c4b5fd;
-            padding-bottom: 1.1rem;
+            font-weight: 800;
+            color: #4338ca;
+            border-bottom: 3px solid #a5b4fc;
+            padding-bottom: 12px;
+            margin-bottom: 28px;
             display: flex;
             align-items: center;
-            gap: 0.8rem;
-            background: linear-gradient(90deg, #6366f1 0%, #a78bfa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            gap: 12px;
+        }
+
+        .content-section h2 .icon {
+            color: #6366f1;
+            font-size: 2.1rem;
         }
 
         .content-section h3 {
-            font-size: 1.6rem;
-            font-weight: 600;
-            color: #6366f1;
-            margin-bottom: 1.3rem;
-            margin-top: 2.5rem;
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #2563eb;
+            margin-top: 38px;
+            margin-bottom: 18px;
+            border-top: 2px solid #dbeafe;
+            padding-top: 18px;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 10px;
+        }
+
+        .content-section h3 .icon {
+            color: #6366f1;
+            font-size: 1.4rem;
         }
 
         .content-section h4 {
-            font-size: 1.22rem;
-            font-weight: 600;
-            color: #8b5cf6;
-            margin-bottom: 1.1rem;
-            margin-top: 2rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #6366f1;
+            margin-top: 28px;
+            margin-bottom: 10px;
         }
 
         .content-section h5 {
-            font-size: 1.08rem;
-            font-weight: 600;
-            color: #6366f1;
-            margin-bottom: 0.5rem;
-            margin-top: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #a21caf;
+            margin-top: 22px;
+            margin-bottom: 8px;
         }
 
         .content-section h6 {
             font-size: 1.05rem;
-            font-weight: 600;
-            color: #14b8a6;
-            margin-bottom: 0.4rem;
-            margin-top: 1.2rem;
+            font-weight: 700;
+            color: #0891b2;
+            margin-top: 18px;
+            margin-bottom: 8px;
+            background: #e0f2fe;
+            padding: 6px 14px;
+            border-radius: 7px;
+            display: inline-block;
         }
 
         .content-section p,
         .content-section ul,
         .content-section ol {
-            color: #334155;
-            font-size: 1.09rem;
-            margin-bottom: 1.2rem;
+            color: #3b3b4f;
+            font-size: 1.08rem;
+            margin-bottom: 18px;
             line-height: 1.7;
         }
 
-        .content-section ul.custom-bullets,
         .content-section ul.simple-list {
-            list-style: none;
-            padding-left: 0;
+            list-style: disc inside;
+            padding-left: 18px;
+            color: #444;
         }
 
-        .content-section ul.custom-bullets li {
-            margin-bottom: 0.7rem;
-            padding-left: 1.7em;
-            position: relative;
-        }
-
-        .content-section ul.custom-bullets li::before {
-            content: "\f00c";
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-            color: #6366f1;
-            position: absolute;
-            left: 0;
-            top: 0.1em;
-            font-size: 1em;
-        }
-
-        .content-section ul.simple-list li {
-            margin-bottom: 0.7rem;
-            padding-left: 1.5em;
-            position: relative;
-        }
-
-        .content-section ul.simple-list li::before {
-            content: "\2022";
-            color: #8b5cf6;
-            position: absolute;
-            left: 0;
-            font-size: 1.2em;
-            top: 0.1em;
+        .content-section ul.simple-list ul {
+            list-style: circle inside;
+            margin-top: 6px;
         }
 
         .content-section ol.styled-list {
             list-style: decimal inside;
-            padding-left: 1.2em;
+            padding-left: 18px;
         }
 
-        .content-section ol li {
-            margin-bottom: 0.5rem;
+        .key-observations li {
+            background: #e0f2fe;
+            border-left: 4px solid #0ea5e9;
+            color: #0369a1;
+            border-radius: 8px;
+            padding: 10px 16px;
+            margin-bottom: 8px;
+            font-size: 1.01rem;
+            box-shadow: 0 2px 8px rgba(14, 165, 233, 0.08);
         }
 
         .info-box {
-            background: linear-gradient(90deg, #ede9fe 0%, #e0e7ff 100%);
-            padding: 1.2rem 1rem;
-            border-left: 5px solid #a78bfa;
+            background: #eef2ff;
+            border-left: 5px solid #6366f1;
             color: #3730a3;
-            border-radius: 0.7rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.07);
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin: 24px 0 28px 0;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.06);
+            font-size: 1.05rem;
         }
 
         .info-box strong {
-            color: #7c3aed;
+            color: #3730a3;
         }
 
         .diagram-container {
             background: #f8fafc;
-            padding: 1.2rem;
-            border-radius: 1rem;
-            box-shadow: 0 2px 12px rgba(139, 92, 246, 0.07);
-            border: 1px solid #e0e7ef;
-            margin: 2rem 0;
+            border: 1.5px solid #e0e7ef;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(99, 102, 241, 0.06);
+            padding: 18px 18px 12px 18px;
+            margin: 32px 0;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
         .diagram-container img {
-            border-radius: 0.5rem;
-            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.09);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
             max-width: 100%;
             height: auto;
-            border: 1.5px solid #e0e7ef;
+            border: 1px solid #e0e7ef;
         }
 
         .diagram-container figcaption {
             color: #64748b;
             font-size: 0.98rem;
-            margin-top: 0.7rem;
+            margin-top: 10px;
             font-style: italic;
             text-align: center;
         }
 
+        .diagram-gallery {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 18px;
+        }
+
         .diagram-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 24px;
-            align-items: start;
-        }
-
-        .concept-group {
-            background: linear-gradient(120deg, #f3e8ff 60%, #fff 100%);
-            border: 1px solid #e0e7ef;
-            border-radius: 0.8rem;
-            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.07);
-            padding: 1.2rem 1rem;
-            margin-bottom: 0.5rem;
-            transition: box-shadow 0.2s, border-color 0.2s;
-        }
-
-        .concept-group:hover {
-            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.13);
-            border-color: #a78bfa;
-        }
-
-        .concept-group-title {
-            text-align: center;
-            font-weight: 600;
-            color: #6366f1;
-            margin-bottom: 0.7rem;
-            font-size: 1.02rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .concept-item {
-            background: #ede9fe;
-            color: #7c3aed;
-            font-size: 0.98rem;
-            font-weight: 500;
-            padding: 0.7em 1.1em;
-            border-radius: 0.6em;
-            text-align: center;
-            margin-bottom: 0.4em;
-            box-shadow: 0 1px 4px rgba(139, 92, 246, 0.07);
-            display: inline-block;
-        }
-
-        .grid-concepts,
-        .grid-concepts-single-col {
-            display: grid;
-            gap: 0.7em;
-        }
-
-        .grid-concepts {
             grid-template-columns: 1fr 1fr;
+            gap: 18px;
         }
 
-        .grid-concepts-single-col {
-            grid-template-columns: 1fr;
+        @media (min-width: 700px) {
+            .diagram-gallery {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
         }
 
-        pre {
-            background: #1e293b;
-            color: #fbbf24;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            overflow-x: auto;
-            font-size: 1rem;
-            margin: 1.2rem 0;
-            font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+        table.styled-table {
+            border-collapse: collapse;
+            margin: 18px 0;
+            font-size: 1em;
+            min-width: 320px;
+            width: 100%;
+            background: #f8fafc;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.06);
         }
 
-        code {
-            background: #ede9fe;
-            color: #7c3aed;
-            padding: 0.1em 0.4em;
-            border-radius: 0.3em;
-            font-size: 0.98em;
+        .styled-table th,
+        .styled-table td {
+            border: 1px solid #e0e7ef;
+            padding: 10px 14px;
+            text-align: left;
         }
 
-        pre code {
-            background: transparent;
-            color: inherit;
-            padding: 0;
-            border-radius: 0;
+        .styled-table th {
+            background: #e0e7ef;
+            color: #4338ca;
+            font-weight: 700;
+        }
+
+        .styled-table tr:nth-child(even) {
+            background: #f1f5f9;
+        }
+
+        .styled-table tr:hover {
+            background: #e0e7ef;
+        }
+
+        .styled-table caption {
+            color: #64748b;
+            font-size: 0.98rem;
+            margin-bottom: 6px;
+            font-style: italic;
+            text-align: left;
         }
 
         .nav-button {
             display: inline-flex;
             align-items: center;
-            padding: 0.75rem 1.5rem;
-            background: linear-gradient(90deg, #6366f1 0%, #a78bfa 100%);
+            gap: 8px;
+            padding: 12px 28px;
+            background: linear-gradient(90deg, #6366f1 0%, #2563eb 100%);
             color: #fff;
-            border-radius: 9999px;
-            font-weight: 500;
-            font-size: 1rem;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 1.08rem;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.10);
+            border: none;
             text-decoration: none;
-            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.13);
-            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-            margin: 0.5rem 0.5rem 0.5rem 0;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
         }
 
-        .nav-button:hover {
-            background: linear-gradient(90deg, #7c3aed 0%, #6366f1 100%);
+        .nav-button:hover,
+        .nav-button:focus {
+            background: linear-gradient(90deg, #4338ca 0%, #1e40af 100%);
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.18);
+            color: #fff;
             transform: translateY(-2px) scale(1.03);
-            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.18);
+            text-decoration: none;
+        }
+
+        .nav-button .icon {
+            font-size: 1.1em;
+        }
+
+        .topic-nav {
+            margin-top: 48px;
+            padding-top: 28px;
+            border-top: 1.5px solid #e0e7ef;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            align-items: center;
+        }
+
+        @media (min-width: 640px) {
+            .topic-nav {
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 0;
+            }
         }
 
         footer {
             text-align: center;
-            color: #7c3aed;
-            font-size: 1.02rem;
-            padding: 2rem 0 1rem 0;
-            background: #f3e8ff;
-            border-top: 1px solid #e0e7ef;
-            margin-top: 2rem;
+            font-size: 1.01rem;
+            color: #64748b;
+            padding: 32px 0 18px 0;
+            margin-top: 48px;
+            background: #f1f5f9;
+            border-top: 1.5px solid #e0e7ef;
+            letter-spacing: 0.02em;
         }
 
         footer a {
             color: #6366f1;
-            font-weight: 600;
             text-decoration: none;
-            transition: color 0.2s;
+            font-weight: 600;
         }
 
         footer a:hover {
-            color: #7c3aed;
+            text-decoration: underline;
+            color: #4338ca;
         }
 
-        @media (max-width: 700px) {
-            main {
-                padding: 1.2rem 0.3rem;
-            }
+        .fa-heart {
+            color: #ef4444;
+            vertical-align: middle;
+        }
 
-            .content-section {
-                padding: 1.2rem 0.7rem;
-            }
+        .mt-12 {
+            margin-top: 3rem;
+        }
 
-            .diagram-grid {
-                grid-template-columns: 1fr;
-            }
+        .pt-8 {
+            padding-top: 2rem;
+        }
 
-            .grid-concepts {
-                grid-template-columns: 1fr;
-            }
+        .mb-8 {
+            margin-bottom: 2rem;
+        }
+
+        .gap-6 {
+            gap: 1.5rem;
+        }
+
+        .max-w-xs {
+            max-width: 260px;
+        }
+
+        .max-w-sm {
+            max-width: 340px;
+        }
+
+        .max-w-md {
+            max-width: 480px;
+        }
+
+        .max-w-lg {
+            max-width: 700px;
+        }
+
+        .max-w-xl {
+            max-width: 900px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-xs {
+            font-size: 0.92em;
+        }
+
+        .italic {
+            font-style: italic;
         }
     </style>
 </head>
 
 <body>
     <header>
-        <!-- Header content from previous examples -->
-        <div class="container mx-auto flex flex-row items-center justify-between">
-            <div class="text-3xl font-bold" style="font-family: 'Nunito', sans-serif;">
-                <a href="../../../index.html" class="flex items-center group">
+        <div class="container"
+            style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
+            <div class="header-brand">
+                <a href="../../../index.html">
                     <span>Edu</span>
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        class="h-8 w-8 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-all duration-300 group-hover:rotate-12"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-0.5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2" style="color:#fde047;">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -394,392 +435,305 @@
                     <span>ision</span>
                 </a>
             </div>
-            <div class="flex-1 flex flex-col items-center">
-                <h1 class="text-3xl font-bold">Software Engineering</h1>
-                <p class="text-base opacity-90">Explore each topic in depth</p>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
+                <span class="header-title">Software Engineering</span>
+                <span class="header-desc">Explore each topic in depth</span>
             </div>
             <div style="width:3rem;"></div>
         </div>
     </header>
 
-    <main class="container mx-auto px-4 py-10">
+    <main class="container">
         <div class="flex justify-between items-center mb-8">
-            <a href="../software-engineering.html"
+            <a href="../data-structures-syllabus.html"
                 class="text-indigo-600 hover:text-indigo-800 hover:underline font-medium text-lg transition-colors duration-300">
                 <i class="fas fa-arrow-left mr-2"></i>Back to Syllabus
             </a>
             <div class="bg-indigo-600 text-white text-base font-semibold px-5 py-2 rounded-lg shadow-md">
-                Topic 8
+                Topic 8 <!-- Assuming DFD is Topic 8 -->
             </div>
         </div>
 
         <section class="content-section">
-            <h2><i class="fas fa-cubes icon"></i>Object Modelling Using UML</h2>
-            <p class="text-xl mb-8 text-slate-600">Object-oriented software development has become a dominant paradigm,
-                offering powerful ways to model and build complex systems. This topic explores core object-oriented
-                concepts and introduces the Unified Modeling Language (UML) as a standard tool for visualizing,
-                specifying, constructing, and documenting object-oriented systems.</p>
+            <h2><i class="fas fa-project-diagram icon"></i>Data Flow Diagrams (DFD)</h2>
+            <p class="text-xl mb-6 text-slate-600">A Data Flow Diagram (DFD) is a traditional graphical tool used to
+                represent the flow of information within a system. It clearly depicts how data enters and leaves the
+                system, what processes transform the information, and where data is stored. DFDs are essential for
+                showing the scope and boundaries of a system and serve as a communication tool between analysts and
+                stakeholders.</p>
 
-            <h3><i class="fas fa-lightbulb icon"></i>7.1 Overview of Object-Oriented Concepts</h3>
-            <p>Before diving into UML, let's revisit some fundamental concepts central to the object-oriented approach.
-                These concepts define how we think about and structure software in an OO way.</p>
+            <h6 class="font-semibold text-indigo-700">Key Observations about DFDs:</h6>
+            <ul class="key-observations mt-4 space-y-2">
+                <li>All names (processes, data stores, data flows, entities) should be unique for easy reference.</li>
+                <li>DFDs are NOT flowcharts. Arrows in DFDs represent flowing data, not the order of events or control
+                    flow.</li>
+                <li>Suppress logical decisions (no diamond-shaped boxes). DFDs don't imply an order of events for
+                    decisions.</li>
+                <li>Start with a high-level view and defer minute details, error conditions, and error handling until
+                    later stages of analysis or design.</li>
+            </ul>
+        </section>
+
+        <section class="content-section">
+            <h3 id="dfd-symbols"><i class="fas fa-shapes icon"></i>Symbols and Conventions</h3>
+            <p>Standard symbols are used to construct DFDs, primarily derived from Yourdon/DeMarco or Gane & Sarson
+                notations. The core components are:</p>
             <div class="diagram-container">
-                <img src="image.png" alt="Important concepts used in the object-oriented approach" class="max-w-2xl">
-                <figcaption>Figure 7.1: Key Concepts, Basic Mechanisms, and Related Terms in Object-Orientation.
+                <img src="dfd-symbols-table.png" alt="Standard Symbols for Data Flow Diagrams" class="max-w-lg">
+                <figcaption>Symbols for Data Flow Diagrams (Process, Data Flow, Data Store, External Entity).
                 </figcaption>
             </div>
-
-            <div class="grid md:grid-cols-3 gap-6 mt-8">
-                <div class="concept-group">
-                    <h4 class="concept-group-title">Basic Mechanisms</h4>
-                    <div class="grid-concepts-single-col">
-                        <div class="concept-item">Objects</div>
-                        <div class="concept-item">Classes & Instances</div>
-                        <div class="concept-item">Inheritance</div>
-                        <div class="concept-item">Messages & Methods</div>
-                    </div>
-                </div>
-                <div class="concept-group">
-                    <h4 class="concept-group-title">Key Concepts</h4>
-                    <div class="grid-concepts">
-                        <div class="concept-item">Abstraction</div>
-                        <div class="concept-item">Dynamic Binding</div>
-                        <div class="concept-item">Polymorphism</div>
-                        <div class="concept-item">Genericity</div>
-                        <div class="concept-item">Encapsulation</div>
-                        <div class="concept-item">Composite Objects</div>
-                    </div>
-                </div>
-                <div class="concept-group">
-                    <h4 class="concept-group-title">Related Terms</h4>
-                    <div class="grid-concepts">
-                        <div class="concept-item">Agents</div>
-                        <div class="concept-item">Widgets</div>
-                        <div class="concept-item">Persistence</div>
-                    </div>
-                </div>
-            </div>
-
-            <h5 class="mt-8">Core OO Principles:</h5>
-            <ul class="custom-bullets">
-                <li><strong>Objects:</strong> Real-world or conceptual entities involved in the solution design (e.g.,
-                    person, bank, customer). Each object has attributes (characteristics) and methods (behaviors).</li>
-                <li><strong>Classes:</strong> A generalized description or blueprint of an object. An object is an
-                    instance of a class. Classes define attributes and methods for their objects.</li>
-                <li><strong>Encapsulation (Information Hiding):</strong> Bundling attributes (data) and methods
-                    (operations on data) together within an object, restricting direct access from outside. This
-                    protects internal state and promotes modularity.</li>
-                <li><strong>Inheritance:</strong> Allows similar classes to be organized hierarchically. Sub-classes
-                    (derived classes) can inherit, implement, and reuse attributes and methods from their super-classes
-                    (base classes). This promotes code reuse and a natural way to model "is-a" relationships.</li>
-                <li><strong>Polymorphism ("Many Forms"):</strong> Allows methods with similar tasks but different
-                    implementations (e.g., varying arguments or operating on different data types) to share the same
-                    name. The correct method is invoked based on the context or object type, enabling a single interface
-                    for diverse behaviors.</li>
-                <li><strong>Abstraction:</strong> Focusing on essential characteristics while ignoring irrelevant
-                    details. Objects and classes provide abstractions of real-world entities.</li>
-                <li><strong>Messages & Methods:</strong> Objects communicate by sending messages to each other. A
-                    message is a request for an object to perform one of its operations (methods).</li>
+            <ul class="simple-list mt-6">
+                <li><strong>Process:</strong> Represented by a circle (bubble) or a rounded rectangle. It shows a
+                    process that transforms data inputs into data outputs.</li>
+                <li><strong>Data Flow:</strong> Represented by a curved or straight line with an arrowhead. It shows the
+                    direction of data movement into or out of a process or data store.</li>
+                <li><strong>Data Store:</strong> Represented by two parallel lines or an open-ended rectangle. It's a
+                    repository for data items that can be used later or by other processes.</li>
+                <li><strong>External Entity (Source/Sink):</strong> Represented by a rectangle. It's an external system,
+                    person, or organization that acts as a source of system inputs or a sink for system outputs. It lies
+                    outside the boundary of the system being modeled.</li>
             </ul>
-
-            <h5 class="mt-6">Object-Oriented Design Process (High-Level):</h5>
-            <ol class="simple-list">
-                <li>A solution design is created from requirements or existing system analysis.</li>
-                <li>Objects are identified and grouped into classes based on shared attributes and characteristics.</li>
-                <li>Class hierarchies and relationships among classes are defined (e.g., inheritance, association).</li>
-                <li>An application framework, defining the overall structure and flow, is established.</li>
-            </ol>
         </section>
 
         <section class="content-section">
-            <h3><i class="fas fa-language icon"></i>7.2 Unified Modeling Language (UML)</h3>
-            <p>UML is a standardized graphical modeling language used to specify, visualize, construct, and document the
-                artifacts of a software-intensive system. It provides a rich set of notations (rectangles, lines,
-                ellipses, etc.) to create various diagrams that model different aspects of a system.</p>
-            <div class="info-box">
-                <p><i class="fas fa-exclamation-circle mr-2"></i><strong>Important Note:</strong> UML is a modeling
-                    language, NOT a system design or development methodology. It is also not tied to any specific
-                    object-oriented methodology, unlike its predecessors. Its independence allows it to be used with
-                    various design approaches.</p>
-            </div>
+            <h3 id="dfd-levels"><i class="fas fa-layer-group icon"></i>Levels in Data Flow Diagrams (DFD)</h3>
+            <p>DFDs are partitioned into levels to represent increasing information flow and functional detail. This
+                hierarchical decomposition helps in understanding complex systems by starting from a high-level
+                abstraction and progressively refining it.</p>
 
-            <h4>Origin and Influences:</h4>
-            <p>In the late 1980s and early 1990s, numerous object-oriented design techniques and notations proliferated,
-                leading to confusion when different teams used different notations. UML was developed to standardize
-                these, drawing heavily from established methodologies, primarily:</p>
-            <ul class="simple-list">
-                <li>OMT (Object Modeling Technique) by Rumbaugh et al.</li>
-                <li>Booch's Methodology by Grady Booch.</li>
-                <li>OOSE (Object-Oriented Software Engineering) by Ivar Jacobson.</li>
-                <li>Odell's methodology.</li>
-                <li>Shlaer and Mellor methodology.</li>
-            </ul>
+            <h5 class="mt-8">0-level DFD (Context Diagram)</h5>
+            <p>Also known as the fundamental system model or context diagram, it represents the entire software
+                requirement as a single system (one process bubble) with input and output data denoted by incoming and
+                outgoing arrows from/to external entities. It shows the system's boundary and its interaction with the
+                external world, concealing all internal details. Preserving the number of inputs and outputs between
+                levels is essential (levelling by DeMarco).</p>
             <div class="diagram-container">
-                <img src="image-2.png"
-                    alt="Schematic representation of the impact of different object modelling techniques on UML"
-                    class="max-w-lg">
-                <figcaption>Figure 7.9: OMT, Booch, and OOSE had the most profound influence on UML.</figcaption>
+                <img src="dfd-level0-generic.png" alt="Generic Level-0 DFD" class="max-w-xs">
+                <figcaption>Fig: Generic Level-0 DFD showing system A with inputs X1, X2 and output Y.</figcaption>
             </div>
-            <p>UML was adopted by the Object Management Group (OMG) as a de facto standard in 1997. OMG, an association
-                of industries, promotes consensus on notations and techniques to foster widespread adoption and
-                standardization.</p>
+            <h6>Examples of 0-Level DFDs:</h6>
+            <div class="diagram-gallery mt-4">
+                <div class="diagram-container p-2"><img src="dfd-level0-result-management.png"
+                        alt="Level-0 DFD of Result Management System">
+                    <figcaption>Result Management System</figcaption>
+                </div>
+                <div class="diagram-container p-2"><img src="dfd-level0-library-management.png"
+                        alt="Context Diagram for Library Information System">
+                    <figcaption>Library Management System</figcaption>
+                </div>
+                <div class="diagram-container p-2"><img src="dfd-level0-online-shopping.png"
+                        alt="Context Level DFD Online Shopping System">
+                    <figcaption>Online Shopping System</figcaption>
+                </div>
+                <div class="diagram-container p-2"><img src="dfd-level0-railway-reservation.png"
+                        alt="0-LEVEL DFD for Railway Reservation">
+                    <figcaption>Railway Reservation System</figcaption>
+                </div>
+                <div class="diagram-container p-2"><img src="dfd-level0-hospital-management.png"
+                        alt="0 Level DFD - Context Level for Hospital Management">
+                    <figcaption>Hospital Management System</figcaption>
+                </div>
+            </div>
 
-            <h4>What is a Model?</h4>
-            <p>A model is an abstraction of a system that captures essential aspects while omitting or simplifying
-                others. Models in software development can be graphical, textual, mathematical, or code-based. UML is
-                primarily a graphical modeling tool, often accompanied by textual explanations for clarity.</p>
-            <p>Models are crucial for understanding complex systems, communicating designs, analyzing requirements, and
-                facilitating the generation of test cases and even code templates (with the help of CASE tools like
-                Rational Rose).</p>
-        </section>
+            <h5 class="mt-10">1-level DFD</h5>
+            <p>The context diagram (0-level DFD) is decomposed into multiple bubbles/processes. This level highlights
+                the main objectives and major sub-processes of the system, showing the data flow among them and
+                potentially introducing data stores.</p>
+            <h6>Examples of 1-Level DFDs:</h6>
+            <div class="diagram-gallery mt-4">
+                <div class="diagram-container p-2"><img src="dfd-level1-result-management.png"
+                        alt="Level-1 DFD of Result Management System">
+                    <figcaption>Result Management System</figcaption>
+                </div>
+                <div class="diagram-container p-2"><img src="dfd-level1-library-management.png"
+                        alt="Level 1 DFD for Library Information System">
+                    <figcaption>Library Management System</figcaption>
+                </div>
+                <div class="diagram-container p-2"><img src="dfd-level1-online-shopping.png"
+                        alt="Level 1 DFD - Online Shopping System">
+                    <figcaption>Online Shopping System</figcaption>
+                </div>
+                <div class="diagram-container p-2"><img src="dfd-level1-railway-reservation.png"
+                        alt="1-LEVEL DFD for Railway Reservation">
+                    <figcaption>Railway Reservation System</figcaption>
+                </div>
+                <div class="diagram-container p-2"><img src="dfd-level1-hospital-management.png"
+                        alt="1st Level DFD - Hospital Management System">
+                    <figcaption>Hospital Management System</figcaption>
+                </div>
+            </div>
 
-        <section class="content-section">
-            <h3><i class="fas fa-diagram-project icon"></i>7.3 UML Diagrams & Views</h3>
-            <p>UML provides nine standard types of diagrams (this number has evolved in later UML versions, but we'll
-                focus on the classical set) to capture different views or perspectives of a system, much like
-                architectural blueprints show different aspects of a building.</p>
+            <h5 class="mt-10">2-level DFD (and beyond)</h5>
+            <p>A 2-level DFD goes one process deeper into parts of a 1-level DFD. Any process from a higher-level DFD
+                can be further decomposed into a more detailed lower-level DFD. This process of decomposition can be
+                repeated for as many levels as necessary until the program at hand is well understood and each process
+                represents a reasonably simple function.</p>
+            <h6>Examples of 2-Level DFDs (and a 3rd Level for Hospital System):</h6>
+            <p class="text-center font-semibold text-indigo-700 mt-4">Result Management System - Level 2 Decompositions
+            </p>
+            <div class="diagram-gallery mt-4">
+                <div class="diagram-container p-2"><img src="dfd-level2-result-user-account.png"
+                        alt="Level 2 DFD for User Account Maintenance">
+                    <figcaption>User Account Maintenance</figcaption>
+                </div>
+                <div class="diagram-container p-2"><img src="dfd-level2-result-login.png"
+                        alt="Level 2 DFD for Login Process">
+                    <figcaption>Login Process</figcaption>
+                </div>
+                <div class="diagram-container p-2"><img src="dfd-level2-result-student-info.png"
+                        alt="Level 2 DFD for Student Information Management">
+                    <figcaption>Student Information Mgt.</figcaption>
+                </div>
+                <div class="diagram-container p-2"><img src="dfd-level2-result-subject-info.png"
+                        alt="Level 2 DFD for Subject Information Management">
+                    <figcaption>Subject Information Mgt.</figcaption>
+                </div>
+                <div class="diagram-container p-2"><img src="dfd-level2-result-subject-choice.png"
+                        alt="Level 2 DFD for Student's Subject Choice Management">
+                    <figcaption>Student Subject Choice Mgt.</figcaption>
+                </div>
+                <div class="diagram-container p-2"><img src="dfd-level2-result-marks-info.png"
+                        alt="Level 2 DFD for Marks Information Management">
+                    <figcaption>Marks Information Mgt.</figcaption>
+                </div>
+            </div>
+            <p class="text-center font-semibold text-indigo-700 mt-8">Library Management System - Level 2 Decomposition
+            </p>
             <div class="diagram-container">
-                <img src="image-3.png" alt="Different types of diagrams and views supported by UML" class="max-w-xl">
-                <figcaption>Figure 7.10: UML diagrams categorized by the system view they represent.</figcaption>
+                <img src="dfd-level2-library-management.png" alt="Level 2 DFD for Library Information System">
             </div>
-            <p>UML diagrams can capture the following views:</p>
-            <ul class="custom-bullets">
-                <li><strong>Users' View:</strong> Defines functionalities (facilities) made available to users. Captures
-                    the external view (black-box) of the system. (Primarily: Use Case Diagram)</li>
-                <li><strong>Structural View (Static View):</strong> Defines the kinds of objects (classes) important to
-                    the system and their relationships. This structure does not change with time. (Primarily: Class
-                    Diagram, Object Diagram)</li>
-                <li><strong>Behavioural View (Dynamic View):</strong> Captures how objects interact with each other over
-                    time to realize system behavior. (Primarily: Sequence Diagram, Collaboration Diagram, Statechart
-                    Diagram, Activity Diagram)</li>
-                <li><strong>Implementation View:</strong> Captures important components of the system and their
-                    dependencies. (Primarily: Component Diagram)</li>
-                <li><strong>Environmental View (Deployment View):</strong> Models how different components are
-                    implemented on different pieces of hardware. (Primarily: Deployment Diagram)</li>
-            </ul>
-            <div class="info-box">
-                <p><i class="fas fa-lightbulb mr-2"></i>It's not necessary to construct all views using all diagrams for
-                    every system. The choice depends on the complexity and nature of the problem. The Users' View (Use
-                    Case Model) is often considered central, with other views conforming to it.</p>
+            <p class="text-center font-semibold text-indigo-700 mt-8">Online Shopping System - Level 2 Decompositions
+            </p>
+            <div class="diagram-grid mt-4">
+                <div class="diagram-container p-2"><img src="dfd-level2-online-shopping1.png"
+                        alt="Level 2 DFD - Online Shopping System (Item Master)">
+                    <figcaption>Online Shopping (Item Master Module)</figcaption>
+                </div>
+                <div class="diagram-container p-2"><img src="dfd-level2-online-shopping2.png"
+                        alt="Level 2 DFD - Online Shopping System (Order/Payment)">
+                    <figcaption>Online Shopping (Order/Payment Module)</figcaption>
+                </div>
+            </div>
+            <p class="text-center font-semibold text-indigo-700 mt-8">Railway Reservation System - Level 2 Decomposition
+            </p>
+            <div class="diagram-container">
+                <img src="dfd-level2-railway-reservation.png" alt="2-LEVEL DFD for Railway Reservation">
+            </div>
+            <p class="text-center font-semibold text-indigo-700 mt-8">Hospital Management System - Level 2 & 3
+                Decompositions</p>
+            <div class="diagram-gallery mt-4">
+                <div class="diagram-container p-2"><img src="dfd-level2-hospital-2.0.png"
+                        alt="2nd Level DFD (2.0) - Hospital Management">
+                    <figcaption>Hospital Mgt. (2.0 Add Room etc.)</figcaption>
+                </div>
+                <div class="diagram-container p-2"><img src="dfd-level2-hospital-3.0.png"
+                        alt="2nd Level DFD (3.0) - Hospital Management">
+                    <figcaption>Hospital Mgt. (3.0 Add Doctor etc.)</figcaption>
+                </div>
+                <div class="diagram-container p-2"><img src="dfd-level2-hospital-4.0.png"
+                        alt="2nd Level DFD (4.0) - Hospital Management">
+                    <figcaption>Hospital Mgt. (4.0 Add Patient etc.)</figcaption>
+                </div>
+                <div class="diagram-container p-2"><img src="dfd-level2-hospital-5.0.png"
+                        alt="2nd Level DFD (5.0) - Hospital Management">
+                    <figcaption>Hospital Mgt. (5.0 Reports etc.)</figcaption>
+                </div>
+                <div class="diagram-container p-2 md:col-span-2 lg:col-span-3"><img src="dfd-level3-hospital-4.2.png"
+                        alt="3rd Level DFD (4.2) - Hospital Management (Add Bill Detail)" class="max-w-lg mx-auto">
+                    <figcaption>Hospital Mgt. (3rd Level DFD for 4.2 - Add Bill)</figcaption>
+                </div>
             </div>
         </section>
 
         <section class="content-section">
-            <h3><i class="fas fa-user-friends icon"></i>7.4 Use Case Model</h3>
-            <p>A use case model consists of a set of "use cases," which represent the different ways users can interact
-                with or use the system. To identify use cases, ask: "What can users do using the system?" (e.g.,
-                `issue-book`, `query-book` for a Library Information System).</p>
-            <p>Use cases partition system behavior into transactions, each performing a useful action from the user's
-                perspective, possibly involving multiple message exchanges.</p>
+            <h3 id="dfd-balancing-decomposition"><i class="fas fa-balance-scale icon"></i>Balancing and Decomposition
+            </h3>
+            <p>A crucial principle in creating leveled DFDs is **balancing**. This means that a child diagram (e.g.,
+                Level 1 DFD decomposing a Level 0 process) must maintain the same net inputs and outputs as its parent
+                process. If a process 'P' in a higher-level DFD has inputs I1, I2 and output O1, then the lower-level
+                DFD that decomposes 'P' must collectively show I1, I2 entering its processes and O1 exiting from its
+                processes. No new external inputs or outputs should appear at lower levels that were not present at the
+                parent level for that specific process decomposition.</p>
+            <p>Decomposition continues until processes are simple enough to be easily understood and implemented (often
+                called "primitive processes").</p>
+        </section>
 
-            <h4>Representation of Use Cases:</h4>
-            <p>Use cases are represented by drawing a Use Case Diagram and writing accompanying text descriptions.</p>
+        <section class="content-section">
+            <h3 id="dfd-guidelines"><i class="fas fa-ruler-combined icon"></i>Guidelines for Developing Data Flow
+                Diagrams</h3>
             <ul class="simple-list">
-                <li><strong>Use Case Diagram:</strong>
-                    <ul>
-                        <li>Each use case is an ellipse with its name inside.</li>
-                        <li>All use cases are enclosed in a rectangle (system boundary).</li>
-                        <li>System name appears inside the rectangle.</li>
-                        <li>Users are represented by stick-person icons called **Actors**. An actor represents a role
-                            played by a user or an external system. The line connecting an actor to a use case is a
-                            communication relationship.</li>
-                        <li>**Stereotypes:** UML allows annotating basic symbols to slightly change their meaning. For
-                            example, <code><<external system>></code> can stereotype an actor representing another
-                            system.</li>
-                    </ul>
+                <li>All processes in a DFD must go to another process or a data store (not directly to an external
+                    entity without passing through a process if it's an internal transformation).</li>
+                <li>Each process must have at least one input data flow and at least one output data flow.</li>
+                <li>Data stored in a system (in a data store) must be processed (i.e., a process must put data into it,
+                    and a process must get data out of it, though not necessarily the same process or at the same time).
                 </li>
+                <li>Each data store must have at least one data flow in and at least one data flow out (though these may
+                    occur at different times or in different DFDs representing different system interactions).</li>
+                <li>Data flows should be named to reflect the data they carry. Process names should be verb phrases.
+                    Data store and entity names should be nouns.</li>
             </ul>
-            <div class="diagram-grid">
-                <div class="diagram-container">
-                    <img src="image-4.png" alt="Use case model for Tic-Tac-Toe game" class="max-w-xs">
-                    <figcaption>Figure 7.11: Use Case for Tic-Tac-Toe ("Play move").</figcaption>
-                </div>
-                <div class="diagram-container">
-                    <img src="image-5.png" alt="Use case model for Supermarket Prize Scheme" class="max-w-md">
-                    <figcaption>Figure 7.12: Use Cases for Supermarket Prize Scheme.</figcaption>
-                </div>
-            </div>
-
-            <h4>Text Description for Use Cases:</h4>
-            <p>Each use case ellipse should be accompanied by a detailed text description covering:</p>
-            <ul class="simple-list">
-                <li>**Mainline Sequence:** The normal, successful flow of events.</li>
-                <li>**Alternate Scenarios/Variations:** Different paths or outcomes.</li>
-                <li>**Exceptional Conditions/Error Situations:** How errors are handled.</li>
-                <li>**Pre-conditions:** State of the system before the use case starts.</li>
-                <li>**Post-conditions:** State of the system after successful completion.</li>
-                <li>**Non-functional Requirements:** Constraints like performance, response time.</li>
-                <li>**Sample Dialogs:** Examples illustrating user interface interactions.</li>
-                <li>**Document References:** Links to relevant domain documents.</li>
-                <li>**Contact Persons:** Stakeholders involved in defining the use case.</li>
-            </ul>
-            <pre><code class="language-none">Example Text Description Snippet (for Supermarket - U1: register-customer):
-Mainline sequence:
-1. Customer: select register customer option
-2. System: display prompt to enter name, address, telephone number
-3. Customer: enter the necessary values
-4. System: display the generated id and success message.
-
-Scenario 2 (Alternate): At step 4 of mainline.
-4. System: displays message "customer has already registered".</code></pre>
-
-            <h4>Why Develop Use Case Diagrams?</h4>
-            <ul class="custom-bullets">
-                <li>Serve as a form of requirements specification.</li>
-                <li>Form the core model to which other models conform.</li>
-                <li>Help in selecting/implementing security mechanisms by identifying actor entitlements.</li>
-                <li>Useful for preparing user manuals targeted to different user roles (actors).</li>
-                <li>Actors help in identifying use cases and understanding system functioning.</li>
-            </ul>
-
-            <h4>Factoring Commonality Among Use Cases:</h4>
-            <p>Complex use cases can be simplified, and common behavior across different use cases can be factored out
-                for reusability (e.g., error handling). UML provides mechanisms like:</p>
-            <ul class="simple-list">
-                <li><strong>Generalization:</strong> A child use case inherits and specializes the behavior of a parent
-                    use case. (e.g., "Pay through credit card" and "Pay through library pay card" generalize to "Pay
-                    membership fee").</li>
-                <div class="diagram-container">
-                    <img src="image-6.png" alt="Representation of use case generalization" class="max-w-sm">
-                    <figcaption>Figure 7.13: Use Case Generalization.</figcaption>
-                </div>
-                <li><strong>Include (<code><<include>></code>):</strong> One use case explicitly includes the behavior
-                    of another at a specified point. Useful for reusing common functionality.</li>
-                <li><strong>Extend (<code><<extend>></code>):</strong> One use case adds behavior to another (base) use
-                    case at defined extension points, typically for optional or exceptional behavior.</li>
-            </ul>
-
-            <h4>Use Case Packaging:</h4>
-            <p>Use cases can be grouped into packages to organize large models, often based on related functionality or
-                subsystems.</p>
-            <div class="diagram-container">
-                <img src="image-7.png" alt="Use case packaging example" class="max-w-xl">
-                <figcaption>Figure 7.18: Grouping related use cases into packages.</figcaption>
-            </div>
         </section>
 
         <section class="content-section">
-            <h3><i class="fas fa-project-diagram icon"></i>7.5 Class Diagrams</h3>
-            <p>A class diagram describes the static structure of a system: its classes, attributes, operations, and the
-                relationships between classes. It shows how a system is structured rather than how it behaves
-                dynamically.</p>
-
-            <h4>Classes:</h4>
-            <p>Represent entities with common features (attributes and operations). Shown as solid outline rectangles,
-                often with compartments for name, attributes, and operations. Class names are typically singular nouns,
-                mixed case starting with an uppercase letter (e.g., `LibraryMember`).</p>
+            <h3 id="logical-vs-physical-dfd"><i class="fas fa-exchange-alt icon"></i>Logical DFD vs. Physical DFD</h3>
+            <p>DFDs can be categorized based on the perspective they represent:</p>
             <div class="diagram-container">
-                <img src="image-8.png" alt="Different representations of the LibraryMember class" class="max-w-2xl">
-                <figcaption>Figure 7.19: Various ways to represent a class, showing different levels of detail.
-                </figcaption>
+                <img src="logical-vs-physical-dfd-example.png" alt="Example illustrating Logical vs Physical DFD"
+                    class="max-w-xl">
+                <figcaption>Visual comparison of Logical and Physical DFD concepts.</figcaption>
             </div>
-
-            <h5>Attributes:</h5>
-            <p>Named properties of a class, representing data an object can hold. Listed with names, optionally type,
-                initial value, and constraints. E.g., <code>memberName: String</code>,
-                <code>booksIssued[0..*]: Book</code>. Multiplicity (e.g., `[10]`) indicates the number of attributes per
-                instance.
-            </p>
-
-            <h5>Operations (Methods):</h5>
-            <p>Functions or procedures that objects of the class can perform. Listed with names, optionally parameters
-                (with kind: `in`, `out`, `inout`), and return type. E.g.,
-                <code>issueBook(in bookID: String): Boolean</code>. Abstract operations are often italicized.
-                Class-scope operations (static) are underlined.
-            </p>
-
-            <h4>Relationships Between Classes:</h4>
-            <div class="diagram-grid">
-                <div>
-                    <h6>Association:</h6>
-                    <p>A connection between classes, representing a structural relationship. Links are instances of
-                        associations. Shown as a solid line. Can have a name, role names at ends, and multiplicity
-                        (e.g., `1`, `0..*`, `1..5`).</p>
-                    <div class="diagram-container">
-                        <img src="image-9.png" alt="Representation of association (LibraryMember borrows Books)"
-                            class="max-w-md">
-                        <figcaption>Figure 7.20: Association with multiplicity.</figcaption>
-                    </div>
-                </div>
-                <div>
-                    <h6>Aggregation ("has-a" or "part-of"):</h6>
-                    <p>A special type of association representing a whole-part relationship. The aggregate (whole) is
-                        responsible for its parts. Shown with a hollow diamond at the aggregate end.</p>
-                    <div class="diagram-container">
-                        <img src="image-10.png" alt="Representation of aggregation (Document contains Paragraphs, Line)"
-                            class="max-w-md">
-                        <figcaption>Figure 7.21: Aggregation relationship.</figcaption>
-                    </div>
-                </div>
-                <div>
-                    <h6>Composition (Strong Aggregation):</h6>
-                    <p>A stricter form of aggregation where parts are existence-dependent on the whole. If the whole is
-                        destroyed, its parts are also destroyed. Shown with a filled diamond at the composite-end.</p>
-                    <div class="diagram-container">
-                        <img src="image-11.png" alt="Representation of composition (Order contains Items)"
-                            class="max-w-md">
-                        <figcaption>Figure 7.22: Composition relationship.</figcaption>
-                    </div>
-                </div>
-                <div>
-                    <h6>Inheritance (Generalization/Specialization "is-a"):</h6>
-                    <p>Relates a superclass (general) to its subclasses (specific). Subclasses inherit attributes and
-                        operations. Shown as an empty arrowhead pointing to the superclass. Discriminators (e.g.,
-                        `issuable`, `reference`) can differentiate subclasses.</p>
-                    <div class="diagram-container">
-                        <img src="image-12.png" alt="Representation of the inheritance relationship" class="max-w-md">
-                        <figcaption>Figure 7.23: Inheritance (LibraryBook and its types).</figcaption>
-                    </div>
-                </div>
-                <div>
-                    <h6>Dependency:</h6>
-                    <p>Shows that a change in an independent class may require a change in a dependent class (e.g., one
-                        class uses another's methods or interface). Shown as a dotted arrow pointing to the independent
-                        class.</p>
-                    <div class="diagram-container">
-                        <!-- Assuming image-13.png is for Dependency based on your description sequence -->
-                        <img src="image-13.png" alt="Representation of dependence between classes" class="max-w-xs">
-                        <figcaption>Figure 7.24: Dependency relationship.</figcaption>
-                    </div>
-                </div>
-            </div>
-
-            <h4>Constraints:</h4>
-            <p>Conditions or integrity rules applied to model elements (e.g., permissible values for attributes,
-                pre/post-conditions for operations). Enclosed in braces `{}`. Can be informal English or formal Object
-                Constraint Language (OCL).</p>
+            <table class="styled-table w-full mt-6">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Logical DFD</th>
+                        <th>Physical DFD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Focus</td>
+                        <td>Describes business events, data required, and what the business/system does. Focuses on
+                            "what".</td>
+                        <td>Shows how the system will be implemented (programs, modules, manual procedures, physical
+                            files). Focuses on "how".</td>
+                    </tr>
+                    <tr>
+                        <td>Processes</td>
+                        <td>Represent business activities.</td>
+                        <td>Represent programs, program modules, manual procedures.</td>
+                    </tr>
+                    <tr>
+                        <td>Data Stores</td>
+                        <td>Represent collections of data regardless of how they are stored (e.g., "Customer
+                            Information").</td>
+                        <td>Represent physical files, databases, manual files (e.g., "Customer_Master_Table",
+                            "Order_Forms_File_Cabinet").</td>
+                    </tr>
+                    <tr>
+                        <td>Controls</td>
+                        <td>Shows business controls.</td>
+                        <td>Shows controls for data validation, record access, process completion, system security.</td>
+                    </tr>
+                </tbody>
+            </table>
         </section>
-
-        <section class="content-section">
-            <h3><i class="fas fa-clone icon"></i>Object Diagrams</h3>
-            <p>An object diagram shows a snapshot of the objects in a system (instances of classes) and their links
-                (instances of associations) at a particular point in time. It's often called an instance diagram.
-                Objects are typically drawn using rounded rectangles. Object diagrams are useful for explaining the
-                dynamic working of the system and can change as execution proceeds.</p>
-            <!-- No specific object diagram image provided, so a general description is given. -->
-            <div class="info-box">
-                <p>Example: An object diagram might show specific <code>LibraryMember</code> objects like
-                    <code>johnDoe:LibraryMember</code> linked to specific <code>book123:Book</code> objects at a moment
-                    when John has borrowed that book.
-                </p>
-            </div>
-        </section>
-
 
         <div class="mt-12 pt-8 border-t border-slate-300 flex flex-col sm:flex-row justify-between items-center gap-6">
-            <a href="topic-7.html" class="nav-button" aria-label="Previous Topic">
+            <a href="topic-7.html" class="nav-button"> <!-- Assuming previous topic is 7 -->
                 <i class="fas fa-arrow-left icon"></i> Previous Topic
             </a>
-            <a href="topic-9.html" class="nav-button" aria-label="Next Topic">
+            <a href="topic-9.html" class="nav-button"> <!-- Assuming next topic is 9 -->
                 Next Topic <i class="fas fa-arrow-right icon"></i>
             </a>
         </div>
     </main>
 
     <footer>
-        <!-- Footer content -->
         © <span id="currentYear"></span> <a href="../../../index.html">EduVision</a>.
-        All rights reserved. Crafted with <i class="fas fa-heart text-red-500"></i> for learning.
+        All rights reserved. Crafted with <i class="fas fa-heart"></i> for learning.
     </footer>
 
     <script>

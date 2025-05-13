@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Topic 11: Coding and Testing - EduVision</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Nunito:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(120deg, #f4f7fa 0%, #e9eafc 100%);
+            color: #232946;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(90deg, #4f46e5 0%, #2563eb 100%);
+            color: #fff;
+            padding: 28px 0 20px 0;
+            box-shadow: 0 4px 16px rgba(79, 70, 229, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .header-brand {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.1rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-brand a {
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-brand svg {
+            margin: 0 4px;
+            color: #fde047;
+            transition: transform 0.2s;
+        }
+
+        .header-brand a:hover svg {
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        .header-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+        }
+
+        .header-desc {
+            font-size: 1.08rem;
+            opacity: 0.92;
+            margin-bottom: 0;
+        }
+
+        main {
+            flex: 1 1 auto;
+            padding: 40px 0 0 0;
+        }
+
+        .content-section {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 6px 32px rgba(79, 70, 229, 0.08), 0 1.5px 6px rgba(79, 70, 229, 0.03);
+            padding: 38px 32px;
+            margin-bottom: 38px;
+            transition: box-shadow 0.2s;
+        }
+
+        .content-section:hover {
+            box-shadow: 0 12px 36px rgba(79, 70, 229, 0.13), 0 2px 8px rgba(79, 70, 229, 0.06);
+        }
+
+        .content-section h2 {
+            font-size: 2.3rem;
+            font-weight: 800;
+            color: #4338ca;
+            border-bottom: 3px solid #a5b4fc;
+            padding-bottom: 12px;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .content-section h2 .icon {
+            color: #6366f1;
+            font-size: 2.1rem;
+        }
+
+        .content-section h3 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #2563eb;
+            margin-top: 38px;
+            margin-bottom: 18px;
+            border-top: 2px solid #dbeafe;
+            padding-top: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .content-section h3 .icon {
+            color: #6366f1;
+            font-size: 1.4rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #6366f1;
+            margin-top: 28px;
+            margin-bottom: 10px;
+        }
+
+        .content-section h5 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #a21caf;
+            margin-top: 22px;
+            margin-bottom: 8px;
+        }
+
+        .content-section h6,
+        .sub-h6 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0891b2;
+            margin-top: 18px;
+            margin-bottom: 8px;
+            background: #e0f2fe;
+            padding: 6px 14px;
+            border-radius: 7px;
+            display: inline-block;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section ol {
+            color: #3b3b4f;
+            font-size: 1.08rem;
+            margin-bottom: 18px;
+            line-height: 1.7;
+        }
+
+        .content-section ul.simple-list {
+            list-style: disc inside;
+            padding-left: 18px;
+            color: #444;
+        }
+
+        .content-section ul.simple-list ul {
+            list-style: circle inside;
+            margin-top: 6px;
+        }
+
+        .content-section ol.styled-list {
+            list-style: decimal inside;
+            padding-left: 18px;
+        }
+
+        .info-box {
+            background: #eef2ff;
+            border-left: 5px solid #6366f1;
+            color: #3730a3;
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin: 24px 0 28px 0;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.06);
+            font-size: 1.05rem;
+        }
+
+        .info-box strong {
+            color: #3730a3;
+        }
+
+        .highlight-box {
+            background: #fce7f3;
+            border-left: 5px solid #ec4899;
+            color: #be185d;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 24px 0 28px 0;
+            box-shadow: 0 2px 8px rgba(236, 72, 153, 0.08);
+            font-size: 1.01rem;
+        }
+
+        .highlight-box p {
+            color: #be185d;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .definition-box {
+            background: #e0f2fe;
+            border-left: 5px solid #0ea5e9;
+            color: #0369a1;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 24px 0 28px 0;
+            box-shadow: 0 2px 8px rgba(14, 165, 233, 0.08);
+            font-size: 1.01rem;
+        }
+
+        .diagram-container {
+            background: #f8fafc;
+            border: 1.5px solid #e0e7ef;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(99, 102, 241, 0.06);
+            padding: 18px 18px 12px 18px;
+            margin: 32px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .diagram-container img {
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e0e7ef;
+        }
+
+        .diagram-container figcaption {
+            color: #64748b;
+            font-size: 0.98rem;
+            margin-top: 10px;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .diagram-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            margin-top: 18px;
+        }
+
+        @media (min-width: 700px) {
+            .diagram-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        table.styled-table {
+            border-collapse: collapse;
+            margin: 18px 0;
+            font-size: 1em;
+            min-width: 320px;
+            width: 100%;
+            background: #f8fafc;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.06);
+        }
+
+        .styled-table th,
+        .styled-table td {
+            border: 1px solid #e0e7ef;
+            padding: 10px 14px;
+            text-align: left;
+        }
+
+        .styled-table th {
+            background: #e0e7ef;
+            color: #4338ca;
+            font-weight: 700;
+        }
+
+        .styled-table tr:nth-child(even) {
+            background: #f1f5f9;
+        }
+
+        .styled-table tr:hover {
+            background: #e0e7ef;
+        }
+
+        .styled-table caption {
+            color: #64748b;
+            font-size: 0.98rem;
+            margin-bottom: 6px;
+            font-style: italic;
+            text-align: left;
+        }
+
+        pre {
+            background: #232946;
+            color: #f4f7fa;
+            padding: 18px 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 1rem;
+            margin: 22px 0;
+            font-family: 'Fira Mono', 'Consolas', monospace;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.08);
+        }
+
+        code {
+            background: #e0e7ef;
+            color: #a21caf;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            border-radius: 0;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            background: linear-gradient(90deg, #6366f1 0%, #2563eb 100%);
+            color: #fff;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 1.08rem;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.10);
+            border: none;
+            text-decoration: none;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+        }
+
+        .nav-button:hover,
+        .nav-button:focus {
+            background: linear-gradient(90deg, #4338ca 0%, #1e40af 100%);
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.18);
+            color: #fff;
+            transform: translateY(-2px) scale(1.03);
+            text-decoration: none;
+        }
+
+        .nav-button .icon {
+            font-size: 1.1em;
+        }
+
+        .topic-nav {
+            margin-top: 48px;
+            padding-top: 28px;
+            border-top: 1.5px solid #e0e7ef;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            align-items: center;
+        }
+
+        @media (min-width: 640px) {
+            .topic-nav {
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 0;
+            }
+        }
+
+        .technique-card {
+            background: #f1f5f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.06);
+            padding: 22px 18px;
+            margin-bottom: 18px;
+            transition: box-shadow 0.2s;
+        }
+
+        .technique-card:hover {
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.13);
+        }
+
+        .technique-card h6 {
+            color: #a21caf;
+            border-bottom: 1.5px solid #e9d5ff;
+            padding-bottom: 6px;
+            margin-bottom: 10px;
+            background: transparent;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 1.01rem;
+            color: #64748b;
+            padding: 32px 0 18px 0;
+            margin-top: 48px;
+            background: #f1f5f9;
+            border-top: 1.5px solid #e0e7ef;
+            letter-spacing: 0.02em;
+        }
+
+        footer a {
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+            color: #4338ca;
+        }
+
+        .fa-heart {
+            color: #ef4444;
+            vertical-align: middle;
+        }
+
+        .mt-12 {
+            margin-top: 3rem;
+        }
+
+        .pt-8 {
+            padding-top: 2rem;
+        }
+
+        .mb-8 {
+            margin-bottom: 2rem;
+        }
+
+        .gap-6 {
+            gap: 1.5rem;
+        }
+
+        .max-w-xs {
+            max-width: 260px;
+        }
+
+        .max-w-sm {
+            max-width: 340px;
+        }
+
+        .max-w-md {
+            max-width: 480px;
+        }
+
+        .max-w-lg {
+            max-width: 700px;
+        }
+
+        .max-w-xl {
+            max-width: 900px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-xs {
+            font-size: 0.92em;
+        }
+
+        .italic {
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container"
+            style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
+            <div class="header-brand">
+                <a href="../../../index.html">
+                    <span>Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-0.5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2" style="color:#fde047;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span>ision</span>
+                </a>
+            </div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
+                <span class="header-title">Software Engineering</span>
+                <span class="header-desc">Explore each topic in depth</span>
+            </div>
+            <div style="width:3rem;"></div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="flex justify-between items-center mb-8">
+            <a href="../software-engineering.html"
+                class="text-indigo-600 hover:text-indigo-800 hover:underline font-medium text-lg transition-colors duration-300">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Syllabus
+            </a>
+            <div class="bg-indigo-600 text-white text-base font-semibold px-5 py-2 rounded-lg shadow-md">
+                Topic 11 <!-- Assuming Coding & Testing is Topic 11 -->
+            </div>
+        </div>
+
+        <section class="content-section">
+            <h2><i class="fas fa-laptop-code icon"></i>Coding and Testing</h2>
+            <p class="text-xl mb-6 text-slate-600">The coding phase transforms the detailed design of a system into
+                executable high-level language code. Following coding, rigorous testing is performed to evaluate the
+                software against requirements, identify defects, and ensure a quality product. This involves both
+                validating that the software meets user needs and verifying that it's built correctly according to
+                specifications.</p>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="info-box">
+                    <strong class="block mb-1">Software Validation:</strong> Process of examining if the software
+                    satisfies user requirements. Answers: "Are we developing the product which attempts all that user
+                    needs?" (Emphasizes user requirements).
+                </div>
+                <div class="info-box">
+                    <strong class="block mb-1">Software Verification:</strong> Process of confirming if the software
+                    meets business requirements and adheres to design specifications and methodologies. Answers: "Are we
+                    developing this product by firmly following all design specifications?" (Concentrates on
+                    design/system specs).
+                </div>
+            </div>
+            <h6 class="mt-4">Key Terms in Testing:</h6>
+            <ul class="simple-list text-sm">
+                <li><strong>Error:</strong> A coding mistake made by a developer; a discrepancy between actual and
+                    desired output.</li>
+                <li><strong>Fault (Bug):</strong> The result of an error, which can cause the system to behave
+                    incorrectly or fail.</li>
+                <li><strong>Failure:</strong> The inability of the system to perform its desired task, occurring when a
+                    fault exists.</li>
+            </ul>
+        </section>
+
+        <section class="content-section">
+            <h3 id="coding"><i class="fas fa-code icon"></i>10.1 Coding</h3>
+            <p>The input to this phase is the design document, including module structure and specifications (data
+                structures, algorithms). The primary objective is to translate this design into high-level language code
+                and perform initial unit tests on this code.</p>
+
+            <h4 class="mt-8">10.1.1 Coding Standards and Guidelines</h4>
+            <p>Good software development organizations often establish coding standards and guidelines to ensure:</p>
+            <ul class="simple-list">
+                <li>Uniform appearance and readability of code written by different engineers.</li>
+                <li>Improved code understandability and maintainability.</li>
+                <li>Encouragement of good programming practices.</li>
+            </ul>
+            <h6>Representative Coding Standards:</h6>
+            <ul class="simple-list text-sm">
+                <li>**Module Headers:** Include module name, creation date, author, modification history, synopsis,
+                    functions supported (with parameters), global variables accessed/modified.</li>
+                <li>**Naming Conventions:** Consistent rules for global variables (e.g., starting with uppercase), local
+                    variables (e.g., all lowercase), and constants (e.g., all uppercase).</li>
+                <li>**Error Return Conventions & Exception Handling:** Standardized ways for functions to report errors
+                    (e.g., consistently return 0 or 1) and handle common exceptions.</li>
+                <li>Rules for data types, global variable usage, code indentation, comments.</li>
+            </ul>
+            <h6>Representative Coding Guidelines:</h6>
+            <ul class="simple-list text-sm">
+                <li>Avoid overly clever or difficult-to-understand code. Clarity is paramount.</li>
+                <li>Avoid obscure side effects (e.g., unexpected modification of global variables or reference
+                    parameters).</li>
+                <li>Do not use an identifier for multiple, unrelated purposes. Give descriptive names.</li>
+                <li>Ensure code is well-documented (e.g., at least one comment line per three source lines as a rule of
+                    thumb).</li>
+                <li>Limit function length (e.g., not exceeding 100 source lines, though this varies) to maintain
+                    understandability.</li>
+                <li>Do not use `goto` statements, as they make programs unstructured and hard to follow.</li>
+            </ul>
+        </section>
+
+        <section class="content-section">
+            <h3 id="code-review"><i class="fas fa-users-cog icon"></i>10.2 Code Review</h3>
+            <p>Performed after a module is compiled and syntax errors are eliminated. Code reviews are cost-effective
+                for reducing coding errors and producing high-quality code.</p>
+
+            <h4 class="mt-8">10.2.1 Code Walk-Throughs</h4>
+            <p>An informal code analysis technique. Team members read and manually simulate the execution of code with
+                test cases before a meeting. The main objective is to discover algorithmic and logical errors.
+                Discussion focuses on error discovery, not fixing. Managers typically don't attend to foster
+                cooperation.</p>
+
+            <h4 class="mt-8">10.2.2 Code Inspection</h4>
+            <p>A more formal technique aimed at discovering common types of errors due to oversight or improper
+                programming, and checking adherence to coding standards. Uses checklists of common errors.</p>
+            <h6 class="mt-4">Classical Programming Errors Checked During Inspection:</h6>
+            <ul class="simple-list text-sm">
+                <li>Use of uninitialized variables.</li>
+                <li>Jumps into loops.</li>
+                <li>Non-terminating loops.</li>
+                <li>Incompatible assignments.</li>
+                <li>Array indices out of bounds.</li>
+                <li>Improper storage allocation/deallocation.</li>
+                <li>Mismatches between actual and formal parameters.</li>
+                <li>Incorrect logical operators or precedence.</li>
+                <li>Improper modification of loop variables.</li>
+                <li>Comparison of equality of floating-point values.</li>
+            </ul>
+            <div class="info-box">
+                <p>Detecting errors during code reviews or unit testing is much less costly to fix than if found during
+                    later system testing phases.</p>
+            </div>
+        </section>
+
+        <!-- Software Testing Fundamentals -->
+        <section class="content-section">
+            <h3 id="testing-fundamentals"><i class="fas fa-vial icon"></i>Software Testing Fundamentals</h3>
+            <h4 class="mt-8">Manual Vs Automated Testing</h4>
+            <ul class="simple-list">
+                <li><strong>Manual Testing:</strong> Performed by software testers without automated tools. Involves
+                    preparing test cases, executing tests, and reporting results. Time and resource-consuming.</li>
+                <li><strong>Automated Testing:</strong> Uses tools to perform tests. Overcomes limitations of manual
+                    testing for tasks like load testing, stress testing, and regression testing.</li>
+            </ul>
+
+            <h4 class="mt-8">Testing Approaches</h4>
+            <ul class="simple-list">
+                <li><strong>Functionality Testing (Black-Box Testing):</strong> Tests functionality without considering
+                    internal implementation.</li>
+                <li><strong>Implementation Testing (White-Box Testing):</strong> Tests functionality and analyzes the
+                    internal implementation (code structure, paths).</li>
+            </ul>
+            <p><strong>Exhaustive Testing</strong> (testing every possible input/output value) is ideal but practically
+                impossible for most non-trivial software.</p>
+        </section>
+
+        <!-- Levels of Software Testing -->
+        <section class="content-section">
+            <h3 id="testing-levels"><i class="fas fa-layer-group icon"></i>Levels of Software Testing</h3>
+            <p>Testing is conducted at different stages of the software development lifecycle.</p>
+            <div class="diagram-container">
+                <img src="software-testing-levels.png"
+                    alt="Four Levels of Software Testing: Unit, Integration, System, Acceptance" class="max-w-md">
+                <figcaption>The hierarchy of software testing levels.</figcaption>
+            </div>
+            <ol class="styled-list mt-6">
+                <li><strong>Unit Testing:</strong> Testing individual modules or components of the source code in
+                    isolation, typically by developers in their environment. AKA Module Testing or Component Testing.
+                </li>
+                <li><strong>Integration Testing:</strong> Testing the connectivity and data transfer between two or more
+                    unit-tested modules. Approaches include:
+                    <ul class="simple-list ml-4 text-sm">
+                        <li><strong>Top-Down:</strong> High-level modules first, using **Stubs** (dummy modules called
+                            by the module under test).</li>
+                        <li><strong>Bottom-Up:</strong> Low-level modules first, using **Drivers** (dummy modules that
+                            call the module to be tested).</li>
+                        <li><strong>Sandwich:</strong> Combination of Top-Down and Bottom-Up.</li>
+                        <li><strong>Big Bang:</strong> Integrate all modules at once (can make defect isolation
+                            difficult).</li>
+                    </ul>
+                </li>
+                <li><strong>System Testing (End-to-End Testing):</strong> Testing the fully integrated application as a
+                    whole. A black-box activity verifying that the software works in all intended target systems and
+                    meets requirements. Includes functionality, performance, security, and portability testing.</li>
+                <li><strong>Acceptance Testing:</strong> Performed to obtain customer sign-off before delivery.
+                    <div class="diagram-container mt-4">
+                        <img src="user-acceptance-testing-types.png"
+                            alt="User Acceptance Testing including Alpha and Beta Testing" class="max-w-lg">
+                        <figcaption>Alpha and Beta testing as part of User Acceptance Testing.</figcaption>
+                    </div>
+                    <ul class="simple-list ml-4 text-sm">
+                        <li><strong>Alpha Testing:</strong> Conducted at the developer's site, often by internal
+                            employees (testers/developers) or sometimes by clients in a controlled environment.
+                            Simulates real user tasks.</li>
+                        <li><strong>Beta Testing:</strong> Performed by a limited number of actual end-users in their
+                            real environment before the product's official release. Provides valuable feedback on
+                            product quality and usability.</li>
+                        <li><strong>Gamma Testing:</strong> (Less common) Testing done right before release, often
+                            skipping in-depth QA to focus on final checks.</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h5 class="mt-8">Comparison: Alpha vs. Beta Testing</h5>
+            <table class="styled-table w-full">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Alpha Testing</th>
+                        <th>Beta Testing</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Performed By</td>
+                        <td>Internal team (testers, developers) at developer's site.</td>
+                        <td>Real end-users/clients in their environment (external).</td>
+                    </tr>
+                    <tr>
+                        <td>Environment</td>
+                        <td>Lab/testing environment, controlled.</td>
+                        <td>Client's location/end-user's product environment, not controlled by developer.</td>
+                    </tr>
+                    <tr>
+                        <td>Reliability/Security</td>
+                        <td>Not typically performed in-depth.</td>
+                        <td>Reliability, security, robustness checked.</td>
+                    </tr>
+                    <tr>
+                        <td>Techniques Used</td>
+                        <td>Both white-box and black-box techniques.</td>
+                        <td>Typically uses only black-box testing.</td>
+                    </tr>
+                    <tr>
+                        <td>Execution Cycle</td>
+                        <td>May require long execution cycles.</td>
+                        <td>Usually a few weeks.</td>
+                    </tr>
+                    <tr>
+                        <td>Issue Identification</td>
+                        <td>Critical issues/fixes can be identified and addressed by developers immediately.</td>
+                        <td>Most feedback/issues collected are for future versions or critical fixes before final
+                            launch.</td>
+                    </tr>
+                    <tr>
+                        <td>Timing</td>
+                        <td>Performed before potential launch to market (near end of development).</td>
+                        <td>Final test before shipping; at the time of software product marketing.</td>
+                    </tr>
+                    <tr>
+                        <td>Focus</td>
+                        <td>Ensures product quality before beta testing.</td>
+                        <td>Concentrates on product quality, gathers user input, ensures readiness for real-time users.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Developer Presence</td>
+                        <td>Conducted in the presence of developers (or developers are readily available).</td>
+                        <td>Conducted in the absence of developers ("reversed of alpha testing").</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Testing Techniques -->
+        <section class="content-section">
+            <h3 id="testing-techniques"><i class="fas fa-microscope icon"></i>Testing Techniques</h3>
+
+            <h4 id="black-box-testing">Black-Box Testing (Behavioral/Specification-Based Testing)</h4>
+            <p>Tests the functionality of a software/application without knowing its internal structure, design, or
+                implementation details. The tester focuses on inputs and expected outputs.</p>
+            <div class="diagram-container">
+                <img src="black-box-testing-concept.png" alt="Black-Box Testing Concept: Input -> Opaque Box -> Output"
+                    class="max-w-sm">
+                <figcaption>Black-Box Testing: Internal workings are unknown to the tester.</figcaption>
+            </div>
+            <h6>Black-Box Testing Techniques:</h6>
+            <div class="grid md:grid-cols-2 gap-6 mt-6">
+                <div class="technique-card">
+                    <h6 class="font-semibold"><i class="fas fa-th-list mr-2"></i>Equivalence Class Partitioning (ECP)
+                    </h6>
+                    <p class="text-sm">Input values are divided into groups or "equivalence classes" based on expected
+                        similar outcomes. If one value from a class passes, all values in that class are assumed to
+                        pass. Reduces the number of test cases. Example: For an age field accepting 18-60, classes are
+                        <=17 (invalid), 18-60 (valid),>=61 (invalid).
+                    </p>
+                    <div class="diagram-container p-2"><img src="equivalence-partitioning-example.png"
+                            alt="Equivalence Partitioning Example for Age Input" class="max-w-sm"></div>
+                </div>
+                <div class="technique-card">
+                    <h6 class="font-semibold"><i class="fas fa-border-style mr-2"></i>Boundary Value Analysis (BVA)</h6>
+                    <p class="text-sm">Focuses on testing values at the boundaries (limits) of input domains, as errors
+                        often occur at these edges. Test cases include min, min-1, min+1, nominal, max-1, max, max+1.
+                        Example: For age 18-56, boundaries are 18 and 56. Test cases: 17, 18, 19, (some nominal), 55,
+                        56, 57.</p>
+                    <div class="diagram-container p-2"><img src="boundary-value-analysis-example1.png"
+                            alt="Boundary Value Analysis Example for Age" class="max-w-sm"></div>
+                    <div class="diagram-container p-2"><img src="boundary-value-analysis-example2.png"
+                            alt="Boundary Value Analysis Example for Name Length" class="max-w-sm"></div>
+                </div>
+                <div class="technique-card">
+                    <h6 class="font-semibold"><i class="fas fa-table mr-2"></i>Decision Table Testing / Cause-Effect
+                        Graphing</h6>
+                    <p class="text-sm">Used when output depends on logical combinations of input conditions. A decision
+                        table lists conditions and the actions taken for each combination. Cause (input) - Effect
+                        (output) graphing helps identify these combinations systematically.</p>
+                    <div class="diagram-container p-2"><img src="decision-table-example.png"
+                            alt="Decision Table Example for Bank Interest Rate" class="max-w-md"></div>
+                </div>
+                <div class="technique-card">
+                    <h6 class="font-semibold"><i class="fas fa-retweet mr-2"></i>State Transition Testing</h6>
+                    <p class="text-sm">Tests the system's behavior as it transitions between different states based on
+                        input conditions or events. A state transition diagram helps visualize these changes. Effective
+                        for simpler applications.</p>
+                    <div class="diagram-container p-2"><img src="state-transition-testing-example.png"
+                            alt="State Transition Testing Example for Login Attempts" class="max-w-md"></div>
+                </div>
+                <div class="technique-card">
+                    <h6 class="font-semibold"><i class="fas fa-compress-arrows-alt mr-2"></i>Pair-wise Testing</h6>
+                    <p class="text-sm">Tests all possible pairs of input parameter values to reduce the number of test
+                        cases when dealing with multiple parameters, assuming most faults are caused by interactions
+                        between pairs of parameters.</p>
+                </div>
+                <div class="technique-card">
+                    <h6 class="font-semibold"><i class="fas fa-user-secret mr-2"></i>Error Guessing</h6>
+                    <p class="text-sm">An experience-based technique where testers use their intuition and experience to
+                        guess error-prone areas (e.g., division by zero, null inputs, file upload limits).</p>
+                </div>
+                <div class="technique-card">
+                    <h6 class="font-semibold"><i class="fas fa-sitemap mr-2"></i>Graph-Based Testing Methods</h6>
+                    <p class="text-sm">Identifies objects/components of an application, creates a graph representing
+                        their relationships, and designs test cases to cover these relationships.</p>
+                </div>
+                <div class="technique-card">
+                    <h6 class="font-semibold"><i class="fas fa-balance-scale mr-2"></i>Comparison Testing</h6>
+                    <p class="text-sm">Compares the output of the software under test with different independent
+                        versions of the same software or similar products.</p>
+                </div>
+            </div>
+
+            <h4 id="white-box-testing" class="mt-10">White-Box Testing (Structural/Glass Box/Clear Box Testing)</h4>
+            <p>Tests the internal structure, design, and implementation of the software. The tester has knowledge of the
+                source code and focuses on testing paths, branches, statements, and conditions within the code.</p>
+            <div class="diagram-container">
+                <img src="white-box-testing-concept.png"
+                    alt="White-Box Testing Concept: Input -> Transparent Box (Code) -> Output" class="max-w-sm">
+                <figcaption>White-Box Testing: Internal code structure is known.</figcaption>
+            </div>
+            <h6>White-Box Testing Techniques:</h6>
+            <div class="technique-card mt-6">
+                <h6 class="font-semibold"><i class="fas fa-code-branch mr-2"></i>Control-Flow Testing</h6>
+                <p class="text-sm">Aims to set up test cases that cover all statements and branch conditions. Involves
+                    creating a **Control Flow Graph (CFG)**, which describes the sequence of execution of program
+                    instructions.</p>
+                <div class="diagram-grid">
+                    <div class="diagram-container"><img src="cfg-constructs.png"
+                            alt="CFG for Sequence, Selection, Iteration" class="max-w-md">
+                        <figcaption>Figure 10.3: CFGs for basic constructs.</figcaption>
+                    </div>
+                    <div class="diagram-container"><img src="cfg-example-program.png"
+                            alt="Example program and its Control Flow Graph" class="max-w-md">
+                        <figcaption>Figure 10.4: Example GCD program and its CFG.</figcaption>
+                    </div>
+                </div>
+                <p class="text-sm mt-2"><strong>Path Coverage:</strong> Design test cases such that all linearly
+                    independent paths in the program's CFG are executed at least once.</p>
+            </div>
+            <div class="technique-card">
+                <h6 class="font-semibold"><i class="fas fa-database mr-2"></i>Data-Flow Testing</h6>
+                <p class="text-sm">Focuses on covering all data variables included in the program. Tests where variables
+                    are declared, defined, used, and potentially changed or destroyed (definition-use pairs).</p>
+            </div>
+            <div class="technique-card">
+                <h6 class="font-semibold"><i class="fas fa-calculator mr-2"></i>Cyclomatic Complexity (McCabe's
+                    Complexity)</h6>
+                <p class="text-sm">A quantitative measure of the logical complexity of a program, based on its control
+                    flow graph. It indicates the number of linearly independent paths.</p>
+                <p class="text-sm">Formula: <code>V(G) = e - n + 2P</code> (where P is usually 1 for a single connected
+                    program). <br> Simpler: <code>V(G) = Number of Edges (e) - Number of Nodes (n) + 2</code>.</p>
+                <div class="diagram-container"><img src="cyclomatic-complexity-example.png"
+                        alt="Example of Code to Flow-Chart to Flow-Graph for Cyclomatic Complexity" class="max-w-xl">
+                    <figcaption>Calculating Cyclomatic Complexity from Code to Flow Graph.</figcaption>
+                </div>
+            </div>
+
+            <h5 class="mt-8">Difference: Black Box vs. White Box Testing</h5>
+            <table class="styled-table w-full">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Black Box Testing</th>
+                        <th>White Box Testing</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Knowledge</td>
+                        <td>No knowledge of actual code or internal structure.</td>
+                        <td>Knowledge of actual code and internal structure.</td>
+                    </tr>
+                    <tr>
+                        <td>Level</td>
+                        <td>Higher level testing (e.g., System, Acceptance, Functional).</td>
+                        <td>Lower level testing (e.g., Unit, Integration).</td>
+                    </tr>
+                    <tr>
+                        <td>Focus</td>
+                        <td>External behavior, functionality against requirements.</td>
+                        <td>Internal logic, code paths, branches, statements.</td>
+                    </tr>
+                    <tr>
+                        <td>Performed By</td>
+                        <td>Testers, End-users.</td>
+                        <td>Developers, Testers with coding knowledge.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="diagram-container">
+                <img src="blackbox-vs-whitebox-visual.png"
+                    alt="Visual difference between Black Box and White Box Testing" class="max-w-xs">
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h3 id="debugging"><i class="fas fa-bug icon"></i>Debugging</h3>
+            <p>Debugging is the process of finding and resolving defects or bugs in the software that cause it to behave
+                incorrectly. It's a consequence of successful testing (i.e., tests that find failures). Debugging
+                involves identifying the root cause of the error and then correcting the code.</p>
+        </section>
+
+        <section class="content-section">
+            <h3 id="program-analysis-tools"><i class="fas fa-chart-bar icon"></i>Program Analysis Tools (Software
+                Metrics)</h3>
+            <p>Software metrics provide quantitative measures of various attributes of software or the software process.
+                They can help in understanding complexity, estimating effort, and tracking quality.</p>
+
+            <h4 class="mt-8">Halstead's Complexity Measures</h4>
+            <p>Introduced by Maurice Halstead in 1977, these metrics are computed directly from operators and operands
+                in the source code (static analysis).</p>
+            <table class="styled-table w-full md:w-2/3 mx-auto">
+                <caption>Halstead's Basic Parameters</caption>
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Meaning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>n1</td>
+                        <td>Number of unique operators</td>
+                    </tr>
+                    <tr>
+                        <td>n2</td>
+                        <td>Number of unique operands</td>
+                    </tr>
+                    <tr>
+                        <td>N1</td>
+                        <td>Total number of occurrences of operators</td>
+                    </tr>
+                    <tr>
+                        <td>N2</td>
+                        <td>Total number of occurrences of operands</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="styled-table w-full mt-4">
+                <caption>Halstead's Derived Metrics</caption>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Meaning</th>
+                        <th>Mathematical Representation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>n (Vocabulary)</td>
+                        <td>n1 + n2</td>
+                        <td>Program Vocabulary</td>
+                    </tr>
+                    <tr>
+                        <td>N (Size)</td>
+                        <td>N1 + N2</td>
+                        <td>Program Length</td>
+                    </tr>
+                    <tr>
+                        <td>V (Volume)</td>
+                        <td>N * log<sub>2</sub>(n)</td>
+                        <td>Program Volume (bits to represent)</td>
+                    </tr>
+                    <tr>
+                        <td>D (Difficulty)</td>
+                        <td>(n1/2) * (N2/n2)</td>
+                        <td>Program Difficulty (to write/understand)</td>
+                    </tr>
+                    <tr>
+                        <td>E (Effort)</td>
+                        <td>D * V</td>
+                        <td>Implementation Effort</td>
+                    </tr>
+                    <tr>
+                        <td>B (Errors)</td>
+                        <td>V / 3000 (approx.)</td>
+                        <td>Estimated Number of Bugs</td>
+                    </tr>
+                    <tr>
+                        <td>T (Testing Time)</td>
+                        <td>E / S (where S=18 seconds/Stroud number)</td>
+                        <td>Time to implement or understand</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4 class="mt-8">Function Point (FP) Analysis</h4>
+            <p>A method to measure software size based on the functionality provided by the system from a user's
+                perspective. FP counts are based on five parameters, each categorized as Simple, Average, or Complex.
+            </p>
+            <div class="diagram-container">
+                <img src="function-point-parameters.png" alt="Parameters for Function Point Analysis" class="max-w-lg">
+                <figcaption>Function Point Analysis Parameters.</figcaption>
+            </div>
+            <h6>Function Point Parameters & Weightages:</h6>
+            <table class="styled-table w-full md:w-3/4 mx-auto">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Simple</th>
+                        <th>Average</th>
+                        <th>Complex</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>External Inputs (EI)</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td>External Outputs (EO)</td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td>External Inquiries (EQ)</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td>Logical Internal Files (ILF)</td>
+                        <td>7</td>
+                        <td>10</td>
+                        <td>15</td>
+                    </tr>
+                    <tr>
+                        <td>External Interface Files (EIF)</td>
+                        <td>5</td>
+                        <td>7</td>
+                        <td>10</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>The sum of weighted parameters gives Raw Function Points (Raw FP). This is then adjusted by a Complexity
+                Adjustment Factor (CAF), derived from rating 14 General System Characteristics (GSCs) like data
+                communications, performance, reusability, etc., on a scale of 0 (no influence) to 5 (strong influence).
+                <br><code>CAF = 0.65 + (0.01 * N)</code>, where N is the sum of GSC ratings.
+                <br><code>Delivered Function Points (FP) = CAF * Raw FP</code>.
+                <br>FP can then be used for metrics like Cost/FP, Errors/FP, FP/person-month.
+            </p>
+        </section>
+
+        <div class="mt-12 pt-8 border-t border-slate-300 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <a href="topic-10.html" class="nav-button"> <!-- Assuming previous topic is 10 -->
+                <i class="fas fa-arrow-left icon"></i> Previous Topic
+            </a>
+            <!-- Add next topic link if applicable, or link back to syllabus -->
+            <a href="../software-engineering.html" class="nav-button">
+                Back to Syllabus <i class="fas fa-list-alt icon"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <!-- Footer content -->
+        © <span id="currentYear"></span> <a href="../../../index.html">EduVision</a>.
+        All rights reserved. Crafted with <i class="fas fa-heart"></i> for learning.
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Topic 9: Object-Oriented Software Development - EduVision</title>
+    <title>Topic 8: Object Modelling Using UML - EduVision</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito:wght@700&display=swap"
@@ -19,7 +19,41 @@
             flex-direction: column;
         }
 
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        header {
+            background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+            color: #fff;
+            padding: 1.5rem 0.5rem;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.10);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .logo a {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .logo a:hover span {
+            opacity: 0.8;
+        }
+
+        .logo svg {
+            margin: 0 0.25rem;
+            color: #fde047;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .logo a:hover svg {
+            color: #fef08a;
+            transform: rotate(12deg);
+        }
 
         main {
             flex-grow: 1;
@@ -203,34 +237,57 @@
             align-items: start;
         }
 
-        /* Pattern Card Styling */
-        .pattern-card {
+        .concept-group {
             background: linear-gradient(120deg, #f3e8ff 60%, #fff 100%);
-            padding: 1.2rem 1rem;
+            border: 1px solid #e0e7ef;
             border-radius: 0.8rem;
             box-shadow: 0 2px 8px rgba(139, 92, 246, 0.07);
-            border: 1px solid #e0e7ef;
+            padding: 1.2rem 1rem;
+            margin-bottom: 0.5rem;
             transition: box-shadow 0.2s, border-color 0.2s;
-            margin-bottom: 1.2rem;
         }
 
-        .pattern-card:hover {
+        .concept-group:hover {
             box-shadow: 0 6px 20px rgba(139, 92, 246, 0.13);
             border-color: #a78bfa;
         }
 
-        .pattern-title {
-            color: #7c3aed;
-            font-size: 1.15rem;
+        .concept-group-title {
+            text-align: center;
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            color: #6366f1;
+            margin-bottom: 0.7rem;
+            font-size: 1.02rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
-        .pattern-problem strong,
-        .pattern-card .pattern-solution strong {
-            color: #a21caf;
+        .concept-item {
+            background: #ede9fe;
+            color: #7c3aed;
+            font-size: 0.98rem;
+            font-weight: 500;
+            padding: 0.7em 1.1em;
+            border-radius: 0.6em;
+            text-align: center;
+            margin-bottom: 0.4em;
+            box-shadow: 0 1px 4px rgba(139, 92, 246, 0.07);
+            display: inline-block;
         }
 
+        .grid-concepts,
+        .grid-concepts-single-col {
+            display: grid;
+            gap: 0.7em;
+        }
+
+        .grid-concepts {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .grid-concepts-single-col {
+            grid-template-columns: 1fr;
+        }
 
         pre {
             background: #1e293b;
@@ -279,16 +336,6 @@
             box-shadow: 0 4px 16px rgba(139, 92, 246, 0.18);
         }
 
-        header {
-            background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
-            color: #fff;
-            padding: 1.5rem 0.5rem;
-            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.10);
-            position: sticky;
-            top: 0;
-            z-index: 50;
-        }
-
         footer {
             text-align: center;
             color: #7c3aed;
@@ -322,6 +369,10 @@
             .diagram-grid {
                 grid-template-columns: 1fr;
             }
+
+            .grid-concepts {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -330,7 +381,7 @@
     <header>
         <!-- Header content from previous examples -->
         <div class="container mx-auto flex flex-row items-center justify-between">
-            <div class="text-3xl font-bold logo" style="font-family: 'Nunito', sans-serif;">
+            <div class="text-3xl font-bold" style="font-family: 'Nunito', sans-serif;">
                 <a href="../../../index.html" class="flex items-center group">
                     <span>Edu</span>
                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -358,312 +409,368 @@
                 <i class="fas fa-arrow-left mr-2"></i>Back to Syllabus
             </a>
             <div class="bg-indigo-600 text-white text-base font-semibold px-5 py-2 rounded-lg shadow-md">
-                Topic 9
+                Topic 8
             </div>
         </div>
 
         <section class="content-section">
-            <h2><i class="fas fa-drafting-compass icon"></i>Object-Oriented Software Development</h2>
-            <p class="text-xl mb-8 text-slate-600">Object-Oriented Design (OOD) is a paradigm that shifts the focus from
-                functions to the natural objects (entities) within a problem domain. This chapter builds upon
-                object-modeling concepts to explore a comprehensive object-oriented analysis and design methodology.</p>
-            <div class="info-box">
-                <p><i class="fas fa-lightbulb mr-2"></i>Grady Booch famously summarized the core difference: "Read the
-                    specification. If you want procedural code, find the verbs. If you want object-oriented programs,
-                    find the nouns."</p>
-            </div>
-            <p>Object-Oriented Analysis (OOA) develops an object model from requirements, which is then refined into a
-                design model (OOD) suitable for implementation using Object-Oriented Programming (OOP).</p>
-        </section>
+            <h2><i class="fas fa-cubes icon"></i>Object Modelling Using UML</h2>
+            <p class="text-xl mb-8 text-slate-600">Object-oriented software development has become a dominant paradigm,
+                offering powerful ways to model and build complex systems. This topic explores core object-oriented
+                concepts and introduces the Unified Modeling Language (UML) as a standard tool for visualizing,
+                specifying, constructing, and documenting object-oriented systems.</p>
 
-        <section class="content-section">
-            <h3><i class="fas fa-puzzle-piece icon"></i>8.1 Design Patterns</h3>
-            <p>Design patterns are reusable, well-documented solutions to commonly occurring problems within a given
-                context in software design. They act as guides for creating good designs, based on fundamental
-                principles and experience. Knowing patterns helps in developing robust solutions more quickly.</p>
-            <h6>A pattern typically has four important parts:</h6>
-            <ul class="simple-list">
-                <li>The **Problem** it addresses.</li>
-                <li>The **Context** in which the problem occurs.</li>
-                <li>The **Solution** (often described in terms of class interactions).</li>
-                <li>The **Context** within which the solution works (and sometimes, where it might not).</li>
-            </ul>
-
-            <div class="mt-8 space-y-6">
-                <div class="pattern-card">
-                    <h4 class="pattern-title">Expert Pattern</h4>
-                    <p class="pattern-problem"><strong>Problem:</strong> Which class should be responsible for certain
-                        information or tasks?</p>
-                    <p class="pattern-solution"><strong>Solution:</strong> Assign responsibility to the **information
-                        expert** – the class that has the information necessary to fulfill the required responsibility.
-                        This aligns with the intuition that objects "do" things related to the information they possess.
-                    </p>
-                    <div class="diagram-container">
-                        <img src="image.png" alt="Expert Pattern: Class and Collaboration Diagram" class="max-w-lg">
-                        <figcaption>Figure 8.1: Expert pattern example showing `SaleTransaction` as expert for `total`
-                            and `SaleItem` for `subTotal`.</figcaption>
-                    </div>
-                </div>
-
-                <div class="pattern-card">
-                    <h4 class="pattern-title">Creator Pattern</h4>
-                    <p class="pattern-problem"><strong>Problem:</strong> Which class should be responsible for creating
-                        an instance of class C2?</p>
-                    <p class="pattern-solution"><strong>Solution:</strong> Assign class C1 the responsibility to create
-                        an instance of C2 if one or more of these apply:
-                    <ul class="simple-list ml-4 mt-2">
-                        <li>C1 aggregates objects of type C2.</li>
-                        <li>C1 contains objects of type C2.</li>
-                        <li>C1 closely uses objects of type C2.</li>
-                        <li>C1 has the data that will be required to initialize objects of type C2 when they are
-                            created.</li>
-                    </ul>
-                    </p>
-                </div>
-
-                <div class="pattern-card">
-                    <h4 class="pattern-title">Controller Pattern</h4>
-                    <p class="pattern-problem"><strong>Problem:</strong> Who should be responsible for handling actor
-                        requests (system events)?</p>
-                    <p class="pattern-solution"><strong>Solution:</strong> For each use case, there should typically be
-                        a separate controller object responsible for handling all actor requests pertaining to that use
-                        case. This controller maintains necessary information about the state of the use case and can
-                        identify out-of-sequence requests. It decouples boundary objects (UI) from entity objects
-                        (domain logic).</p>
-                </div>
-
-                <div class="pattern-card">
-                    <h4 class="pattern-title">Facade Pattern</h4>
-                    <p class="pattern-problem"><strong>Problem:</strong> How should services be requested from a complex
-                        package or subsystem?</p>
-                    <p class="pattern-solution"><strong>Solution:</strong> Create a Facade class that provides a single,
-                        simplified, common interface to the services of the package. A package is a cohesive set of
-                        classes with strong responsibilities (e.g., an RDBMS interface). The Facade hides the complexity
-                        of the subsystem.</p>
-                </div>
-
-                <div class="pattern-card">
-                    <h4 class="pattern-title">Model-View Separation Pattern</h4>
-                    <p class="pattern-problem"><strong>Problem:</strong> How should non-GUI (model/domain) classes
-                        communicate with GUI (view) classes without direct coupling?</p>
-                    <p class="pattern-solution"><strong>Solution:</strong> Model objects should not have direct
-                        knowledge of or be directly coupled to view objects. This results in a reusable model. Two
-                        common approaches:
-                    <ol class="styled-list ml-4 mt-2">
-                        <li><strong>Polling (Pull from above):</strong> GUI objects are responsible for asking (pulling)
-                            relevant information from model objects when needed. Efficient for some applications but not
-                            for real-time visualizations or monitoring.</li>
-                        <li><strong>Publish-Subscribe Pattern (Push from below):</strong> An event notification system
-                            is implemented. An Event Manager class tracks subscribers and event types. Publishers send
-                            messages to the Event Manager, which then notifies all registered subscribers (often via
-                            callbacks). Java's `EventListener` interface supports this.</li>
-                    </ol>
-                    </p>
-                </div>
-                <div class="pattern-card">
-                    <h4 class="pattern-title">Intermediary Pattern (Proxy)</h4>
-                    <p class="pattern-problem"><strong>Problem:</strong> How should client and server objects (software
-                        components, possibly across a network) interact?</p>
-                    <p class="pattern-solution"><strong>Solution:</strong> Define a Proxy object on the client side that
-                        acts as a local stand-in for the remote server object. The Proxy hides network transmission
-                        details, determines server address, communicates requests, obtains responses, and passes them to
-                        the client. It can also augment or filter exchanged information and may have the same interface
-                        as the remote server, abstracting network complexities from the client.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="content-section">
-            <h3><i class="fas fa-project-diagram icon"></i>A Generalized Object-Oriented Analysis and Design Process
-            </h3>
-            <p>This process begins by making an analysis model, which is then refined into a design model through
-                iterations. It explains how to define system requirements and translate them into a logical solution
-                that can be implemented.</p>
+            <h3><i class="fas fa-lightbulb icon"></i>7.1 Overview of Object-Oriented Concepts</h3>
+            <p>Before diving into UML, let's revisit some fundamental concepts central to the object-oriented approach.
+                These concepts define how we think about and structure software in an OO way.</p>
             <div class="diagram-container">
-                <img src="image-2.png" alt="An object-oriented analysis and design process" class="max-w-2xl">
-                <figcaption>Figure 8.2: Schematic of an object-oriented analysis and design process flow.</figcaption>
-            </div>
-
-            <h4>8.2.1 Overview</h4>
-            <p>The process typically starts with developing a **Use Case Model**. This model, along with the **SRS
-                document**, informs the construction of a **Domain Model**. The Domain Model is then refined into a
-                **Class Diagram** through iterations involving **Interaction Diagrams**. A **Glossary** of terms is
-                continuously maintained to ensure clear communication and reduce misunderstandings. User interface
-                prototypes often evolve in parallel.</p>
-
-            <h4>8.2.2 Use Case Model Development</h4>
-            <p>The essence is to capture user requirements by detailing all scenarios of user interactions. There's a
-                strong correlation between the user manual's content and the use case model. Iterating on GUI design and
-                use cases in parallel is an excellent approach, but use cases should remain independent of specific GUI
-                elements (e.g., radio buttons), as UI can change more frequently than core functionality. State use
-                cases from the actor's perspective using active voice verb phrases (e.g., "Admit patient," "Issue
-                book").</p>
-            <h6>Common Mistakes in Use Case Model Development:</h6>
-            <ul class="simple-list">
-                <li><strong>Clutter:</strong> Too many use cases in the top-level diagram. Organize using packages.</li>
-                <li><strong>Confusing Sub-steps:</strong> Mistaking sub-steps of a use case (e.g., "print receipt") for
-                    separate, top-level use cases.</li>
-                <li><strong>Omitting Text Descriptions:</strong> Makes it hard to fully understand behavior and leads to
-                    implementation difficulties.</li>
-                <li><strong>Missing Alternative Scenarios:</strong> Leads to incomplete functionality or late discovery
-                    of issues.</li>
-            </ul>
-
-            <h4>8.2.3 Domain Modelling (Conceptual Modelling)</h4>
-            <p>A domain model represents the concepts or objects appearing in the problem domain and their
-                relationships. A recommended strategy is to quickly create a rough conceptual model focusing on obvious
-                concepts, then refine and extend it.</p>
-            <h5>Classifying Objects in the Domain Model:</h5>
-            <div class="diagram-container">
-                <img src="image-3.png"
-                    alt="Typical realization of a use case through boundary, controller, and entity objects"
-                    class="max-w-xl">
-                <figcaption>Figure 8.3: Interaction of Boundary, Controller, and Entity objects for a use case.
+                <img src="image.png" alt="Important concepts used in the object-oriented approach" class="max-w-2xl">
+                <figcaption>Figure 7.1: Key Concepts, Basic Mechanisms, and Related Terms in Object-Orientation.
                 </figcaption>
             </div>
-            <ul class="simple-list">
-                <li><strong>Boundary Objects:</strong> Objects with which actors interact (e.g., screens, menus,
-                    dialogs). Responsible for user interaction, input validation, output formatting, but typically not
-                    processing logic. A common heuristic is one boundary class per actor/use case pair.</li>
-                <li><strong>Entity Objects:</strong> Hold information that needs to outlive use case execution (e.g.,
-                    data tables, files like `Book`, `BookRegister`). Often "dumb servers" for storing and fetching data.
-                </li>
-                <li><strong>Controller Objects:</strong> Coordinate activities of boundary and entity objects to provide
-                    overall system behavior for a use case. They decouple boundary and entity objects, embodying much of
-                    the use case realization logic. Often, one controller object per use case, though complex use cases
-                    might need more, or trivial ones might omit it.</li>
-            </ul>
 
-            <h4>8.2.4 Identification of Entity Objects</h4>
-            <p>This is a crucial step. Grammatical analysis of the problem description (processing narrative) is a
-                common approach (originated by Booch):</p>
-            <ul class="simple-list">
-                <li>Nouns are potential objects.</li>
-                <li>Verbs are potential methods.</li>
-            </ul>
-            <p>Eliminate synonyms. Distinguish between objects in the solution space (needed for implementation) and
-                problem space (descriptive). An imperative verb form (e.g., "move") represents an action, not an object.
-            </p>
-            <h6>Criteria for Legitimate Objects:</h6>
-            <ul class="simple-list">
-                <li><strong>Retained Information:</strong> Object needs to store some private data.</li>
-                <li><strong>Multiple Attributes & Operations:</strong> Useful objects typically have several attributes
-                    and support multiple methods.</li>
-                <li><strong>Common Operations:</strong> Defined operations must apply to all instances. If not, consider
-                    subclasses.</li>
-            </ul>
-            <p><strong>Actor Surrogates:</strong> Classes needed to store information about an actor within the system
-                (e.g., `LibraryMember` class for a library member actor).</p>
-            <p>While grammatical analysis is simple, high-quality abstractions often result from deeper insight into the
-                problem.</p>
-            <h6>Example 8.1: Tic-Tac-Toe Entity Object Identification</h6>
-            <p>Problem description nouns: Tic-tac-toe, game, human player, computer, moves, square, mark, straight line,
-                board, row, column, diagonal. After eliminating synonyms, problem-domain-only nouns (human player), and
-                action-nouns (move), the primary entity object identified is often `Board` (or `Square` as part of
-                Board).</p>
-
-            <h4>8.2.5 Interaction Modelling</h4>
-            <p>Aims to allocate responsibilities to classes and show detailed interactions over time for each use case.
-                This is typically done using **Sequence Diagrams**. One sequence diagram per use case is often needed,
-                potentially split for complex scenarios or alternative flows.</p>
-
-            <h4>8.2.7 CRC (Class-Responsibility-Collaborator) Cards</h4>
-            <p>A simple, effective technique for determining class responsibilities in a use case realization. Pioneered
-                by Ward Cunningham and Kent Beck.</p>
-            <ul class="simple-list">
-                <li>Index cards, one per class.</li>
-                <li>Lists class name, its responsibilities, and collaborator classes it needs to fulfill those
-                    responsibilities.</li>
-                <li>Developed in small group sessions with role-playing.</li>
-                <li>Cards are deliberately small to limit responsibilities per class.</li>
-            </ul>
-            <div class="diagram-container">
-                <img src="image-4.png" alt="CRC card for the BookRegister class" class="max-w-md">
-                <figcaption>Figure 8.4: Example CRC card for `BookRegister`.</figcaption>
-            </div>
-            <p>Interaction diagrams can often be developed by "flipping through" CRC cards.</p>
-        </section>
-
-        <section class="content-section">
-            <h3><i class="fas fa-microscope icon"></i>8.3 Examples of OOA&D Process</h3>
-
-            <h4>Example 8.2: Tic-Tac-Toe Computer Game</h4>
-            <div class="diagram-grid">
-                <div class="diagram-container">
-                    <img src="image-5.png" alt="Use case model for Tic-Tac-Toe" class="max-w-xs">
-                    <figcaption>Figure 8.5: Use Case - "Play move".</figcaption>
+            <div class="grid md:grid-cols-3 gap-6 mt-8">
+                <div class="concept-group">
+                    <h4 class="concept-group-title">Basic Mechanisms</h4>
+                    <div class="grid-concepts-single-col">
+                        <div class="concept-item">Objects</div>
+                        <div class="concept-item">Classes & Instances</div>
+                        <div class="concept-item">Inheritance</div>
+                        <div class="concept-item">Messages & Methods</div>
+                    </div>
                 </div>
-                <div class="diagram-container">
-                    <img src="image-6.png" alt="Initial and refined domain model for Tic-Tac-Toe" class="max-w-md">
-                    <figcaption>Figure 8.6: (a) Initial Domain (`Board`), (b) Refined with Boundary & Controller.
-                    </figcaption>
+                <div class="concept-group">
+                    <h4 class="concept-group-title">Key Concepts</h4>
+                    <div class="grid-concepts">
+                        <div class="concept-item">Abstraction</div>
+                        <div class="concept-item">Dynamic Binding</div>
+                        <div class="concept-item">Polymorphism</div>
+                        <div class="concept-item">Genericity</div>
+                        <div class="concept-item">Encapsulation</div>
+                        <div class="concept-item">Composite Objects</div>
+                    </div>
+                </div>
+                <div class="concept-group">
+                    <h4 class="concept-group-title">Related Terms</h4>
+                    <div class="grid-concepts">
+                        <div class="concept-item">Agents</div>
+                        <div class="concept-item">Widgets</div>
+                        <div class="concept-item">Persistence</div>
+                    </div>
                 </div>
             </div>
-            <div class="diagram-container">
-                <img src="image-7.png" alt="Sequence diagram for play move use case" class="max-w-lg">
-                <figcaption>Figure 8.7: Sequence Diagram for "Play move".</figcaption>
-            </div>
-            <div class="diagram-container">
-                <img src="image-8.png" alt="Class diagram for Tic-Tac-Toe" class="max-w-lg">
-                <figcaption>Figure 8.8: Class Diagram showing `Board`, `PlayMoveBoundary`, `Controller`.</figcaption>
-            </div>
 
-            <h4 class="mt-10">Example 8.3: Supermarket Prize Scheme</h4>
-            <div class="diagram-grid">
-                <div class="diagram-container">
-                    <img src="image-9.png" alt="Use case model for Supermarket Prize Scheme" class="max-w-md">
-                    <figcaption>Figure 8.9: Use Cases - `register-customer`, `register-sales`, `select-winners`.
-                    </figcaption>
-                </div>
-                <div class="diagram-container">
-                    <!-- Interpreting Figure 8.10 from your scan -->
-                    <img src="image-10.png" alt="Domain/Class model elements for Supermarket Prize Scheme"
-                        class="max-w-xl">
-                    <figcaption>Figure 8.10 (interpretation): (a) Entities like `SalesHistory`, `CustomerRegister`. (b)
-                        Boundary & Controller classes.</figcaption>
-                </div>
-            </div>
-            <p>The text mentions sequence diagrams (Figures 8.11, 8.12, 8.13 - not provided in image set) and a final
-                class diagram (Figure 8.15 - not provided) would be developed similarly, populating methods based on
-                sequence diagram messages.</p>
-        </section>
-
-        <section class="content-section">
-            <h3><i class="fas fa-award icon"></i>8.4 OOD Goodness Criteria</h3>
-            <p>Arriving at a good object-oriented design involves subjective judgments. Therefore, accepted criteria are
-                needed to judge design quality.</p>
+            <h5 class="mt-8">Core OO Principles:</h5>
             <ul class="custom-bullets">
-                <li><strong>Coupling Guidelines:</strong> Minimize coupling between objects or groups of objects.
-                    Excessive coupling is detrimental to modularity and prevents reuse.</li>
-                <li><strong>Cohesion Guidelines:</strong> Aim for high cohesion at three levels:
-                    <ol class="simple-list ml-6">
-                        <li>Cohesiveness of individual methods (each method does one well-defined function).</li>
-                        <li>Cohesiveness of data and methods within a class (methods act on data for which the object is
-                            naturally responsible).</li>
-                        <li>Cohesiveness of an entire class hierarchy (promotes encapsulation).</li>
-                    </ol>
-                </li>
-                <li><strong>Hierarchy and Factoring Guidelines:</strong> A base class should not have too many
-                    subclasses (approx. 7±2 is a heuristic). This aids understandability.</li>
-                <li><strong>Keeping Message Protocols Simple:</strong> Complex message protocols (e.g., more than three
-                    parameters) can indicate excessive coupling.</li>
-                <li><strong>Number of Methods per Class:</strong> Objects with too many methods (e.g., >7) are likely
-                    application-specific, complex, and less reusable.</li>
-                <li><strong>Depth of Inheritance Tree:</strong> Very deep trees can make classes complex due to many
-                    inherited methods. Keep height manageable.</li>
-                <li><strong>Number of Messages per Use Case:</strong> A single message triggering an excessive chain of
-                    messages across many objects complicates testing and debugging.</li>
-                <li><strong>Response For a Class (RFC):</strong> The maximum number of different methods an instance of
-                    this class would call (counting a method only once if called multiple times). A class calling >7
-                    different methods might be error-prone.</li>
+                <li><strong>Objects:</strong> Real-world or conceptual entities involved in the solution design (e.g.,
+                    person, bank, customer). Each object has attributes (characteristics) and methods (behaviors).</li>
+                <li><strong>Classes:</strong> A generalized description or blueprint of an object. An object is an
+                    instance of a class. Classes define attributes and methods for their objects.</li>
+                <li><strong>Encapsulation (Information Hiding):</strong> Bundling attributes (data) and methods
+                    (operations on data) together within an object, restricting direct access from outside. This
+                    protects internal state and promotes modularity.</li>
+                <li><strong>Inheritance:</strong> Allows similar classes to be organized hierarchically. Sub-classes
+                    (derived classes) can inherit, implement, and reuse attributes and methods from their super-classes
+                    (base classes). This promotes code reuse and a natural way to model "is-a" relationships.</li>
+                <li><strong>Polymorphism ("Many Forms"):</strong> Allows methods with similar tasks but different
+                    implementations (e.g., varying arguments or operating on different data types) to share the same
+                    name. The correct method is invoked based on the context or object type, enabling a single interface
+                    for diverse behaviors.</li>
+                <li><strong>Abstraction:</strong> Focusing on essential characteristics while ignoring irrelevant
+                    details. Objects and classes provide abstractions of real-world entities.</li>
+                <li><strong>Messages & Methods:</strong> Objects communicate by sending messages to each other. A
+                    message is a request for an object to perform one of its operations (methods).</li>
             </ul>
+
+            <h5 class="mt-6">Object-Oriented Design Process (High-Level):</h5>
+            <ol class="simple-list">
+                <li>A solution design is created from requirements or existing system analysis.</li>
+                <li>Objects are identified and grouped into classes based on shared attributes and characteristics.</li>
+                <li>Class hierarchies and relationships among classes are defined (e.g., inheritance, association).</li>
+                <li>An application framework, defining the overall structure and flow, is established.</li>
+            </ol>
         </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-language icon"></i>7.2 Unified Modeling Language (UML)</h3>
+            <p>UML is a standardized graphical modeling language used to specify, visualize, construct, and document the
+                artifacts of a software-intensive system. It provides a rich set of notations (rectangles, lines,
+                ellipses, etc.) to create various diagrams that model different aspects of a system.</p>
+            <div class="info-box">
+                <p><i class="fas fa-exclamation-circle mr-2"></i><strong>Important Note:</strong> UML is a modeling
+                    language, NOT a system design or development methodology. It is also not tied to any specific
+                    object-oriented methodology, unlike its predecessors. Its independence allows it to be used with
+                    various design approaches.</p>
+            </div>
+
+            <h4>Origin and Influences:</h4>
+            <p>In the late 1980s and early 1990s, numerous object-oriented design techniques and notations proliferated,
+                leading to confusion when different teams used different notations. UML was developed to standardize
+                these, drawing heavily from established methodologies, primarily:</p>
+            <ul class="simple-list">
+                <li>OMT (Object Modeling Technique) by Rumbaugh et al.</li>
+                <li>Booch's Methodology by Grady Booch.</li>
+                <li>OOSE (Object-Oriented Software Engineering) by Ivar Jacobson.</li>
+                <li>Odell's methodology.</li>
+                <li>Shlaer and Mellor methodology.</li>
+            </ul>
+            <div class="diagram-container">
+                <img src="image-2.png"
+                    alt="Schematic representation of the impact of different object modelling techniques on UML"
+                    class="max-w-lg">
+                <figcaption>Figure 7.9: OMT, Booch, and OOSE had the most profound influence on UML.</figcaption>
+            </div>
+            <p>UML was adopted by the Object Management Group (OMG) as a de facto standard in 1997. OMG, an association
+                of industries, promotes consensus on notations and techniques to foster widespread adoption and
+                standardization.</p>
+
+            <h4>What is a Model?</h4>
+            <p>A model is an abstraction of a system that captures essential aspects while omitting or simplifying
+                others. Models in software development can be graphical, textual, mathematical, or code-based. UML is
+                primarily a graphical modeling tool, often accompanied by textual explanations for clarity.</p>
+            <p>Models are crucial for understanding complex systems, communicating designs, analyzing requirements, and
+                facilitating the generation of test cases and even code templates (with the help of CASE tools like
+                Rational Rose).</p>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-diagram-project icon"></i>7.3 UML Diagrams & Views</h3>
+            <p>UML provides nine standard types of diagrams (this number has evolved in later UML versions, but we'll
+                focus on the classical set) to capture different views or perspectives of a system, much like
+                architectural blueprints show different aspects of a building.</p>
+            <div class="diagram-container">
+                <img src="image-3.png" alt="Different types of diagrams and views supported by UML" class="max-w-xl">
+                <figcaption>Figure 7.10: UML diagrams categorized by the system view they represent.</figcaption>
+            </div>
+            <p>UML diagrams can capture the following views:</p>
+            <ul class="custom-bullets">
+                <li><strong>Users' View:</strong> Defines functionalities (facilities) made available to users. Captures
+                    the external view (black-box) of the system. (Primarily: Use Case Diagram)</li>
+                <li><strong>Structural View (Static View):</strong> Defines the kinds of objects (classes) important to
+                    the system and their relationships. This structure does not change with time. (Primarily: Class
+                    Diagram, Object Diagram)</li>
+                <li><strong>Behavioural View (Dynamic View):</strong> Captures how objects interact with each other over
+                    time to realize system behavior. (Primarily: Sequence Diagram, Collaboration Diagram, Statechart
+                    Diagram, Activity Diagram)</li>
+                <li><strong>Implementation View:</strong> Captures important components of the system and their
+                    dependencies. (Primarily: Component Diagram)</li>
+                <li><strong>Environmental View (Deployment View):</strong> Models how different components are
+                    implemented on different pieces of hardware. (Primarily: Deployment Diagram)</li>
+            </ul>
+            <div class="info-box">
+                <p><i class="fas fa-lightbulb mr-2"></i>It's not necessary to construct all views using all diagrams for
+                    every system. The choice depends on the complexity and nature of the problem. The Users' View (Use
+                    Case Model) is often considered central, with other views conforming to it.</p>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-user-friends icon"></i>7.4 Use Case Model</h3>
+            <p>A use case model consists of a set of "use cases," which represent the different ways users can interact
+                with or use the system. To identify use cases, ask: "What can users do using the system?" (e.g.,
+                `issue-book`, `query-book` for a Library Information System).</p>
+            <p>Use cases partition system behavior into transactions, each performing a useful action from the user's
+                perspective, possibly involving multiple message exchanges.</p>
+
+            <h4>Representation of Use Cases:</h4>
+            <p>Use cases are represented by drawing a Use Case Diagram and writing accompanying text descriptions.</p>
+            <ul class="simple-list">
+                <li><strong>Use Case Diagram:</strong>
+                    <ul>
+                        <li>Each use case is an ellipse with its name inside.</li>
+                        <li>All use cases are enclosed in a rectangle (system boundary).</li>
+                        <li>System name appears inside the rectangle.</li>
+                        <li>Users are represented by stick-person icons called **Actors**. An actor represents a role
+                            played by a user or an external system. The line connecting an actor to a use case is a
+                            communication relationship.</li>
+                        <li>**Stereotypes:** UML allows annotating basic symbols to slightly change their meaning. For
+                            example, <code><<external system>></code> can stereotype an actor representing another
+                            system.</li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="diagram-grid">
+                <div class="diagram-container">
+                    <img src="image-4.png" alt="Use case model for Tic-Tac-Toe game" class="max-w-xs">
+                    <figcaption>Figure 7.11: Use Case for Tic-Tac-Toe ("Play move").</figcaption>
+                </div>
+                <div class="diagram-container">
+                    <img src="image-5.png" alt="Use case model for Supermarket Prize Scheme" class="max-w-md">
+                    <figcaption>Figure 7.12: Use Cases for Supermarket Prize Scheme.</figcaption>
+                </div>
+            </div>
+
+            <h4>Text Description for Use Cases:</h4>
+            <p>Each use case ellipse should be accompanied by a detailed text description covering:</p>
+            <ul class="simple-list">
+                <li>**Mainline Sequence:** The normal, successful flow of events.</li>
+                <li>**Alternate Scenarios/Variations:** Different paths or outcomes.</li>
+                <li>**Exceptional Conditions/Error Situations:** How errors are handled.</li>
+                <li>**Pre-conditions:** State of the system before the use case starts.</li>
+                <li>**Post-conditions:** State of the system after successful completion.</li>
+                <li>**Non-functional Requirements:** Constraints like performance, response time.</li>
+                <li>**Sample Dialogs:** Examples illustrating user interface interactions.</li>
+                <li>**Document References:** Links to relevant domain documents.</li>
+                <li>**Contact Persons:** Stakeholders involved in defining the use case.</li>
+            </ul>
+            <pre><code class="language-none">Example Text Description Snippet (for Supermarket - U1: register-customer):
+Mainline sequence:
+1. Customer: select register customer option
+2. System: display prompt to enter name, address, telephone number
+3. Customer: enter the necessary values
+4. System: display the generated id and success message.
+
+Scenario 2 (Alternate): At step 4 of mainline.
+4. System: displays message "customer has already registered".</code></pre>
+
+            <h4>Why Develop Use Case Diagrams?</h4>
+            <ul class="custom-bullets">
+                <li>Serve as a form of requirements specification.</li>
+                <li>Form the core model to which other models conform.</li>
+                <li>Help in selecting/implementing security mechanisms by identifying actor entitlements.</li>
+                <li>Useful for preparing user manuals targeted to different user roles (actors).</li>
+                <li>Actors help in identifying use cases and understanding system functioning.</li>
+            </ul>
+
+            <h4>Factoring Commonality Among Use Cases:</h4>
+            <p>Complex use cases can be simplified, and common behavior across different use cases can be factored out
+                for reusability (e.g., error handling). UML provides mechanisms like:</p>
+            <ul class="simple-list">
+                <li><strong>Generalization:</strong> A child use case inherits and specializes the behavior of a parent
+                    use case. (e.g., "Pay through credit card" and "Pay through library pay card" generalize to "Pay
+                    membership fee").</li>
+                <div class="diagram-container">
+                    <img src="image-6.png" alt="Representation of use case generalization" class="max-w-sm">
+                    <figcaption>Figure 7.13: Use Case Generalization.</figcaption>
+                </div>
+                <li><strong>Include (<code><<include>></code>):</strong> One use case explicitly includes the behavior
+                    of another at a specified point. Useful for reusing common functionality.</li>
+                <li><strong>Extend (<code><<extend>></code>):</strong> One use case adds behavior to another (base) use
+                    case at defined extension points, typically for optional or exceptional behavior.</li>
+            </ul>
+
+            <h4>Use Case Packaging:</h4>
+            <p>Use cases can be grouped into packages to organize large models, often based on related functionality or
+                subsystems.</p>
+            <div class="diagram-container">
+                <img src="image-7.png" alt="Use case packaging example" class="max-w-xl">
+                <figcaption>Figure 7.18: Grouping related use cases into packages.</figcaption>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-project-diagram icon"></i>7.5 Class Diagrams</h3>
+            <p>A class diagram describes the static structure of a system: its classes, attributes, operations, and the
+                relationships between classes. It shows how a system is structured rather than how it behaves
+                dynamically.</p>
+
+            <h4>Classes:</h4>
+            <p>Represent entities with common features (attributes and operations). Shown as solid outline rectangles,
+                often with compartments for name, attributes, and operations. Class names are typically singular nouns,
+                mixed case starting with an uppercase letter (e.g., `LibraryMember`).</p>
+            <div class="diagram-container">
+                <img src="image-8.png" alt="Different representations of the LibraryMember class" class="max-w-2xl">
+                <figcaption>Figure 7.19: Various ways to represent a class, showing different levels of detail.
+                </figcaption>
+            </div>
+
+            <h5>Attributes:</h5>
+            <p>Named properties of a class, representing data an object can hold. Listed with names, optionally type,
+                initial value, and constraints. E.g., <code>memberName: String</code>,
+                <code>booksIssued[0..*]: Book</code>. Multiplicity (e.g., `[10]`) indicates the number of attributes per
+                instance.
+            </p>
+
+            <h5>Operations (Methods):</h5>
+            <p>Functions or procedures that objects of the class can perform. Listed with names, optionally parameters
+                (with kind: `in`, `out`, `inout`), and return type. E.g.,
+                <code>issueBook(in bookID: String): Boolean</code>. Abstract operations are often italicized.
+                Class-scope operations (static) are underlined.
+            </p>
+
+            <h4>Relationships Between Classes:</h4>
+            <div class="diagram-grid">
+                <div>
+                    <h6>Association:</h6>
+                    <p>A connection between classes, representing a structural relationship. Links are instances of
+                        associations. Shown as a solid line. Can have a name, role names at ends, and multiplicity
+                        (e.g., `1`, `0..*`, `1..5`).</p>
+                    <div class="diagram-container">
+                        <img src="image-9.png" alt="Representation of association (LibraryMember borrows Books)"
+                            class="max-w-md">
+                        <figcaption>Figure 7.20: Association with multiplicity.</figcaption>
+                    </div>
+                </div>
+                <div>
+                    <h6>Aggregation ("has-a" or "part-of"):</h6>
+                    <p>A special type of association representing a whole-part relationship. The aggregate (whole) is
+                        responsible for its parts. Shown with a hollow diamond at the aggregate end.</p>
+                    <div class="diagram-container">
+                        <img src="image-10.png" alt="Representation of aggregation (Document contains Paragraphs, Line)"
+                            class="max-w-md">
+                        <figcaption>Figure 7.21: Aggregation relationship.</figcaption>
+                    </div>
+                </div>
+                <div>
+                    <h6>Composition (Strong Aggregation):</h6>
+                    <p>A stricter form of aggregation where parts are existence-dependent on the whole. If the whole is
+                        destroyed, its parts are also destroyed. Shown with a filled diamond at the composite-end.</p>
+                    <div class="diagram-container">
+                        <img src="image-11.png" alt="Representation of composition (Order contains Items)"
+                            class="max-w-md">
+                        <figcaption>Figure 7.22: Composition relationship.</figcaption>
+                    </div>
+                </div>
+                <div>
+                    <h6>Inheritance (Generalization/Specialization "is-a"):</h6>
+                    <p>Relates a superclass (general) to its subclasses (specific). Subclasses inherit attributes and
+                        operations. Shown as an empty arrowhead pointing to the superclass. Discriminators (e.g.,
+                        `issuable`, `reference`) can differentiate subclasses.</p>
+                    <div class="diagram-container">
+                        <img src="image-12.png" alt="Representation of the inheritance relationship" class="max-w-md">
+                        <figcaption>Figure 7.23: Inheritance (LibraryBook and its types).</figcaption>
+                    </div>
+                </div>
+                <div>
+                    <h6>Dependency:</h6>
+                    <p>Shows that a change in an independent class may require a change in a dependent class (e.g., one
+                        class uses another's methods or interface). Shown as a dotted arrow pointing to the independent
+                        class.</p>
+                    <div class="diagram-container">
+                        <!-- Assuming image-13.png is for Dependency based on your description sequence -->
+                        <img src="image-13.png" alt="Representation of dependence between classes" class="max-w-xs">
+                        <figcaption>Figure 7.24: Dependency relationship.</figcaption>
+                    </div>
+                </div>
+            </div>
+
+            <h4>Constraints:</h4>
+            <p>Conditions or integrity rules applied to model elements (e.g., permissible values for attributes,
+                pre/post-conditions for operations). Enclosed in braces `{}`. Can be informal English or formal Object
+                Constraint Language (OCL).</p>
+        </section>
+
+        <section class="content-section">
+            <h3><i class="fas fa-clone icon"></i>Object Diagrams</h3>
+            <p>An object diagram shows a snapshot of the objects in a system (instances of classes) and their links
+                (instances of associations) at a particular point in time. It's often called an instance diagram.
+                Objects are typically drawn using rounded rectangles. Object diagrams are useful for explaining the
+                dynamic working of the system and can change as execution proceeds.</p>
+            <!-- No specific object diagram image provided, so a general description is given. -->
+            <div class="info-box">
+                <p>Example: An object diagram might show specific <code>LibraryMember</code> objects like
+                    <code>johnDoe:LibraryMember</code> linked to specific <code>book123:Book</code> objects at a moment
+                    when John has borrowed that book.
+                </p>
+            </div>
+        </section>
+
 
         <div class="mt-12 pt-8 border-t border-slate-300 flex flex-col sm:flex-row justify-between items-center gap-6">
-            <a href="topic-8.html" class="nav-button" aria-label="Previous Topic">
+            <a href="topic-7.html" class="nav-button" aria-label="Previous Topic">
                 <i class="fas fa-arrow-left icon"></i> Previous Topic
             </a>
-            <a href="topic-10.html" class="nav-button" aria-label="Next Topic">
+            <a href="topic-9.html" class="nav-button" aria-label="Next Topic">
                 Next Topic <i class="fas fa-arrow-right icon"></i>
             </a>
         </div>

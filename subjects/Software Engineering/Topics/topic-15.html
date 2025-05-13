@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Topic 15: Software Maintenance, Re-engineering & CASE Tools - EduVision</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Nunito:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(120deg, #f4f7fa 0%, #e9eafc 100%);
+            color: #232946;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(90deg, #4f46e5 0%, #2563eb 100%);
+            color: #fff;
+            padding: 28px 0 20px 0;
+            box-shadow: 0 4px 16px rgba(79, 70, 229, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .header-brand {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.1rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-brand a {
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-brand svg {
+            margin: 0 4px;
+            color: #fde047;
+            transition: transform 0.2s;
+        }
+
+        .header-brand a:hover svg {
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        .header-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+        }
+
+        .header-desc {
+            font-size: 1.08rem;
+            opacity: 0.92;
+            margin-bottom: 0;
+        }
+
+        main {
+            flex: 1 1 auto;
+            padding: 40px 0 0 0;
+        }
+
+        .content-section {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 6px 32px rgba(79, 70, 229, 0.08), 0 1.5px 6px rgba(79, 70, 229, 0.03);
+            padding: 38px 32px;
+            margin-bottom: 38px;
+            transition: box-shadow 0.2s;
+        }
+
+        .content-section:hover {
+            box-shadow: 0 12px 36px rgba(79, 70, 229, 0.13), 0 2px 8px rgba(79, 70, 229, 0.06);
+        }
+
+        .content-section h2 {
+            font-size: 2.3rem;
+            font-weight: 800;
+            color: #4338ca;
+            border-bottom: 3px solid #a5b4fc;
+            padding-bottom: 12px;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .content-section h2 .icon {
+            color: #6366f1;
+            font-size: 2.1rem;
+        }
+
+        .content-section h3 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #2563eb;
+            margin-top: 38px;
+            margin-bottom: 18px;
+            border-top: 2px solid #dbeafe;
+            padding-top: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .content-section h3 .icon {
+            color: #6366f1;
+            font-size: 1.4rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #6366f1;
+            margin-top: 28px;
+            margin-bottom: 10px;
+        }
+
+        .content-section h5 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #a21caf;
+            margin-top: 22px;
+            margin-bottom: 8px;
+        }
+
+        .content-section h6,
+        .sub-h6 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0891b2;
+            margin-top: 18px;
+            margin-bottom: 8px;
+            background: #e0f2fe;
+            padding: 6px 14px;
+            border-radius: 7px;
+            display: inline-block;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section ol {
+            color: #3b3b4f;
+            font-size: 1.08rem;
+            margin-bottom: 18px;
+            line-height: 1.7;
+        }
+
+        .content-section ul.simple-list {
+            list-style: disc inside;
+            padding-left: 18px;
+            color: #444;
+        }
+
+        .content-section ul.simple-list ul {
+            list-style: circle inside;
+            margin-top: 6px;
+        }
+
+        .content-section ol.styled-list {
+            list-style: decimal inside;
+            padding-left: 18px;
+        }
+
+        .content-section ol.process-steps li {
+            background: #f1f5f9;
+            padding: 14px 18px;
+            border-radius: 8px;
+            border: 1.5px solid #e0e7ef;
+            color: #232946;
+            font-size: 1.01rem;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 4px rgba(99, 102, 241, 0.04);
+        }
+
+        .content-section ol.process-steps li strong {
+            color: #6366f1;
+        }
+
+        .info-box {
+            background: #eef2ff;
+            border-left: 5px solid #6366f1;
+            color: #3730a3;
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin: 24px 0 28px 0;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.06);
+            font-size: 1.05rem;
+        }
+
+        .info-box strong {
+            color: #3730a3;
+        }
+
+        .cost-factor-box {
+            background: #fee2e2;
+            border-left: 5px solid #ef4444;
+            color: #991b1b;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 18px 0 18px 0;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.08);
+            font-size: 1.01rem;
+        }
+
+        .advantages-box {
+            background: #dcfce7;
+            border-left: 5px solid #22c55e;
+            color: #166534;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 18px 0 18px 0;
+            box-shadow: 0 2px 8px rgba(34, 197, 94, 0.08);
+            font-size: 1.01rem;
+        }
+
+        .feature-card {
+            background: #f1f5f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.06);
+            padding: 22px 18px;
+            margin-bottom: 18px;
+            border: 1.5px solid #e0e7ef;
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .feature-card:hover {
+            border-color: #6366f1;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.13);
+        }
+
+        .feature-card h6 {
+            color: #a21caf;
+            border-bottom: 1.5px solid #e9d5ff;
+            padding-bottom: 6px;
+            margin-bottom: 10px;
+            background: transparent;
+        }
+
+        .diagram-container {
+            background: #f8fafc;
+            border: 1.5px solid #e0e7ef;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(99, 102, 241, 0.06);
+            padding: 18px 18px 12px 18px;
+            margin: 32px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .diagram-container img {
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e0e7ef;
+        }
+
+        .diagram-container figcaption {
+            color: #64748b;
+            font-size: 0.98rem;
+            margin-top: 10px;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .case-tool-card {
+            background: #e0f2fe;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(14, 165, 233, 0.06);
+            padding: 22px 18px;
+            margin-bottom: 18px;
+            border: 1.5px solid #bae6fd;
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .case-tool-card:hover {
+            border-color: #0ea5e9;
+            box-shadow: 0 4px 16px rgba(14, 165, 233, 0.13);
+        }
+
+        .case-tool-card h6 {
+            color: #0ea5e9;
+            border-bottom: 1.5px solid #bae6fd;
+            padding-bottom: 6px;
+            margin-bottom: 10px;
+            background: transparent;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            background: linear-gradient(90deg, #6366f1 0%, #2563eb 100%);
+            color: #fff;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 1.08rem;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.10);
+            border: none;
+            text-decoration: none;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+        }
+
+        .nav-button:hover,
+        .nav-button:focus {
+            background: linear-gradient(90deg, #4338ca 0%, #1e40af 100%);
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.18);
+            color: #fff;
+            transform: translateY(-2px) scale(1.03);
+            text-decoration: none;
+        }
+
+        .nav-button .icon {
+            font-size: 1.1em;
+        }
+
+        .topic-nav {
+            margin-top: 48px;
+            padding-top: 28px;
+            border-top: 1.5px solid #e0e7ef;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            align-items: center;
+        }
+
+        @media (min-width: 640px) {
+            .topic-nav {
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 0;
+            }
+        }
+
+        footer {
+            text-align: center;
+            font-size: 1.01rem;
+            color: #64748b;
+            padding: 32px 0 18px 0;
+            margin-top: 48px;
+            background: #f1f5f9;
+            border-top: 1.5px solid #e0e7ef;
+            letter-spacing: 0.02em;
+        }
+
+        footer a {
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+            color: #4338ca;
+        }
+
+        .fa-heart {
+            color: #ef4444;
+            vertical-align: middle;
+        }
+
+        .mt-12 {
+            margin-top: 3rem;
+        }
+
+        .pt-8 {
+            padding-top: 2rem;
+        }
+
+        .mb-8 {
+            margin-bottom: 2rem;
+        }
+
+        .gap-6 {
+            gap: 1.5rem;
+        }
+
+        .max-w-xs {
+            max-width: 260px;
+        }
+
+        .max-w-sm {
+            max-width: 340px;
+        }
+
+        .max-w-md {
+            max-width: 480px;
+        }
+
+        .max-w-lg {
+            max-width: 700px;
+        }
+
+        .max-w-xl {
+            max-width: 900px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-xs {
+            font-size: 0.92em;
+        }
+
+        .italic {
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container"
+            style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
+            <div class="header-brand">
+                <a href="../../../index.html">
+                    <span>Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-0.5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2" style="color:#fde047;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span>ision</span>
+                </a>
+            </div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
+                <span class="header-title">Software Engineering</span>
+                <span class="header-desc">Explore each topic in depth</span>
+            </div>
+            <div style="width:3rem;"></div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="flex justify-between items-center mb-8">
+            <a href="../software-engineering.html"
+                class="text-indigo-600 hover:text-indigo-800 hover:underline font-medium text-lg transition-colors duration-300">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Syllabus
+            </a>
+            <div class="bg-indigo-600 text-white text-base font-semibold px-5 py-2 rounded-lg shadow-md">
+                Topic 15 <!-- Assuming this is Topic 15 -->
+            </div>
+        </div>
+
+        <section class="content-section">
+            <h2><i class="fas fa-wrench icon"></i>Software Maintenance, Re-engineering & CASE Tools</h2>
+            <p class="text-xl mb-6 text-slate-600">Once software is delivered, its lifecycle is far from over. Software
+                maintenance involves all modifications and updates post-delivery. Re-engineering aims to improve
+                existing software, while Computer-Aided Software Engineering (CASE) tools provide automated support
+                throughout the software development and maintenance processes.</p>
+        </section>
+
+        <section class="content-section">
+            <h3 id="software-maintenance"><i class="fas fa-cogs icon"></i>Software Maintenance</h3>
+            <p>Software maintenance encompasses all activities performed after the software product has been delivered
+                to the customer. These modifications are essential to keep the software useful and operational over its
+                lifespan.</p>
+            <h6>Reasons for Maintenance:</h6>
+            <ul class="simple-list text-sm">
+                <li><strong>Market Conditions:</strong> Changes in policies, taxation, regulations (e.g., new
+                    bookkeeping rules).</li>
+                <li><strong>Client Requirements:</strong> Requests for new features, enhancements, or modifications to
+                    existing functionalities.</li>
+                <li><strong>Host Modifications:</strong> Changes in the target hardware, operating system, or platform
+                    requiring software adaptation.</li>
+                <li><strong>Organization Changes:</strong> Business-level changes at the client's end (e.g., mergers,
+                    new business ventures, downsizing) that necessitate software adjustments.</li>
+            </ul>
+
+            <h4 class="mt-8">Types of Maintenance</h4>
+            <div class="grid md:grid-cols-2 gap-6 mt-4">
+                <div class="feature-card">
+                    <h6 class="font-semibold"><i class="fas fa-bug mr-2 text-red-500"></i>Corrective Maintenance</h6>
+                    <p class="text-xs">Modifications and updates to correct or fix problems (bugs) discovered by users
+                        or identified through error reports.</p>
+                </div>
+                <div class="feature-card">
+                    <h6 class="font-semibold"><i class="fas fa-sync-alt mr-2 text-blue-500"></i>Adaptive Maintenance
+                    </h6>
+                    <p class="text-xs">Modifications and updates to keep the software product current and compatible
+                        with a changing technological and business environment (e.g., OS updates, new hardware).</p>
+                </div>
+                <div class="feature-card">
+                    <h6 class="font-semibold"><i class="fas fa-star mr-2 text-yellow-500"></i>Perfective Maintenance
+                    </h6>
+                    <p class="text-xs">Modifications and updates to keep the software usable over a long period.
+                        Includes adding new features, accommodating new user requirements, and refining the software to
+                        improve its reliability and performance.</p>
+                </div>
+                <div class="feature-card">
+                    <h6 class="font-semibold"><i class="fas fa-shield-alt mr-2 text-green-500"></i>Preventive
+                        Maintenance</h6>
+                    <p class="text-xs">Modifications and updates to prevent future problems. Aims to attend to issues
+                        that are not significant at the moment but may cause serious problems later (e.g., code
+                        restructuring for better maintainability).</p>
+                </div>
+            </div>
+
+            <h4 class="mt-8">Cost of Maintenance</h4>
+            <p>The cost of maintenance is notoriously high, often reported to be as much as 67% of the entire software
+                process cycle, exceeding 50% of all SDLC phases on average.</p>
+            <div class="diagram-container">
+                <img src="cost-of-maintenance-pie-chart.png"
+                    alt="Pie chart showing Cost of Maintenance relative to other SDLC phases" class="max-w-md">
+                <figcaption>Maintenance often constitutes the largest portion of software lifecycle costs.</figcaption>
+            </div>
+            <h6>Real-world factors affecting Maintenance Cost:</h6>
+            <ul class="simple-list text-sm">
+                <li>Standard age of software (10-15 years). Older software on slow machines with less memory struggles
+                    with modern hardware enhancements.</li>
+                <li>Advancing technology makes maintaining old software costly.</li>
+                <li>Many maintenance engineers might be newer and use trial-and-error, potentially harming the original
+                    structure.</li>
+                <li>Undocumented changes can cause future conflicts.</li>
+            </ul>
+            <h6>Software-end factors affecting Maintenance Cost:</h6>
+            <ul class="simple-list text-sm">
+                <li>Structure of the Software Program.</li>
+                <li>Programming Language used.</li>
+                <li>Dependence on external environment.</li>
+                <li>Staff reliability and availability.</li>
+            </ul>
+
+            <h4 class="mt-8">Maintenance Activities (IEEE Framework)</h4>
+            <p>IEEE provides a framework for a sequential maintenance process, which can be used iteratively and
+                customized.</p>
+            <div class="diagram-container">
+                <img src="maintenance-activities-cycle.png" alt="Cycle of Maintenance Activities" class="max-w-lg">
+                <figcaption>Iterative cycle of Maintenance Activities.</figcaption>
+            </div>
+            <ol class="process-steps mt-4">
+                <li><strong>Identification & Tracing:</strong> Identifying the need for modification or maintenance,
+                    often generated by user requests or system logs.</li>
+                <li><strong>Analysis:</strong> Analyzing the impact of the modification on the system (including
+                    safety/security). If severe, alternatives are sought. Requirements for the modification are
+                    specified, and cost estimations are made.</li>
+                <li><strong>Design:</strong> Designing new or modified modules based on the new requirements. Test cases
+                    are created.</li>
+                <li><strong>Implementation:</strong> Coding the new modules according to the design. Unit testing is
+                    performed by programmers.</li>
+                <li><strong>System Testing:</strong> Integration testing between new and existing modules. The system as
+                    a whole is tested using regression testing procedures.</li>
+                <li><strong>Acceptance Testing:</strong> Users test the system. Any issues are addressed or noted for
+                    future iterations.</li>
+                <li><strong>Delivery:</strong> Deploying the modified system (via update package or fresh install).
+                    Final testing at the client end.</li>
+                <li><strong>Maintenance Management:</strong> Essential configuration management, version control, and
+                    patch management.</li>
+            </ol>
+        </section>
+
+        <section class="content-section">
+            <h3 id="software-reengineering"><i class="fas fa-recycle icon"></i>Software Re-engineering</h3>
+            <p>The process of software development undertaken to improve the maintainability of an existing software
+                system, often by examining, altering, and reconstituting it in a new form. This is crucial when software
+                needs to be updated to current market standards without altering its core functionality.</p>
+            <div class="diagram-container">
+                <img src="reengineering-process-flow.png" alt="High-level Re-engineering Process Flow" class="max-w-lg">
+                <figcaption>Conceptual flow: Existing Software → Reverse Engineering → Re-structuring → Forward
+                    Engineering → Re-engineered Software.</figcaption>
+            </div>
+            <h6>Objectives of Re-engineering:</h6>
+            <ul class="simple-list text-sm">
+                <li>Provide a cost-effective option for system evolution.</li>
+                <li>Improve maintainability and understandability.</li>
+                <li>Address issues related to obsolete technology or platforms.</li>
+            </ul>
+
+            <h5 class="mt-6">Re-engineering Process Steps:</h5>
+            <div class="diagram-container">
+                <img src="reengineering-cycle-detailed.png" alt="Detailed Re-engineering Cycle" class="max-w-md">
+                <figcaption>The Re-engineering Cycle: Inventory Analysis → Document Reconstruction → Reverse Engineering
+                    → Code Re-construction → Data Re-construction → Forward Engineering.</figcaption>
+            </div>
+            <ol class="styled-list text-sm">
+                <li><strong>Inventory Analysis:</strong> Decide what to re-engineer (whole software or parts).</li>
+                <li><strong>Document Reconstruction:</strong> Recreate or update documentation if missing or outdated.
+                </li>
+                <li><strong>Reverse Engineering:</strong> Analyze the existing system to understand its components,
+                    interrelationships, and extract design/specification information. This is like a reverse SDLC,
+                    moving from code to higher abstraction levels.</li>
+                <li><strong>Code Re-construction/Restructuring:</strong> Inspect and restructure the source code using
+                    tools to remove anomalies and improve clarity, without changing its external behavior.</li>
+                <li><strong>Data Re-construction/Restructuring:</strong> Analyze and redefine data objects, attributes,
+                    and structures to make them more understandable and efficient.</li>
+                <li><strong>Forward Engineering (Renovation):</strong> Use the recovered design and specification
+                    information to modify or rebuild the system to achieve the desired improvements.</li>
+            </ol>
+
+            <h6 class="mt-6">Need for Software Re-engineering:</h6>
+            <ul class="simple-list text-sm">
+                <li>Improving software product quality.</li>
+                <li>Cost-effective alternative to complete redevelopment.</li>
+                <li>Minimizing risk by building upon an existing, understood system.</li>
+                <li>Enabling software reusability by adding new features.</li>
+                <li>Enhancing software maintainability and operational life.</li>
+                <li>Adapting to new hardware, software platforms, or programming languages.</li>
+                <li>Rediscovering embedded business rules.</li>
+                <li>Better use of existing staff expertise.</li>
+            </ul>
+            <div class="diagram-container">
+                <img src="software-reengineering-prepinsta.png" alt="Software Re-engineering Process Overview"
+                    class="max-w-lg">
+                <figcaption>Another perspective on the Re-engineering process components.</figcaption>
+            </div>
+            <div class="grid md:grid-cols-2 gap-4 mt-4">
+                <div class="advantages-box">
+                    <h6 class="font-semibold mb-1">Advantages:</h6>
+                    <ul class="simple-list text-xs">
+                        <li>Reduced Risk</li>
+                        <li>Reduced Cost (vs. new development)</li>
+                        <li>Revelation of Business Rules</li>
+                        <li>Better use of Existing Staff</li>
+                        <li>Increased performance, time-saving, new features possible, cost-reducing, longer operational
+                            life, clear documentation.</li>
+                    </ul>
+                </div>
+                <div class="cost-factor-box">
+                    <h6 class="font-semibold mb-1">Disadvantages / Cost Factors:</h6>
+                    <ul class="simple-list text-xs">
+                        <li>Practical limits to the extent of re-engineering.</li>
+                        <li>Quality of software to be re-engineered.</li>
+                        <li>Tool support availability.</li>
+                        <li>Extent of required data conversion.</li>
+                        <li>Availability of expert staff.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h3 id="component-reusability"><i class="fas fa-puzzle-piece icon"></i>Component Reusability</h3>
+            <p>A component is a part of software program code that executes an independent task and can be a small
+                module or a sub-system. Reusability aims to use existing components to build new software, reducing
+                development time and cost, and improving quality.</p>
+            <p>Examples: Login procedures, printing systems. Components ideally have high cohesion and low coupling.</p>
+            <div class="diagram-container">
+                <img src="component-communication.png" alt="Components communicating via interfaces" class="max-w-lg">
+                <figcaption>Components with defined interfaces enable communication and reusability.</figcaption>
+            </div>
+            <h6>Levels of Re-use:</h6>
+            <ul class="simple-list text-sm">
+                <li><strong>Application level:</strong> Entire application used as a sub-system.</li>
+                <li><strong>Component level:</strong> Sub-system of an application is used.</li>
+                <li><strong>Modules level:</strong> Functional modules are re-used.</li>
+            </ul>
+            <p>This forms the basis of **Component-Based Software Engineering (CBSE)**.</p>
+            <h5 class="mt-6">Reuse Process:</h5>
+            <div class="diagram-container">
+                <img src="reuse-process-diagram.png" alt="Component Reuse Process" class="max-w-lg">
+                <figcaption>Process: Specify Requirements → System Design → Specify Components → Search Repository →
+                    Incorporate Components.</figcaption>
+            </div>
+            <ol class="styled-list text-sm">
+                <li><strong>Requirement Specification:</strong> Functional and non-functional requirements are
+                    specified, considering existing system capabilities or user input.</li>
+                <li><strong>Design:</strong> Standard SDLC step; requirements are defined in terms of software parlance.
+                    Basic system architecture is created.</li>
+                <li><strong>Specify Components:</strong> Designers segregate the system into smaller
+                    components/sub-systems based on the software design.</li>
+                <li><strong>Search Suitable Components:</strong> The software component repository is searched for
+                    matching components based on functionality and intended use.</li>
+                <li><strong>Incorporate Components:</strong> All matched components are packaged together to form the
+                    complete software.</li>
+            </ol>
+        </section>
+
+        <section class="content-section">
+            <h3 id="case-tools"><i class="fas fa-laptop-code icon"></i>Computer-Aided Software Engineering (CASE) Tools
+            </h3>
+            <p>CASE tools are software applications used to automate and support SDLC activities, aiding project
+                managers, analysts, and engineers in developing and maintaining software systems. They accelerate
+                development, help uncover flaws early, and improve overall quality and consistency.</p>
+            <div class="diagram-container">
+                <img src="case-tool-categories.png" alt="Upper, Lower, and Integrated CASE Tools" class="max-w-md">
+                <figcaption>Categorization of CASE Tools based on SDLC phase coverage.</figcaption>
+            </div>
+            <h6>Key Components / Scope:</h6>
+            <ul class="simple-list">
+                <li><strong>Central Repository:</strong> A central storage for all project information (specifications,
+                    requirements, reports, diagrams, data dictionary), ensuring common, integrated, and consistent data.
+                </li>
+                <li><strong>Upper CASE Tools:</strong> Used in early SDLC stages: planning, analysis, and design.</li>
+                <li><strong>Lower CASE Tools:</strong> Used in later SDLC stages: implementation, testing, and
+                    maintenance.</li>
+                <li><strong>Integrated CASE Tools:</strong> Span multiple or all SDLC stages, from requirements to
+                    documentation.</li>
+                <li><strong>Diagram Tools:</strong> Represent system components, data, and control flow graphically
+                    (e.g., Flow Chart Maker).</li>
+                <li><strong>Process Modeling Tools:</strong> Create software process models to develop or modify
+                    processes (e.g., EPF Composer).</li>
+            </ul>
+            <h5 class="mt-8">Categories of CASE Tools & Examples:</h5>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                <div class="case-tool-card">
+                    <h6 class="font-semibold">Analysis Tools</h6>
+                    <p>Gather requirements, check for inconsistency, inaccuracy, data redundancies. Ex: Accept 360,
+                        Accompa, CaseComplete, Visible Analyst.</p>
+                </div>
+                <div class="case-tool-card">
+                    <h6 class="font-semibold">Design Tools</h6>
+                    <p>Design block structure, module detailing, interconnections. Ex: Animated Software Design.</p>
+                </div>
+                <div class="case-tool-card">
+                    <h6 class="font-semibold">Project Management Tools</h6>
+                    <p>Project planning, cost/effort estimation, scheduling, resource planning, real-time info sharing.
+                        Ex: Creative Pro Office, Trac Project, Basecamp.</p>
+                </div>
+                <div class="case-tool-card">
+                    <h6 class="font-semibold">Documentation Tools</h6>
+                    <p>Generate documents for technical users (manuals) and end-users (user guides). Ex: Doxygen,
+                        DrExplain, Adobe RoboHelp.</p>
+                </div>
+                <div class="case-tool-card">
+                    <h6 class="font-semibold">Configuration Management Tools</h6>
+                    <p>Version/revision management, baseline configuration, change control. Ex: Fossil, Git, AccuREV.
+                    </p>
+                </div>
+                <div class="case-tool-card">
+                    <h6 class="font-semibold">Change Control Tools</h6>
+                    <p>Part of CM; manage changes after baseline, automate tracking, file/code management, enforce
+                        change policy.</p>
+                </div>
+                <div class="case-tool-card">
+                    <h6 class="font-semibold">Programming Tools</h6>
+                    <p>IDEs, module libraries, simulation tools for building and testing. Ex: Cscope, Eclipse.</p>
+                </div>
+                <div class="case-tool-card">
+                    <h6 class="font-semibold">Prototyping Tools</h6>
+                    <p>Create simulated versions, initial look & feel, graphical libraries, hardware-independent UI
+                        design, rapid prototyping. Ex: Serena prototype composer, Mockup Builder.</p>
+                </div>
+                <div class="case-tool-card">
+                    <h6 class="font-semibold">Web Development Tools</h6>
+                    <p>Design web pages, forms, scripts, graphics, live preview. Ex: Fontello, Adobe Edge Inspect,
+                        Foundation 3, Brackets.</p>
+                </div>
+                <div class="case-tool-card">
+                    <h6 class="font-semibold">Quality Assurance Tools</h6>
+                    <p>Monitor engineering process, ensure quality conformance. Include CM, change control, testing
+                        tools. Ex: SoapTest, AppsWatch, JMeter.</p>
+                </div>
+                <div class="case-tool-card">
+                    <h6 class="font-semibold">Maintenance Tools</h6>
+                    <p>Automatic logging, error reporting, ticket generation, root cause analysis. Ex: Bugzilla, HP
+                        Quality Center.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="mt-12 pt-8 border-t border-slate-300 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <a href="topic-14.html" class="nav-button">
+                <i class="fas fa-arrow-left icon"></i> Previous Topic
+            </a>
+            <!-- Add next topic link if applicable, or link back to syllabus -->
+            <a href="../software-engineering.html" class="nav-button">
+                Back to Syllabus <i class="fas fa-list-alt icon"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        © <span id="currentYear"></span> <a href="../../../index.html">EduVision</a>.
+        All rights reserved. Crafted with <i class="fas fa-heart"></i> for learning.
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>
