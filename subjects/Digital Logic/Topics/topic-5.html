@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karnaugh Maps (K-Maps) | Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Eduvision Logo Specific Styles */
+        .eduvishion-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvishion-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .eduvishion-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvishion-logo .text-yellow-300 {
+            color: #fde047 !important;
+        }
+
+        .eduvishion-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+        }
+
+        .eduvishion-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvishion-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* General Styles */
+        :root {
+            --primary-color: #d35400;
+            /* Burnt Orange for K-Maps */
+            --secondary-color: #2c3e50;
+            /* Dark Blue */
+            --accent-color: #2980b9;
+            /* Blue */
+            --text-color: #333;
+            --bg-color: #fdf3e7;
+            /* Very Light Orange/Cream */
+            --light-bg-color: #ffffff;
+            --border-color: #f5cba7;
+            /* Light Orange */
+            --header-bg: #2c3e50;
+            /* Dark background for header */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.7;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header.main-header {
+            background: var(--header-bg);
+            color: #fff;
+            padding: 60px 0 20px;
+            text-align: center;
+            position: relative;
+            min-height: 120px;
+        }
+
+        header.main-header h1 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        header.main-header .subtitle {
+            font-size: 1.2rem;
+            color: #bdc3c7;
+        }
+
+        /* Navigation / Table of Contents */
+        nav.toc {
+            background: var(--primary-color);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        nav.toc ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        nav.toc ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 12px;
+            font-weight: 700;
+            transition: background-color 0.3s ease;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        nav.toc ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Sections */
+        section {
+            padding: 40px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        section:last-child {
+            border-bottom: none;
+        }
+
+        section h2 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.2rem;
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        section h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        section h3 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-top: 30px;
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #fdebd0;
+            /* Light orange underline */
+        }
+
+        section h4 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.4rem;
+            color: var(--secondary-color);
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .content-box {
+            background: var(--light-bg-color);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+
+        p,
+        li {
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+
+        ul,
+        ol {
+            margin-left: 20px;
+        }
+
+        code,
+        .inline-code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #fbe9e7;
+            /* Light peach for code */
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 0.95em;
+            color: #bf360c;
+            /* Darker orange */
+        }
+
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+
+        /* Tables */
+        table.truth-table {
+            /* Specific for truth tables if needed */
+            width: auto;
+            /* Allow tables to be less than 100% */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        th,
+        td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 700;
+        }
+
+        td {
+            background-color: var(--light-bg-color);
+        }
+
+        tr:nth-child(even) td {
+            background-color: #fdebd0;
+            /* Light orange for even rows */
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .kmap-table {
+            /* Special styling for K-Map tables */
+            border-collapse: collapse;
+            margin: 20px auto;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .kmap-table td,
+        .kmap-table th {
+            border: 1px solid #555;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            vertical-align: middle;
+            position: relative;
+        }
+
+        .kmap-table .header-cell {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            border: none;
+        }
+
+        .kmap-table .var-label {
+            position: absolute;
+            font-size: 0.8em;
+            color: #333;
+        }
+
+        .kmap-table .var-label.top {
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .kmap-table .var-label.left {
+            left: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .kmap-table .gray-code {
+            font-size: 0.8em;
+        }
+
+        /* Interactive Elements */
+        .interactive-kmap-tool {
+            background: #fff3e0;
+            /* Light orange */
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid var(--primary-color);
+        }
+
+        .interactive-kmap-tool .kmap-grid {
+            display: grid;
+            margin: 15px auto;
+            border: 1px solid var(--primary-color);
+        }
+
+        .interactive-kmap-tool .kmap-cell {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.2em;
+            background-color: var(--light-bg-color);
+        }
+
+        .interactive-kmap-tool .kmap-cell:hover {
+            background-color: #fdebd0;
+        }
+
+        .interactive-kmap-tool .kmap-cell.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .interactive-kmap-tool button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .interactive-kmap-tool button:hover {
+            background-color: #af4100;
+            /* Darker orange */
+        }
+
+        .interactive-kmap-tool .result-display {
+            margin-top: 15px;
+            padding: 10px;
+            background: var(--light-bg-color);
+            border-radius: 4px;
+            border: 1px solid #c3c3c3;
+            font-weight: bold;
+        }
+
+        /* Diagrams and Images */
+        .diagram {
+            text-align: center;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #fff8f2;
+            border: 1px solid #fadbc5;
+            border-radius: 5px;
+            max-width: 95%;
+        }
+
+        .diagram img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .diagram-caption {
+            font-style: italic;
+            color: #555;
+            margin-top: 8px;
+            font-size: 0.9em;
+        }
+
+        /* Callout / Highlight boxes */
+        .callout {
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 5px solid var(--accent-color);
+            background-color: #e3f2fd;
+            /* Light blue */
+            border-radius: 0 4px 4px 0;
+        }
+
+        .callout.info {
+            border-left-color: var(--primary-color);
+            background-color: #fbe9e7;
+            /* Light peach */
+        }
+
+        .callout.rules ul {
+            list-style-type: decimal;
+            padding-left: 20px;
+        }
+
+        /* Footer and Nav Links */
+        .topic-navigation {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .topic-navigation {
+                flex-direction: row;
+            }
+        }
+
+        .topic-navigation a {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background-color: #3b82f6;
+            /* Blue for nav consistency */
+            color: white;
+            border-radius: 9999px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .topic-navigation a:hover {
+            background-color: #2563eb;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            background: var(--secondary-color);
+            color: #ecf0f1;
+            margin-top: 0;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header.main-header h1 {
+                font-size: 2rem;
+            }
+
+            header.main-header .subtitle {
+                font-size: 1rem;
+            }
+
+            nav.toc ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav.toc ul li a {
+                display: block;
+                width: 100%;
+                text-align: center;
+                font-size: 1rem;
+            }
+
+            section h2 {
+                font-size: 1.8rem;
+            }
+
+            section h3 {
+                font-size: 1.6rem;
+            }
+
+            .eduvishion-logo {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin: 0 auto 10px;
+                text-shadow: none;
+            }
+
+            .eduvishion-logo .text-white {
+                color: #fff !important;
+            }
+
+            header.main-header {
+                padding-top: 20px;
+            }
+
+            .interactive-kmap-tool .kmap-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+
+            /* Force 2-col for small screens */
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="main-header">
+        <div class="eduvishion-logo">
+            <div class="text-2xl font-bold">
+                <a href="#" class="flex items-center group">
+                    <span class="text-white">Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span class="text-white">ision</span>
+                </a>
+            </div>
+        </div>
+        <div class="container">
+            <h1>Karnaugh Maps (K-Maps)</h1>
+            <p class="subtitle">A Graphical Method for Simplifying Boolean Expressions</p>
+        </div>
+    </header>
+
+    <nav class="toc">
+        <div class="container">
+            <ul>
+                <li><a href="#intro-kmap"><i class="fas fa-map"></i> Intro</a></li>
+                <li><a href="#rules-kmap"><i class="fas fa-ruler-combined"></i> Rules</a></li>
+                <li><a href="#2var-kmap"><i class="fas fa-th-large"></i> 2-Var</a></li>
+                <li><a href="#3var-kmap"><i class="fas fa-table"></i> 3-Var</a></li>
+                <li><a href="#4var-kmap"><i class="fas fa-border-all"></i> 4-Var</a></li>
+                <li><a href="#dont-care"><i class="fas fa-question-circle"></i> Don't Cares</a></li>
+                <li><a href="#pos-kmap"><i class="fas fa-retweet"></i> POS Min.</a></li>
+                <li><a href="#interactive-kmap"><i class="fas fa-mouse-pointer"></i> Interactive</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section id="intro-kmap" class="container">
+            <h2><i class="fas fa-map"></i> Introduction to Karnaugh Maps</h2>
+            <div class="content-box">
+                <p>A <strong>Karnaugh Map (K-Map)</strong> is a graphical method used for simplifying Boolean
+                    expressions. It provides an alternative, often faster and more intuitive, approach to Boolean
+                    algebra for minimization.</p>
+                <h4>Overview:</h4>
+                <ul>
+                    <li>K-maps are a visual representation of a Boolean function or truth table.</li>
+                    <li>Each cell in the K-map corresponds to one row of the truth table or one minterm (for SOP) or
+                        maxterm (for POS).</li>
+                    <li>Cells are arranged so that adjacent cells (horizontally or vertically, including wrap-around)
+                        differ by only one variable, which is key to simplification (Gray code ordering).</li>
+                    <li>Easy conversion from truth table to K-map and then to a minimized SOP or POS expression.</li>
+                    <li>Much faster and more efficient than algebraic minimization for a small number of variables
+                        (typically up to 5 or 6).</li>
+                    <li>Unoptimized form: Number of 1s in K-map equals the number of minterms in the canonical SOP.</li>
+                    <li>Optimized form: Reduced number of terms by grouping 1s (for SOP) or 0s (for POS).</li>
+                </ul>
+                <p>The term 'literal' means a Boolean variable either in its complementary or uncomplementary form
+                    (e.g., A, A', B, B'). Minimization aims to reduce the number of terms and the number of literals per
+                    term.</p>
+            </div>
+        </section>
+
+        <section id="rules-kmap" class="container">
+            <h3><i class="fas fa-ruler-combined"></i> Karnaugh Maps - Rules of Simplification</h3>
+            <div class="content-box">
+                <p>The Karnaugh map uses the following rules for the simplification of expressions by grouping adjacent
+                    cells containing ones (for SOP) or zeros (for POS).</p>
+                <div class="callout rules">
+                    <h4>Key Grouping Rules:</h4>
+                    <ol>
+                        <li><strong>Groups may not include any cell containing a zero (for SOP simplification).</strong>
+                            (Vice-versa for POS: groups may not include any cell containing a one).
+                            <div class="diagram">
+                                <img src="https://i.imgur.com/z9jXkIm.png" alt="K-Map Rule: No Zeros in Group"
+                                    style="max-width: 400px;">
+                            </div>
+                        </li>
+                        <li><strong>Groups may be horizontal or vertical, but not diagonal.</strong>
+                            <div class="diagram">
+                                <img src="https://i.imgur.com/d4yS0zJ.png"
+                                    alt="K-Map Rule: Horizontal/Vertical Groups Only" style="max-width: 400px;">
+                            </div>
+                        </li>
+                        <li><strong>Groups must contain 1, 2, 4, 8, or in general 2<sup>n</sup> cells.</strong> This
+                            means groups of 3, 5, 6, etc., are not allowed.
+                            <div class="diagram">
+                                <img src="https://i.imgur.com/wA1gQ3R.png" alt="K-Map Rule: Group Size Power of 2"
+                                    style="max-width: 500px;">
+                            </div>
+                        </li>
+                        <li><strong>Each group should be as large as possible.</strong> Larger groups lead to simpler
+                            terms.
+                            <div class="diagram">
+                                <img src="https://i.imgur.com/iP9tE7V.png" alt="K-Map Rule: Largest Possible Groups"
+                                    style="max-width: 500px;">
+                            </div>
+                        </li>
+                        <li><strong>Each cell containing a one (for SOP) must be in at least one group.</strong> All 1s
+                            must be covered.
+                            <div class="diagram">
+                                <img src="https://i.imgur.com/tL3kO8Y.png" alt="K-Map Rule: Cover All Ones"
+                                    style="max-width: 300px;">
+                            </div>
+                        </li>
+                        <li><strong>Groups may overlap.</strong> Overlapping is often necessary to achieve the largest
+                            possible groups.
+                            <div class="diagram">
+                                <img src="https://i.imgur.com/bU6iN9F.png" alt="K-Map Rule: Groups May Overlap"
+                                    style="max-width: 500px;">
+                            </div>
+                        </li>
+                        <li><strong>Groups may wrap around the table.</strong> The leftmost cell(s) in a row are
+                            considered adjacent to the rightmost cell(s) in that row. Similarly, top and bottom cells in
+                            a column are adjacent.
+                            <div class="diagram">
+                                <img src="https://i.imgur.com/xO2jR4T.png" alt="K-Map Rule: Wrap-Around Grouping"
+                                    style="max-width: 350px;">
+                            </div>
+                        </li>
+                        <li><strong>There should be as few groups as possible,</strong> as long as this does not
+                            contradict any of the previous rules (especially covering all 1s and making groups as large
+                            as possible). Each group corresponds to one term in the simplified expression.
+                            <div class="diagram">
+                                <img src="https://i.imgur.com/pD7sQ5Y.png" alt="K-Map Rule: Fewest Possible Groups"
+                                    style="max-width: 500px;">
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+                <h4>Summary of Grouping Guidelines:</h4>
+                <ul>
+                    <li>No zeros allowed in groups (for SOP).</li>
+                    <li>No diagonals.</li>
+                    <li>Group size must be a power of 2 (1, 2, 4, 8...).</li>
+                    <li>Groups should be as large as possible.</li>
+                    <li>Every '1' must be in at least one group.</li>
+                    <li>Overlapping is allowed.</li>
+                    <li>Wrap-around is allowed.</li>
+                    <li>Use the fewest number of groups possible to cover all '1's.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="2var-kmap" class="container">
+            <h3><i class="fas fa-th-large"></i> 2-Variable K-Maps</h3>
+            <div class="content-box">
+                <p>A 2-variable K-map has 2<sup>2</sup> = 4 cells. Let the variables be X and Y.</p>
+                <div class="diagram">
+                    <p>Basic 2-Variable K-Map Structure:</p>
+                    <!-- From "2-Variable Karnaugh Maps ... map looks like this" -->
+                    <img src="https://i.imgur.com/gO3rV4N.png" alt="2-Variable K-Map Structure"
+                        style="max-width: 150px;">
+                    <p class="diagram-caption">Structure of a 2-variable K-Map for variables X, Y.</p>
+                </div>
+                <p>The cells on the top row represent X' (not X) and X. The cells on the left column represent Y' (not
+                    Y) and Y.
+                    The cells can also be labeled with minterm numbers m<sub>0</sub>, m<sub>1</sub>, m<sub>2</sub>,
+                    m<sub>3</sub> or maxterm numbers M<sub>0</sub>, M<sub>1</sub>, M<sub>2</sub>, M<sub>3</sub>.
+                </p>
+                <div class="diagram">
+                    <!-- From "Two-variable K-Map ... (For SOP), (For POS)" -->
+                    <img src="https://i.imgur.com/bK0wR1Z.png" alt="2-Variable K-Map SOP and POS labels"
+                        style="max-width: 400px;">
+                    <p class="diagram-caption">2-Variable K-Map with minterm (SOP) and maxterm (POS) cell assignments.
+                    </p>
+                </div>
+                <h4>Example: Minimize DNF: <code class="inline-code">X'Y' + X'Y + XY</code></h4>
+                <p>Place 1s in the K-map for the given minterms: X'Y' (m<sub>0</sub>), X'Y (m<sub>1</sub>), XY
+                    (m<sub>3</sub>).</p>
+                <div class="diagram">
+                    <!-- From "2-Variable Karnaugh Maps ... Here is the Karnaugh map..." -->
+                    <img src="https://i.imgur.com/dJ5rU6L.png" alt="2-Variable K-Map Example Filled and Grouped"
+                        style="max-width: 200px;">
+                    <p class="diagram-caption">K-Map for X'Y' + X'Y + XY.</p>
+                </div>
+                <p>Grouping the 1s:</p>
+                <ul>
+                    <li>The group of two cells in the first column (X'Y' and X'Y) covers Y' and Y, while X' remains
+                        constant. This group reduces to <code class="inline-code">X'</code>.</li>
+                    <li>The group of two cells in the second row (X'Y and XY) covers X' and X, while Y remains constant.
+                        This group reduces to <code class="inline-code">Y</code>.</li>
+                </ul>
+                <p>The minimized expression is the OR sum of these terms: <code
+                        class="inline-code">Result = X' + Y</code>.</p>
+            </div>
+        </section>
+
+        <section id="3var-kmap" class="container">
+            <h3><i class="fas fa-table"></i> 3-Variable K-Maps</h3>
+            <div class="content-box">
+                <p>A 3-variable K-map has 2<sup>3</sup> = 8 cells. Let the variables be X, Y, Z. The arrangement ensures
+                    adjacency (Gray code sequence for YZ: 00, 01, 11, 10).</p>
+                <div class="diagram">
+                    <p>Basic 3-Variable K-Map Structure:</p>
+                    <!-- From "3-Variable Karnaugh maps ... Here is a 3-variable Karnaugh map:" -->
+                    <img src="https://i.imgur.com/fV4wT8N.png" alt="3-Variable K-Map Structure"
+                        style="max-width: 250px;">
+                    <p class="diagram-caption">Structure of a 3-variable K-Map for X, Y, Z.</p>
+                </div>
+                <div class="diagram">
+                    <!-- From "Three-variable K-Map ... (For SOP), (For POS)" -->
+                    <img src="https://i.imgur.com/jP8vS7T.png" alt="3-Variable K-Map SOP and POS labels"
+                        style="max-width: 500px;">
+                    <p class="diagram-caption">3-Variable K-Map with minterm (SOP) and maxterm (POS) cell assignments.
+                    </p>
+                </div>
+                <p>In this map, the leftmost column (YZ=00) is considered adjacent to the rightmost column (YZ=10) for
+                    wrap-around grouping.</p>
+                <h4>Example: Minimize DNF: <code class="inline-code">X'Y'Z' + X'YZ' + XYZ' + XY'Z' + X'Y'Z</code></h4>
+                <p>Place 1s in the K-map cells corresponding to these minterms.</p>
+                <p>(Original example: <code class="inline-code">xyz + x'yz + xyz' + xy'z + x'y'z</code> from slide.
+                    Let's use slide data.
+                    This is m7, m3, m6, m5, m1.)
+                    <code class="inline-code">F(X,Y,Z) = Σm(1, 3, 5, 6, 7)</code>
+                </p>
+                <div class="diagram">
+                    <!-- Based on "3-Variable Karnaugh maps ... Here is the Karnaugh map:" example for xz + y'z + x'z. Simplified for easier visualization. -->
+                    <!-- A more accurate image for the given minterms is needed. This one is illustrative from the slide. -->
+                    <img src="https://i.imgur.com/rD3eW5T.png" alt="3-Variable K-Map Example Grouped"
+                        style="max-width: 300px;">
+                    <p class="diagram-caption">Example K-Map for 3 variables (illustration for grouping, not specific to
+                        above minterms).</p>
+                </div>
+                <p>To get a minimal expression, identify the largest possible groups of 1s (pairs, quads):</p>
+                <ul>
+                    <li>The quad covering m<sub>1</sub>, m<sub>3</sub>, m<sub>5</sub>, m<sub>7</sub> (X'Y'Z, X'YZ, XY'Z,
+                        XYZ) where Z is always 1, and X, Y vary through all combinations, reduces to <code
+                            class="inline-code">Z</code>.</li>
+                    <li>The pair covering m<sub>6</sub>, m<sub>7</sub> (XYZ', XYZ) where XY is 1 and Z varies, reduces
+                        to <code class="inline-code">XY</code>.</li>
+                </ul>
+                <p>So, one possible simplified SOP expression is <code class="inline-code">F = Z + XY</code>.</p>
+            </div>
+        </section>
+
+        <section id="4var-kmap" class="container">
+            <h3><i class="fas fa-border-all"></i> 4-Variable K-Maps</h3>
+            <div class="content-box">
+                <p>A 4-variable K-map has 2<sup>4</sup> = 16 cells. Let the variables be W, X, Y, Z. Both pairs of
+                    variables (WX and YZ) are arranged in Gray code sequence (00, 01, 11, 10).</p>
+                <div class="diagram">
+                    <p>Basic 4-Variable K-Map Structure:</p>
+                    <!-- From "4-Variable Karnaugh Maps ... A 4-variable Karnaugh map looks like this:" -->
+                    <img src="https://i.imgur.com/sO2uC8J.png" alt="4-Variable K-Map Structure"
+                        style="max-width: 300px;">
+                    <p class="diagram-caption">Structure of a 4-variable K-Map.</p>
+                </div>
+                <div class="diagram">
+                    <!-- From "Four-variable K-Map ... (For SOP), (For POS)" - which is Table-2.3 (a) and (b) -->
+                    <img src="https://i.imgur.com/jK9wL8P.png" alt="4-Variable K-Map SOP and POS labels"
+                        style="max-width: 600px;">
+                    <p class="diagram-caption">4-Variable K-Map with minterm (SOP) and maxterm (POS) cell assignments.
+                    </p>
+                </div>
+                <p>Wrap-around applies to both rows and columns: the top row is adjacent to the bottom row, and the
+                    leftmost column is adjacent to the rightmost column. Corners are also adjacent.</p>
+                <p>Groups can be of size 1, 2, 4, 8, or 16.</p>
+                <h4>Example: Simplify F(A,B,C,D) = Σm(0, 1, 2, 4, 5, 6, 8, 9, 12, 13, 14)</h4>
+                <div class="diagram">
+                    <!-- Conceptual K-Map for 4 variables. Replace with specific example if available -->
+                    <img src="https://www.electronicshub.org/wp-content/uploads/2015/06/4-Variable-K-Map-Example-1.jpg"
+                        alt="4-Variable K-Map Example" style="max-width: 400px;">
+                    <p class="diagram-caption">Illustrative 4-Variable K-Map with grouping.</p>
+                </div>
+                <p>To simplify, one would fill in the 1s for the given minterms and then form the largest possible
+                    groups (octets, quads, pairs) to cover all the 1s.</p>
+                <p>For the example F(A,B,C,D) = Σm(0,1,2,4,5,6,8,9,12,13,14), the simplified expression is <code
+                        class="inline-code">C' + A'D' + BD'</code>.</p>
+            </div>
+        </section>
+
+        <section id="dont-care" class="container">
+            <h3><i class="fas fa-question-circle"></i> Don't Care Conditions</h3>
+            <div class="content-box">
+                <p>In some digital systems, certain input combinations may never occur, or if they do, the output value
+                    for these combinations is irrelevant. These are called <strong>"don't care" conditions</strong>.</p>
+                <ul>
+                    <li>Don't care conditions are represented by an 'X' or 'd' in the K-map cells or truth table.</li>
+                    <li>When forming groups in a K-map, don't care cells can be treated as 1s if doing so helps to form
+                        a larger group (thus simplifying the expression further).</li>
+                    <li>If a don't care cell does not help in forming a larger group, it should be treated as a 0 (for
+                        SOP) and left ungrouped.</li>
+                    <li>Don't cares must not be grouped by themselves to form a term if they are not needed to cover
+                        actual 1s.</li>
+                </ul>
+                <h4>Example with Don't Cares:</h4>
+                <p>Let F(A,B,C,D) = Σm(1,3,7,11,15) with don't cares d(0,2,5).</p>
+                <div class="diagram">
+                    <!-- Conceptual K-Map. Replace with specific example if available -->
+                    <img src="https://www.electronicshub.org/wp-content/uploads/2015/06/4-Variable-K-Map-with-Dont-Care-Conditions-Example-1.jpg"
+                        alt="K-Map with Don't Cares" style="max-width: 400px;">
+                    <p class="diagram-caption">Illustrative K-Map showing use of Don't Care (X) conditions.</p>
+                </div>
+                <p>By including some 'X's as 1s, larger groups can be formed, leading to a simpler expression than if
+                    only the actual minterms were grouped.</p>
+            </div>
+        </section>
+
+        <section id="pos-kmap" class="container">
+            <h3><i class="fas fa-retweet"></i> Minimization of POS Expressions</h3>
+            <div class="content-box">
+                <p>K-Maps can also be used to simplify Boolean expressions into a minimal Product of Sums (POS) form.
+                </p>
+                <h4>Method for POS Simplification:</h4>
+                <ol>
+                    <li>Plot the 0s of the function on the K-map (or plot the 1s of F and then consider the cells not
+                        covered, which represent F').</li>
+                    <li>Group the 0s using the same rules as for grouping 1s (form largest possible groups of 0s -
+                        pairs, quads, octets; wrap-around and overlap allowed).</li>
+                    <li>Each group of 0s corresponds to a sum term for F'.</li>
+                    <li>Write the SOP expression for F' from these groups of 0s.</li>
+                    <li>Apply De Morgan's theorem to F' to obtain the minimal POS expression for F.</li>
+                </ol>
+                <p>Alternatively, directly derive the sum terms for F by grouping 0s: For each group of 0s, write a sum
+                    term where a variable is complemented if it's 1 in the region of the group, and uncomplemented if
+                    it's 0.</p>
+                <h4>Example: Find POS for F(A,B,C) = Σm(0,1,3,5,7)</h4>
+                <p>This means F has 0s at m<sub>2</sub>, m<sub>4</sub>, m<sub>6</sub>.
+                    <code class="inline-code">F(A,B,C) = ΠM(2,4,6)</code>
+                </p>
+                <p>K-map for F (0s):</p>
+                <!-- Draw or find a K-map here showing 0s at m2, m4, m6 -->
+                <table class="kmap-table">
+                    <tr>
+                        <td class="header-cell"><span class="var-label left">A</span></td>
+                        <td class="header-cell"></td>
+                        <td class="header-cell gray-code">00<br><span class="var-label top">BC</span></td>
+                        <td class="header-cell gray-code">01</td>
+                        <td class="header-cell gray-code">11</td>
+                        <td class="header-cell gray-code">10</td>
+                    </tr>
+                    <tr>
+                        <td class="header-cell gray-code">0</td>
+                        <td>m0=1</td>
+                        <td>m1=1</td>
+                        <td>m3=1</td>
+                        <td>m2=<b>0</b></td>
+                    </tr>
+                    <tr>
+                        <td class="header-cell gray-code">1</td>
+                        <td>m4=<b>0</b></td>
+                        <td>m5=1</td>
+                        <td>m7=1</td>
+                        <td>m6=<b>0</b></td>
+                    </tr>
+                </table>
+                <p>Grouping the 0s:</p>
+                <ul>
+                    <li>Group 1 (m<sub>2</sub>, m<sub>6</sub>): A varies, B=1, C=0. Term for F': BC'. For F (POS):
+                        (B'+C).</li>
+                    <li>Group 2 (m<sub>4</sub>, m<sub>6</sub>): C varies, A=1, B=0. Term for F': AB. For F (POS):
+                        (A'+B'). (Mistake in typical direct translation logic. It's easier to do SOP of F' then
+                        DeMorgan)
+                        Let's do SOP of F':
+                        Group of m2, m6 (010, 110) => F' term is BC'
+                        Group of m4 (100) => F' term is AB'C' (if m6 is already covered) or m4,m6 pair => AC'
+                        So, F' = BC' + AB'C' (if m6 grouped with m2 only) OR F' = AC' + BC'
+                        If F' = AC' + BC' = C'(A+B).
+                        Then F = (C'(A+B))' = C + A'B'. This is SOP.
+                        </p>
+                        <p>Let's use the standard method for POS (grouping 0s to write sum terms for F directly):</p>
+                        <ul>
+                            <li>Group m<sub>2</sub>(010), m<sub>6</sub>(110) -> B is 1, C is 0. Term for F: (B' + C).
+                                (Variable is complemented if it's 1 for the group, uncomplemented if 0).</li>
+                            <li>Group m<sub>4</sub>(100), m<sub>6</sub>(110) -> A is 1, C is 0. Term for F: (A' + C).
+                            </li>
+                        </ul>
+                        Minimal POS: <code class="inline-code">F = (A' + C) (B' + C)</code>.
+
+                        <div class="diagram">
+                            <!-- From "Four-variable K-Map ... (For POS)" - which is Table-2.3 (b) -->
+                            <img src="https://i.imgur.com/U1vO0tP.png" alt="4-Variable K-Map Maxterm labels"
+                                style="max-width: 300px;">
+                            <p class="diagram-caption">4-Variable K-Map with maxterm cell assignments (useful for POS).
+                            </p>
+                        </div>
+            </div>
+        </section>
+
+        <section id="interactive-kmap" class="container">
+            <h2><i class="fas fa-mouse-pointer"></i> Interactive 2-Variable K-Map Tool (SOP)</h2>
+            <div class="content-box interactive-kmap-tool">
+                <p>Click on cells to set them to '1'. The tool will attempt to show the simplified SOP expression.
+                    (Simplification logic is basic).</p>
+                <div style="display:flex; align-items:center; justify-content:center;">
+                    <div style="position:relative; margin-right:30px; margin-bottom:20px;text-align:center;">B</div>
+                    <div>
+                        <div style="text-align:center; margin-left:30px; margin-bottom:5px;">A</div>
+                        <div style="display:flex; margin-left:30px;">
+                            <div style="width:50px; text-align:center;">0</div>
+                            <div style="width:50px; text-align:center;">1</div>
+                        </div>
+                        <div class="kmap-grid" id="kmapGrid2Var"
+                            style="grid-template-columns: repeat(2, 1fr); width:100px;">
+                            <!-- Cells will be generated by JS -->
+                        </div>
+                    </div>
+                </div>
+                <button onclick="simplify2VarKMap()"><i class="fas fa-magic"></i> Simplify</button>
+                <div id="kmapResult2Var" class="result-display" style="display:none;">Simplified SOP: </div>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="topic-navigation">
+                <a href="topic-4.html">
+                    ← Previous Topic: Combinational Circuits
+                </a>
+                <a href="topic-6.html"> <!-- Assuming topic-6.html is for Sequential Circuits -->
+                    Next Topic: Sequential Circuits →
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© <span id="currentYear"></span> Eduvision. A High-Quality Resource on Karnaugh Maps.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Interactive 2-Variable K-Map
+        const kmapGrid2Var = document.getElementById('kmapGrid2Var');
+        const kmapCells2Var = [];
+        // Cell order for 2-var K-Map: m0 (A'B'), m1 (A'B), m2 (AB'), m3 (AB)
+        // Display order:
+        //     A=0 A=1
+        // B=0 [m0] [m2]
+        // B=1 [m1] [m3]
+        // So, if my JS cells are 0,1,2,3: cell[0]=m0, cell[1]=m2, cell[2]=m1, cell[3]=m3
+        // Or more standard: AB / C : 00, 01, 11, 10. For 2 vars A, B:
+        //      B=0 B=1
+        // A=0 [m0] [m1]
+        // A=1 [m2] [m3]
+        // This is cell order: 00, 01, 10, 11 for (A,B)
+        // The interactive grid cells:
+        // Top-left (A=0, B=0), Top-right (A=1, B=0)
+        // Bottom-left (A=0, B=1), Bottom-right (A=1, B=1)
+        // This means my cell indices [0][1]
+        //                           [2][3]
+        // map to minterms m0, m2, m1, m3 if A is column, B is row.
+        // Let's use A as row, B as column for consistency with most texts.
+        //     B=0 B=1
+        // A=0 [m0] [m1]  (JS cell index 0, 1)
+        // A=1 [m2] [m3]  (JS cell index 2, 3)
+
+        for (let i = 0; i < 4; i++) {
+            const cell = document.createElement('div');
+            cell.classList.add('kmap-cell');
+            cell.dataset.index = i;
+            cell.textContent = '0';
+            cell.onclick = () => {
+                cell.textContent = cell.textContent === '0' ? '1' : '0';
+                cell.classList.toggle('active', cell.textContent === '1');
+            };
+            kmapGrid2Var.appendChild(cell);
+            kmapCells2Var.push(cell);
+        }
+
+        function simplify2VarKMap() {
+            const values = kmapCells2Var.map(cell => parseInt(cell.textContent));
+            // values[0] = m0 (A'B'), values[1] = m1 (A'B), values[2] = m2 (AB'), values[3] = m3 (AB)
+            const m0 = values[0]; const m1 = values[1]; const m2 = values[2]; const m3 = values[3];
+            let terms = [];
+
+            // Check for group of 4
+            if (m0 && m1 && m2 && m3) {
+                terms.push("1");
+            } else {
+                // Check for pairs
+                // Horizontal pairs
+                if (m0 && m1) terms.push("A'"); // A'B' + A'B = A'
+                if (m2 && m3) terms.push("A");  // AB' + AB = A
+                // Vertical pairs
+                if (m0 && m2) terms.push("B'"); // A'B' + AB' = B'
+                if (m1 && m3) terms.push("B");  // A'B + AB = B
+
+                // Remove redundant terms (e.g. if A' covers m0,m1 and B' covers m0,m2, m0 is covered twice)
+                // This simple version will list all valid prime implicants from pairs.
+                // A full K-map algorithm does proper covering.
+
+                // Handle individual 1s not covered by pairs (if a more complex covering algorithm isn't used)
+                // For this basic version, we'll just list terms from pairs, then unique individual terms.
+                // This is not a full Petrick's method or Quine-McCluskey, just illustrative.
+
+                // A very naive way to handle singles if no pairs were found for them
+                if (terms.length === 0) { // Only consider singles if no pairs at all
+                    if (m0) terms.push("A'B'");
+                    if (m1) terms.push("A'B");
+                    if (m2) terms.push("AB'");
+                    if (m3) terms.push("AB");
+                } else {
+                    // Crude check: if a minterm is part of a pair, don't list it singly.
+                    // This still isn't perfect for minimal sum.
+                    let covered = [0, 0, 0, 0];
+                    if (m0 && m1) { covered[0] = 1; covered[1] = 1; }
+                    if (m2 && m3) { covered[2] = 1; covered[3] = 1; }
+                    if (m0 && m2) { covered[0] = 1; covered[2] = 1; }
+                    if (m1 && m3) { covered[1] = 1; covered[3] = 1; }
+
+                    if (m0 && !covered[0]) terms.push("A'B'");
+                    if (m1 && !covered[1]) terms.push("A'B");
+                    if (m2 && !covered[2]) terms.push("AB'");
+                    if (m3 && !covered[3]) terms.push("AB");
+                }
+            }
+
+            // Remove duplicate terms that might arise from simple logic
+            terms = [...new Set(terms)];
+
+
+            const resultDiv = document.getElementById('kmapResult2Var');
+            if (terms.length === 0 && !(m0 || m1 || m2 || m3)) { // All zeros
+                resultDiv.textContent = "Simplified SOP: 0";
+            } else if (terms.length === 0 && (m0 || m1 || m2 || m3)) { // Some 1s but basic logic failed
+                resultDiv.textContent = "Simplified SOP: (Manual check needed for optimal grouping)";
+            }
+            else {
+                resultDiv.textContent = "Simplified SOP: " + terms.join(" + ");
+            }
+            resultDiv.style.display = 'block';
+        }
+
+    </script>
+
+</body>
+
+</html>

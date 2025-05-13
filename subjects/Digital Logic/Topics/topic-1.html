@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Systems & Conversions | Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Eduvision Logo Specific Styles */
+        .eduvishion-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            /* Ensure logo is on top */
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvishion-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .eduvishion-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvishion-logo .text-yellow-300 {
+            color: #fde047 !important;
+        }
+
+        .eduvishion-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+        }
+
+        .eduvishion-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvishion-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* General Styles */
+        :root {
+            --primary-color: #3498db;
+            /* Brighter Blue */
+            --secondary-color: #2c3e50;
+            /* Dark Blue */
+            --accent-color: #f1c40f;
+            /* Yellow */
+            --text-color: #333;
+            --bg-color: #f9f9f9;
+            --light-bg-color: #ffffff;
+            --border-color: #e0e0e0;
+            --header-bg: #2c3e50;
+            /* Dark background for header */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.7;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header.main-header {
+            background: var(--header-bg);
+            color: #fff;
+            padding: 60px 0 20px;
+            /* Increased top padding for logo */
+            text-align: center;
+            position: relative;
+            /* For logo positioning */
+            min-height: 120px;
+            /* Ensure enough space for logo */
+        }
+
+        header.main-header h1 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        header.main-header .subtitle {
+            font-size: 1.2rem;
+            color: #bdc3c7;
+        }
+
+        /* Navigation / Table of Contents */
+        nav.toc {
+            background: var(--primary-color);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        nav.toc ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        nav.toc ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+            font-weight: 700;
+            transition: background-color 0.3s ease;
+            border-radius: 4px;
+        }
+
+        nav.toc ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Sections */
+        section {
+            padding: 50px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        section:last-child {
+            border-bottom: none;
+        }
+
+        section h2 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.2rem;
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        section h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        section h3 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.6rem;
+            color: var(--primary-color);
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        section h4 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.3rem;
+            color: var(--secondary-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .content-box {
+            background: var(--light-bg-color);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+
+        p,
+        li {
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+
+        ul,
+        ol {
+            margin-left: 20px;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #e9ecef;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 0.95em;
+        }
+
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        th,
+        td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 700;
+        }
+
+        td {
+            background-color: var(--light-bg-color);
+        }
+
+        tr:nth-child(even) td {
+            background-color: #f1f8ff;
+            /* Light blue for even rows */
+        }
+
+        /* Interactive Elements */
+        .interactive-tool {
+            background: #eef5ff;
+            /* Light blue background for tools */
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid var(--primary-color);
+        }
+
+        .interactive-tool label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        .interactive-tool input[type="text"],
+        .interactive-tool input[type="number"],
+        .interactive-tool select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .interactive-tool button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            transition: background-color 0.3s ease;
+        }
+
+        .interactive-tool button:hover {
+            background-color: #2980b9;
+            /* Darker blue on hover */
+        }
+
+        .interactive-tool .result {
+            margin-top: 15px;
+            padding: 10px;
+            background: var(--light-bg-color);
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-weight: bold;
+        }
+
+        .interactive-tool .steps {
+            font-size: 0.9em;
+            color: #555;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            /* Preserve formatting for steps */
+        }
+
+        /* Diagrams and Images */
+        .diagram {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .diagram img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .diagram-caption {
+            font-style: italic;
+            color: #555;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+
+        /* Callout / Highlight boxes */
+        .callout {
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 5px solid var(--accent-color);
+            background-color: #fffbe6;
+            /* Light yellow */
+            border-radius: 0 4px 4px 0;
+        }
+
+        .callout.info {
+            border-left-color: var(--primary-color);
+            background-color: #e7f3fe;
+        }
+
+        .callout.warning {
+            border-left-color: #e67e22;
+            /* Orange */
+            background-color: #fdf3e7;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            background: var(--secondary-color);
+            color: #ecf0f1;
+            margin-top: 40px;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header.main-header h1 {
+                font-size: 2rem;
+            }
+
+            header.main-header .subtitle {
+                font-size: 1rem;
+            }
+
+            nav.toc ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav.toc ul li a {
+                display: block;
+                width: 100%;
+                text-align: center;
+            }
+
+            section h2 {
+                font-size: 1.8rem;
+            }
+
+            section h3 {
+                font-size: 1.4rem;
+            }
+
+            .eduvishion-logo {
+                position: relative;
+                /* Stack in flow on small screens */
+                top: auto;
+                left: auto;
+                margin: 0 auto 10px;
+                /* Center it */
+                text-shadow: none;
+                /* Simpler shadow or none */
+            }
+
+            .eduvishion-logo .text-white {
+                color: #fff !important;
+                /* Ensure visibility on header */
+            }
+
+            header.main-header {
+                padding-top: 20px;
+            }
+        }
+
+        .inline-code {
+            background-color: #f0f0f0;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="main-header">
+        <div class="eduvishion-logo">
+            <div class="text-2xl font-bold">
+                <a href="../../../index.html" class="flex items-center group"> <!-- Placeholder link -->
+                    <span class="text-white">Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span class="text-white">ision</span>
+                </a>
+            </div>
+        </div>
+        <div class="container">
+            <h1>Number Systems & Conversions</h1>
+            <p class="subtitle">Mastering Binary, Octal, Decimal, Hexadecimal, and Their Applications</p>
+        </div>
+    </header>
+
+    <nav class="toc">
+        <div class="container">
+            <ul>
+                <li><a href="#intro"><i class="fas fa-lightbulb"></i> Intro</a></li>
+                <li><a href="#systems"><i class="fas fa-list-ol"></i> Systems</a></li>
+                <li><a href="#conversions"><i class="fas fa-exchange-alt"></i> Conversions</a></li>
+                <li><a href="#arithmetic"><i class="fas fa-calculator"></i> Binary Arithmetic</a></li>
+                <li><a href="#floating-point"><i class="fas fa-infinity"></i> Floating Point</a></li>
+                <li><a href="#binary-codes"><i class="fas fa-qrcode"></i> Binary Codes</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section id="intro" class="container">
+            <h2><i class="fas fa-info-circle"></i> Introduction to Numerical Representation</h2>
+            <div class="content-box">
+                <p>In science, technology, business, and virtually all fields, we constantly deal with quantities. These
+                    quantities are measured, monitored, recorded, and manipulated. It's crucial to represent their
+                    numerical values efficiently and accurately. There are two fundamental ways of representing
+                    quantities: <strong>analog</strong> and <strong>digital</strong>.</p>
+
+                <h3>Analog Representation</h3>
+                <p>In analog representation, a quantity is represented by a voltage, current, or meter movement that is
+                    proportional to the value of that quantity. Analog quantities can vary over a continuous range of
+                    values. Think of a dimmer switch for a light or the hands of an analog clock.</p>
+                <div class="diagram">
+                    <!-- Placeholder for analog graph, ideally an SVG or image -->
+                    <p style="border:1px solid #ccc; padding:10px; text-align:center; background:#f0f0f0;">
+                        <strong>Analog Voltage vs Time Graph (Conceptual)</strong><br>
+                        A smooth, continuous wave, like a sine wave, varying over time. For example, voltage might range
+                        from -5V to +5V smoothly.
+                    </p>
+                    <p class="diagram-caption">An analog signal changes continuously over time.</p>
+                </div>
+
+                <h3>Digital Representation</h3>
+                <p>In digital representation, quantities are represented by symbols called digits. Digital quantities
+                    change in discrete steps. A digital watch, for instance, displays time in distinct one-minute (or
+                    one-second) intervals, rather than a continuous sweep.</p>
+                <div class="diagram">
+                    <!-- Placeholder for digital graph -->
+                    <p style="border:1px solid #ccc; padding:10px; text-align:center; background:#f0f0f0;">
+                        <strong>Digital Voltage vs Time Graph (Conceptual)</strong><br>
+                        A signal that jumps between discrete levels (e.g., 0V and 5V) at specific time intervals,
+                        appearing as a series of steps or square waves.
+                    </p>
+                    <p class="diagram-caption">A digital signal changes in discrete steps.</p>
+                </div>
+                <p><strong>The core difference:</strong> Analog is continuous, Digital is discrete (step-by-step).</p>
+
+                <h3>Why Digital? Advantages & Limitations</h3>
+                <div class="callout info">
+                    <h4>Advantages of Digital Techniques:</h4>
+                    <ul>
+                        <li><strong>Easier to design:</strong> Exact voltage/current values are less critical than
+                            ranges (HIGH/LOW).</li>
+                        <li><strong>Information storage is easy.</strong></li>
+                        <li><strong>Accuracy and precision are greater.</strong></li>
+                        <li><strong>Operations can be programmed:</strong> Digital systems are more flexible.</li>
+                        <li><strong>Less affected by noise:</strong> As long as noise isn't large enough to change a LOW
+                            to a HIGH (or vice-versa).</li>
+                        <li><strong>More digital circuitry can be fabricated on IC chips.</strong></li>
+                    </ul>
+                </div>
+                <div class="callout warning">
+                    <h4>Limitations of Digital Techniques:</h4>
+                    <p>The real world is mainly analog. Most physical quantities (temperature, pressure, speed) are
+                        analog. Therefore, to use digital techniques with analog inputs and outputs, three steps are
+                        often needed:</p>
+                    <ol>
+                        <li>Convert real-world analog inputs to digital form (<strong>Analog-to-Digital Converter,
+                                ADC</strong>).</li>
+                        <li>Process (operate on) the digital information.</li>
+                        <li>Convert digital outputs back to real-world analog form (<strong>Digital-to-Analog Converter,
+                                DAC</strong>).</li>
+                    </ol>
+                    <div class="diagram">
+                        <p style="border:1px solid #ccc; padding:10px; text-align:center; background:#f0f0f0;">
+                            <strong>Temperature Control System (Conceptual Diagram)</strong><br>
+                            Analog Temperature -> Measuring Device -> Analog-to-Digital Converter (ADC) -> Digital
+                            Process -> Digital-to-Analog Converter (DAC) -> Controller -> Adjusts Temperature (Analog).
+                        </p>
+                        <p class="diagram-caption">Diagram showing ADC/DAC in a control system.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="systems" class="container">
+            <h2><i class="fas fa-list-ol"></i> Number Systems</h2>
+            <div class="content-box">
+                <p>Many number systems are used in digital technology. Understanding these systems is key to
+                    understanding digital circuits and data representation.</p>
+
+                <h3>Decimal System (Base-10)</h3>
+                <p>The decimal system is composed of 10 numerals or symbols: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9. It's a
+                    base-10 system because it has 10 digits. Each position in a decimal number represents a power of 10.
+                </p>
+                <p>Example: <code
+                        class="inline-code">123.45<sub>10</sub> = (1 × 10<sup>2</sup>) + (2 × 10<sup>1</sup>) + (3 × 10<sup>0</sup>) + (4 × 10<sup>-1</sup>) + (5 × 10<sup>-2</sup>)</code>
+                </p>
+
+                <h3>Binary System (Base-2)</h3>
+                <p>The binary system uses only two symbols: 0 and 1. It's a base-2 system. Each position represents a
+                    power of 2. This is the fundamental system for digital computers.</p>
+                <p>Example: <code
+                        class="inline-code">1101.1<sub>2</sub> = (1 × 2<sup>3</sup>) + (1 × 2<sup>2</sup>) + (0 × 2<sup>1</sup>) + (1 × 2<sup>0</sup>) + (1 × 2<sup>-1</sup>)</code>
+                </p>
+                <h4>Binary Counting Example:</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Decimal</th>
+                            <th>Binary (4-bit)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>0000</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0001</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>0010</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>0011</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>0100</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>0101</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>0110</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>0111</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>1000</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Octal System (Base-8)</h3>
+                <p>The octal system uses eight symbols: 0, 1, 2, 3, 4, 5, 6, 7. It's a base-8 system. Each position
+                    represents a power of 8. Octal is often used as a shorthand for binary numbers.</p>
+                <p>Example: <code
+                        class="inline-code">273.4<sub>8</sub> = (2 × 8<sup>2</sup>) + (7 × 8<sup>1</sup>) + (3 × 8<sup>0</sup>) + (4 × 8<sup>-1</sup>)</code>
+                </p>
+
+                <h3>Hexadecimal System (Base-16)</h3>
+                <p>The hexadecimal system uses sixteen symbols: 0-9 and A, B, C, D, E, F (where A=10, B=11, C=12, D=13,
+                    E=14, F=15). It's a base-16 system. Each position represents a power of 16. Hexadecimal is also
+                    widely used as a compact representation of binary data.</p>
+                <p>Example: <code
+                        class="inline-code">1A3.F<sub>16</sub> = (1 × 16<sup>2</sup>) + (10 × 16<sup>1</sup>) + (3 × 16<sup>0</sup>) + (15 × 16<sup>-1</sup>)</code>
+                </p>
+
+                <h4>Summary of Number Systems:</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Decimal</th>
+                            <th>Binary</th>
+                            <th>Octal</th>
+                            <th>Hexadecimal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>0000</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0001</td>
+                            <td>1</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>0010</td>
+                            <td>2</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>0011</td>
+                            <td>3</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>0100</td>
+                            <td>4</td>
+                            <td>4</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>0101</td>
+                            <td>5</td>
+                            <td>5</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>0110</td>
+                            <td>6</td>
+                            <td>6</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>0111</td>
+                            <td>7</td>
+                            <td>7</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>1000</td>
+                            <td>10</td>
+                            <td>8</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>1001</td>
+                            <td>11</td>
+                            <td>9</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>1010</td>
+                            <td>12</td>
+                            <td>A</td>
+                        </tr>
+                        <tr>
+                            <td>11</td>
+                            <td>1011</td>
+                            <td>13</td>
+                            <td>B</td>
+                        </tr>
+                        <tr>
+                            <td>12</td>
+                            <td>1100</td>
+                            <td>14</td>
+                            <td>C</td>
+                        </tr>
+                        <tr>
+                            <td>13</td>
+                            <td>1101</td>
+                            <td>15</td>
+                            <td>D</td>
+                        </tr>
+                        <tr>
+                            <td>14</td>
+                            <td>1110</td>
+                            <td>16</td>
+                            <td>E</td>
+                        </tr>
+                        <tr>
+                            <td>15</td>
+                            <td>1111</td>
+                            <td>17</td>
+                            <td>F</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="conversions" class="container">
+            <h2><i class="fas fa-exchange-alt"></i> Number System Conversions</h2>
+            <div class="content-box">
+                <h3>Binary ↔ Decimal</h3>
+                <h4>Binary to Decimal</h4>
+                <p>Convert a binary number to its decimal equivalent by summing the weights (powers of 2) of each
+                    position that contains a '1'.</p>
+                <p>Example: <code
+                        class="inline-code">11011<sub>2</sub> = (1 × 2<sup>4</sup>) + (1 × 2<sup>3</sup>) + (0 × 2<sup>2</sup>) + (1 × 2<sup>1</sup>) + (1 × 2<sup>0</sup>) = 16 + 8 + 0 + 2 + 1 = 27<sub>10</sub></code>
+                </p>
+                <p>Example: <code
+                        class="inline-code">10110101<sub>2</sub> = (1×2<sup>7</sup>)+(0×2<sup>6</sup>)+(1×2<sup>5</sup>)+(1×2<sup>4</sup>)+(0×2<sup>3</sup>)+(1×2<sup>2</sup>)+(0×2<sup>1</sup>)+(1×2<sup>0</sup>) = 128+0+32+16+0+4+0+1 = 181<sub>10</sub></code>
+                </p>
+
+                <h4>Decimal to Binary</h4>
+                <p>Two common methods:</p>
+                <ol>
+                    <li><strong>Sum-of-Weights (Reverse of Binary-to-Decimal):</strong> Find the largest power of 2 less
+                        than or equal to the decimal number, subtract it, and repeat with the remainder.
+                        <p>Example: <code class="inline-code">45<sub>10</sub></code></p>
+                        <ul>
+                            <li>Largest power of 2 ≤ 45 is 32 (2<sup>5</sup>). <code
+                                    class="inline-code">45 - 32 = 13</code>. (Bit for 2<sup>5</sup> is 1)</li>
+                            <li>Largest power of 2 ≤ 13 is 8 (2<sup>3</sup>). <code
+                                    class="inline-code">13 - 8 = 5</code>. (Bit for 2<sup>4</sup> is 0, bit for
+                                2<sup>3</sup> is 1)</li>
+                            <li>Largest power of 2 ≤ 5 is 4 (2<sup>2</sup>). <code class="inline-code">5 - 4 = 1</code>.
+                                (Bit for 2<sup>2</sup> is 1)</li>
+                            <li>Largest power of 2 ≤ 1 is 1 (2<sup>0</sup>). <code class="inline-code">1 - 1 = 0</code>.
+                                (Bit for 2<sup>1</sup> is 0, bit for 2<sup>0</sup> is 1)</li>
+                            <li>Result: <code class="inline-code">101101<sub>2</sub></code> (2<sup>5</sup> +
+                                2<sup>3</sup> + 2<sup>2</sup> + 2<sup>0</sup>)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Repeated Division by 2:</strong> Continuously divide the decimal number by 2 and record
+                        the remainders. The binary number is formed by the remainders in reverse order of calculation
+                        (first remainder is LSB).
+                        <p>Example: <code class="inline-code">25<sub>10</sub></code> to Binary</p>
+                        <pre>
+25 / 2 = 12 remainder 1 (LSB)
+12 / 2 =  6 remainder 0
+ 6 / 2 =  3 remainder 0
+ 3 / 2 =  1 remainder 1
+ 1 / 2 =  0 remainder 1 (MSB)
+Result: 11001<sub>2</sub></pre>
+                        <div class="diagram">
+                            <p style="border:1px solid #ccc; padding:10px; text-align:left; background:#f0f0f0;">
+                                <strong>Flowchart for Repeated-Division Method (Decimal to Binary)</strong><br>
+                                1. START<br>
+                                2. Input Decimal Number (N)<br>
+                                3. Divide N by 2.<br>
+                                4. Record Quotient (Q) and Remainder (R). Store R.<br>
+                                5. Is Q = 0? <br>
+                                - YES: Collect R's in reverse order. This is the binary number. END.<br>
+                                - NO: Set N = Q. Go to step 3.<br>
+                            </p>
+                            <p class="diagram-caption">Algorithm for decimal to binary conversion using repeated
+                                division.</p>
+                        </div>
+                    </li>
+                </ol>
+
+                <h3>Binary ↔ Octal</h3>
+                <h4>Binary to Octal</h4>
+                <p>Group binary digits into sets of three, starting from the binary point. Add leading/trailing zeros if
+                    needed. Convert each 3-bit group to its octal equivalent.</p>
+                <p>Example: <code class="inline-code">(110 011 101 . 111 010)<sub>2</sub></code></p>
+                <p><code class="inline-code">110<sub>2</sub> = 6<sub>8</sub></code>, <code
+                        class="inline-code">011<sub>2</sub> = 3<sub>8</sub></code>, <code
+                        class="inline-code">101<sub>2</sub> = 5<sub>8</sub></code>, <code
+                        class="inline-code">111<sub>2</sub> = 7<sub>8</sub></code>, <code
+                        class="inline-code">010<sub>2</sub> = 2<sub>8</sub></code></p>
+                <p>Result: <code class="inline-code">635.72<sub>8</sub></code></p>
+                <p>Another example: <code
+                        class="inline-code">100111010<sub>2</sub> = (100)(111)(010)<sub>2</sub> = 472<sub>8</sub></code>
+                </p>
+
+                <h4>Octal to Binary</h4>
+                <p>Convert each octal digit to its 3-bit binary equivalent.</p>
+                <p>Example: <code class="inline-code">472.16<sub>8</sub></code></p>
+                <p><code class="inline-code">4<sub>8</sub> = 100<sub>2</sub></code>, <code
+                        class="inline-code">7<sub>8</sub> = 111<sub>2</sub></code>, <code
+                        class="inline-code">2<sub>8</sub> = 010<sub>2</sub></code>, <code
+                        class="inline-code">1<sub>8</sub> = 001<sub>2</sub></code>, <code
+                        class="inline-code">6<sub>8</sub> = 110<sub>2</sub></code></p>
+                <p>Result: <code class="inline-code">100111010.001110<sub>2</sub></code></p>
+                <p>Example from provided data: <code
+                        class="inline-code">(673.124)<sub>8</sub> = (110 111 011 . 001 010 100)<sub>2</sub></code></p>
+
+                <h3>Binary ↔ Hexadecimal</h3>
+                <h4>Binary to Hexadecimal</h4>
+                <p>Group binary digits into sets of four, starting from the binary point. Add leading/trailing zeros if
+                    needed. Convert each 4-bit group to its hexadecimal equivalent.</p>
+                <p>Example: <code class="inline-code">(0010 1100 0110 1011 . 1111 0010)<sub>2</sub></code></p>
+                <p><code class="inline-code">0010<sub>2</sub> = 2<sub>16</sub></code>, <code
+                        class="inline-code">1100<sub>2</sub> = C<sub>16</sub></code>, <code
+                        class="inline-code">0110<sub>2</sub> = 6<sub>16</sub></code>, <code
+                        class="inline-code">1011<sub>2</sub> = B<sub>16</sub></code></p>
+                <p><code class="inline-code">1111<sub>2</sub> = F<sub>16</sub></code>, <code
+                        class="inline-code">0010<sub>2</sub> = 2<sub>16</sub></code></p>
+                <p>Result: <code class="inline-code">2C6B.F2<sub>16</sub></code></p>
+
+                <h4>Hexadecimal to Binary</h4>
+                <p>Convert each hexadecimal digit to its 4-bit binary equivalent.</p>
+                <p>Example: <code class="inline-code">3A6.D<sub>16</sub></code></p>
+                <p><code class="inline-code">3<sub>16</sub> = 0011<sub>2</sub></code>, <code
+                        class="inline-code">A<sub>16</sub> = 1010<sub>2</sub></code>, <code
+                        class="inline-code">6<sub>16</sub> = 0110<sub>2</sub></code>, <code
+                        class="inline-code">D<sub>16</sub> = 1101<sub>2</sub></code></p>
+                <p>Result: <code class="inline-code">001110100110.1101<sub>2</sub></code></p>
+                <p>Example from provided data: <code
+                        class="inline-code">(306.D)<sub>16</sub> = (0011 0000 0110 . 1101)<sub>2</sub></code></p>
+
+                <h3>Decimal ↔ Octal/Hexadecimal (via Binary)</h3>
+                <p>The most straightforward way to convert between decimal and octal/hexadecimal is often by using
+                    binary as an intermediate step:</p>
+                <ul>
+                    <li><strong>Decimal to Octal/Hex:</strong> Convert Decimal to Binary, then Binary to Octal/Hex.</li>
+                    <li><strong>Octal/Hex to Decimal:</strong> Convert Octal/Hex to Binary, then Binary to Decimal.</li>
+                </ul>
+                <h4>Octal to Decimal Example:</h4>
+                <p><code
+                        class="inline-code">(24.6)<sub>8</sub> = 2 × 8<sup>1</sup> + 4 × 8<sup>0</sup> + 6 × 8<sup>-1</sup> = 16 + 4 + 6/8 = 20 + 0.75 = 20.75<sub>10</sub></code>
+                </p>
+
+                <div class="interactive-tool">
+                    <h4>Universal Number Converter</h4>
+                    <label for="inputNumber">Number:</label>
+                    <input type="text" id="inputNumber" placeholder="Enter number">
+                    <label for="inputBase">From Base:</label>
+                    <select id="inputBase">
+                        <option value="2">Binary (2)</option>
+                        <option value="8">Octal (8)</option>
+                        <option value="10" selected>Decimal (10)</option>
+                        <option value="16">Hexadecimal (16)</option>
+                    </select>
+                    <label for="outputBase">To Base:</label>
+                    <select id="outputBase">
+                        <option value="2">Binary (2)</option>
+                        <option value="8">Octal (8)</option>
+                        <option value="10">Decimal (10)</option>
+                        <option value="16" selected>Hexadecimal (16)</option>
+                    </select>
+                    <button onclick="convertNumber()"><i class="fas fa-magic"></i> Convert</button>
+                    <div id="conversionResult" class="result" style="display:none;"></div>
+                    <div id="conversionSteps" class="steps" style="display:none;"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="arithmetic" class="container">
+            <h2><i class="fas fa-calculator"></i> Binary Arithmetic</h2>
+            <div class="content-box">
+                <h3>Binary Addition</h3>
+                <p>Binary addition follows these rules:</p>
+                <ul>
+                    <li><code class="inline-code">0 + 0 = 0</code></li>
+                    <li><code class="inline-code">0 + 1 = 1</code></li>
+                    <li><code class="inline-code">1 + 0 = 1</code></li>
+                    <li><code class="inline-code">1 + 1 = 0</code> (carry 1 to the next more significant bit)</li>
+                    <li><code class="inline-code">1 + 1 + 1 = 1</code> (carry 1)</li>
+                </ul>
+                <p>Example:</p>
+                <pre>
+  11111   (carries)
+  111101  (61)
++  10111  (23)
+----------
+ 1010100  (84)
+        </pre>
+
+                <h3>Binary Subtraction</h3>
+                <p>Binary subtraction uses borrowing:</p>
+                <ul>
+                    <li><code class="inline-code">0 - 0 = 0</code></li>
+                    <li><code class="inline-code">1 - 0 = 1</code></li>
+                    <li><code class="inline-code">1 - 1 = 0</code></li>
+                    <li><code class="inline-code">0 - 1 = 1</code> (borrow 1 from the next more significant bit, making
+                        it 10 - 1 = 1)</li>
+                </ul>
+                <p>Example: Subtract <code class="inline-code">(10111)<sub>2</sub></code> from <code
+                        class="inline-code">(1001101)<sub>2</sub></code></p>
+                <pre>
+      1 10   (borrows)
+    0 10 10 0 10
+  1 0 0 1 1 0 1  (77)
+-   0 1 0 1 1 1  (23)
+-----------------
+    1 1 0 1 1 0  (54)
+        </pre>
+
+                <h3>Binary Multiplication</h3>
+                <p>Binary multiplication is similar to decimal multiplication, but simpler as it only involves
+                    multiplying by 0 or 1.</p>
+                <ul>
+                    <li><code class="inline-code">0 × 0 = 0</code></li>
+                    <li><code class="inline-code">0 × 1 = 0</code></li>
+                    <li><code class="inline-code">1 × 0 = 0</code></li>
+                    <li><code class="inline-code">1 × 1 = 1</code></li>
+                </ul>
+                <p>Example: <code class="inline-code">10111<sub>2</sub> × 1010<sub>2</sub></code></p>
+                <pre>
+      10111  (23)
+    x  1010  (10)
+    -------
+      00000  (10111 * 0)
+     10111   (10111 * 1, shifted)
+    00000    (10111 * 0, shifted)
+   10111     (10111 * 1, shifted)
+   -----------
+   11100110  (230)
+        </pre>
+
+                <h3>Binary Division</h3>
+                <p>Binary division is similar to decimal long division. It involves comparing the divisor with parts of
+                    the dividend, subtracting, and bringing down the next bit.</p>
+                <p>(Detailed examples of binary division can be complex and are often best understood through practice.
+                    The core idea is repeated subtraction or comparison.)</p>
+
+                <h3>Complements</h3>
+                <p>Complements are used in digital computers for simplifying subtraction operations and for logical
+                    manipulation. For any base-r system, there are two types of complements: the r's complement and the
+                    (r-1)'s complement.</p>
+
+                <h4>1's Complement (for Binary Numbers, r=2, (r-1)'s Complement)</h4>
+                <p>The 1's complement of a binary number is obtained by inverting all its bits (changing 0s to 1s and 1s
+                    to 0s).</p>
+                <p>Example: 1's complement of <code class="inline-code">1011000</code> is <code
+                        class="inline-code">0100111</code>.</p>
+                <p>Example: 1's complement of <code class="inline-code">0101101</code> is <code
+                        class="inline-code">1010010</code>.</p>
+
+                <h4>2's Complement (for Binary Numbers, r's Complement)</h4>
+                <p>The 2's complement of a binary number is obtained by adding 1 to its 1's complement.</p>
+                <p>Example: Find 2's complement of <code class="inline-code">101100</code>.</p>
+                <ol>
+                    <li>1's complement: <code class="inline-code">010011</code></li>
+                    <li>Add 1: <code class="inline-code">010011 + 1 = 010100</code></li>
+                </ol>
+                <p>A shortcut for 2's complement: Starting from the LSB, leave all least significant 0s and the first 1
+                    unchanged. Then, invert all bits to the left of that first 1.</p>
+                <p>Example: 2's complement of <code class="inline-code">1101100</code>: <code
+                        class="inline-code">0010<u>100</u></code> (underline unchanged part, invert rest).</p>
+
+                <h3>Subtraction with Complements</h3>
+                <p>Subtraction M - N in base r can be done by M + (r's complement of N).</p>
+
+                <h4>Subtraction with 2's Complement</h4>
+                <p>To subtract N from M (M - N):</p>
+                <ol>
+                    <li>Find the 2's complement of N.</li>
+                    <li>Add this to M.</li>
+                    <li>If there is an end carry, discard it. The result is positive.</li>
+                    <li>If there is no end carry, the result is negative and is in 2's complement form. To get the
+                        magnitude, take the 2's complement of the sum and prefix a negative sign.</li>
+                </ol>
+                <p>Example: <code class="inline-code">X = 1010100</code>, <code class="inline-code">Y = 1000011</code>.
+                    Compute X - Y.</p>
+                <pre>
+  X          =  1010100
+  2's comp Y =  0111101  (1's comp of 1000011 is 0111100, +1 = 0111101)
+  ---------------------
+  Sum        = 10010001
+  Discard carry (2<sup>7</sup>) ↑
+  Result X-Y =  0010001 (Positive)
+        </pre>
+                <p>Example: Compute Y - X.</p>
+                <pre>
+  Y          =  1000011
+  2's comp X =  0101100
+  ---------------------
+  Sum        =  1101111 (No end carry)
+  Result is negative. Take 2's complement of sum:
+  1's comp of 1101111 is 0010000.
+  2's comp is 0010000 + 1 = 0010001.
+  Result Y-X = -0010001
+        </pre>
+
+                <h4>Subtraction with 1's Complement</h4>
+                <p>To subtract N from M (M - N):</p>
+                <ol>
+                    <li>Find the 1's complement of N.</li>
+                    <li>Add this to M.</li>
+                    <li>If there is an end carry (called end-around carry), add it to the LSB of the sum. The result is
+                        positive.</li>
+                    <li>If there is no end carry, the result is negative and is in 1's complement form. To get the
+                        magnitude, take the 1's complement of the sum and prefix a negative sign.</li>
+                </ol>
+                <p>Example: <code class="inline-code">X = 1010100</code>, <code class="inline-code">Y = 1000011</code>.
+                    Compute X - Y using 1's complement.</p>
+                <pre>
+  X          =  1010100
+  1's comp Y =  0111100
+  ---------------------
+  Sum        = 10010000
+  End-around carry ↑
+                +     1
+  ---------------------
+  Result X-Y =  0010001 (Positive)
+        </pre>
+            </div>
+        </section>
+
+        <section id="floating-point" class="container">
+            <h2><i class="fas fa-infinity"></i> Floating Point Representation</h2>
+            <div class="content-box">
+                <p>A real number or floating-point number is a number that has both an integer and a fractional part.
+                    Examples include <code class="inline-code">123.45</code>, <code class="inline-code">0.1234</code>,
+                    <code class="inline-code">-0.12345</code> (decimal) or <code class="inline-code">1100.1100</code>,
+                    <code class="inline-code">0.1001</code>, <code class="inline-code">-1.001</code> (binary).
+                </p>
+                <p>Floating-point numbers are generally expressed in exponential notation. For example:</p>
+                <ul>
+                    <li>Decimal: <code class="inline-code">30000.0</code> can be written as <code
+                            class="inline-code">3 × 10<sup>4</sup></code>.</li>
+                    <li>Decimal: <code class="inline-code">312.45</code> can be written as <code
+                            class="inline-code">3.1245 × 10<sup>2</sup></code>.</li>
+                    <li>Binary: <code class="inline-code">1010.001</code> can be written as <code
+                            class="inline-code">1.010001 × 2<sup>3</sup></code> (note: binary 1010.001 = 10.125 decimal;
+                        2<sup>3</sup> is 8 in binary, so 1.010001<sub>2</sub> × 1000<sub>2</sub>).</li>
+                </ul>
+                <p>The general form of a number N can be expressed as:</p>
+                <p style="text-align:center; font-size: 1.2em; margin: 15px 0;"><code>N = ± m × b<sup>e</sup></code></p>
+                <p>Where:</p>
+                <ul>
+                    <li><strong>m</strong> is the <strong>mantissa</strong> (or significand)</li>
+                    <li><strong>b</strong> is the <strong>base</strong> of the number system (e.g., 10 for decimal, 2
+                        for binary)</li>
+                    <li><strong>e</strong> is the <strong>exponent</strong></li>
+                </ul>
+                <p>A floating-point number is represented by two parts: the mantissa and the exponent. The mantissa is
+                    typically a signed fixed-point number, and the exponent specifies the decimal or binary point's
+                    position.</p>
+
+                <h3>Binary Representation of Floating Point Numbers</h3>
+                <p>In binary floating-point representation, the mantissa and exponent are expressed using a signed
+                    magnitude notation, where one bit is reserved for the sign.</p>
+                <p><strong>Example:</strong> Consider a 16-bit word used to store floating-point numbers.</p>
+                <ul>
+                    <li>Assume 9 bits are reserved for the mantissa (1 sign bit + 8 magnitude bits).</li>
+                    <li>Assume 7 bits are reserved for the exponent (1 sign bit + 6 magnitude bits).</li>
+                    <li>Assume the mantissa is a fraction, meaning the binary point is immediately to the right of the
+                        mantissa's sign bit (normalized form often places it after the first '1').</li>
+                </ul>
+                <p>Let's represent the binary number <code class="inline-code">(1101.01)<sub>2</sub></code>:</p>
+                <ol>
+                    <li><strong>Normalize:</strong> <code
+                            class="inline-code">(1101.01)<sub>2</sub> = 0.110101 × 2<sup>4</sup></code> (assuming
+                        fractional mantissa after normalization by shifting right until it's < 1, exponent counts
+                            shifts). <br>Alternatively, <code class="inline-code">1.10101 × 2<sup>3</sup></code> if the
+                            first '1' is before the point. The provided example uses the former.
+                    </li>
+                    <li><strong>Mantissa:</strong> The fractional part is <code class="inline-code">.110101</code>.
+                        If 9 bits for mantissa (1 sign, 8 magnitude), and the number is positive (sign bit 0):
+                        Mantissa bits: <code class="inline-code">11010100</code> (padded to 8 bits).
+                        Signed Mantissa: <code class="inline-code">0 11010100</code>
+                    </li>
+                    <li><strong>Exponent:</strong> The exponent is <code class="inline-code">(4)<sub>10</sub></code>.
+                        If 7 bits for exponent (1 sign, 6 magnitude), and exponent is positive (sign bit 0):
+                        Binary of 4 is <code class="inline-code">100</code>. Padded to 6 bits: <code
+                            class="inline-code">000100</code>.
+                        Signed Exponent: <code class="inline-code">0 000100</code>
+                    </li>
+                    <li><strong>Final 16-bit representation:</strong>
+                        <code class="inline-code">[Sign_exp | Mag_exp | Sign_man | Mag_man]</code>
+                        <code class="inline-code">[0 000100 | 0 11010100]</code> (This order can vary based on specific
+                        formats like IEEE 754).
+                        The example given in "my data" implies separate sign bits for mantissa and exponent. More
+                        commonly, IEEE 754 format has one sign bit for the number, an exponent field (often biased), and
+                        a significand field.
+                    </li>
+                </ol>
+                <div class="callout info">
+                    <p><strong>Note:</strong> Standard floating-point representations like IEEE 754 use a slightly
+                        different approach: a single sign bit for the number, a biased exponent, and a normalized
+                        significand (usually with an implicit leading '1'). The example above illustrates a conceptual
+                        custom format.</p>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="binary-codes" class="container">
+            <h2><i class="fas fa-qrcode"></i> Binary Codes</h2>
+            <div class="content-box">
+                <p>Besides pure binary representation, various binary codes are used for specific purposes.</p>
+
+                <h3>Binary Coded Decimal (BCD)</h3>
+                <p>BCD represents each decimal digit with a 4-bit binary code. It's different from converting the entire
+                    decimal number to binary.</p>
+                <p>Example: <code class="inline-code">329<sub>10</sub></code> in BCD</p>
+                <p><code class="inline-code">3 = 0011</code>, <code class="inline-code">2 = 0010</code>, <code
+                        class="inline-code">9 = 1001</code></p>
+                <p>So, <code class="inline-code">329<sub>10</sub> = 0011 0010 1001<sub>BCD</sub></code></p>
+                <div class="callout warning">
+                    <p>This is NOT the same as <code class="inline-code">(001100101001)<sub>2</sub></code>. <code
+                            class="inline-code">(329)<sub>10</sub></code> in pure binary is <code
+                            class="inline-code">(101001001)<sub>2</sub></code>.</p>
+                </div>
+                <p>Why use BCD? People think in decimal. BCD is useful for displaying decimal numbers on devices like
+                    7-segment displays and in some financial calculations.</p>
+                <p>BCD is not very efficient in terms of bit usage compared to pure binary. Only 10 out of 16 possible
+                    4-bit combinations are used (0000 to 1001).</p>
+                <table>
+                    <caption>Common BCD (8421) Codes</caption>
+                    <thead>
+                        <tr>
+                            <th>Decimal</th>
+                            <th>BCD</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>0000</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0001</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>0010</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>0011</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>0100</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>0101</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>0110</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>0111</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>1000</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>1001</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Gray Code</h3>
+                <p>Gray code is not a number system for arithmetic but an alternative way to represent a sequence of
+                    numbers. Its key feature is that only one bit changes between successive code words.</p>
+                <p>This property is useful in reducing errors in systems where a mechanical position is encoded, as a
+                    slight misalignment will only cause a 1-bit error, leading to an adjacent value.</p>
+                <table>
+                    <caption>4-bit Gray Code Example</caption>
+                    <thead>
+                        <tr>
+                            <th>Decimal</th>
+                            <th>Binary</th>
+                            <th>Gray Code</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>0000</td>
+                            <td>0000</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0001</td>
+                            <td>0001</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>0010</td>
+                            <td>0011</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>0011</td>
+                            <td>0010</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>0100</td>
+                            <td>0110</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>0101</td>
+                            <td>0111</td>
+                        </tr>
+                        <!-- ... and so on -->
+                        <tr>
+                            <td>6</td>
+                            <td>0110</td>
+                            <td>0101</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>0111</td>
+                            <td>0100</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>1000</td>
+                            <td>1100</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>ASCII (American Standard Code for Information Interchange)</h3>
+                <p>ASCII is a character encoding standard used to represent text in computers and other devices.
+                    Standard ASCII uses 7 bits to represent 128 characters (control characters, numbers,
+                    uppercase/lowercase letters, punctuation).</p>
+                <p>An 8th bit is often added for extended ASCII (more characters) or for error detection (parity bit).
+                </p>
+                <p>Example: <code class="inline-code">'A' = 41<sub>16</sub> = 01000001<sub>2</sub></code>, <code
+                        class="inline-code">'a' = 61<sub>16</sub> = 01100001<sub>2</sub></code>, <code
+                        class="inline-code">'0' = 30<sub>16</sub> = 00110000<sub>2</sub></code>.</p>
+                <div class="callout info">
+                    <p><a href="https://www.asciitable.com/" target="_blank" rel="noopener noreferrer">View a full ASCII
+                            Table here.</a></p>
+                </div>
+
+                <h3>Other Decimal Codes</h3>
+                <p>Besides BCD (8421), other weighted and unweighted codes exist for representing decimal digits:</p>
+                <table>
+                    <caption>Various Decimal Codes (4-bit)</caption>
+                    <thead>
+                        <tr>
+                            <th>Decimal Digit</th>
+                            <th>BCD (8421)</th>
+                            <th>Excess-3</th>
+                            <th>84-2-1</th>
+                            <th>2421</th>
+                            <th>Biquinary (Conceptual 7-bit)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>0000</td>
+                            <td>0011</td>
+                            <td>0000</td>
+                            <td>0000</td>
+                            <td>0100001</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0001</td>
+                            <td>0100</td>
+                            <td>0111</td>
+                            <td>0001</td>
+                            <td>0100010</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>0010</td>
+                            <td>0101</td>
+                            <td>0110</td>
+                            <td>0010</td>
+                            <td>0100100</td>
+                        </tr>
+                        <tr>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>1001</td>
+                            <td>1100</td>
+                            <td>1011</td>
+                            <td>1111</td>
+                            <td>1010000</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p><strong>Excess-3 Code:</strong> An unweighted code derived by adding 3 (binary 0011) to each BCD
+                    code. It's self-complementing.</p>
+
+                <h3>Error Detection Codes (Parity)</h3>
+                <p>Parity codes are used to detect errors in data transmission or storage. A parity bit is added to a
+                    group of data bits to make the total number of 1s either even (even parity) or odd (odd parity).</p>
+                <ul>
+                    <li><strong>Even Parity:</strong> The parity bit is set to 0 or 1 to make the total number of 1s
+                        (including the parity bit) even.</li>
+                    <li><strong>Odd Parity:</strong> The parity bit is set to 0 or 1 to make the total number of 1s
+                        (including the parity bit) odd.</li>
+                </ul>
+                <p>Example: Information Bits <code class="inline-code">11000011</code> (contains four 1s)</p>
+                <ul>
+                    <li>For <strong>even parity</strong>: Four 1s is already even. Parity bit P = 0. Code word: <code
+                            class="inline-code">011000011</code> (P appended).</li>
+                    <li>For <strong>odd parity</strong>: Four 1s is even. To make it odd, Parity bit P = 1. Code word:
+                        <code class="inline-code">111000011</code>.
+                    </li>
+                </ul>
+                <p>If a single bit error occurs during transmission, the parity check at the receiver will fail,
+                    indicating an error.</p>
+                <table>
+                    <caption>Parity Example for ASCII Characters (assuming 7-bit ASCII)</caption>
+                    <thead>
+                        <tr>
+                            <th>Character</th>
+                            <th>7-bit ASCII</th>
+                            <th>Odd-Parity ASCII (8-bit)</th>
+                            <th>Even-Parity ASCII (8-bit)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>0110000</td>
+                            <td>10110000</td>
+                            <td>00110000</td>
+                        </tr>
+                        <tr>
+                            <td>X</td>
+                            <td>1011000</td>
+                            <td>01011000</td>
+                            <td>11011000</td>
+                        </tr>
+                        <tr>
+                            <td>=</td>
+                            <td>0111101</td>
+                            <td>10111101</td>
+                            <td>00111101</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© <span id="currentYear"></span> Eduvision. A High-Quality Resource on Number Systems & Conversions.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Set current year in footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Interactive Converter Logic
+        function convertNumber() {
+            const inputNumberStr = document.getElementById('inputNumber').value.trim();
+            const inputBase = parseInt(document.getElementById('inputBase').value);
+            const outputBase = parseInt(document.getElementById('outputBase').value);
+            const resultDiv = document.getElementById('conversionResult');
+            const stepsDiv = document.getElementById('conversionSteps');
+
+            resultDiv.style.display = 'none';
+            stepsDiv.style.display = 'none';
+            stepsDiv.innerHTML = ''; // Clear previous steps
+
+            if (inputNumberStr === '') {
+                resultDiv.textContent = 'Please enter a number.';
+                resultDiv.style.display = 'block';
+                resultDiv.style.color = 'red';
+                return;
+            }
+
+            let decimalValue;
+            let processSteps = `<strong>Steps for ${inputNumberStr} (Base ${inputBase}) to Base ${outputBase}:</strong><br>`;
+
+            // Step 1: Convert input number to decimal (if not already decimal)
+            try {
+                if (inputBase === 10) {
+                    decimalValue = parseInt(inputNumberStr, 10);
+                    if (isNaN(decimalValue)) throw new Error("Invalid decimal input.");
+                    processSteps += `1. Input is already decimal: ${decimalValue}<sub>10</sub><br>`;
+                } else {
+                    decimalValue = parseInt(inputNumberStr, inputBase);
+                    if (isNaN(decimalValue)) throw new Error(`Invalid base ${inputBase} input.`);
+                    processSteps += `1. Convert ${inputNumberStr}<sub>${inputBase}</sub> to Decimal: ${decimalValue}<sub>10</sub><br>`;
+                    // Could add detailed steps for bin/oct/hex to dec here
+                }
+            } catch (e) {
+                resultDiv.textContent = `Error: ${e.message}`;
+                resultDiv.style.display = 'block';
+                resultDiv.style.color = 'red';
+                return;
+            }
+
+            // Step 2: Convert decimal value to output base
+            let outputValue;
+            if (outputBase === 10) {
+                outputValue = decimalValue.toString(10);
+                processSteps += `2. Decimal value is the result in base 10: ${outputValue}<sub>10</sub><br>`;
+            } else {
+                outputValue = decimalValue.toString(outputBase).toUpperCase();
+                processSteps += `2. Convert ${decimalValue}<sub>10</sub> to Base ${outputBase}:<br>`;
+                if (outputBase === 2) { // Show repeated division for decimal to binary
+                    let num = decimalValue;
+                    let binaryString = "";
+                    if (num === 0) binaryString = "0";
+                    while (num > 0) {
+                        let remainder = num % 2;
+                        processSteps += `   ${num} / 2 = ${Math.floor(num / 2)} remainder ${remainder}<br>`;
+                        binaryString = remainder + binaryString;
+                        num = Math.floor(num / 2);
+                    }
+                    processSteps += `   Binary result (remainders in reverse): ${binaryString || "0"}<sub>2</sub><br>`;
+                } else {
+                    processSteps += `   Result: ${outputValue}<sub>${outputBase}</sub><br>`;
+                }
+            }
+
+            resultDiv.textContent = `Result: ${outputValue}`;
+            resultDiv.style.color = 'green';
+            resultDiv.style.display = 'block';
+            stepsDiv.innerHTML = processSteps;
+            stepsDiv.style.display = 'block';
+        }
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boolean Algebra | Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Eduvision Logo Specific Styles */
+        .eduvishion-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            /* Ensure logo is on top */
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvishion-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .eduvishion-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvishion-logo .text-yellow-300 {
+            color: #fde047 !important;
+        }
+
+        .eduvishion-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+        }
+
+        .eduvishion-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvishion-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* General Styles (Reused and adapted from topic-1.html) */
+        :root {
+            --primary-color: #27ae60;
+            /* Green for Boolean/Logic theme */
+            --secondary-color: #2c3e50;
+            /* Dark Blue */
+            --accent-color: #f39c12;
+            /* Orange */
+            --text-color: #333;
+            --bg-color: #f4f6f6;
+            --light-bg-color: #ffffff;
+            --border-color: #e0e0e0;
+            --header-bg: #2c3e50;
+            /* Dark background for header */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.7;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header.main-header {
+            background: var(--header-bg);
+            color: #fff;
+            padding: 60px 0 20px;
+            text-align: center;
+            position: relative;
+            min-height: 120px;
+        }
+
+        header.main-header h1 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        header.main-header .subtitle {
+            font-size: 1.2rem;
+            color: #bdc3c7;
+        }
+
+        /* Navigation / Table of Contents */
+        nav.toc {
+            background: var(--primary-color);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        nav.toc ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        nav.toc ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+            font-weight: 700;
+            transition: background-color 0.3s ease;
+            border-radius: 4px;
+        }
+
+        nav.toc ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Sections */
+        section {
+            padding: 50px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        section:last-child {
+            border-bottom: none;
+        }
+
+        section h2 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.2rem;
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        section h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        section h3 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.6rem;
+            color: var(--primary-color);
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        section h4 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.3rem;
+            color: #333;
+            /* Darker than primary for sub-sub-headings */
+            margin-top: 25px;
+            margin-bottom: 10px;
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 5px;
+        }
+
+        .content-box {
+            background: var(--light-bg-color);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+
+        p,
+        li {
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+
+        ul,
+        ol {
+            margin-left: 20px;
+        }
+
+        code,
+        .inline-code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #e9ecef;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 0.95em;
+        }
+
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        th,
+        td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 700;
+        }
+
+        td {
+            background-color: var(--light-bg-color);
+        }
+
+        tr:nth-child(even) td {
+            background-color: #e8f5e9;
+            /* Light green for even rows */
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        /* Interactive Elements */
+        .interactive-tool {
+            background: #e6f7ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid var(--primary-color);
+        }
+
+        .interactive-tool label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        .interactive-tool input[type="text"],
+        .interactive-tool select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .interactive-tool button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            transition: background-color 0.3s ease;
+        }
+
+        .interactive-tool button:hover {
+            background-color: #229954;
+            /* Darker green on hover */
+        }
+
+        .interactive-tool .result-display {
+            margin-top: 15px;
+            padding: 10px;
+            background: var(--light-bg-color);
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        /* Diagrams and Images */
+        .diagram {
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+        }
+
+        .diagram img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .diagram-caption {
+            font-style: italic;
+            color: #555;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+
+        /* Callout / Highlight boxes */
+        .callout {
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 5px solid var(--accent-color);
+            background-color: #fff8e1;
+            /* Light orange/yellow */
+            border-radius: 0 4px 4px 0;
+        }
+
+        .callout.info {
+            border-left-color: var(--primary-color);
+            background-color: #e8f5e9;
+            /* Light green */
+        }
+
+        .callout.theorem {
+            border-left-color: var(--secondary-color);
+            background-color: #e4e7ea;
+        }
+
+        /* Footer and Nav Links */
+        .topic-navigation {
+            margin-top: 30px;
+            /* (mt-16 pt-10) -> Reduced margin */
+            padding-top: 20px;
+            /* (pt-10) */
+            border-top: 1px solid #e2e8f0;
+            /* (border-gray-200) */
+            display: flex;
+            flex-direction: column;
+            /* (flex-col) */
+            justify-content: space-between;
+            /* (justify-between) */
+            align-items: center;
+            /* (items-center) */
+            gap: 1rem;
+            /* (gap-4) */
+        }
+
+        @media (min-width: 640px) {
+
+            /* (sm:flex-row) */
+            .topic-navigation {
+                flex-direction: row;
+            }
+        }
+
+        .topic-navigation a {
+            display: inline-flex;
+            /* (inline-flex) */
+            align-items: center;
+            /* (items-center) */
+            padding: 0.75rem 1.5rem;
+            /* (px-6 py-3) */
+            background-color: #3b82f6;
+            /* (bg-blue-600) */
+            color: white;
+            /* (text-white) */
+            border-radius: 9999px;
+            /* (rounded-full) */
+            text-decoration: none;
+            font-weight: 500;
+            /* (font-medium) */
+            font-size: 0.875rem;
+            /* (text-sm) */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            /* (shadow-md) */
+            transition: all 0.3s ease-in-out;
+            /* (transition-all) */
+        }
+
+        .topic-navigation a:hover {
+            background-color: #2563eb;
+            /* (hover:bg-blue-700) */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            /* (hover:shadow-lg) */
+        }
+
+        /* Focus styles can be added if needed, mimicking Tailwind focus rings would be more complex */
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            background: var(--secondary-color);
+            color: #ecf0f1;
+            margin-top: 0;
+            /* Removed top margin as it's now part of the last section's bottom */
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header.main-header h1 {
+                font-size: 2rem;
+            }
+
+            header.main-header .subtitle {
+                font-size: 1rem;
+            }
+
+            nav.toc ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav.toc ul li a {
+                display: block;
+                width: 100%;
+                text-align: center;
+            }
+
+            section h2 {
+                font-size: 1.8rem;
+            }
+
+            section h3 {
+                font-size: 1.4rem;
+            }
+
+            .eduvishion-logo {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin: 0 auto 10px;
+                text-shadow: none;
+            }
+
+            .eduvishion-logo .text-white {
+                color: #fff !important;
+            }
+
+            header.main-header {
+                padding-top: 20px;
+            }
+        }
+
+        .truth-table-output table {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="main-header">
+        <div class="eduvishion-logo">
+            <div class="text-2xl font-bold">
+                <a href="#" class="flex items-center group"> <!-- Placeholder link -->
+                    <span class="text-white">Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span class="text-white">ision</span>
+                </a>
+            </div>
+        </div>
+        <div class="container">
+            <h1>Boolean Algebra</h1>
+            <p class="subtitle">Understanding Laws, Theorems, Expressions, and Simplification Techniques</p>
+        </div>
+    </header>
+
+    <nav class="toc">
+        <div class="container">
+            <ul>
+                <li><a href="#intro-boolean"><i class="fas fa-lightbulb"></i> Intro</a></li>
+                <li><a href="#basic-ops"><i class="fas fa-cogs"></i> Basic Ops</a></li>
+                <li><a href="#laws-theorems"><i class="fas fa-balance-scale"></i> Laws & Theorems</a></li>
+                <li><a href="#expressions-simplification"><i class="fas fa-calculator"></i> Expressions</a></li>
+                <li><a href="#canonical-forms"><i class="fas fa-puzzle-piece"></i> Canonical Forms</a></li>
+                <li><a href="#interactive-boolean"><i class="fas fa-magic"></i> Interactive</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section id="intro-boolean" class="container">
+            <h2><i class="fas fa-info-circle"></i> Introduction to Boolean Algebra</h2>
+            <div class="content-box">
+                <p>Boolean algebra, named after George Boole, is a branch of algebra in which the values of the
+                    variables are the truth values <strong>true</strong> and <strong>false</strong>, usually denoted as
+                    <strong>1</strong> and <strong>0</strong> respectively. It differs significantly from ordinary
+                    algebra in that Boolean constants and variables are allowed to have only these two possible values.
+                </p>
+                <p>Boolean 0 and 1 do not represent actual numerical quantities but instead represent the
+                    <strong>state</strong> of a voltage variable, or what is called its <strong>logic level</strong>.
+                    These logic levels can represent various dichotomies:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Logic 0</th>
+                            <th>Logic 1</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>False</td>
+                            <td>True</td>
+                        </tr>
+                        <tr>
+                            <td>Off</td>
+                            <td>On</td>
+                        </tr>
+                        <tr>
+                            <td>Low</td>
+                            <td>High</td>
+                        </tr>
+                        <tr>
+                            <td>No</td>
+                            <td>Yes</td>
+                        </tr>
+                        <tr>
+                            <td>Open Switch</td>
+                            <td>Closed Switch</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Boolean algebra is fundamental to the design and analysis of digital logic circuits used in computers
+                    and other electronic devices.</p>
+            </div>
+        </section>
+
+        <section id="basic-ops" class="container">
+            <h2><i class="fas fa-cogs"></i> Basic Boolean Operations</h2>
+            <div class="content-box">
+                <p>In Boolean algebra, there are three basic logic operations: <strong>OR</strong>,
+                    <strong>AND</strong>, and <strong>NOT</strong> (complement). Logic gates are digital circuits that
+                    implement these operations.</p>
+
+                <h3>NOT Operation (Complement)</h3>
+                <p>The NOT operation inverts the input. If the input is 0, the output is 1, and if the input is 1, the
+                    output is 0. It is represented by an overbar (<code class="inline-code">Ā</code>), a prime (<code
+                        class="inline-code">A'</code>), or a tilde (<code class="inline-code">~A</code>).</p>
+                <h4>Truth Table for NOT:</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Input A</th>
+                            <th>Output Ā</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="diagram">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Not_ANSI_Labelled.svg/150px-Not_ANSI_Labelled.svg.png"
+                        alt="NOT Gate Symbol">
+                    <p class="diagram-caption">NOT Gate Symbol</p>
+                </div>
+
+                <h3>AND Operation</h3>
+                <p>The AND operation produces an output of 1 only if all its inputs are 1. Otherwise, the output is 0.
+                    It is represented by a dot (<code class="inline-code">A · B</code>), by juxtaposition (<code
+                        class="inline-code">AB</code>), or by the symbol <code class="inline-code">&</code>.</p>
+                <h4>Truth Table for AND (2 inputs):</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Input A</th>
+                            <th>Input B</th>
+                            <th>Output A · B</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="diagram">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/And_ANSI_Labelled.svg/150px-And_ANSI_Labelled.svg.png"
+                        alt="AND Gate Symbol">
+                    <p class="diagram-caption">AND Gate Symbol</p>
+                </div>
+
+                <h3>OR Operation</h3>
+                <p>The OR operation produces an output of 1 if at least one of its inputs is 1. The output is 0 only if
+                    all inputs are 0. It is represented by a plus sign (<code class="inline-code">A + B</code>) or by
+                    the symbol <code class="inline-code">|</code>.</p>
+                <h4>Truth Table for OR (2 inputs):</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Input A</th>
+                            <th>Input B</th>
+                            <th>Output A + B</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="diagram">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Or_ANSI_Labelled.svg/150px-Or_ANSI_Labelled.svg.png"
+                        alt="OR Gate Symbol">
+                    <p class="diagram-caption">OR Gate Symbol</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="laws-theorems" class="container">
+            <h2><i class="fas fa-balance-scale"></i> Boolean Laws and Theorems</h2>
+            <div class="content-box">
+                <p>Boolean algebra is governed by a set of laws and theorems that allow for the manipulation and
+                    simplification of Boolean expressions. These are fundamental for digital circuit design.</p>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Law/Theorem Name</th>
+                                <th>OR Form (Summing)</th>
+                                <th>AND Form (Product)</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Identity Law</strong></td>
+                                <td><code class="inline-code">A + 0 = A</code></td>
+                                <td><code class="inline-code">A · 1 = A</code></td>
+                                <td>Adding 0 or ANDing with 1 doesn't change the variable.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Null (Annihilation / Dominance) Law</strong></td>
+                                <td><code class="inline-code">A + 1 = 1</code></td>
+                                <td><code class="inline-code">A · 0 = 0</code></td>
+                                <td>ORing with 1 results in 1; ANDing with 0 results in 0.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Idempotent Law</strong></td>
+                                <td><code class="inline-code">A + A = A</code></td>
+                                <td><code class="inline-code">A · A = A</code></td>
+                                <td>Combining a variable with itself doesn't change it.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Inverse (Complement) Law</strong></td>
+                                <td><code class="inline-code">A + Ā = 1</code></td>
+                                <td><code class="inline-code">A · Ā = 0</code></td>
+                                <td>A variable combined with its complement yields a constant.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Commutative Law</strong></td>
+                                <td><code class="inline-code">A + B = B + A</code></td>
+                                <td><code class="inline-code">A · B = B · A</code></td>
+                                <td>The order of variables doesn't matter.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Associative Law</strong></td>
+                                <td><code class="inline-code">(A + B) + C = A + (B + C)</code></td>
+                                <td><code class="inline-code">(A · B) · C = A · (B · C)</code></td>
+                                <td>Grouping of variables doesn't matter for same operations.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Distributive Law</strong></td>
+                                <td><code class="inline-code">A · (B + C) = A·B + A·C</code></td>
+                                <td><code class="inline-code">A + (B · C) = (A + B) · (A + C)</code></td>
+                                <td>One operation can be distributed over another. The second form is unique to Boolean
+                                    algebra.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Absorption Law</strong></td>
+                                <td><code class="inline-code">A + A·B = A</code></td>
+                                <td><code class="inline-code">A · (A + B) = A</code></td>
+                                <td>Simplifies expressions where a variable is combined with a term containing itself.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Involution Law</strong></td>
+                                <td colspan="2" style="text-align:center;"><code class="inline-code">(Ā)' = A</code> or
+                                    <code class="inline-code">Ā̄ = A</code></td>
+                                <td>Double negation cancels out.</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2"><strong>De Morgan's Theorems</strong></td>
+                                <td><code class="inline-code">(A + B)' = Ā · B̄</code></td>
+                                <td><code class="inline-code">(A · B)' = Ā + B̄</code></td>
+                                <td rowspan="2">Relates the complement of a combination to the combination of
+                                    complements. Crucial for converting SOP to POS and gate equivalencies.</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline-code">(A + B + C + ...)' = Ā·B̄·C̄·...</code></td>
+                                <td><code class="inline-code">(A · B · C · ...)' = Ā+B̄+C̄+...</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4>Illustrating De Morgan's Theorem:</h4>
+                <p><strong>(A + B)' = Ā · B̄</strong> (NOR is equivalent to AND of inverted inputs)</p>
+                <div class="diagram">
+                    <!-- Placeholder for DeMorgan's diagram 1. Ideally replace with an actual image. -->
+                    <p>Diagram: NOR gate symbol == AND gate symbol with inverted inputs.</p>
+                    <img src="https://i.stack.imgur.com/v4TqW.png" alt="DeMorgan's Law (A+B)' = A'.B'"
+                        style="max-width:300px;">
+                    <p class="diagram-caption">A NOR gate is equivalent to an AND gate with inverted inputs.</p>
+                </div>
+                <p><strong>(A · B)' = Ā + B̄</strong> (NAND is equivalent to OR of inverted inputs)</p>
+                <div class="diagram">
+                    <!-- Placeholder for DeMorgan's diagram 2 -->
+                    <p>Diagram: NAND gate symbol == OR gate symbol with inverted inputs.</p>
+                    <img src="https://i.stack.imgur.com/38GjS.png" alt="DeMorgan's Law (A.B)' = A'+B'"
+                        style="max-width:300px;">
+                    <p class="diagram-caption">A NAND gate is equivalent to an OR gate with inverted inputs.</p>
+                </div>
+
+                <h3>Duality Principle</h3>
+                <p>The duality principle is an important property of Boolean algebra. It states that if a Boolean
+                    expression is valid, its dual is also valid. The dual of an expression is obtained by:</p>
+                <ol>
+                    <li>Interchanging OR (+) and AND (·) operators.</li>
+                    <li>Interchanging 0s and 1s.</li>
+                    <li>Leaving variables unchanged (or their complements).</li>
+                </ol>
+                <p>Example: The dual of <code class="inline-code">A + (B · C) = (A + B) · (A + C)</code> (Distributive
+                    Law) is <code class="inline-code">A · (B + C) = (A · B) + (A · C)</code>.</p>
+                <p>Notice how many laws in the table above come in dual pairs (e.g., Identity, Null, Associative,
+                    Distributive, Absorption, De Morgan's).</p>
+            </div>
+        </section>
+
+        <section id="expressions-simplification" class="container">
+            <h2><i class="fas fa-calculator"></i> Boolean Expressions & Simplification</h2>
+            <div class="content-box">
+                <h3>Implementing Circuits from Boolean Expressions</h3>
+                <p>If the operation of a circuit is defined by a Boolean expression, a logic circuit diagram can be
+                    implemented directly from that expression. Each term in the expression corresponds to a set of logic
+                    gates.</p>
+                <p>Example: <code class="inline-code">Y = AC + B'C + A'BC</code></p>
+                <ul>
+                    <li>This expression has three product terms (AC, B'C, A'BC) which are ORed together.</li>
+                    <li>This implies a three-input OR gate for the final output.</li>
+                    <li>Each input to the OR gate is an AND product term:
+                        <ul>
+                            <li>AC requires a 2-input AND gate.</li>
+                            <li>B'C requires a 2-input AND gate and an inverter for B.</li>
+                            <li>A'BC requires a 3-input AND gate and an inverter for A.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="diagram">
+                    <p>Logic Circuit for Y = AC + B'C + A'BC</p>
+                    <!-- Replace with actual diagram from user data: 4.3 Implementing Circuits... -->
+                    <img src="https://i.imgur.com/eU2QW9X.png" alt="Logic Circuit for Y = AC + B'C + A'BC"
+                        style="max-width:450px;">
+                    <p class="diagram-caption">Circuit implementation for Y = AC + B'C + A'BC.</p>
+                </div>
+
+                <h3>Simplification Techniques</h3>
+                <p>Boolean expressions can often be simplified using the laws and theorems of Boolean algebra.
+                    Simplification reduces the number of gates and inputs required to implement the circuit, leading to
+                    lower cost, less power consumption, and potentially faster operation.</p>
+                <p>Example: Simplify <code class="inline-code">G = xyz + x'yz + xy'z</code></p>
+                <ol>
+                    <li><strong>Use Distributive Law (or Consensus Theorem implicitly):</strong>
+                        <code class="inline-code">G = yz(x + x') + xy'z</code>
+                    </li>
+                    <li><strong>Use Inverse Law (x + x' = 1):</strong>
+                        <code class="inline-code">G = yz(1) + xy'z</code>
+                    </li>
+                    <li><strong>Use Identity Law (A · 1 = A):</strong>
+                        <code class="inline-code">G = yz + xy'z</code>
+                    </li>
+                    <li><strong>Use Distributive Law again:</strong>
+                        <code class="inline-code">G = z(y + xy')</code>
+                    </li>
+                    <li><strong>Apply special distributive form (A + A'B = A + B):</strong> Here, <code
+                            class="inline-code">y + xy' = y + x</code>
+                        <code class="inline-code">G = z(y + x)</code> or <code class="inline-code">G = xz + yz</code>
+                    </li>
+                </ol>
+                <p>The simplified expression <code class="inline-code">G = xz + yz</code> requires less hardware to
+                    implement than the original.</p>
+                <div class="callout info">
+                    <p>Systematic simplification methods like Karnaugh Maps (K-maps) are often used for more complex
+                        expressions, especially when aiming for minimal forms.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="canonical-forms" class="container">
+            <h2><i class="fas fa-puzzle-piece"></i> Canonical and Standard Forms</h2>
+            <div class="content-box">
+                <p>Boolean functions can be expressed in several standard or canonical forms. Canonical forms are unique
+                    representations of a Boolean function. The two main canonical forms are Sum of Products (SOP) and
+                    Product of Sums (POS).</p>
+
+                <h3>Minterms and Maxterms</h3>
+                <h4>Minterms</h4>
+                <p>A <strong>minterm</strong> is a product term (AND term) that includes every variable of the function,
+                    either in its complemented or uncomplemented form. For n variables, there are 2<sup>n</sup> possible
+                    minterms. A minterm evaluates to 1 for only one specific combination of input values.</p>
+                <p>Minterms are denoted by <code class="inline-code">m<sub>i</sub></code>, where 'i' is the decimal
+                    equivalent of the binary input combination for which the minterm is 1. A variable appears
+                    uncomplemented if its value is 1 in the input combination, and complemented if its value is 0.</p>
+
+                <h4>Maxterms</h4>
+                <p>A <strong>maxterm</strong> is a sum term (OR term) that includes every variable of the function,
+                    either in its complemented or uncomplemented form. For n variables, there are 2<sup>n</sup> possible
+                    maxterms. A maxterm evaluates to 0 for only one specific combination of input values.</p>
+                <p>Maxterms are denoted by <code class="inline-code">M<sub>i</sub></code>, where 'i' is the decimal
+                    equivalent of the binary input combination for which the maxterm is 0. A variable appears
+                    uncomplemented if its value is 0 in the input combination, and complemented if its value is 1.</p>
+
+                <h4>Table of Minterms and Maxterms for 3 Variables (A, B, C):</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>A</th>
+                            <th>B</th>
+                            <th>C</th>
+                            <th>Minterm</th>
+                            <th>Designation</th>
+                            <th>Maxterm</th>
+                            <th>Designation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>A'B'C'</td>
+                            <td>m<sub>0</sub></td>
+                            <td>A+B+C</td>
+                            <td>M<sub>0</sub></td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>A'B'C</td>
+                            <td>m<sub>1</sub></td>
+                            <td>A+B+C'</td>
+                            <td>M<sub>1</sub></td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>A'BC'</td>
+                            <td>m<sub>2</sub></td>
+                            <td>A+B'+C</td>
+                            <td>M<sub>2</sub></td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>A'BC</td>
+                            <td>m<sub>3</sub></td>
+                            <td>A+B'+C'</td>
+                            <td>M<sub>3</sub></td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>AB'C'</td>
+                            <td>m<sub>4</sub></td>
+                            <td>A'+B+C</td>
+                            <td>M<sub>4</sub></td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>AB'C</td>
+                            <td>m<sub>5</sub></td>
+                            <td>A'+B+C'</td>
+                            <td>M<sub>5</sub></td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>ABC'</td>
+                            <td>m<sub>6</sub></td>
+                            <td>A'+B'+C</td>
+                            <td>M<sub>6</sub></td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>ABC</td>
+                            <td>m<sub>7</sub></td>
+                            <td>A'+B'+C'</td>
+                            <td>M<sub>7</sub></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Note: Minterm m<sub>i</sub> is the complement of Maxterm M<sub>i</sub> (i.e., m<sub>i</sub>' =
+                    M<sub>i</sub> and M<sub>i</sub>' = m<sub>i</sub>).</p>
+
+                <h3>Sum of Products (SOP) Form</h3>
+                <p>A Boolean expression is in SOP form if it is expressed as a sum (ORing) of one or more product
+                    (ANDing) terms. Example: <code class="inline-code">F = AB + A'C + ABC'</code>.</p>
+                <h4>Canonical SOP Form (Sum of Minterms)</h4>
+                <p>This is a special SOP form where all terms are minterms. Any Boolean function can be expressed as a
+                    sum of the minterms for which the function evaluates to 1.</p>
+                <p>Example: If a function F(A,B,C) is 1 for input combinations 011 (m<sub>3</sub>), 110 (m<sub>6</sub>),
+                    and 111 (m<sub>7</sub>), then its canonical SOP is:</p>
+                <p><code
+                        class="inline-code">F = m<sub>3</sub> + m<sub>6</sub> + m<sub>7</sub> = A'BC + ABC' + ABC</code>
+                </p>
+                <p>This is often written using sigma notation: <code class="inline-code">F(A,B,C) = Σm(3, 6, 7)</code>.
+                </p>
+                <h4>Constructing SOP from a Truth Table:</h4>
+                <ol>
+                    <li>Identify all rows in the truth table where the function output is 1.</li>
+                    <li>For each such row, write down the minterm.
+                        <ul>
+                            <li>If an input variable is 0, use its complement in the minterm.</li>
+                            <li>If an input variable is 1, use its uncomplemented form.</li>
+                        </ul>
+                    </li>
+                    <li>OR all these minterms together.</li>
+                </ol>
+                <div class="diagram">
+                    <p>Example: Constructing SOP from a Truth Table.</p>
+                    <!-- Based on image: Construct SOP from a Truth Table.png -->
+                    <img src="https://i.imgur.com/J8yYm8d.png" alt="SOP from Truth Table Example"
+                        style="max-width:500px;">
+                    <p class="diagram-caption">F = A'B'C + A'BC + AB'C' = Σm(1,3,4)</p>
+                </div>
+                <h4>Minimal SOP Form</h4>
+                <p>This is an SOP form where the expression has been simplified to contain the minimum number of terms
+                    and the minimum number of literals in each term. Karnaugh Maps (K-maps) or Boolean algebra theorems
+                    are used to obtain the minimal SOP form from canonical SOP or a truth table.</p>
+                <div class="diagram">
+                    <p>K-map example for simplification to Minimal SOP.</p>
+                    <!-- Based on image: Minimal SOP Form Its K-map is given below.png -->
+                    <img src="https://i.imgur.com/Rk4J3yN.png" alt="K-map for Minimal SOP" style="max-width:400px;">
+                    <p class="diagram-caption">K-map leading to minimal SOP: F = B'C + A'B</p>
+                </div>
+
+                <h3>Product of Sums (POS) Form</h3>
+                <p>A Boolean expression is in POS form if it is expressed as a product (ANDing) of one or more sum
+                    (ORing) terms. Example: <code class="inline-code">F = (A+B) · (A'+C) · (A+B+C')</code>.</p>
+                <h4>Canonical POS Form (Product of Maxterms)</h4>
+                <p>This is a special POS form where all terms are maxterms. Any Boolean function can be expressed as a
+                    product of the maxterms for which the function evaluates to 0.</p>
+                <p>Example: If a function F(A,B,C) is 0 for input combinations 000 (M<sub>0</sub>), 100 (M<sub>4</sub>),
+                    and 101 (M<sub>5</sub>), then its canonical POS is:</p>
+                <p><code
+                        class="inline-code">F = M<sub>0</sub> · M<sub>4</sub> · M<sub>5</sub> = (A+B+C) · (A'+B+C) · (A'+B+C')</code>
+                </p>
+                <p>This is often written using pi notation: <code class="inline-code">F(A,B,C) = ΠM(0, 4, 5)</code>.</p>
+                <h4>Constructing POS from a Truth Table:</h4>
+                <ol>
+                    <li>Identify all rows in the truth table where the function output is 0.</li>
+                    <li>For each such row, write down the maxterm.
+                        <ul>
+                            <li>If an input variable is 0, use its uncomplemented form in the maxterm.</li>
+                            <li>If an input variable is 1, use its complement.</li>
+                        </ul>
+                    </li>
+                    <li>AND all these maxterms together.</li>
+                </ol>
+                <div class="diagram">
+                    <p>Example: Constructing POS from a Truth Table.</p>
+                    <!-- Based on image: Product of Sums (POS).png -->
+                    <img src="https://i.imgur.com/rB4hLqT.png" alt="POS from Truth Table Example"
+                        style="max-width:600px;">
+                    <p class="diagram-caption">F = (A+B+C) (A+B'+C) (A'+B'+C) (A'+B'+C') = ΠM(0,2,6,7)</p>
+                </div>
+                <h4>Minimal POS Form</h4>
+                <p>Similar to minimal SOP, this is a POS form with the minimum number of terms and literals, obtained
+                    using K-maps (grouping 0s) or Boolean algebra.</p>
+
+                <h3>Conversion Between Canonical Forms</h3>
+                <ul>
+                    <li><strong>SOP to POS:</strong> If <code
+                            class="inline-code">F = Σm(i<sub>1</sub>, i<sub>2</sub>, ...)</code>, then <code
+                            class="inline-code">F = ΠM(j<sub>1</sub>, j<sub>2</sub>, ...)</code> where j's are the
+                        indices not present in the minterm list.
+                        Also, <code class="inline-code">F' = Σm(j<sub>1</sub>, j<sub>2</sub>, ...)</code>. Then apply
+                        DeMorgan's to F' to get F in POS: <code
+                            class="inline-code">F = (F')' = (Σm(j<sub>k</sub>))' = Π(m<sub>jk</sub>)' = ΠM<sub>jk</sub></code>.
+                    </li>
+                    <li><strong>POS to SOP:</strong> Similarly, if <code
+                            class="inline-code">F = ΠM(j<sub>1</sub>, j<sub>2</sub>, ...)</code>, then <code
+                            class="inline-code">F = Σm(i<sub>1</sub>, i<sub>2</sub>, ...)</code> where i's are the
+                        indices not present in the maxterm list.</li>
+                </ul>
+                <p>Example: Given <code class="inline-code">F(A,B,C) = Σm(1, 2, 3, 5)</code> from the K-map image.</p>
+                <p>The missing minterm indices (where F=0) are 0, 4, 6, 7.
+                    So, <code class="inline-code">F(A,B,C) = ΠM(0, 4, 6, 7)</code>.</p>
+                <p><code class="inline-code">M<sub>0</sub> = (A+B+C)</code>, <code
+                        class="inline-code">M<sub>4</sub> = (A'+B+C)</code>, <code
+                        class="inline-code">M<sub>6</sub> = (A'+B'+C)</code>, <code
+                        class="inline-code">M<sub>7</sub> = (A'+B'+C')</code>.</p>
+                <p>Therefore, <code class="inline-code">F = (A+B+C)(A'+B+C)(A'+B'+C)(A'+B'+C')</code>.</p>
+
+                <h3>SOP vs. POS Comparison</h3>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Characteristic</th>
+                                <th>SOP (Sum of Products)</th>
+                                <th>POS (Product of Sums)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Basic Terms</td>
+                                <td>Product terms (ANDed literals)</td>
+                                <td>Sum terms (ORed literals)</td>
+                            </tr>
+                            <tr>
+                                <td>Combining Terms</td>
+                                <td>ORing of product terms</td>
+                                <td>ANDing of sum terms</td>
+                            </tr>
+                            <tr>
+                                <td>Canonical Element</td>
+                                <td>Minterm (m)</td>
+                                <td>Maxterm (M)</td>
+                            </tr>
+                            <tr>
+                                <td>Representation</td>
+                                <td>Σ (Summation of minterms)</td>
+                                <td>Π (Product of maxterms)</td>
+                            </tr>
+                            <tr>
+                                <td>Focus for Truth Table</td>
+                                <td>Rows where output is 1</td>
+                                <td>Rows where output is 0</td>
+                            </tr>
+                            <tr>
+                                <td>Logic Implementation</td>
+                                <td>AND gates followed by an OR gate (AND-OR logic)</td>
+                                <td>OR gates followed by an AND gate (OR-AND logic)</td>
+                            </tr>
+                            <tr>
+                                <td>Variable in Term (from Truth Table)</td>
+                                <td>Input 0 → Complemented, Input 1 → Uncomplemented</td>
+                                <td>Input 0 → Uncomplemented, Input 1 → Complemented</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="interactive-boolean" class="container">
+            <h2><i class="fas fa-magic"></i> Interactive Tool: Truth Table Generator</h2>
+            <div class="content-box interactive-tool">
+                <p>Enter a simple Boolean expression with variables A, B (and optionally C). Use <code
+                        class="inline-code">+</code> for OR, <code class="inline-code">*</code> or juxtaposition (e.g.,
+                    AB) for AND, and <code class="inline-code">'</code> for NOT (e.g., A'). Parentheses <code
+                        class="inline-code">()</code> can be used for grouping.</p>
+                <label for="booleanExpression">Boolean Expression:</label>
+                <input type="text" id="booleanExpression" placeholder="e.g., A*B + C'">
+                <label for="numVariables">Number of Variables:</label>
+                <select id="numVariables">
+                    <option value="2">2 (A, B)</option>
+                    <option value="3" selected>3 (A, B, C)</option>
+                </select>
+                <button onclick="generateTruthTable()"><i class="fas fa-table"></i> Generate Table</button>
+                <div id="truthTableResult" class="result-display" style="margin-top: 20px; overflow-x:auto;"></div>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="topic-navigation">
+                <a href="topic-1.html">
+                    ← Previous Topic: Number Systems & Conversions
+                </a>
+                <a href="topic-3.html"> <!-- Assuming topic-3.html is the next one -->
+                    Next Topic: Logic Gates →
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© <span id="currentYear"></span> Eduvision. A High-Quality Resource on Boolean Algebra.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        function evaluateBooleanExpression(expression, values) {
+            // Replace variables with their numerical values (0 or 1)
+            let expr = expression.replace(/A/g, values.A)
+                .replace(/B/g, values.B)
+                .replace(/C/g, values.C !== undefined ? values.C : '0'); // Default C to 0 if not present
+
+            // Handle NOT: A' becomes (1-A)
+            // This needs to be done carefully to respect operator precedence.
+            // A simple approach for A', B', C':
+            expr = expr.replace(/([A-Z])'/g, "(1-$1)"); // e.g. A' becomes (1-A)
+
+            // Replace AND (juxtaposition and *) and OR (+)
+            // JavaScript's eval can handle + and *, but juxtaposition (AB) needs explicit *
+            // This is a simplified parser and might not handle all complex cases perfectly.
+            // For AB, A*B, A B etc.
+            expr = expr.replace(/([01\)])([01\(A-Z])/g, '$1*$2'); // Add * for juxtaposition: 1A -> 1*A, )A -> )*A
+            expr = expr.replace(/([A-Z])([01\(A-Z])/g, '$1*$2'); // Add * for juxtaposition: AA -> A*A, AB -> A*B
+
+
+            // Ensure * is used for AND
+            expr = expr.replace(/\*/g, '*'); // Keep explicit *
+            expr = expr.replace(/\)\(/g, ')*('); // Ensure )*(
+
+            // For + (OR), it needs to be treated as Math.max for binary logic if inputs are 0/1
+            // However, if we ensure all inputs become 0 or 1, standard arithmetic +
+            // would need to be capped at 1.  A more robust way is to use logical operators.
+
+            // This is a very simplified evaluator. Using `eval` is risky.
+            // A proper parser/evaluator for Boolean expressions is complex.
+            // For now, let's try a safer, limited approach.
+            try {
+                // Replace logical ops with JS equivalents if inputs are strictly 0/1
+                // A' -> !A (boolean) or (1-A) (arithmetic)
+                // A*B -> A && B
+                // A+B -> A || B
+
+                // Create a function string for eval
+                let funcStr = "let A=" + values.A + "; let B=" + values.B + ";";
+                if (values.C !== undefined) {
+                    funcStr += " let C=" + values.C + ";";
+                }
+
+                // Transform expression for JS logical operators
+                let jsExpr = expression;
+                // Handle NOT: X' becomes (!X)
+                jsExpr = jsExpr.replace(/([A-Z])'/g, "(!$1)");
+                // Handle AND: XY becomes (X&&Y), X*Y becomes (X&&Y)
+                jsExpr = jsExpr.replace(/([A-Z\)])\s*([A-Z\(])/g, "$1 && $2"); // Juxtaposition with space
+                jsExpr = jsExpr.replace(/([A-Z\)])([A-Z\(])/g, "$1 && $2");    // Juxtaposition no space
+                jsExpr = jsExpr.replace(/\*/g, "&&");
+                // Handle OR: X+Y becomes (X||Y)
+                jsExpr = jsExpr.replace(/\+/g, "||");
+
+                funcStr += " return (" + jsExpr + ") ? 1 : 0;";
+
+                let result = new Function(funcStr)();
+                return result;
+
+            } catch (e) {
+                console.error("Evaluation error:", e, "Expression attempted:", expression, " Values:", values);
+                return 'Err';
+            }
+        }
+
+        function generateTruthTable() {
+            const expression = document.getElementById('booleanExpression').value.trim();
+            const numVars = parseInt(document.getElementById('numVariables').value);
+            const resultDiv = document.getElementById('truthTableResult');
+
+            if (!expression) {
+                resultDiv.innerHTML = "<p style='color:red;'>Please enter a Boolean expression.</p>";
+                return;
+            }
+
+            let tableHTML = "<table class='truth-table-output'><thead><tr>";
+            const variables = ['A', 'B'];
+            if (numVars === 3) variables.push('C');
+
+            variables.forEach(v => tableHTML += `<th>${v}</th>`);
+            tableHTML += `<th>${expression}</th></tr></thead><tbody>`;
+
+            const numRows = Math.pow(2, numVars);
+
+            for (let i = 0; i < numRows; i++) {
+                tableHTML += "<tr>";
+                const values = {};
+                let temp = i;
+                for (let j = numVars - 1; j >= 0; j--) {
+                    values[variables[j]] = (temp % 2);
+                    temp = Math.floor(temp / 2);
+                }
+
+                // Display inputs in standard order A, B, C
+                variables.forEach(v_header => {
+                    // Find the correct bit for current header
+                    let bit_index_map;
+                    if (numVars === 2) bit_index_map = { 'A': 1, 'B': 0 }; // A is MSB for 2 vars
+                    else bit_index_map = { 'A': 2, 'B': 1, 'C': 0 }; // A is MSB for 3 vars
+
+                    let current_val = (i >> bit_index_map[v_header]) & 1;
+                    values[v_header] = current_val; // ensure values object is correct for eval
+                    tableHTML += `<td>${current_val}</td>`;
+                });
+
+                const output = evaluateBooleanExpression(expression, values);
+                tableHTML += `<td>${output}</td></tr>`;
+            }
+
+            tableHTML += "</tbody></table>";
+            resultDiv.innerHTML = tableHTML;
+        }
+    </script>
+
+</body>
+
+</html>

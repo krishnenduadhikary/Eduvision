@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combinational Circuits | Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Eduvision Logo Specific Styles */
+        .eduvishion-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvishion-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .eduvishion-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvishion-logo .text-yellow-300 {
+            color: #fde047 !important;
+        }
+
+        .eduvishion-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+        }
+
+        .eduvishion-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvishion-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* General Styles */
+        :root {
+            --primary-color: #8e44ad;
+            /* Purple for Combinational Circuits */
+            --secondary-color: #2c3e50;
+            /* Dark Blue */
+            --accent-color: #e67e22;
+            /* Orange */
+            --text-color: #333;
+            --bg-color: #f5f3f7;
+            /* Light Lavender */
+            --light-bg-color: #ffffff;
+            --border-color: #d2b4de;
+            /* Light Purple */
+            --header-bg: #2c3e50;
+            /* Dark background for header */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.7;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header.main-header {
+            background: var(--header-bg);
+            color: #fff;
+            padding: 60px 0 20px;
+            text-align: center;
+            position: relative;
+            min-height: 120px;
+        }
+
+        header.main-header h1 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        header.main-header .subtitle {
+            font-size: 1.2rem;
+            color: #bdc3c7;
+        }
+
+        /* Navigation / Table of Contents */
+        nav.toc {
+            background: var(--primary-color);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        nav.toc ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        nav.toc ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 12px;
+            /* Slightly reduced padding for more items */
+            font-weight: 700;
+            transition: background-color 0.3s ease;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        nav.toc ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Sections */
+        section {
+            padding: 40px 0;
+            /* Slightly reduced padding */
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        section:last-child {
+            border-bottom: none;
+        }
+
+        section h2 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.2rem;
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        section h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        section h3 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-top: 30px;
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #eee;
+            /* Light underline for H3 */
+        }
+
+        section h4 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.4rem;
+            /* Increased size for sub-topics */
+            color: var(--secondary-color);
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .content-box {
+            background: var(--light-bg-color);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+
+        p,
+        li {
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+
+        ul,
+        ol {
+            margin-left: 20px;
+        }
+
+        code,
+        .inline-code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f3e5f5;
+            /* Light purple for code */
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 0.95em;
+            color: #6a1b9a;
+            /* Darker purple */
+        }
+
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        th,
+        td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 700;
+        }
+
+        td {
+            background-color: var(--light-bg-color);
+        }
+
+        tr:nth-child(even) td {
+            background-color: #e1bee7;
+            /* Lighter purple for even rows */
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        /* Interactive Elements */
+        .interactive-tool {
+            background: #f3e5f5;
+            /* Light purple */
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid var(--primary-color);
+        }
+
+        .interactive-tool label,
+        .interactive-tool select,
+        .interactive-tool input {
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .interactive-tool input[type="number"] {
+            width: 60px;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .interactive-tool button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .interactive-tool button:hover {
+            background-color: #7b2499;
+            /* Darker purple */
+        }
+
+        .interactive-tool .result-display {
+            margin-top: 15px;
+            padding: 10px;
+            background: var(--light-bg-color);
+            border-radius: 4px;
+            border: 1px solid #c3c3c3;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        /* Diagrams and Images */
+        .diagram {
+            text-align: center;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            max-width: 95%;
+            /* Allow slightly wider diagrams */
+        }
+
+        .diagram img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            background-color: #000;
+            /* For images with black backgrounds */
+        }
+
+        .diagram img.light-bg-img {
+            /* Add this class to images that have light backgrounds */
+            background-color: transparent;
+        }
+
+        .diagram-caption {
+            font-style: italic;
+            color: #555;
+            margin-top: 8px;
+            font-size: 0.9em;
+        }
+
+        .diagram-set {
+            /* For side-by-side diagrams */
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .diagram-set .diagram {
+            flex: 1;
+            min-width: 300px;
+            /* Adjust as needed */
+            margin: 5px;
+        }
+
+        /* Callout / Highlight boxes */
+        .callout {
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 5px solid var(--accent-color);
+            background-color: #fff3e0;
+            /* Light orange */
+            border-radius: 0 4px 4px 0;
+        }
+
+        .callout.info {
+            border-left-color: var(--primary-color);
+            background-color: #f3e5f5;
+            /* Light purple */
+        }
+
+        .callout.application ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        /* Footer and Nav Links */
+        .topic-navigation {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .topic-navigation {
+                flex-direction: row;
+            }
+        }
+
+        .topic-navigation a {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background-color: #3b82f6;
+            /* Blue for nav consistency */
+            color: white;
+            border-radius: 9999px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .topic-navigation a:hover {
+            background-color: #2563eb;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            background: var(--secondary-color);
+            color: #ecf0f1;
+            margin-top: 0;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header.main-header h1 {
+                font-size: 2rem;
+            }
+
+            header.main-header .subtitle {
+                font-size: 1rem;
+            }
+
+            nav.toc ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav.toc ul li a {
+                display: block;
+                width: 100%;
+                text-align: center;
+                font-size: 1rem;
+            }
+
+            section h2 {
+                font-size: 1.8rem;
+            }
+
+            section h3 {
+                font-size: 1.6rem;
+            }
+
+            .eduvishion-logo {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin: 0 auto 10px;
+                text-shadow: none;
+            }
+
+            .eduvishion-logo .text-white {
+                color: #fff !important;
+            }
+
+            header.main-header {
+                padding-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="main-header">
+        <div class="eduvishion-logo">
+            <div class="text-2xl font-bold">
+                <a href="#" class="flex items-center group">
+                    <span class="text-white">Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span class="text-white">ision</span>
+                </a>
+            </div>
+        </div>
+        <div class="container">
+            <h1>Combinational Logic Circuits</h1>
+            <p class="subtitle">Designing and Analyzing MUX, DEMUX, Decoders, Encoders, Adders, and Subtractors</p>
+        </div>
+    </header>
+
+    <nav class="toc">
+        <div class="container">
+            <ul>
+                <li><a href="#intro-combo"><i class="fas fa-project-diagram"></i> Intro</a></li>
+                <li><a href="#mux"><i class="fas fa-random"></i> MUX</a></li>
+                <li><a href="#demux"><i class="fas fa-share-alt"></i> DEMUX</a></li>
+                <li><a href="#decoder"><i class="fas fa-search"></i> Decoders</a></li>
+                <li><a href="#encoder"><i class="fas fa-keyboard"></i> Encoders</a></li>
+                <li><a href="#adders"><i class="fas fa-plus-square"></i> Adders</a></li>
+                <li><a href="#subtractors"><i class="fas fa-minus-square"></i> Subtractors</a></li>
+                <li><a href="#other-combo"><i class="fas  fa-ellipsis-h"></i> Other</a></li>
+                <li><a href="#interactive-combo"><i class="fas fa-cogs"></i> Simulate</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section id="intro-combo" class="container">
+            <h2><i class="fas fa-project-diagram"></i> Overview of Combinational Circuits</h2>
+            <div class="content-box">
+                <p>Combinational logic circuits are digital circuits where the output at any instant is determined
+                    solely by the present combination of input values. They do not have memory elements, so their past
+                    input history does not affect their current output.</p>
+                <h4>Characteristics:</h4>
+                <ul>
+                    <li>Outputs are a direct function of the current inputs.</li>
+                    <li>No feedback paths from output to input (acyclic).</li>
+                    <li>No memory elements like flip-flops are used.</li>
+                    <li>Typically constructed from basic logic gates (AND, OR, NOT) or universal gates (NAND, NOR).</li>
+                    <li>Used for tasks like data selection, routing, code conversion, and arithmetic operations.</li>
+                </ul>
+                <p>This section will cover the design and analysis of several key combinational circuits.</p>
+            </div>
+        </section>
+
+        <section id="mux" class="container">
+            <h3><i class="fas fa-random"></i> Multiplexers (MUX)</h3>
+            <div class="content-box">
+                <p>A <strong>Multiplexer</strong> (MUX), often called a data selector, means "many into one." It is a
+                    circuit used to select and route any one of several input signals to a single output line. The
+                    selection of a particular input line is controlled by a set of selection (or control) inputs.</p>
+                <div class="diagram">
+                    <!-- From "Multiplexer" block diagram -->
+                    <img src="https://i.imgur.com/YQvO7Gk.png" alt="Multiplexer Block Diagram" class="light-bg-img"
+                        style="max-width: 350px;">
+                    <p class="diagram-caption">General Block Diagram of a Multiplexer (N inputs, M control lines, 1
+                        output, where N = 2<sup>M</sup>).</p>
+                </div>
+
+                <h4>4-to-1 Multiplexer</h4>
+                <p>A 4-to-1 multiplexer has 4 data input lines (A, B, C, D), 2 control/select lines (a, b), and 1 output
+                    line (Q). The control lines determine which of the four inputs is transmitted to the output.</p>
+                <ul>
+                    <li>The output Q depends on the value of the control input <code class="inline-code">ab</code>.</li>
+                    <li>When <code class="inline-code">ab = 00</code>, input A is selected (Y=A).</li>
+                    <li>When <code class="inline-code">ab = 01</code>, input B is selected (Y=B).</li>
+                    <li>When <code class="inline-code">ab = 10</code>, input C is selected (Y=C).</li>
+                    <li>When <code class="inline-code">ab = 11</code>, input D is selected (Y=D).</li>
+                </ul>
+                <p>Boolean Expression for a 4:1 MUX: <code class="inline-code">Q = a'b'A + a'bB + ab'C + abD</code></p>
+                <div class="diagram-set">
+                    <div class="diagram">
+                        <p>NAND Gate Implementation</p>
+                        <!-- From "4:1 Multiplexer ... NAND Gates" diagram -->
+                        <img src="https://i.imgur.com/U5x9g3P.png" alt="4:1 MUX NAND Implementation"
+                            class="light-bg-img" style="max-width: 400px;">
+                        <p class="diagram-caption">4:1 MUX using NAND gates, with truth table and switch analogy.</p>
+                    </div>
+                    <div class="diagram">
+                        <p>AND-OR Gate Implementation</p>
+                        <!-- From "4:1 Multiplexer ... Inverters, AND gate, OR gate" diagram -->
+                        <img src="https://i.imgur.com/f8W2d6B.png" alt="4:1 MUX AND-OR Implementation"
+                            class="light-bg-img" style="max-width: 400px;">
+                        <p class="diagram-caption">4:1 MUX using AND, OR, and NOT gates.</p>
+                    </div>
+                </div>
+
+                <h4>Applications of Multiplexers:</h4>
+                <div class="callout callout.application">
+                    <ul>
+                        <li><strong>Data Selection/Routing:</strong> Selecting one data source from multiple sources.
+                        </li>
+                        <li><strong>Parallel-to-Serial Conversion:</strong> Converting parallel data into a serial
+                            stream.</li>
+                        <li><strong>Logic Function Implementation:</strong> A MUX can implement any Boolean function of
+                            n variables (using an n-to-1 MUX with select lines as variables and data inputs tied to 0,
+                            1, or other variables).</li>
+                        <li>Communication systems (e.g., telephone networks)</li>
+                        <li>Computer memory addressing</li>
+                        <li>Transmission from computer systems (e.g., satellite)</li>
+                        <li>Data bus control</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="demux" class="container">
+            <h3><i class="fas fa-share-alt"></i> Demultiplexers (DEMUX)</h3>
+            <div class="content-box">
+                <p>A <strong>Demultiplexer</strong> (DEMUX) means "one into many." It is a circuit with one input data
+                    line and multiple output lines. It routes the single input signal to one of the many output lines,
+                    based on the value of the control/select inputs.</p>
+                <div class="diagram">
+                    <!-- From "Demultiplexer" block diagram -->
+                    <img src="https://i.imgur.com/K2tW8rH.png" alt="Demultiplexer Block Diagram" class="light-bg-img"
+                        style="max-width: 350px;">
+                    <p class="diagram-caption">General Block Diagram of a Demultiplexer (1 input, M control lines, N
+                        outputs, where N = 2<sup>M</sup>).</p>
+                </div>
+
+                <h4>1-to-4 Demultiplexer</h4>
+                <p>A 1-to-4 demultiplexer has 1 input data line (F), 2 control/select lines (a, b), and 4 output lines
+                    (A, B, C, D). The control lines determine to which output line the input F is routed. The unselected
+                    output lines remain at a default state (usually 0).</p>
+                <p>The Boolean expressions for the outputs are (assuming common input F):</p>
+                <ul>
+                    <li>A = a'b'F</li>
+                    <li>B = a'bF</li>
+                    <li>C = ab'F</li>
+                    <li>D = abF</li>
+                </ul>
+                <p>The image shows F = a'b'A + a'bB + ab'C + abD, which is the expression for a MUX. For a DEMUX with
+                    input F and outputs Y0, Y1, Y2, Y3:
+                    Y0 = S1'S0'·F, Y1 = S1'S0·F, Y2 = S1S0'·F, Y3 = S1S0·F. Let's use the provided image's logic for the
+                    circuit diagram shown.</p>
+
+                <div class="diagram-set">
+                    <div class="diagram">
+                        <p>Switch Analogy & Truth Table</p>
+                        <!-- From "1:4 Demultiplexer" diagram (switch and table) -->
+                        <img src="https://i.imgur.com/J5yN0rF.png"
+                            alt="1:4 Demultiplexer Switch Analogy and Truth Table" class="light-bg-img"
+                            style="max-width: 400px;">
+                        <p class="diagram-caption">1:4 Demux switch analogy and truth table for selected output.</p>
+                    </div>
+                    <div class="diagram">
+                        <p>Logic Gate Implementation</p>
+                        <!-- From "1:4 Demultiplexer ... Inverters, AND gate" diagram -->
+                        <img src="https://i.imgur.com/d2pQ3vE.png" alt="1:4 Demultiplexer Logic Diagram"
+                            class="light-bg-img" style="max-width: 400px;">
+                        <p class="diagram-caption">1:4 Demultiplexer using AND and NOT gates.</p>
+                    </div>
+                </div>
+                <h4>Applications of Demultiplexers:</h4>
+                <div class="callout callout.application">
+                    <ul>
+                        <li><strong>Data Distribution:</strong> Sending a single data stream to one of multiple
+                            destinations.</li>
+                        <li><strong>Serial-to-Parallel Conversion:</strong> Converting a serial data stream into
+                            parallel data.</li>
+                        <li><strong>Decoder Implementation:</strong> A demultiplexer with a constant HIGH input acts as
+                            a decoder.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="decoder" class="container">
+            <h3><i class="fas fa-search"></i> Decoders</h3>
+            <div class="content-box">
+                <p>A <strong>Decoder</strong> is a combinational logic circuit that converts coded inputs (e.g., binary)
+                    into coded outputs, where the input and output codes are different. Typically, a decoder has N input
+                    lines to handle N bits and 2<sup>N</sup> output lines to indicate the presence of one specific N-bit
+                    input combination.</p>
+                <ul>
+                    <li>A decoder circuit would often use AND gates because the output of an AND gate is "High" (1) only
+                        when all its inputs are "High." Such an output is called an "active high output."</li>
+                    <li>If NAND gates are used instead of AND gates, the selected output will be "Low" (0) only when all
+                        its inputs are "High." This is called an "active low output."</li>
+                </ul>
+                <div class="diagram">
+                    <!-- From "Decoder ... N-Inputs, 2^N-Outputs" diagram -->
+                    <img src="https://i.imgur.com/N9v0mUe.png" alt="Decoder Block Diagram" class="light-bg-img"
+                        style="max-width: 300px;">
+                    <p class="diagram-caption">General Block Diagram of a Decoder.</p>
+                </div>
+                <h4>2-to-4 Decoder</h4>
+                <p>A 2-to-4 decoder has 2 input lines (A, B) and 4 output lines (Q<sub>0</sub>, Q<sub>1</sub>,
+                    Q<sub>2</sub>, Q<sub>3</sub>). For each binary input combination, only one output line is active
+                    (typically HIGH).</p>
+                <div class="diagram-set">
+                    <div class="diagram">
+                        <p>Block Diagram & Truth Table</p>
+                        <!-- From "2:4 Decoder" (block and table) diagram -->
+                        <img src="https://i.imgur.com/gR7vW6E.png" alt="2:4 Decoder Block Diagram and Truth Table"
+                            class="light-bg-img" style="max-width: 400px;">
+                        <p class="diagram-caption">2:4 Decoder Block Diagram and Truth Table (Active HIGH outputs).</p>
+                    </div>
+                    <div class="diagram">
+                        <p>Logic Gate Implementation</p>
+                        <!-- From "2:4 Decoder" (logic circuit) diagram -->
+                        <img src="https://i.imgur.com/sT1wY3X.png" alt="2:4 Decoder Logic Diagram" class="light-bg-img"
+                            style="max-width: 400px;">
+                        <p class="diagram-caption">2:4 Decoder using AND and NOT gates.</p>
+                    </div>
+                </div>
+                <h4>Applications of Decoders:</h4>
+                <div class="callout callout.application">
+                    <ul>
+                        <li><strong>Memory Address Decoding:</strong> Selecting a specific memory location.</li>
+                        <li><strong>Data Demultiplexing:</strong> A decoder with an enable input can function as a
+                            demultiplexer.</li>
+                        <li><strong>Display Driving:</strong> Such as driving a 7-segment display (e.g., BCD to
+                            7-segment decoder).</li>
+                        <li>Instruction decoding in CPUs.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="encoder" class="container">
+            <h3><i class="fas fa-keyboard"></i> Encoders</h3>
+            <div class="content-box">
+                <p>An <strong>Encoder</strong> is a combinational logic circuit that performs the inverse operation of a
+                    decoder. It converts information from one format or code to another. It has 2<sup>N</sup> (or fewer)
+                    input lines and N output lines. Typically, only one input line is active at a time, and the encoder
+                    produces an N-bit binary code corresponding to the active input.</p>
+                <ul>
+                    <li>The purpose of an encoder is standardization, security, or saving space by shrinking size.</li>
+                    <li>Encoders accept one or more inputs and generate a multibit output code.</li>
+                </ul>
+                <div class="diagram">
+                    <!-- From "Encoder ... 2^N-Inputs, N-Outputs" diagram -->
+                    <img src="https://i.imgur.com/sE2rF3G.png" alt="Encoder Block Diagram" class="light-bg-img"
+                        style="max-width: 300px;">
+                    <p class="diagram-caption">General Block Diagram of an Encoder.</p>
+                </div>
+                <h4>Priority Encoders</h4>
+                <p>A standard encoder assumes only one input is active. If multiple inputs can be active, a
+                    <strong>Priority Encoder</strong> is used. It selects the active input with the highest priority
+                    (usually predetermined) and outputs its corresponding binary code.</p>
+                <h5>4-to-2 Priority Encoder Example:</h5>
+                <p>Assumes D<sub>3</sub> has the highest priority, D<sub>0</sub> the lowest. 'x' denotes "don't care". A
+                    'Valid' output (V) indicates if any input is active.</p>
+                <div class="diagram">
+                    <!-- From "4:2 Priority Encoder" diagram -->
+                    <img src="https://i.imgur.com/cW6xS9T.png" alt="4:2 Priority Encoder Block Diagram and Truth Table"
+                        class="light-bg-img" style="max-width: 450px;">
+                    <p class="diagram-caption">4:2 Priority Encoder (Often includes a 'Valid' output bit, not shown in
+                        this specific table).</p>
+                </div>
+                <h4>Digital Encoder using Logic Gates (8-to-3 Encoder)</h4>
+                <div class="diagram">
+                    <!-- From "Digital Encoder using Logic Gates" diagram -->
+                    <img src="https://i.imgur.com/mJ5zD8X.png" alt="8:3 Encoder Logic Diagram" class="light-bg-img"
+                        style="max-width: 450px;">
+                    <p class="diagram-caption">An 8-to-3 encoder implemented with OR gates (assumes one-hot input).</p>
+                </div>
+
+                <h4>Applications of Encoders:</h4>
+                <div class="callout callout.application">
+                    <ul>
+                        <li><strong>Keyboard Encoding:</strong> Converting key presses into binary codes.</li>
+                        <li><strong>Data Compression:</strong> Representing a larger set of inputs with a smaller set of
+                            outputs.</li>
+                        <li>Interrupt handling in microprocessors (priority encoders).</li>
+                        <li>Speed synchronization of multiple motors.</li>
+                        <li>Robotic vehicle with metal detector.</li>
+                        <li>RF based home automation.</li>
+                        <li>Automatic wireless health monitoring.</li>
+                        <li>Ships navigation.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="adders" class="container">
+            <h3><i class="fas fa-plus-square"></i> Adders</h3>
+            <div class="content-box">
+                <p>Adders are fundamental combinational circuits used for performing arithmetic addition of binary
+                    numbers.</p>
+
+                <h4>Half Adder</h4>
+                <p>A <strong>Half Adder</strong> is an arithmetic circuit used to perform the addition of two single
+                    bits. It has two inputs (A, B) and two outputs: Sum (S) and Carry (C).</p>
+                <ul>
+                    <li>Boolean Expression for Sum: <code class="inline-code">S = A'B + AB' = A ⊕ B</code></li>
+                    <li>Boolean Expression for Carry: <code class="inline-code">C = AB</code></li>
+                </ul>
+                <div class="diagram-set">
+                    <div class="diagram">
+                        <p>Block Diagram & Truth Table</p>
+                        <!-- From "The Half-Adder" (Figure 4.2 and Table 4.1) -->
+                        <img src="https://i.imgur.com/uB4dN7Y.png" alt="Half Adder Block Diagram and Truth Table"
+                            class="light-bg-img" style="max-width: 400px;">
+                        <p class="diagram-caption">Half Adder Block Diagram and Truth Table.</p>
+                    </div>
+                    <div class="diagram">
+                        <p>Logic Diagram</p>
+                        <!-- From "The Half-Adder" (Figure 4.3a) -->
+                        <img src="https://i.imgur.com/aF9gP2L.png" alt="Half Adder Logic Diagram" class="light-bg-img"
+                            style="max-width: 250px;">
+                        <p class="diagram-caption">Half Adder using XOR and AND gates.</p>
+                    </div>
+                </div>
+                <h5>Half Adder Implementations:</h5>
+                <div class="diagram-set">
+                    <div class="diagram">
+                        <p>Using 2x4 Decoder</p>
+                        <!-- From "Q. Design Half-Adder Using 2*4 Decoder" -->
+                        <img src="https://i.imgur.com/E0jL4wK.png" alt="Half Adder using 2x4 Decoder"
+                            style="max-width: 350px;">
+                    </div>
+                    <div class="diagram">
+                        <p>Using NAND Gates</p>
+                        <!-- From "Half Adder By NAND GATE" -->
+                        <img src="https://i.imgur.com/N7yX0fP.png" alt="Half Adder using NAND Gates"
+                            style="max-width: 350px;">
+                    </div>
+                    <div class="diagram">
+                        <p>Using NOR Gates</p>
+                        <!-- From "Half Adder By NOR GATE" -->
+                        <img src="https://i.imgur.com/wQ3gV1M.png" alt="Half Adder using NOR Gates"
+                            style="max-width: 350px;">
+                    </div>
+                </div>
+
+                <h4>Full Adder</h4>
+                <p>A <strong>Full Adder</strong> is a combinational circuit that performs the arithmetic sum of three
+                    input bits: two significant bits (A, B) and a carry-in bit (C<sub>in</sub>) from a previous less
+                    significant stage. It produces two outputs: Sum (S) and Carry-out (C<sub>out</sub>).</p>
+                <ul>
+                    <li>Boolean Expression for Sum: <code
+                            class="inline-code">S = A ⊕ B ⊕ C<sub>in</sub> = A'B'C<sub>in</sub> + A'BC'<sub>in</sub> + AB'C'<sub>in</sub> + ABC<sub>in</sub></code>
+                        (Σm(1,2,4,7))</li>
+                    <li>Boolean Expression for Carry-out: <code
+                            class="inline-code">C<sub>out</sub> = AB + AC<sub>in</sub> + BC<sub>in</sub> = AB + C<sub>in</sub>(A ⊕ B)</code>
+                        (Σm(3,5,6,7))</li>
+                </ul>
+                <div class="diagram-set">
+                    <div class="diagram">
+                        <p>Block Diagram & Truth Table</p>
+                        <!-- From "The Full-adder" (Figure 4.4 and Table 4.2) -->
+                        <img src="https://i.imgur.com/jM6tY8L.png" alt="Full Adder Block Diagram and Truth Table"
+                            class="light-bg-img" style="max-width: 400px;">
+                        <p class="diagram-caption">Full Adder Block Diagram and Truth Table.</p>
+                    </div>
+                    <div class="diagram">
+                        <p>K-Maps</p>
+                        <!-- From "The Full-adder" (Figure 4.5 K-maps) -->
+                        <img src="https://i.imgur.com/xY5rC8A.png" alt="Full Adder K-Maps" class="light-bg-img"
+                            style="max-width: 400px;">
+                        <p class="diagram-caption">K-Maps for Full Adder Sum and Carry.</p>
+                    </div>
+                </div>
+                <h5>Full Adder Implementations:</h5>
+                <div class="diagram">
+                    <p>Logic Diagram (SOP and using Two Half Adders)</p>
+                    <!-- From "Implementation of full-adder circuit" (Figure 4.6 a and b) -->
+                    <img src="https://i.imgur.com/tC0pY9V.png" alt="Full Adder Logic Diagrams" class="light-bg-img"
+                        style="max-width: 600px;">
+                    <p class="diagram-caption">Full Adder: (a) SOP form, (b) Using two Half Adders and an OR gate.</p>
+                </div>
+                <div class="diagram-set">
+                    <div class="diagram">
+                        <p>Using 3x8 Decoder</p>
+                        <!-- From "Design Full Adder using 3*8 Decoder" -->
+                        <img src="https://i.imgur.com/Z8vM7hP.png" alt="Full Adder using 3x8 Decoder"
+                            style="max-width: 400px;">
+                    </div>
+                    <div class="diagram">
+                        <p>Using NAND Gates</p>
+                        <!-- From "Design Full Adder using NAND Gate" -->
+                        <img src="https://i.imgur.com/xJ3sN6R.png" alt="Full Adder using NAND Gates"
+                            style="max-width: 450px;">
+                    </div>
+                    <div class="diagram">
+                        <p>Using NOR Gates</p>
+                        <!-- From "Design Full Adder using NOR Gate" -->
+                        <img src="https://i.imgur.com/kL5pY8V.png" alt="Full Adder using NOR Gates"
+                            style="max-width: 450px;">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="subtractors" class="container">
+            <h3><i class="fas fa-minus-square"></i> Subtractors</h3>
+            <div class="content-box">
+                <p>Subtractors are combinational circuits that perform binary subtraction.</p>
+
+                <h4>Half Subtractor</h4>
+                <p>A <strong>Half Subtractor</strong> is a circuit that subtracts one bit (subtrahend B) from another
+                    bit (minuend A) and produces two outputs: Difference (D) and Borrow (B<sub>out</sub>).</p>
+                <ul>
+                    <li>Boolean Expression for Difference: <code class="inline-code">D = A'B + AB' = A ⊕ B</code></li>
+                    <li>Boolean Expression for Borrow: <code class="inline-code">B<sub>out</sub> = A'B</code></li>
+                </ul>
+                <div class="diagram-set">
+                    <div class="diagram">
+                        <p>Block Diagram & Truth Table</p>
+                        <!-- From "The Half Subtractor" (Figure 4.13 and Table 4.5) -->
+                        <img src="https://i.imgur.com/fH7vT2P.png" alt="Half Subtractor Block, Truth Table, Logic"
+                            class="light-bg-img" style="max-width: 450px;">
+                        <p class="diagram-caption">Half Subtractor Block Diagram, Truth Table, and Logic Diagram.</p>
+                    </div>
+                </div>
+                <h5>Half Subtractor Implementations:</h5>
+                <div class="diagram-set">
+                    <div class="diagram">
+                        <p>Using 2x4 Decoder</p>
+                        <!-- From "Design Half -Subtractor using 2*4 Decoder" -->
+                        <img src="https://i.imgur.com/oD9rR3T.png" alt="Half Subtractor using 2x4 Decoder"
+                            style="max-width: 350px;">
+                    </div>
+                    <div class="diagram">
+                        <p>Using NAND Gates</p>
+                        <!-- From "HALF SUBTRACTOR Using NAND gates" -->
+                        <img src="https://i.imgur.com/uK7cP8Y.png" alt="Half Subtractor using NAND Gates"
+                            style="max-width: 400px;">
+                    </div>
+                    <div class="diagram">
+                        <p>Using NOR Gates</p>
+                        <!-- From "HALF SUBTRACTOR using NOR gates" -->
+                        <img src="https://i.imgur.com/fL2qR1Z.png" alt="Half Subtractor using NOR Gates"
+                            style="max-width: 350px;">
+                    </div>
+                </div>
+
+                <h4>Full Subtractor</h4>
+                <p>A <strong>Full Subtractor</strong> is a combinational circuit that performs subtraction involving
+                    three bits: minuend (A), subtrahend (B), and borrow-in (B<sub>in</sub>) from a previous stage. It
+                    produces two outputs: Difference (D) and Borrow-out (B<sub>out</sub>).</p>
+                <ul>
+                    <li>Difference: <code class="inline-code">D = A ⊕ B ⊕ B<sub>in</sub></code></li>
+                    <li>Borrow-out: <code
+                            class="inline-code">B<sub>out</sub> = A'B + A'B<sub>in</sub> + BB<sub>in</sub></code></li>
+                </ul>
+                <div class="diagram-set">
+                    <div class="diagram">
+                        <p>Block & Circuit Diagram</p>
+                        <!-- From "What is a Full-Subtractor?" (Figure-1) -->
+                        <img src="https://i.imgur.com/rX9zT3U.png" alt="Full Subtractor Block and Circuit Diagram"
+                            class="light-bg-img" style="max-width: 450px;">
+                        <p class="diagram-caption">Full Subtractor Block and Example Circuit Diagram.</p>
+                    </div>
+                    <div class="diagram">
+                        <p>Truth Table</p>
+                        <!-- From "The truth table of the full-subtractor" -->
+                        <img src="https://i.imgur.com/jG7wT2U.png" alt="Full Subtractor Truth Table"
+                            class="light-bg-img" style="max-width: 450px;">
+                        <p class="diagram-caption">Full Subtractor Truth Table.</p>
+                    </div>
+                </div>
+                <div class="diagram">
+                    <p>K-Maps for Full Subtractor</p>
+                    <!-- From "K-Map for Full Subtractor" (Figure-2) -->
+                    <img src="https://i.imgur.com/aK8wR3T.png" alt="K-Maps for Full Subtractor" class="light-bg-img"
+                        style="max-width: 500px;">
+                    <p class="diagram-caption">K-Maps for Full Subtractor Difference (d) and Borrow (b).</p>
+                </div>
+                <p>A full subtractor can also be implemented using two half subtractors and an OR gate, similar to how a
+                    full adder is made from half adders.</p>
+            </div>
+        </section>
+
+        <section id="other-combo" class="container">
+            <h3><i class="fas fa-ellipsis-h"></i> Other Combinational Circuits</h3>
+            <div class="content-box">
+                <h4>Binary Comparators</h4>
+                <p>A <strong>Binary Comparator</strong> is a combinational circuit that compares two binary numbers (A
+                    and B) and determines their relative magnitudes. The outputs typically indicate whether A > B, A =
+                    B, or A < B.</p>
+                        <p>For example, a 1-bit comparator takes two bits A and B as input.
+                        <ul>
+                            <li>A = B output (EQU): <code class="inline-code">(A XNOR B)</code> or <code
+                                    class="inline-code">A'B' + AB</code></li>
+                            <li>A > B output (GT): <code class="inline-code">AB'</code></li>
+                            <li>A < B output (LT): <code class="inline-code">A'B</code></li>
+                        </ul>
+                </p>
+                <p>Multi-bit comparators can be built by cascading 1-bit comparators or designed directly.</p>
+
+                <h4>Parity Generators and Checkers</h4>
+                <p><strong>Parity</strong> is a simple error detection scheme. A parity bit is added to a binary message
+                    to make the total number of 1s either even (even parity) or odd (odd parity).</p>
+                <ul>
+                    <li>A <strong>Parity Generator</strong> is a circuit that takes an N-bit data word and generates the
+                        (N+1)th bit, the parity bit. For even parity, it's the XOR sum of all data bits. For odd parity,
+                        it's the XNOR sum (or NOT of XOR sum) of all data bits.</li>
+                    <li>A <strong>Parity Checker</strong> is a circuit that takes an (N+1)-bit word (data + parity bit)
+                        and checks if the parity is correct. It usually outputs a 1 if an error is detected. For even
+                        parity checking, it's the XOR sum of all N+1 bits.</li>
+                </ul>
+                <p>XOR gates are fundamental to parity circuits because of their property: the output of a series of XOR
+                    gates is 1 if an odd number of inputs are 1, and 0 if an even number of inputs are 1.</p>
+            </div>
+        </section>
+
+        <section id="interactive-combo" class="container">
+            <h2><i class="fas fa-cogs"></i> Interactive MUX Simulator (2-to-1)</h2>
+            <div class="content-box interactive-tool">
+                <p>Simulate a 2-to-1 Multiplexer. Output Q = S'·I<sub>0</sub> + S·I<sub>1</sub></p>
+                <div>
+                    <label for="muxInputI0">Input I<sub>0</sub>:</label>
+                    <select id="muxInputI0">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="muxInputI1">Input I<sub>1</sub>:</label>
+                    <select id="muxInputI1">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="muxSelectS">Select S:</label>
+                    <select id="muxSelectS">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                    </select>
+                </div>
+                <button onclick="simulateMux()"><i class="fas fa-play"></i> Simulate MUX</button>
+                <div id="muxResult" class="result-display" style="display:none;">Output Q: </div>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="topic-navigation">
+                <a href="topic-3.html">
+                    ← Previous Topic: Logic Gates
+                </a>
+                <a href="topic-5.html"> <!-- Assuming topic-5.html is for Karnaugh Maps -->
+                    Next Topic: Karnaugh Maps →
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© <span id="currentYear"></span> Eduvision. A High-Quality Resource on Combinational Circuits.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        function simulateMux() {
+            const i0 = parseInt(document.getElementById('muxInputI0').value);
+            const i1 = parseInt(document.getElementById('muxInputI1').value);
+            const s = parseInt(document.getElementById('muxSelectS').value);
+            const resultDiv = document.getElementById('muxResult');
+            let outputQ;
+
+            if (s === 0) {
+                outputQ = i0;
+            } else {
+                outputQ = i1;
+            }
+
+            resultDiv.textContent = `Output Q: ${outputQ}`;
+            resultDiv.style.display = 'block';
+        }
+    </script>
+
+</body>
+
+</html>

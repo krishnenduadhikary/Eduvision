@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logic Gates | Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Eduvision Logo Specific Styles */
+        .eduvishion-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvishion-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .eduvishion-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvishion-logo .text-yellow-300 {
+            color: #fde047 !important;
+        }
+
+        .eduvishion-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+        }
+
+        .eduvishion-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvishion-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* General Styles */
+        :root {
+            --primary-color: #1abc9c;
+            /* Turquoise/Teal for Logic Gates theme */
+            --secondary-color: #34495e;
+            /* Darker Blue-Gray */
+            --accent-color: #e67e22;
+            /* Orange */
+            --text-color: #333;
+            --bg-color: #ecf0f1;
+            /* Light Gray */
+            --light-bg-color: #ffffff;
+            --border-color: #bdc3c7;
+            /* Silver */
+            --header-bg: #2c3e50;
+            /* Dark background for header */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.7;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header.main-header {
+            background: var(--header-bg);
+            color: #fff;
+            padding: 60px 0 20px;
+            text-align: center;
+            position: relative;
+            min-height: 120px;
+        }
+
+        header.main-header h1 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        header.main-header .subtitle {
+            font-size: 1.2rem;
+            color: #bdc3c7;
+        }
+
+        /* Navigation / Table of Contents */
+        nav.toc {
+            background: var(--primary-color);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        nav.toc ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        nav.toc ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+            font-weight: 700;
+            transition: background-color 0.3s ease;
+            border-radius: 4px;
+        }
+
+        nav.toc ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Sections */
+        section {
+            padding: 50px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        section:last-child {
+            border-bottom: none;
+        }
+
+        section h2 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.2rem;
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        section h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        section h3 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.8rem;
+            /* Slightly larger for gate names */
+            color: var(--primary-color);
+            margin-top: 30px;
+            margin-bottom: 20px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #eee;
+        }
+
+        section h4 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.3rem;
+            color: var(--secondary-color);
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        .content-box {
+            background: var(--light-bg-color);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+
+        p,
+        li {
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+
+        ul,
+        ol {
+            margin-left: 20px;
+        }
+
+        code,
+        .inline-code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #e9ecef;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 0.95em;
+        }
+
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        th,
+        td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            /* Slightly smaller padding for potentially more tables */
+            text-align: center;
+            /* Center align for truth tables */
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 700;
+        }
+
+        td {
+            background-color: var(--light-bg-color);
+        }
+
+        tr:nth-child(even) td {
+            background-color: #e0f2f1;
+            /* Light teal for even rows */
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        /* Interactive Elements */
+        .interactive-gate-simulator {
+            background: #e0f7fa;
+            /* Light cyan background */
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid var(--primary-color);
+        }
+
+        .interactive-gate-simulator label,
+        .interactive-gate-simulator select,
+        .interactive-gate-simulator .gate-input {
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .interactive-gate-simulator .gate-input {
+            width: 50px;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .interactive-gate-simulator button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .interactive-gate-simulator button:hover {
+            background-color: #16a085;
+            /* Darker teal */
+        }
+
+        .interactive-gate-simulator .result-display {
+            margin-top: 15px;
+            padding: 10px;
+            background: var(--light-bg-color);
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        /* Diagrams and Images */
+        .diagram {
+            text-align: center;
+            margin: 25px auto;
+            padding: 15px;
+            background-color: #fdfefe;
+            border: 1px solid #d5dbdb;
+            border-radius: 5px;
+            max-width: 90%;
+        }
+
+        .diagram img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .diagram-caption {
+            font-style: italic;
+            color: #555;
+            margin-top: 8px;
+            font-size: 0.9em;
+        }
+
+        .gate-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .gate-details>div {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        /* Callout / Highlight boxes */
+        .callout {
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 5px solid var(--accent-color);
+            background-color: #fef9e7;
+            /* Light yellow */
+            border-radius: 0 4px 4px 0;
+        }
+
+        .callout.info {
+            border-left-color: var(--primary-color);
+            background-color: #e8f8f5;
+            /* Light teal */
+        }
+
+        /* Footer and Nav Links */
+        .topic-navigation {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .topic-navigation {
+                flex-direction: row;
+            }
+        }
+
+        .topic-navigation a {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background-color: #3b82f6;
+            /* Blue for nav consistency */
+            color: white;
+            border-radius: 9999px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .topic-navigation a:hover {
+            background-color: #2563eb;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            background: var(--secondary-color);
+            color: #ecf0f1;
+            margin-top: 0;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header.main-header h1 {
+                font-size: 2rem;
+            }
+
+            header.main-header .subtitle {
+                font-size: 1rem;
+            }
+
+            nav.toc ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav.toc ul li a {
+                display: block;
+                width: 100%;
+                text-align: center;
+            }
+
+            section h2 {
+                font-size: 1.8rem;
+            }
+
+            section h3 {
+                font-size: 1.6rem;
+            }
+
+            .eduvishion-logo {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin: 0 auto 10px;
+                text-shadow: none;
+            }
+
+            .eduvishion-logo .text-white {
+                color: #fff !important;
+            }
+
+            header.main-header {
+                padding-top: 20px;
+            }
+
+            .gate-details {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="main-header">
+        <div class="eduvishion-logo">
+            <div class="text-2xl font-bold">
+                <a href="#" class="flex items-center group">
+                    <span class="text-white">Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span class="text-white">ision</span>
+                </a>
+            </div>
+        </div>
+        <div class="container">
+            <h1>Logic Gates</h1>
+            <p class="subtitle">The Fundamental Building Blocks of Digital Systems</p>
+        </div>
+    </header>
+
+    <nav class="toc">
+        <div class="container">
+            <ul>
+                <li><a href="#intro-gates"><i class="fas fa-door-open"></i> Intro</a></li>
+                <li><a href="#basic-gates"><i class="fas fa-microchip"></i> Basic Gates</a></li>
+                <li><a href="#universal-gates"><i class="fas fa-globe"></i> Universal Gates</a></li>
+                <li><a href="#other-gates"><i class="fas fa-puzzle-piece"></i> Other Gates</a></li>
+                <li><a href="#gate-implementation"><i class="fas fa-sitemap"></i> Implementation</a></li>
+                <li><a href="#interactive-gates"><i class="fas fa-gamepad"></i> Simulate</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section id="intro-gates" class="container">
+            <h2><i class="fas fa-info-circle"></i> Introduction to Logic Gates</h2>
+            <div class="content-box">
+                <p>Logic gates are the most basic building blocks of any digital system. They are electronic circuits
+                    (hardware) that have one or more inputs and typically one output. The relationship between the input
+                    and the output is based on a certain logic.</p>
+                <ul>
+                    <li>A logic gate is a piece of hardware or an electronic circuit used to implement basic logic
+                        expressions.</li>
+                    <li>They perform logical operations on one or more binary inputs to produce a single binary output
+                        (0 or 1, LOW or HIGH).</li>
+                    <li>The three fundamental logic gates are: <strong>OR</strong> gate, <strong>AND</strong> gate, and
+                        <strong>NOT</strong> gate.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="basic-gates" class="container">
+            <h2><i class="fas fa-microchip"></i> Basic Logic Gates</h2>
+            <div class="content-box">
+
+                <h3>AND Gate</h3>
+                <p>A logic AND gate is a basic logic gate whose output is equal to the logical product (multiplication)
+                    of its inputs. The output of an AND gate is HIGH (1) only if all of its inputs are HIGH (1). For all
+                    other cases, the output is LOW (0).</p>
+                <p>Boolean Expression: <code class="inline-code">Y = A · B</code> or <code
+                        class="inline-code">Y = AB</code></p>
+                <div class="gate-details">
+                    <div>
+                        <h4>Symbol & Truth Table (2-Input)</h4>
+                        <div class="diagram">
+                            <!-- From "AND Gate Y=A.B" and truth table -->
+                            <img src="https://i.imgur.com/XpYq5ys.png" alt="AND Gate Symbol and Truth Table"
+                                style="max-width: 250px;">
+                            <p class="diagram-caption">2-Input AND Gate</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h4>IC Package Example</h4>
+                        <div class="diagram">
+                            <!-- From "AND Gate ... 7408 (AND)" -->
+                            <img src="https://i.imgur.com/XbJd2Ff.png" alt="7408 Quad 2-Input AND Gate IC"
+                                style="max-width: 280px;">
+                            <p class="diagram-caption">7408 Quad 2-Input AND Gate IC</p>
+                        </div>
+                    </div>
+                </div>
+                <h4>3-Input AND Gate</h4>
+                <p>Boolean Expression: <code class="inline-code">X = A · B · C</code></p>
+                <div class="diagram">
+                    <!-- From "3.3 AND Operation ... Three inputs AND Gate" -->
+                    <img src="https://i.imgur.com/nS2tG3g.png" alt="3-Input AND Gate and Truth Table"
+                        style="max-width:350px;">
+                    <p class="diagram-caption">3-Input AND Gate and its Truth Table</p>
+                </div>
+
+                <h3>OR Gate</h3>
+                <p>The output of the logic OR gate is equal to the logical sum (addition) of its inputs. The output of
+                    an OR gate is HIGH (1) if any of its inputs are HIGH (1). The output is LOW (0) only when all the
+                    inputs are LOW (0).</p>
+                <p>Boolean Expression: <code class="inline-code">Y = A + B</code></p>
+                <div class="gate-details">
+                    <div>
+                        <h4>Symbol & Truth Table (2-Input)</h4>
+                        <div class="diagram">
+                            <!-- From "OR Gate Y=A+B" and use truth table from "3.2 OR Operation" -->
+                            <img src="https://i.imgur.com/wz6g3oH.png" alt="OR Gate Symbol and Truth Table"
+                                style="max-width: 250px;">
+                            <p class="diagram-caption">2-Input OR Gate (Truth Table: 00->0, 01->1, 10->1, 11->1)</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h4>IC Package Example</h4>
+                        <div class="diagram">
+                            <!-- From "OR Gate ... 7432 (OR)" -->
+                            <img src="https://i.imgur.com/6eLh7dJ.png" alt="7432 Quad 2-Input OR Gate IC"
+                                style="max-width: 280px;">
+                            <p class="diagram-caption">7432 Quad 2-Input OR Gate IC</p>
+                        </div>
+                    </div>
+                </div>
+                <h4>Switch Representation of OR</h4>
+                <div class="diagram">
+                    <!-- From "Switch Representation of the OR Function" -->
+                    <img src="https://i.imgur.com/YF5t9zH.png" alt="OR Gate Switch Analogy" style="max-width:300px;">
+                    <p class="diagram-caption">Switches in parallel represent an OR function.</p>
+                </div>
+
+                <h3>NOT Gate (Inverter)</h3>
+                <p>A logic NOT gate, also known as an inverter, is a basic logic gate whose output is equal to the
+                    inverse (complement) of its single input. If the input is HIGH (1), the output is LOW (0), and if
+                    the input is LOW (0), the output is HIGH (1).</p>
+                <p>Boolean Expression: <code class="inline-code">Y = A'</code> or <code class="inline-code">Y = Ā</code>
+                </p>
+                <div class="gate-details">
+                    <div>
+                        <h4>Symbol & Truth Table</h4>
+                        <div class="diagram">
+                            <!-- From "NOT Gate Y=X'" and truth table -->
+                            <img src="https://i.imgur.com/xN2oP6s.png" alt="NOT Gate Symbol and Truth Table"
+                                style="max-width: 200px;">
+                            <p class="diagram-caption">NOT Gate (Inverter)</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h4>IC Package Example</h4>
+                        <div class="diagram">
+                            <!-- From "NOT Gate ... 7404 (NOT)" -->
+                            <img src="https://i.imgur.com/aB1vR2X.png" alt="7404 Hex Inverter IC"
+                                style="max-width: 280px;">
+                            <p class="diagram-caption">7404 Hex Inverter IC</p>
+                        </div>
+                    </div>
+                </div>
+                <h4>Switch Representation of NOT</h4>
+                <div class="diagram">
+                    <!-- From "Switch Representation of the NOT Function" -->
+                    <img src="https://i.imgur.com/oO0LwWd.png" alt="NOT Gate Switch Analogy" style="max-width:300px;">
+                    <p class="diagram-caption">A normally closed switch in series can represent an aspect of inversion.
+                    </p>
+                    <p class="diagram-caption">(Note: Switch analogies for NOT are less direct. This shows if A is open
+                        (0), lamp is ON via R. If A is closed (1), it shorts the lamp path if R is significantly larger
+                        than lamp resistance, or simply changes current paths.)</p>
+                </div>
+                <p>The small circle (bubble) on the output of the NOT gate symbol denotes inversion.</p>
+            </div>
+        </section>
+
+        <section id="universal-gates" class="container">
+            <h2><i class="fas fa-globe"></i> Universal Logic Gates</h2>
+            <div class="content-box">
+                <p>Universal logic gates are gates that can be used to implement any other logic gate or any Boolean
+                    function without needing any other type of gate. The two universal logic gates are
+                    <strong>NAND</strong> and <strong>NOR</strong>.</p>
+                <ul>
+                    <li>The reason they are universal is that NAND gates and NOR gates can perform (or can function
+                        like) all three basic gates: AND, OR, and NOT.</li>
+                    <li>We can design any basic logic gate or complex Boolean expression by using only NAND gates or
+                        only NOR gates.</li>
+                </ul>
+
+                <h3>NAND Gate</h3>
+                <p>A NAND (NOT-AND) gate is a logical combination of an AND gate followed by a NOT gate. Its output is
+                    the complement of the AND operation. The output is LOW (0) only if all inputs are HIGH (1);
+                    otherwise, the output is HIGH (1).</p>
+                <p>Boolean Expression: <code class="inline-code">Y = (A · B)'</code> or <code
+                        class="inline-code">Y = (AB)'</code></p>
+                <div class="gate-details">
+                    <div>
+                        <h4>Symbol & Truth Table (2-Input)</h4>
+                        <div class="diagram">
+                            <!-- From "NAND Gate X Y Z" and truth table -->
+                            <img src="https://i.imgur.com/QW8i3lE.png" alt="NAND Gate Symbol and Truth Table"
+                                style="max-width: 250px;">
+                            <p class="diagram-caption">2-Input NAND Gate</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h4>IC Package Example</h4>
+                        <div class="diagram">
+                            <!-- From "NAND Gate ... 7400 Quad 2 Input NAND" -->
+                            <img src="https://i.imgur.com/D6mD1hG.png" alt="7400 Quad 2-Input NAND Gate IC"
+                                style="max-width: 280px;">
+                            <p class="diagram-caption">7400 Quad 2-Input NAND Gate IC</p>
+                        </div>
+                    </div>
+                </div>
+                <p>The NAND gate symbol is an AND gate symbol with a small circle (bubble) on the output, denoting
+                    inversion.</p>
+
+                <h3>NOR Gate</h3>
+                <p>A NOR (NOT-OR) gate is a logical combination of an OR gate followed by a NOT gate. Its output is the
+                    complement of the OR operation. The output is HIGH (1) only if all inputs are LOW (0); otherwise,
+                    the output is LOW (0).</p>
+                <p>Boolean Expression: <code class="inline-code">Y = (A + B)'</code></p>
+                <div class="gate-details">
+                    <div>
+                        <h4>Symbol & Truth Table (2-Input)</h4>
+                        <div class="diagram">
+                            <!-- From "NOR Gate X Y Z" and truth table -->
+                            <img src="https://i.imgur.com/3RjK2wP.png" alt="NOR Gate Symbol and Truth Table"
+                                style="max-width: 250px;">
+                            <p class="diagram-caption">2-Input NOR Gate</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h4>IC Package Example</h4>
+                        <div class="diagram">
+                            <!-- From "NOR Gate ... 7402 Quad 2 Input NOR" -->
+                            <img src="https://i.imgur.com/N9vO0uU.png" alt="7402 Quad 2-Input NOR Gate IC"
+                                style="max-width: 280px;">
+                            <p class="diagram-caption">7402 Quad 2-Input NOR Gate IC</p>
+                        </div>
+                    </div>
+                </div>
+                <p>The NOR gate symbol is an OR gate symbol with a small circle (bubble) on the output.</p>
+
+                <h4>Realization of Basic Gates using Universal Gates</h4>
+                <div class="callout info">
+                    <p>Any Boolean function, no matter how complex, can be implemented using only NAND gates or only NOR
+                        gates. This is extremely useful in digital circuit design and manufacturing.</p>
+                </div>
+                <h4>Using NAND Gates:</h4>
+                <div class="diagram">
+                    <!-- From "Realization of Basic Gates Using Universal NAND Gates" -->
+                    <img src="https://i.imgur.com/JjF0fD9.png" alt="Basic Gates from NAND" style="max-width: 500px;">
+                    <p class="diagram-caption">NOT, OR, and AND gates implemented using only NAND gates.</p>
+                </div>
+                <div class="diagram">
+                    <!-- From "NAND gate acts as Universal Gate ... Fig 1.14" -->
+                    <img src="https://i.imgur.com/v7n6z4E.png" alt="More complex gates from NAND"
+                        style="max-width: 600px;">
+                    <p class="diagram-caption">Implementation of various logic gates using only NAND gates (Fig 1.14).
+                    </p>
+                </div>
+
+                <h4>Using NOR Gates:</h4>
+                <div class="diagram">
+                    <!-- From "Realization of Basic Gates Using Universal NOR Gates" -->
+                    <img src="https://i.imgur.com/c6T4Y8g.png" alt="Basic Gates from NOR" style="max-width: 500px;">
+                    <p class="diagram-caption">NOT, AND, and OR gates implemented using only NOR gates.</p>
+                </div>
+                <div class="diagram">
+                    <!-- From "Logic Gates using only NOR Gates ... Fig 1.16" -->
+                    <img src="https://i.imgur.com/hU5kL3D.png" alt="More complex gates from NOR"
+                        style="max-width: 600px;">
+                    <p class="diagram-caption">Implementation of various logic gates using only NOR gates (Fig 1.16).
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="other-gates" class="container">
+            <h2><i class="fas fa-puzzle-piece"></i> Other Common Logic Gates</h2>
+            <div class="content-box">
+
+                <h3>XOR (Exclusive-OR) Gate</h3>
+                <p>The Exclusive-OR (XOR) gate produces a HIGH (1) output only if its inputs are different (one is HIGH,
+                    the other is LOW). If the inputs are the same (both HIGH or both LOW), the output is LOW (0).</p>
+                <p>Boolean Expression: <code class="inline-code">Y = A ⊕ B = A'B + AB'</code></p>
+                <div class="gate-details">
+                    <div>
+                        <h4>Symbol & Truth Table (2-Input)</h4>
+                        <div class="diagram">
+                            <!-- From "3.7 XOR Operation gates" symbol and truth table -->
+                            <img src="https://i.imgur.com/rV2tT9P.png" alt="XOR Gate Symbol and Truth Table"
+                                style="max-width: 250px;">
+                            <p class="diagram-caption">2-Input XOR Gate</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h4>Properties</h4>
+                        <ul>
+                            <li>The function is symmetric: <code class="inline-code">A ⊕ B = B ⊕ A</code></li>
+                            <li>The function is associative: <code class="inline-code">(A ⊕ B) ⊕ C = A ⊕ (B ⊕ C)</code>
+                            </li>
+                            <li>Often used in arithmetic circuits (like adders) and for parity checking.</li>
+                        </ul>
+                    </div>
+                </div>
+                <p>The XOR gate symbol is similar to an OR gate but with an additional curved line on the input side.
+                </p>
+
+                <h3>XNOR (Exclusive-NOR) Gate</h3>
+                <p>The Exclusive-NOR (XNOR) gate is the complement of the XOR gate. It produces a HIGH (1) output only
+                    if its inputs are the same (both HIGH or both LOW). If the inputs are different, the output is LOW
+                    (0). It is also known as an equivalence gate.</p>
+                <p>Boolean Expression: <code class="inline-code">Y = (A ⊕ B)' = A'B' + AB</code></p>
+                <div class="gate-details">
+                    <div>
+                        <h4>Symbol & Truth Table (2-Input)</h4>
+                        <div class="diagram">
+                            <!-- From "3.8 XNOR Operation gates" symbol and truth table -->
+                            <img src="https://i.imgur.com/wP7yQ6X.png" alt="XNOR Gate Symbol and Truth Table"
+                                style="max-width: 250px;">
+                            <p class="diagram-caption">2-Input XNOR Gate</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h4>Properties</h4>
+                        <ul>
+                            <li>The function is symmetric: <code class="inline-code">A XNOR B = B XNOR A</code></li>
+                            <li>The function is associative.</li>
+                            <li>Outputs 1 when inputs are equivalent.</li>
+                        </ul>
+                    </div>
+                </div>
+                <p>The XNOR gate symbol is an XOR gate symbol with a small circle (bubble) on the output.</p>
+            </div>
+        </section>
+
+        <section id="gate-implementation" class="container">
+            <h2><i class="fas fa-sitemap"></i> Gate-Level Implementation of Boolean Expressions</h2>
+            <div class="content-box">
+                <p>Any Boolean expression can be implemented by a network of logic gates. The expression dictates the
+                    types of gates needed and how they are interconnected.</p>
+                <ul>
+                    <li>Product terms (AND operations) are implemented using AND gates.</li>
+                    <li>Sum terms (OR operations) are implemented using OR gates.</li>
+                    <li>Complements (NOT operations) are implemented using NOT gates (inverters).</li>
+                </ul>
+                <p>Example: Implement <code class="inline-code">F = AB + C'D</code></p>
+                <ol>
+                    <li>One AND gate for AB.</li>
+                    <li>One NOT gate for C'.</li>
+                    <li>One AND gate for C'D (inputs C' and D).</li>
+                    <li>One OR gate for (AB) + (C'D).</li>
+                </ol>
+                <div class="diagram">
+                    <!-- Conceptual diagram, should be drawn -->
+                    <p style="border:1px solid #ccc; padding:10px; text-align:center; background:#f0f0f0;">
+                        <strong>Circuit for F = AB + C'D</strong><br>
+                        Inputs A, B -> AND gate 1 (Output AB)<br>
+                        Input C -> NOT gate (Output C')<br>
+                        Inputs C', D -> AND gate 2 (Output C'D)<br>
+                        Outputs of AND gate 1 and AND gate 2 -> OR gate (Output F)
+                    </p>
+                    <p class="diagram-caption">Conceptual logic circuit for F = AB + C'D.</p>
+                </div>
+                <p>Using universal gates (NAND-only or NOR-only implementations) is also very common, often leading to
+                    more efficient circuit designs in certain technologies.</p>
+            </div>
+        </section>
+
+        <section id="interactive-gates" class="container">
+            <h2><i class="fas fa-gamepad"></i> Interactive Gate Simulator</h2>
+            <div class="content-box interactive-gate-simulator">
+                <label for="gateType">Select Gate:</label>
+                <select id="gateType" onchange="updateInputsVisibility()">
+                    <option value="AND">AND</option>
+                    <option value="OR">OR</option>
+                    <option value="NOT">NOT</option>
+                    <option value="NAND">NAND</option>
+                    <option value="NOR">NOR</option>
+                    <option value="XOR">XOR</option>
+                    <option value="XNOR">XNOR</option>
+                </select>
+                <span id="inputA_span">
+                    <label for="gateInputA">A:</label>
+                    <select id="gateInputA" class="gate-input">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                    </select>
+                </span>
+                <span id="inputB_span">
+                    <label for="gateInputB">B:</label>
+                    <select id="gateInputB" class="gate-input">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                    </select>
+                </span>
+                <button onclick="simulateGate()"><i class="fas fa-play"></i> Simulate</button>
+                <div id="gateResult" class="result-display" style="display:none;">Output: </div>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="topic-navigation">
+                <a href="topic-2.html">
+                    ← Previous Topic: Boolean Algebra
+                </a>
+                <a href="topic-4.html"> <!-- Assuming topic-4.html is the next one -->
+                    Next Topic: Combinational Circuits →
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© <span id="currentYear"></span> Eduvision. A High-Quality Resource on Logic Gates.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        function updateInputsVisibility() {
+            const gateType = document.getElementById('gateType').value;
+            const inputASpan = document.getElementById('inputA_span');
+            const inputBSpan = document.getElementById('inputB_span');
+            if (gateType === 'NOT') {
+                inputBSpan.style.display = 'none';
+            } else {
+                inputBSpan.style.display = 'inline';
+            }
+        }
+
+        function simulateGate() {
+            const gateType = document.getElementById('gateType').value;
+            const inputA = parseInt(document.getElementById('gateInputA').value);
+            const inputBElement = document.getElementById('gateInputB');
+            let inputB = 0;
+            if (inputBElement.style.display !== 'none') {
+                inputB = parseInt(inputBElement.value);
+            }
+
+            const resultDiv = document.getElementById('gateResult');
+            let output;
+
+            switch (gateType) {
+                case 'AND':
+                    output = inputA & inputB;
+                    break;
+                case 'OR':
+                    output = inputA | inputB;
+                    break;
+                case 'NOT':
+                    output = inputA ? 0 : 1; // !inputA
+                    break;
+                case 'NAND':
+                    output = (inputA & inputB) ? 0 : 1;
+                    break;
+                case 'NOR':
+                    output = (inputA | inputB) ? 0 : 1;
+                    break;
+                case 'XOR':
+                    output = inputA ^ inputB;
+                    break;
+                case 'XNOR':
+                    output = (inputA ^ inputB) ? 0 : 1;
+                    break;
+                default:
+                    output = 'N/A';
+            }
+            resultDiv.textContent = `Output: ${output}`;
+            resultDiv.style.display = 'block';
+        }
+        // Initialize input visibility
+        updateInputsVisibility();
+    </script>
+
+</body>
+
+</html>
