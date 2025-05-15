@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sequential Circuits | Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Eduvision Logo Specific Styles */
+        .eduvishion-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvishion-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .eduvishion-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvishion-logo .text-yellow-300 {
+            color: #fde047 !important;
+        }
+
+        .eduvishion-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+        }
+
+        .eduvishion-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvishion-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* General Styles */
+        :root {
+            --primary-color: #3498db;
+            /* Professional Blue */
+            --secondary-color: #2c3e50;
+            /* Dark Blue-Gray */
+            --accent-color: #e74c3c;
+            /* Red for alerts/contrast */
+            --text-color: #333;
+            --bg-color: #ecf0f1;
+            /* Light Gray */
+            --light-bg-color: #ffffff;
+            --border-color: #bdc3c7;
+            /* Silver */
+            --header-bg: #2c3e50;
+            /* Dark background for header */
+            --code-bg: #eaf2f8;
+            /* Very Light Blue for code */
+            --code-text: #2980b9;
+            /* Darker Blue for code text */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.7;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header.main-header {
+            background: var(--header-bg);
+            color: #fff;
+            padding: 60px 0 20px;
+            text-align: center;
+            position: relative;
+            min-height: 120px;
+        }
+
+        header.main-header h1 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        header.main-header .subtitle {
+            font-size: 1.2rem;
+            color: #bdc3c7;
+        }
+
+        /* Navigation / Table of Contents */
+        nav.toc {
+            background: var(--primary-color);
+            padding: 10px 0;
+            /* Reduced padding for more items */
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        nav.toc ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        nav.toc ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 10px;
+            /* Reduced padding for more items */
+            font-weight: 700;
+            transition: background-color 0.3s ease;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            /* Slightly smaller font */
+        }
+
+        nav.toc ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Sections */
+        section {
+            padding: 40px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        section:last-child {
+            border-bottom: none;
+        }
+
+        section h2 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.2rem;
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        section h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        section h3 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-top: 30px;
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #dfeffb;
+            /* Light blue underline */
+        }
+
+        section h4 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.4rem;
+            color: var(--secondary-color);
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .content-box {
+            background: var(--light-bg-color);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+
+        p,
+        li {
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+
+        ul,
+        ol {
+            margin-left: 20px;
+        }
+
+        code,
+        .inline-code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--code-bg);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 0.95em;
+            color: var(--code-text);
+        }
+
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        th,
+        td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 700;
+        }
+
+        td {
+            background-color: var(--light-bg-color);
+        }
+
+        tr:nth-child(even) td {
+            background-color: #dfeffb;
+            /* Light blue for even rows */
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        /* Interactive Elements */
+        .interactive-tool {
+            background: var(--code-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid var(--primary-color);
+        }
+
+        .interactive-tool label,
+        .interactive-tool select,
+        .interactive-tool input[type="button"],
+        .interactive-tool button {
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .interactive-tool button,
+        .interactive-tool input[type="button"] {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .interactive-tool button:hover,
+        .interactive-tool input[type="button"]:hover {
+            background-color: #2980b9;
+            /* Darker blue */
+        }
+
+        .interactive-tool .ff-output {
+            font-size: 1.5em;
+            font-weight: bold;
+            padding: 10px;
+            border: 1px solid #ccc;
+            display: inline-block;
+            min-width: 50px;
+            text-align: center;
+            background-color: white;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        .interactive-tool .ff-state {
+            font-style: italic;
+            color: #555;
+            font-size: 0.9em;
+        }
+
+        /* Diagrams and Images */
+        .diagram {
+            text-align: center;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #f8f9f9;
+            border: 1px solid #d5dbdb;
+            border-radius: 5px;
+            max-width: 95%;
+        }
+
+        .diagram img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .diagram img.black-bg-img {
+            /* Add this class to images that have black backgrounds */
+            background-color: #000;
+        }
+
+        .diagram-caption {
+            font-style: italic;
+            color: #555;
+            margin-top: 8px;
+            font-size: 0.9em;
+        }
+
+        .diagram-set {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .diagram-set .diagram {
+            flex: 1;
+            min-width: 300px;
+            margin: 5px;
+        }
+
+        /* Callout / Highlight boxes */
+        .callout {
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 5px solid var(--accent-color);
+            background-color: #fbeee6;
+            /* Light red/orange */
+            border-radius: 0 4px 4px 0;
+        }
+
+        .callout.info {
+            border-left-color: var(--primary-color);
+            background-color: #eaf2f8;
+            /* Light blue */
+        }
+
+        /* Collapsible Sections for Flip-Flop Conversions */
+        .collapsible {
+            background-color: #f0f8ff;
+            /* Alice blue, slightly different */
+            color: var(--secondary-color);
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.2rem;
+            font-family: 'Nunito', sans-serif;
+            margin-top: 15px;
+            border-radius: 5px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .collapsible:hover {
+            background-color: #e6f3ff;
+        }
+
+        .collapsible::after {
+            content: '\f078';
+            /* Font Awesome down arrow */
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            color: var(--primary-color);
+            float: right;
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible.active::after {
+            transform: rotate(-180deg);
+            /* Up arrow */
+        }
+
+        .collapsible-content {
+            padding: 0 18px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: var(--light-bg-color);
+            border: 1px solid #e0e0e0;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+        }
+
+
+        /* Footer and Nav Links */
+        .topic-navigation {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .topic-navigation {
+                flex-direction: row;
+            }
+        }
+
+        .topic-navigation a {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background-color: #3b82f6;
+            color: white;
+            border-radius: 9999px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .topic-navigation a:hover {
+            background-color: #2563eb;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            background: var(--secondary-color);
+            color: #ecf0f1;
+            margin-top: 0;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header.main-header h1 {
+                font-size: 2rem;
+            }
+
+            header.main-header .subtitle {
+                font-size: 1rem;
+            }
+
+            nav.toc ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav.toc ul li a {
+                display: block;
+                width: 100%;
+                text-align: center;
+                font-size: 0.9rem;
+            }
+
+            section h2 {
+                font-size: 1.8rem;
+            }
+
+            section h3 {
+                font-size: 1.6rem;
+            }
+
+            .eduvishion-logo {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin: 0 auto 10px;
+                text-shadow: none;
+            }
+
+            .eduvishion-logo .text-white {
+                color: #fff !important;
+            }
+
+            header.main-header {
+                padding-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="main-header">
+        <div class="eduvishion-logo">
+            <div class="text-2xl font-bold">
+                <a href="#" class="flex items-center group">
+                    <span class="text-white">Edu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span class="text-white">ision</span>
+                </a>
+            </div>
+        </div>
+        <div class="container">
+            <h1>Sequential Logic Circuits</h1>
+            <p class="subtitle">Exploring Flip-Flops, Counters, and Shift Registers</p>
+        </div>
+    </header>
+
+    <nav class="toc">
+        <div class="container">
+            <ul>
+                <li><a href="#intro-seq"><i class="fas fa-history"></i> Intro</a></li>
+                <li><a href="#flip-flops"><i class="fas fa-toggle-on"></i> Flip-Flops</a></li>
+                <li><a href="#ff-conversion"><i class="fas fa-exchange-alt"></i> FF Conversion</a></li>
+                <li><a href="#counters"><i class="fas fa-sort-numeric-up"></i> Counters</a></li>
+                <li><a href="#shift-registers"><i class="fas fa-angle-double-right"></i> Shift Registers</a></li>
+                <li><a href="#interactive-seq"><i class="fas fa-gamepad"></i> Simulate</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section id="intro-seq" class="container">
+            <h2><i class="fas fa-history"></i> Introduction to Sequential Circuits</h2>
+            <div class="content-box">
+                <p>Sequential circuits are a type of digital logic circuit whose output depends not only on the present
+                    value of its input signals but also on the sequence of past inputs, i.e., its previous state. This
+                    is in contrast to combinational circuits, whose outputs are a direct function of only the present
+                    inputs.</p>
+                <h4>Key Characteristics:</h4>
+                <ul>
+                    <li><strong>Memory Elements:</strong> Sequential circuits contain memory elements (like flip-flops
+                        or latches) to store information about past states.</li>
+                    <li><strong>Feedback:</strong> They often employ feedback paths, where some outputs are fed back as
+                        inputs.</li>
+                    <li><strong>Clock Signals:</strong> Most sequential circuits are synchronous, meaning their state
+                        changes are synchronized by a periodic clock signal. Asynchronous sequential circuits also exist
+                        but are less common for complex designs.</li>
+                    <li>Used for building counters, registers, memory units, and finite state machines.</li>
+                </ul>
+                <p>The experiments described in your data (e.g., "11-9 SEQUENTIAL CIRCUITS") involve designing,
+                    constructing, and testing such circuits, often using ICs like the 7476 JK flip-flop.</p>
+            </div>
+        </section>
+
+        <section id="flip-flops" class="container">
+            <h3><i class="fas fa-toggle-on"></i> Flip-Flops: The Basic Memory Element</h3>
+            <div class="content-box">
+                <p>A flip-flop is a bistable multivibrator, meaning it has two stable states (0 and 1) and can be used
+                    to store one bit of binary information. It is the fundamental building block of many sequential
+                    circuits.</p>
+                <div class="diagram">
+                    <!-- From "Flip Flop" classification diagram -->
+                    <img src="https://i.imgur.com/2E4hF6G.png" alt="Flip-Flop Types" style="max-width:400px;">
+                    <p class="diagram-caption">Common Types of Flip-Flops.</p>
+                </div>
+                <p>Flip-flops change state based on their inputs and, for clocked types, a clock signal. Common types
+                    include SR, JK, D, and T flip-flops.</p>
+
+                <h4>SR Flip-Flop (Set-Reset)</h4>
+                <p>The SR flip-flop, also known as an SR Latch (if unclocked), is a basic one-bit memory device. It has
+                    two inputs: S (Set) and R (Reset).</p>
+                <ul>
+                    <li>S input sets the output Q to 1.</li>
+                    <li>R input resets the output Q to 0.</li>
+                    <li>If both S and R are 0, the flip-flop maintains its current state.</li>
+                    <li>The condition S=1 and R=1 is typically considered invalid or undefined as it leads to an
+                        unpredictable state or oscillation.</li>
+                </ul>
+                <div class="diagram-set">
+                    <div class="diagram">
+                        <p>SR Flip-Flop Symbol & Circuit</p>
+                        <!-- From "SR Flip-Flop" Symbol and Circuit image -->
+                        <img src="https://i.imgur.com/uP3qK8L.png" alt="SR Flip-Flop Symbol and NAND Latch Circuit"
+                            style="max-width:350px;">
+                        <p class="diagram-caption">SR Flip-Flop: Symbol and basic NAND Latch implementation.</p>
+                    </div>
+                    <div class="diagram">
+                        <p>SR Flip-Flop Truth Table</p>
+                        <!-- From "Truth Table of SR Flip Flop" image -->
+                        <img src="https://i.imgur.com/aB5vR9X.png" alt="SR Flip-Flop Truth Table"
+                            style="max-width:350px;">
+                        <p class="diagram-caption">Truth Table for an SR Flip-Flop/Latch. Note: S, R inputs are often
+                            active-low for NAND latches.</p>
+                    </div>
+                </div>
+                <p>A clocked SR flip-flop only changes state when a clock pulse is applied, based on the S and R inputs.
+                </p>
+
+                <h4>JK Flip-Flop</h4>
+                <p>The JK flip-flop is an improvement over the SR flip-flop as it does not have an invalid input state.
+                    It has J (Set-like) and K (Reset-like) inputs, and a clock input.</p>
+                <ul>
+                    <li>If J=0, K=0: No change in state (Q<sub>next</sub> = Q).</li>
+                    <li>If J=0, K=1: Reset state (Q<sub>next</sub> = 0).</li>
+                    <li>If J=1, K=0: Set state (Q<sub>next</sub> = 1).</li>
+                    <li>If J=1, K=1: Toggle state (Q<sub>next</sub> = Q'). This is the key advantage.</li>
+                </ul>
+                <div class="diagram">
+                    <p>JK Flip-Flop Circuit (Conceptual)</p>
+                    <!-- From "2. JK Flip-Flop" circuit diagram -->
+                    <img src="https://i.imgur.com/xK1yJ7P.png" alt="JK Flip-Flop Circuit Diagram"
+                        style="max-width:400px;">
+                    <p class="diagram-caption">Conceptual circuit diagram of a JK Flip-Flop using NAND gates.</p>
+                </div>
+                <div class="diagram-set">
+                    <div class="diagram">
+                        <p>JK Flip-Flop Function Table (with Preset/Clear)</p>
+                        <!-- From "Function table" for JK FF (top of an image) -->
+                        <img src="https://i.imgur.com/gP2cK7R.png" alt="JK Flip-Flop Function Table"
+                            style="max-width:400px;">
+                        <p class="diagram-caption">Function Table for a JK Flip-Flop including asynchronous Preset and
+                            Clear inputs.</p>
+                    </div>
+                    <div class="diagram">
+                        <p>JK Flip-Flop Truth Table (Detailed)</p>
+                        <!-- From "JK Flip-flop Truth Table" image -->
+                        <img src="https://i.imgur.com/mR2dE5V.png" alt="Detailed JK Flip-Flop Truth Table"
+                            style="max-width:400px;">
+                        <p class="diagram-caption">Truth table showing next state Q based on J, K and current state Q.
+                        </p>
+                    </div>
+                </div>
+                <p><strong>Master-Slave JK Flip-Flop:</strong> A common construction method to avoid race-around
+                    conditions (where the output toggles multiple times during a single clock pulse if J=K=1). It
+                    consists of two cascaded latches: a master latch that receives inputs during one phase of the clock,
+                    and a slave latch that updates its output from the master during the other clock phase.</p>
+
+                <h4>D Flip-Flop (Data or Delay)</h4>
+                <p>The D flip-flop has a single data input D and a clock input. Its output Q takes the value of the D
+                    input at the active edge of the clock pulse. It is commonly used for storing data (registers) and
+                    delaying signals.</p>
+                <p>Characteristic Equation: <code class="inline-code">Q<sub>next</sub> = D</code></p>
+                <div class="diagram">
+                    <p>D Flip-Flop Circuit & Truth Table</p>
+                    <!-- From "3. D Flip-Flop" circuit and truth table images -->
+                    <img src="https://i.imgur.com/nQ1fG4D.png" alt="D Flip-Flop Circuit" style="max-width:350px;">
+                    <img src="https://i.imgur.com/rT1yJ8L.png" alt="D Flip-Flop Truth Table"
+                        style="max-width:350px; margin-top:10px;">
+                    <p class="diagram-caption">D Flip-Flop: Conceptual Circuit and Truth Table (showing
+                        edge-triggering).</p>
+                </div>
+
+                <h4>T Flip-Flop (Toggle)</h4>
+                <p>The T flip-flop has a single input T (Toggle) and a clock input. If T=0, the flip-flop holds its
+                    state. If T=1, the flip-flop toggles its state on the active clock edge.</p>
+                <p>It can be derived from a JK flip-flop by connecting J and K inputs together to form T.</p>
+                <p>Characteristic Equation: <code class="inline-code">Q<sub>next</sub> = T ⊕ Q = T'Q + TQ'</code></p>
+                <div class="diagram">
+                    <p>T Flip-Flop Circuit & Truth Table</p>
+                    <!-- From "4. T Flip-Flop" circuit and truth table images -->
+                    <img src="https://i.imgur.com/xY9oH5V.png" alt="T Flip-Flop Circuit" style="max-width:350px;">
+                    <img src="https://i.imgur.com/eA2qR5Z.png" alt="T Flip-Flop Truth Table"
+                        style="max-width:300px; margin-top:10px;">
+                    <p class="diagram-caption">T Flip-Flop: Conceptual Circuit and Truth Table.</p>
+                </div>
+                <p><strong>Edge-Triggered vs. Level-Triggered:</strong></p>
+                <ul>
+                    <li><strong>Level-Triggered:</strong> The flip-flop (often a latch) responds to inputs as long as
+                        the clock signal is at a certain level (e.g., HIGH).</li>
+                    <li><strong>Edge-Triggered:</strong> The flip-flop responds to inputs only at the transition of the
+                        clock signal (either positive/rising edge or negative/falling edge). Most modern flip-flops are
+                        edge-triggered to ensure predictable state changes.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="ff-conversion" class="container">
+            <h3><i class="fas fa-exchange-alt"></i> Flip-Flop Conversions</h3>
+            <div class="content-box">
+                <p>It's often necessary to convert one type of flip-flop into another using additional combinational
+                    logic. The general steps involve understanding the source and target flip-flops, using their
+                    characteristic tables/equations, and deriving the logic for the source flip-flop's inputs to mimic
+                    the target's behavior.</p>
+                <button type="button" class="collapsible">General Steps for Flip-Flop Conversion</button>
+                <div class="collapsible-content">
+                    <!-- From "General Steps for Flip-Flop Conversion" image -->
+                    <div class="diagram">
+                        <img src="https://i.imgur.com/gJ1vK7P.png" alt="General Steps for Flip-Flop Conversion"
+                            style="max-width:600px;">
+                    </div>
+                </div>
+
+                <button type="button" class="collapsible">SR Flip-Flop Conversions (to JK, D, T)</button>
+                <div class="collapsible-content">
+                    <h4>SR to JK Flip-Flop</h4>
+                    <!-- From "SR Flip-Flop Conversion to Other Flip-Flops -> Converting SR Flip-Flop to JK Flip-Flop" -->
+                    <div class="diagram">
+                        <img src="https://i.imgur.com/wO5sE8R.png" alt="SR to JK Flip-Flop Conversion"
+                            style="max-width:600px;">
+                    </div>
+                    <h4>SR to D Flip-Flop</h4>
+                    <!-- From "... -> Converting SR Flip-Flop to D Flip-Flop" -->
+                    <div class="diagram">
+                        <img src="https://i.imgur.com/uF0xR7X.png" alt="SR to D Flip-Flop Conversion"
+                            style="max-width:600px;">
+                    </div>
+                    <h4>SR to T Flip-Flop</h4>
+                    <p>To convert an SR flip-flop to a T flip-flop, a combinational circuit is designed using the T
+                        input and the present state (QP). The derived equations for S and R are: S = T·Q' and R = T·Q.
+                    </p>
+                    <!-- Add diagram if available or conceptual description -->
+                </div>
+
+                <button type="button" class="collapsible">JK Flip-Flop Conversions (to SR, D, T)</button>
+                <div class="collapsible-content">
+                    <h4>JK to SR Flip-Flop</h4>
+                    <!-- From "JK Flip-Flop Conversion -> Converting JK Flip-Flop to SR Flip-Flop" -->
+                    <div class="diagram">
+                        <img src="https://i.imgur.com/jM2uP5V.png" alt="JK to SR Flip-Flop Conversion"
+                            style="max-width:600px;">
+                    </div>
+                    <h4>JK to D Flip-Flop</h4>
+                    <!-- From "... -> Converting JK Flip-Flop to D Flip-Flop" -->
+                    <div class="diagram">
+                        <img src="https://i.imgur.com/sK3yL8Q.png" alt="JK to D Flip-Flop Conversion"
+                            style="max-width:600px;">
+                    </div>
+                    <h4>JK to T Flip-Flop</h4>
+                    <!-- From "... -> Converting JK Flip-Flop to T Flip-Flop" -->
+                    <div class="diagram">
+                        <img src="https://i.imgur.com/pB7nF2Z.png" alt="JK to T Flip-Flop Conversion"
+                            style="max-width:600px;">
+                    </div>
+                </div>
+                <button type="button" class="collapsible">D Flip-Flop Conversions (to SR, JK, T)</button>
+                <div class="collapsible-content">
+                    <h4>D to SR Flip-Flop</h4>
+                    <!-- From "D Flip-Flop Conversion -> Converting D Flip-Flop to SR Flip-Flop" -->
+                    <div class="diagram">
+                        <img src="https://i.imgur.com/dO0fN9R.png" alt="D to SR Flip-Flop Conversion"
+                            style="max-width:600px;">
+                    </div>
+                    <h4>D to JK Flip-Flop</h4>
+                    <!-- From "... -> Converting D Flip-Flop to JK Flip-Flop" -->
+                    <div class="diagram">
+                        <img src="https://i.imgur.com/aR2vG3Y.png" alt="D to JK Flip-Flop Conversion"
+                            style="max-width:600px;">
+                    </div>
+                    <h4>D to T Flip-Flop</h4>
+                    <p>A D flip-flop can function as a T flip-flop by connecting the T input to an XOR gate whose other
+                        input is Q, and the output of the XOR gate to D. So, D = T ⊕ Q. No additional combinational
+                        logic is required if T input is available and Q output can be fed back.</p>
+                    <!-- Add diagram if available or conceptual description -->
+                </div>
+            </div>
+        </section>
+
+        <section id="counters" class="container">
+            <h3><i class="fas fa-sort-numeric-up"></i> Counters</h3>
+            <div class="content-box">
+                <p>A counter is a sequential circuit that goes through a predetermined sequence of states upon the
+                    application of input pulses (usually clock pulses). Counters are essential for timing, sequencing,
+                    and frequency division.</p>
+                <h4>Counter Classification:</h4>
+                <ul>
+                    <li><strong>Asynchronous (Ripple) Counters:</strong> The flip-flops are not triggered by a common
+                        clock signal. The output of one flip-flop triggers the clock input of the next.</li>
+                    <li><strong>Synchronous Counters:</strong> All flip-flops are triggered simultaneously by a common
+                        clock signal.</li>
+                </ul>
+                <p>Counters can also be characterized by:</p>
+                <ul>
+                    <li>Up, Down, or Up/Down counting capability.</li>
+                    <li>Positive or Negative edge triggering.</li>
+                    <li>The number of states (modulus of the counter).</li>
+                </ul>
+
+                <h4>Asynchronous (Ripple) Counters</h4>
+                <p>In asynchronous counters, only the first flip-flop is driven by the main clock. The clock input of
+                    subsequent flip-flops is driven by the output of the previous flip-flop. This creates a "ripple"
+                    effect as the count propagates through the stages.</p>
+                <div class="diagram">
+                    <p>4-Bit Asynchronous (Ripple) Counter & Timing Diagram</p>
+                    <!-- From "Counter Classification ... Asynchronous Counter" diagram -->
+                    <img src="https://i.imgur.com/hW7zQ9R.png" alt="Asynchronous Counter and Timing Diagram"
+                        style="max-width:600px;">
+                    <p class="diagram-caption">A 4-bit asynchronous up-counter using D flip-flops (configured to toggle)
+                        and its timing diagram.</p>
+                </div>
+                <div class="diagram">
+                    <p>3-Bit Asynchronous Up-Counter Example</p>
+                    <!-- From "Figure 3, Figure 4, Figure 5, Table II" for 3-bit async counter -->
+                    <img src="https://i.imgur.com/wS8vX4E.png" alt="3-bit async up-counter block"
+                        style="max-width:400px;">
+                    <img src="https://i.imgur.com/bN3qP7Y.png" alt="3-bit async up-counter timing"
+                        style="max-width:500px; margin-top:10px;">
+                    <img src="https://i.imgur.com/kM2jO6P.png"
+                        alt="3-bit async up-counter state diagram and truth table"
+                        style="max-width:400px; margin-top:10px;">
+                    <p class="diagram-caption">3-bit asynchronous positive edge triggered up-counter: block, timing,
+                        state diagram, and truth table.</p>
+                </div>
+                <h5>BCD Ripple Counter</h5>
+                <p>A BCD (Binary Coded Decimal) counter counts from 0 (0000) to 9 (1001) and then resets to 0. It's a
+                    decade counter.</p>
+                <div class="diagram-set">
+                    <div class="diagram">
+                        <p>BCD Ripple Counter State Diagram</p>
+                        <!-- From "BCD Ripple Counter Fig. 6-9" state diagram -->
+                        <img src="https://i.imgur.com/oR3uP8T.png" alt="BCD Ripple Counter State Diagram"
+                            style="max-width:450px;">
+                    </div>
+                    <div class="diagram">
+                        <p>BCD Ripple Counter Circuit (Conceptual)</p>
+                        <!-- From "BCD Ripple Counter ... Fig. 6-11" circuit diagram for one stage -->
+                        <img src="https://i.imgur.com/xN3rD8S.png" alt="BCD Ripple Counter Circuit Logic-1"
+                            style="max-width:300px;">
+                    </div>
+                </div>
+
+
+                <h4>Synchronous Counters</h4>
+                <p>In synchronous counters, all flip-flops share a common clock input, and their state changes are
+                    synchronized. This eliminates the cumulative propagation delay found in ripple counters, allowing
+                    for higher frequency operation.</p>
+                <div class="diagram">
+                    <p>4-Bit Synchronous Counter</p>
+                    <!-- From "Counter Classification ... Synchronous Counter" diagram -->
+                    <img src="https://i.imgur.com/qJ3yX5Z.png" alt="Synchronous Counter Example"
+                        style="max-width:500px;">
+                    <p class="diagram-caption">A 4-bit synchronous up-counter using JK flip-flops.</p>
+                </div>
+                <h5>Up-Down Binary Counter</h5>
+                <p>An up-down counter can count in either an increasing or decreasing sequence, controlled by an Up/Down
+                    control input.</p>
+                <div class="diagram">
+                    <!-- From "Up-Down Binary Counter" image -->
+                    <img src="https://i.imgur.com/gS9rV8P.png" alt="Up-Down Binary Counter Circuit"
+                        style="max-width:400px;">
+                    <p class="diagram-caption">Synchronous Up-Down Binary Counter using T flip-flops.</p>
+                </div>
+                <h5>Binary Counter with Parallel Load</h5>
+                <p>These counters can be preset to a specific binary number by loading data into the flip-flops in
+                    parallel, then can proceed to count from that number.</p>
+                <div class="diagram">
+                    <!-- From "Binary Counter with Parallel Load ... Fig. 6-14" circuit -->
+                    <img src="https://i.imgur.com/mP4cE5Y.png" alt="Binary Counter with Parallel Load Circuit"
+                        style="max-width:500px;">
+                    <p class="diagram-caption">4-bit Synchronous Binary Counter with Parallel Load capability.</p>
+                </div>
+
+                <h4>Special Counters</h4>
+                <h5>Ring Counter</h5>
+                <p>A ring counter is a circular shift register where only one flip-flop is set at any particular time,
+                    and all others are cleared. The '1' bit is shifted from one flip-flop to the next on each clock
+                    pulse, creating a sequence of timing signals.</p>
+                <div class="diagram">
+                    <!-- From "Ring Counter" image (Fig. 6-17) -->
+                    <img src="https://i.imgur.com/zL9tK8J.png" alt="Ring Counter and Timing Signals"
+                        style="max-width:500px;">
+                    <p class="diagram-caption">Ring Counter operation and generated timing signals.</p>
+                </div>
+                <h5>Johnson Counter (Twisted Ring Counter)</h5>
+                <p>A Johnson counter is a modified ring counter where the complemented output of the last flip-flop is
+                    fed back to the input of the first. This creates a sequence of 2k states for k flip-flops.</p>
+                <div class="diagram">
+                    <!-- From "Johnson Counter" image (Fig. 6-18) -->
+                    <img src="https://i.imgur.com/aJ7oP9R.png" alt="Johnson Counter (Switch-Tail Ring Counter)"
+                        style="max-width:500px;">
+                    <p class="diagram-caption">Four-stage Johnson Counter and its state sequence.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="shift-registers" class="container">
+            <h3><i class="fas fa-angle-double-right"></i> Shift Registers</h3>
+            <div class="content-box">
+                <p>A shift register is a type of sequential logic circuit, mainly for storage and transfer of digital
+                    data. They are a group of flip-flops connected in a chain so that the output from one flip-flop
+                    becomes the input of the next flip-flop. Most of the registers possess no characteristic internal
+                    sequence of states.</p>
+                <div class="diagram">
+                    <!-- From "Shift Register" main block diagram -->
+                    <img src="https://i.imgur.com/wE4rQ5T.png" alt="Shift Register Block Diagram"
+                        style="max-width:500px;">
+                    <p class="diagram-caption">General concept of a Shift Register.</p>
+                </div>
+                <ul>
+                    <li>A simple shift register can be made using D-type flip-flops.</li>
+                    <li>Data is moved ("shifted") to their required positions on each clock pulse.</li>
+                    <li>Shift registers can operate in various modes based on how data is loaded and retrieved.</li>
+                </ul>
+                <h4>Types of Shift Registers:</h4>
+                <ul>
+                    <li><strong>SISO (Serial-In, Serial-Out):</strong> Data is shifted in one bit at a time and shifted
+                        out one bit at a time.
+                        <div class="diagram">
+                            <!-- From "Serial-In Serial-Out Shift Register (SISO)" image -->
+                            <img src="https://i.imgur.com/fJ3kH8P.png" alt="SISO Shift Register" class="light-bg-img"
+                                style="max-width:500px;">
+                        </div>
+                    </li>
+                    <li><strong>SIPO (Serial-In, Parallel-Out):</strong> Data is shifted in serially, but all bits are
+                        available simultaneously as parallel output.
+                        <div class="diagram">
+                            <!-- From "4-bit Serial-in to Parallel-out Shift Register" image -->
+                            <img src="https://i.imgur.com/sO2uD7R.png" alt="SIPO Shift Register and Waveform"
+                                class="light-bg-img" style="max-width:500px;">
+                        </div>
+                    </li>
+                    <li><strong>PISO (Parallel-In, Serial-Out):</strong> Data is loaded in parallel simultaneously into
+                        all flip-flops, and then shifted out serially.
+                        <div class="diagram">
+                            <!-- From "Parallel-In Serial-Out Shift Register (PISO)" image -->
+                            <img src="https://i.imgur.com/aE5tY9Q.png" alt="PISO Shift Register" class="light-bg-img"
+                                style="max-width:500px;">
+                        </div>
+                    </li>
+                    <li><strong>PIPO (Parallel-In, Parallel-Out):</strong> Data is loaded in parallel and retrieved in
+                        parallel. Often used for temporary storage.
+                        <div class="diagram">
+                            <!-- From "Parallel-In Parallel-Out Shift Register (PIPO)" image -->
+                            <img src="https://i.imgur.com/oR3eF2P.png" alt="PIPO Shift Register" class="light-bg-img"
+                                style="max-width:500px;">
+                        </div>
+                    </li>
+                </ul>
+                <h4>Bidirectional and Universal Shift Registers:</h4>
+                <ul>
+                    <li><strong>Bidirectional Shift Register:</strong> Can shift data either left or right.
+                        <div class="diagram">
+                            <!-- From "Bidirectional Shift Register" image -->
+                            <img src="https://i.imgur.com/yT4wS9X.png" alt="Bidirectional Shift Register"
+                                class="light-bg-img" style="max-width:500px;">
+                        </div>
+                    </li>
+                    <li><strong>Universal Shift Register:</strong> Combines capabilities for serial/parallel
+                        input/output and left/right shifting.
+                        <div class="diagram">
+                            <!-- From "Universal Shift Register" image -->
+                            <img src="https://i.imgur.com/kL8uP7X.png" alt="Universal Shift Register"
+                                class="light-bg-img" style="max-width:600px;">
+                        </div>
+                    </li>
+                </ul>
+                <h4>Applications of Shift Registers:</h4>
+                <div class="callout info">
+                    <ul>
+                        <li>Temporary data storage.</li>
+                        <li>Serial-to-parallel and parallel-to-serial data conversion.</li>
+                        <li>Time delay generation.</li>
+                        <li>Sequence generation (e.g., Ring and Johnson counters).
+                        <li>Arithmetic operations (multiplication/division by powers of 2).</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="interactive-seq" class="container">
+            <h2><i class="fas fa-gamepad"></i> Interactive D Flip-Flop Simulator</h2>
+            <div class="content-box interactive-tool">
+                <label for="dInput">D Input:</label>
+                <select id="dInput">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                </select>
+                <input type="button" value="Clock Pulse ↻" onclick="clockDFlipFlop()">
+                <div style="margin-top:15px;">
+                    Output Q: <span id="dffOutputQ" class="ff-output">0</span>
+                    Output Q': <span id="dffOutputQNot" class="ff-output">1</span>
+                </div>
+                <p class="ff-state" id="dffState">Initial state: Q=0, Q'=1</p>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="topic-navigation">
+                <a href="topic-5.html">
+                    ← Previous Topic: Karnaugh Maps
+                </a>
+                <a href="topic-7.html"> <!-- Assuming topic-7.html is next -->
+                    Next Topic: State Machines →
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© <span id="currentYear"></span> Eduvision. A High-Quality Resource on Sequential Circuits.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Collapsible sections
+        var collapsibles = document.getElementsByClassName("collapsible");
+        for (var i = 0; i < collapsibles.length; i++) {
+            collapsibles[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            });
+        }
+
+        // D Flip-Flop Simulator
+        let qState = 0;
+        const dffOutputQ = document.getElementById('dffOutputQ');
+        const dffOutputQNot = document.getElementById('dffOutputQNot');
+        const dffState = document.getElementById('dffState');
+
+        function clockDFlipFlop() {
+            const dValue = parseInt(document.getElementById('dInput').value);
+            qState = dValue; // D FF: Q_next = D
+
+            dffOutputQ.textContent = qState;
+            dffOutputQNot.textContent = qState ? 0 : 1;
+            dffState.textContent = `After clock: D=${dValue}, Q=${qState}, Q'=${qState ? 0 : 1}`;
+        }
+        // Initialize display
+        dffOutputQ.textContent = qState;
+        dffOutputQNot.textContent = qState ? 0 : 1;
+
+    </script>
+
+</body>
+
+</html>
