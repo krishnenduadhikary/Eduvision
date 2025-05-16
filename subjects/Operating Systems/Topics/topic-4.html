@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Management - EduVision OS Guide</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Nunito:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-purple: #7A5CFA;
+            --primary-purple-dark: #5D3FD3;
+            --primary-purple-light: #A48DFB;
+            --light-lavender-bg: #F8F7FF;
+            --card-bg-color: #FFFFFF;
+            --text-color: #23272f;
+            --subtle-text-color: #6b7280;
+            --border-color: #E2E8F0;
+            --code-bg-color: #181c24;
+            --code-text-color: #e0e6f1;
+            --tooltip-bg: #23272f;
+            --tooltip-text: #F7FAFC;
+            --success-color: #48BB78;
+            --danger-color: #F56565;
+            --info-blue: #3B82F6;
+            --info-blue-dark: #2563EB;
+            --info-blue-light: #EFF6FF;
+            --font-sans: 'Poppins', 'Segoe UI', Arial, sans-serif;
+            --font-mono: 'Fira Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px 0 rgba(80, 70, 140, 0.10);
+            --shadow-lg: 0 12px 32px 0 rgba(80, 70, 140, 0.13);
+            --shadow-subtle: 0 2px 4px 0 rgba(107, 114, 128, 0.08);
+            --border-radius-sm: 0.25rem;
+            --border-radius-md: 0.5rem;
+            --border-radius-lg: 1rem;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            color: var(--text-color);
+            background: linear-gradient(120deg, #f8f7ff 0%, #e9e6f7 100%);
+        }
+
+        .main-header {
+            background: linear-gradient(90deg, var(--primary-purple-dark) 0%, var(--primary-purple) 100%);
+            color: white;
+            padding: 28px 40px 22px 40px;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .main-header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .main-header .subtitle {
+            font-size: 1.1em;
+            font-weight: 400;
+            opacity: 0.92;
+            margin-top: 0.25rem;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvishion-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1001;
+        }
+
+        .eduvishion-logo .text-2xl {
+            font-size: 1.6rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .eduvishion-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvishion-logo .text-yellow-300 {
+            color: #fde047 !important;
+        }
+
+        .eduvishion-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+        }
+
+        .eduvishion-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvishion-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        @media (max-width: 768px) {
+            .main-header {
+                position: static;
+            }
+
+            .eduvishion-logo {
+                top: 15px !important;
+                left: 15px !important;
+            }
+
+            .eduvishion-logo .text-2xl {
+                font-size: 1.2rem !important;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .eduvishion-logo {
+                display: none;
+            }
+        }
+
+        .page-container {
+            display: flex;
+            width: 100%;
+            margin-top: 0;
+        }
+
+        #sidebar {
+            width: 270px;
+            min-width: 220px;
+            background: linear-gradient(135deg, #f5f3fe 80%, #e9e6f7 100%);
+            padding: 32px 18px 32px 18px;
+            height: calc(100vh - 85px);
+            position: sticky;
+            top: 85px;
+            overflow-y: auto;
+            border-right: 1.5px solid var(--border-color);
+            box-shadow: 2px 0 12px 0 rgba(80, 70, 140, 0.04);
+            transition: width 0.3s;
+        }
+
+        #sidebar h2 {
+            color: var(--primary-purple-dark);
+            text-align: left;
+            margin-top: 0;
+            margin-bottom: 22px;
+            font-size: 1.3em;
+            font-weight: 700;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-purple);
+            letter-spacing: 0.01em;
+        }
+
+        #sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #sidebar ul li a {
+            color: var(--subtle-text-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 18px;
+            margin-bottom: 7px;
+            border-radius: var(--border-radius-md);
+            font-weight: 500;
+            font-size: 1.04em;
+            transition: background 0.18s, color 0.18s, transform 0.13s;
+            border-left: 4px solid transparent;
+            position: relative;
+        }
+
+        #sidebar ul li a:hover,
+        #sidebar ul li a.active {
+            background: linear-gradient(90deg, #ece9fa 60%, #e0d7f3 100%);
+            color: var(--primary-purple-dark);
+            border-left: 4px solid var(--primary-purple);
+            font-weight: 700;
+            transform: translateX(4px) scale(1.03);
+        }
+
+        #main-content {
+            flex-grow: 1;
+            padding: 38px 48px 48px 48px;
+            max-width: 100vw;
+            min-width: 0;
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .main-content-float {
+            background: var(--card-bg-color);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 36px 36px 24px 36px;
+            margin-bottom: 40px;
+            margin-top: 0;
+            min-width: 0;
+        }
+
+        .syllabus-nav-bar {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 0.75rem;
+            background: var(--card-bg-color);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .syllabus-nav-bar a.back-to-syllabus {
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.98rem;
+            color: var(--info-blue);
+            font-weight: 600;
+            padding: 0.5rem 0.95rem;
+            border-radius: var(--border-radius-md);
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .syllabus-nav-bar a.back-to-syllabus:hover {
+            background: var(--info-blue-light);
+            color: var(--info-blue-dark);
+        }
+
+        .syllabus-nav-bar a.back-to-syllabus svg {
+            height: 1.25rem;
+            width: 1.25rem;
+            margin-right: 0.375rem;
+        }
+
+        .syllabus-nav-bar .topic-indicator {
+            background: var(--info-blue);
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 0.375rem 1.1rem;
+            border-radius: 9999px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        @media (min-width: 640px) {
+            .syllabus-nav-bar {
+                flex-direction: row;
+            }
+
+            .syllabus-nav-bar a.back-to-syllabus {
+                margin-bottom: 0;
+            }
+
+            .syllabus-nav-bar .topic-indicator {
+                font-size: 1rem;
+            }
+        }
+
+        .topic-header {
+            text-align: left;
+            padding-bottom: 18px;
+            margin-bottom: 32px;
+            border-bottom: 1.5px solid var(--border-color);
+        }
+
+        .topic-header h1 {
+            color: var(--primary-purple-dark);
+            margin: 0 0 7px 0;
+            font-size: 2.1em;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .topic-header p {
+            color: var(--subtle-text-color);
+            font-size: 1.08em;
+            margin: 0;
+        }
+
+        section {
+            margin-bottom: 38px;
+            padding: 30px 28px 28px 28px;
+            background: var(--card-bg-color);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        section h2 {
+            font-size: 1.6em;
+            color: var(--primary-purple-dark);
+            border-bottom: 2px solid var(--primary-purple);
+            margin-bottom: 22px;
+            padding-bottom: 8px;
+            font-weight: 700;
+        }
+
+        section h3 {
+            font-size: 1.22em;
+            margin-top: 32px;
+            margin-bottom: 14px;
+            color: var(--primary-purple);
+            font-weight: 600;
+            padding-bottom: 6px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        section h4 {
+            font-size: 1.08em;
+            margin-top: 22px;
+            margin-bottom: 9px;
+            color: var(--primary-purple-dark);
+            font-weight: 600;
+        }
+
+        section ul {
+            padding-left: 22px;
+            margin-top: 0.5rem;
+        }
+
+        section ul li {
+            margin-bottom: 0.5rem;
+            list-style-type: disc;
+        }
+
+        section ul li::marker {
+            color: var(--primary-purple);
+        }
+
+        .diagram-placeholder,
+        .image-container {
+            border: 1.5px dashed var(--primary-purple-light);
+            padding: 22px;
+            margin: 22px 0;
+            text-align: center;
+            background: linear-gradient(90deg, #f8f7ff 80%, #ece9fa 100%);
+            border-radius: var(--border-radius-md);
+            color: var(--subtle-text-color);
+            font-style: italic;
+            font-size: 1.01em;
+        }
+
+        .diagram-placeholder p,
+        .image-container p {
+            margin: 7px 0;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            border-radius: 0.5em;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 8px 0 rgba(80, 70, 140, 0.08);
+        }
+
+        .code-block {
+            background: var(--code-bg-color);
+            color: var(--code-text-color);
+            padding: 1.2rem 1.2rem 1.2rem 1.5rem;
+            border-radius: var(--border-radius-md);
+            overflow-x: auto;
+            margin: 1.2rem 0;
+            position: relative;
+            box-shadow: 0 2px 12px 0 rgba(30, 30, 60, 0.10);
+            font-family: var(--font-mono);
+            font-size: 1em;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: var(--font-mono);
+            font-size: 1em;
+            line-height: 1.7;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.8rem;
+            right: 1.1rem;
+            background: linear-gradient(90deg, var(--primary-purple) 60%, var(--primary-purple-dark) 100%);
+            color: white;
+            border: none;
+            padding: 0.38rem 1.1rem;
+            border-radius: 1.2em;
+            cursor: pointer;
+            font-size: 0.93em;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            box-shadow: 0 2px 8px 0 rgba(80, 70, 140, 0.10);
+            transition: background 0.18s, box-shadow 0.18s;
+        }
+
+        .copy-btn:hover {
+            background: linear-gradient(90deg, var(--primary-purple-dark) 60%, var(--primary-purple) 100%);
+            box-shadow: 0 4px 16px 0 rgba(80, 70, 140, 0.13);
+        }
+
+        [data-tooltip] {
+            position: relative;
+            cursor: help;
+            border-bottom: 1px dotted var(--primary-purple);
+        }
+
+        [data-tooltip]::before,
+        [data-tooltip]::after {
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s, transform 0.2s;
+            position: absolute;
+            left: 50%;
+            z-index: 1001;
+        }
+
+        [data-tooltip]::before {
+            content: attr(data-tooltip);
+            background: var(--tooltip-bg);
+            color: var(--tooltip-text);
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--border-radius-md);
+            font-size: 0.85em;
+            white-space: nowrap;
+            bottom: 140%;
+            transform: translateX(-50%) translateY(5px);
+        }
+
+        [data-tooltip]::after {
+            content: '';
+            border-style: solid;
+            border-width: 6px 6px 0 6px;
+            border-color: var(--tooltip-bg) transparent transparent transparent;
+            bottom: calc(140% - 6px);
+            transform: translateX(-50%) translateY(5px);
+        }
+
+        [data-tooltip]:hover::before,
+        [data-tooltip]:hover::after {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .topic-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 32px;
+            margin-bottom: 0;
+        }
+
+        .topic-navigation a {
+            background: linear-gradient(90deg, var(--primary-purple) 60%, var(--primary-purple-dark) 100%);
+            color: #fff;
+            border-radius: 2em;
+            padding: 0.8em 2.2em;
+            font-size: 1.08em;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 2px 12px 0 rgba(80, 70, 140, 0.13);
+            transition: background 0.18s, box-shadow 0.18s, transform 0.13s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7em;
+        }
+
+        .topic-navigation a:hover {
+            background: linear-gradient(90deg, var(--primary-purple-dark) 60%, var(--primary-purple) 100%);
+            box-shadow: 0 6px 24px 0 rgba(80, 70, 140, 0.18);
+            transform: translateY(-2px) scale(1.04);
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: var(--primary-purple-dark);
+            color: rgba(255, 255, 255, 0.85);
+            margin-top: 40px;
+            font-size: 0.97em;
+            letter-spacing: 0.01em;
+        }
+
+        @media (max-width: 1024px) {
+            #main-content {
+                padding: 20px 10px;
+            }
+
+            .main-content-float {
+                padding: 18px 8px 18px 8px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-container {
+                flex-direction: column;
+            }
+
+            #sidebar {
+                width: 100%;
+                min-width: 0;
+                height: auto;
+                position: static;
+                border-right: none;
+                border-bottom: 1.5px solid var(--border-color);
+                box-shadow: none;
+                top: 0;
+            }
+
+            .main-header {
+                padding: 18px;
+                position: static;
+            }
+
+            .main-header h1 {
+                font-size: 1.5em;
+            }
+
+            .topic-header h1 {
+                font-size: 1.2em;
+            }
+
+            section h2 {
+                font-size: 1.1em;
+            }
+
+            section h3 {
+                font-size: 1em;
+            }
+
+            section h4 {
+                font-size: 0.97em;
+            }
+
+            #main-content {
+                padding: 10px 2vw;
+            }
+
+            .main-content-float {
+                padding: 10px 2vw;
+            }
+
+            .topic-navigation {
+                flex-direction: column;
+                gap: 0.7em;
+            }
+
+            .topic-navigation a {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        .command-prompt {
+            color: var(--primary-purple);
+            font-weight: 600;
+        }
+
+        .command-error {
+            color: var(--danger-color);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="main-header">
+        <!-- EduVision Logo (same as topic-3.html) -->
+        <div class="eduvishion-logo">
+            <a href="../../index.html" class="flex items-center group">
+                <span class="text-white">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+                    fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-white">ision</span>
+            </a>
+        </div>
+        <h1>Operating Systems</h1>
+        <p class="subtitle">EduVision :: Full Syllabus with Concepts, Notes, and Diagrams</p>
+    </header>
+
+    <div class="page-container">
+        <nav id="sidebar">
+            <h2>Navigation</h2>
+            <ul id="toc-list">
+                <li><a href="#memory-management-intro" class="active">1. Introduction to Memory Management</a></li>
+                <li><a href="#address-binding">2. Address Binding</a></li>
+                <li><a href="#logical-vs-physical-address">3. Logical vs. Physical Address</a></li>
+                <li><a href="#dynamic-loading-linking-overlays">4. Dynamic Loading, Linking & Overlays</a></li>
+                <li><a href="#swapping">5. Swapping</a></li>
+                <li><a href="#memory-allocation">6. Memory Allocation</a></li>
+                <li><a href="#paging">7. Paging</a></li>
+                <li><a href="#segmentation">8. Segmentation</a></li>
+                <li><a href="#virtual-memory">9. Virtual Memory</a></li>
+            </ul>
+        </nav>
+
+        <main id="main-content">
+            <div class="syllabus-nav-bar">
+                <a href="../../index.html" class="back-to-syllabus"> <!-- Update path as needed -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Back to Syllabus
+                </a>
+                <div class="topic-indicator">
+                    Topic 4
+                </div>
+            </div>
+
+            <div class="topic-header">
+                <h1>Topic 4: Memory Management</h1>
+                <p>Understanding how operating systems manage primary memory, including address binding, logical versus
+                    physical addresses, various allocation schemes (contiguous and non-contiguous like paging and
+                    segmentation), and virtual memory concepts.</p>
+            </div>
+
+            <section id="memory-management-intro">
+                <h2>1. Introduction to Memory Management</h2>
+                <p>Memory management is concerned with managing the primary memory. Memory consists of array of bytes or
+                    words each with their own address. The instructions are fetched from the memory by the CPU based on
+                    the value program counter. These instructions may cause additional loading from and storing to
+                    specific memory addresses. Memory unit sees only a stream of memory addresses. It does not know how
+                    they are generated.</p>
+                <p>Program must be brought into memory and placed within a process for it to be run. Input queue -
+                    collection of processes on the disk that are waiting to be brought into memory for execution. User
+                    programs go through several steps before being run.</p>
+                <h3>Functions of memory management:</h3>
+                <ul>
+                    <li>Keeping track of status of each memory location.</li>
+                    <li>Determining the allocation policy - Memory allocation technique & De-allocation technique.</li>
+                </ul>
+            </section>
+
+            <section id="address-binding">
+                <h2>2. Address Binding</h2>
+                <p>Programs are stored on the secondary storage disks as binary executable files. When the programs are
+                    to be executed they are brought in to the main memory and placed within a process. The collection of
+                    processes on the disk waiting to enter the main memory forms the input queue. One of the processes
+                    which are to be executed is fetched from the queue and placed in the main memory. During the
+                    execution it fetches instruction and data from main memory. After the process terminates it returns
+                    back the memory space.</p>
+                <p>During execution the process will go through different steps and in each step the address is
+                    represented in different ways. In source program the address is symbolic. The compiler converts the
+                    symbolic address to re-locatable address. The loader will convert this re-locatable address to
+                    absolute address.</p>
+                <div class="image-container">
+                    <img src="placeholder_multistep_processing.png" alt="Multistep processing of a user program">
+                    <p>Figure: Multistep processing of a user program (compile time, load time, execution time).</p>
+                </div>
+                <h4>Binding of instructions and data can be done at any step along the way:</h4>
+                <ol>
+                    <li><strong>Compile time:</strong> If we know whether the process resides in memory then absolute
+                        code can be generated. If the static address changes then it is necessary to re-compile the code
+                        from the beginning.</li>
+                    <li><strong>Load time:</strong> If the compiler doesn’t know whether the process resides in memory
+                        then it generates the re-locatable code. In this the binding is delayed until the load time.
+                    </li>
+                    <li><strong>Execution time:</strong> If the process is moved during its execution from one memory
+                        segment to another then the binding is delayed until run time. Special hardware is used for
+                        this. Most of the general purpose operating system uses this method.</li>
+                </ol>
+            </section>
+
+            <section id="logical-vs-physical-address">
+                <h2>3. Logical vs. Physical Address Space</h2>
+                <p>The address generated by the CPU is called <strong
+                        data-tooltip="An address generated by the CPU; also referred to as a virtual address.">logical
+                        address</strong> or <strong
+                        data-tooltip="An address generated by the CPU; also referred to as a logical address.">virtual
+                        address</strong>. The address seen by the memory unit i.e., the one loaded in to the memory
+                    register is called the <strong
+                        data-tooltip="An address seen by the memory unit; the actual address in main memory.">physical
+                        address</strong>. Compile time and load time address binding methods generate some logical and
+                    physical address. The execution time address binding generate different logical and physical
+                    address.</p>
+                <ul>
+                    <li>Set of logical address space generated by the programs is the <strong
+                            data-tooltip="The set of all logical addresses generated by a program.">logical address
+                            space</strong>.</li>
+                    <li>Set of physical address corresponding to these logical addresses is the <strong
+                            data-tooltip="The set of all physical addresses corresponding to the logical addresses.">physical
+                            address space</strong>.</li>
+                    <li>The mapping of virtual address to physical address during run time is done by the hardware
+                        device called <strong
+                            data-tooltip="Memory Management Unit - Hardware device that maps virtual to physical addresses.">memory
+                            management unit (MMU)</strong>.</li>
+                    <li>The base register is also called re-location register. Value of the re-location register is
+                        added to every address generated by the user process at the time it is sent to memory.</li>
+                    <li>User program never sees the real physical address.</li>
+                </ul>
+                <div class="image-container">
+                    <img src="placeholder_dynamic_relocation_mmu.png"
+                        alt="Dynamic relocation using a relocation register (MMU)">
+                    <p>Figure: Dynamic relocation using a relocation register.</p>
+                </div>
+                <h4>Comparison Table: Logical vs. Physical Address</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sl. No</th>
+                            <th>Logical Address</th>
+                            <th>Physical Address</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Address generated by the CPU</td>
+                            <td>Address seen by the memory unit</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>The set of all logical addresses generated by a program is a logical address space.</td>
+                            <td>The set of all physical addresses corresponding to these logical addresses is a physical
+                                address space.</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Logical addresses (in the range 0 to max)</td>
+                            <td>Physical addresses (in the range R + 0 to R + max for a base value R)</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>User can view the logical address of a program</td>
+                            <td>User can never view the Physical address of a program</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>User can use the logical address to access the physical address</td>
+                            <td>User can indirectly access physical address but not directly</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>Logical address is variable hence will changing with the system</td>
+                            <td>Physical address of that object always remains constant.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="dynamic-loading-linking-overlays">
+                <h2>4. Dynamic Loading, Linking & Overlays</h2>
+                <h3>Dynamic Loading</h3>
+                <p>⇒ It loads the program and data dynamically into physical memory to obtain better memory-space
+                    utilization.</p>
+                <p>⇒ With dynamic loading, a routine is not loaded until it is called.</p>
+                <p>⇒ The advantage of dynamic loading is that an unused routine is never loaded.</p>
+                <p>⇒ This method is useful when large amounts of code are needed to handle infrequently occurring cases,
+                    such as error routines.</p>
+                <p>⇒ Dynamic loading does not require special support from the operating system.</p>
+
+                <hr class="subsection-divider">
+                <h3>Dynamic Linking</h3>
+                <p>⇒ Linking postponed until execution time.</p>
+                <p>⇒ Small piece of code (<strong
+                        data-tooltip="A small piece of code used to locate a library routine, load it if necessary, and then call it.">stub</strong>)
+                    used to locate the appropriate memory-resident library routine.</p>
+                <p>⇒ Stub replaces itself with the address of the routine and executes the routine.</p>
+                <p>⇒ Operating system needed to check if routine is in processes memory address.</p>
+                <p>⇒ Dynamic linking is particularly useful for libraries.</p>
+
+                <hr class="subsection-divider">
+                <h3>Overlays</h3>
+                <p>⇒ Keep in memory only those instructions and data that are needed at any given time.</p>
+                <p>⇒ Needed when process is larger than amount of memory allocated to it.</p>
+                <p>⇒ Implemented by user, no special support needed from operating system, programming design of overlay
+                    structure is complex.</p>
+            </section>
+
+            <section id="swapping">
+                <h2>5. Swapping</h2>
+                <p>A process can be swapped temporarily out of memory to a <strong
+                        data-tooltip="Fast disk large enough to accommodate copies of all memory images for all users.">backing
+                        store</strong> (large disc), and then brought back into memory for continued execution.</p>
+                <p>⇒ <strong
+                        data-tooltip="A variant of swapping where a lower-priority process is swapped out so a higher-priority process can be loaded and run.">Roll
+                        out, roll in:</strong> A variant of this swapping policy is used for priority-based scheduling
+                    algorithms. If a higher-priority process arrives and wants service, the memory manager can swap out
+                    the lower-priority process so that it can load and execute the higher-priority process. When the
+                    higher-priority process finishes, the lower-priority process can be swapped back in and continued.
+                    This variant of swapping is called roll out, roll in.</p>
+                <p>⇒ Major part of swap time is transfer time; total transfer time is directly proportional to the
+                    amount of memory swapped.</p>
+                <p>⇒ Modified versions of swapping are found on many systems (UNIX, Linux, and Windows).</p>
+                <div class="image-container">
+                    <img src="placeholder_swapping_diagram.png"
+                        alt="Swapping of two processes using a disk as a backing store">
+                    <p>Figure: Swapping of two processes using a disk as a backing store.</p>
+                </div>
+            </section>
+
+            <section id="memory-allocation">
+                <h2>6. Memory Allocation</h2>
+                <p>The main memory must accommodate both the operating system and the various user processes. We need to
+                    allocate different parts of the main memory in the most efficient way possible.</p>
+                <p>The main memory is usually divided into two partitions: one for the resident operating system, and
+                    one for the user processes. We may place the operating system in either low memory or high memory.
+                    The major factor affecting this decision is the location of the interrupt vector. Since the
+                    interrupt vector is often in low memory, programmers usually place the operating system in low
+                    memory as well.</p>
+                <p>There are following two ways to allocate memory for user processes:</p>
+                <ol>
+                    <li>Contiguous memory allocation</li>
+                    <li>Non contiguous memory allocation</li>
+                </ol>
+
+                <h3>1. Contiguous Memory Allocation</h3>
+                <p>Here, all the processes are stored in contiguous memory locations. To load multiple processes into
+                    memory, the Operating System must divide memory into multiple partitions for those processes.</p>
+                <p><strong>Hardware Support:</strong> The relocation-register scheme used to protect user processes from
+                    each other, and from changing operating system code and data. Relocation register contains value of
+                    smallest physical address of a partition and limit register contains range of that partition. Each
+                    logical address must be less than the limit register.</p>
+                <div class="image-container">
+                    <img src="placeholder_relocation_limit_registers.png"
+                        alt="Hardware support for relocation and limit registers">
+                    <p>Figure: Hardware support for relocation and limit registers.</p>
+                </div>
+                <p>According to size of partitions, the multiple partition schemes are divided into two types:</p>
+                <ul>
+                    <li>i. Multiple fixed partition/ multiprogramming with fixed task (MFT)</li>
+                    <li>ii. Multiple variable partition/ multiprogramming with variable task (MVT)</li>
+                </ul>
+                <h4>i. Multiple fixed partitions:</h4>
+                <p>Main memory is divided into a number of static partitions at system generation time. In this case,
+                    any process whose size is less than or equal to the partition size can be loaded into any available
+                    partition. If all partitions are full and no process is in the Ready or Running state, the operating
+                    system can swap a process out of any of the partitions and load in another process, so that there is
+                    some work for the processor.</p>
+                <p><strong>Advantages:</strong> Simple to implement and little operating system overhead.</p>
+                <p><strong>Disadvantage:</strong> Inefficient use of memory due to internal fragmentation. Maximum
+                    number of active processes is fixed.</p>
+
+                <h4>ii. Multiple variable partitions:</h4>
+                <p>With this partitioning, the partitions are of variable length and number. When a process is brought
+                    into main memory, it is allocated exactly as much memory as it requires and no more.</p>
+                <p><strong>Advantages:</strong> No internal fragmentation and more efficient use of main memory.</p>
+                <p><strong>Disadvantages:</strong> Inefficient use of processor due to the need for compaction to
+                    counter external fragmentation.</p>
+
+                <h4>Partition Selection Policy:</h4>
+                <p>When the multiple memory holes (partitions) are large enough to contain a process, the operating
+                    system must use an algorithm to select in which hole the process will be loaded. The partition
+                    selection algorithm are as follows:</p>
+                <ul>
+                    <li>⇒ <strong>First-fit:</strong> The OS looks at all sections of free memory. The process is
+                        allocated to the first hole found that is big enough size than the size of process.</li>
+                    <li>⇒ <strong>Next Fit:</strong> The next fit search starts at the last hole allocated and The
+                        process is allocated to the next hole found that is big enough size than the size of process.
+                    </li>
+                    <li>⇒ <strong>Best-fit:</strong> The Best Fit searches the entire list of holes to find the smallest
+                        hole that is big enough size than the size of process.</li>
+                    <li>⇒ <strong>Worst-fit:</strong> The Worst Fit searches the entire list of holes to find the
+                        largest hole that is big enough size than the size of process.</li>
+                </ul>
+                <p><strong
+                        data-tooltip="Wasted memory space within allocated partitions (internal) or between partitions (external).">Fragmentation:</strong>
+                    The wasting of memory space is called fragmentation. There are two types of fragmentation as
+                    follows:</p>
+                <h5>Internal Fragmentation:</h5>
+                <p>There is wasted space internal to a portion due to the fact that block of data loaded is smaller than
+                    the partition. The scenario is where a free space is too small for any file to fit into. The
+                    overhead to keep a track of that free space is too much for the operating system. This is called
+                    internal fragmentation. Example:- If there is a block of 50kb and if the process requests 40kb and
+                    if the block is allocated to the process then there will be 10kb of memory left.</p>
+                <h5>External Fragmentation:</h5>
+                <p>Exists when there is enough memory space exists to satisfy the request, but it not contiguous i.e.,
+                    storage is fragmented into large number of small holes. External Fragmentation may be either minor
+                    or a major problem. As shown in the diagram, if we want a file to fit into the memory which is equal
+                    to the sum of the freed space, we cannot as the space is not contiguous. Therefore even though there
+                    is enough memory to hold the file we cannot fit it due to the memory being scattered at different
+                    places. This is external fragmentation.</p>
+                <p>⇒ One solution for over-coming external fragmentation is <strong
+                        data-tooltip="Moving memory contents to place all free memory together in one large block.">compaction</strong>.
+                    The goal is to move all the free memory together to form a large block. Compaction is not possible
+                    always. If the re-location is static and is done at load time then compaction is not possible.
+                    Compaction is possible if the re-location is dynamic and done at execution time.</p>
+                <div class="image-container">
+                    <img src="placeholder_fragmentation_compaction.png"
+                        alt="Fragmented memory before and after compaction">
+                    <p>Figure: Fragmented memory before compaction and Memory after compaction.</p>
+                </div>
+                <p>⇒ Another possible solution to the external fragmentation problem is to permit the logical address
+                    space of a process to be non-contiguous, thus allowing the process to be allocated physical memory
+                    whenever the latter is available.</p>
+            </section>
+
+            <!-- Sections for Paging, Segmentation, Virtual Memory will follow -->
+            <!-- Populate these based on the images you provided, similar to the sections above. -->
+            <!-- For brevity, I'm adding a stub. -->
+            <section id="paging">
+                <h2>7. Paging</h2>
+                <p>Paging is a memory management scheme that permits the physical address space of a process to be
+                    non-contiguous. Support for paging is handled by hardware. It is used to avoid external
+                    fragmentation.</p>
+                <p>Paging avoids the considerable problem of fitting the varying sized memory chunks onto the backing
+                    store. When some code or data residing in main memory need to be swapped out, space must be found on
+                    backing store.</p>
+                <h3>Basic Method:</h3>
+                <ul>
+                    <li>Physical memory is broken in to fixed sized blocks called <strong
+                            data-tooltip="Fixed-size blocks of physical memory.">frames (f)</strong>.</li>
+                    <li>Logical memory is broken in to blocks of same size called <strong
+                            data-tooltip="Fixed-size blocks of logical memory.">pages (p)</strong>.</li>
+                    <li>When a process is to be executed its pages are loaded in to available frames from backing store.
+                    </li>
+                    <li>The blocking store is also divided in to fixed-sized blocks of same size as memory frames.</li>
+                </ul>
+                <div class="image-container">
+                    <img src="placeholder_paging_basic_method.png" alt="Paging basic method diagram">
+                    <p>Figure: Paging - mapping pages to frames in Main Memory and Secondary Memory.</p>
+                </div>
+                <ul>
+                    <li>Logical address generated by the CPU is divided in to two parts: page number (p) and page offset
+                        (d).</li>
+                    <li>The page number (p) is used as index to the <strong
+                            data-tooltip="A data structure used by the virtual memory system to store the mapping between logical addresses and physical addresses.">page
+                            table</strong>. The page table contains base address of each page in physical memory. This
+                        base address is combined with the page offset to define the physical memory i.e., sent to the
+                        memory unit.</li>
+                </ul>
+                <div class="image-container">
+                    <img src="placeholder_paging_hardware.png" alt="Paging hardware diagram">
+                    <p>Figure: Paging hardware (CPU, page table, physical memory).</p>
+                </div>
+                <ul>
+                    <li>The page size is defined by the hardware. The size of a power of 2, varying between 512 bytes
+                        and 10Mb per page.</li>
+                    <li>If the size of logical address space is 2<sup>m</sup> address unit and page size is
+                        2<sup>n</sup>, then high order m-n designates the page number and n low order bits represents
+                        page offset.</li>
+                </ul>
+                <div class="image-container">
+                    <img src="placeholder_paging_model_logical_physical.png"
+                        alt="Paging model of logical and physical memory">
+                    <p>Figure: Paging model of logical and physical memory.</p>
+                </div>
+
+                <h4>Implementation of Page Table</h4>
+                <ul>
+                    <li>Page table is kept in main memory.</li>
+                    <li>Page-table base register (PTBR) points to the page table.</li>
+                    <li>In this scheme every data/instruction-byte access requires two memory accesses. One for the
+                        page-table entry and one for the byte.</li>
+                    <li>The two memory access problem can be solved by the use of a special fast-lookup hardware cache
+                        called associative registers or associative memory or <strong
+                            data-tooltip="Translation Look-aside Buffer: A CPU cache that memory management hardware uses to improve virtual address translation speed.">translation
+                            look-aside buffers (TLBs)</strong>.</li>
+                    <li>Typically, the number of entries in a TLB is between 32 and 1024.</li>
+                </ul>
+                <div class="image-container">
+                    <img src="placeholder_paging_with_tlb.png" alt="Paging hardware with TLB">
+                    <p>Figure: Paging hardware with TLB.</p>
+                </div>
+                <ul>
+                    <li>The TLB contains only a few of the page table entries. When a logical address is generated by
+                        the CPU, its page number is presented to the TLB. If the page number is found, its frame number
+                        is immediately available and is used to access memory. The whole task may take less than 10
+                        percent longer than it would if an unmapped memory reference were used.</li>
+                    <li>If the page number is not in the TLB (known as a TLB miss), a memory reference to the page table
+                        must be made. When the frame number is obtained, we can use it to access memory.</li>
+                </ul>
+                <p><strong>Hit Ratio:</strong> Hit Ratio: the percentage of times that a page number is found in the
+                    associative registers. For example, if it takes 20 nanoseconds to search the associative memory and
+                    100 nanoseconds to access memory; for a 98-percent hit ratio, we have Effective memory-access time =
+                    0.98 x 120 + 0.02 x 220 = 122 nanoseconds.</p>
+                <p><strong>Valid or invalid bit in a page table:</strong> Memory protection implemented by associating
+                    protection bit with each frame. Valid-invalid bit attached to each entry in the page table: "Valid"
+                    indicates that the associated page is in the process’ logical address space, and is thus a legal
+                    page. "Invalid" indicates that the page is not in the process’ logical address space.</p>
+
+                <h4>Structure of Page table</h4>
+                <ul>
+                    <li><strong>Hierarchical Paging:</strong> Break up the logical address space into multiple page
+                        tables. A simple technique is a two-level page table.</li>
+                </ul>
+                <div class="image-container">
+                    <img src="placeholder_hierarchical_paging.png" alt="Two-level hierarchical paging structure">
+                    <p>Figure: Two-level page table structure.</p>
+                </div>
+                <ul>
+                    <li><strong>Hashed Page Tables:</strong> The virtual page number is hashed into a page table. This
+                        page table contains a chain of elements hashing to the same location. Virtual page numbers are
+                        compared in this chain searching for a match. If a match is found, the corresponding physical
+                        frame is extracted.</li>
+                </ul>
+                <div class="image-container">
+                    <img src="placeholder_hashed_page_table.png" alt="Hashed page table structure">
+                    <p>Figure: Hashed page table structure.</p>
+                </div>
+                <ul>
+                    <li><strong>Inverted Page Tables:</strong> One entry for each real page of memory. Entry consists of
+                        the virtual address of the page stored in that real memory location, with information about the
+                        process that owns that page. Decreases memory needed to store each page table, but increases
+                        time needed to search the table when a page reference occurs. Use hash table to limit the search
+                        to one — or at most a few — page-table entries.</li>
+                </ul>
+                <div class="image-container">
+                    <img src="placeholder_inverted_page_table.png" alt="Inverted page table structure">
+                    <p>Figure: Inverted page table structure with PID.</p>
+                </div>
+
+                <h4>Shared Pages</h4>
+                <p><strong>Shared code:</strong> One copy of read-only (reentrant) code shared among processes (i.e.,
+                    text editors, compilers, window systems). Shared code must appear in same location in the logical
+                    address space of all processes.</p>
+                <p><strong>Private code and data:</strong> Each process keeps a separate copy of the code and data. The
+                    pages for the private code and data can appear anywhere in the logical address space.</p>
+            </section>
+
+            <section id="segmentation">
+                <h2>8. Segmentation</h2>
+                <p>Memory-management scheme that supports user view of memory. A program is a collection of segments. A
+                    segment is a logical unit such as:</p>
+                <ul>
+                    <li>main program</li>
+                    <li>Procedure</li>
+                    <li>function method</li>
+                    <li>object</li>
+                    <li>local variables, global variables</li>
+                    <li>common block</li>
+                    <li>stack</li>
+                    <li>symbol table</li>
+                    <li>arrays</li>
+                </ul>
+                <div class="image-container">
+                    <img src="placeholder_user_view_program_segmentation.png"
+                        alt="User's view of a program as segments">
+                    <p>Figure: User's View of a Program (subroutine, stack, sqrt, main program, symbol table as
+                        segments).</p>
+                </div>
+                <h3>Segmentation Architecture</h3>
+                <ul>
+                    <li>Logical address consists of a two tuple: <segment-number, offset>.</li>
+                    <li><strong>Segment table</strong> – maps two-dimensional physical addresses; each table entry has:
+                        <ul>
+                            <li><strong>base</strong> – contains the starting physical address where the segments reside
+                                in memory.</li>
+                            <li><strong>limit</strong> – specifies the length of the segment.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Segment-table base register (STBR)</strong> points to the segment table’s location in
+                        memory.</li>
+                    <li><strong>Segment-table length register (STLR)</strong> indicates number of segments used by a
+                        program; segment number s is legal if s < STLR.</li>
+                    <li>Protection: With each entry in segment table associate: validation bit = 0 ⇒ illegal segment,
+                        read/write/execute privileges. Protection bits associated with segments; code sharing occurs at
+                        segment level.</li>
+                    <li>Since segments vary in length, memory allocation is a dynamic storage-allocation problem.</li>
+                </ul>
+                <div class="image-container">
+                    <img src="placeholder_segmentation_hardware.png" alt="Segmentation hardware">
+                    <p>Figure: Segmentation hardware.</p>
+                </div>
+                <div class="image-container">
+                    <img src="placeholder_example_segmentation.png"
+                        alt="Example of segmentation showing logical and physical memory mapping">
+                    <p>Figure: Example of Segmentation (logical address space mapped to physical memory segments).</p>
+                </div>
+                <p>Segmentation with paging can also be implemented.</p>
+            </section>
+
+            <section id="virtual-memory">
+                <h2>9. Virtual Memory</h2>
+                <p>It is a technique which allows execution of process that may not be compiled within the primary
+                    memory. It separates the user logical memory from the physical memory. This separation allows an
+                    extremely large memory to be provided for program when only a small physical memory is available.
+                    Virtual memory makes the task of programming much easier because the programmer no longer needs to
+                    working about the amount of the physical memory is available or not. The virtual memory allows files
+                    and memory to be shared by different processes by page sharing. It is most commonly implemented by
+                    demand paging.</p>
+                <div class="image-container">
+                    <img src="placeholder_virtual_memory_larger_than_physical.png"
+                        alt="Diagram showing virtual memory larger than physical memory">
+                    <p>Figure: Diagram showing virtual memory that is larger than physical memory.</p>
+                </div>
+                <p>The virtual address space of a process refers to the logical (or virtual) view of how a process is
+                    stored in memory. Typically, this view is that a process begins at a certain logical address—say,
+                    address 0—and exists in contiguous memory.</p>
+                <div class="image-container">
+                    <img src="placeholder_virtual_address_space_layout.png" alt="Virtual address space layout">
+                    <p>Figure: Virtual address space (code, data, heap, stack).</p>
+                </div>
+                <p>Virtual memory can be implemented via: Demand paging, Demand segmentation.</p>
+
+                <h3>Demand Paging</h3>
+                <p>A demand-paging system is similar to a paging system with swapping. Generally, Processes reside on
+                    secondary memory (which is usually a disk). When we want to execute a process, we swap it into
+                    memory. Rather than swapping the entire process into memory, it swaps the required page. This can be
+                    done by a <strong
+                        data-tooltip="A pager that brings pages into memory only when they are needed.">lazy
+                        swapper</strong>. A lazy swapper never swaps a page into memory unless that page will be needed.
+                    A swapper manipulates entire processes, whereas a <strong
+                        data-tooltip="A component concerned with individual pages of a process for swapping.">pager</strong>
+                    is concerned with the individual pages of a process.</p>
+                <p><strong>Page transfer Method:</strong> When a process is to be swapped in, the pager guesses which
+                    pages will be used before the process is swapped out again. Instead of swapping in a whole process,
+                    the pager brings only those necessary pages into memory. Thus, it avoids reading into memory pages
+                    that will not be used anyway, decreasing the swap time and the amount of physical memory needed.</p>
+                <div class="image-container">
+                    <img src="placeholder_transfer_paged_memory_disk.png"
+                        alt="Transfer of a paged memory to contiguous disk space">
+                    <p>Figure: Transfer of a paged memory to contiguous disk space.</p>
+                </div>
+                <h4>Page Table (with Valid-Invalid Bit):</h4>
+                <ul>
+                    <li>The valid-invalid bit scheme of Page table can be used for indicating which pages are currently
+                        in memory.</li>
+                    <li>When this bit is set to "valid", this value indicates that the associated page is both legal and
+                        in memory. If the bit is set to "invalid", this value indicates that the page either is not
+                        valid or is valid but is currently on the disk.</li>
+                    <li>The page-table entry for a page that is brought into memory is set as usual, but the page-table
+                        entry for a page that is not currently in memory is simply marked invalid, or contains the
+                        address of the page on disk.</li>
+                </ul>
+                <div class="image-container">
+                    <img src="placeholder_page_table_valid_invalid.png"
+                        alt="Page table when some pages are not in main memory">
+                    <p>Figure: Page table when some pages are not in main memory.</p>
+                </div>
+                <h4>Procedure to handle page fault:</h4>
+                <p>If a process refers to a page that is not in physical memory then a <strong
+                        data-tooltip="A trap to the operating system caused by referencing a page not in physical memory.">page
+                        fault</strong> occurs.</p>
+                <ol>
+                    <li>We check an internal table (page table) for this process to determine whether the reference was
+                        valid or invalid.</li>
+                    <li>If the reference was invalid, we terminate the process, if it was valid but not yet brought in,
+                        we have to bring that from main memory.</li>
+                    <li>Now we find a free frame in memory.</li>
+                    <li>Then we read the desired page into the newly allocated frame.</li>
+                    <li>When the disk read is complete, we modify the internal table to indicate that the page is now in
+                        memory.</li>
+                    <li>We restart the instruction that was interrupted by the illegal address trap. Now the process can
+                        access the page as if it had always been in memory.</li>
+                </ol>
+                <div class="image-container">
+                    <img src="placeholder_page_fault_handling.png" alt="Steps in handling a page fault">
+                    <p>Figure: Steps in handling a page fault.</p>
+                </div>
+                <p>Note: The pages are copied into memory, only when they are required. This mechanism is called
+                    <strong>Pure Demand Paging</strong>.
+                </p>
+                <h4>Performance of Demand Paging</h4>
+                <p>Let p be the probability of a page fault (0 ≤ p ≤ 1). Then the <strong>effective access time</strong>
+                    is: Effective access time = (1 - p) x memory access time + p x page fault time. In any case, we are
+                    faced with three major components of the page-fault service time:</p>
+                <ol>
+                    <li>Service the page-fault interrupt.</li>
+                    <li>Read in the page.</li>
+                    <li>Restart the process.</li>
+                </ol>
+
+                <hr class="subsection-divider">
+                <h3>Page Replacement</h3>
+                <p>The page replacement is a mechanism that loads a page from disc to memory when a page of memory needs
+                    to be allocated. Page replacement can be described as follows:</p>
+                <ol>
+                    <li>Find the location of the desired page on the disk.</li>
+                    <li>Find a free frame:
+                        <ol type="a">
+                            <li>If there is a free frame, use it.</li>
+                            <li>If there is no free frame, use a page-replacement algorithm to select a <strong
+                                    data-tooltip="A page in memory chosen to be swapped out to make space for a new page.">victim
+                                    frame</strong>.</li>
+                            <li>Write the victim page to the disk; change the page and frame tables accordingly.</li>
+                        </ol>
+                    </li>
+                    <li>Read the desired page into the (newly) free frame; change the page and frame tables.</li>
+                    <li>Restart the user process.</li>
+                </ol>
+                <div class="image-container">
+                    <img src="placeholder_page_replacement_diagram.png" alt="Page replacement process">
+                    <p>Figure: Page replacement (finding victim, swapping out, swapping in).</p>
+                </div>
+                <h4>Page Replacement Algorithm</h4>
+                <p>It decides which memory page to page will be swapped out when a page of memory needs to be allocated.
+                </p>
+                <p><strong>Page Fault:</strong> The CPU demanded page is not present in memory.</p>
+                <p><strong>Page Hit:</strong> The CPU demanded page is present in memory.</p>
+                <p>There are 3 different types:</p>
+                <ol>
+                    <li>FIFO (First In First Out)</li>
+                    <li>Optimal</li>
+                    <li>LRU (Least Recently Used)</li>
+                </ol>
+                <h5>FIFO (First In First Out) algorithm:</h5>
+                <ul>
+                    <li>This is the simplest page replacement algorithm. A FIFO replacement algorithm associates each
+                        page the time when that page was brought into memory.</li>
+                    <li>When a Page is to be replaced the oldest one is selected.</li>
+                    <li>We replace the queue at the head of the queue. When a page is brought into memory, we insert it
+                        at the tail of the queue.</li>
+                </ul>
+                <details>
+                    <summary>FIFO Example</summary>
+                    <p>Reference string: 7,0,1,2,0,3,0,4,2,3,0,3,2,1,2,0,1,7,0,1 (3 frames)</p>
+                    <div class="image-container"><img src="placeholder_fifo_example.png"
+                            alt="FIFO Page Replacement Example"></div>
+                    <p>Analysis: Page references = 20, Page faults = 15, Page Hits = 5. Hit Ratio = 25%, Fault Ratio =
+                        75%.</p>
+                    <p><strong>Belady's Anomaly:</strong> For some page replacement algorithm, the page fault may
+                        increase as the number of allocated frames increases. FIFO replacement algorithm may face this
+                        problem.</p>
+                </details>
+
+                <h5>Optimal Algorithm:</h5>
+                <ul>
+                    <li>Optimal page replacement algorithm is mainly to solve the problem of Belady’s Anomaly.</li>
+                    <li>Ideally we want to select an algorithm with the lowest page-fault rate.</li>
+                    <li>Such an algorithm exists, and is called (unsurprisingly) the optimal algorithm:</li>
+                    <li>Procedure: replace the page that will not be used for the longest time (or at all) – i.e.
+                        replace the page with the greatest forward distance in the reference string.</li>
+                </ul>
+                <details>
+                    <summary>Optimal Example</summary>
+                    <p>Reference string: 7,0,1,2,0,3,0,4,2,3,0,3,2,1,2,0,1,7,0,1 (3 frames)</p>
+                    <div class="image-container"><img src="placeholder_optimal_example.png"
+                            alt="Optimal Page Replacement Example"></div>
+                    <p>Analysis: Page references = 20, Page faults = 9, Page Hits = 11. Hit Ratio = 55%, Fault Ratio =
+                        45%.</p>
+                    <p>This algorithm is difficult t implement because it requires future knowledge of reference
+                        strings.</p>
+                </details>
+
+                <h5>Least Recently Used (LRU) Algorithm:</h5>
+                <ul>
+                    <li>If the optimal algorithm is not feasible, an approximation to the optimal algorithm is possible.
+                    </li>
+                    <li>The main difference b/w OPTS and FIFO is that; FIFO algorithm uses the time when the pages was
+                        built in and OPT uses the time when a page is to be used.</li>
+                    <li>The LRU algorithm replaces the pages that have not been used for longest period of time.</li>
+                    <li>The LRU associated its pages with the time of that pages last use. This strategy is the optimal
+                        page replacement algorithm looking backward in time rather than forward.</li>
+                </ul>
+                <details>
+                    <summary>LRU Example</summary>
+                    <p>Reference string: 7,0,1,2,0,3,0,4,2,3,0,3,2,1,2,0,1,7,0,1 (3 frames)</p>
+                    <div class="image-container"><img src="placeholder_lru_example.png"
+                            alt="LRU Page Replacement Example"></div>
+                    <p>Analysis: Page references = 20, Page faults = 12, Page Hits = 8. Hit Ratio = 40%, Fault Ratio =
+                        60%.</p>
+                </details>
+
+                <hr class="subsection-divider">
+                <h3>Thrashing</h3>
+                <p>If the number of page faults is equal to the number of referred pages or the number of page faults
+                    are so high so that the CPU remains busy in just reading the pages from the secondary memory then
+                    the effective access time will be the time taken by the CPU to read one word from the secondary
+                    memory and it will be so high. The concept is called <strong
+                        data-tooltip="A condition where a system spends more time paging (swapping pages between memory and disk) than executing useful work, leading to severe performance degradation.">thrashing</strong>.
+                </p>
+                <p>If the page fault rate is PF %, the time taken in getting a page from the secondary memory and again
+                    restarting is S (service time) and the memory access time is ma then the effective access time can
+                    be given as; EAT = PF x S + (1 - PF) X (ma)</p>
+                <p>A process that is spending more time paging than executing is said to be thrashing. In other words it
+                    means, that the process doesn’t have enough frames to hold all the pages for its execution, so it is
+                    swapping pages in and out very frequently to keep executing. Sometimes, the pages which will be
+                    required in the near future have to be swapped out.</p>
+                <p>Initially when the CPU utilization is low, the process scheduling mechanism, to increase the level of
+                    multiprogramming loads multiple processes into the memory at the same time, allocating a limited
+                    amount of frames to each process. As the memory fills up, process starts to spend a lot of time for
+                    the required pages to be swapped in, again leading to low CPU utilization because most of the
+                    processes are waiting for pages. Hence the scheduler loads more processes to increase CPU
+                    utilization, as this continues at a point of time the complete system comes to a stop.</p>
+                <div class="image-container">
+                    <img src="placeholder_thrashing_diagram.png"
+                        alt="Thrashing diagram: CPU Utilization vs Degree of Multiprogramming">
+                    <p>Figure: CPU Utilization vs Degree of Multiprogramming, showing thrashing.</p>
+                </div>
+                <p>To prevent thrashing we must provide processes with as many frames as they really need "right now".
+                </p>
+                <p>(Note: The concept of "Working Set" is often discussed in relation to thrashing, but wasn't
+                    explicitly detailed in the provided images beyond mentioning it helps determine frames needed "right
+                    now".)</p>
+            </section>
+
+
+            <nav class="topic-navigation">
+                <a href="topic-3.html">
+                    ← Previous: Threads & Concurrency
+                </a>
+                <a href="topic-5.html"> <!-- Assuming topic-5.html is the next one -->
+                    Next: File Systems →
+                </a>
+            </nav>
+
+        </main>
+    </div>
+
+    <footer>
+        <p>© 2024 EduVision OS Guide. Gold Standard Interactive Learning.</p>
+        <p>Content based on provided materials and AI enhancements for clarity and engagement.</p>
+    </footer>
+
+    <script>
+        // JavaScript from topic-3.html can be reused.
+        // Ensure sidebar links and section IDs match.
+        // Simulators might not be directly relevant for this high-level memory management page.
+
+        document.querySelectorAll('#sidebar a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                    let headerActualHeight = document.querySelector('.main-header').offsetHeight;
+                    if (window.innerWidth <= 768 && getComputedStyle(document.querySelector('.main-header')).position !== 'sticky') {
+                        headerActualHeight = 0;
+                    }
+                    const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                    const offsetPosition = elementPosition - headerActualHeight - 20;
+                    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                }
+                document.querySelectorAll('#sidebar a').forEach(link => link.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        const sections = document.querySelectorAll('#main-content section');
+        const navLi = document.querySelectorAll('#sidebar ul li a');
+
+        window.addEventListener('scroll', () => {
+            let headerActualHeight = document.querySelector('.main-header') ? document.querySelector('.main-header').offsetHeight : 0;
+            if (window.innerWidth <= 768 && getComputedStyle(document.querySelector('.main-header')).position !== 'sticky') {
+                headerActualHeight = 0;
+            }
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - headerActualHeight - 50;
+                if (pageYOffset >= sectionTop) { current = section.getAttribute('id'); }
+            });
+            navLi.forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href').substring(1) === current) { a.classList.add('active'); }
+            });
+            if (!current && navLi.length > 0 && sections.length > 0 && window.pageYOffset < (sections[0].offsetTop - headerActualHeight - 50)) {
+                navLi.forEach(a => a.classList.remove('active'));
+                navLi[0].classList.add('active');
+            }
+        });
+
+        function copyCode(button) {
+            const pre = button.parentElement.querySelector('pre');
+            if (!pre) return;
+            const code = pre.innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                button.innerText = 'Copied!'; button.style.backgroundColor = 'var(--success-color)';
+                setTimeout(() => { button.innerText = 'Copy'; button.style.backgroundColor = 'var(--primary-purple)'; }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err); button.innerText = 'Error'; button.style.backgroundColor = 'var(--danger-color)';
+                setTimeout(() => { button.innerText = 'Copy'; button.style.backgroundColor = 'var(--primary-purple)'; }, 2000);
+            });
+        }
+
+        function setInitialActiveLink() {
+            const hash = window.location.hash;
+            let activeSet = false;
+            if (hash && navLi.length > 0) {
+                navLi.forEach(a => {
+                    if (a.getAttribute('href') === hash) { a.classList.add('active'); activeSet = true; }
+                    else { a.classList.remove('active'); }
+                });
+            }
+            if (!activeSet && navLi.length > 0) { navLi[0].classList.add('active'); }
+        }
+        window.addEventListener('load', setInitialActiveLink);
+    </script>
+</body>
+
+</html>

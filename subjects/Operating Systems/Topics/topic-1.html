@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Operating Systems - EduVision OS Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-purple: #7A5CFA;
+            --primary-purple-dark: #5D3FD3;
+            --primary-purple-light: #A48DFB;
+            --light-lavender-bg: #F8F7FF;
+            --card-bg-color: #FFFFFF;
+            --text-color: #23272f;
+            --subtle-text-color: #6b7280;
+            --border-color: #E2E8F0;
+            --code-bg-color: #181c24;
+            --code-text-color: #e0e6f1;
+            --tooltip-bg: #23272f;
+            --tooltip-text: #F7FAFC;
+            --success-color: #48BB78;
+            --danger-color: #F56565;
+            --font-sans: 'Poppins', 'Segoe UI', Arial, sans-serif;
+            --font-mono: 'Fira Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px 0 rgba(80, 70, 140, 0.10);
+            --shadow-lg: 0 12px 32px 0 rgba(80, 70, 140, 0.13);
+            --border-radius-md: 0.5rem;
+            --border-radius-lg: 1rem;
+            --sidebar-width: 270px;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            color: var(--text-color);
+            background: linear-gradient(120deg, #f8f7ff 0%, #e9e6f7 100%);
+        }
+
+        .main-header {
+            background: linear-gradient(90deg, var(--primary-purple-dark) 0%, var(--primary-purple) 100%);
+            color: white;
+            padding: 28px 40px 22px 40px;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .main-header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .main-header .subtitle {
+            font-size: 1.1em;
+            font-weight: 400;
+            opacity: 0.92;
+            margin-top: 0.25rem;
+            letter-spacing: 0.01em;
+        }
+
+        .page-container {
+            display: flex;
+            width: 100%;
+            margin-top: 0;
+        }
+
+        #sidebar {
+            width: var(--sidebar-width);
+            min-width: 220px;
+            background: linear-gradient(135deg, #f5f3fe 80%, #e9e6f7 100%);
+            padding: 32px 18px 32px 18px;
+            height: calc(100vh - 85px);
+            position: sticky;
+            top: 85px;
+            overflow-y: auto;
+            border-right: 1.5px solid var(--border-color);
+            box-shadow: 2px 0 12px 0 rgba(80, 70, 140, 0.04);
+            transition: width 0.3s;
+        }
+
+        #sidebar h2 {
+            color: var(--primary-purple-dark);
+            text-align: left;
+            margin-top: 0;
+            margin-bottom: 22px;
+            font-size: 1.3em;
+            font-weight: 700;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-purple);
+            letter-spacing: 0.01em;
+        }
+
+        #sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #sidebar ul li a {
+            color: var(--subtle-text-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 18px;
+            margin-bottom: 7px;
+            border-radius: var(--border-radius-md);
+            font-weight: 500;
+            font-size: 1.04em;
+            transition: background 0.18s, color 0.18s, transform 0.13s;
+            border-left: 4px solid transparent;
+            position: relative;
+        }
+
+        #sidebar ul li a:hover,
+        #sidebar ul li a.active {
+            background: linear-gradient(90deg, #ece9fa 60%, #e0d7f3 100%);
+            color: var(--primary-purple-dark);
+            border-left: 4px solid var(--primary-purple);
+            font-weight: 700;
+            transform: translateX(4px) scale(1.03);
+        }
+
+        #main-content {
+            flex-grow: 1;
+            padding: 38px 48px 48px 48px;
+            max-width: 100vw;
+            min-width: 0;
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .main-content-float {
+            background: var(--card-bg-color);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 36px 36px 24px 36px;
+            margin-bottom: 40px;
+            margin-top: 0;
+            min-width: 0;
+        }
+
+        .topic-header {
+            text-align: left;
+            padding-bottom: 18px;
+            margin-bottom: 32px;
+            border-bottom: 1.5px solid var(--border-color);
+        }
+
+        .topic-header h1 {
+            color: var(--primary-purple-dark);
+            margin: 0 0 7px 0;
+            font-size: 2.1em;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .topic-header p {
+            color: var(--subtle-text-color);
+            font-size: 1.08em;
+            margin: 0;
+        }
+
+        section {
+            margin-bottom: 38px;
+            padding: 30px 28px 28px 28px;
+            background: var(--card-bg-color);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        section h2 {
+            font-size: 1.6em;
+            color: var(--primary-purple-dark);
+            border-bottom: 2px solid var(--primary-purple);
+            margin-bottom: 22px;
+            padding-bottom: 8px;
+            font-weight: 700;
+        }
+
+        section h3 {
+            font-size: 1.22em;
+            margin-top: 32px;
+            margin-bottom: 14px;
+            color: var(--primary-purple);
+            font-weight: 600;
+            padding-bottom: 6px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        section h4 {
+            font-size: 1.08em;
+            margin-top: 22px;
+            margin-bottom: 9px;
+            color: var(--primary-purple-dark);
+            font-weight: 600;
+        }
+
+        section ul {
+            padding-left: 22px;
+            margin-top: 0.5rem;
+        }
+
+        section ul li {
+            margin-bottom: 0.5rem;
+            list-style-type: disc;
+        }
+
+        section ul li::marker {
+            color: var(--primary-purple);
+        }
+
+        .diagram-placeholder {
+            border: 1.5px dashed var(--primary-purple-light);
+            padding: 22px;
+            margin: 22px 0;
+            text-align: center;
+            background: linear-gradient(90deg, #f8f7ff 80%, #ece9fa 100%);
+            border-radius: var(--border-radius-md);
+            color: var(--subtle-text-color);
+            font-style: italic;
+            font-size: 1.01em;
+        }
+
+        .diagram-placeholder p {
+            margin: 7px 0;
+        }
+
+        .code-block {
+            background: var(--code-bg-color);
+            color: var(--code-text-color);
+            padding: 1.2rem 1.2rem 1.2rem 1.5rem;
+            border-radius: var(--border-radius-md);
+            overflow-x: auto;
+            margin: 1.2rem 0;
+            position: relative;
+            box-shadow: 0 2px 12px 0 rgba(30, 30, 60, 0.10);
+            font-family: var(--font-mono);
+            font-size: 1em;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: var(--font-mono);
+            font-size: 1em;
+            line-height: 1.7;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.8rem;
+            right: 1.1rem;
+            background: linear-gradient(90deg, var(--primary-purple) 60%, var(--primary-purple-dark) 100%);
+            color: white;
+            border: none;
+            padding: 0.38rem 1.1rem;
+            border-radius: 1.2em;
+            cursor: pointer;
+            font-size: 0.93em;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            box-shadow: 0 2px 8px 0 rgba(80, 70, 140, 0.10);
+            transition: background 0.18s, box-shadow 0.18s;
+        }
+
+        .copy-btn:hover {
+            background: linear-gradient(90deg, var(--primary-purple-dark) 60%, var(--primary-purple) 100%);
+            box-shadow: 0 4px 16px 0 rgba(80, 70, 140, 0.13);
+        }
+
+        [data-tooltip] {
+            position: relative;
+            cursor: help;
+            border-bottom: 1px dotted var(--primary-purple);
+        }
+
+        [data-tooltip]::before,
+        [data-tooltip]::after {
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s, transform 0.2s;
+            position: absolute;
+            left: 50%;
+            z-index: 1001;
+        }
+
+        [data-tooltip]::before {
+            content: attr(data-tooltip);
+            background: var(--tooltip-bg);
+            color: var(--tooltip-text);
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--border-radius-md);
+            font-size: 0.85em;
+            white-space: nowrap;
+            bottom: 140%;
+            transform: translateX(-50%) translateY(5px);
+        }
+
+        [data-tooltip]::after {
+            content: '';
+            border-style: solid;
+            border-width: 6px 6px 0 6px;
+            border-color: var(--tooltip-bg) transparent transparent transparent;
+            bottom: calc(140% - 6px);
+            transform: translateX(-50%) translateY(5px);
+        }
+
+        [data-tooltip]:hover::before,
+        [data-tooltip]:hover::after {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .interactive-area {
+            border: 1.5px solid var(--primary-purple-light);
+            padding: 18px 18px 12px 18px;
+            border-radius: var(--border-radius-lg);
+            margin-top: 22px;
+            background: #fff;
+            box-shadow: 0 2px 8px 0 rgba(80, 70, 140, 0.06);
+        }
+
+        .interactive-area button,
+        input[type="button"],
+        input[type="submit"] {
+            background: linear-gradient(90deg, var(--primary-purple) 60%, var(--primary-purple-dark) 100%);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--border-radius-md);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1em;
+            transition: background 0.18s, box-shadow 0.18s;
+            margin: 5px 7px 5px 0;
+            box-shadow: 0 1px 4px 0 rgba(80, 70, 140, 0.10);
+        }
+
+        .interactive-area button:hover {
+            background: linear-gradient(90deg, var(--primary-purple-dark) 60%, var(--primary-purple) 100%);
+            box-shadow: 0 4px 16px 0 rgba(80, 70, 140, 0.13);
+        }
+
+        .interactive-area input[type="text"],
+        .interactive-area input[type="number"] {
+            padding: 0.6rem;
+            border: 1.5px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            margin-right: 10px;
+            min-width: 140px;
+            font-size: 1em;
+            transition: border-color 0.18s, box-shadow 0.18s;
+        }
+
+        .interactive-area input[type="text"]:focus,
+        .interactive-area input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 0 2px var(--primary-purple-light);
+        }
+
+        .process-sim-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .process-state {
+            padding: 0.5rem 1.1rem;
+            border: 1.5px solid var(--primary-purple-light);
+            border-radius: var(--border-radius-md);
+            background: var(--card-bg-color);
+            transition: background 0.3s, color 0.3s, border-color 0.3s;
+            min-width: 90px;
+            text-align: center;
+            font-size: 0.98em;
+        }
+
+        .process-state.active {
+            background: var(--primary-purple);
+            color: white;
+            font-weight: 700;
+            border-color: var(--primary-purple-dark);
+        }
+
+        #memory-map {
+            display: flex;
+            flex-wrap: wrap;
+            background: #f3f0fa;
+            min-height: 90px;
+            border: 1.5px solid var(--primary-purple-light);
+            margin-bottom: 13px;
+            padding: 7px;
+            border-radius: var(--border-radius-md);
+        }
+
+        .memory-block {
+            min-height: 70px;
+            border: 1.5px solid var(--subtle-text-color);
+            margin: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.93em;
+            color: var(--text-color);
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .memory-block.free {
+            background: #A0AEC0;
+            color: white;
+        }
+
+        .memory-block.allocated {
+            background: var(--primary-purple-light);
+            color: var(--primary-purple-dark);
+        }
+
+        #command-output {
+            min-height: 70px;
+            background: #F7FAFC;
+            padding: 1rem;
+            border-radius: var(--border-radius-md);
+            font-family: var(--font-mono);
+            white-space: pre-wrap;
+            border: 1.5px solid var(--primary-purple-light);
+            font-size: 0.97em;
+            line-height: 1.6;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 22px 0;
+            box-shadow: 0 2px 12px 0 rgba(80, 70, 140, 0.07);
+            border: 1.5px solid var(--primary-purple-light);
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 1.25rem;
+            text-align: left;
+        }
+
+        th {
+            background: linear-gradient(90deg, #ece9fa 60%, #e0d7f3 100%);
+            color: var(--primary-purple-dark);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.92em;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            background: var(--card-bg-color);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        hr.subsection-divider {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--primary-purple-light), transparent);
+            margin: 36px 0;
+        }
+
+        .topic-navigation {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 32px;
+            margin-bottom: 0;
+        }
+
+        .topic-navigation a {
+            background: linear-gradient(90deg, var(--primary-purple) 60%, var(--primary-purple-dark) 100%);
+            color: #fff;
+            border-radius: 2em;
+            padding: 0.8em 2.2em;
+            font-size: 1.08em;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 2px 12px 0 rgba(80, 70, 140, 0.13);
+            transition: background 0.18s, box-shadow 0.18s, transform 0.13s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7em;
+        }
+
+        .topic-navigation a:hover {
+            background: linear-gradient(90deg, var(--primary-purple-dark) 60%, var(--primary-purple) 100%);
+            box-shadow: 0 6px 24px 0 rgba(80, 70, 140, 0.18);
+            transform: translateY(-2px) scale(1.04);
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: var(--primary-purple-dark);
+            color: rgba(255, 255, 255, 0.85);
+            margin-top: 40px;
+            font-size: 0.97em;
+            letter-spacing: 0.01em;
+        }
+
+        @media (max-width: 1024px) {
+            #main-content {
+                padding: 20px 10px;
+            }
+
+            .main-content-float {
+                padding: 18px 8px 18px 8px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-container {
+                flex-direction: column;
+            }
+
+            #sidebar {
+                width: 100%;
+                min-width: 0;
+                height: auto;
+                position: static;
+                border-right: none;
+                border-bottom: 1.5px solid var(--border-color);
+                box-shadow: none;
+                top: 0;
+            }
+
+            .main-header {
+                padding: 18px;
+                position: static;
+            }
+
+            .main-header h1 {
+                font-size: 1.5em;
+            }
+
+            .topic-header h1 {
+                font-size: 1.2em;
+            }
+
+            section h2 {
+                font-size: 1.1em;
+            }
+
+            section h3 {
+                font-size: 1em;
+            }
+
+            section h4 {
+                font-size: 0.97em;
+            }
+
+            #main-content {
+                padding: 10px 2vw;
+            }
+
+            .main-content-float {
+                padding: 10px 2vw;
+            }
+
+            .topic-navigation {
+                flex-direction: column;
+                gap: 0.7em;
+            }
+
+            .topic-navigation a {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="main-header">
+        <h1>Operating Systems</h1>
+        <p class="subtitle">EduVision :: Full Syllabus with Concepts, Notes, and Diagrams</p>
+    </header>
+
+    <div class="page-container">
+        <nav id="sidebar">
+            <h2>Navigation</h2>
+            <ul id="toc-list">
+                <li><a href="#definition-purpose" class="active">1. Definition & Purpose</a></li>
+                <li><a href="#types-os">2. Types of OS</a></li>
+                <li><a href="#functions-os">3. Functions of OS</a></li>
+                <li><a href="#system-components">4. System Components</a></li>
+                <li><a href="#system-calls-structure">5. System Calls & OS Structure</a></li>
+            </ul>
+        </nav>
+
+        <main id="main-content">
+            <div class="main-content-float">
+                <div class="topic-header">
+                    <h1>Introduction to Operating Systems</h1>
+                    <p>Understanding the fundamentals: What an OS is, its purpose, various types, core functions, and
+                        essential components.</p>
+                </div>
+
+                <section id="definition-purpose">
+                    <h2>1. Definition and Purpose of an OS</h2>
+                    <p>An <strong
+                            data-tooltip="System software that manages computer hardware and software resources, providing common services for computer programs.">Operating
+                            System (OS)</strong> is pivotal software that serves as an intermediary between the computer
+                        user and the computer hardware. It's responsible for managing the computer's hardware resources
+                        and
+                        providing an environment in which user programs can execute efficiently and conveniently.</p>
+
+                    <div class="diagram-placeholder">
+                        <p><strong>Conceptual Diagram: OS as an Intermediary</strong></p>
+                        <p>User Applications ↔ <strong>Operating System</strong> ↔ Hardware (CPU, Memory, I/O, Disk)</p>
+                    </div>
+
+                    <h4>Key Definitions:</h4>
+                    <ul>
+                        <li>"An operating system is software that manages the basic resources of a computer i.e
+                            Processor,
+                            Memory, Files, Peripheral devices, disk storage units etc..."</li>
+                        <li>"An Operating System can be defined as an <strong
+                                data-tooltip="A point where two systems, subjects, organizations, etc. meet and interact for a common purpose.">interface</strong>
+                            between user and hardware."</li>
+                    </ul>
+
+                    <h4>Primary Purposes of an OS:</h4>
+                    <ul>
+                        <li><strong>Resource Management:</strong> Efficiently manages and allocates CPU time, memory
+                            space,
+                            file storage, and I/O devices. "OS performs the job of allocating resources for various
+                            tasks
+                            ... and reclaims the allocated resources after their use."</li>
+                        <li><strong>Execution Environment:</strong> "It provides an environment in which user can
+                            execute
+                            programs in a convenient and efficient manner."</li>
+                        <li><strong>Control Program:</strong> Oversees program execution, preventing errors and
+                            unauthorized
+                            use. "Purpose of OS is to transfer control automatically from one job to next job."</li>
+                        <li><strong>Abstraction Layer:</strong> Simplifies complex hardware interactions for users and
+                            applications.</li>
+                        <li><strong>Convenience & Efficiency:</strong> Makes the computer system user-friendly and
+                            optimizes
+                            resource utilization.</li>
+                    </ul>
+                    <p>"The primary need for the OS arises from the fact that user needs to be provided with services
+                        and OS
+                        ought to facilitate the provisioning of these services."</p>
+                </section>
+
+                <section id="types-os">
+                    <h2>2. Types of Operating Systems</h2>
+                    <p>Operating systems have evolved, resulting in diverse types tailored for specific applications and
+                        environments.</p>
+
+                    <h3>Batch Operating System</h3> <!-- Changed from h4 to h3 for consistency -->
+                    <p>"The users of a batch operating system do not interact with the computer directly. Each user
+                        prepares
+                        his job on an off-line device like punch cards and submits it to the computer operator." Jobs
+                        with
+                        similar requirements are grouped into batches and processed sequentially by the OS to improve
+                        throughput.</p>
+                    <div class="diagram-placeholder">
+                        <p><strong>Batch OS Workflow Diagram</strong></p>
+                        <p>Users submit Jobs → Operator batches Jobs → Computer processes Batches → Output</p>
+                    </div>
+                    <strong>Problems with Batch Systems:</strong>
+                    <ul>
+                        <li>Lack of user interaction with the running job.</li>
+                        <li>CPU often idle due to slow I/O devices.</li>
+                        <li>Difficult to implement job priority.</li>
+                    </ul>
+
+                    <hr class="subsection-divider">
+
+                    <h3>Time-sharing Operating Systems (Multitasking)</h3> <!-- Changed from h4 to h3 -->
+                    <p>"Time-sharing is a technique which enables many people, located at various terminals, to use a
+                        particular computer system at the same time. Time-sharing or multitasking is a logical extension
+                        of
+                        multiprogramming." The OS rapidly switches CPU allocation among multiple active jobs, giving
+                        each
+                        user the impression of dedicated system access.</p>
+                    <div class="diagram-placeholder">
+                        <p><strong>Time-Sharing OS Concept Diagram</strong></p>
+                        <p>Central CPU ↔ (User 1 [Active], User 2 [Ready], User 3 [Active], ...)</p>
+                    </div>
+                    <strong>Key Features:</strong>
+                    <ul>
+                        <li>Objective: Minimize user response time.</li>
+                        <li>Mechanism: CPU scheduling and multiprogramming.</li>
+                    </ul>
+                    <strong>Advantages:</strong>
+                    <ul>
+                        <li>Quick response times for users.</li>
+                        <li>Reduced software duplication.</li>
+                        <li>Improved CPU utilization.</li>
+                    </ul>
+                    <strong>Disadvantages:</strong>
+                    <ul>
+                        <li>Reliability concerns.</li>
+                        <li>Security and data integrity challenges for multiple users.</li>
+                        <li>Complexity in data communication.</li>
+                    </ul>
+
+                    <hr class="subsection-divider">
+
+                    <h3>Distributed Operating System</h3> <!-- Changed from h4 to h3 -->
+                    <p>"Distributed systems use multiple central processors to serve multiple real-time applications and
+                        multiple users. Data processing jobs are distributed among the processors accordingly." Manages
+                        a
+                        collection of independent, networked computers, making them appear as a single, coherent system.
+                        These are often <strong
+                            data-tooltip="Systems where each processor has its own local memory; communication is via message passing.">loosely
+                            coupled systems</strong>.</p>
+                    <div class="diagram-placeholder">
+                        <p><strong>Distributed OS Architecture Diagram</strong></p>
+                        <p>Communication Network connecting [Work Stations, Terminals, File Servers, DB Servers, Nodes]
+                        </p>
+                    </div>
+                    <strong>Advantages:</strong>
+                    <ul>
+                        <li>Enhanced resource sharing across sites.</li>
+                        <li>Faster data exchange (e.g., email).</li>
+                        <li>Improved fault tolerance (if one site fails, others may continue).</li>
+                        <li>Better service scalability and load balancing.</li>
+                    </ul>
+
+                    <hr class="subsection-divider">
+
+                    <h3>Real-Time Operating System (RTOS)</h3> <!-- Changed from h4 to h3 -->
+                    <p>"A real-time system is defined as a data processing system in which the time interval required to
+                        process and respond to inputs is so small that it controls the environment." Crucial for
+                        applications with strict timing constraints, often embedded systems.</p>
+                    <div class="diagram-placeholder">
+                        <p><strong>RTOS Concept</strong></p>
+                        <p>Sensors/Inputs → RTOS (Strict Timing) → Actuators/Outputs</p>
+                    </div>
+                    <strong>Types:</strong>
+                    <ul>
+                        <li><strong>Hard real-time systems:</strong> Guarantee task completion within deadlines (e.g.,
+                            flight control, medical pacemakers). Often lack secondary storage and virtual memory.</li>
+                        <li><strong>Soft real-time systems:</strong> Prioritize critical tasks but can tolerate
+                            occasional
+                            deadline misses (e.g., multimedia streaming, online gaming).</li>
+                    </ul>
+
+                    <hr class="subsection-divider">
+
+                    <h3>Network Operating System (NOS)</h3> <!-- Changed from h4 to h3 -->
+                    <p>"A Network Operating System runs on a server and provides the server the capability to manage
+                        data,
+                        users, groups, security, applications, and other networking functions." Facilitates resource
+                        sharing
+                        (files, printers) among computers on a network.</p>
+                    <div class="diagram-placeholder">
+                        <p><strong>Network OS Diagram</strong></p>
+                        <p>Server (NOS, Storage) ↔ Network Hub ↔ [Client 1, Client 2, Client 3]</p>
+                    </div>
+                    <strong>Examples:</strong> Windows Server, Linux (as a server), Novell NetWare. <br>
+                    <strong>Advantages:</strong> Centralized management, enhanced security, remote access. <br>
+                    <strong>Disadvantages:</strong> Higher cost, dependency on server, maintenance needs.
+
+                    <hr class="subsection-divider">
+
+                    <h3>Mobile Operating System</h3> <!-- Changed from h4 to h3 -->
+                    <p>"A mobile operating system (OS) is software that enables smartphones, tablets, and other mobile
+                        devices to run applications and programs." Manages mobile device hardware and provides a
+                        platform
+                        for mobile applications.</p>
+                    <div class="diagram-placeholder">
+                        <p><strong>Mobile OS Ecosystem</strong></p>
+                        <p>Device Hardware ↔ Mobile OS ↔ (Applications, User Interface, Cloud Services)</p>
+                    </div>
+                    <strong>Key Concepts:</strong> Function (hardware/software management), User Interface (touch,
+                    voice),
+                    Application Support (app stores), Hardware Management. <br>
+                    <strong>Prominent Examples:</strong> Android (Google), iOS (Apple).
+                </section>
+
+                <section id="functions-os">
+                    <h2>3. Functions of an Operating System</h2>
+                    <p>The OS performs several vital functions to manage the computer system and provide a stable
+                        operating
+                        environment.</p>
+
+                    <h3>1. Process Management</h3>
+                    <p>"A program does nothing unless its instructions are executed by a CPU. A process is a program in
+                        execution."</p>
+                    <p>The OS is responsible for activities related to process management such as:</p>
+                    <ul></ul>
+                    <li>Creating and deleting user and system processes.</li>
+                    <li>Suspending and resuming processes.</li>
+                    <li>Providing mechanisms for process synchronization.</li>
+                    <li>Providing mechanisms for process communication.</li>
+                    <li>Handling deadlocks.</li>
+                    </ul>
+                    <h4>Simple Process State Simulator:</h4>
+                    <div class="interactive-area">
+                        <div class="process-sim-container">
+                            <div id="proc_new" class="process-state">NEW</div>
+                            <div id="proc_ready" class="process-state">READY</div>
+                            <div id="proc_running" class="process-state">RUNNING</div>
+                            <div id="proc_waiting" class="process-state">WAITING</div>
+                            <div id="proc_terminated" class="process-state">TERMINATED</div>
+                        </div>
+                        <button onclick="simulateProcessCycle()">Simulate Cycle</button>
+                        <p id="process-sim-status"
+                            style="text-align: center; margin-top: 10px; color: var(--subtle-text-color);">Click button
+                            to
+                            see states change.</p>
+                    </div>
+
+                    <hr class="subsection-divider">
+
+                    <h3>2. Main Memory Management</h3>
+                    <p>"Main memory is central to the operation of a modern computer system... Main memory stores the
+                        quickly accessible data shared by the CPU & I/O device."</p>
+                    <p>The OS manages this critical resource by:</p>
+                    <ul>
+                        <li>Tracking memory usage (which parts are in use and by whom).</li>
+                        <li>Deciding which processes/data to move into and out of memory.</li>
+                        <li>Allocating and deallocating memory space as needed.</li>
+                    </ul>
+                    <h4>Conceptual Memory Allocation Simulator:</h4>
+                    <div class="interactive-area">
+                        <div id="memory-map">
+                            <div class="memory-block free" style="width: 100%;">Free (100%)</div>
+                        </div>
+                        <input type="number" id="alloc-size" placeholder="Size (1-100)" min="1" max="100">
+                        <button onclick="allocateMemory()">Allocate</button>
+                        <button onclick="deallocateMemory()">Deallocate Last</button>
+                        <button onclick="resetMemory()">Reset Memory</button>
+                    </div>
+
+                    <hr class="subsection-divider">
+
+                    <h3>3. File Management</h3>
+                    <p>"File management is one of the most important components of an OS... The OS provides a uniform
+                        logical view of information storage."</p>
+                    <p>The OS handles files by:</p>
+                    <ul>
+                        <li>Creating and deleting files and directories.</li>
+                        <li>Providing primitives for file/directory manipulation.</li>
+                        <li>Mapping files onto secondary storage.</li>
+                        <li>Supporting file backup.</li>
+                    </ul>
+
+                    <hr class="subsection-divider">
+
+                    <h3>4. I/O System Management</h3>
+                    <p>"One of the purposes of an OS is to hide the peculiarities of specific hardware devices from the
+                        user."</p>
+                    <p>The I/O subsystem includes a memory management component (buffering, caching, spooling), a
+                        general
+                        device-driver interface, and specific device drivers to manage I/O operations efficiently and
+                        abstract hardware details.</p>
+
+                    <hr class="subsection-divider">
+
+                    <h3>5. Protection or Security</h3>
+                    <p>"If a computer system has multi users & allow the concurrent execution of multiple processes then
+                        the
+                        various processes must be protected from one another's activities."</p>
+                    <p>The OS enforces security policies to control access to resources, ensuring that only authorized
+                        processes can operate on files, memory segments, CPU, etc. This involves mechanisms for
+                        authentication, authorization, and data protection.</p>
+
+                    <hr class="subsection-divider">
+
+                    <h3>6. Command Interpretation</h3>
+                    <p>"One of the most important functions of the OS is connected interpretation where it acts as the
+                        interface between the user & the OS."</p>
+                    <p>The command interpreter (e.g., shell or GUI) processes user commands and translates them into
+                        system
+                        calls for the kernel to execute, enabling user interaction with the system.</p>
+                    <h4>Mock Command Interpreter:</h4>
+                    <div class="interactive-area"></div>
+                    <p style="color: var(--subtle-text-color);">Type a command (e.g., `help`, `ls`, `date`) and press
+                        Enter:</p>
+                    <input type="text" id="command-input" placeholder="user@os-sim:~$">
+                    <div id="command-output"></div>
+            </div>
+            </section>
+
+            <section id="system-components">
+                <h2>4. System Components</h2>
+                <p>"In an operating system, the kernel acts as the central interface between user applications and the
+                    underlying hardware, while the shell provides a user interface to interact with the kernel."</p>
+                <div class="diagram-placeholder">
+                    <strong>Linux Operating System Architecture (Conceptual)</strong><br>
+                    User ↔ Applications ↔ Shell ↔ Kernel ↔ Hardware
+                </div>
+
+                <h3>1. Hardware Interface</h3> <!-- Changed from h4 to h3 -->
+                <p><strong>Definition:</strong> "The hardware interface is the connection between the operating system
+                    and the physical components of the computer."</p>
+                <p><strong>Function:</strong> Allows OS to access and control hardware resources like the CPU, memory,
+                    disk drives, and network interfaces.</p>
+                <p><strong>Mechanism:</strong> This is typically achieved through <strong
+                        data-tooltip="Software modules that allow the OS to communicate with specific hardware devices.">device
+                        drivers</strong>, which provide a standardized interface for interacting with diverse hardware.
+                </p>
+
+                <hr class="subsection-divider">
+
+                <h3>2. Kernel</h3> <!-- Changed from h4 to h3 -->
+                <p><strong>Definition:</strong> "The kernel is the core of the operating system, responsible for
+                    managing system resources and interacting with the hardware interface." It is the first part of the
+                    OS to load into memory during boot-up and remains resident.</p>
+                <p><strong>Function:</strong> It handles essential tasks such as process scheduling, memory management,
+                    file system management, and device driver management.</p>
+                <p><strong>Role:</strong> It provides an abstraction layer between user applications and the hardware,
+                    shielding applications from the complexities of direct hardware control and ensuring system
+                    stability.</p>
+
+                <hr class="subsection-divider">
+
+                <h3>3. Shell</h3> <!-- Changed from h4 to h3 -->
+                <p><strong>Definition:</strong> "The shell is a user interface that allows users to interact with the
+                    operating system, typically through a command-line interface (CLI) or a graphical user interface
+                    (GUI)."</p>
+                <p><strong>Function:</strong> "It interprets user commands and passes them to the kernel, which then
+                    executes the requested actions." It effectively translates human-readable commands into operations
+                    the kernel can understand.</p>
+                <p><strong>Example:</strong> "A common example of a shell is the Bash shell used in Linux systems."
+                    Other examples include PowerShell (Windows), Zsh (macOS/Linux), and graphical shells like Windows
+                    Explorer or GNOME Shell.</p>
+            </section>
+
+            <section id="system-calls-structure">
+                <h2>5. System Calls & OS Structure</h2>
+                <div id="system-calls">
+                    <h3>5.1 System Calls</h3>
+                    <p>"System calls provide the interface between a process & the OS. These are usually available in
+                        the form of assembly language instruction," though modern systems often provide C library
+                        wrappers.</p>
+                    <p>"Some systems allow system calls to be made directly from a high level language program like C,
+                        BCPL and PERL etc."</p>
+                    <p>System calls are how user programs request services from the operating system kernel. They
+                        transition the CPU from user mode to kernel mode to perform privileged operations.</p>
+
+                    <h4>Major Categories of System Calls:</h4> <!-- This was h4, now directly under h3 -->
+                    <ul>
+                        <li><strong>Process Management and Control:</strong> Calls to create, terminate, load, execute,
+                            and manage processes (e.g., `fork()`, `exec()`, `exit()`, `wait()`). Also includes managing
+                            process attributes and memory allocation for processes.</li>
+                        <li><strong>File Management/File Manipulation/File Handling:</strong> Calls for creating,
+                            deleting, opening, closing, reading, writing, and repositioning files, as well as managing
+                            file attributes (e.g., `open()`, `read()`, `write()`, `close()`, `unlink()`).</li>
+                        <li><strong>Device Management:</strong> Calls to request, release, read from, write to, and
+                            reposition devices. Often involves I/O control operations (e.g., `ioctl()`).</li>
+                        <li><strong>Information Maintenance/Management:</strong> Calls to get or set system information
+                            like time/date, system data (OS version, user count), and process/file/device attributes.
+                        </li>
+                        <li><strong>Communication Management:</strong> Calls for creating/deleting communication
+                            connections, sending/receiving messages between processes (Inter-Process Communication -
+                            IPC), and managing remote devices.
+                            <details>
+                                <summary>Modes of Communication (Details)</summary>
+                                <p><strong>Message passing model:</strong> Information is exchanged through an
+                                    OS-provided facility. Processes have IDs and explicitly send/receive messages.
+                                    Requires cooperation and synchronization.</p>
+                                <p><strong>Shared memory model:</strong> Processes map a common region of memory into
+                                    their address spaces. Communication occurs by reading/writing to this shared area.
+                                    Faster but requires careful synchronization to avoid conflicts.</p>
+                            </details>
+                        </li>
+                    </ul>
+
+                    <div class="code-block">
+                        <pre><code class="language-c">// Example: Conceptual C-like system call for reading a file (Unix-like)
+    // int fd = open("myfile.txt", O_RDONLY); // System call to open a file
+    // if (fd == -1) { /* handle error */ }
+    //
+    // char buffer[1024];
+    // ssize_t bytes_read = read(fd, buffer, sizeof(buffer)-1); // System call to read from file
+    // if (bytes_read > 0) { 
+    //     buffer[bytes_read] = '\0'; // Null-terminate the string
+    //     // printf("Read: %s\n", buffer); // Use the buffer
+    // } else if (bytes_read == -1) { /* handle error */ }
+    //
+    // close(fd); // System call to close the file</code></pre>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <h4>Examples of Windows and Unix System Calls:</h4> <!-- This was h4, now directly under h3 -->
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Windows</th>
+                                <th>Unix</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Process Control</td>
+                                <td>CreateProcess(), ExitProcess(), WaitForSingleObject()</td>
+                                <td>fork(), exit(), wait()</td>
+                            </tr>
+                            <tr>
+                                <td>File Manipulation</td>
+                                <td>CreateFile(), ReadFile(), WriteFile(), CloseHandle()</td>
+                                <td>open(), read(), write(), close()</td>
+                            </tr>
+                            <tr>
+                                <td>Device Manipulation</td>
+                                <td>SetConsoleMode(), ReadConsole(), WriteConsole()</td>
+                                <td>ioctl(), read(), write()</td>
+                            </tr>
+                            <tr>
+                                <td>Information Maintenance</td>
+                                <td>GetCurrentProcessID(), SetTimer(), Sleep()</td>
+                                <td>getpid(), alarm(), sleep()</td>
+                            </tr>
+                            <tr>
+                                <td>Communication</td>
+                                <td>CreatePipe(), CreateFileMapping(), MapViewOfFile()</td>
+                                <td>pipe(), shm_open(), mmap()</td>
+                            </tr>
+                            <tr>
+                                <td>Protection</td>
+                                <td>SetFileSecurity(), SetSecurityDescriptorGroup()</td>
+                                <td>chmod(), umask(), chown()</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <hr class="subsection-divider">
+
+                <div id="os-structure">
+                    <h3>5.2 Operating System Structures</h3>
+                    <p>"The design of operating system architecture traditionally follows the separation of concerns
+                        principle," aiming for manageability and clarity.</p>
+
+                    <h4>1. Simple Structure (e.g., MS-DOS)</h4> <!-- This was h4, now directly under h3 -->
+                    <p>"There are several commercial system that don't have a well-defined structure... MS-DOS is an
+                        example of such system. It was not divided into modules carefully." Applications could often
+                        bypass OS layers and directly access hardware (like BIOS). "There was no CPU Execution Mode
+                        (user and kernel), so errors in applications could cause the whole system to crash."</p>
+                    <div class="diagram-placeholder">
+                        <strong>MS-DOS Structure Diagram</strong><br>
+                        Application Program ↔ Resident System Program ↔ MS-DOS Device Drivers ↔ ROM BIOS Device Drivers
+                    </div>
+
+                    <h4>2. Monolithic Approach</h4> <!-- This was h4, now directly under h3 -->
+                    <p>"A monolithic design of the operating system architecture makes no special accommodation for the
+                        special nature of the operating system." The entire OS is a single, large program running in
+                        kernel mode ("maximum privileges"). All components are tightly coupled. "CP/M and DOS are simple
+                        examples of monolithic operating systems."</p>
+                    <p><strong>Advantages:</strong> Low communication overhead between components, potentially high
+                        performance.</p>
+                    <p><strong>Disadvantages:</strong> Difficult to develop, debug, maintain, and extend. A bug in one
+                        part can crash the entire system.</p>
+
+                    <h4>3. Layered Approach</h4> <!-- This was h4, now directly under h3 -->
+                    <p>"In the layered approach, the OS is broken into a number of layers (levels) each built on top of
+                        lower layers. The bottom layer (layer 0) is the hardware & top most layer (layer N) is the user
+                        interface." Each layer provides services only to the layer above it and uses services only from
+                        the layer below it.</p>
+                    <p>"The main advantage of the layered approach is modularity." This simplifies design,
+                        implementation, debugging, and system verification, as layers can be developed and tested
+                        independently.</p>
+                    <div class="diagram-placeholder">
+                        <strong>Layered OS Structure Example</strong><br>
+                        Layer 5: User Program <br> Layer 4: I/O Management <br> Layer 3: Operator Process Communication
+                        <br> Layer 2: Memory Management <br> Layer 1: CPU Scheduling <br> Layer 0: Hardware
+                    </div>
+                    <p><strong>Disadvantages:</strong> Can be less efficient due to overhead of calls passing through
+                        multiple layers. Defining layers appropriately can be difficult.</p>
+
+                    <h4>4. Microkernel Approach</h4> <!-- This was h4, now directly under h3 -->
+                    <p>"This structures the operating system by removing all nonessential portions of the kernel and
+                        implementing them as system and user level programs." The microkernel itself is minimal,
+                        typically providing only basic process and memory management, and an inter-process communication
+                        (IPC) facility.</p>
+                    <p>Other OS services (file systems, device drivers, network stacks) run as separate processes in
+                        user space. "Communication between components of the OS is provided by message passing" via the
+                        microkernel.</p>
+                    <div class="diagram-placeholder">
+                        <strong>Microkernel Architecture</strong><br>
+                        User Mode: [App, File System, Device Driver] ↔ Messages ↔ Kernel Mode: [Microkernel (IPC, Mem
+                        Mgmt, CPU Sched)] ↔ Hardware
+                    </div>
+                    <p><strong>Benefits:</strong> Improved reliability and security (failure in a user-space service
+                        doesn't crash kernel), easier to extend and port.</p>
+                    <p><strong>Disadvantage:</strong> "Poor performance due to increased system overhead from message
+                        passing."</p>
+
+                    <h4>5. Modular Approach (Hybrid)</h4> <!-- This was h4, now directly under h3 -->
+                    <p>Most modern OS (like Linux, Windows, macOS) use a modular approach, which is a hybrid. They have
+                        a relatively large monolithic kernel but also support dynamically loadable modules (e.g., for
+                        device drivers, file systems, network protocols). These modules can be loaded and unloaded at
+                        runtime without rebooting.</p>
+                    <p><strong>Advantages:</strong> Combines performance of monolithic kernels (modules run in kernel
+                        space) with flexibility and maintainability (modules are somewhat independent).</p>
+                </div>
+            </section>
+
+            <nav class="topic-navigation">
+                <a href="topic-2.html">
+                    Next: Process Management &nbsp;&#8594;
+                </a>
+            </nav>
+    </div>
+    </main>
+    </div>
+
+    <footer>
+        <p>© 2024 EduVision OS Guide. Gold Standard Interactive Learning.</p>
+        <p>Content based on provided materials and AI enhancements for clarity and engagement.</p>
+    </footer>
+
+    <script>
+        // JavaScript is largely the same as your provided script.
+        // Ensure element IDs match for interactivity.
+
+        document.querySelectorAll('#sidebar a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                    const headerActualHeight = document.querySelector('.main-header').offsetHeight;
+                    const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                    const offsetPosition = elementPosition - headerActualHeight - 20; // 20px buffer
+                    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                }
+                document.querySelectorAll('#sidebar a').forEach(link => link.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        const sections = document.querySelectorAll('#main-content section'); // Target sections within main-content
+        const navLi = document.querySelectorAll('#sidebar ul li a');
+
+        window.addEventListener('scroll', () => {
+            const headerActualHeight = document.querySelector('.main-header') ? document.querySelector('.main-header').offsetHeight : 0;
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - headerActualHeight - 50; // Buffer
+                if (pageYOffset >= sectionTop) { // Simplified condition
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLi.forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href').substring(1) === current) {
+                    a.classList.add('active');
+                }
+            });
+            // If no section is current (e.g., at the very top before first section)
+            if (!current && navLi.length > 0 && window.pageYOffset < (sections[0].offsetTop - headerActualHeight - 50)) {
+                navLi.forEach(a => a.classList.remove('active'));
+                navLi[0].classList.add('active');
+            }
+        });
+
+        function copyCode(button) {
+            const pre = button.parentElement.querySelector('pre'); // More robust selector
+            if (!pre) return;
+            const code = pre.innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                button.innerText = 'Copied!';
+                button.style.backgroundColor = 'var(--success-color)';
+                setTimeout(() => {
+                    button.innerText = 'Copy';
+                    button.style.backgroundColor = 'var(--primary-purple)';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                button.innerText = 'Error';
+                button.style.backgroundColor = 'var(--danger-color)';
+                setTimeout(() => {
+                    button.innerText = 'Copy';
+                    button.style.backgroundColor = 'var(--primary-purple)';
+                }, 2000);
+            });
+        }
+
+        let currentProcessState = 0;
+        const processStates = ['proc_new', 'proc_ready', 'proc_running', 'proc_waiting', 'proc_terminated'];
+        const processStateNames = ['NEW', 'READY', 'RUNNING', 'WAITING (I/O)', 'TERMINATED'];
+        function updateProcessSimDisplay() {
+            processStates.forEach((stateId, index) => {
+                const el = document.getElementById(stateId);
+                if el) {
+                    el.classList.toggle('active', index === currentProcessState);
+                }
+            });
+            const statusEl = document.getElementById('process-sim-status');
+            if (statusEl) statusEl.textContent = `Current State: ${processStateNames[currentProcessState]}`;
+        }
+        function simulateProcessCycle() {
+            currentProcessState = (currentProcessState + 1) % processStates.length;
+            updateProcessSimDisplay();
+        }
+        if (document.getElementById('proc_new')) updateProcessSimDisplay();
+
+        const memoryMapDiv = document.getElementById('memory-map');
+        const totalMemorySize = 100;
+        let allocatedBlocks = [];
+        function renderMemoryMap() {
+            if (!memoryMapDiv) return;
+            memoryMapDiv.innerHTML = '';
+            let currentPosition = 0;
+            allocatedBlocks.sort((a, b) => a.start - b.start);
+
+            allocatedBlocks.forEach(block => {
+                if (block.start > currentPosition) {
+                    const freeBlock = document.createElement('div');
+                    freeBlock.className = 'memory-block free';
+                    freeBlock.style.width = `${(block.start - currentPosition)}%`;
+                    freeBlock.textContent = `Free (${block.start - currentPosition}%)`;
+                    memoryMapDiv.appendChild(freeBlock);
+                }
+                const allocatedDiv = document.createElement('div');
+                allocatedDiv.className = 'memory-block allocated';
+                allocatedDiv.style.width = `${block.size}%`;
+                allocatedDiv.textContent = `P${block.id} (${block.size}%)`;
+                memoryMapDiv.appendChild(allocatedDiv);
+                currentPosition = block.start + block.size;
+            });
+
+            if (currentPosition < totalMemorySize) {
+                const freeBlock = document.createElement('div');
+                freeBlock.className = 'memory-block free';
+                freeBlock.style.width = `${totalMemorySize - currentPosition}%`;
+                freeBlock.textContent = `Free (${totalMemorySize - currentPosition}%)`;
+                memoryMapDiv.appendChild(freeBlock);
+            }
+        }
+
+        function findFreeSpace(size) {
+            let currentPosition = 0;
+            allocatedBlocks.sort((a, b) => a.start - b.start);
+            for (let i = 0; i < allocatedBlocks.length; i++) {
+                const block = allocatedBlocks[i];
+                if (block.start - currentPosition >= size) { return currentPosition; }
+                currentPosition = block.start + block.size;
+            }
+            if (totalMemorySize - currentPosition >= size) { return currentPosition; }
+            return -1;
+        }
+
+        function allocateMemory() {
+            const sizeInput = document.getElementById('alloc-size');
+            if (!sizeInput) return;
+            const size = parseInt(sizeInput.value);
+            if (isNaN(size) || size <= 0 || size > totalMemorySize) {
+                alert('Invalid size. Must be between 1 and ' + totalMemorySize + '.');
+                return;
+            }
+            const startPosition = findFreeSpace(size);
+            if (startPosition !== -1) {
+                allocatedBlocks.push({ id: allocatedBlocks.length + 1, start: startPosition, size: size });
+                renderMemoryMap();
+            } else {
+                alert('Not enough free memory or memory is too fragmented for this size.');
+            }
+            sizeInput.value = '';
+        }
+        function deallocateMemory() {
+            if (allocatedBlocks.length > 0) { allocatedBlocks.pop(); renderMemoryMap(); }
+            else { alert('No memory allocated to deallocate.'); }
+        }
+        function resetMemory() { allocatedBlocks = []; renderMemoryMap(); }
+        if (memoryMapDiv) renderMemoryMap();
+
+        const commandInput = document.getElementById('command-input');
+        const commandOutput = document.getElementById('command-output');
+        if (commandInput && commandOutput) {
+            commandInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    const command = commandInput.value.trim().toLowerCase();
+                    let outputText = `\n<span class="command-prompt">user@os-sim:~$</span> ${commandInput.value}\n`;
+
+                    let response = '';
+                    switch (command) {
+                        case 'help': response = '  Available commands: help, ls, date, clear, whoami, uname'; break;
+                        case 'ls': response = '  Documents/\n  Pictures/\n  Music/\n  file1.txt\n  program.exe'; break;
+                        case 'date': response = `  ${new Date().toLocaleString()}`; break; // Use toLocaleString for better format
+                        case 'clear': commandOutput.innerHTML = ''; commandInput.value = ''; return;
+                        case 'whoami': response = '  guest_user'; break;
+                        case 'uname': response = '  EduVision OS Kernel 1.0 (Simulated)'; break;
+                        default: response = `  <span class="command-error">command not found:</span> ${command}`;
+                    }
+                    commandOutput.innerHTML += outputText + response + '\n'; // Use innerHTML for spans
+                    commandInput.value = '';
+                    commandOutput.scrollTop = commandOutput.scrollHeight;
+                }
+            });
+        }
+        // Add CSS for command prompt/error if you use innerHTML like above
+        const styleSheet = document.createElement("style");
+        styleSheet.innerText = `
+            .command-prompt { color: var(--primary-purple); font-weight: 600; }
+            .command-error { color: var(--danger-color); }
+        `;
+        document.head.appendChild(styleSheet);
+
+
+        function setInitialActiveLink() {
+            const hash = window.location.hash;
+            let activeSet = false;
+            if (hash && navLi.length > 0) {
+                navLi.forEach(a => {
+                    if (a.getAttribute('href') === hash) {
+                        a.classList.add('active'); activeSet = true;
+                    } else { a.classList.remove('active'); }
+                });
+            }
+            if (!activeSet && navLi.length > 0) {
+                navLi[0].classList.add('active');
+            }
+        }
+        window.addEventListener('load', setInitialActiveLink);
+    </script>
+</body>
+
+</html>

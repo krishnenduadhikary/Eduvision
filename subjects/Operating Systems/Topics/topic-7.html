@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced OS Topics - EduVision OS Guide</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Nunito:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-purple: #7A5CFA;
+            --primary-purple-dark: #5D3FD3;
+            --primary-purple-light: #A48DFB;
+            --light-lavender-bg: #F8F7FF;
+            --card-bg-color: #FFFFFF;
+            --text-color: #23272f;
+            --subtle-text-color: #6b7280;
+            --border-color: #E2E8F0;
+            --code-bg-color: #181c24;
+            --code-text-color: #e0e6f1;
+            --tooltip-bg: #23272f;
+            --tooltip-text: #F7FAFC;
+            --success-color: #48BB78;
+            --danger-color: #F56565;
+            --info-blue: #3B82F6;
+            --info-blue-dark: #2563EB;
+            --info-blue-light: #EFF6FF;
+            --font-sans: 'Poppins', 'Segoe UI', Arial, sans-serif;
+            --font-mono: 'Fira Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px 0 rgba(80, 70, 140, 0.10);
+            --shadow-lg: 0 12px 32px 0 rgba(80, 70, 140, 0.13);
+            --shadow-subtle: 0 2px 4px 0 rgba(107, 114, 128, 0.08);
+            --border-radius-sm: 0.25rem;
+            --border-radius-md: 0.5rem;
+            --border-radius-lg: 1rem;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            color: var(--text-color);
+            background: linear-gradient(120deg, #f8f7ff 0%, #e9e6f7 100%);
+        }
+
+        .main-header {
+            background: linear-gradient(90deg, var(--primary-purple-dark) 0%, var(--primary-purple) 100%);
+            color: white;
+            padding: 28px 40px 22px 40px;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .main-header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .main-header .subtitle {
+            font-size: 1.1em;
+            font-weight: 400;
+            opacity: 0.92;
+            margin-top: 0.25rem;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvishion-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1001;
+        }
+
+        .eduvishion-logo .text-2xl {
+            font-size: 1.6rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .eduvishion-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvishion-logo .text-yellow-300 {
+            color: #fde047 !important;
+        }
+
+        .eduvishion-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+        }
+
+        .eduvishion-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvishion-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        @media (max-width: 768px) {
+            .main-header {
+                position: static;
+            }
+
+            .eduvishion-logo {
+                top: 15px !important;
+                left: 15px !important;
+            }
+
+            .eduvishion-logo .text-2xl {
+                font-size: 1.2rem !important;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .eduvishion-logo {
+                display: none;
+            }
+        }
+
+        .page-container {
+            display: flex;
+            width: 100%;
+            margin-top: 0;
+        }
+
+        #sidebar {
+            width: 270px;
+            min-width: 220px;
+            background: linear-gradient(135deg, #f5f3fe 80%, #e9e6f7 100%);
+            padding: 32px 18px 32px 18px;
+            height: calc(100vh - 85px);
+            position: sticky;
+            top: 85px;
+            overflow-y: auto;
+            border-right: 1.5px solid var(--border-color);
+            box-shadow: 2px 0 12px 0 rgba(80, 70, 140, 0.04);
+            transition: width 0.3s;
+        }
+
+        #sidebar h2 {
+            color: var(--primary-purple-dark);
+            text-align: left;
+            margin-top: 0;
+            margin-bottom: 22px;
+            font-size: 1.3em;
+            font-weight: 700;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-purple);
+            letter-spacing: 0.01em;
+        }
+
+        #sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #sidebar ul li a {
+            color: var(--subtle-text-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 18px;
+            margin-bottom: 7px;
+            border-radius: var(--border-radius-md);
+            font-weight: 500;
+            font-size: 1.04em;
+            transition: background 0.18s, color 0.18s, transform 0.13s;
+            border-left: 4px solid transparent;
+            position: relative;
+        }
+
+        #sidebar ul li a:hover,
+        #sidebar ul li a.active {
+            background: linear-gradient(90deg, #ece9fa 60%, #e0d7f3 100%);
+            color: var(--primary-purple-dark);
+            border-left: 4px solid var(--primary-purple);
+            font-weight: 700;
+            transform: translateX(4px) scale(1.03);
+        }
+
+        #main-content {
+            flex-grow: 1;
+            padding: 38px 48px 48px 48px;
+            max-width: 100vw;
+            min-width: 0;
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .main-content-float {
+            background: var(--card-bg-color);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 36px 36px 24px 36px;
+            margin-bottom: 40px;
+            margin-top: 0;
+            min-width: 0;
+        }
+
+        .syllabus-nav-bar {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 0.75rem;
+            background: var(--card-bg-color);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .syllabus-nav-bar a.back-to-syllabus {
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.98rem;
+            color: var(--info-blue);
+            font-weight: 600;
+            padding: 0.5rem 0.95rem;
+            border-radius: var(--border-radius-md);
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .syllabus-nav-bar a.back-to-syllabus:hover {
+            background: var(--info-blue-light);
+            color: var(--info-blue-dark);
+        }
+
+        .syllabus-nav-bar a.back-to-syllabus svg {
+            height: 1.25rem;
+            width: 1.25rem;
+            margin-right: 0.375rem;
+        }
+
+        .syllabus-nav-bar .topic-indicator {
+            background: var(--info-blue);
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 0.375rem 1.1rem;
+            border-radius: 9999px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        @media (min-width: 640px) {
+            .syllabus-nav-bar {
+                flex-direction: row;
+            }
+
+            .syllabus-nav-bar a.back-to-syllabus {
+                margin-bottom: 0;
+            }
+
+            .syllabus-nav-bar .topic-indicator {
+                font-size: 1rem;
+            }
+        }
+
+        .topic-header {
+            text-align: left;
+            padding-bottom: 18px;
+            margin-bottom: 32px;
+            border-bottom: 1.5px solid var(--border-color);
+        }
+
+        .topic-header h1 {
+            color: var(--primary-purple-dark);
+            margin: 0 0 7px 0;
+            font-size: 2.1em;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .topic-header p {
+            color: var(--subtle-text-color);
+            font-size: 1.08em;
+            margin: 0;
+        }
+
+        section {
+            margin-bottom: 38px;
+            padding: 30px 28px 28px 28px;
+            background: var(--card-bg-color);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        section h2 {
+            font-size: 1.6em;
+            color: var(--primary-purple-dark);
+            border-bottom: 2px solid var(--primary-purple);
+            margin-bottom: 22px;
+            padding-bottom: 8px;
+            font-weight: 700;
+        }
+
+        section h3 {
+            font-size: 1.22em;
+            margin-top: 32px;
+            margin-bottom: 14px;
+            color: var(--primary-purple);
+            font-weight: 600;
+            padding-bottom: 6px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        section h4 {
+            font-size: 1.08em;
+            margin-top: 22px;
+            margin-bottom: 9px;
+            color: var(--primary-purple-dark);
+            font-weight: 600;
+        }
+
+        section ul {
+            padding-left: 22px;
+            margin-top: 0.5rem;
+        }
+
+        section ul li {
+            margin-bottom: 0.5rem;
+            list-style-type: disc;
+        }
+
+        section ul li::marker {
+            color: var(--primary-purple);
+        }
+
+        .diagram-placeholder,
+        .image-container {
+            border: 1.5px dashed var(--primary-purple-light);
+            padding: 22px;
+            margin: 22px 0;
+            text-align: center;
+            background: linear-gradient(90deg, #f8f7ff 80%, #ece9fa 100%);
+            border-radius: var(--border-radius-md);
+            color: var(--subtle-text-color);
+            font-style: italic;
+            font-size: 1.01em;
+        }
+
+        .diagram-placeholder p,
+        .image-container p {
+            margin: 7px 0;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            border-radius: 0.5em;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 8px 0 rgba(80, 70, 140, 0.08);
+        }
+
+        .code-block {
+            background: var(--code-bg-color);
+            color: var(--code-text-color);
+            padding: 1.2rem 1.2rem 1.2rem 1.5rem;
+            border-radius: var(--border-radius-md);
+            overflow-x: auto;
+            margin: 1.2rem 0;
+            position: relative;
+            box-shadow: 0 2px 12px 0 rgba(30, 30, 60, 0.10);
+            font-family: var(--font-mono);
+            font-size: 1em;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: var(--font-mono);
+            font-size: 1em;
+            line-height: 1.7;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.8rem;
+            right: 1.1rem;
+            background: linear-gradient(90deg, var(--primary-purple) 60%, var(--primary-purple-dark) 100%);
+            color: white;
+            border: none;
+            padding: 0.38rem 1.1rem;
+            border-radius: 1.2em;
+            cursor: pointer;
+            font-size: 0.93em;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            box-shadow: 0 2px 8px 0 rgba(80, 70, 140, 0.10);
+            transition: background 0.18s, box-shadow 0.18s;
+        }
+
+        .copy-btn:hover {
+            background: linear-gradient(90deg, var(--primary-purple-dark) 60%, var(--primary-purple) 100%);
+            box-shadow: 0 4px 16px 0 rgba(80, 70, 140, 0.13);
+        }
+
+        [data-tooltip] {
+            position: relative;
+            cursor: help;
+            border-bottom: 1px dotted var(--primary-purple);
+        }
+
+        [data-tooltip]::before,
+        [data-tooltip]::after {
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s, transform 0.2s;
+            position: absolute;
+            left: 50%;
+            z-index: 1001;
+        }
+
+        [data-tooltip]::before {
+            content: attr(data-tooltip);
+            background: var(--tooltip-bg);
+            color: var(--tooltip-text);
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--border-radius-md);
+            font-size: 0.85em;
+            white-space: nowrap;
+            bottom: 140%;
+            transform: translateX(-50%) translateY(5px);
+        }
+
+        [data-tooltip]::after {
+            content: '';
+            border-style: solid;
+            border-width: 6px 6px 0 6px;
+            border-color: var(--tooltip-bg) transparent transparent transparent;
+            bottom: calc(140% - 6px);
+            transform: translateX(-50%) translateY(5px);
+        }
+
+        [data-tooltip]:hover::before,
+        [data-tooltip]:hover::after {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .topic-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 32px;
+            margin-bottom: 0;
+        }
+
+        .topic-navigation a {
+            background: linear-gradient(90deg, var(--primary-purple) 60%, var(--primary-purple-dark) 100%);
+            color: #fff;
+            border-radius: 2em;
+            padding: 0.8em 2.2em;
+            font-size: 1.08em;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 2px 12px 0 rgba(80, 70, 140, 0.13);
+            transition: background 0.18s, box-shadow 0.18s, transform 0.13s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7em;
+        }
+
+        .topic-navigation a:hover {
+            background: linear-gradient(90deg, var(--primary-purple-dark) 60%, var(--primary-purple) 100%);
+            box-shadow: 0 6px 24px 0 rgba(80, 70, 140, 0.18);
+            transform: translateY(-2px) scale(1.04);
+        }
+
+        .nav-spacer {
+            flex-grow: 1;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: var(--primary-purple-dark);
+            color: rgba(255, 255, 255, 0.85);
+            margin-top: 40px;
+            font-size: 0.97em;
+            letter-spacing: 0.01em;
+        }
+
+        @media (max-width: 1024px) {
+            #main-content {
+                padding: 20px 10px;
+            }
+
+            .main-content-float {
+                padding: 18px 8px 18px 8px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-container {
+                flex-direction: column;
+            }
+
+            #sidebar {
+                width: 100%;
+                min-width: 0;
+                height: auto;
+                position: static;
+                border-right: none;
+                border-bottom: 1.5px solid var(--border-color);
+                box-shadow: none;
+                top: 0;
+            }
+
+            .main-header {
+                padding: 18px;
+                position: static;
+            }
+
+            .main-header h1 {
+                font-size: 1.5em;
+            }
+
+            .topic-header h1 {
+                font-size: 1.2em;
+            }
+
+            section h2 {
+                font-size: 1.1em;
+            }
+
+            section h3 {
+                font-size: 1em;
+            }
+
+            section h4 {
+                font-size: 0.97em;
+            }
+
+            #main-content {
+                padding: 10px 2vw;
+            }
+
+            .main-content-float {
+                padding: 10px 2vw;
+            }
+
+            .topic-navigation {
+                flex-direction: column;
+                gap: 0.7em;
+            }
+
+            .topic-navigation a {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        .command-prompt {
+            color: var(--primary-purple);
+            font-weight: 600;
+        }
+
+        .command-error {
+            color: var(--danger-color);
+        }
+
+        /* Specific styles for case studies */
+        .case-study-logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 15px;
+            float: left;
+            /* Or use flexbox on parent */
+        }
+    </style>
+</head>
+
+<body>
+    <header class="main-header">
+        <!-- EduVision Logo -->
+        <div class="eduvishion-logo">
+            <a href="../../index.html" class="flex items-center group">
+                <span class="text-white">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+                    fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-white">ision</span>
+            </a>
+        </div>
+        <h1>Operating Systems</h1>
+        <p class="subtitle">EduVision :: Full Syllabus with Concepts, Notes, and Diagrams</p>
+    </header>
+
+    <div class="page-container">
+        <nav id="sidebar">
+            <h2>Navigation</h2>
+            <ul id="toc-list">
+                <li><a href="#security-protection" class="active">1. Security & Protection</a></li>
+                <li><a href="#system-booting">2. System Booting Process</a></li>
+                <li><a href="#case-studies">3. Case Studies</a></li>
+            </ul>
+        </nav>
+
+        <main id="main-content">
+            <div class="syllabus-nav-bar">
+                <a href="../../index.html" class="back-to-syllabus"> <!-- Update path as needed -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Back to Syllabus
+                </a>
+                <div class="topic-indicator">
+                    Topic 7 (Advanced)
+                </div>
+            </div>
+
+            <div class="topic-header">
+                <h1>Topic 7: Advanced Topics (Optional)</h1>
+                <p>Exploring crucial advanced concepts in operating systems, including security mechanisms, the system
+                    startup sequence, and real-world OS case studies.</p>
+            </div>
+
+            <section id="security-protection">
+                <h2>1. Security and Protection</h2>
+                <p>In a multi-user and multi-tasking environment, it's crucial for the operating system to manage access
+                    to system resources and protect processes from interfering with each other. While related,
+                    **protection** and **security** address different aspects:</p>
+                <ul>
+                    <li><strong
+                            data-tooltip="Mechanisms for controlling the access of programs, processes, or users to the resources defined by a computer system.">Protection</strong>
+                        refers to internal mechanisms that control the access of programs or users to the resources of a
+                        computer system. It ensures that resources are used only in authorized ways.</li>
+                    <li><strong
+                            data-tooltip="Defense of the system against internal and external attacks, such as denial-of-service, worms, viruses, and identity theft.">Security</strong>
+                        refers to the broader problem of defending a system from external and internal attacks. This
+                        includes things like unauthorized access, data breaches, malware, and denial of service.</li>
+                </ul>
+
+                <h3>Goals of Protection</h3>
+                <ul>
+                    <li><strong>Preventing Interference:</strong> Ensure that one process cannot adversely affect
+                        another running process or the operating system itself.</li>
+                    <li><strong>Controlled Sharing:</strong> Allow resources to be shared among users or processes but
+                        in a controlled manner, respecting access rights.</li>
+                    <li><strong>Enforcing Policies:</strong> Implement system-wide policies regarding resource usage and
+                        access.</li>
+                    <li><strong>Reliability:</strong> By catching errors at interfaces between components, protection
+                        mechanisms contribute to overall system reliability.</li>
+                </ul>
+
+                <h3>Domains of Protection</h3>
+                <p>A computer system can be viewed as a collection of processes and objects (hardware resources like
+                    CPU, memory segments, printers; and software resources like files, programs, semaphores). Each
+                    process operates within a <strong
+                        data-tooltip="A set of (object, rights-set) pairs, specifying what operations a process can perform on which objects.">protection
+                        domain</strong>, which specifies the resources that the process can access and the operations it
+                    can perform on them.</p>
+                <ul>
+                    <li><strong>User Mode vs. Kernel Mode (Dual Mode):</strong> This is a fundamental protection
+                        mechanism. The OS runs in kernel mode (privileged, supervisor mode) with access to all hardware
+                        and instructions. User applications run in user mode with restricted access. System calls
+                        provide a controlled way for user processes to request services from the kernel.</li>
+                    <li><strong>Access Control Matrix:</strong> A conceptual model where rows represent domains (or
+                        users/processes) and columns represent objects. Each entry `Access[i, j]` defines the set of
+                        operations that a process executing in domain `D_i` can invoke on object `O_j`. In practice,
+                        this matrix is often too large and sparse, so it's implemented using:
+                        <ul>
+                            <li><strong>Access Control Lists (ACLs):</strong> For each object, an ACL lists all
+                                domains/users that have access and their specific rights (e.g., read, write, execute for
+                                a file).</li>
+                            <li><strong>Capability Lists (C-Lists):</strong> For each domain, a capability list
+                                specifies objects and operations allowed. A capability is like a secure pointer to an
+                                object combined with access rights.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Memory Protection:</strong>
+                        <ul>
+                            <li><strong>Base and Limit Registers:</strong> Each process is confined to its allocated
+                                memory space defined by a base address and a limit (size). Any attempt to access memory
+                                outside this range triggers a trap to the OS.</li>
+                            <li><strong>Paging/Segmentation:</strong> These memory management schemes provide
+                                finer-grained protection, often with read, write, and execute bits associated with each
+                                page or segment.</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h3>Security Threats and Defenses</h3>
+                <p>Operating system security aims to ensure the confidentiality, integrity, and availability (CIA triad)
+                    of system resources and data.</p>
+                <h4>Common Threats:</h4>
+                <ul>
+                    <li><strong>Malware:</strong> Viruses, worms, trojan horses, ransomware, spyware that can damage
+                        systems, steal data, or disrupt operations.</li>
+                    <li><strong>Unauthorized Access:</strong> Gaining access to systems or data without permission
+                        (e.g., through stolen credentials, exploiting vulnerabilities).</li>
+                    <li><strong>Denial of Service (DoS/DDoS):</strong> Overwhelming a system with traffic or requests to
+                        make it unavailable to legitimate users.</li>
+                    <li><strong>Social Engineering:</strong> Tricking users into divulging confidential information or
+                        performing actions that compromise security.</li>
+                    <li><strong>Insider Threats:</strong> Malicious actions or negligence by individuals with legitimate
+                        access.</li>
+                </ul>
+                <h4>Common Defense Mechanisms:</h4>
+                <ul>
+                    <li><strong>Authentication:</strong> Verifying the identity of users or processes (e.g., passwords,
+                        biometrics, multi-factor authentication).</li>
+                    <li><strong>Authorization/Access Control:</strong> Ensuring that authenticated users/processes only
+                        access resources they are permitted to (using ACLs, role-based access control - RBAC).</li>
+                    <li><strong>Cryptography:</strong> Encrypting data at rest and in transit to protect confidentiality
+                        and integrity.</li>
+                    <li><strong>Firewalls:</strong> Filtering network traffic to block unauthorized access.</li>
+                    <li><strong>Intrusion Detection/Prevention Systems (IDS/IPS):</strong> Monitoring for and responding
+                        to suspicious activities.</li>
+                    <li><strong>Regular Patching and Updates:</strong> Fixing known vulnerabilities in the OS and
+                        applications.</li>
+                    <li><strong>Auditing and Logging:</strong> Recording system events to detect security breaches and
+                        for forensic analysis.</li>
+                    <li><strong>Principle of Least Privilege:</strong> Granting users and processes only the minimum
+                        permissions necessary to perform their tasks.</li>
+                </ul>
+            </section>
+
+            <section id="system-booting">
+                <h2>2. System Booting Process</h2>
+                <p>The <strong
+                        data-tooltip="The process of starting a computer, which involves loading the operating system into main memory.">system
+                        booting process</strong> (or startup) is the sequence of operations the computer performs when
+                    it is powered on, culminating in the operating system taking control.</p>
+                <div class="diagram-placeholder">
+                    <p><strong>Conceptual Boot Sequence Diagram</strong></p>
+                    <p>Power ON → BIOS/UEFI Initialization → POST → Boot Device Selection → Bootloader Execution → OS
+                        Kernel Loading → OS Initialization → User Login</p>
+                </div>
+                <h4>Typical Stages:</h4>
+                <ol>
+                    <li>
+                        <strong>Power On:</strong> When the computer is turned on, the power supply provides power to
+                        the motherboard and other components.
+                    </li>
+                    <li>
+                        <strong>Firmware Initialization (BIOS/UEFI):</strong>
+                        <ul>
+                            <li>The CPU starts executing firmware code stored in a ROM chip on the motherboard. This
+                                firmware is traditionally called the <strong
+                                    data-tooltip="Basic Input/Output System: Firmware used to perform hardware initialization during the booting process.">BIOS</strong>
+                                (Basic Input/Output System) or, on modern systems, <strong
+                                    data-tooltip="Unified Extensible Firmware Interface: A modern specification for system firmware, replacing BIOS.">UEFI</strong>
+                                (Unified Extensible Firmware Interface).</li>
+                            <li>The firmware initializes basic hardware components (CPU, memory, video card).</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>POST (Power-On Self-Test):</strong>
+                        <ul>
+                            <li>The firmware performs a series of diagnostic tests to check if essential hardware
+                                components (RAM, keyboard, disk drives) are functioning correctly.</li>
+                            <li>Errors are typically indicated by beep codes or on-screen messages if video is
+                                initialized.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Boot Device Selection:</strong>
+                        <ul>
+                            <li>The firmware consults a configured boot order (e.g., USB drive, hard drive, network) to
+                                find a bootable device.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Bootloader Execution:</strong>
+                        <ul>
+                            <li>Once a bootable device is found, the firmware loads the first sector of that device
+                                (e.g., Master Boot Record - MBR, or EFI System Partition - ESP for UEFI) into memory and
+                                executes it. This sector contains the initial stage of the <strong
+                                    data-tooltip="A small program that loads the main operating system for the computer.">bootloader</strong>.
+                            </li>
+                            <li>Common bootloaders include GRUB (for Linux), NTLDR/BOOTMGR (for Windows).</li>
+                            <li>The bootloader's job is to load the operating system kernel into memory. It might
+                                present a menu if multiple OSs are installed.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>OS Kernel Loading and Initialization:</strong>
+                        <ul>
+                            <li>The bootloader loads the OS kernel (e.g., `vmlinuz` for Linux, `ntoskrnl.exe` for
+                                Windows) and possibly an initial RAM disk (initrd/initramfs) into main memory.</li>
+                            <li>Control is transferred to the kernel.</li>
+                            <li>The kernel initializes itself: sets up memory management, device drivers, system data
+                                structures, and starts essential system processes (e.g., `init` or `systemd` on Linux).
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>User Space Initialization:</strong>
+                        <ul>
+                            <li>The kernel starts user-space processes, including daemons/services.</li>
+                            <li>Eventually, a login prompt or graphical user interface (GUI) is presented to the user.
+                            </li>
+                        </ul>
+                    </li>
+                </ol>
+                <p>UEFI systems offer more advanced features than traditional BIOS, including secure boot (verifying the
+                    digital signature of bootloaders and kernels) and a more flexible pre-boot environment.</p>
+            </section>
+
+            <section id="case-studies">
+                <h2>3. Case Studies: Operating Systems</h2>
+                <p>Examining specific operating systems helps illustrate how the theoretical concepts are applied in
+                    practice. Here, we'll briefly look at Linux, Windows, and Android.</p>
+
+                <h3><img src="placeholder_linux_logo.png" alt="Linux Logo" class="case-study-logo">Linux</h3>
+                <p>Linux is a family of open-source Unix-like operating systems based on the Linux kernel, an operating
+                    system kernel first released on September 17, 1991, by Linus Torvalds. It's known for its stability,
+                    security, flexibility, and wide range of distributions (distros) like Ubuntu, Fedora, Debian, and
+                    Arch Linux.</p>
+                <h4>Key Characteristics:</h4>
+                <ul>
+                    <li><strong>Monolithic Kernel (with Modules):</strong> The Linux kernel is monolithic in design,
+                        meaning most OS services run in kernel space. However, it's highly modular, allowing device
+                        drivers and other functionalities to be loaded/unloaded dynamically.</li>
+                    <li><strong>Multi-user and Multitasking:</strong> Designed from the ground up to support multiple
+                        users and run multiple processes concurrently (using preemptive multitasking).</li>
+                    <li><strong>Hierarchical File System:</strong> Adheres to the Unix-like file system hierarchy (e.g.,
+                        `/bin`, `/etc`, `/home`, `/usr`). Supports various file systems like ext4, XFS, Btrfs.</li>
+                    <li><strong>Powerful Command-Line Interface (CLI):</strong> The shell (e.g., Bash) is a core
+                        component, providing extensive scripting and system administration capabilities.</li>
+                    <li><strong>Networking:</strong> Robust TCP/IP networking stack, widely used for servers.</li>
+                    <li><strong>Security:</strong> Implements traditional Unix permissions (owner, group, other for
+                        read, write, execute), ACLs, and advanced security modules like SELinux and AppArmor.</li>
+                    <li><strong>Process Management:</strong> Uses `fork()` and `exec()` for process creation. Advanced
+                        schedulers like CFS (Completely Fair Scheduler).</li>
+                    <li><strong>Memory Management:</strong> Uses paging, demand paging, and swapping. Manages virtual
+                        memory effectively.</li>
+                    <li><strong>Open Source:</strong> Source code is freely available, leading to a large community of
+                        developers and extensive customization.</li>
+                </ul>
+                <div class="diagram-placeholder">
+                    <p><strong>Simplified Linux Architecture Diagram</strong></p>
+                    <p>Hardware ↔ Linux Kernel (Process Mgmt, Memory Mgmt, File Systems, Device Drivers, Network Stack)
+                        ↔ System Libraries (e.g., glibc) ↔ Shell / GUI / User Applications</p>
+                </div>
+
+                <hr class="subsection-divider">
+
+                <h3><img src="placeholder_windows_logo.png" alt="Windows Logo" class="case-study-logo">Microsoft Windows
+                </h3>
+                <p>Microsoft Windows is a group of several proprietary graphical operating system families developed and
+                    marketed by Microsoft. It dominates the personal computer OS market.</p>
+                <h4>Key Characteristics:</h4>
+                <ul>
+                    <li><strong>Hybrid Kernel:</strong> The Windows NT kernel (used in modern Windows versions like 10
+                        and 11) is often described as a hybrid kernel. It has a microkernel-like core (the "Executive")
+                        that provides basic services, with other OS services running as distinct components in kernel
+                        mode, but more integrated than a pure microkernel.</li>
+                    <li><strong>Graphical User Interface (GUI):</strong> A primary feature, with the Windows Shell
+                        (Explorer) providing the desktop environment.</li>
+                    <li><strong>Object-Oriented Design:</strong> Many internal components are object-based. The
+                        Executive manages objects representing system resources.</li>
+                    <li><strong>NTFS File System:</strong> Native and most common file system, supporting features like
+                        ACLs, journaling, encryption, and compression. Also supports FAT32 and exFAT.</li>
+                    <li><strong>Registry:</strong> A hierarchical database that stores low-level settings for the
+                        operating system and for applications that opt to use the registry.</li>
+                    <li><strong>Win32 API / Windows API:</strong> The primary application programming interface for
+                        Windows applications.</li>
+                    <li><strong>Security:</strong> Features include User Account Control (UAC), BitLocker encryption,
+                        Windows Defender antivirus, and a permission system based on ACLs and security identifiers
+                        (SIDs).</li>
+                    <li><strong>Process and Thread Management:</strong> Supports processes and threads, with a
+                        sophisticated scheduler. Uses concepts like "jobs" to manage groups of processes.</li>
+                    <li><strong>Memory Management:</strong> Implements virtual memory, demand paging, and a complex
+                        memory manager.</li>
+                </ul>
+                <div class="diagram-placeholder">
+                    <p><strong>Simplified Windows NT Architecture Diagram</strong></p>
+                    <p>Hardware ↔ HAL (Hardware Abstraction Layer) ↔ NT Kernel & Executive (Object Mgr, Process Mgr, VM
+                        Mgr, I/O Mgr, Security Ref Monitor) ↔ Subsystems (e.g., Win32) ↔ User Applications</p>
+                </div>
+
+                <hr class="subsection-divider">
+
+                <h3><img src="placeholder_android_logo.png" alt="Android Logo" class="case-study-logo">Android OS</h3>
+                <p>Android is a mobile operating system based on a modified version of the Linux kernel and other
+                    open-source software, designed primarily for touchscreen mobile devices such as smartphones and
+                    tablets.</p>
+                <h4>Key Characteristics:</h4>
+                <ul>
+                    <li><strong>Linux Kernel:</strong> Utilizes a modified Linux kernel for core system services like
+                        process management, memory management, device drivers, and security. However, it doesn't include
+                        the GNU C Library (glibc) or many standard Unix utilities.</li>
+                    <li><strong>Application Framework:</strong> Provides a rich framework for developing applications,
+                        primarily using Java or Kotlin. Key components include Activities (for UI), Services (for
+                        background tasks), Broadcast Receivers, and Content Providers.</li>
+                    <li><strong>Dalvik Virtual Machine / Android Runtime (ART):</strong>
+                        <ul>
+                            <li>Historically, Android used the Dalvik VM to execute application code (compiled to Dalvik
+                                bytecode).</li>
+                            <li>Modern Android versions use ART, which employs Ahead-Of-Time (AOT) compilation to native
+                                machine code upon app installation, improving performance and battery life.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Sandbox Model:</strong> Each application runs in its own process and its own sandbox,
+                        with limited access to system resources. Permissions must be explicitly granted by the user.
+                    </li>
+                    <li><strong>Intents:</strong> A messaging system used for inter-component communication, allowing
+                        apps to request actions from other apps or system components.</li>
+                    <li><strong>SQLite Database:</strong> Built-in support for lightweight relational databases for
+                        application data storage.</li>
+                    <li><strong>Power Management:</strong> Critical for mobile devices, with features like Doze mode and
+                        App Standby Buckets to conserve battery.</li>
+                    <li><strong>Security:</strong> Based on Linux kernel security, application sandboxing, permissions
+                        model, verified boot, and regular security updates.</li>
+                </ul>
+                <div class="diagram-placeholder">
+                    <p><strong>Simplified Android Architecture Stack</strong></p>
+                    <p>Linux Kernel (Drivers, Power Mgmt, etc.) ↔ HAL (Hardware Abstraction Layer) ↔ Native Libraries
+                        (C/C++) & Android Runtime (ART/Core Libs) ↔ Application Framework (Java API) ↔ System Apps &
+                        User Apps</p>
+                </div>
+            </section>
+
+            <nav class="topic-navigation">
+                <a href="topic-6.html">
+                    ← Previous: I/O Management
+                </a>
+                <span class="nav-spacer"></span> <!-- Use if there's no "Next" topic in this series -->
+                <!-- If you plan a "Conclusion" or "Further Study" page, link it here: -->
+                <!-- <a href="conclusion.html"> End of Core Topics → </a> -->
+            </nav>
+
+        </main>
+    </div>
+
+    <footer>
+        <p>© 2024 EduVision OS Guide. Gold Standard Interactive Learning.</p>
+        <p>Content based on provided materials and AI enhancements for clarity and engagement.</p>
+    </footer>
+
+    <script>
+        // JavaScript from topic-5.html can be largely reused.
+
+        document.querySelectorAll('#sidebar a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                    let headerActualHeight = document.querySelector('.main-header').offsetHeight;
+                    if (window.innerWidth <= 768 && getComputedStyle(document.querySelector('.main-header')).position !== 'sticky') {
+                        headerActualHeight = 0;
+                    }
+                    const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                    const offsetPosition = elementPosition - headerActualHeight - 20;
+                    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                }
+                document.querySelectorAll('#sidebar a').forEach(link => link.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        const sections = document.querySelectorAll('#main-content section');
+        const navLi = document.querySelectorAll('#sidebar ul li a');
+
+        window.addEventListener('scroll', () => {
+            let headerActualHeight = document.querySelector('.main-header') ? document.querySelector('.main-header').offsetHeight : 0;
+            if (window.innerWidth <= 768 && getComputedStyle(document.querySelector('.main-header')).position !== 'sticky') {
+                headerActualHeight = 0;
+            }
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - headerActualHeight - 50;
+                if (pageYOffset >= sectionTop) { current = section.getAttribute('id'); }
+            });
+            navLi.forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href').substring(1) === current) { a.classList.add('active'); }
+            });
+            if (!current && navLi.length > 0 && sections.length > 0 && window.pageYOffset < (sections[0].offsetTop - headerActualHeight - 50)) {
+                navLi.forEach(a => a.classList.remove('active'));
+                navLi[0].classList.add('active');
+            }
+        });
+
+        // No copyCode function needed if there are no code blocks in this topic's content,
+        // unless you add examples for, e.g., bootloader configs or security rules.
+        /* 
+        function copyCode(button) {
+            // ...
+        }
+        */
+
+        function setInitialActiveLink() {
+            const hash = window.location.hash;
+            let activeSet = false;
+            if (hash && navLi.length > 0) {
+                navLi.forEach(a => {
+                    if (a.getAttribute('href') === hash) { a.classList.add('active'); activeSet = true; }
+                    else { a.classList.remove('active'); }
+                });
+            }
+            if (!activeSet && navLi.length > 0) { navLi[0].classList.add('active'); }
+        }
+        window.addEventListener('load', setInitialActiveLink);
+    </script>
+</body>
+
+</html>

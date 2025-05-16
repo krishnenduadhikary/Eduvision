@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Systems - EduVision OS Guide</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Nunito:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-purple: #7A5CFA;
+            --primary-purple-dark: #5D3FD3;
+            --primary-purple-light: #A48DFB;
+            --light-lavender-bg: #F8F7FF;
+            --card-bg-color: #FFFFFF;
+            --text-color: #23272f;
+            --subtle-text-color: #6b7280;
+            --border-color: #E2E8F0;
+            --code-bg-color: #181c24;
+            --code-text-color: #e0e6f1;
+            --tooltip-bg: #23272f;
+            --tooltip-text: #F7FAFC;
+            --success-color: #48BB78;
+            --danger-color: #F56565;
+            --info-blue: #3B82F6;
+            --info-blue-dark: #2563EB;
+            --info-blue-light: #EFF6FF;
+            --font-sans: 'Poppins', 'Segoe UI', Arial, sans-serif;
+            --font-mono: 'Fira Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px 0 rgba(80, 70, 140, 0.10);
+            --shadow-lg: 0 12px 32px 0 rgba(80, 70, 140, 0.13);
+            --shadow-subtle: 0 2px 4px 0 rgba(107, 114, 128, 0.08);
+            --border-radius-sm: 0.25rem;
+            --border-radius-md: 0.5rem;
+            --border-radius-lg: 1rem;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            color: var(--text-color);
+            background: linear-gradient(120deg, #f8f7ff 0%, #e9e6f7 100%);
+        }
+
+        .main-header {
+            background: linear-gradient(90deg, var(--primary-purple-dark) 0%, var(--primary-purple) 100%);
+            color: white;
+            padding: 28px 40px 22px 40px;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .main-header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .main-header .subtitle {
+            font-size: 1.1em;
+            font-weight: 400;
+            opacity: 0.92;
+            margin-top: 0.25rem;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvishion-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1001;
+        }
+
+        .eduvishion-logo .text-2xl {
+            font-size: 1.6rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .eduvishion-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvishion-logo .text-yellow-300 {
+            color: #fde047 !important;
+        }
+
+        .eduvishion-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+        }
+
+        .eduvishion-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvishion-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        @media (max-width: 768px) {
+            .main-header {
+                position: static;
+            }
+
+            .eduvishion-logo {
+                top: 15px !important;
+                left: 15px !important;
+            }
+
+            .eduvishion-logo .text-2xl {
+                font-size: 1.2rem !important;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .eduvishion-logo {
+                display: none;
+            }
+        }
+
+        .page-container {
+            display: flex;
+            width: 100%;
+            margin-top: 0;
+        }
+
+        #sidebar {
+            width: 270px;
+            min-width: 220px;
+            background: linear-gradient(135deg, #f5f3fe 80%, #e9e6f7 100%);
+            padding: 32px 18px 32px 18px;
+            height: calc(100vh - 85px);
+            position: sticky;
+            top: 85px;
+            overflow-y: auto;
+            border-right: 1.5px solid var(--border-color);
+            box-shadow: 2px 0 12px 0 rgba(80, 70, 140, 0.04);
+            transition: width 0.3s;
+        }
+
+        #sidebar h2 {
+            color: var(--primary-purple-dark);
+            text-align: left;
+            margin-top: 0;
+            margin-bottom: 22px;
+            font-size: 1.3em;
+            font-weight: 700;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-purple);
+            letter-spacing: 0.01em;
+        }
+
+        #sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #sidebar ul li a {
+            color: var(--subtle-text-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 18px;
+            margin-bottom: 7px;
+            border-radius: var(--border-radius-md);
+            font-weight: 500;
+            font-size: 1.04em;
+            transition: background 0.18s, color 0.18s, transform 0.13s;
+            border-left: 4px solid transparent;
+            position: relative;
+        }
+
+        #sidebar ul li a:hover,
+        #sidebar ul li a.active {
+            background: linear-gradient(90deg, #ece9fa 60%, #e0d7f3 100%);
+            color: var(--primary-purple-dark);
+            border-left: 4px solid var(--primary-purple);
+            font-weight: 700;
+            transform: translateX(4px) scale(1.03);
+        }
+
+        #main-content {
+            flex-grow: 1;
+            padding: 38px 48px 48px 48px;
+            max-width: 100vw;
+            min-width: 0;
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .main-content-float {
+            background: var(--card-bg-color);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 36px 36px 24px 36px;
+            margin-bottom: 40px;
+            margin-top: 0;
+            min-width: 0;
+        }
+
+        .syllabus-nav-bar {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 0.75rem;
+            background: var(--card-bg-color);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .syllabus-nav-bar a.back-to-syllabus {
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.98rem;
+            color: var(--info-blue);
+            font-weight: 600;
+            padding: 0.5rem 0.95rem;
+            border-radius: var(--border-radius-md);
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .syllabus-nav-bar a.back-to-syllabus:hover {
+            background: var(--info-blue-light);
+            color: var(--info-blue-dark);
+        }
+
+        .syllabus-nav-bar a.back-to-syllabus svg {
+            height: 1.25rem;
+            width: 1.25rem;
+            margin-right: 0.375rem;
+        }
+
+        .syllabus-nav-bar .topic-indicator {
+            background: var(--info-blue);
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 0.375rem 1.1rem;
+            border-radius: 9999px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        @media (min-width: 640px) {
+            .syllabus-nav-bar {
+                flex-direction: row;
+            }
+
+            .syllabus-nav-bar a.back-to-syllabus {
+                margin-bottom: 0;
+            }
+
+            .syllabus-nav-bar .topic-indicator {
+                font-size: 1rem;
+            }
+        }
+
+        .topic-header {
+            text-align: left;
+            padding-bottom: 18px;
+            margin-bottom: 32px;
+            border-bottom: 1.5px solid var(--border-color);
+        }
+
+        .topic-header h1 {
+            color: var(--primary-purple-dark);
+            margin: 0 0 7px 0;
+            font-size: 2.1em;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .topic-header p {
+            color: var(--subtle-text-color);
+            font-size: 1.08em;
+            margin: 0;
+        }
+
+        section {
+            margin-bottom: 38px;
+            padding: 30px 28px 28px 28px;
+            background: var(--card-bg-color);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        section h2 {
+            font-size: 1.6em;
+            color: var(--primary-purple-dark);
+            border-bottom: 2px solid var(--primary-purple);
+            margin-bottom: 22px;
+            padding-bottom: 8px;
+            font-weight: 700;
+        }
+
+        section h3 {
+            font-size: 1.22em;
+            margin-top: 32px;
+            margin-bottom: 14px;
+            color: var(--primary-purple);
+            font-weight: 600;
+            padding-bottom: 6px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        section h4 {
+            font-size: 1.08em;
+            margin-top: 22px;
+            margin-bottom: 9px;
+            color: var(--primary-purple-dark);
+            font-weight: 600;
+        }
+
+        section ul {
+            padding-left: 22px;
+            margin-top: 0.5rem;
+        }
+
+        section ul li {
+            margin-bottom: 0.5rem;
+            list-style-type: disc;
+        }
+
+        section ul li::marker {
+            color: var(--primary-purple);
+        }
+
+        .diagram-placeholder,
+        .image-container {
+            border: 1.5px dashed var(--primary-purple-light);
+            padding: 22px;
+            margin: 22px 0;
+            text-align: center;
+            background: linear-gradient(90deg, #f8f7ff 80%, #ece9fa 100%);
+            border-radius: var(--border-radius-md);
+            color: var(--subtle-text-color);
+            font-style: italic;
+            font-size: 1.01em;
+        }
+
+        .diagram-placeholder p,
+        .image-container p {
+            margin: 7px 0;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            border-radius: 0.5em;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 8px 0 rgba(80, 70, 140, 0.08);
+        }
+
+        .code-block {
+            background: var(--code-bg-color);
+            color: var(--code-text-color);
+            padding: 1.2rem 1.2rem 1.2rem 1.5rem;
+            border-radius: var(--border-radius-md);
+            overflow-x: auto;
+            margin: 1.2rem 0;
+            position: relative;
+            box-shadow: 0 2px 12px 0 rgba(30, 30, 60, 0.10);
+            font-family: var(--font-mono);
+            font-size: 1em;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: var(--font-mono);
+            font-size: 1em;
+            line-height: 1.7;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.8rem;
+            right: 1.1rem;
+            background: linear-gradient(90deg, var(--primary-purple) 60%, var(--primary-purple-dark) 100%);
+            color: white;
+            border: none;
+            padding: 0.38rem 1.1rem;
+            border-radius: 1.2em;
+            cursor: pointer;
+            font-size: 0.93em;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            box-shadow: 0 2px 8px 0 rgba(80, 70, 140, 0.10);
+            transition: background 0.18s, box-shadow 0.18s;
+        }
+
+        .copy-btn:hover {
+            background: linear-gradient(90deg, var(--primary-purple-dark) 60%, var(--primary-purple) 100%);
+            box-shadow: 0 4px 16px 0 rgba(80, 70, 140, 0.13);
+        }
+
+        [data-tooltip] {
+            position: relative;
+            cursor: help;
+            border-bottom: 1px dotted var(--primary-purple);
+        }
+
+        [data-tooltip]::before,
+        [data-tooltip]::after {
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s, transform 0.2s;
+            position: absolute;
+            left: 50%;
+            z-index: 1001;
+        }
+
+        [data-tooltip]::before {
+            content: attr(data-tooltip);
+            background: var(--tooltip-bg);
+            color: var(--tooltip-text);
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--border-radius-md);
+            font-size: 0.85em;
+            white-space: nowrap;
+            bottom: 140%;
+            transform: translateX(-50%) translateY(5px);
+        }
+
+        [data-tooltip]::after {
+            content: '';
+            border-style: solid;
+            border-width: 6px 6px 0 6px;
+            border-color: var(--tooltip-bg) transparent transparent transparent;
+            bottom: calc(140% - 6px);
+            transform: translateX(-50%) translateY(5px);
+        }
+
+        [data-tooltip]:hover::before,
+        [data-tooltip]:hover::after {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .topic-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 32px;
+            margin-bottom: 0;
+        }
+
+        .topic-navigation a {
+            background: linear-gradient(90deg, var(--primary-purple) 60%, var(--primary-purple-dark) 100%);
+            color: #fff;
+            border-radius: 2em;
+            padding: 0.8em 2.2em;
+            font-size: 1.08em;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 2px 12px 0 rgba(80, 70, 140, 0.13);
+            transition: background 0.18s, box-shadow 0.18s, transform 0.13s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7em;
+        }
+
+        .topic-navigation a:hover {
+            background: linear-gradient(90deg, var(--primary-purple-dark) 60%, var(--primary-purple) 100%);
+            box-shadow: 0 6px 24px 0 rgba(80, 70, 140, 0.18);
+            transform: translateY(-2px) scale(1.04);
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: var(--primary-purple-dark);
+            color: rgba(255, 255, 255, 0.85);
+            margin-top: 40px;
+            font-size: 0.97em;
+            letter-spacing: 0.01em;
+        }
+
+        @media (max-width: 1024px) {
+            #main-content {
+                padding: 20px 10px;
+            }
+
+            .main-content-float {
+                padding: 18px 8px 18px 8px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-container {
+                flex-direction: column;
+            }
+
+            #sidebar {
+                width: 100%;
+                min-width: 0;
+                height: auto;
+                position: static;
+                border-right: none;
+                border-bottom: 1.5px solid var(--border-color);
+                box-shadow: none;
+                top: 0;
+            }
+
+            .main-header {
+                padding: 18px;
+                position: static;
+            }
+
+            .main-header h1 {
+                font-size: 1.5em;
+            }
+
+            .topic-header h1 {
+                font-size: 1.2em;
+            }
+
+            section h2 {
+                font-size: 1.1em;
+            }
+
+            section h3 {
+                font-size: 1em;
+            }
+
+            section h4 {
+                font-size: 0.97em;
+            }
+
+            #main-content {
+                padding: 10px 2vw;
+            }
+
+            .main-content-float {
+                padding: 10px 2vw;
+            }
+
+            .topic-navigation {
+                flex-direction: column;
+                gap: 0.7em;
+            }
+
+            .topic-navigation a {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        .command-prompt {
+            color: var(--primary-purple);
+            font-weight: 600;
+        }
+
+        .command-error {
+            color: var(--danger-color);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="main-header">
+        <!-- EduVision Logo (same as previous topics) -->
+        <div class="eduvishion-logo">
+            <a href="../../index.html" class="flex items-center group">
+                <span class="text-white">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+                    fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-white">ision</span>
+            </a>
+        </div>
+        <h1>Operating Systems</h1>
+        <p class="subtitle">EduVision :: Full Syllabus with Concepts, Notes, and Diagrams</p>
+    </header>
+
+    <div class="page-container">
+        <nav id="sidebar">
+            <h2>Navigation</h2>
+            <ul id="toc-list">
+                <li><a href="#file-system-interface" class="active">1. File System Interface</a></li>
+                <li><a href="#file-concept">2. File Concept</a></li>
+                <li><a href="#access-methods">3. Access Methods</a></li>
+                <li><a href="#directory-structure">4. Directory Structure</a></li>
+                <li><a href="#file-system-implementation">5. File System Implementation</a></li>
+                <li><a href="#allocation-methods">6. Allocation Methods</a></li>
+                <li><a href="#free-space-management">7. Free-Space Management</a></li>
+            </ul>
+        </nav>
+
+        <main id="main-content">
+            <div class="syllabus-nav-bar">
+                <a href="../../index.html" class="back-to-syllabus"> <!-- Update path as needed -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Back to Syllabus
+                </a>
+                <div class="topic-indicator">
+                    Topic 5
+                </div>
+            </div>
+
+            <div class="topic-header">
+                <h1>Topic 5: File Systems</h1>
+                <p>Exploring the concepts, structure, implementation, and management of file systems in operating
+                    systems.</p>
+            </div>
+
+            <section id="file-system-interface">
+                <h2>1. File System Interface</h2>
+                <p>The file system provides the mechanism for on-line storage of and access to both data and programs of
+                    the operating system and all the users of the computer system. The file system consists of two
+                    distinct parts: a collection of files, each storing related data, and a directory structure, which
+                    organizes and provides information about all the files in the system.</p>
+            </section>
+
+            <section id="file-concept">
+                <h2>2. File Concept</h2>
+                <p>A file is a collection of related information that is recorded on secondary storage. From a user’s
+                    perspective, a file is the smallest allotment of logical secondary storage and data can not be
+                    written to secondary storage unless they are within a file.</p>
+                <p>Four terms are in common use when discussing files: Field, Record, File and Database.</p>
+                <ul>
+                    <li>⇒ A <strong data-tooltip="The basic element of data, containing a single value.">field</strong>
+                        is the basic element of data. An individual field contains a single value, such as an employee’s
+                        last name, a date, or the value of a sensor reading. It is characterized by its length and data
+                        type.</li>
+                    <li>⇒ A <strong data-tooltip="A collection of related fields treated as a unit.">record</strong> is
+                        a collection of related fields that can be treated as a unit by some application program. For
+                        example, an employee record would contain such fields as name, social security number, job
+                        classification, date of hire, and so on.</li>
+                    <li>⇒ A <strong
+                            data-tooltip="A collection of similar records, treated as a single entity.">file</strong> is
+                        a collection of similar records. The file is treated as a single entity by users and
+                        applications and may be referenced by name.</li>
+                    <li>⇒ A <strong
+                            data-tooltip="A collection of related data, often organized for efficient retrieval.">database</strong>
+                        is a collection of related data. A database may contain all of the information related to an
+                        organization or project, such as a business or a scientific study. The database itself consists
+                        of one or more types of files.</li>
+                </ul>
+
+                <h3>File Attributes:</h3>
+                <p>A file has the following attributes:</p>
+                <ul>
+                    <li>⇒ <strong>Name:</strong> The symbolic file name is the only information kept in human readable
+                        form.</li>
+                    <li>⇒ <strong>Identifier:</strong> This unique tag, usually a number, identifies the file within the
+                        file system; it is the non-human-readable name for the file.</li>
+                    <li>⇒ <strong>Type:</strong> This information is needed for those systems that support different
+                        types.</li>
+                    <li>⇒ <strong>Location:</strong> This information is a pointer to a device and to the location of
+                        the file on that device.</li>
+                    <li>⇒ <strong>Size:</strong> The current size of the file (in bytes, words, or blocks), and possibly
+                        the maximum allowed size are included in this attribute.</li>
+                    <li>⇒ <strong>Protection:</strong> Access-control information determines who can do reading,
+                        writing, executing, and so on.</li>
+                    <li>⇒ <strong>Time, date, and user identification:</strong> This information may be kept for
+                        creation, modification and last use. These data can be useful for protection, security, and
+                        usage monitoring.</li>
+                </ul>
+
+                <h3>File Operations:</h3>
+                <p>The operating system can provide system calls to create, write, read, reposition, delete, and
+                    truncate files. The file operations are described as followed:</p>
+                <ul>
+                    <li>⇒ <strong>Creating a file:</strong> Two steps are necessary to create a file. First, space in
+                        the file system must be found for the file. Second, an entry for the new file must be made in
+                        the directory. The directory entry records the name of the file and the location in the file
+                        system, and possibly other information.</li>
+                    <li>⇒ <strong>Writing a file:</strong> To write a file, we make a system call specifying both the
+                        name of the file and the information to be written to the file. Given the name of the file, the
+                        system searches the directory to find the location of the file. The system must keep a write
+                        pointer to the location in the file where the next write is to take place. The write pointer
+                        must be updated whenever a write occurs.</li>
+                    <li>⇒ <strong>Reading a file:</strong> To read from a file, we use a system call that specifies the
+                        name of the file and where (in main memory) the next block of the file should be put. Again, the
+                        directory is searched for the associated directory entry, and the system needs to keep a read
+                        pointer to the location in the file where the next read is to take place. Once the read has
+                        taken place, the read pointer is updated.</li>
+                    <li>⇒ <strong>Repositioning within a file:</strong> The directory is searched for the appropriate
+                        entry, and the current-file-position is set to a given value. Repositioning within a file does
+                        not need to involve any actual I/O. This file operation is also known as a file seeks.</li>
+                    <li>⇒ <strong>Deleting a file:</strong> To delete a file, we search the directory for the named
+                        file. Having found the associated directory entry, we release all file space, so that it can be
+                        reused by other files, and erase the directory entry.</li>
+                    <li>⇒ <strong>Truncating a file:</strong> The user may want to erase the contents of a file but keep
+                        its attributes. Rather than forcing the user to delete the file and then recreate it, this
+                        function allows all attributes to remain unchanged-except for file length-but lets the file be
+                        reset to length zero and its file space released.</li>
+                </ul>
+
+                <h3>File Types:</h3>
+                <p>The files are classified into different categories as follows:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>File Type</th>
+                            <th>Usual Extension</th>
+                            <th>Function</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>executable</td>
+                            <td>exe, com, bin or none</td>
+                            <td>read to run machine-language program</td>
+                        </tr>
+                        <tr>
+                            <td>object</td>
+                            <td>obj, o</td>
+                            <td>compiled, machine language, not linked</td>
+                        </tr>
+                        <tr>
+                            <td>source code</td>
+                            <td>c, cc, java, pas, asm, a</td>
+                            <td>source code in various languages</td>
+                        </tr>
+                        <tr>
+                            <td>batch</td>
+                            <td>bat, sh</td>
+                            <td>commands to the command interpreter</td>
+                        </tr>
+                        <tr>
+                            <td>text</td>
+                            <td>txt, doc</td>
+                            <td>textual data, documents</td>
+                        </tr>
+                        <tr>
+                            <td>word processor</td>
+                            <td>wp, tex, rrf, doc</td>
+                            <td>various word-processor formats</td>
+                        </tr>
+                        <tr>
+                            <td>library</td>
+                            <td>lib, a, so, dll, mpeg, mov, rm</td>
+                            <td>libraries of routines for programmers</td>
+                        </tr>
+                        <tr>
+                            <td>print or view</td>
+                            <td>arc, zip, tar</td>
+                            <td>ASCII or binary file in a format for printing or viewing</td>
+                        </tr>
+                        <tr>
+                            <td>archive</td>
+                            <td>arc, zip, tar</td>
+                            <td>related files grouped into one file, sometimes compressed, for archiving or storage</td>
+                        </tr>
+                        <tr>
+                            <td>multimedia</td>
+                            <td>mpeg, mov, rm</td>
+                            <td>binary file containing audio or A/V information</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>The name is split into two parts-a name and an extension. The system uses the extension to indicate
+                    the type of the file and the type of operations that can be done on that file.</p>
+            </section>
+
+            <section id="access-methods">
+                <h2>3. Access Methods</h2>
+                <p>Files stores information, this information must be accessed and read into computer memory. There are
+                    so many ways that the information in the file can be accessed.</p>
+                <ol>
+                    <li>
+                        <strong>Sequential file access:</strong>
+                        <p>Information in the file is processed in order i.e. one record after the other. Magnetic tapes
+                            are supporting this type of file accessing.
+                            <br>Eg : A file consisting of 100 records, the current position of read/write head is
+                            45<sup>th</sup> record, suppose we want to read the 75<sup>th</sup> record then, it access
+                            sequentially from 45, 46, 47 ........ 74, 75. So the read/write head traverse all the
+                            records between 45 to 75.
+                        </p>
+                        <div class="image-container"><img src="placeholder_sequential_access.png"
+                                alt="Sequential File Access Diagram"></div>
+                    </li>
+                    <li>
+                        <strong>Direct access:</strong>
+                        <p>Direct access is also called relative access. Here records can read/write randomly without
+                            any order. The direct access method is based on a disk model of a file, because disks allow
+                            random access to any file block.
+                            <br>Eg : A disk containing of 256 blocks, the position of read/write head is at
+                            95<sup>th</sup> block. The block is to be read or write is 250<sup>th</sup> block. Then we
+                            can access the 250<sup>th</sup> block directly without any restrictions.
+                            <br>Eg : CD consists of 10 songs, at present we are listening song 3. If we want to listen
+                            song 10, we can shift to 10.
+                        </p>
+                    </li>
+                    <li>
+                        <strong>Indexed Sequential File access:</strong>
+                        <p>The main disadvantage in the sequential file is, it takes more time to access a Record.
+                            Records are organized in sequence based on a key field.
+                            <br>Eg : A file consisting of 60000 records, the master index divide the total records into
+                            6 blocks, each block consisting of a pointer to secondary index. The secondary index divide
+                            the 10,000 records into 10 indexes. Each index consisting of a pointer to its original
+                            location. Each record in the index file consisting of 2 field, A key field and a pointer
+                            field.
+                        </p>
+                        <div class="image-container"><img src="placeholder_indexed_sequential_access.png"
+                                alt="Indexed Sequential File Access Diagram"></div>
+                    </li>
+                </ol>
+            </section>
+
+            <section id="directory-structure">
+                <h2>4. Directory Structure</h2>
+                <p>A directory is an object that contains the names of file system objects. File system allows the users
+                    to organize files and other file system objects through the use of directories. The structure
+                    created by placement of names in directories can take a number of forms: Single-level tree,
+                    Two-level tree, multi-level tree or cyclic graph.</p>
+                <ol>
+                    <li><strong>Single-Level Directory:</strong> The simplest directory structure is the single-level
+                        directory. All files are contained in the same directory, which is easy to support and
+                        understand. A single-level directory has significant limitations, when the number of files
+                        increases or when the system has more than one user. Since all files are in the same directory,
+                        they must have unique names.
+                        <div class="image-container"><img src="placeholder_single_level_directory.png"
+                                alt="Single-Level Directory Structure"></div>
+                    </li>
+                    <li><strong>Two-Level Directory:</strong> In the two-level directory structure, each user has its
+                        own user file directory (UFD). Each UFD has a similar structure, but lists only the files of a
+                        single user. When a user job starts or a user logs in, the system’s master file directory (MFD)
+                        is searched. The MFD is indexed by user name or account number, and each entry points to the UFD
+                        for that user. When a user refers to a particular file, only his own UFD is searched. Different
+                        users may have files with the same name, as long as all the file names within each UFD are
+                        unique.
+                        <div class="image-container"><img src="placeholder_two_level_directory.png"
+                                alt="Two-Level Directory Structure"></div>
+                    </li>
+                    <li><strong>Tree-structured directories:</strong> A tree structure is A more powerful and flexible
+                        approach to organize files and directories in hierarchical. There is a master directory, which
+                        has under it a number of user directories. Each of these user directories may have
+                        sub-directories and files as entries. This is true at any level: That is, at any level, a
+                        directory may consist of entries for subdirectories and/or entries for files.
+                        <div class="image-container"><img src="placeholder_tree_structured_directory.png"
+                                alt="Tree-Structured Directory"></div>
+                    </li>
+                    <li><strong>Acyclic-Graph Directories:</strong> An acyclic graph allows directories to have shared
+                        subdirectories and files. The same file or subdirectory may be in two different directories. An
+                        acyclic graph is a natural generalization of the tree structured directory scheme. A shared file
+                        (or directory) is not the same as two copies of the file. With two copies, each programmer can
+                        view the copy rather than the original, but if one programmer changes the file, the changes will
+                        not appear in the other’s copy. Shared files and subdirectories can be implemented in several
+                        ways. A common way is to create a new directory entry called a link. A link is a pointer to
+                        another file or subdirectory.
+                        <div class="image-container"><img src="placeholder_acyclic_graph_directory.png"
+                                alt="Acyclic-Graph Directory Structure"></div>
+                    </li>
+                    <li><strong>General Graph Directory:</strong> When we add links to an existing tree-structured
+                        directory, the tree structure is destroyed, resulting in a simple graph structure.
+                        <div class="image-container"><img src="placeholder_general_graph_directory.png"
+                                alt="General Graph Directory Structure"></div>
+                    </li>
+                </ol>
+            </section>
+
+            <section id="file-system-implementation">
+                <h2>5. File System Implementation</h2>
+                <h3>Overview:</h3>
+                <p>A Boot Control Block (per volume) can contain information needed by the system to boot an OS from
+                    that volume. If the disk does not contain an OS, this block can be empty.</p>
+                <p>A Volume Control Block (per volume) contains volume (or partition) details, such as number of blocks
+                    in the partition, size of the blocks, a free block, count and free block pointers, free FCB count,
+                    FCB pointers.</p>
+                <h4>A Typical File Control Block (FCB)</h4>
+                <div class="image-container" style="max-width: 400px;"> <!-- Adjusted width -->
+                    <img src="placeholder_fcb_layout.png" alt="Typical File Control Block Layout">
+                    <!-- Example of a simple text representation if image fails or for quick glance -->
+                    <pre
+                        style="text-align: left; background: #fff; padding:10px; border:1px solid #ccc; border-radius:4px; font-family:monospace;">
+File Permissions
+File Dates (create, access, write)
+File Owner, Group, ACL
+File Size
+File Data Blocks or Pointers
+                    </pre>
+                </div>
+                <p>A Directory Structure (per file system) is used to organize the files. A PER-FILE FCB contains many
+                    details about the file.</p>
+                <p>A file has been created; it can be used for I/O. First, it must be opened. The open() call passes a
+                    file name to the logical file system. The open() system call First searches the system wide open
+                    file table to see if the file is already in use by another process. If it is, a per process open
+                    file table entry is created pointing to the existing system wide open file table. If the file is not
+                    already open, the directory structure is searched for the given file name. Once the file is found,
+                    FCB is copied into a system wide open file table in memory. This table not only stores the FCB but
+                    also tracks the number of processes that have the file open.</p>
+                <p>Next, an entry is made in the per – process open file table, with the pointer to the entry in the
+                    system wide open file table and some other fields. These are the fields include a pointer to the
+                    current location in the file (for the next read/write operation) and the access mode in which the
+                    file is open. The open () call returns a pointer to the appropriate entry in the per-process file
+                    system table. All file operations are preformed via this pointer. When a process closes the file the
+                    per- process table entry is removed. And the system wide open entry count is decremented. When all
+                    users that have opened the file close it, any updated metadata is copied back to the disk base
+                    directory structure. System wide open file table entry is removed. System wide open file table
+                    contains a copy of the FCB of each open file, other information. Per process open file table,
+                    contains a pointer to the appropriate entry in the system wide open file table, other information.
+                </p>
+                <div class="image-container" style="display:flex; justify-content:space-around; flex-wrap:wrap;">
+                    <div style="max-width:48%; margin-bottom:10px;">
+                        <img src="placeholder_file_open_diagram.png" alt="File Open Operation Diagram">
+                        <p>(a) Open operation</p>
+                    </div>
+                    <div style="max-width:48%;">
+                        <img src="placeholder_file_read_diagram.png" alt="File Read Operation Diagram">
+                        <p>(b) Read operation</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="allocation-methods">
+                <h2>6. Allocation Methods - Contiguous</h2> <!-- Focusing on Contiguous based on image content -->
+                <p>An allocation method refers to how disk blocks are allocated for files:</p>
+                <h3>Contiguous allocation</h3>
+                <p>Each file occupies set of contiguous blocks o Best performance in most cases</p>
+                <ul>
+                    <li>Simple – only starting location (block #) and length (number of blocks) are required</li>
+                    <li>Problems include finding space for file, knowing file size, external fragmentation, need for
+                        compaction off-line (downtime) or on-line directory</li>
+                </ul>
+                <div class="image-container">
+                    <img src="placeholder_contiguous_allocation.png" alt="Contiguous Allocation Example">
+                </div>
+                <h3>Linked allocation</h3>
+                <p>Each file a linked list of blocks o File ends at nil pointer</p>
+                <ul>
+                    <li>No external fragmentation</li>
+                    <li>Each block contains pointer to next block</li>
+                    <li>No compaction, external fragmentation</li>
+                    <li>Free space management system called when new block needed</li>
+                    <li>Improve efficiency by clustering blocks into groups but increases internal fragmentation</li>
+                    <li>Reliability can be a problem</li>
+                    <li>Locating a block can take many I/Os and disk seeks FAT (File Allocation Table) variation</li>
+                </ul>
+                <p>o Beginning of volume has table, indexed by block number</p>
+                <p>o Much like a linked list, but faster on disk and cacheable</p>
+                <div class="image-container">
+                    <img src="placeholder_linked_allocation_directory.png" alt="Linked Allocation via Directory">
+                </div>
+                <div class="image-container">
+                    <img src="placeholder_linked_allocation_fat.png" alt="Linked Allocation using FAT">
+                </div>
+
+                <h3>Indexed allocation</h3>
+                <p>o Each file has its own index block(s) of pointers to its data blocks</p>
+                <div class="image-container">
+                    <img src="placeholder_indexed_allocation.png" alt="Indexed Allocation Example">
+                </div>
+            </section>
+
+            <section id="free-space-management">
+                <h2>7. Free-Space Management</h2>
+                <p>Since there is only a limited amount of disk space, it is necessary to reuse the space from deleted
+                    files for new files, if possible.</p>
+                <h3>Bit Vector</h3>
+                <ul>
+                    <li>Free-space list is implemented as a bit map or bit vector. Each block is represented by 1 bit.
+                        If the block is free, the bit is 1; if the block is allocated, the bit is 0.</li>
+                    <li>For example consider a disk where blocks 2, 3, 4, 5, 8, 9, 10, 11, 12, 13, 17, 18, 25, 26, and
+                        27 are free, and the rest of the blocks are allocated. The free-space bit map would be
+                        001111001111110001100000011100000......</li>
+                    <li>The main advantage of this approach is that it is relatively simple and efficient to find the
+                        first free block or n consecutive free blocks on the disk.</li>
+                    <li>The calculation of the block number is (number of bits per word) x (number of 0-value words) +
+                        offset of first 1 bit.</li>
+                </ul>
+                <h3>Linked List</h3>
+                <ul>
+                    <li>Another approach is to link together all the free disk blocks, keeping a pointer to the first
+                        free block in a special location on the disk and caching it in memory. This first block contains
+                        a pointer to the next free disk block, and so on. Block 2 would contain a pointer to block 3,
+                        which would point to block 4, which would point to block 5, which would point to block 8, and so
+                        on. Usually, the operating system simply needs a free block so that it can allocate that block
+                        to a file, so the first block in the free list is used.</li>
+                </ul>
+                <h3>Grouping</h3>
+                <ul>
+                    <li>A modification of the free-list approach is to store the addresses of n free blocks in the first
+                        free block. The first n-1 of these blocks are actually free. The importance of this
+                        implementation is that the addresses of a large number of free blocks can be found quickly,
+                        unlike in the standard linked-list approach.</li>
+                </ul>
+                <h3>Counting</h3>
+                <ul>
+                    <li>Several contiguous blocks may be allocated or freed simultaneously, particularly when space is
+                        allocated with the contiguous allocation algorithm or through clustering. A list of n free disk
+                        addresses, we can keep the address of the first free block and the number n of free contiguous
+                        blocks that follow the first block.</li>
+                    <li>Each entry in the free-space list then consists of a disk address and a count. Although each
+                        entry requires more space than would a simple disk address, the overall list will be shorter, as
+                        long as count is generally greater than 1.</li>
+                </ul>
+            </section>
+
+
+            <nav class="topic-navigation">
+                <a href="topic-4.html">
+                    ← Previous: Memory Management
+                </a>
+                <a href="topic-6.html"> <!-- Assuming topic-6.html is next for I/O Management -->
+                    Next: I/O Management →
+                </a>
+            </nav>
+
+        </main>
+    </div>
+
+    <footer>
+        <p>© 2024 EduVision OS Guide. Gold Standard Interactive Learning.</p>
+        <p>Content based on provided materials and AI enhancements for clarity and engagement.</p>
+    </footer>
+
+    <script>
+        // JavaScript from topic-3.html can be largely reused.
+        // Simulators might not be relevant for this specific topic.
+
+        document.querySelectorAll('#sidebar a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                    let headerActualHeight = document.querySelector('.main-header').offsetHeight;
+                    if (window.innerWidth <= 768 && getComputedStyle(document.querySelector('.main-header')).position !== 'sticky') {
+                        headerActualHeight = 0;
+                    }
+                    const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                    const offsetPosition = elementPosition - headerActualHeight - 20;
+                    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                }
+                document.querySelectorAll('#sidebar a').forEach(link => link.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        const sections = document.querySelectorAll('#main-content section');
+        const navLi = document.querySelectorAll('#sidebar ul li a');
+
+        window.addEventListener('scroll', () => {
+            let headerActualHeight = document.querySelector('.main-header') ? document.querySelector('.main-header').offsetHeight : 0;
+            if (window.innerWidth <= 768 && getComputedStyle(document.querySelector('.main-header')).position !== 'sticky') {
+                headerActualHeight = 0;
+            }
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - headerActualHeight - 50;
+                if (pageYOffset >= sectionTop) { current = section.getAttribute('id'); }
+            });
+            navLi.forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href').substring(1) === current) { a.classList.add('active'); }
+            });
+            if (!current && navLi.length > 0 && sections.length > 0 && window.pageYOffset < (sections[0].offsetTop - headerActualHeight - 50)) {
+                navLi.forEach(a => a.classList.remove('active'));
+                navLi[0].classList.add('active');
+            }
+        });
+
+        function copyCode(button) {
+            const pre = button.parentElement.querySelector('pre');
+            if (!pre) return;
+            const code = pre.innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                button.innerText = 'Copied!'; button.style.backgroundColor = 'var(--success-color)';
+                setTimeout(() => { button.innerText = 'Copy'; button.style.backgroundColor = 'var(--primary-purple)'; }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err); button.innerText = 'Error'; button.style.backgroundColor = 'var(--danger-color)';
+                setTimeout(() => { button.innerText = 'Copy'; button.style.backgroundColor = 'var(--primary-purple)'; }, 2000);
+            });
+        }
+
+        function setInitialActiveLink() {
+            const hash = window.location.hash;
+            let activeSet = false;
+            if (hash && navLi.length > 0) {
+                navLi.forEach(a => {
+                    if (a.getAttribute('href') === hash) { a.classList.add('active'); activeSet = true; }
+                    else { a.classList.remove('active'); }
+                });
+            }
+            if (!activeSet && navLi.length > 0) { navLi[0].classList.add('active'); }
+        }
+        window.addEventListener('load', setInitialActiveLink);
+    </script>
+</body>
+
+</html>

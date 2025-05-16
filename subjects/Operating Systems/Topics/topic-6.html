@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I/O Management - EduVision OS Guide</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Nunito:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-purple: #7A5CFA;
+            --primary-purple-dark: #5D3FD3;
+            --primary-purple-light: #A48DFB;
+            --light-lavender-bg: #F8F7FF;
+            --card-bg-color: #FFFFFF;
+            --text-color: #23272f;
+            --subtle-text-color: #6b7280;
+            --border-color: #E2E8F0;
+            --code-bg-color: #181c24;
+            --code-text-color: #e0e6f1;
+            --tooltip-bg: #23272f;
+            --tooltip-text: #F7FAFC;
+            --success-color: #48BB78;
+            --danger-color: #F56565;
+            --info-blue: #3B82F6;
+            --info-blue-dark: #2563EB;
+            --info-blue-light: #EFF6FF;
+            --font-sans: 'Poppins', 'Segoe UI', Arial, sans-serif;
+            --font-mono: 'Fira Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px 0 rgba(80, 70, 140, 0.10);
+            --shadow-lg: 0 12px 32px 0 rgba(80, 70, 140, 0.13);
+            --shadow-subtle: 0 2px 4px 0 rgba(107, 114, 128, 0.08);
+            --border-radius-sm: 0.25rem;
+            --border-radius-md: 0.5rem;
+            --border-radius-lg: 1rem;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            color: var(--text-color);
+            background: linear-gradient(120deg, #f8f7ff 0%, #e9e6f7 100%);
+        }
+
+        .main-header {
+            background: linear-gradient(90deg, var(--primary-purple-dark) 0%, var(--primary-purple) 100%);
+            color: white;
+            padding: 28px 40px 22px 40px;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .main-header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .main-header .subtitle {
+            font-size: 1.1em;
+            font-weight: 400;
+            opacity: 0.92;
+            margin-top: 0.25rem;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvishion-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1001;
+        }
+
+        .eduvishion-logo .text-2xl {
+            font-size: 1.6rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .eduvishion-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvishion-logo .text-yellow-300 {
+            color: #fde047 !important;
+        }
+
+        .eduvishion-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+        }
+
+        .eduvishion-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvishion-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        @media (max-width: 768px) {
+            .main-header {
+                position: static;
+            }
+
+            .eduvishion-logo {
+                top: 15px !important;
+                left: 15px !important;
+            }
+
+            .eduvishion-logo .text-2xl {
+                font-size: 1.2rem !important;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .eduvishion-logo {
+                display: none;
+            }
+        }
+
+        .page-container {
+            display: flex;
+            width: 100%;
+            margin-top: 0;
+        }
+
+        #sidebar {
+            width: 270px;
+            min-width: 220px;
+            background: linear-gradient(135deg, #f5f3fe 80%, #e9e6f7 100%);
+            padding: 32px 18px 32px 18px;
+            height: calc(100vh - 85px);
+            position: sticky;
+            top: 85px;
+            overflow-y: auto;
+            border-right: 1.5px solid var(--border-color);
+            box-shadow: 2px 0 12px 0 rgba(80, 70, 140, 0.04);
+            transition: width 0.3s;
+        }
+
+        #sidebar h2 {
+            color: var(--primary-purple-dark);
+            text-align: left;
+            margin-top: 0;
+            margin-bottom: 22px;
+            font-size: 1.3em;
+            font-weight: 700;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-purple);
+            letter-spacing: 0.01em;
+        }
+
+        #sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #sidebar ul li a {
+            color: var(--subtle-text-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 18px;
+            margin-bottom: 7px;
+            border-radius: var(--border-radius-md);
+            font-weight: 500;
+            font-size: 1.04em;
+            transition: background 0.18s, color 0.18s, transform 0.13s;
+            border-left: 4px solid transparent;
+            position: relative;
+        }
+
+        #sidebar ul li a:hover,
+        #sidebar ul li a.active {
+            background: linear-gradient(90deg, #ece9fa 60%, #e0d7f3 100%);
+            color: var(--primary-purple-dark);
+            border-left: 4px solid var(--primary-purple);
+            font-weight: 700;
+            transform: translateX(4px) scale(1.03);
+        }
+
+        #main-content {
+            flex-grow: 1;
+            padding: 38px 48px 48px 48px;
+            max-width: 100vw;
+            min-width: 0;
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .main-content-float {
+            background: var(--card-bg-color);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 36px 36px 24px 36px;
+            margin-bottom: 40px;
+            margin-top: 0;
+            min-width: 0;
+        }
+
+        .syllabus-nav-bar {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 0.75rem;
+            background: var(--card-bg-color);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .syllabus-nav-bar a.back-to-syllabus {
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.98rem;
+            color: var(--info-blue);
+            font-weight: 600;
+            padding: 0.5rem 0.95rem;
+            border-radius: var(--border-radius-md);
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .syllabus-nav-bar a.back-to-syllabus:hover {
+            background: var(--info-blue-light);
+            color: var(--info-blue-dark);
+        }
+
+        .syllabus-nav-bar a.back-to-syllabus svg {
+            height: 1.25rem;
+            width: 1.25rem;
+            margin-right: 0.375rem;
+        }
+
+        .syllabus-nav-bar .topic-indicator {
+            background: var(--info-blue);
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 0.375rem 1.1rem;
+            border-radius: 9999px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        @media (min-width: 640px) {
+            .syllabus-nav-bar {
+                flex-direction: row;
+            }
+
+            .syllabus-nav-bar a.back-to-syllabus {
+                margin-bottom: 0;
+            }
+
+            .syllabus-nav-bar .topic-indicator {
+                font-size: 1rem;
+            }
+        }
+
+        .topic-header {
+            text-align: left;
+            padding-bottom: 18px;
+            margin-bottom: 32px;
+            border-bottom: 1.5px solid var(--border-color);
+        }
+
+        .topic-header h1 {
+            color: var(--primary-purple-dark);
+            margin: 0 0 7px 0;
+            font-size: 2.1em;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .topic-header p {
+            color: var(--subtle-text-color);
+            font-size: 1.08em;
+            margin: 0;
+        }
+
+        section {
+            margin-bottom: 38px;
+            padding: 30px 28px 28px 28px;
+            background: var(--card-bg-color);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        section h2 {
+            font-size: 1.6em;
+            color: var(--primary-purple-dark);
+            border-bottom: 2px solid var(--primary-purple);
+            margin-bottom: 22px;
+            padding-bottom: 8px;
+            font-weight: 700;
+        }
+
+        section h3 {
+            font-size: 1.22em;
+            margin-top: 32px;
+            margin-bottom: 14px;
+            color: var(--primary-purple);
+            font-weight: 600;
+            padding-bottom: 6px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        section h4 {
+            font-size: 1.08em;
+            margin-top: 22px;
+            margin-bottom: 9px;
+            color: var(--primary-purple-dark);
+            font-weight: 600;
+        }
+
+        section ul {
+            padding-left: 22px;
+            margin-top: 0.5rem;
+        }
+
+        section ul li {
+            margin-bottom: 0.5rem;
+            list-style-type: disc;
+        }
+
+        section ul li::marker {
+            color: var(--primary-purple);
+        }
+
+        .diagram-placeholder,
+        .image-container {
+            border: 1.5px dashed var(--primary-purple-light);
+            padding: 22px;
+            margin: 22px 0;
+            text-align: center;
+            background: linear-gradient(90deg, #f8f7ff 80%, #ece9fa 100%);
+            border-radius: var(--border-radius-md);
+            color: var(--subtle-text-color);
+            font-style: italic;
+            font-size: 1.01em;
+        }
+
+        .diagram-placeholder p,
+        .image-container p {
+            margin: 7px 0;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            border-radius: 0.5em;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 8px 0 rgba(80, 70, 140, 0.08);
+        }
+
+        .code-block {
+            background: var(--code-bg-color);
+            color: var(--code-text-color);
+            padding: 1.2rem 1.2rem 1.2rem 1.5rem;
+            border-radius: var(--border-radius-md);
+            overflow-x: auto;
+            margin: 1.2rem 0;
+            position: relative;
+            box-shadow: 0 2px 12px 0 rgba(30, 30, 60, 0.10);
+            font-family: var(--font-mono);
+            font-size: 1em;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: var(--font-mono);
+            font-size: 1em;
+            line-height: 1.7;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.8rem;
+            right: 1.1rem;
+            background: linear-gradient(90deg, var(--primary-purple) 60%, var(--primary-purple-dark) 100%);
+            color: white;
+            border: none;
+            padding: 0.38rem 1.1rem;
+            border-radius: 1.2em;
+            cursor: pointer;
+            font-size: 0.93em;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            box-shadow: 0 2px 8px 0 rgba(80, 70, 140, 0.10);
+            transition: background 0.18s, box-shadow 0.18s;
+        }
+
+        .copy-btn:hover {
+            background: linear-gradient(90deg, var(--primary-purple-dark) 60%, var(--primary-purple) 100%);
+            box-shadow: 0 4px 16px 0 rgba(80, 70, 140, 0.13);
+        }
+
+        [data-tooltip] {
+            position: relative;
+            cursor: help;
+            border-bottom: 1px dotted var(--primary-purple);
+        }
+
+        [data-tooltip]::before,
+        [data-tooltip]::after {
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s, transform 0.2s;
+            position: absolute;
+            left: 50%;
+            z-index: 1001;
+        }
+
+        [data-tooltip]::before {
+            content: attr(data-tooltip);
+            background: var(--tooltip-bg);
+            color: var(--tooltip-text);
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--border-radius-md);
+            font-size: 0.85em;
+            white-space: nowrap;
+            bottom: 140%;
+            transform: translateX(-50%) translateY(5px);
+        }
+
+        [data-tooltip]::after {
+            content: '';
+            border-style: solid;
+            border-width: 6px 6px 0 6px;
+            border-color: var(--tooltip-bg) transparent transparent transparent;
+            bottom: calc(140% - 6px);
+            transform: translateX(-50%) translateY(5px);
+        }
+
+        [data-tooltip]:hover::before,
+        [data-tooltip]:hover::after {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .topic-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 32px;
+            margin-bottom: 0;
+        }
+
+        .topic-navigation a {
+            background: linear-gradient(90deg, var(--primary-purple) 60%, var(--primary-purple-dark) 100%);
+            color: #fff;
+            border-radius: 2em;
+            padding: 0.8em 2.2em;
+            font-size: 1.08em;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 2px 12px 0 rgba(80, 70, 140, 0.13);
+            transition: background 0.18s, box-shadow 0.18s, transform 0.13s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7em;
+        }
+
+        .topic-navigation a:hover {
+            background: linear-gradient(90deg, var(--primary-purple-dark) 60%, var(--primary-purple) 100%);
+            box-shadow: 0 6px 24px 0 rgba(80, 70, 140, 0.18);
+            transform: translateY(-2px) scale(1.04);
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: var(--primary-purple-dark);
+            color: rgba(255, 255, 255, 0.85);
+            margin-top: 40px;
+            font-size: 0.97em;
+            letter-spacing: 0.01em;
+        }
+
+        @media (max-width: 1024px) {
+            #main-content {
+                padding: 20px 10px;
+            }
+
+            .main-content-float {
+                padding: 18px 8px 18px 8px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-container {
+                flex-direction: column;
+            }
+
+            #sidebar {
+                width: 100%;
+                min-width: 0;
+                height: auto;
+                position: static;
+                border-right: none;
+                border-bottom: 1.5px solid var(--border-color);
+                box-shadow: none;
+                top: 0;
+            }
+
+            .main-header {
+                padding: 18px;
+                position: static;
+            }
+
+            .main-header h1 {
+                font-size: 1.5em;
+            }
+
+            .topic-header h1 {
+                font-size: 1.2em;
+            }
+
+            section h2 {
+                font-size: 1.1em;
+            }
+
+            section h3 {
+                font-size: 1em;
+            }
+
+            section h4 {
+                font-size: 0.97em;
+            }
+
+            #main-content {
+                padding: 10px 2vw;
+            }
+
+            .main-content-float {
+                padding: 10px 2vw;
+            }
+
+            .topic-navigation {
+                flex-direction: column;
+                gap: 0.7em;
+            }
+
+            .topic-navigation a {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        .command-prompt {
+            color: var(--primary-purple);
+            font-weight: 600;
+        }
+
+        .command-error {
+            color: var(--danger-color);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="main-header">
+        <!-- EduVision Logo (same as previous topics) -->
+        <div class="eduvishion-logo">
+            <a href="../../index.html" class="flex items-center group">
+                <span class="text-white">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+                    fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-white">ision</span>
+            </a>
+        </div>
+        <h1>Operating Systems</h1>
+        <p class="subtitle">EduVision :: Full Syllabus with Concepts, Notes, and Diagrams</p>
+    </header>
+
+    <div class="page-container">
+        <nav id="sidebar">
+            <h2>Navigation</h2>
+            <ul id="toc-list">
+                <li><a href="#io-hardware" class="active">1. I/O Hardware</a></li>
+                <li><a href="#io-techniques">2. I/O Techniques</a></li>
+                <li><a href="#io-software">3. I/O Software Layers</a></li>
+                <li><a href="#disk-scheduling">4. Disk Scheduling</a></li>
+            </ul>
+        </nav>
+
+        <main id="main-content">
+            <div class="syllabus-nav-bar">
+                <a href="../../index.html" class="back-to-syllabus"> <!-- Update path as needed -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Back to Syllabus
+                </a>
+                <div class="topic-indicator">
+                    Topic 6
+                </div>
+            </div>
+
+            <div class="topic-header">
+                <h1>Topic 6: I/O Management</h1>
+                <p>Understanding I/O devices, hardware interaction, I/O techniques, software layers like interrupt
+                    handlers and device drivers, and disk scheduling algorithms.</p>
+            </div>
+
+            <section id="io-hardware">
+                <h2>1. I/O Hardware & System</h2>
+                <p>The role of the operating system in computer I/O is to manage and control I/O operations and I/O
+                    devices. A device communicates with a computer system by sending signals over a cable or even
+                    through the air. The device communicates with the machine via a connection point. If one or more
+                    devices use a common set of wires for communication, the connection is called a <strong
+                        data-tooltip="A communication system that transfers data between components inside a computer, or between computers.">bus</strong>.
+                </p>
+                <p>When device A has a cable that plugs into device B, and device B has a cable that plugs into device
+                    C, and device C plugs into a port on the computer, this arrangement is called a <strong
+                        data-tooltip="A scheme where multiple devices are wired together in sequence.">daisy
+                        chain</strong>. A daisy chain usually operates as a bus.</p>
+                <p>Buses are used widely in computer architecture.</p>
+                <div class="image-container">
+                    <img src="placeholder_pc_bus_structure.png" alt="A typical PC bus structure">
+                    <p>Figure: A typical PC bus structure.</p>
+                </div>
+                <p>This figure shows a PCI bus (the common PC system bus) that connects the processor-memory subsystem
+                    to the fast devices, and an expansion bus that connects relatively slow devices such as the keyboard
+                    and serial and parallel ports. In the upper-right portion of the figure, four disks are connected
+                    together on a SCSI bus plugged into a SCSI controller.</p>
+                <p>A <strong
+                        data-tooltip="A collection of electronics that can operate a port, a bus, or a device.">controller</strong>
+                    is a collection of electronics that can operate a port, a bus, or a device. A serial-port controller
+                    is a simple device controller. It is a single chip (or portion of a chip) in the computer that
+                    controls the signals on the wires of a serial port.</p>
+                <p>Since the SCSI protocol is complex, the SCSI bus controller is often implemented as a separate
+                    circuit board (or a host adapter) that plugs into the computer. It contains a processor, microcode,
+                    and some private memory to enable it to process the SCSI protocol messages.</p>
+                <p>Some devices have their own built-in controllers. This board is the disk controller. It has microcode
+                    and a processor to do many tasks, such as bad-sector mapping, prefetching, buffering, and caching.
+                </p>
+
+                <h3>I/O Port Registers</h3>
+                <p>An I/O port consists of four registers, called the status, control, data-in, and data-out registers.
+                </p>
+                <ul>
+                    <li>⇒ The <strong
+                            data-tooltip="Contains bits that can be read by the host to check device status.">status
+                            register</strong> contains bits that can be read by the host. These bits indicate states
+                        such as whether the current command has completed, whether a byte is available to be read from
+                        the data-in register, and whether there has been a device error.</li>
+                    <li>⇒ The <strong
+                            data-tooltip="Can be written by the host to start a command or change device mode.">control
+                            register</strong> can be written by the host to start a command or to change the mode of a
+                        device.</li>
+                    <li>⇒ The <strong data-tooltip="Read by the host to get input from the device.">data-in
+                            register</strong> is read by the host to get input.</li>
+                    <li>⇒ The <strong data-tooltip="Written by the host to send output to the device.">data-out
+                            register</strong> is written by the host to send output.</li>
+                </ul>
+                <p>The external devices can be grouped into three categories:</p>
+                <ol>
+                    <li><strong>Human readable:</strong> Suitable for communicating with the computer user. Examples
+                        include printers and terminals, the latter consisting of video display, keyboard, and perhaps
+                        other devices such as a mouse.</li>
+                    <li><strong>Machine readable:</strong> Suitable for communicating with electronic equipment.
+                        Examples are disk drives, USB keys, sensors, controllers, and actuators.</li>
+                    <li><strong>Communication:</strong> Suitable for communicating with remote devices. Examples are
+                        digital line drivers and modems.</li>
+                </ol>
+            </section>
+
+            <section id="io-techniques">
+                <h2>2. I/O Techniques</h2>
+                <p>There are three techniques for performing I/O operations:</p>
+                <ol>
+                    <li><strong>Programmed I/O:</strong> The processor issues an I/O command, on behalf of a process, to
+                        an I/O module; that process busy waits for the operation to be completed before proceeding.</li>
+                    <li><strong>Interrupt-driven I/O:</strong> The processor issues an I/O command on behalf of a
+                        process. There are two possibilities. If the I/O instruction from the process is non blocking,
+                        then the processor continues to execute instructions from the process that issued the I/O
+                        command. If the I/O instruction is blocking, then the next instruction that the processor
+                        executes is from the OS, which will put the current process in a blocked state and schedule
+                        another process.</li>
+                    <li><strong>Direct memory access (DMA):</strong> A DMA module controls the exchange of data between
+                        main memory and an I/O module. The processor sends a request for the transfer of a block of data
+                        to the DMA module and is interrupted only after the entire block has been transferred.</li>
+                </ol>
+
+                <h3>Interrupt-driven I/O</h3>
+                <p>The basic interrupt mechanism works as follows.</p>
+                <ul>
+                    <li>⇒ The CPU hardware has a wire called the <strong
+                            data-tooltip="A hardware line that a device controller can assert to signal the CPU.">interrupt-request
+                            line</strong> that the CPU senses after executing every instruction.</li>
+                    <li>⇒ When the CPU detects that a controller has asserted a signal on the interrupt request line,
+                        the CPU saves a small amount of state, such as the current value of the instruction pointer, and
+                        jumps to the <strong
+                            data-tooltip="A routine at a fixed address in memory that handles the interrupt.">interrupt-handler
+                            routine</strong> at a fixed address in memory.</li>
+                    <li>⇒ The interrupt handler determines the cause of the interrupt, performs the necessary
+                        processing, and executes a return from interrupt instruction to return the CPU to the execution
+                        state prior to the interrupt.</li>
+                </ul>
+                <p>The above mechanism concludes that the device controller raises an interrupt by asserting a signal on
+                    the interrupt request line, the CPU catches the interrupt and dispatches to the interrupt handler,
+                    and the handler clears the interrupt by servicing the device.</p>
+
+                <hr class="subsection-divider">
+                <h3>Direct Memory Access (DMA)</h3>
+                <p>Slow devices like keyboards will generate an interrupt to the main CPU after each byte is
+                    transferred. If a fast device such as a disk generated an interrupt for each byte, the operating
+                    system would spend most of its time handling these interrupts. So a typical computer uses direct
+                    memory access (DMA) hardware to reduce this overhead.</p>
+                <p>Direct Memory Access (DMA) means CPU grants I/O module authority to read from or write to memory
+                    without involvement. DMA module itself controls exchange of data between main memory and the I/O
+                    device. CPU is only involved at the beginning and end of the transfer and interrupted only after
+                    entire block has been transferred.</p>
+                <p>Direct Memory Access needs a special hardware called <strong
+                        data-tooltip="Direct Memory Access Controller: Manages data transfers between I/O devices and main memory.">DMA
+                        controller (DMAC)</strong> that manages the data transfers and arbitrates access to the system
+                    bus. The controllers are programmed with source and destination pointers (where to read/write the
+                    data), counters to track the number of transferred bytes, and settings, which includes I/O and
+                    memory types, interrupts and states for the CPU cycles.</p>
+                <div class="image-container">
+                    <img src="placeholder_dma_structure.png" alt="Direct Memory Access (DMA) structure">
+                    <p>Figure: Direct Memory Access structure showing CPU, Main Memory, DMA, and Device Controllers.</p>
+                </div>
+            </section>
+
+            <section id="io-software">
+                <h2>3. I/O Software Layers</h2>
+                <h3>Device Drivers</h3>
+                <p><strong
+                        data-tooltip="Software modules that handle communication between the OS and a specific hardware device.">Device
+                        drivers</strong> are software modules that can be plugged into an OS to handle a particular
+                    device. Operating System takes help from device drivers to handle all I/O devices. Device Drivers
+                    encapsulate device-dependent code and implement a standard interface in such a way that code
+                    contains device-specific register reads/writes. Device driver, is generally written by the device’s
+                    manufacturer and delivered along with the device on a CD-ROM.</p>
+                <p>A device driver performs the following jobs –</p>
+                <ul>
+                    <li>To accept request from the device independent software above to it.</li>
+                    <li>Interact with the device controller to take and give I/O and perform required error handling
+                    </li>
+                    <li>Making sure that the request is executed successfully</li>
+                </ul>
+                <p>How a device driver handles a request is as follows: Suppose a request comes to read a block N. If
+                    the driver is idle at the time a request arrives, it starts carrying out the request immediately.
+                    Otherwise, if the driver is already busy with some other request, it places the new request in the
+                    queue of pending requests.</p>
+
+                <hr class="subsection-divider">
+                <h3>Interrupt Handlers</h3>
+                <p>An <strong
+                        data-tooltip="Also known as an Interrupt Service Routine (ISR); software that processes an interrupt.">interrupt
+                        handler</strong>, also known as an interrupt service routine or ISR, is a piece of software or
+                    more specifically a callback functions in an operating system or more specifically in a device
+                    driver, whose execution is triggered by the reception of an interrupt.</p>
+                <p>When the interrupt happens, the interrupt procedure does whatever it has to in order to handle the
+                    interrupt, updates data structures and wakes up process that was waiting for an interrupt to happen.
+                    The interrupt mechanism accepts an address — a number that selects a specific interrupt handling
+                    routine/function from a small set. In most architecture, this address is an offset stored in a table
+                    called the <strong data-tooltip="A table of pointers to interrupt handling routines.">interrupt
+                        vector</strong>. This vector contains the memory addresses of specialized interrupt handlers.
+                </p>
+            </section>
+
+            <section id="disk-scheduling">
+                <h2>4. Disk Scheduling</h2>
+                <p>⇒ The amount of head needed to satisfy a series of I/O request can affect the performance.</p>
+                <p>⇒ If desired disk drive and controller are available, the request can be serviced immediately.</p>
+                <p>⇒ If a device or controller is busy, any new requests for service will be placed on the queue of
+                    pending requests for that drive.</p>
+                <p>⇒ When one request is completed, the operating system chooses which pending request to service next.
+                </p>
+                <p>Different types of scheduling algorithms are as follows.</p>
+                <ol>
+                    <li>First Come, First Served scheduling algorithm (FCFS).</li>
+                    <li>Shortest Seek Time First (SSTF) algorithm</li>
+                    <li>SCAN algorithm</li>
+                    <li>Circular SCAN (C-SCAN) algorithm</li>
+                    <li>Look Scheduling Algorithm</li>
+                </ol>
+
+                <h3>First Come, First Served (FCFS)</h3>
+                <ul>
+                    <li>The simplest form of scheduling is first-in-first-out (FIFO) scheduling, which processes items
+                        from the queue in sequential order.</li>
+                    <li>This services the request in the order they are received.</li>
+                    <li>This algorithm is fair but do not provide fastest service.</li>
+                    <li>It takes no special time to minimize the overall seek time.</li>
+                    <li>This strategy has the advantage of being fair, because every request is honored and the requests
+                        are honored in the order received.</li>
+                    <li>With FIFO, if there are only a few processes that require access and if many of the requests are
+                        to clustered file sectors, then we can hope for good performance.</li>
+                </ul>
+                <details>
+                    <summary>FCFS Disk Scheduling Example</summary>
+                    <p>Consider a disk queue with request for I/O to blocks on cylinders. Queue = 98, 183, 37, 122, 14,
+                        124, 65, 67. Head starts at 53.</p>
+                    <div class="image-container">
+                        <img src="placeholder_fcfs_disk_scheduling.png" alt="FCFS Disk Scheduling Movement">
+                    </div>
+                    <ul>
+                        <li>If the disk head is initially at 53, it will first move from 53 to 98 then to 183 and then
+                            to 37, 122, 14, 124, 65, 67 for a total head movement of 640 cylinders.</li>
+                        <li>The wild swing from 122 to 14 and then back to 124 illustrates the problem with this
+                            schedule.</li>
+                        <li>If the requests for cylinders 37 and 14 could be serviced together before or after 122 and
+                            124 the total head movement could be decreased substantially and performance could be
+                            improved.</li>
+                    </ul>
+                </details>
+
+                <h3>Shortest Seek Time First (SSTF)</h3>
+                <ul>
+                    <li>Shortest Seek Time First selects the request with the minimum seek time from the current head
+                        position.</li>
+                    <li>SSTF scheduling is a form of SJF scheduling; may cause starvation of some requests.</li>
+                    <li>Since seek time increases with the number of cylinders traversed by head, SSTF chooses the
+                        pending request closest to the current head position.</li>
+                    <li>Illustration shows total head movement of 236 cylinders.</li>
+                </ul>
+                <details>
+                    <summary>SSTF Disk Scheduling Example</summary>
+                    <p>Queue = 98, 183, 37, 122, 14, 124, 65, 67. Head starts at 53.</p>
+                    <div class="image-container">
+                        <img src="placeholder_sstf_disk_scheduling.png" alt="SSTF Disk Scheduling Movement">
+                    </div>
+                    <ul>
+                        <li>If the disk head is initially at 53, the closest is at cylinder 65, then 67, then 37 is
+                            closer than 98 to 67.</li>
+                        <li>So it services 37, continuing we service 14, 98, 122, 124 and finally 183.</li>
+                        <li>The total head movement is only 236 cylinders.</li>
+                        <li>SSTF is essentially a form of SJF and it may cause starvation of some requests. SSTF is a
+                            substantial improvement over FCFS, it is not optimal.</li>
+                    </ul>
+                </details>
+
+                <h3>SCAN algorithm</h3>
+                <ul>
+                    <li>SCAN algorithm Sometimes called the <strong
+                            data-tooltip="The disk arm moves back and forth like an elevator servicing requests.">elevator
+                            algorithm</strong>.</li>
+                    <li>The scan algorithm has the head start at track 0 and move towards the highest numbered track,
+                        servicing all requests for a track as it passes the track.</li>
+                    <li>The disk arm starts at one end of the disk, and moves toward the other end, servicing requests
+                        until it gets to the other end of the disk, where the head movement is reversed and servicing
+                        continues.</li>
+                    <li>Illustration shows total head movement of 208 cylinders.</li>
+                    <li>But note that if requests are uniformly dense, largest density at other end of disk and those
+                        wait the longest.</li>
+                </ul>
+                <details>
+                    <summary>SCAN Disk Scheduling Example</summary>
+                    <p>Queue = 98, 183, 37, 122, 14, 124, 65, 67. Head starts at 53.</p>
+                    <div class="image-container">
+                        <img src="placeholder_scan_disk_scheduling.png" alt="SCAN Disk Scheduling Movement">
+                    </div>
+                    <ul>
+                        <li>If the disk head is initially at 53 and if the head is moving towards 0, it services 37 and
+                            then 14.</li>
+                        <li>At cylinder 0 the arm will reverse and will move towards the other end of the disk servicing
+                            65, 67, 98, 122, 124 and 183.</li>
+                        <li>If a request arrives just in front of head, it will be serviced immediately and the request
+                            just behind the head will have to wait until the arm reach other end and reverses direction.
+                        </li>
+                    </ul>
+                </details>
+
+                <h3>Circular SCAN (C-SCAN) algorithm:</h3>
+                <ul>
+                    <li>C-SCAN is a variant of SCAN designed to provide a more uniform wait time.</li>
+                    <li>The C-SCAN policy restricts scanning to one direction only.</li>
+                    <li>Like SCAN, C-SCAN moves the head from end of the disk to the other servicing the request along
+                        the way.</li>
+                    <li>When the head reaches the other end, it immediately returns to the beginning of the disk,
+                        without servicing any request on the return.</li>
+                    <li>The C-SCAN treats the cylinders as circular list that wraps around from the final cylinder to
+                        the first one.</li>
+                    <li>This reduces the maximum delay experienced by new requests.</li>
+                </ul>
+                <details>
+                    <summary>C-SCAN Disk Scheduling Example</summary>
+                    <p>Queue = 98, 183, 37, 122, 14, 124, 65, 67. Head starts at 53.</p>
+                    <div class="image-container">
+                        <img src="placeholder_cscan_disk_scheduling.png" alt="C-SCAN Disk Scheduling Movement">
+                    </div>
+                </details>
+
+                <h3>Look Scheduling Algorithm:</h3>
+                <ul>
+                    <li>Both SCAN and C-SCAN move the disk arm across the full width of the disk.</li>
+                    <li>Start the head moving in one direction. Satisfy the request for the closest track in that
+                        direction when there is no more request in the direction, the head is traveling, reverse
+                        direction and repeat. This algorithm is similar to innermost and outermost track on each
+                        circuit.</li>
+                    <li>In practice neither of the algorithms is implemented in this way.</li>
+                    <li>The arm goes only as far as the final request in each direction. Then it reverses, without going
+                        all the way to the end of the disk.</li>
+                    <li>These versions of SCAN and CSCAN are called Look and C-Look scheduling because they look for a
+                        request before continuing to move in a given direction.</li>
+                </ul>
+                <details>
+                    <summary>LOOK Disk Scheduling Example</summary>
+                    <p>Queue = 98, 183, 37, 122, 14, 124, 65, 67. Head starts at 53.</p>
+                    <div class="image-container">
+                        <img src="placeholder_look_disk_scheduling.png" alt="LOOK Disk Scheduling Movement">
+                    </div>
+                </details>
+            </section>
+
+            <nav class="topic-navigation">
+                <a href="topic-5.html">
+                    ← Previous: File Systems
+                </a>
+                <a href="topic-7.html"> <!-- Assuming topic-7.html is for Advanced Topics -->
+                    Next: Advanced Topics →
+                </a>
+            </nav>
+
+        </main>
+    </div>
+
+    <footer>
+        <p>© 2024 EduVision OS Guide. Gold Standard Interactive Learning.</p>
+        <p>Content based on provided materials and AI enhancements for clarity and engagement.</p>
+    </footer>
+
+    <script>
+        // JavaScript from topic-5.html can be largely reused.
+
+        document.querySelectorAll('#sidebar a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                    let headerActualHeight = document.querySelector('.main-header').offsetHeight;
+                    if (window.innerWidth <= 768 && getComputedStyle(document.querySelector('.main-header')).position !== 'sticky') {
+                        headerActualHeight = 0;
+                    }
+                    const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                    const offsetPosition = elementPosition - headerActualHeight - 20;
+                    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                }
+                document.querySelectorAll('#sidebar a').forEach(link => link.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        const sections = document.querySelectorAll('#main-content section');
+        const navLi = document.querySelectorAll('#sidebar ul li a');
+
+        window.addEventListener('scroll', () => {
+            let headerActualHeight = document.querySelector('.main-header') ? document.querySelector('.main-header').offsetHeight : 0;
+            if (window.innerWidth <= 768 && getComputedStyle(document.querySelector('.main-header')).position !== 'sticky') {
+                headerActualHeight = 0;
+            }
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - headerActualHeight - 50;
+                if (pageYOffset >= sectionTop) { current = section.getAttribute('id'); }
+            });
+            navLi.forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href').substring(1) === current) { a.classList.add('active'); }
+            });
+            if (!current && navLi.length > 0 && sections.length > 0 && window.pageYOffset < (sections[0].offsetTop - headerActualHeight - 50)) {
+                navLi.forEach(a => a.classList.remove('active'));
+                navLi[0].classList.add('active');
+            }
+        });
+
+        // No copyCode function needed if there are no code blocks in this topic's content.
+        // Remove if not used.
+        /* 
+        function copyCode(button) {
+            // ...
+        }
+        */
+
+        function setInitialActiveLink() {
+            const hash = window.location.hash;
+            let activeSet = false;
+            if (hash && navLi.length > 0) {
+                navLi.forEach(a => {
+                    if (a.getAttribute('href') === hash) { a.classList.add('active'); activeSet = true; }
+                    else { a.classList.remove('active'); }
+                });
+            }
+            if (!activeSet && navLi.length > 0) { navLi[0].classList.add('active'); }
+        }
+        window.addEventListener('load', setInitialActiveLink);
+    </script>
+</body>
+
+</html>

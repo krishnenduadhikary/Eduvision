@@ -5,6 +5,34 @@ body {
     color: #333;
   }
   
+  .eduvishion-logo .text-2xl {
+  font-size: 1.7rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  letter-spacing: 0.01em;
+}
+.eduvishion-logo .text-white {
+  color: #fff !important;
+}
+.eduvishion-logo .text-yellow-300 {
+  color: #fde047 !important;
+}
+.eduvishion-logo .group:hover .text-yellow-300 {
+  color: #fef08a !important;
+}
+.eduvishion-logo a {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.eduvishion-logo svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+
   .header {
     background: #4b3f72;
     color: white;

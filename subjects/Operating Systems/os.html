@@ -90,21 +90,26 @@
       gap: 8px;
     }
 
-    .syllabus-resource-btn {
-      background: #6c63ff;
+    .explore-btn {
+      background: linear-gradient(90deg, #6c63ff 60%, #4b3f72 100%);
       color: #fff;
       border: none;
-      border-radius: 18px;
-      padding: 5px 16px;
-      font-size: 0.95em;
-      font-weight: 500;
+      border-radius: 22px;
+      padding: 8px 28px;
+      font-size: 1.05em;
+      font-weight: 600;
       cursor: pointer;
-      transition: background 0.18s;
-      box-shadow: 0 2px 8px rgba(108, 99, 255, 0.08);
+      transition: background 0.18s, box-shadow 0.18s, transform 0.15s;
+      box-shadow: 0 3px 16px rgba(108, 99, 255, 0.13);
+      margin-top: 10px;
+      letter-spacing: 0.5px;
+      display: inline-block;
     }
 
-    .syllabus-resource-btn:hover {
-      background: #4b3f72;
+    .explore-btn:hover {
+      background: linear-gradient(90deg, #4b3f72 60%, #6c63ff 100%);
+      box-shadow: 0 6px 24px rgba(76, 63, 114, 0.16);
+      transform: translateY(-2px) scale(1.04);
     }
 
     @media (max-width: 600px) {
@@ -120,6 +125,24 @@
 </head>
 
 <body>
+  <div class="eduvishion-logo"
+    style="position: absolute; top: 18px; left: 18px; z-index: 100; text-shadow: 0 2px 12px #6a82fb33;">
+    <div class="text-2xl font-bold" style="font-family: 'Nunito', sans-serif;">
+      <a href="../../index.html" class="flex items-center group" style="text-decoration: none;">
+        <span class="text-white">Edu</span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300" fill="none"
+          viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+          style="height: 1.5em; width: 1.5em; margin: 0 2px; vertical-align: middle;">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+        </svg>
+        <span class="text-white">ision</span>
+      </a>
+    </div>
+  </div>
+
   <header class="header">
     <h1 id="main-title">Operating Systems</h1>
     <p id="subtitle">📘 Full Syllabus with Concepts, Notes, and Diagrams</p>
@@ -143,9 +166,7 @@
           <li>System Calls & OS Structure: Monolithic, Microkernel, Layered, Modular</li>
         </ul>
         <div class="syllabus-resources">
-          <button class="syllabus-resource-btn">Notes</button>
-          <button class="syllabus-resource-btn">Video Lecture</button>
-          <button class="syllabus-resource-btn">Diagram (OS Structure)</button>
+          <button class="explore-btn" data-topic="1">Explore &#8614;</button>
         </div>
       </div>
       <!-- 2. Process Management -->
@@ -162,9 +183,7 @@
           <li>Context Switching</li>
         </ul>
         <div class="syllabus-resources">
-          <button class="syllabus-resource-btn">Notes</button>
-          <button class="syllabus-resource-btn">Example Problems</button>
-          <button class="syllabus-resource-btn">Diagrams (State Transition)</button>
+          <button class="explore-btn" data-topic="2">Explore &#8614;</button>
         </div>
       </div>
       <!-- 3. Threads and Concurrency -->
@@ -180,9 +199,7 @@
           <li>Deadlocks: Conditions, Prevention, Avoidance, Detection, Recovery</li>
         </ul>
         <div class="syllabus-resources">
-          <button class="syllabus-resource-btn">Simulation</button>
-          <button class="syllabus-resource-btn">Diagrams (Deadlock, Thread Models)</button>
-          <button class="syllabus-resource-btn">Notes</button>
+          <button class="explore-btn" data-topic="3">Explore &#8614;</button>
         </div>
       </div>
       <!-- 4. Memory Management -->
@@ -198,9 +215,7 @@
           <li>Virtual Memory: Demand Paging, Thrashing, Page Faults, Working Set</li>
         </ul>
         <div class="syllabus-resources">
-          <button class="syllabus-resource-btn">Notes</button>
-          <button class="syllabus-resource-btn">Examples</button>
-          <button class="syllabus-resource-btn">Diagrams (Paging, Segmentation)</button>
+          <button class="explore-btn" data-topic="4">Explore &#8614;</button>
         </div>
       </div>
       <!-- 5. File Systems -->
@@ -217,9 +232,7 @@
           <li>Free Space Management</li>
         </ul>
         <div class="syllabus-resources">
-          <button class="syllabus-resource-btn">Notes</button>
-          <button class="syllabus-resource-btn">Video</button>
-          <button class="syllabus-resource-btn">Diagrams (Directory, Allocation)</button>
+          <button class="explore-btn" data-topic="5">Explore &#8614;</button>
         </div>
       </div>
       <!-- 6. I/O Management -->
@@ -235,8 +248,7 @@
           <li>Disk Scheduling: FCFS, SSTF, SCAN, C-SCAN, LOOK</li>
         </ul>
         <div class="syllabus-resources">
-          <button class="syllabus-resource-btn">Notes</button>
-          <button class="syllabus-resource-btn">Diagrams (I/O Stack, DMA Flow)</button>
+          <button class="explore-btn" data-topic="6">Explore &#8614;</button>
         </div>
       </div>
       <!-- 7. Optional Advanced Topics -->
@@ -251,15 +263,24 @@
           <li>Case Studies: Linux, Windows, Android OS</li>
         </ul>
         <div class="syllabus-resources">
-          <button class="syllabus-resource-btn">Notes</button>
-          <button class="syllabus-resource-btn">Case Studies</button>
+          <button class="explore-btn" data-topic="7">Explore &#8614;</button>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ...existing code for overview, if you want to keep it, or remove if not needed... -->
-
+  <script>
+    // Add click event to all Explore buttons to redirect to the corresponding topic page
+    document.querySelectorAll('.explore-btn[data-topic]').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const topicNum = this.getAttribute('data-topic');
+        if (topicNum) {
+          window.location.href = `Topics/topic-${topicNum}.html`;
+        }
+      });
+    });
+  </script>
 </body>
 
 </html>

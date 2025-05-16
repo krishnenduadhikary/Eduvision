@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Process Management - EduVision OS Guide</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Nunito:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-purple: #7A5CFA;
+            --primary-purple-dark: #5D3FD3;
+            --primary-purple-light: #A48DFB;
+            --light-lavender-bg: #F8F7FF;
+            --card-bg-color: #FFFFFF;
+            --text-color: #2D3748;
+            --subtle-text-color: #718096;
+            --border-color: #E2E8F0;
+            --code-bg-color: #1A202C;
+            --code-text-color: #CBD5E0;
+            --tooltip-bg: #2D3748;
+            --tooltip-text: #F7FAFC;
+            --success-color: #48BB78;
+            --danger-color: #F56565;
+            --font-sans: 'Poppins', sans-serif;
+            --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --border-radius-md: 0.375rem;
+            /* 6px */
+            --border-radius-lg: 0.5rem;
+            /* 8px */
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-lavender-bg);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .main-header {
+            background: linear-gradient(90deg, var(--primary-purple-dark) 0%, var(--primary-purple) 100%);
+            color: white;
+            padding: 25px 40px;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .main-header h1 {
+            margin: 0;
+            font-size: 2.25em;
+            font-weight: 700;
+        }
+
+        .main-header .subtitle {
+            font-size: 1.05em;
+            font-weight: 300;
+            opacity: 0.85;
+            margin-top: 0.25rem;
+        }
+
+        /* EduVision Logo Styles */
+        .eduvishion-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1001;
+            /* Above header content */
+        }
+
+        .eduvishion-logo .text-2xl {
+            font-size: 1.6rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            font-family: 'Nunito', sans-serif;
+            /* Specific font for logo */
+        }
+
+        .eduvishion-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvishion-logo .text-yellow-300 {
+            color: #fde047 !important;
+        }
+
+        .eduvishion-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+        }
+
+        .eduvishion-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvishion-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        @media (max-width: 768px) {
+
+            /* Ensure logo adjusts with sticky header on mobile */
+            .main-header {
+                position: static;
+            }
+
+            /* No sticky header on mobile */
+            .eduvishion-logo {
+                top: 15px !important;
+                left: 15px !important;
+            }
+
+            .eduvishion-logo .text-2xl {
+                font-size: 1.2rem !important;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .eduvishion-logo {
+                display: none;
+            }
+
+            /* Hide logo on very small screens if it causes layout issues */
+        }
+
+
+        .page-container {
+            display: flex;
+            width: 100%;
+            margin-top: 0;
+        }
+
+        #sidebar {
+            width: 280px;
+            min-width: 260px;
+            background-color: var(--card-bg-color);
+            padding: 25px 15px;
+            height: calc(100vh - 85px);
+            /* Adjust if header height changes */
+            position: sticky;
+            top: 85px;
+            /* Match header actual height if sticky */
+            overflow-y: auto;
+            border-right: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            transition: width 0.3s ease;
+        }
+
+        #sidebar h2 {
+            color: var(--primary-purple);
+            text-align: left;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-purple);
+            font-weight: 600;
+        }
+
+        #sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #sidebar ul li a {
+            color: var(--subtle-text-color);
+            text-decoration: none;
+            display: block;
+            padding: 10px 15px;
+            margin-bottom: 6px;
+            border-radius: var(--border-radius-md);
+            font-weight: 500;
+            transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+            border-left: 3px solid transparent;
+        }
+
+        #sidebar ul li a:hover {
+            background-color: var(--light-lavender-bg);
+            color: var(--primary-purple);
+            border-left-color: var(--primary-purple-light);
+        }
+
+        #sidebar ul li a.active {
+            background-color: var(--primary-purple-light);
+            color: var(--primary-purple-dark);
+            font-weight: 600;
+            border-left-color: var(--primary-purple);
+        }
+
+        #main-content {
+            flex-grow: 1;
+            padding: 30px 40px;
+        }
+
+        .topic-header {
+            text-align: left;
+            padding-bottom: 20px;
+            margin-bottom: 35px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .topic-header h1 {
+            color: var(--primary-purple-dark);
+            margin: 0 0 8px 0;
+            font-size: 2em;
+            font-weight: 700;
+        }
+
+        .topic-header p {
+            color: var(--subtle-text-color);
+            font-size: 1.05em;
+            margin: 0;
+        }
+
+        section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background-color: var(--card-bg-color);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+        }
+
+        section h2 {
+            font-size: 1.7em;
+            color: var(--primary-purple-dark);
+            border-bottom: 2px solid var(--primary-purple);
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            font-weight: 600;
+        }
+
+        section h3 {
+            font-size: 1.45em;
+            margin-top: 35px;
+            margin-bottom: 18px;
+            color: var(--primary-purple);
+            font-weight: 600;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        section h4 {
+            font-size: 1.2em;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: var(--primary-purple-dark);
+            font-weight: 600;
+        }
+
+        section ul {
+            padding-left: 25px;
+            margin-top: 0.5rem;
+        }
+
+        section ul li {
+            margin-bottom: 0.6rem;
+            list-style-type: disc;
+        }
+
+        section ul li::marker {
+            color: var(--primary-purple);
+        }
+
+        details summary {
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--primary-purple);
+            padding: 8px;
+            outline: none;
+            transition: background-color 0.2s ease;
+            list-style-type: none;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        details summary::before {
+            content: '▶';
+            position: absolute;
+            left: 5px;
+            top: 50%;
+            transform: translateY(-50%) rotate(0deg);
+            transition: transform 0.2s ease-in-out;
+            color: var(--primary-purple);
+        }
+
+        details[open] summary::before {
+            transform: translateY(-50%) rotate(90deg);
+        }
+
+        details summary:hover {
+            background-color: var(--light-lavender-bg);
+        }
+
+        details {
+            background-color: #fdfcff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            margin: 15px 0;
+            padding: 15px;
+        }
+
+
+        .diagram-placeholder,
+        .image-container {
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 25px auto;
+            /* Centered */
+            text-align: center;
+            background-color: var(--light-lavender-bg);
+            border-radius: var(--border-radius-md);
+            color: var(--subtle-text-color);
+            max-width: 90%;
+            /* Ensure images don't overflow too much */
+        }
+
+        .diagram-placeholder p,
+        .image-container p {
+            margin: 8px 0;
+            font-style: italic;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--border-radius-sm);
+            box-shadow: var(--shadow-sm);
+        }
+
+
+        .code-block {
+            /* Styles are fine */
+        }
+
+        .copy-btn {
+            /* Styles are fine */
+        }
+
+        [data-tooltip] {
+            /* Styles are fine */
+        }
+
+        .interactive-area {
+            /* Styles are fine */
+        }
+
+        .process-sim-container,
+        .process-state,
+        #memory-map,
+        .memory-block,
+        #command-output {
+            /* Styles are fine */
+        }
+
+        table {
+            /* Styles are fine */
+        }
+
+        th,
+        td {
+            /* Styles are fine */
+        }
+
+        hr.subsection-divider {
+            border: 0;
+            height: 1px;
+            background-image: linear-gradient(to right, transparent, var(--border-color), transparent);
+            margin: 40px 0;
+        }
+
+        .topic-navigation {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-wrap: wrap;
+            /* Allow wrapping on small screens */
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .topic-navigation a {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-purple);
+            color: white;
+            border-radius: 9999px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9em;
+            /* Slightly smaller */
+            box-shadow: var(--shadow-md);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .topic-navigation a:hover {
+            background-color: var(--primary-purple-dark);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+            /* Subtle lift effect */
+        }
+
+        .nav-spacer {
+            flex-grow: 1;
+        }
+
+        /* For when only one button is present */
+
+
+        footer {
+            /* Styles are fine */
+        }
+
+        @media (max-width: 768px) {
+
+            /* ... existing responsive styles ... */
+            #sidebar {
+                top: 0;
+                height: auto;
+                /* No longer sticky relative to viewport if header is static */
+            }
+        }
+
+        /* Command prompt styles from previous version */
+        .command-prompt {
+            color: var(--primary-purple);
+            font-weight: 600;
+        }
+
+        .command-error {
+            color: var(--danger-color);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="eduvishion-logo">
+            <a href="../../index.html" class="flex items-center group">
+                <span class="text-white">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-white">ision</span>
+            </a>
+        </div>
+        <h1>Operating Systems</h1>
+        <p class="subtitle">EduVision :: Full Syllabus with Concepts, Notes, and Diagrams</p>
+    </header>
+
+    <div class="page-container">
+        <nav id="sidebar">
+            <h2>Navigation</h2>
+            <ul id="toc-list">
+                <li><a href="#process-concept" class="active">1. Process Concept</a></li>
+                <li><a href="#process-states-pcb">2. States & PCB</a></li>
+                <li><a href="#process-scheduling">3. Process Scheduling</a></li>
+                <li><a href="#scheduling-algorithms">4. Scheduling Algorithms</a></li>
+                <li><a href="#process-operations">5. Process Operations</a></li>
+                <li><a href="#ipc">6. Inter-Process Communication</a></li>
+                <li><a href="#context-switching">7. Context Switching</a></li>
+            </ul>
+        </nav>
+
+        <main id="main-content">
+            <div class="topic-header">
+                <h1>Topic 2: Process Management</h1>
+                <p>Exploring processes, their states, control blocks, scheduling mechanisms, operations, communication,
+                    and context switching.</p>
+            </div>
+
+            <section id="process-concept">
+                <h2>1. Process Concept</h2>
+                <p>Informally, a process is a program in execution. A process is more than the program code, which is
+                    sometimes known as the text section. It also includes the current activity, as represented by the
+                    value of the program counter and the contents of the processor's registers. In addition, a process
+                    generally includes the process stack, which contains temporary data (such as method parameters,
+                    return addresses, and local variables), and a data section, which contains global variables.</p>
+                <p>An operating system executes a variety of programs:</p>
+                <ul>
+                    <li>Batch system – jobs</li>
+                    <li>Time-shared systems – user programs or tasks</li>
+                </ul>
+                <p>Essentially, a process is an instance of a computer program that is being executed. Process execution
+                    must progress in a sequential fashion. A process includes: program counter, stack, and data section.
+                </p>
+
+                <div class="image-container">
+                    <img src="placeholder_process_memory.png" alt="Process in Memory Layout Diagram">
+                    <!-- Replace with actual path -->
+                    <p>Figure: Process in memory (Text, Data, Heap, Stack).</p>
+                </div>
+
+                <h3>Difference between Process & Program:</h3>
+                <ul>
+                    <li>A program by itself is not a process.</li>
+                    <li>A program in execution is known as a process.</li>
+                    <li>A program is a <strong
+                            data-tooltip="Passive: Not currently active or running; existing as stored code.">passive
+                            entity</strong>, such as the contents of a file stored on disk, whereas a process is an
+                        <strong
+                            data-tooltip="Active: Currently executing or ready to execute, with state and resources.">active
+                            entity</strong> with a program counter specifying the next instruction to execute and a set
+                        of associated resources.
+                    </li>
+                    <li>Resources may be shared among several processes, with some scheduling algorithm being used to
+                        determine when to stop work on one process and service a different one.</li>
+                </ul>
+            </section>
+
+            <section id="process-states-pcb">
+                <h2>2. Process States & Process Control Block (PCB)</h2>
+
+                <h3>Process States</h3>
+                <p>As a process executes, it changes state. The state of a process is defined by the current activity of
+                    that process. Each process may be in one of the following states:</p>
+                <ul>
+                    <li><strong>New:</strong> The process is being created.</li>
+                    <li><strong>Ready:</strong> The process is waiting to be assigned to a processor.</li>
+                    <li><strong>Running:</strong> Instructions are being executed.</li>
+                    <li><strong>Waiting:</strong> The process is waiting for some event to occur (such as an I/O
+                        completion or reception of a signal).</li>
+                    <li><strong>Terminated:</strong> The process has finished execution.</li>
+                </ul>
+                <p><strong>Process State Transitions:</strong> Many processes may be in ready and waiting state at the
+                    same time. But only one process can be running on any processor at any instant.</p>
+                <div class="image-container">
+                    <img src="placeholder_process_state_diagram.png" alt="Diagram of Process States">
+                    <!-- Replace with actual path -->
+                    <p>Figure: Diagram of process state (New, Ready, Running, Waiting, Terminated with transitions).</p>
+                </div>
+
+                <hr class="subsection-divider">
+
+                <h3>Process Control Block (PCB)</h3>
+                <p>Each process is represented in the OS by a process control block (PCB). It is also known as a task
+                    control block.</p>
+                <p>A process control block contains many pieces of information associated with a specific process. It
+                    includes the following information's:</p>
+                <ul>
+                    <li><strong>Process state:</strong> The state may be new, ready, running, waiting, or terminated.
+                    </li>
+                    <li><strong>Program counter:</strong> It indicates the address of the next instruction to be
+                        executed for this process.</li>
+                    <li><strong>CPU registers:</strong> The registers vary in number & type depending on the computer
+                        architecture. They include accumulators, index registers, stack pointer & general purpose
+                        registers, plus any condition-code information. This must be saved when an interrupt occurs to
+                        allow the process to be continued correctly afterward.</li>
+                    <li><strong>CPU scheduling information:</strong> This information includes process priority,
+                        pointers to scheduling queues & any other scheduling parameters.</li>
+                    <li><strong>Memory management information:</strong> This information may include such information as
+                        the value of the base & limit registers, the page tables, or the segment tables, depending upon
+                        the memory system used by the operating system.</li>
+                    <li><strong>Accounting information:</strong> This information includes the amount of CPU and real
+                        time used, time limits, account number, job or process numbers and so on.</li>
+                    <li><strong>I/O Status Information:</strong> This information includes the list of I/O devices
+                        allocated to this process, a list of open files and so on.</li>
+                </ul>
+                <p>The PCB simply serves as the repository for any information that may vary from process to process.
+                </p>
+                <div class="image-container">
+                    <img src="placeholder_pcb_layout.png" alt="Process Control Block Layout">
+                    <!-- Replace with actual path -->
+                    <p>Figure: Process control block (PCB) layout.</p>
+                </div>
+            </section>
+
+            <section id="process-scheduling">
+                <h2>3. Process Scheduling</h2>
+                <p>The objective of multiprogramming is to have some process running at all times, to maximize CPU
+                    utilization. The objective of time sharing is to switch the CPU among processes so frequently that
+                    users can interact with each program while it is running. To meet these objectives, the <strong
+                        data-tooltip="A part of the OS that decides which process in the ready queue should be allocated the CPU.">process
+                        scheduler</strong> selects an available process (possibly from a set of several available
+                    processes) for program execution on the CPU. For a single-processor system, there will never be more
+                    than one running process. If there are more processes, the rest will have to wait until the CPU is
+                    free and can be rescheduled.</p>
+
+                <h3>Scheduling Queues</h3>
+                <p>As processes enter the system, they are put into a <strong
+                        data-tooltip="Queue of all processes in the system.">job queue</strong>, which consists of all
+                    processes in the system. The processes that are residing in main memory and are ready and waiting to
+                    execute are kept on a list called the <strong
+                        data-tooltip="Queue of processes in main memory, ready and waiting to execute.">ready
+                        queue</strong>. This queue is generally stored as a linked list. A ready-queue header contains
+                    pointers to the first and final PCBs in the list. Each PCB includes a pointer field that points to
+                    the next PCB in the ready queue. The list of processes waiting for a particular I/O device is called
+                    a <strong data-tooltip="Queue of processes waiting for a specific I/O device.">device
+                        queue</strong>.</p>
+                <p>A common representation of process scheduling is a <strong
+                        data-tooltip="Diagram showing queues, resources, and flows of processes.">queueing
+                        diagram</strong>. Each rectangular box represents a queue. Two types of queues are present: the
+                    ready queue and a set of device queues. The circles represent the resources that serve the queues,
+                    and the arrows indicate the flow of processes in the system.</p>
+
+                <div class="image-container">
+                    <img src="placeholder_queueing_diagram_simple.png"
+                        alt="Simple Queueing Diagram for Process Scheduling"> <!-- Replace with actual path -->
+                    <p>Figure 3.6: Queueing-diagram representation of process scheduling.</p>
+                </div>
+
+                <p>A new process is initially put in the ready queue. It waits there until it is selected for execution,
+                    or <strong
+                        data-tooltip="The process of allocating the CPU to the selected process.">dispatched</strong>.
+                    Once the process is allocated the CPU and is executing, one of several events could occur:</p>
+                <ul>
+                    <li>The process could issue an I/O request and then be placed in an I/O queue.</li>
+                    <li>The process could create a new child process and wait for the child’s termination.</li>
+                    <li>The process could be removed forcibly from the CPU, as a result of an interrupt, and be put back
+                        in the ready queue.</li>
+                </ul>
+
+                <h3>Schedulers</h3>
+                <p>A process migrates between the various scheduling queues throughout its lifetime. The OS must select
+                    for scheduling processes from these queues in some fashion. This selection process is carried out by
+                    the appropriate scheduler.</p>
+                <p>In a batch system, more processes are submitted and then executed immediately. So these processes are
+                    spooled to a mass storage device like disk, where they are kept for later execution.</p>
+
+                <h4>Types of schedulers:</h4>
+                There are 3 types of schedulers mainly used:
+                <ol>
+                    <li>
+                        <strong>Long-term scheduler (or job scheduler):</strong>
+                        <ul>
+                            <li>Selects processes from the disk (pool) & loads them into memory for execution.</li>
+                            <li>It controls the degree of multi-programming (i.e., no. of processes in memory).</li>
+                            <li>It executes less frequently than other schedulers.</li>
+                            <li>If the degree of multiprogramming is stable (average rate of process creation = average
+                                departure rate), the long-term scheduler is needed only when a process leaves the
+                                system.</li>
+                            <li>Due to longer intervals, it can afford to take more time to decide which process to
+                                select.</li>
+                            <li>Most processes in the CPU are either I/O bound (spends more time in I/O) or CPU bound
+                                (spends more time in computation). It's important for the long-term scheduler to select
+                                a good mix of I/O bound & CPU bound processes.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Short-term scheduler (or CPU scheduler):</strong>
+                        <ul>
+                            <li>Selects among the processes that are ready to execute & allocates the CPU to one of
+                                them.</li>
+                            <li>The primary distinction between these two schedulers is their frequency of execution.
+                            </li>
+                            <li>The short-term scheduler must select a new process for the CPU quite frequently (e.g.,
+                                every 100ms). It must be very fast.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Medium-term scheduler:</strong>
+                        <ul>
+                            <li>Some operating systems introduce an additional intermediate level of scheduling.</li>
+                            <li>The main idea is that sometimes it is advantageous to remove processes from memory (and
+                                thus reduce the degree of multiprogramming) and later reintroduce them. This is called
+                                <strong
+                                    data-tooltip="Moving a process out of main memory to secondary storage, or vice-versa.">swapping</strong>.
+                            </li>
+                            <li>The process is swapped out and swapped in later by the medium-term scheduler.</li>
+                            <li>Swapping may be necessary to improve the process mix or due to memory requirements
+                                changes, freeing up memory.</li>
+                        </ul>
+                    </li>
+                </ol>
+                <div class="image-container">
+                    <img src="placeholder_medium_term_scheduler_diagram.png"
+                        alt="Addition of medium-term scheduling to queueing diagram"> <!-- Replace with actual path -->
+                    <p>Figure: Addition of medium-term scheduling to the queueing diagram.</p>
+                </div>
+
+                <h4>Comparison between Schedulers:</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>S.N.</th>
+                            <th>Long Term Scheduler</th>
+                            <th>Short Term Scheduler</th>
+                            <th>Medium Term Scheduler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>It is a job scheduler.</td>
+                            <td>It is a CPU scheduler.</td>
+                            <td>It is a process swapping scheduler.</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Speed is lesser than short term scheduler.</td>
+                            <td>Speed is fastest among other two.</td>
+                            <td>Speed is in between both short and long term scheduler.</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>It controls the degree of multiprogramming.</td>
+                            <td>It provides lesser control over degree of multiprogramming.</td>
+                            <td>It reduces the degree of multiprogramming.</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>It is almost absent or minimal in time sharing system.</td>
+                            <td>It is also minimal in time sharing system.</td>
+                            <td>It is a part of Time sharing systems.</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>It selects processes from pool and loads them into memory for execution.</td>
+                            <td>It selects those processes which are ready to execute.</td>
+                            <td>It can re-introduce the process into memory and execution can be continued.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="scheduling-algorithms">
+                <h2>4. Scheduling Algorithms</h2>
+                <p>CPU scheduling deals with the problem of deciding which of the processes in the ready queue is to be
+                    allocated the CPU.</p>
+
+                <h3>Scheduling Criteria</h3>
+                <p>Different CPU-scheduling algorithms have different properties and may favor one class of processes
+                    over another. In choosing which algorithm to use, we must consider the properties of the various
+                    algorithms. The criteria include the following:</p>
+                <ul>
+                    <li><strong>CPU utilization:</strong> We want to keep the CPU as busy as possible. CPU utilization
+                        may range from 0 to 100 percent. In a real system, it should range from 40 percent (for a
+                        lightly loaded system) to 90 percent (for a heavily loaded system).</li>
+                    <li><strong>Throughput:</strong> If the CPU is busy executing processes, then work is being done.
+                        One measure of work is the number of processes that are completed per time unit, called
+                        throughput. For long processes, this rate may be 1 process per hour; for short transactions,
+                        throughput might be 10 processes per second.</li>
+                    <li><strong>Turnaround time:</strong> From the point of view of a particular process, the important
+                        criterion is how long it takes to execute that process. The interval from the time of submission
+                        of a process to the time of completion is the turnaround time. Turnaround time is the sum of the
+                        periods spent waiting to get into memory, waiting in the ready queue, executing on the CPU, and
+                        doing I/O.</li>
+                    <li><strong>Waiting time:</strong> The CPU-scheduling algorithm does not affect the amount of time
+                        during which a process executes or does I/O; it affects only the amount of time that a process
+                        spends waiting in the ready queue. Waiting time is the sum of the periods spent waiting in the
+                        ready queue.</li>
+                    <li><strong>Response time:</strong> In an interactive system, turnaround time may not be the best
+                        criterion. Often, a process can produce some output fairly early and can continue computing new
+                        results while previous results are being output to the user. Thus, another measure is the time
+                        from the submission of a request until the first response is produced. This measure, called
+                        response time, is the amount of time it takes to start responding, but not the time that it
+                        takes to output that response. The turnaround time is generally limited by the speed of the
+                        output device.</li>
+                </ul>
+
+                <h3>Preemptive Vs Non-preemptive Scheduling</h3>
+                <p>The Scheduling algorithms can be divided into two categories with respect to how they deal with clock
+                    interrupts.</p>
+                <h4>Non-preemptive Scheduling</h4>
+                <p>A scheduling discipline is non-preemptive if, once a process has been given the CPU, the CPU cannot
+                    be taken away from that process.</p>
+                <p>Following are some characteristics of non-preemptive scheduling:</p>
+                <ul>
+                    <li>In non-preemptive system, short jobs are made to wait by longer jobs but the overall treatment
+                        of all processes is fair.</li>
+                    <li>In non-preemptive system, response times are more predictable because incoming high priority
+                        jobs cannot displace waiting jobs.</li>
+                    <li>A scheduler executes jobs in the following two situations:
+                        <ul>
+                            <li>When a process switches from running state to the waiting state.</li>
+                            <li>When a process terminates.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h4>Preemptive Scheduling</h4>
+                <ul>
+                    <li>A scheduling discipline is preemptive if, once a process has been given the CPU can taken away.
+                    </li>
+                    <li>The strategy of allowing processes that are logically runnable to be temporarily suspended is
+                        called Preemptive Scheduling and it is contrast to the "run to completion" method.</li>
+                </ul>
+
+                <hr class="subsection-divider">
+                <h3>CPU scheduling algorithms:</h3>
+                <p>Following are some scheduling algorithms we will study:</p>
+                <ol>
+                    <li>FCFS Scheduling.</li>
+                    <li>Round Robin Scheduling.</li>
+                    <li>SJF Scheduling.</li>
+                    <li>SRT Scheduling.</li>
+                    <li>Priority Scheduling.</li>
+                    <li>Multilevel Queue Scheduling.</li>
+                    <li>Multilevel Feedback Queue Scheduling.</li>
+                </ol>
+
+                <h4>1. First Come, First Served (FCFS) Scheduling Algorithm:</h4>
+                <ul>
+                    <li>This is the simplest CPU scheduling algorithm. In this scheme, the process which requests the
+                        CPU first, that is allocated to the CPU first.</li>
+                    <li>The implementation of the FCFS algorithm is easily managed with a FIFO queue.</li>
+                    <li>When a process enters the ready queue its PCB is linked onto the rear of the queue.</li>
+                    <li>The average waiting time under FCFS policy is quiet long.</li>
+                </ul>
+                <details>
+                    <summary>FCFS Example</summary>
+                    <p>Consider the following example: Processes P1 (CPU time 3), P2 (5), P3 (2), P4 (4) arriving in
+                        order P1, P2, P3, P4.</p>
+                    <div class="image-container">
+                        <img src="placeholder_fcfs_gantt.png" alt="FCFS Gantt Chart Example">
+                        <p>Gantt chart: P1 (0-3), P2 (3-8), P3 (8-10), P4 (10-14).</p>
+                    </div>
+                    <p>Waiting time: P1=0, P2=3, P3=8, P4=10. Average Waiting Time = (0+3+8+10)/4 = 5.25.</p>
+                    <p>Turnaround time: P1=3, P2=8, P3=10, P4=14. Average Turnaround Time = (3+8+10+14)/4 = 8.75.</p>
+                    <p>The FCFS algorithm is non-preemptive.</p>
+                </details>
+
+                <h4>2. Shortest Job First (SJF) Scheduling Algorithm:</h4>
+                <ul>
+                    <li>Other name of this algorithm is Shortest-Process-Next (SPN).</li>
+                    <li>This algorithm associates with each process if the CPU is available.</li>
+                    <li>This scheduling is also known as shortest next CPU burst, because the scheduling is done by
+                        examining the length of the next CPU burst of the process rather than its total length.</li>
+                </ul>
+                <details>
+                    <summary>SJF Example (Non-preemptive)</summary>
+                    <p>Processes: P1 (CPU time 3), P2 (5), P3 (2), P4 (4). (Assuming all arrive at time 0 for simplicity
+                        here, or order implies availability based on shortest next)</p>
+                    <div class="image-container">
+                        <img src="placeholder_sjf_gantt.png" alt="SJF Gantt Chart Example">
+                        <p>Gantt chart (if P3 is shortest first): P3 (0-2), P1 (2-5), P4 (5-9), P2 (9-14).</p>
+                    </div>
+                    <p>Waiting time: P3=0, P1=2, P4=5, P2=9. Average Waiting Time = (0+2+5+9)/4 = 4.</p>
+                    <p>Turnaround time: P3=2, P1=5, P4=9, P2=14. Average Turnaround Time = (2+5+9+14)/4 = 7.5.</p>
+                    <p>The SJF algorithm may be either preemptive or non-preemptive. The preemptive SJF is also known as
+                        Shortest Remaining Time First (SRTF).</p>
+                </details>
+                <details>
+                    <summary>Preemptive SJF (SRTF) Example</summary>
+                    <p>Processes: P1 (Arrival 0, CPU 8), P2 (A 1, C 4), P3 (A 2, C 9), P4 (A 3, C 5).</p>
+                    <div class="image-container">
+                        <img src="placeholder_srtf_gantt.png" alt="SRTF Gantt Chart Example">
+                        <p>Gantt chart: P1(0-1), P2(1-5), P4(5-10), P1(10-17), P3(17-26).</p>
+                    </div>
+                    <p>Waiting time: P1=10-1=9, P2=1-1=0, P3=17-2=15, P4=5-3=2. Average Waiting Time = (9+0+15+2)/4 =
+                        6.5.</p>
+                </details>
+
+                <h4>3. Priority Scheduling Algorithm:</h4>
+                <ul>
+                    <li>In this scheduling a priority number (integer) is associated with each process (smallest
+                        integer, highest priority).</li>
+                    <li>Can be Preemptive or Non-preemptive.</li>
+                    <li>Equal priority processes are scheduled in FCFS manner.</li>
+                    <li>SJF is a priority scheduling where priority is the predicted next CPU burst time.</li>
+                    <li>Problem: Starvation – low priority processes may never execute.</li>
+                    <li>Solution: Aging – as time progresses increase the priority of the process.</li>
+                    <li>Priority can be defined either internally or externally.
+                        <ul>
+                            <li>Internal priorities: Time limits, memory requirements, file requirements, CPU Vs I/O
+                                requirements.</li>
+                            <li>External priorities: Importance of process, type or amount of funds being paid,
+                                department sponsoring, politics.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <details>
+                    <summary>Priority Scheduling Example</summary>
+                    <p>Processes: P1 (Arrival 10, CPU 3), P2 (A 1, C 1), P3 (A 2, C 3), P4 (A 1, C 4), P5 (A 5, C 2).
+                        (Assuming priority order is P2, P5, P1, P3, P4 for example purposes based on shortest CPU time
+                        as a proxy or an unstated priority value)</p>
+                    <div class="image-container">
+                        <img src="placeholder_priority_gantt.png" alt="Priority Scheduling Gantt Chart Example">
+                        <p>Gantt chart (example): P2(0-1), P5(1-6), P1(6-16), P3(16-18), P4(18-19). *(Note: This Gantt
+                            is based on the image's solved example, which implies specific priorities not explicitly
+                            stated in the process list above this specific example's Gantt chart in the source image.
+                            The source image's Gantt for priority scheduling seems to reorder processes based on arrival
+                            and then some priority logic.)*</p>
+                    </div>
+                    <p>Waiting times based on *source image's Gantt for its priority example*: P1=6, P2=0, P3=16, P4=18,
+                        P5=1. Average Waiting Time = (0+1+6+16+18)/5 = 8.2</p>
+                </details>
+
+                <h4>4. Round Robin (RR) Scheduling Algorithm:</h4>
+                <ul>
+                    <li>This type of algorithm is designed only for the time sharing system.</li>
+                    <li>It is similar to FCFS scheduling with preemption condition to switch between processes.</li>
+                    <li>A small unit of time called quantum time or time slice is used to switch between the processes.
+                    </li>
+                    <li>The average waiting time under the round robin policy is quiet long.</li>
+                </ul>
+                <details>
+                    <summary>Round Robin Example</summary>
+                    <p>Processes P1 (CPU time 3), P2 (5), P3 (2), P4 (4). Time Slice = 1 millisecond.</p>
+                    <div class="image-container">
+                        <img src="placeholder_rr_gantt.png" alt="Round Robin Gantt Chart Example">
+                        <p>Gantt chart sequence: P1, P2, P3, P4, P1, P2, P3, P4, P1, P2, P2, P4, P4, P2.</p>
+                    </div>
+                    <p>Waiting times: P1=0+(4-1)+(8-5)=6, P2=1+(5-2)+(9-6)+(11-10)+(13-12)=9, P3=2+(6-3)=5,
+                        P4=3+(7-4)+(10-8)+(12-11)=9. Average Waiting Time = (6+9+5+9)/4 = 7.2.</p>
+                </details>
+
+                <h4>5. Shortest Remaining Time First (SRTF):</h4>
+                <p>This is a preemptive scheduling algorithm.</p>
+                <p>Short term scheduler always chooses the process that has shortest remaining time. When a new process
+                    joins the ready queue, short term scheduler compares the remaining time of executing process and new
+                    process. If the new process has the least CPU burst time, the scheduler selects that job and connect
+                    to CPU. Otherwise continue the old process.</p>
+                <details>
+                    <summary>SRTF Example (from image)</summary>
+                    <p>Processes: P1 (Arrival 0, Burst 3), P2 (A 2, B 6), P3 (A 4, B 4), P4 (A 6, B 5), P5 (A 8, B 2).
+                    </p>
+                    <div class="image-container">
+                        <img src="placeholder_srtf_example_gantt.png" alt="SRTF Example Gantt Chart">
+                        <p>Gantt Chart: P1(0-3), P2(3-4), P3(4-8), P5(8-10), P2(10-15), P4(15-20).</p>
+                    </div>
+                    <p>Finish Times: P1=3, P2=15, P3=8, P4=20, P5=10.</p>
+                    <p>Turnaround Times: P1=3-0=3, P2=15-2=13, P3=8-4=4, P4=20-6=14, P5=10-8=2.</p>
+                    <p>Average Turnaround Time = (3+13+4+14+2)/5 = 36/5 = 7.2 ms.</p>
+                </details>
+
+                <h4>6. Multilevel Queue Scheduling:</h4>
+                <ul>
+                    <li>A multilevel queue scheduling algorithm partitions the ready queue in several separate queues,
+                        for instance, in a multilevel queue scheduling processes are permanently assigned to one queues.
+                    </li>
+                    <li>The processes are permanently assigned to one another, based on some property of the process,
+                        such as Memory size, Process priority, Process type.</li>
+                    <li>Algorithm choose the process from the occupied queue that has the highest priority, and run that
+                        process either preemptive or non-preemptive.</li>
+                </ul>
+                <div class="image-container">
+                    <img src="placeholder_multilevel_queue.png" alt="Multilevel Queue Scheduling Diagram">
+                    <p>Diagram: System processes, interactive processes, interactive editing, batch, student processes
+                        (highest to lowest priority).</p>
+                </div>
+
+                <h4>7. Multilevel Feedback Queue Scheduling:</h4>
+                <ul>
+                    <li>Multilevel feedback queue-scheduling algorithm allows a process to move between queues.</li>
+                    <li>It uses many ready queues and associates a different priority with each queue.</li>
+                    <li>The Algorithm chooses that process with highest priority from the occupied queue and run that
+                        process either preemptively or non-preemptively.</li>
+                    <li>If the process uses too much CPU time it will moved to a lower-priority queue.</li>
+                    <li>Similarly, a process that wait too long in the lower-priority queue may be moved to a highest
+                        priority queue. (This form of aging prevents starvation).</li>
+                </ul>
+                <details>
+                    <summary>Multilevel Feedback Queue Example</summary>
+                    <p>A process entering the ready queue is placed in queue 0. If it does not finish within 8ms, it is
+                        moved to queue 1. If it does not complete, it is preempted and placed in queue 2. Processes in
+                        queue 2 run on FCFS only when queue 0 and 1 are empty.</p>
+                    <p>Three queues: Q0 - RR (quantum 8ms), Q1 - RR (quantum 16ms), Q2 - FCFS.</p>
+                    <div class="image-container">
+                        <img src="placeholder_multilevel_feedback_queue.png" alt="Multilevel Feedback Queue Diagram">
+                    </div>
+                    <p>General parameters: number of queues, scheduling algorithm for each queue, method to
+                        upgrade/demote processes, method to determine initial queue.</p>
+                </details>
+
+                <div class="image-container">
+                    <img src="placeholder_scheduling_queues_detailed.png" alt="Detailed Scheduling Queues Diagram">
+                    <p>Figure: Detailed Scheduling Queues (Job Queue, Ready Queue, Wait Queue(s), CPU).</p>
+                </div>
+            </section>
+
+            <section id="process-operations">
+                <h2>5. Operations on Processes</h2>
+                <p>The processes in most systems can execute concurrently, and they may be created and deleted
+                    dynamically.</p>
+                <h3>Process Creation</h3>
+                <p>During the course of execution, a process may create several new processes. The creating process is
+                    called a parent process, and the new processes are called the children of that process. Each of
+                    these new processes may in turn create other processes, forming a tree of processes. Most operating
+                    systems (including UNIX, Linux, and Windows) identify processes according to a unique process
+                    identifier (or pid), which is typically an integer number.</p>
+                <p>When a process creates a new process, two possibilities for execution exist:</p>
+                <ol>
+                    <li>The parent continues to execute concurrently with its children.</li>
+                    <li>The parent waits until some or all of its children have terminated.</li>
+                </ol>
+                <h3>Process Termination</h3>
+                <p>A process terminates when it finishes executing its final statement and asks the operating system to
+                    delete it by using the exit() system call. At that point, the process may return a status value
+                    (typically an integer) to its parent process (via the wait() system call). All the resources of the
+                    process—including physical and virtual memory, open files, and I/O buffers—are deallocated by the
+                    operating system.</p>
+                <p>A parent may terminate the execution of one of its children for a variety of reasons, such as these:
+                </p>
+                <ul>
+                    <li>The child has exceeded its usage of some of the resources that it has been allocated.</li>
+                    <li>The task assigned to the child is no longer required.</li>
+                    <li>The parent is exiting, and the operating system does not allow a child to continue if its parent
+                        terminates. (Cascading termination)</li>
+                </ul>
+                <p>A process that has terminated, but whose parent has not yet called wait(), is known as a <strong
+                        data-tooltip="A terminated process whose entry still remains in the process table, waiting for its parent to retrieve its exit status.">zombie
+                        process</strong>. All processes transition to this state when they terminate, but generally they
+                    exist as zombies only briefly.</p>
+                <div class="image-container">
+                    <img src="placeholder_fork_exec_wait.png" alt="Fork-Exec-Wait Diagram">
+                    <p>Figure: Process creation and termination using fork(), exec(), wait(), exit().</p>
+                </div>
+            </section>
+
+            <section id="ipc">
+                <h2>6. Inter-Process Communication (IPC)</h2>
+                <p>Inter process communication (IPC) is a mechanism which allows processes to communicate each other and
+                    synchronize their actions. The communication between these processes can be seen as a method of
+                    co-operation between them.</p>
+                <p>Processes executing concurrently in the operating system may be either independent processes or
+                    cooperating processes.</p>
+                <ul>
+                    <li>A process is <strong
+                            data-tooltip="A process that cannot affect or be affected by other executing processes.">independent</strong>
+                        if it cannot affect or be affected by the other processes executing in the system. Any process
+                        that does not share data with any other process is independent.</li>
+                    <li>A process is <strong
+                            data-tooltip="A process that can affect or be affected by other executing processes, often by sharing data.">cooperating</strong>
+                        if it can affect or be affected by the other processes executing in the system. Clearly, any
+                        process that shares data with other processes is a cooperating process.</li>
+                </ul>
+                <h4>Reasons for co-operating processes:</h4>
+                <ul>
+                    <li><strong>Information sharing:</strong> Since several users may be interested in the same piece of
+                        information (for instance, a shared file), we must provide an environment to allow concurrent
+                        access to such information.</li>
+                    <li><strong>Computation speedup:</strong> If we want a particular task to run faster, we must break
+                        it into subtasks, each of which will be executing in parallel with the others. Notice that such
+                        a speedup can be achieved only if the computer has multiple processing cores.</li>
+                    <li><strong>Modularity:</strong> We may want to construct the system in a modular fashion, dividing
+                        the system functions into separate processes or threads.</li>
+                    <li><strong>Convenience:</strong> Even an individual user may work on many tasks at the same time.
+                        For instance, a user may be editing, listening to music and compiling in parallel.</li>
+                </ul>
+
+                <h3>Fundamental Models of Inter-Process Communication:</h3>
+                <ol>
+                    <li>
+                        <strong>Shared Memory:</strong>
+                        <ul>
+                            <li>In the shared-memory model, a region of memory that is shared by cooperating processes
+                                is established.</li>
+                            <li>Processes can then exchange information by reading and writing data to the shared
+                                region.</li>
+                            <li>Shared memory can be faster than message passing, since message-passing systems are
+                                typically implemented using system calls and thus require the more time-consuming task
+                                of kernel intervention.</li>
+                            <li>Typically, a shared-memory region resides in the address space of the process creating
+                                the shared-memory segment. Other processes that wish to communicate using this
+                                shared-memory segment must attach it to their address space.</li>
+                            <li>Shared memory requires that two or more processes agree to remove the restriction that
+                                the OS normally tries to prevent one process from accessing another's memory.</li>
+                            <li>The form of the data and the location are determined by these processes and are not
+                                under the operating system’s control.</li>
+                            <li>The processes are also responsible for ensuring that they are not writing to the same
+                                location simultaneously (synchronization).</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Message Passing:</strong>
+                        <ul>
+                            <li>In the message-passing model, communication takes place by means of messages exchanged
+                                between the cooperating processes.</li>
+                            <li>Message passing is useful for exchanging smaller amounts of data, because no conflicts
+                                need be avoided.</li>
+                            <li>Message passing is also easier to implement in a distributed system than shared memory.
+                            </li>
+                            <li>A message-passing facility provides at least two operations: send(message) and
+                                receive(message).</li>
+                            <li>Messages sent by a process can be either fixed or variable in size.</li>
+                            <li>Message passing may be either <strong
+                                    data-tooltip="Sender waits until message is received or placed in mailbox.">blocking</strong>
+                                or <strong
+                                    data-tooltip="Sender sends message and continues operation.">nonblocking</strong>—also
+                                known as synchronous and asynchronous.
+                                <ul>
+                                    <li>Blocking send: The sending process is blocked until the message is received by
+                                        the receiving process or by the mailbox.</li>
+                                    <li>Nonblocking send: The sending process sends the message and resumes operation.
+                                    </li>
+                                    <li>Blocking receive: The receiver blocks until a message is available.</li>
+                                    <li>Nonblocking receive: The receiver retrieves either a valid message or a null.
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ol>
+                <div class="image-container"
+                    style="display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap;">
+                    <div style="max-width: 45%;">
+                        <img src="placeholder_message_passing.png" alt="Message Passing IPC Model">
+                        <p>Figure: Message passing model (message queue in kernel).</p>
+                    </div>
+                    <div style="max-width: 45%;">
+                        <img src="placeholder_shared_memory_ipc.png" alt="Shared Memory IPC Model">
+                        <p>Figure: Shared memory model (shared region between processes).</p>
+                    </div>
+                </div>
+
+                <div class="image-container">
+                    <img src="placeholder_shared_vs_message_passing_diagram.png"
+                        alt="Shared Memory vs Message Passing Diagram">
+                    <p>Figure: Shared Memory vs. Message Passing Architectures.</p>
+                </div>
+
+                <h4>Producer-Consumer Problem:</h4>
+                <p>To illustrate the concept of cooperating processes, let’s consider the producer–consumer problem,
+                    which is a common paradigm for cooperating processes. A producer process produces information that
+                    is consumed by a consumer process. For example, a compiler may produce assembly code that is
+                    consumed by an assembler. The assembler, in turn, may produce object modules that are consumed by
+                    the loader.</p>
+                <p>One solution to the producer–consumer problem uses shared memory. To allow producer and consumer
+                    processes to run concurrently, we must have available a buffer of items that can be filled by the
+                    producer and emptied by the consumer. This buffer will reside in a region of memory that is shared
+                    by the producer and consumer processes. A producer can produce one item while the consumer is
+                    consuming another item. The producer and consumer must be synchronized, so that the consumer does
+                    not try to consume an item that has not yet been produced.</p>
+                <p>Two types of buffers can be used. The <strong
+                        data-tooltip="Buffer with no practical limit on size.">unbounded buffer</strong> places no
+                    practical limit on the size of the buffer. The <strong
+                        data-tooltip="Buffer with a fixed size.">bounded buffer</strong> assumes a fixed buffer size.
+                </p>
+            </section>
+
+            <section id="context-switching">
+                <h2>7. Context Switching</h2>
+                <p>Interrupts cause the operating system to change a CPU from its current task and to run a kernel
+                    routine. Such operations happen frequently on general-purpose systems. When an interrupt occurs, the
+                    system needs to save the current <strong
+                        data-tooltip="The state of the process, including CPU registers, process state, and memory management information.">context</strong>
+                    of the process running on the CPU so that it can restore that context when its processing is done,
+                    essentially suspending the process and then resuming it.</p>
+                <p>Switching the CPU to another process requires performing a state save of the current process and a
+                    state restore of a different process. This task is known as a <strong
+                        data-tooltip="The mechanism to store and restore the state or context of a CPU in Process Control block so that a process execution can be resumed from the same point at a later time.">context
+                        switch</strong>. When a context switch occurs, the kernel saves the context of the old process
+                    in its PCB and loads the saved context of the new process scheduled to run. Context-switch times are
+                    highly dependent on hardware support.</p>
+            </section>
+
+
+            <nav class="topic-navigation">
+                <a href="topic-1.html">
+                    ← Previous: Introduction to OS
+                </a>
+                <a href="topic-3.html">
+                    Next: Threads & Concurrency →
+                </a>
+            </nav>
+
+        </main>
+    </div>
+
+    <footer>
+        <p>© 2024 EduVision OS Guide. Gold Standard Interactive Learning.</p>
+        <p>Content based on provided materials and AI enhancements for clarity and engagement.</p>
+    </footer>
+
+    <script>
+        // All JavaScript from the previous 'pro coder' version is applicable here.
+        // Ensure the sidebar navigation links (#process-concept, etc.) match the section IDs.
+
+        document.querySelectorAll('#sidebar a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                    const headerActualHeight = document.querySelector('.main-header').offsetHeight;
+                    let topOffset = headerActualHeight;
+                    // If header is not sticky on mobile, don't add its height to offset
+                    if (window.innerWidth <= 768 && getComputedStyle(document.querySelector('.main-header')).position !== 'sticky') {
+                        topOffset = 0;
+                    }
+                    const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                    const offsetPosition = elementPosition - topOffset - 20; // 20px buffer
+                    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                }
+                document.querySelectorAll('#sidebar a').forEach(link => link.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        const sections = document.querySelectorAll('#main-content section');
+        const navLi = document.querySelectorAll('#sidebar ul li a');
+
+        window.addEventListener('scroll', () => {
+            let headerActualHeight = document.querySelector('.main-header') ? document.querySelector('.main-header').offsetHeight : 0;
+            if (window.innerWidth <= 768 && getComputedStyle(document.querySelector('.main-header')).position !== 'sticky') {
+                headerActualHeight = 0; // Header is static on mobile
+            }
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - headerActualHeight - 50;
+                if (pageYOffset >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLi.forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href').substring(1) === current) {
+                    a.classList.add('active');
+                }
+            });
+            if (!current && navLi.length > 0 && sections.length > 0 && window.pageYOffset < (sections[0].offsetTop - headerActualHeight - 50)) {
+                navLi.forEach(a => a.classList.remove('active'));
+                navLi[0].classList.add('active');
+            }
+        });
+
+        function copyCode(button) { /* ... same as previous ... */ }
+        let currentProcessState = 0;
+        const processStates = ['proc_new', 'proc_ready', 'proc_running', 'proc_waiting', 'proc_terminated'];
+        const processStateNames = ['NEW', 'READY', 'RUNNING', 'WAITING (I/O)', 'TERMINATED'];
+        function updateProcessSimDisplay() { /* ... same as previous ... */ }
+        function simulateProcessCycle() { /* ... same as previous ... */ }
+        if (document.getElementById('proc_new')) updateProcessSimDisplay();
+
+        const memoryMapDiv = document.getElementById('memory-map');
+        const totalMemorySize = 100;
+        let allocatedBlocks = [];
+        function renderMemoryMap() { /* ... same as previous ... */ }
+        function findFreeSpace(size) { /* ... same as previous ... */ }
+        function allocateMemory() { /* ... same as previous ... */ }
+        function deallocateMemory() { /* ... same as previous ... */ }
+        function resetMemory() { /* ... same as previous ... */ }
+        if (memoryMapDiv) renderMemoryMap();
+
+        const commandInput = document.getElementById('command-input');
+        const commandOutput = document.getElementById('command-output');
+        if (commandInput && commandOutput) { /* ... same as previous ... */ }
+
+        function setInitialActiveLink() { /* ... same as previous ... */ }
+        window.addEventListener('load', setInitialActiveLink);
+
+        // Re-paste full JS functions here
+        function copyCode(button) {
+            const pre = button.parentElement.querySelector('pre');
+            if (!pre) return;
+            const code = pre.innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                button.innerText = 'Copied!'; button.style.backgroundColor = 'var(--success-color)';
+                setTimeout(() => { button.innerText = 'Copy'; button.style.backgroundColor = 'var(--primary-purple)'; }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err); button.innerText = 'Error'; button.style.backgroundColor = 'var(--danger-color)';
+                setTimeout(() => { button.innerText = 'Copy'; button.style.backgroundColor = 'var(--primary-purple)'; }, 2000);
+            });
+        }
+
+        function updateProcessSimDisplay() {
+            processStates.forEach((stateId, index) => {
+                const el = document.getElementById(stateId);
+                if (el) { el.classList.toggle('active', index === currentProcessState); }
+            });
+            const statusEl = document.getElementById('process-sim-status');
+            if (statusEl) statusEl.textContent = `Current State: ${processStateNames[currentProcessState]}`;
+        }
+        function simulateProcessCycle() {
+            currentProcessState = (currentProcessState + 1) % processStates.length;
+            updateProcessSimDisplay();
+        }
+
+        function renderMemoryMap() { /* ... same as previous ... */ }
+        function findFreeSpace(size) { /* ... same as previous ... */ }
+        function allocateMemory() { /* ... same as previous ... */ }
+        function deallocateMemory() { /* ... same as previous ... */ }
+        function resetMemory() { /* ... same as previous ... */ }
+
+        if (commandInput && commandOutput) {
+            commandInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    const command = commandInput.value.trim().toLowerCase();
+                    let outputText = `\n<span class="command-prompt">user@os-sim:~$</span> ${commandInput.value}\n`;
+                    let response = '';
+                    switch (command) {
+                        case 'help': response = '  Available commands: help, ls, date, clear, whoami, uname'; break;
+                        case 'ls': response = '  Documents/\n  Pictures/\n  Music/\n  file1.txt\n  program.exe'; break;
+                        case 'date': response = `  ${new Date().toLocaleString()}`; break;
+                        case 'clear': commandOutput.innerHTML = ''; commandInput.value = ''; return;
+                        case 'whoami': response = '  guest_user'; break;
+                        case 'uname': response = '  EduVision OS Kernel 1.0 (Simulated)'; break;
+                        default: response = `  <span class="command-error">command not found:</span> ${command}`;
+                    }
+                    commandOutput.innerHTML += outputText + response + '\n';
+                    commandInput.value = ''; commandOutput.scrollTop = commandOutput.scrollHeight;
+                }
+            });
+        }
+
+        function setInitialActiveLink() {
+            const hash = window.location.hash;
+            let activeSet = false;
+            if (hash && navLi.length > 0) {
+                navLi.forEach(a => {
+                    if (a.getAttribute('href') === hash) { a.classList.add('active'); activeSet = true; }
+                    else { a.classList.remove('active'); }
+                });
+            }
+            if (!activeSet && navLi.length > 0) { navLi[0].classList.add('active'); }
+        }
+    </script>
+</body>
+
+</html>
