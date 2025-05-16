@@ -444,6 +444,64 @@
             border-radius: 3px;
             font-family: 'Courier New', Courier, monospace;
         }
+
+        /* Footer and Nav Links */
+        .topic-navigation {
+            margin-top: 30px;
+            /* (mt-16 pt-10) -> Reduced margin */
+            padding-top: 20px;
+            /* (pt-10) */
+            border-top: 1px solid #e2e8f0;
+            /* (border-gray-200) */
+            display: flex;
+            flex-direction: column;
+            /* (flex-col) */
+            justify-content: space-between;
+            /* (justify-between) */
+            align-items: center;
+            /* (items-center) */
+            gap: 1rem;
+            /* (gap-4) */
+        }
+
+        @media (min-width: 640px) {
+
+            /* (sm:flex-row) */
+            .topic-navigation {
+                flex-direction: row;
+            }
+        }
+
+        .topic-navigation a {
+            display: inline-flex;
+            /* (inline-flex) */
+            align-items: center;
+            /* (items-center) */
+            padding: 0.75rem 1.5rem;
+            /* (px-6 py-3) */
+            background-color: #3b82f6;
+            /* (bg-blue-600) */
+            color: white;
+            /* (text-white) */
+            border-radius: 9999px;
+            /* (rounded-full) */
+            text-decoration: none;
+            font-weight: 500;
+            /* (font-medium) */
+            font-size: 0.875rem;
+            /* (text-sm) */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            /* (shadow-md) */
+            transition: all 0.3s ease-in-out;
+            /* (transition-all) */
+        }
+
+        .topic-navigation a:hover {
+            background-color: #2563eb;
+            /* (hover:bg-blue-700) */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            /* (hover:shadow-lg) */
+        }
     </style>
 </head>
 
@@ -474,12 +532,14 @@
     <nav class="toc">
         <div class="container">
             <ul>
+                <li><a href="../dl.html">🠠Back to Syllabus</a></li>
                 <li><a href="#intro"><i class="fas fa-lightbulb"></i> Intro</a></li>
                 <li><a href="#systems"><i class="fas fa-list-ol"></i> Systems</a></li>
                 <li><a href="#conversions"><i class="fas fa-exchange-alt"></i> Conversions</a></li>
                 <li><a href="#arithmetic"><i class="fas fa-calculator"></i> Binary Arithmetic</a></li>
                 <li><a href="#floating-point"><i class="fas fa-infinity"></i> Floating Point</a></li>
                 <li><a href="#binary-codes"><i class="fas fa-qrcode"></i> Binary Codes</a></li>
+                <li><a href="topic-1.html">Topic 1</a></li>
             </ul>
         </div>
     </nav>
@@ -1398,6 +1458,12 @@ Result: 11001<sub>2</sub></pre>
                         </tr>
                     </tbody>
                 </table>
+
+            </div>
+            <div class="topic-navigation">
+                <a href="topic-2.html" style="margin-left: auto;">
+                    Next Topic: Boolean Algebra →
+                </a>
             </div>
         </section>
     </main>
