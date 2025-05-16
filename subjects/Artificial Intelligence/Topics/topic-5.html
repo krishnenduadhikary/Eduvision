@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Representation & Reasoning in AI</title>
+    <meta name="description"
+        content="Learn about knowledge representation using logic (propositional, first-order), inference (chaining), rule-based systems, semantic nets, frames, ontologies, and reasoning under uncertainty.">
+    <meta name="keywords"
+        content="Knowledge Representation, AI Reasoning, Propositional Logic, First-Order Logic, Forward Chaining, Backward Chaining, Semantic Networks, Frames, Ontologies, Bayesian Networks, Fuzzy Logic, Expert Systems">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* CSS from topic-1.html - For brevity, imagine all the CSS from the previous example is here */
+        /* Key structural CSS will be included, specific element styles might be summarized */
+        :root {
+            --primary-color-light: #3498db;
+            /* Blue */
+            --secondary-color-light: #2ecc71;
+            /* Green */
+            --accent-color-light: #e67e22;
+            /* Orange */
+            --background-color-light: #f4f7f6;
+            --text-color-light: #333;
+            --card-bg-light: #ffffff;
+            --border-color-light: #e0e0e0;
+            --code-bg-light: #eef;
+
+            --primary-color-dark: #5dade2;
+            /* Lighter Blue */
+            --secondary-color-dark: #58d68d;
+            /* Lighter Green */
+            --accent-color-dark: #f5b041;
+            /* Lighter Orange */
+            --background-color-dark: #1e272e;
+            --text-color-dark: #f0f0f0;
+            --card-bg-dark: #2c3a47;
+            --border-color-dark: #444;
+            --code-bg-dark: #2a2a40;
+
+            --primary-color: var(--primary-color-light);
+            --secondary-color: var(--secondary-color-light);
+            --accent-color: var(--accent-color-light);
+            --background-color: var(--background-color-light);
+            --text-color: var(--text-color-light);
+            --card-bg: var(--card-bg-light);
+            --border-color: var(--border-color-light);
+            --code-bg: var(--code-bg-light);
+
+            --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --font-mono: 'Courier New', Courier, monospace;
+            --font-logo: 'Nunito', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            --primary-color: var(--primary-color-dark);
+            --secondary-color: var(--secondary-color-dark);
+            --accent-color: var(--accent-color-dark);
+            --background-color: var(--background-color-dark);
+            --text-color: var(--text-color-dark);
+            --card-bg: var(--card-bg-dark);
+            --border-color: var(--border-color-dark);
+            --code-bg: var(--code-bg-dark);
+        }
+
+        /* Eduvision Logo (Same as topic-1) */
+        .eduvishion-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1050;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvishion-logo .text-2xl {
+            font-family: var(--font-logo);
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvishion-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvishion-logo .text-yellow-300 {
+            color: #fde047 !important;
+        }
+
+        .eduvishion-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+        }
+
+        .eduvishion-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvishion-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Navbar (Same as topic-1) */
+        .navbar {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-left-spacer {
+            flex-basis: 50px;
+            flex-shrink: 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .navbar-brand i {
+            margin-right: 0.5rem;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            flex-basis: 50px;
+            flex-shrink: 0;
+            text-align: right;
+        }
+
+        /* Sidebar (Same as topic-1) */
+        .sidebar {
+            position: fixed;
+            top: 77px;
+            left: 0;
+            width: 280px;
+            height: calc(100vh - 77px);
+            background-color: var(--card-bg);
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 1px solid var(--border-color);
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li a {
+            display: block;
+            padding: 8px 0;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s, padding-left 0.2s, background-color 0.2s;
+            border-radius: 4px;
+        }
+
+        .sidebar ul li a:hover {
+            color: var(--accent-color);
+            padding-left: 10px;
+        }
+
+        .sidebar ul li a.active {
+            color: var(--accent-color);
+            padding-left: 10px;
+            font-weight: bold;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-mode .sidebar ul li a.active {
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Main Content Area (Same as topic-1) */
+        .main-content {
+            margin-left: 300px;
+            padding: 2rem 3rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 4rem 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-section p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+
+        /* Syllabus Bar (Same as topic-1, with updated topic number) */
+        .syllabus-bar-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 0.75rem;
+            background-color: var(--card-bg);
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.07);
+            border: 1px solid var(--border-color);
+        }
+
+        .syllabus-bar-back-link {
+            display: flex;
+            align-items: center;
+            font-size: 0.875rem;
+            color: #2563eb;
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            text-decoration: none;
+            transition: background-color 0.15s, color 0.15s;
+            margin-bottom: 0.5rem;
+        }
+
+        .dark-mode .syllabus-bar-back-link {
+            color: #5dade2;
+        }
+
+        .dark-mode .syllabus-bar-back-link:hover {
+            color: #8ecae6;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .syllabus-bar-back-link:hover {
+            color: #1d4ed8;
+            background-color: #eff6ff;
+        }
+
+        .syllabus-bar-back-link svg {
+            height: 1.25rem;
+            width: 1.25rem;
+            margin-right: 0.375rem;
+            fill: currentColor;
+        }
+
+        .syllabus-bar-topic-badge {
+            background-color: #2563eb;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.375rem 1rem;
+            border-radius: 9999px;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        @media (min-width: 640px) {
+            .syllabus-bar-container {
+                flex-direction: row;
+            }
+
+            .syllabus-bar-back-link {
+                margin-bottom: 0;
+            }
+
+            .syllabus-bar-topic-badge {
+                font-size: 0.875rem;
+            }
+        }
+
+        /* General Content Styles (Same as topic-1) */
+        section {
+            margin-bottom: 3rem;
+            padding-top: 70px;
+            margin-top: -70px;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-size: 1.7rem;
+            color: var(--secondary-color);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        h4 {
+            font-size: 1.3rem;
+            color: var(--accent-color);
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        p,
+        li {
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        ul,
+        ol {
+            padding-left: 25px;
+        }
+
+        .callout {
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 5px solid var(--accent-color);
+            background-color: var(--card-bg);
+            border-radius: 0 5px 5px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .callout.info {
+            border-left-color: var(--primary-color);
+        }
+
+        .callout.success {
+            border-left-color: var(--secondary-color);
+        }
+
+        .callout.warning {
+            border-left-color: #f39c12;
+        }
+
+        details {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+        }
+
+        summary {
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--primary-color);
+            padding: 0.5rem 0;
+        }
+
+        summary::marker {
+            color: var(--accent-color);
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            color: var(--text-color);
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+            border: 1px solid var(--border-color);
+            line-height: 1.5;
+        }
+
+        code {
+            font-family: var(--font-mono);
+        }
+
+        .highlight {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        /* Diagram Styles (Generic placeholder, use <img> for actual images) */
+        .diagram {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 1.5rem auto;
+            max-width: 600px;
+            /* Adjust as needed */
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+        }
+
+        .diagram img,
+        .diagram-placeholder {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        .diagram-placeholder {
+            border: 2px dashed var(--border-color);
+            padding: 20px;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        .kr-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        .kr-table th,
+        .kr-table td {
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            text-align: left;
+        }
+
+        .kr-table th {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        /* New Footer Styles (Same as topic-1, with link updates) */
+        .new-footer-container {
+            margin-top: 4rem;
+            padding-top: 2.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .new-footer-buttons-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            align-items: center;
+        }
+
+        .new-footer-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            background-color: #2563eb;
+            color: white !important;
+            border-radius: 9999px;
+            text-decoration: none;
+            transition: background-color 0.15s, box-shadow 0.15s;
+            font-weight: 500;
+            font-size: 0.875rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            min-width: 280px;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .new-footer-button:hover {
+            background-color: #1d4ed8;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .new-footer-button:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+
+        .new-footer-print-link {
+            margin-top: 1rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .new-footer-print-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (min-width: 640px) {
+            .new-footer-buttons-wrapper {
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 1rem;
+            }
+
+            .new-footer-button {
+                margin-bottom: 0;
+            }
+        }
+
+        /* Quiz Styles (Same as topic-1) */
+        .quiz-container {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-question {
+            margin-bottom: 15px;
+        }
+
+        .quiz-options label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .quiz-options input {
+            margin-right: 8px;
+        }
+
+        .quiz-feedback {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Responsive Adjustments (Same as topic-1) */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                box-shadow: none;
+                top: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+
+            .navbar {
+                padding: 0.8rem 1rem;
+            }
+
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+
+            .nav-left-spacer,
+            .theme-toggle {
+                flex-basis: 40px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .eduvishion-logo {
+                top: 12px;
+                left: 12px;
+            }
+
+            .eduvishion-logo .text-2xl {
+                font-size: 1.3rem;
+            }
+
+            .eduvishion-logo svg {
+                height: 1.2em;
+                width: 1.2em;
+            }
+
+            .navbar {
+                padding: 1rem;
+                justify-content: center;
+                position: relative;
+            }
+
+            .nav-left-spacer {
+                display: none;
+            }
+
+            .navbar-brand {
+                flex-grow: 0;
+                margin-right: auto;
+                margin-left: 50px;
+                font-size: 1.3rem;
+            }
+
+            .theme-toggle {
+                position: absolute;
+                right: 1rem;
+                top: 50%;
+                transform: translateY(-50%);
+                flex-basis: auto;
+                font-size: 1.2rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            h3 {
+                font-size: 1.5rem;
+            }
+
+            .syllabus-bar-container {
+                padding: 0.5rem;
+            }
+
+            .syllabus-bar-back-link {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.6rem;
+            }
+
+            .syllabus-bar-topic-badge {
+                font-size: 0.7rem;
+                padding: 0.3rem 0.8rem;
+            }
+
+            .new-footer-button {
+                font-size: 0.8rem;
+                padding: 0.6rem 1.2rem;
+                min-width: auto;
+                width: 90%;
+            }
+
+            .new-footer-buttons-wrapper {
+                flex-direction: column;
+            }
+
+            .new-footer-buttons-wrapper .new-footer-button:first-child {
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        /* Print Styles (Same as topic-1) */
+        @media print {
+            body {
+                font-size: 10pt;
+                color: #000 !important;
+                background-color: #fff !important;
+            }
+
+            .navbar,
+            .sidebar,
+            .theme-toggle,
+            .hero-section .btn,
+            .quiz-container,
+            .new-footer-container,
+            details summary::marker,
+            .eduvishion-logo,
+            .syllabus-bar-container,
+            .new-footer-print-link {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 0;
+            }
+
+            section {
+                padding-top: 0;
+                margin-top: 0;
+                margin-bottom: 1.5rem;
+                page-break-after: auto;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4 {
+                color: #000 !important;
+                border: none !important;
+                page-break-after: avoid;
+            }
+
+            .callout {
+                border-left: 3px solid #ccc !important;
+                background-color: #f9f9f9 !important;
+            }
+
+            a {
+                text-decoration: none;
+                color: #000 !important;
+            }
+
+            a[href^="http"]:after {
+                content: " (" attr(href) ")";
+            }
+
+            pre {
+                background-color: #f0f0f0 !important;
+                border: 1px solid #ccc !important;
+                color: #000 !important;
+            }
+
+            .diagram,
+            .diagram img,
+            .kr-table {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvishion-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../index.html" class="flex items-center group">
+                <span class="text-white">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+                    fill="none">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-white">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-left-spacer"></div>
+        <a href="#" class="navbar-brand"><i class="fas fa-brain-circuit"></i> Knowledge Representation & Reasoning</a>
+        <!-- Icon suggestion -->
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+        </button>
+    </nav>
+
+    <aside class="sidebar" id="sidebar">
+        <h3>Table of Contents</h3>
+        <ul id="toc"></ul>
+    </aside>
+
+    <main class="main-content">
+        <header class="hero-section">
+            <h1>Knowledge Representation & Reasoning</h1>
+            <p>How AI systems store, understand, and make inferences from information about the world.</p>
+        </header>
+
+        <div class="syllabus-bar-container">
+            <a href="../ai.html" class="syllabus-bar-back-link"> <!-- Ensure this path is correct -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                        clip-rule="evenodd" />
+                </svg>
+                Back to Syllabus
+            </a>
+            <div class="syllabus-bar-topic-badge">
+                Topic 5
+            </div>
+        </div>
+
+        <section id="intro-kr">
+            <h2>Introduction to Knowledge Representation (KR)</h2>
+            <p>For the purpose of solving complex problems encountered in AI, we need both a large amount of knowledge
+                and some mechanism for manipulating that knowledge to create solutions to new problems. A variety of
+                ways of representing knowledge (facts) have been exploited in AI programs. In all variety of knowledge
+                representations, we deal with two kinds of entities:</p>
+            <ul>
+                <li><strong>A. Facts:</strong> Truths in some relevant world. These are the things we want to represent.
+                </li>
+                <li><strong>B. Representations of facts in some chosen formalism:</strong> These are things we will
+                    actually be able to manipulate.</li>
+            </ul>
+            <p>One way to think of structuring these entities is at two levels:</p>
+            <ol type="a">
+                <li>The <strong class="highlight">knowledge level</strong>, at which facts are described.</li>
+                <li>The <strong class="highlight">symbol level</strong>, at which representations of objects at the
+                    knowledge level are defined in terms of symbols that can be manipulated by programs.</li>
+            </ol>
+            <p>The facts and representations are linked with two-way mappings called <strong
+                    class="highlight">representation mappings</strong>. The forward representation mapping maps from
+                facts to representations. The backward representation mapping goes the other way, from representations
+                to facts.</p>
+            <div class="diagram">
+                <h4>Mapping between Facts and Representations</h4>
+                <div class="diagram-placeholder">Image: Initial facts → Internal Representation ↔ Reasoning Programs.
+                    English Representation ↔ Internal Representation (via English Understanding/Generation).</div>
+            </div>
+
+            <h3>Framework of Knowledge Representation</h3>
+            <p>The Knowledge Representation models/mechanisms are often based on: Logic, Rules, Frames, Semantic Net.
+            </p>
+            <div class="diagram">
+                <h4>Knowledge Representation Framework</h4>
+                <div class="diagram-placeholder">Image: Problem → (Solve/Represent) Representation → (Interpret/Compute)
+                    Output → (Informal/Formal) Solution.</div>
+            </div>
+            <h4>The problem solving requires:</h4>
+            <ul>
+                <li>Formal knowledge representation.</li>
+                <li>Conversion of informal knowledge to a formal knowledge that is the conversion of implicit knowledge
+                    to explicit knowledge.</li>
+            </ul>
+            <h4>A good knowledge representation system should have following properties:</h4>
+            <ol>
+                <li><strong>Representational Adequacy:</strong> The ability to represent all kinds of knowledge that are
+                    needed in that domain.</li>
+                <li><strong>Inferential Adequacy:</strong> The ability to manipulate the representational structures to
+                    derive new structures corresponding to new knowledge inferred from old.</li>
+                <li><strong>Inferential Efficiency:</strong> The ability to incorporate additional information into the
+                    knowledge structure that can be used to focus the attention of the inference mechanisms in the most
+                    promising direction.</li>
+                <li><strong>Acquisitional Efficiency:</strong> The ability to acquire new knowledge using automatic
+                    methods wherever possible rather than reliance on human intervention.</li>
+            </ol>
+        </section>
+
+        <section id="types-of-knowledge">
+            <h2>Types of Knowledge</h2>
+            <p>Knowledge is categorized into two major types:</p>
+            <ol>
+                <li><strong>Tacit Knowledge (Informal/Implicit):</strong>
+                    <ul>
+                        <li>Exists within a human being; it is embodied.</li>
+                        <li>Difficult to articulate formally.</li>
+                        <li>Difficult to communicate or share.</li>
+                        <li>Hard to steal or copy.</li>
+                        <li>Drawn from experience, action, subjective insight.</li>
+                    </ul>
+                </li>
+                <li><strong>Explicit Knowledge (Formal):</strong>
+                    <ul>
+                        <li>Exists outside a human being; it is embedded.</li>
+                        <li>Can be articulated formally.</li>
+                        <li>Can be shared, copied, processed and stored.</li>
+                        <li>Easy to steal or copy.</li>
+                        <li>Drawn from the artifact of some type as a principle, procedure, process, concepts.</li>
+                    </ul>
+                </li>
+            </ol>
+        </section>
+
+        <section id="kr-schemes">
+            <h2>Knowledge Representation Schemes</h2>
+            <details>
+                <summary>1. Relational Knowledge</summary>
+                <p>The simplest way to represent declarative facts is a set of relations of the same sort used in the
+                    database system. It provides a framework to compare two objects based on equivalent attributes. The
+                    table below shows a simple way to store facts.</p>
+                <table class="kr-table">
+                    <thead>
+                        <tr>
+                            <th>Player</th>
+                            <th>Height</th>
+                            <th>Weight</th>
+                            <th>Bats - Throws</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Aaron</td>
+                            <td>6-0</td>
+                            <td>180</td>
+                            <td>Right - Right</td>
+                        </tr>
+                        <tr>
+                            <td>Mays</td>
+                            <td>5-10</td>
+                            <td>170</td>
+                            <td>Right - Right</td>
+                        </tr>
+                        <tr>
+                            <td>Ruth</td>
+                            <td>6-2</td>
+                            <td>215</td>
+                            <td>Left - Left</td>
+                        </tr>
+                        <tr>
+                            <td>Williams</td>
+                            <td>6-3</td>
+                            <td>205</td>
+                            <td>Left - Right</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>This representation provides little opportunity for inference (e.g., "Who is the heaviest player?"
+                    requires a procedure).</p>
+            </details>
+            <details>
+                <summary>2. Inheritable Knowledge</summary>
+                <p>Knowledge elements inherit attributes from their parents. This is common in design hierarchies
+                    (functional, physical domains). The basic KR needs to augment with inference mechanisms. Property
+                    inheritance: objects or elements of specific classes inherit attributes and values from more general
+                    classes.</p>
+                <div class="diagram">
+                    <h4>Inheritance Hierarchy Example</h4>
+                    <div class="diagram-placeholder">Image: Adult Male → Musician (isa) → (Jazz / Avant Garde Jazz) →
+                        Miles Davis / John Zorn (instance).</div>
+                    <p>Boxed nodes are objects/values. Arrows point from object to its value. This is a slot and filler
+                        structure, semantic network, or collection of frames.</p>
+                </div>
+            </details>
+            <details>
+                <summary>3. Inferential Knowledge</summary>
+                <p>This knowledge generates new information from the given information, without further data gathering.
+                    Example: Predicate logic can be used to infer other values or relations. Representing knowledge as
+                    formal logic: "All dogs have tails" → <code class="highlight">∀x: dog(x) → has_tail(x)</code>.</p>
+                <p>Advantages: A set of strict rules, can derive more facts, truths of new statements can be verified,
+                    guaranteed correctness.</p>
+            </details>
+            <details>
+                <summary>4. Procedural Knowledge</summary>
+                <p>A representation in which the control information, to use the knowledge, is embedded in the knowledge
+                    itself. Example: computer programs, directions, and recipes. Knowledge is encoded in procedures that
+                    know how to do specific things.</p>
+                <p><strong>Advantages:</strong> Can represent heuristic or domain-specific knowledge, extended logical
+                    inferences like default reasoning. Side effects of actions may model.</p>
+                <p><strong>Disadvantages:</strong> Completeness (not all cases may represent), consistency (not all
+                    deductions may be correct), modularity sacrificed, changes in knowledge base might have far-reaching
+                    effects, cumbersome control information.</p>
+            </details>
+        </section>
+
+        <section id="logic-kr">
+            <h2>Using Logic for Knowledge Representation</h2>
+            <h3>Propositional Logic</h3>
+            <p>Propositional logic is useful because it is simple to deal with and a decision procedure for it exists.
+                Facts are represented as simple propositions. Example: "Marcus is a man." (<code>Man_Marcus</code>).
+                However, it fails to capture the relationship between an individual being a man and that individual
+                being a mortal, and it quickly becomes impractical for complex worlds.</p>
+
+            <h3>First-Order Logic (FOL) / Predicate Logic</h3>
+            <p>First-order predicate logic (FOPL) models the world in terms of:</p>
+            <ul>
+                <li><strong class="highlight">Objects:</strong> Things with individual identities (e.g., people, houses,
+                    numbers).</li>
+                <li><strong class="highlight">Properties:</strong> Characteristics of objects that distinguish them from
+                    other objects (e.g., red, round, prime).</li>
+                <li><strong class="highlight">Relations:</strong> Relationships that hold among sets of objects (e.g.,
+                    brother-of, bigger-than, part-of).</li>
+                <li><strong class="highlight">Functions:</strong> A subset of relations where there is only one "value"
+                    for any given "input" (e.g., father-of, best-friend).</li>
+            </ul>
+            <h4>Key components of FOL:</h4>
+            <ul>
+                <li><strong>Constants:</strong> Specific objects (e.g., Marcus, Rome, 2).</li>
+                <li><strong>Variables:</strong> Refer to an object without naming it (e.g., x, y).</li>
+                <li><strong>Predicates (Relations):</strong> Refer to properties or relations (e.g.,
+                    <code>man(Marcus)</code>, <code>loyalto(Marcus, Caesar)</code>).</li>
+                <li><strong>Functions:</strong> Refer to objects (e.g., <code>father_of(John)</code>).</li>
+                <li><strong>Connectives:</strong> ∧ (and), ∨ (or), ¬ (not), → (implies), ↔ (equivalent).</li>
+                <li><strong>Quantifiers:</strong>
+                    <ul>
+                        <li><strong>Universal Quantifier (∀):</strong> "For all..." Example: <code
+                                class="highlight">∀x P(x)</code> means P holds for all x.  
+                            <code>∀x dolphin(x) → mammal(x)</code>.</li>
+                        <li><strong>Existential Quantifier (∃):</strong> "There exists..." Example: <code
+                                class="highlight">∃x P(x)</code> means P holds for some x.  
+                            <code>∃x mammal(x) ∧ lays_eggs(x)</code> (platypus).</li>
+                    </ul>
+                </li>
+                <li><strong>Well-Formed Formulas (wffs):</strong> Sentences containing no "free" variables (all
+                    variables are bound by quantifiers).</li>
+            </ul>
+            <details>
+                <summary>Example: Representing Sentences in FOL</summary>
+                <ol>
+                    <li>Marcus was a man. → <code>man(Marcus)</code></li>
+                    <li>Marcus was a Pompeian. → <code>Pompeian(Marcus)</code></li>
+                    <li>All Pompeians were Romans. → <code>∀x: Pompeian(x) → Roman(x)</code></li>
+                    <li>Caesar was a ruler. → <code>ruler(Caesar)</code></li>
+                    <li>All Pompeians were either loyal to Caesar or hated him. (inclusive-or) →
+                        <code>∀x: Pompeian(x) → loyalto(x, Caesar) ∨ hate(x, Caesar)</code></li>
+                    <li>Everyone is loyal to someone. → <code>∀x ∃y: loyalto(x, y)</code></li>
+                    <li>People only try to assassinate rulers they are not loyal to. →
+                        <code>∀x ∀y: person(x) ∧ ruler(y) ∧ try_assassinate(x, y) → ¬loyalto(x, y)</code></li>
+                    <li>Marcus tried to assassinate Caesar. → <code>try_assassinate(Marcus, Caesar)</code></li>
+                </ol>
+                <div class="diagram">
+                    <h4>Attempt to prove ¬loyalto(Marcus, Caesar)</h4>
+                    <div class="diagram-placeholder">Image: Backward chaining proof steps for Marcus not loyal to
+                        Caesar.</div>
+                </div>
+            </details>
+        </section>
+
+        <section id="inference-techniques">
+            <h2>Inference Techniques</h2>
+            <p>Inference is the process of deriving new knowledge (conclusions) from existing knowledge (premises).</p>
+            <details>
+                <summary>1. Resolution</summary>
+                <p>Resolution is a powerful inference rule used in automated theorem proving. It operates on statements
+                    in <strong class="highlight">Conjunctive Normal Form (CNF)</strong>, i.e., a conjunction of clauses,
+                    where each clause is a disjunction of literals.</p>
+                <h4>Propositional Resolution:</h4>
+                <ol>
+                    <li>Convert all propositions to clause form.</li>
+                    <li>Negate the proposition to be proved (P) and convert the result to clause form. Add it to the set
+                        of clauses.</li>
+                    <li>Repeat until a contradiction (empty clause) is found or no progress can be made:
+                        <ol type="a">
+                            <li>Select two clauses (parent clauses).</li>
+                            <li>Resolve them together: The resolvent is the disjunction of all literals of both parents,
+                                except if there is a pair of complementary literals (L and ¬L), one from each parent,
+                                these are eliminated.</li>
+                            <li>If the resolvent is the empty clause, a contradiction is found, and P is proved.</li>
+                        </ol>
+                    </li>
+                </ol>
+                <p><strong>Unification:</strong> In predicate logic, resolution requires unification to make literals
+                    match by finding suitable substitutions for variables.</p>
+                <div class="callout info">
+                    <strong>Example:</strong> Given (Winter ∨ Summer) and (¬Winter ∨ Cold). Resolving these yields
+                    (Summer ∨ Cold).
+                </div>
+            </details>
+            <details>
+                <summary>2. Natural Deduction</summary>
+                <p>Natural deduction systems consist of a set of rules of inference for deriving consequences from
+                    premises in a step-by-step fashion, mimicking human logical reasoning. Proofs are constructed as
+                    trees.</p>
+                <h4>Common Rules:</h4>
+                <ul>
+                    <li><strong>Modus Ponens:</strong> From P and P → Q, infer Q.</li>
+                    <li><strong>Conjunction Introduction (∧-intro):</strong> From P and Q, infer P ∧ Q.</li>
+                    <li><strong>Conjunction Elimination (∧-elim):</strong> From P ∧ Q, infer P (or Q).</li>
+                    <li><strong>Implication Introduction (→-intro):</strong> Assume P, derive Q, then infer P → Q.</li>
+                    <li>And rules for disjunction, negation, falsity (e.g., Reductio ad Absurdum).</li>
+                </ul>
+                <p><strong class="highlight">Soundness:</strong> If a system is sound, every theorem is a tautology
+                    (logically true). <strong class="highlight">Completeness:</strong> If a system is complete, every
+                    tautology is a theorem.</p>
+            </details>
+            <details>
+                <summary>3. Forward Chaining (Data-Driven)</summary>
+                <p>Starts with available data (facts in the knowledge base) and uses inference rules to extract more
+                    data (derive new facts) until a goal is reached or no more rules can be fired. This strategy is
+                    often used in expert systems and production rule systems.</p>
+                <div class="diagram">
+                    <h4>Forward Chaining Example</h4>
+                    <div class="diagram-placeholder">Image: Diagram showing facts leading to decisions (Fact 1 AND Fact
+                        2 → Decision 1).</div>
+                </div>
+            </details>
+            <details>
+                <summary>4. Backward Chaining (Goal-Driven)</summary>
+                <p>Starts with a list of goals and works backward to see if there is data and rules which support any of
+                    these goals. If a rule's conclusion matches a goal, then its premises become new sub-goals. This
+                    strategy is also common in expert systems, especially for diagnostic tasks.</p>
+                <div class="diagram">
+                    <h4>Backward Chaining Example</h4>
+                    <div class="diagram-placeholder">Image: Diagram showing decisions leading back to required facts
+                        (Decision 1 ← Fact 1 AND Fact 2).</div>
+                </div>
+            </details>
+        </section>
+
+        <section id="other-kr-structures">
+            <h2>Other KR Structures</h2>
+            <details>
+                <summary>1. Semantic Networks</summary>
+                <p>A graphical KR scheme where knowledge is represented as a network of nodes (concepts, objects) and
+                    labeled arcs (relationships between nodes). Supports inheritance through ISA links. Similar to the
+                    "Inheritable Knowledge" diagram shown earlier.</p>
+            </details>
+            <details>
+                <summary>2. Frames</summary>
+                <p>Frames are data structures for representing stereotyped situations or concepts. A frame has a name
+                    and a set of <strong class="highlight">slots</strong>, which can hold values (fillers). Slots can
+                    also have associated procedures (e.g., if-needed, if-added). Frames support inheritance through ISA
+                    or AKO (A Kind Of) links.</p>
+                <div class="diagram">
+                    <h4>Frame Example (Bird)</h4>
+                    <div class="diagram-placeholder">Image: Class Frame (Bird) and Instance Frame (Tweety) with slots
+                        like Color, Wings, Flies.</div>
+                </div>
+            </details>
+            <details>
+                <summary>3. Scripts</summary>
+                <p>Scripts are frame-like structures that describe stereotyped sequences of events. They include entry
+                    conditions, results, props, roles, and scenes. Useful for understanding stories or common
+                    situations.</p>
+                <div class="diagram">
+                    <h4>Script Example (Play in Theater)</h4>
+                    <div class="diagram-placeholder">Table: Script example with Track, Props, Roles, Entry Conditions,
+                        Results, and Scenes.</div>
+                </div>
+            </details>
+            <details>
+                <summary>4. Ontologies</summary>
+                <p>An ontology is a formal, explicit specification of a shared conceptualization. It defines a common
+                    vocabulary for a domain, including types of objects/concepts, their properties, and relationships.
+                    Ontologies are crucial for knowledge sharing and reuse, especially in the Semantic Web. They often
+                    use languages like RDF, RDFS, and OWL.</p>
+            </details>
+        </section>
+
+        <section id="reasoning-uncertainty">
+            <h2>Reasoning Under Uncertainty</h2>
+            <p>Real-world knowledge is often incomplete, imprecise, or uncertain. AI systems need mechanisms to reason
+                under these conditions.</p>
+            <h3>Monotonic vs. Non-monotonic Reasoning</h3>
+            <ul>
+                <li><strong>Monotonic Reasoning:</strong> Adding new knowledge (axioms) never invalidates existing
+                    conclusions. Classical logic is monotonic.</li>
+                <li><strong>Non-monotonic Reasoning:</strong> Adding new knowledge can invalidate previous conclusions.
+                    This is common in commonsense reasoning (e.g., "Birds fly." "Tweety is a bird." → "Tweety flies."
+                    Add: "Tweety is a penguin." → "Tweety does not fly."). Techniques include default logic and belief
+                    revision.</li>
+            </ul>
+            <details>
+                <summary>1. Bayesian Networks (Belief Networks)</summary>
+                <p>Bayesian Networks are directed acyclic graphs (DAGs) where nodes represent random variables and edges
+                    represent probabilistic dependencies. Each node has an associated conditional probability table
+                    (CPT) that quantifies the effect of its parents. They allow for efficient probabilistic inference
+                    (e.g., calculating the probability of an event given some evidence).</p>
+            </details>
+            <details>
+                <summary>2. Fuzzy Logic</summary>
+                <p>Fuzzy logic is a form of many-valued logic that deals with reasoning that is approximate rather than
+                    fixed and exact. It uses <strong class="highlight">membership functions</strong> to define the
+                    degree to which an element belongs to a fuzzy set (e.g., "temperature is warm" might have a
+                    membership value between 0 and 1). Fuzzy inference systems use fuzzy rules (IF-THEN rules with fuzzy
+                    propositions) to make decisions.</p>
+            </details>
+        </section>
+
+        <section id="kbs-expert-systems">
+            <h2>Knowledge-Based Systems (KBS) & Expert Systems</h2>
+            <p>An expert system is a computer program that simulates the judgement and behavior of a human or an
+                organization that has expert knowledge and experience in a particular field. <code
+                    class="highlight">Expert system = Knowledge + Problem-solving methods.</code></p>
+            <div class="diagram">
+                <h4>Types of Knowledge-Based Systems</h4>
+                <div class="diagram-placeholder">Image: Hexagonal diagram showing Intelligent tutoring systems, Expert
+                    systems, Hypertext manipulation, Case-based systems, Rule-based systems.</div>
+            </div>
+            <h4>Components of an Expert System:</h4>
+            <ul>
+                <li><strong>Knowledge Base:</strong> Contains domain-specific and high-quality knowledge (facts and
+                    rules).</li>
+                <li><strong>Inference Engine:</strong> Applies logical rules to the knowledge base to derive new
+                    information or make decisions (uses forward/backward chaining).</li>
+                <li><strong>User Interface:</strong> Allows a non-expert user to query the system and receive
+                    explanations.</li>
+            </ul>
+            <div class="diagram">
+                <h4>Expert System Architecture</h4>
+                <div class="diagram-placeholder">Image: Human Expert → Knowledge Engineer → Knowledge Base ↔ Inference
+                    Engine ↔ User Interface ↔ User.</div>
+            </div>
+            <h4>Capabilities:</h4> Advising, diagnosing, explaining, predicting, justifying conclusions.
+            <h4>Limitations:</h4> Difficult knowledge acquisition, costly development, can be brittle (struggle with
+            novel situations not covered by rules).
+        </section>
+
+        <section id="interactive-quiz-kr">
+            <h2>Mini Quiz: KR & Reasoning</h2>
+            <div class="quiz-container">
+                <div id="quiz">
+                    <div class="quiz-question" data-question="1">
+                        <p><strong>1. Which logic allows quantification over variables (e.g., "for all x")?</strong></p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q1" value="a"> Propositional Logic</label>
+                            <label><input type="radio" name="q1" value="b"> First-Order Logic (Predicate Logic)</label>
+                            <label><input type="radio" name="q1" value="c"> Fuzzy Logic</label>
+                        </div>
+                        <p class="quiz-feedback" id="feedback-q1"></p>
+                    </div>
+                    <div class="quiz-question" data-question="2">
+                        <p><strong>2. Reasoning from known facts to derive new facts until a goal is reached is
+                                called:</strong></p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q2" value="a"> Backward Chaining</label>
+                            <label><input type="radio" name="q2" value="b"> Resolution</label>
+                            <label><input type="radio" name="q2" value="c"> Forward Chaining</label>
+                        </div>
+                        <p class="quiz-feedback" id="feedback-q2"></p>
+                    </div>
+                    <div class="quiz-question" data-question="3">
+                        <p><strong>3. Which KR structure represents stereotyped sequences of events with roles, props,
+                                and scenes?</strong></p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q3" value="a"> Semantic Network</label>
+                            <label><input type="radio" name="q3" value="b"> Frame</label>
+                            <label><input type="radio" name="q3" value="c"> Script</label>
+                        </div>
+                        <p class="quiz-feedback" id="feedback-q3"></p>
+                    </div>
+                    <button id="submitQuiz">Submit Answers</button>
+                    <p id="quizScore" style="margin-top:15px; font-weight:bold;"></p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="new-footer-container">
+            <div class="new-footer-buttons-wrapper">
+                <a href="topic-4.html" class="new-footer-button">
+                    ← Previous Topic: Game Playing & Adversarial Search
+                </a>
+                <a href="topic-6.html" <!-- Update this link when topic-6 is ready -->
+                    class="new-footer-button">
+                    Next Topic: Machine Learning Fundamentals →
+                </a>
+            </div>
+            <a href="#" onclick="window.print(); return false;" class="new-footer-print-link">Print this page</a>
+            <p style="font-size: 0.9rem; color: var(--text-color); margin-top: 0.5rem;">© <span id="currentYear"></span>
+                Knowledge Representation & Reasoning. All rights reserved.</p>
+        </footer>
+
+    </main>
+
+    <script>
+        // JavaScript from topic-1.html (Theme toggle, Throttled TOC highlighting, Footer year)
+        // For brevity, imagine all the JS from the previous optimized example is here
+        // Key parts will be included and updated if necessary.
+
+        // Dark/Light Mode Toggle (Same as topic-1)
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+        function setTheme(theme) { if (theme === 'dark') { body.classList.add('dark-mode'); themeToggle.innerHTML = '<i class="fas fa-sun"></i>'; localStorage.setItem('theme', 'dark'); } else { body.classList.remove('dark-mode'); themeToggle.innerHTML = '<i class="fas fa-moon"></i>'; localStorage.setItem('theme', 'light'); } }
+        const localTheme = localStorage.getItem('theme'); if (localTheme) { setTheme(localTheme); } else { setTheme(prefersDarkScheme.matches ? 'dark' : 'light'); }
+        themeToggle.addEventListener('click', () => { setTheme(body.classList.contains('dark-mode') ? 'light' : 'dark'); });
+        prefersDarkScheme.addEventListener('change', (e) => { if (!localStorage.getItem('theme')) { setTheme(e.matches ? 'dark' : 'light'); } });
+
+        // Table of Contents Generation & Active Scrolling (Optimized & Throttled - Same as topic-1)
+        const tocContainer = document.getElementById('toc');
+        const mainSections = Array.from(document.querySelectorAll('main section[id]'));
+        let tocLinkElements = [];
+        function throttle(func, limit) { let inThrottle; return function () { const args = arguments; const context = this; if (!inThrottle) { func.apply(context, args); inThrottle = true; setTimeout(() => inThrottle = false, limit); } } }
+        function updateTocAndSectionData() { const navbar = document.querySelector('.navbar'); const navbarHeight = navbar ? navbar.offsetHeight : 0; tocContainer.innerHTML = ''; tocLinkElements = []; mainSections.forEach(section => { const sectionTitleElement = section.querySelector('h2'); if (sectionTitleElement) { const listItem = document.createElement('li'); const link = document.createElement('a'); link.textContent = sectionTitleElement.textContent; link.href = `#${section.id}`; link.dataset.sectionId = section.id; listItem.appendChild(link); tocContainer.appendChild(listItem); tocLinkElements.push(link); } section.dataset.effectiveOffsetTop = section.offsetTop - navbarHeight - 30; }); }
+        function highlightActiveTocLink() { const scrollPosition = window.scrollY; let currentlyActiveSectionId = null; for (let i = mainSections.length - 1; i >= 0; i--) { const section = mainSections[i]; if (scrollPosition >= parseInt(section.dataset.effectiveOffsetTop || '0')) { currentlyActiveSectionId = section.id; break; } } tocLinkElements.forEach(link => { if (link.dataset.sectionId === currentlyActiveSectionId) { link.classList.add('active'); } else { link.classList.remove('active'); } }); }
+        if (mainSections.length > 0) { updateTocAndSectionData(); highlightActiveTocLink(); window.addEventListener('scroll', throttle(highlightActiveTocLink, 100)); window.addEventListener('resize', throttle(() => { updateTocAndSectionData(); highlightActiveTocLink(); }, 150)); }
+
+        // Mini Quiz Logic for Topic 5
+        const submitQuizButtonTopic5 = document.getElementById('submitQuiz');
+        const quizQuestionElementsTopic5 = document.querySelectorAll('#interactive-quiz-kr .quiz-question');
+        const quizCorrectAnswersTopic5 = {
+            q1: { value: 'b', text: 'First-Order Logic (Predicate Logic)' },
+            q2: { value: 'c', text: 'Forward Chaining' },
+            q3: { value: 'c', text: 'Script' }
+        };
+
+        if (submitQuizButtonTopic5) {
+            submitQuizButtonTopic5.addEventListener('click', () => {
+                let score = 0;
+                quizQuestionElementsTopic5.forEach(questionElement => {
+                    const questionId = 'q' + questionElement.dataset.question;
+                    const selectedOption = document.querySelector(`#interactive-quiz-kr input[name="${questionId}"]:checked`);
+                    const feedbackElement = document.getElementById(`feedback-${questionId}`);
+                    const correctAnswerInfo = quizCorrectAnswersTopic5[questionId];
+
+                    if (selectedOption) {
+                        if (selectedOption.value === correctAnswerInfo.value) {
+                            score++;
+                            feedbackElement.textContent = "Correct!";
+                            feedbackElement.style.color = "var(--secondary-color)";
+                        } else {
+                            feedbackElement.textContent = `Incorrect. The correct answer is: ${correctAnswerInfo.text}.`;
+                            feedbackElement.style.color = "var(--accent-color)";
+                        }
+                    } else {
+                        feedbackElement.textContent = "Please select an answer.";
+                        feedbackElement.style.color = "var(--accent-color)";
+                    }
+                });
+                const quizScoreEl = document.getElementById('quizScore');
+                if (quizScoreEl) {
+                    quizScoreEl.textContent = `You scored ${score} out of ${quizQuestionElementsTopic5.length}.`;
+                }
+            });
+        }
+
+        // Footer current year (Same as topic-1)
+        const currentYearSpan = document.getElementById('currentYear');
+        if (currentYearSpan) {
+            currentYearSpan.textContent = new Date().getFullYear();
+        }
+    </script>
+</body>
+
+</html>

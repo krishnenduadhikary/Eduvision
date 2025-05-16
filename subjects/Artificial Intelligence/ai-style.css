@@ -1,70 +1,84 @@
-.body {
+body { /* Changed from .body to body */
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
-    background: #f4f8fb;
-    color: #333;
+    background: #f4f8fb; /* Light grey background for the page */
+    color: #333; /* Default text color */
   }
   
   .header {
-    background: #2c3e50;
+    background: #2c3e50; /* Dark blue-grey header background */
     color: white;
     padding: 40px 20px;
     text-align: center;
+    border-bottom: 5px solid #7808d0; /* Accent border, matching button color */
+  }
+
+  .header h1 {
+    margin: 0 0 10px 0;
+    font-size: 36px;
+  }
+
+  .header p {
+    margin: 0;
+    font-size: 18px;
+    color: #bdc3c7; /* Lighter text for subtitle */
   }
   
   .overview {
     padding: 30px;
+    max-width: 1200px; /* Max width for content area */
+    margin: 0 auto; /* Center content */
   }
   
   .overview h2 {
     font-size: 24px;
-    margin-bottom: 20px;
+    color: #2c3e50; /* Dark text for section title */
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0; /* Subtle underline for section title */
   }
   
   .topics-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Adjusted minmax for better spacing */
+    gap: 25px; /* Increased gap */
   }
   
   .topic-card {
     background: white;
     border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    transition: transform 0.2s ease;
+    padding: 25px; /* Increased padding */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08); /* Slightly enhanced shadow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column; /* Ensure button stays at bottom */
   }
   
   .topic-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12); /* Enhanced hover shadow */
   }
   
   .topic-title {
-    font-size: 18px;
+    font-size: 20px; /* Slightly larger title */
     font-weight: bold;
     color: #2c3e50;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
   
   .topic-desc {
-    font-size: 14px;
-    margin-bottom: 10px;
+    font-size: 15px; /* Slightly larger description */
+    color: #555; /* Slightly darker grey for readability */
+    line-height: 1.6;
+    margin-bottom: 15px;
+    flex-grow: 1; /* Allows description to take available space, pushing button down */
   }
   
-  .resource-buttons button {
-    margin: 5px 5px 0 0;
-    padding: 6px 12px;
-    background-color: #2c3e50;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
+  .resource-buttons {
+    margin-top: auto; /* Pushes button to the bottom of the card */
   }
-  
-  .resource-buttons button:hover {
-    background-color: #1f2e3c;
-  }
-  /* From Uiverse.io by Creatlydev */
+
+  /* Button styles from Uiverse.io by Creatlydev, adapted slightly */
 .button {
   line-height: 1;
   text-decoration: none;
@@ -73,16 +87,16 @@
   cursor: pointer;
   align-items: center;
   gap: 0.75rem;
-  background-color: var(--clr);
+  background-color: var(--clr, #7808d0); /* Default color if --clr is not set */
   color: #fff;
   border-radius: 10rem;
   font-weight: 600;
-  padding: 0.75rem 1.5rem;
-  padding-left: 20px;
+  padding: 0.75rem 1.5rem; /* y-padding x-padding */
+  font-size: 14px; /* Button text size */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
 }
 
 .button__icon-wrapper {
@@ -90,7 +104,7 @@
   width: 25px;
   height: 25px;
   position: relative;
-  color: var(--clr);
+  color: var(--clr, #7808d0); 
   background-color: #fff;
   border-radius: 50%;
   display: grid;
@@ -99,11 +113,15 @@
 }
 
 .button:hover {
-  background-color: #000;
+  background-color: #5c06a0; /* Darker shade of purple on hover */
 }
 
 .button:hover .button__icon-wrapper {
-  color: #000;
+  color: #5c06a0; /* Match icon color with button hover */
+}
+
+.button__icon-svg {
+  transition: transform 0.3s ease-in-out;
 }
 
 .button__icon-svg--copy {
@@ -112,11 +130,38 @@
 }
 
 .button:hover .button__icon-svg:first-child {
-  transition: transform 0.3s ease-in-out;
   transform: translate(150%, -150%);
 }
 
 .button:hover .button__icon-svg--copy {
-  transition: transform 0.3s ease-in-out 0.1s;
+  transition-delay: 0.1s; /* Slight delay for the copy icon animation */
   transform: translate(0);
+}
+
+.eduvishion-logo .text-2xl {
+  font-size: 1.7rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  letter-spacing: 0.01em;
+}
+.eduvishion-logo .text-white {
+  color: #fff !important;
+}
+.eduvishion-logo .text-yellow-300 {
+  color: #fde047 !important;
+}
+.eduvishion-logo .group:hover .text-yellow-300 {
+  color: #fef08a !important;
+}
+.eduvishion-logo a {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.eduvishion-logo svg {
+  display: inline-block;
+  vertical-align: middle;
 }

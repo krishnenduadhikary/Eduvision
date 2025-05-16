@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligent Agents in AI</title>
+    <meta name="description"
+        content="Explore the concept of intelligent agents, environments, PEAS, rationality, autonomy, and types of agent architectures in Artificial Intelligence.">
+    <meta name="keywords"
+        content="Intelligent Agents, AI Agents, PEAS, Rational Agents, Agent Architectures, Simple Reflex Agent, Model-Based Agent, Goal-Based Agent, Utility-Based Agent, Learning Agent, AI Environment">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* CSS from topic-1.html - For brevity, imagine all the CSS from the previous example is here */
+        /* Key structural CSS will be included, specific element styles might be summarized */
+        :root {
+            --primary-color-light: #3498db;
+            /* Blue */
+            --secondary-color-light: #2ecc71;
+            /* Green */
+            --accent-color-light: #e67e22;
+            /* Orange */
+            --background-color-light: #f4f7f6;
+            --text-color-light: #333;
+            --card-bg-light: #ffffff;
+            --border-color-light: #e0e0e0;
+            --code-bg-light: #eef;
+
+            --primary-color-dark: #5dade2;
+            /* Lighter Blue */
+            --secondary-color-dark: #58d68d;
+            /* Lighter Green */
+            --accent-color-dark: #f5b041;
+            /* Lighter Orange */
+            --background-color-dark: #1e272e;
+            --text-color-dark: #f0f0f0;
+            --card-bg-dark: #2c3a47;
+            --border-color-dark: #444;
+            --code-bg-dark: #2a2a40;
+
+            --primary-color: var(--primary-color-light);
+            --secondary-color: var(--secondary-color-light);
+            --accent-color: var(--accent-color-light);
+            --background-color: var(--background-color-light);
+            --text-color: var(--text-color-light);
+            --card-bg: var(--card-bg-light);
+            --border-color: var(--border-color-light);
+            --code-bg: var(--code-bg-light);
+
+            --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --font-mono: 'Courier New', Courier, monospace;
+            --font-logo: 'Nunito', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            --primary-color: var(--primary-color-dark);
+            --secondary-color: var(--secondary-color-dark);
+            --accent-color: var(--accent-color-dark);
+            --background-color: var(--background-color-dark);
+            --text-color: var(--text-color-dark);
+            --card-bg: var(--card-bg-dark);
+            --border-color: var(--border-color-dark);
+            --code-bg: var(--code-bg-dark);
+        }
+
+        /* Eduvision Logo (Same as topic-1) */
+        .eduvishion-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1050;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvishion-logo .text-2xl {
+            font-family: var(--font-logo);
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvishion-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvishion-logo .text-yellow-300 {
+            color: #fde047 !important;
+        }
+
+        .eduvishion-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+        }
+
+        .eduvishion-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvishion-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Navbar (Same as topic-1) */
+        .navbar {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-left-spacer {
+            flex-basis: 50px;
+            flex-shrink: 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .navbar-brand i {
+            margin-right: 0.5rem;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            flex-basis: 50px;
+            flex-shrink: 0;
+            text-align: right;
+        }
+
+        /* Sidebar (Same as topic-1) */
+        .sidebar {
+            position: fixed;
+            top: 77px;
+            left: 0;
+            width: 280px;
+            height: calc(100vh - 77px);
+            background-color: var(--card-bg);
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 1px solid var(--border-color);
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li a {
+            display: block;
+            padding: 8px 0;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s, padding-left 0.2s, background-color 0.2s;
+            border-radius: 4px;
+        }
+
+        .sidebar ul li a:hover {
+            color: var(--accent-color);
+            padding-left: 10px;
+        }
+
+        .sidebar ul li a.active {
+            color: var(--accent-color);
+            padding-left: 10px;
+            font-weight: bold;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-mode .sidebar ul li a.active {
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Main Content Area (Same as topic-1) */
+        .main-content {
+            margin-left: 300px;
+            padding: 2rem 3rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 4rem 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-section p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+
+        /* Syllabus Bar (Same as topic-1, with updated topic number) */
+        .syllabus-bar-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 0.75rem;
+            background-color: var(--card-bg);
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.07);
+            border: 1px solid var(--border-color);
+        }
+
+        .syllabus-bar-back-link {
+            display: flex;
+            align-items: center;
+            font-size: 0.875rem;
+            color: #2563eb;
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            text-decoration: none;
+            transition: background-color 0.15s, color 0.15s;
+            margin-bottom: 0.5rem;
+        }
+
+        .dark-mode .syllabus-bar-back-link {
+            color: #5dade2;
+        }
+
+        .dark-mode .syllabus-bar-back-link:hover {
+            color: #8ecae6;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .syllabus-bar-back-link:hover {
+            color: #1d4ed8;
+            background-color: #eff6ff;
+        }
+
+        .syllabus-bar-back-link svg {
+            height: 1.25rem;
+            width: 1.25rem;
+            margin-right: 0.375rem;
+            fill: currentColor;
+        }
+
+        .syllabus-bar-topic-badge {
+            background-color: #2563eb;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.375rem 1rem;
+            border-radius: 9999px;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        @media (min-width: 640px) {
+            .syllabus-bar-container {
+                flex-direction: row;
+            }
+
+            .syllabus-bar-back-link {
+                margin-bottom: 0;
+            }
+
+            .syllabus-bar-topic-badge {
+                font-size: 0.875rem;
+            }
+        }
+
+        /* General Content Styles (Same as topic-1) */
+        section {
+            margin-bottom: 3rem;
+            padding-top: 70px;
+            margin-top: -70px;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-size: 1.7rem;
+            color: var(--secondary-color);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        h4 {
+            font-size: 1.3rem;
+            color: var(--accent-color);
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        p,
+        li {
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        ul,
+        ol {
+            padding-left: 25px;
+        }
+
+        .callout {
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 5px solid var(--accent-color);
+            background-color: var(--card-bg);
+            border-radius: 0 5px 5px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .callout.info {
+            border-left-color: var(--primary-color);
+        }
+
+        .callout.success {
+            border-left-color: var(--secondary-color);
+        }
+
+        .callout.warning {
+            border-left-color: #f39c12;
+        }
+
+        details {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+        }
+
+        summary {
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--primary-color);
+            padding: 0.5rem 0;
+        }
+
+        summary::marker {
+            color: var(--accent-color);
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            color: var(--text-color);
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.95em;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Agent Diagram Styles */
+        .agent-diagram {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 1.5rem auto;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+        }
+
+        .agent-diagram img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        .agent-diagram-placeholder {
+            border: 2px dashed var(--border-color);
+            padding: 20px;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        .agent-component {
+            background-color: var(--background-color);
+            border: 1px solid var(--secondary-color);
+            padding: 8px 12px;
+            margin: 5px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .arrow {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin: 0 10px;
+        }
+
+
+        /* New Footer Styles (Same as topic-1, with link updates) */
+        .new-footer-container {
+            margin-top: 4rem;
+            padding-top: 2.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .new-footer-buttons-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            align-items: center;
+        }
+
+        .new-footer-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            background-color: #2563eb;
+            color: white !important;
+            border-radius: 9999px;
+            text-decoration: none;
+            transition: background-color 0.15s, box-shadow 0.15s;
+            font-weight: 500;
+            font-size: 0.875rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            min-width: 280px;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .new-footer-button:hover {
+            background-color: #1d4ed8;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .new-footer-button:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+
+        .new-footer-print-link {
+            margin-top: 1rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .new-footer-print-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (min-width: 640px) {
+            .new-footer-buttons-wrapper {
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 1rem;
+            }
+
+            .new-footer-button {
+                margin-bottom: 0;
+            }
+        }
+
+        /* Quiz Styles (Same as topic-1) */
+        .quiz-container {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-question {
+            margin-bottom: 15px;
+        }
+
+        .quiz-options label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .quiz-options input {
+            margin-right: 8px;
+        }
+
+        .quiz-feedback {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Responsive Adjustments (Same as topic-1) */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                box-shadow: none;
+                top: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+
+            .navbar {
+                padding: 0.8rem 1rem;
+            }
+
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+
+            .nav-left-spacer,
+            .theme-toggle {
+                flex-basis: 40px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .eduvishion-logo {
+                top: 12px;
+                left: 12px;
+            }
+
+            .eduvishion-logo .text-2xl {
+                font-size: 1.3rem;
+            }
+
+            .eduvishion-logo svg {
+                height: 1.2em;
+                width: 1.2em;
+            }
+
+            .navbar {
+                padding: 1rem;
+                justify-content: center;
+                position: relative;
+            }
+
+            .nav-left-spacer {
+                display: none;
+            }
+
+            .navbar-brand {
+                flex-grow: 0;
+                margin-right: auto;
+                margin-left: 50px;
+                font-size: 1.3rem;
+            }
+
+            .theme-toggle {
+                position: absolute;
+                right: 1rem;
+                top: 50%;
+                transform: translateY(-50%);
+                flex-basis: auto;
+                font-size: 1.2rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            h3 {
+                font-size: 1.5rem;
+            }
+
+            .syllabus-bar-container {
+                padding: 0.5rem;
+            }
+
+            .syllabus-bar-back-link {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.6rem;
+            }
+
+            .syllabus-bar-topic-badge {
+                font-size: 0.7rem;
+                padding: 0.3rem 0.8rem;
+            }
+
+            .new-footer-button {
+                font-size: 0.8rem;
+                padding: 0.6rem 1.2rem;
+                min-width: auto;
+                width: 90%;
+            }
+
+            .new-footer-buttons-wrapper {
+                flex-direction: column;
+            }
+
+            .new-footer-buttons-wrapper .new-footer-button:first-child {
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        /* Print Styles (Same as topic-1) */
+        @media print {
+            body {
+                font-size: 10pt;
+                color: #000 !important;
+                background-color: #fff !important;
+            }
+
+            .navbar,
+            .sidebar,
+            .theme-toggle,
+            .hero-section .btn,
+            .quiz-container,
+            .new-footer-container,
+            details summary::marker,
+            .eduvishion-logo,
+            .syllabus-bar-container,
+            .new-footer-print-link {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 0;
+            }
+
+            section {
+                padding-top: 0;
+                margin-top: 0;
+                margin-bottom: 1.5rem;
+                page-break-after: auto;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4 {
+                color: #000 !important;
+                border: none !important;
+                page-break-after: avoid;
+            }
+
+            .callout {
+                border-left: 3px solid #ccc !important;
+                background-color: #f9f9f9 !important;
+            }
+
+            a {
+                text-decoration: none;
+                color: #000 !important;
+            }
+
+            a[href^="http"]:after {
+                content: " (" attr(href) ")";
+            }
+
+            pre {
+                background-color: #f0f0f0 !important;
+                border: 1px solid #ccc !important;
+                color: #000 !important;
+            }
+
+            .agent-diagram,
+            .agent-diagram img {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvishion-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../index.html" class="flex items-center group">
+                <span class="text-white">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+                    fill="none">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-white">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-left-spacer"></div>
+        <a href="#" class="navbar-brand"><i class="fas fa-user-secret"></i> Intelligent Agents</a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+        </button>
+    </nav>
+
+    <aside class="sidebar" id="sidebar">
+        <h3>Table of Contents</h3>
+        <ul id="toc"></ul>
+    </aside>
+
+    <main class="main-content">
+        <header class="hero-section">
+            <h1>Understanding Intelligent Agents</h1>
+            <p>Delve into the world of AI agents, their environments, architectures, and the principles of rationality.
+            </p>
+        </header>
+
+        <div class="syllabus-bar-container">
+            <a href="../ai.html" class="syllabus-bar-back-link"> <!-- Ensure this path is correct -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                        clip-rule="evenodd" />
+                </svg>
+                Back to Syllabus
+            </a>
+            <div class="syllabus-bar-topic-badge">
+                Topic 2
+            </div>
+        </div>
+
+        <section id="what-is-agent">
+            <h2>What is an Agent?</h2>
+            <p>An AI system can be defined as the study of the rational agent and its environment. The agents sense the
+                environment through sensors and act on their environment through actuators. An AI agent can have mental
+                properties such as knowledge, belief, intention, etc.</p>
+            <p>An agent can be anything that perceives its environment through sensors and acts upon that environment
+                through actuators. An agent runs in the cycle of <strong class="highlight">perceiving, thinking, and
+                    acting</strong>.</p>
+
+            <h4>An Agent can be:</h4>
+            <ul>
+                <li><strong>Human-Agent:</strong> A human agent has eyes, ears, and other organs which work for sensors
+                    and hand, legs, vocal tract work for actuators.</li>
+                <li><strong>Robotic Agent:</strong> A robotic agent can have cameras, infrared range finders, NLP for
+                    sensors and various motors for actuators.</li>
+                <li><strong>Software Agent:</strong> Software agent can have keystrokes, file contents as sensory input
+                    and act on those inputs and display output on the screen.</li>
+            </ul>
+            <p>Hence the world around us is full of agents such as thermostats, cell phones, cameras, and even we are
+                also agents.</p>
+
+            <div class="agent-diagram">
+                <h4>Basic Agent-Environment Interaction</h4>
+                <!-- Placeholder for the diagram from image page 23. You can replace this with an <img> tag if you have the image file -->
+                <div class="agent-diagram-placeholder">
+                    Environment ↔ (Percepts via Sensors) Agent (Actions via Effectors/Actuators) ↔ Environment
+                </div>
+                <p style="margin-top:10px;"><strong>Sensors:</strong> Devices that detect changes in the environment and
+                    send information to other electronic devices. An agent observes its environment through sensors.</p>
+                <p><strong>Actuators:</strong> Components of machines that convert energy into motion. They are
+                    responsible for moving and controlling a system. An actuator can be an electric motor, gears, rails,
+                    etc.</p>
+                <p><strong>Effectors:</strong> Devices which affect the environment. Effectors can be legs, wheels,
+                    arms, fingers, wings, fins, and display screens.</p>
+            </div>
+        </section>
+
+        <section id="peas-description">
+            <h2>PEAS Description</h2>
+            <p>PEAS is a type of model on which an AI agent works. When we define an AI agent or rational agent, then we
+                can group its properties under PEAS representation model. It is made up of four words:</p>
+            <ul>
+                <li><strong>P:</strong> Performance measure</li>
+                <li><strong>E:</strong> Environment</li>
+                <li><strong>A:</strong> Actuators</li>
+                <li><strong>S:</strong> Sensors</li>
+            </ul>
+            <p>Here performance measure is the objective for the success of an agent's behavior.</p>
+            <div class="callout info">
+                <h4>PEAS for Self-Driving Cars:</h4>
+                <p>Let's suppose a self-driving car then PEAS representation will be:</p>
+                <ul>
+                    <li><strong>Performance:</strong> Safety, time, legal drive, comfort.</li>
+                    <li><strong>Environment:</strong> Roads, other vehicles, road signs, pedestrians.</li>
+                    <li><strong>Actuators:</strong> Steering, accelerator, brake, signal, horn.</li>
+                    <li><strong>Sensors:</strong> Camera, GPS, speedometer, odometer, accelerometer, sonar.</li>
+                </ul>
+                <!-- Placeholder for the self-driving car PEAS diagram image -->
+                <div class="agent-diagram" style="max-width: 400px;">
+                    <div class="agent-diagram-placeholder">Image: Self-driving car with sensor waves</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="rationality-autonomy">
+            <h2>Rationality and Autonomy</h2>
+            <h3>Intelligent Agents</h3>
+            <p>An intelligent agent is an autonomous entity which acts upon an environment using sensors and actuators
+                for achieving goals. An intelligent agent may learn from the environment to achieve their goals. A
+                thermostat is an example of an intelligent agent.</p>
+            <h4>Following are the main four rules for an AI agent:</h4>
+            <ol>
+                <li><strong>Rule 1:</strong> An AI agent must have the ability to perceive the environment.</li>
+                <li><strong>Rule 2:</strong> The observation must be used to make decisions.</li>
+                <li><strong>Rule 3:</strong> Decision should result in an action.</li>
+                <li><strong>Rule 4:</strong> The action taken by an AI agent must be a rational action.</li>
+            </ol>
+
+            <h3>Rational Agent</h3>
+            <p>A rational agent is an agent which has clear preference, models uncertainty, and acts in a way to
+                maximize its performance measure with all possible actions. A rational agent is said to perform the
+                right things. AI is about creating rational agents to use for game theory and decision theory for
+                various real-world scenarios.</p>
+            <p>For an AI agent, the rational action is most important because in AI reinforcement learning algorithm,
+                for each best possible action, agent gets a positive reward and for each wrong action, an agent gets a
+                negative reward.</p>
+
+            <h4>Rationality:</h4>
+            <p>The rationality of an agent is measured by its performance measure. Rationality can be judged on the
+                basis of following points:</p>
+            <ul>
+                <li>Performance measure which defines the success criterion.</li>
+                <li>Agent prior knowledge of its environment.</li>
+                <li>Best possible actions that an agent can perform.</li>
+                <li>The sequence of percepts.</li>
+            </ul>
+            <div class="callout warning">
+                <strong>Note:</strong> Rationality differs from Omniscience because an Omniscient agent knows the actual
+                outcome of its action and acts accordingly, which is not possible in reality.
+            </div>
+            <p><strong>Autonomy:</strong> An agent is autonomous if its behavior is determined by its own experience
+                (with ability to learn and adapt) rather than solely by its initial programming. A truly autonomous
+                agent should be able to operate successfully in a wide variety of environments given sufficient
+                experience.</p>
+        </section>
+
+        <section id="agent-architectures">
+            <h2>Types of Agent Architectures</h2>
+            <p>Agents can be grouped into five classes based on their degree of perceived intelligence and capability.
+                All these agents can improve their performance and generate better action over time.</p>
+
+            <details>
+                <summary>1. Simple Reflex Agent</summary>
+                <p>The Simple reflex agents are the simplest agents. These agents take decisions on the basis of the
+                    current percepts and ignore the rest of the percept history. They only succeed in the fully
+                    observable environment. The Simple reflex agent does not consider any part of percepts history
+                    during their decision and action process.</p>
+                <p>The Simple reflex agent works on Condition-action rule, which means it maps the current state to
+                    action. Such as a Room Cleaner agent, it works only if there is dirt in the room.</p>
+                <h4>Problems for the simple reflex agent design approach:</h4>
+                <ul>
+                    <li>They have very limited intelligence.</li>
+                    <li>They do not have knowledge of non-perceptual parts of the current state.</li>
+                    <li>Mostly too big to generate and to store.</li>
+                    <li>Not adaptive to changes in the environment.</li>
+                </ul>
+                <div class="agent-diagram">
+                    <h5>Simple Reflex Agent Diagram</h5>
+                    <div class="agent-diagram-placeholder">
+                        Environment → Sensors → "What the world is like now" → Condition-action rules → "What action I
+                        should do now" → Actuators → Action → Environment
+                    </div>
+                </div>
+            </details>
+
+            <details>
+                <summary>2. Model-based reflex agent</summary>
+                <p>The Model-based agent can work in a partially observable environment, and track the situation. A
+                    model-based agent has two important factors:</p>
+                <ul>
+                    <li><strong>Model:</strong> It is knowledge about "how things happen in the world," so it is called
+                        a Model-based agent.</li>
+                    <li><strong>Internal State:</strong> It is a representation of the current state based on percept
+                        history.</li>
+                </ul>
+                <p>These agents have the model, "which is knowledge of the world" and based on the model they perform
+                    actions. Updating the agent state requires information about: How the world evolves, and How the
+                    agent's action affects the world.</p>
+                <div class="agent-diagram">
+                    <h5>Model-based Reflex Agent Diagram</h5>
+                    <div class="agent-diagram-placeholder">
+                        Environment → Sensors → "What the world is like now" <br>
+                        (Inputs to State: "How the world evolves", "What my actions do") <br>
+                        State → "What the world is like now" → Condition-action rules → "What action I should do now" →
+                        Actuators → Action → Environment
+                    </div>
+                </div>
+            </details>
+
+            <details>
+                <summary>3. Goal-based agents</summary>
+                <p>The knowledge of the current state environment is not always sufficient to decide for an agent to
+                    know what to do. The agent needs to know its goal which describes desirable situations. Goal-based
+                    agents expand the capabilities of the model-based agent by having the "goal" information.</p>
+                <p>They choose an action, so that they can achieve the goal. These agents may have to consider a long
+                    sequence of possible actions before deciding whether the goal is achieved or not. Such
+                    considerations of different scenarios are called searching and planning, which makes an agent
+                    proactive.</p>
+                <div class="agent-diagram">
+                    <h5>Goal-based Agent Diagram</h5>
+                    <div class="agent-diagram-placeholder">
+                        (Same as Model-based, but Condition-action rules are influenced by Goals) <br>
+                        Environment → Sensors → "What the world is like now" <br>
+                        (Inputs to State: "How the world evolves", "What my actions do") <br>
+                        State → "What it will be like if I do action A" ← Goals → "What action I should do now" →
+                        Actuators → Action → Environment
+                    </div>
+                </div>
+            </details>
+
+            <details>
+                <summary>4. Utility-based agents</summary>
+                <p>These agents are similar to the goal-based agent but provide an extra component of utility
+                    measurement which makes them different by providing a measure of success at a given state.
+                    Utility-based agent acts based not only on goals but also the best way to achieve the goal.</p>
+                <p>The Utility-based agent is useful when there are multiple possible alternatives, and an agent has to
+                    choose in order to perform the best action. The utility function maps each state to a real number to
+                    check how efficiently each action achieves the goals.</p>
+                <div class="agent-diagram">
+                    <h5>Utility-based Agent Diagram</h5>
+                    <div class="agent-diagram-placeholder">
+                        (Same as Goal-based, but "How happy I will be in such a state" (Utility) influences action
+                        choice) <br>
+                        Environment → Sensors → "What the world is like now" <br>
+                        (Inputs to State: "How the world evolves", "What my actions do") <br>
+                        State → "What it will be like if I do action A" → Utility → "How happy I will be" → "What action
+                        I should do now" → Actuators → Action → Environment
+                    </div>
+                </div>
+            </details>
+
+            <details>
+                <summary>5. Learning Agents</summary>
+                <p>A learning agent in AI is the type of agent which can learn from its past experiences, or it has
+                    learning capabilities. It starts to act with basic knowledge and then is able to act and adapt
+                    automatically through learning.</p>
+                <h4>A learning agent has mainly four conceptual components, which are:</h4>
+                <ol>
+                    <li><strong>Learning element:</strong> It is responsible for making improvements by learning from
+                        the environment.</li>
+                    <li><strong>Critic:</strong> Learning element takes feedback from critic which describes how well
+                        the agent is doing with respect to a fixed performance standard.</li>
+                    <li><strong>Performance element:</strong> It is responsible for selecting external action.</li>
+                    <li><strong>Problem generator:</strong> This component is responsible for suggesting actions that
+                        will lead to new and informative experiences.</li>
+                </ol>
+                <p>Hence, learning agents are able to learn, analyze performance, and look for new ways to improve the
+                    performance.</p>
+                <div class="agent-diagram">
+                    <h5>Learning Agent Diagram</h5>
+                    <div class="agent-diagram-placeholder">
+                        Environment → (Sensors → Percepts) Performance Element (Actions → Effectors) → Environment <br>
+                        Performance Element ↔ (Changes, Knowledge) Learning Element <br>
+                        Learning Element ↔ (Feedback) Critic (Performance Standard) <br>
+                        Learning Element ↔ (Learning Goals, Experiments) Problem Generator
+                    </div>
+                </div>
+            </details>
+        </section>
+
+        <section id="agent-structure">
+            <h2>Structure of an AI Agent</h2>
+            <p>The task of AI is to design an agent program which implements the agent function. The structure of an
+                intelligent agent is a combination of architecture and agent program. It can be viewed as:</p>
+            <p class="highlight" style="text-align:center; display:block; margin:10px 0;">Agent = Architecture + Agent
+                program</p>
+            <h4>Following are the main three terms involved in the structure of an AI agent:</h4>
+            <ul>
+                <li><strong>Architecture:</strong> Architecture is machinery that an AI agent executes on.</li>
+                <li><strong>Agent Function:</strong> Agent function is used to map a percept to an action. <code
+                        style="font-weight:bold;">F: P* → A</code></li>
+                <li><strong>Agent program:</strong> Agent program is an implementation of an agent function. An agent
+                    program executes on the physical architecture to produce function f.</li>
+            </ul>
+        </section>
+
+        <section id="agent-environment">
+            <h2>Agent Environment in AI</h2>
+            <p>An environment is everything in the world which surrounds the agent, but it is not a part of an agent
+                itself. An environment can be described as a situation in which an agent is present. The environment is
+                where agent lives, operates and provides the agent with something to sense and act upon it. An
+                environment is mostly said to be non-feministic (likely a typo, should be non-deterministic or complex).
+            </p>
+            <h3>Features of Environment</h3>
+            <p>As per Russell and Norvig, an environment can have various features from the point of view of an agent:
+            </p>
+            <ol>
+                <li>Fully observable vs Partially Observable</li>
+                <li>Static vs Dynamic</li>
+                <li>Discrete vs Continuous</li>
+                <li>Deterministic vs Stochastic</li>
+                <li>Single-agent vs Multi-agent</li>
+                <li>Episodic vs Sequential</li>
+                <li>Known vs Unknown</li>
+                <li>Accessible vs Inaccessible</li>
+            </ol>
+            <details>
+                <summary>Details on Environment Features</summary>
+                <h4>1. Fully observable vs Partially Observable:</h4>
+                <ul>
+                    <li>If an agent sensor can sense or access the complete state of an environment at each point of
+                        time then it is a fully observable environment, else it is partially observable.</li>
+                    <li>A fully observable environment is easy as there is no need to maintain the internal state to
+                        keep track history of the world.</li>
+                    <li>An agent with no sensors in all environments then such an environment is called an unobservable.
+                    </li>
+                </ul>
+                <h4>2. Deterministic vs Stochastic:</h4>
+                <ul>
+                    <li>If an agent's current state and selected action can completely determine the next state of the
+                        environment, then such environment is called a deterministic environment.</li>
+                    <li>A stochastic environment is random in nature and cannot be determined completely by an agent.
+                    </li>
+                    <li>In a deterministic, fully observable environment, an agent does not need to worry about
+                        uncertainty.</li>
+                </ul>
+                <h4>3. Episodic vs Sequential:</h4>
+                <ul>
+                    <li>In an episodic environment, there is a series of one-shot actions, and only the current percept
+                        is required for the action.</li>
+                    <li>However, in Sequential environment, an agent requires memory of past actions to determine the
+                        next best actions.</li>
+                </ul>
+                <h4>4. Single-agent vs Multi-agent:</h4>
+                <ul>
+                    <li>If only one agent is involved in an environment, and operating by itself then such an
+                        environment is called single agent environment.</li>
+                    <li>However, if multiple agents are operating in an environment, then such an environment is called
+                        a multi-agent environment.</li>
+                    <li>The agent design problems in the multi-agent environment are different from single agent
+                        environment.</li>
+                </ul>
+                <h4>5. Static vs Dynamic:</h4>
+                <ul>
+                    <li>If the environment can change itself while an agent is deliberating then such environment is
+                        called a dynamic environment else it is called a static environment.</li>
+                    <li>Static environments are easy to deal because an agent does not need to continue looking at the
+                        world while deciding for an action.</li>
+                    <li>However for dynamic environment, agents need to keep looking at the world at each action.</li>
+                    <li>Taxi driving is an example of a dynamic environment whereas Crossword puzzles are an example of
+                        a static environment.</li>
+                </ul>
+                <h4>6. Discrete vs Continuous:</h4>
+                <ul>
+                    <li>If in an environment there are a finite number of percepts and actions that can be performed
+                        within it, then such an environment is called a discrete environment else it is called
+                        continuous environment.</li>
+                    <li>A chess game comes under discrete environment as there is a finite number of moves.</li>
+                    <li>A self-driving car is an example of a continuous environment.</li>
+                </ul>
+                <h4>7. Known vs Unknown:</h4>
+                <ul>
+                    <li>Known and unknown are not actually a feature of an environment, but it is an agent's state of
+                        knowledge to perform an action.</li>
+                    <li>In a known environment, the results for all actions are known to the agent. While in unknown
+                        environment, agent needs to learn how it works in order to perform an action.</li>
+                    <li>It is quite possible that a known environment to be partially observable and an Unknown
+                        environment to be fully observable.</li>
+                </ul>
+                <h4>8. Accessible vs Inaccessible:</h4>
+                <ul>
+                    <li>If an agent can obtain complete and accurate information about the state's environment, then
+                        such an environment is called accessible environment else it is called inaccessible.</li>
+                    <li>An empty room whose state can be defined by its temperature is an example of an accessible
+                        environment.</li>
+                    <li>Information about an event on earth is an example of Inaccessible environment.</li>
+                </ul>
+            </details>
+        </section>
+
+        <section id="turing-test">
+            <h2>The Turing Test and Related Concepts</h2>
+            <p>While agent architectures define how an agent operates, evaluating the "intelligence" of such systems
+                often involves benchmarks or thought experiments like the Turing Test.</p>
+            <h3>Turing Test in AI</h3>
+            <p>In 1950, Alan Turing introduced a test to check whether a machine can think like a human or not, this
+                test is known as the Turing Test. In this test, Turing proposed that the computer can be said to be an
+                intelligent if it can mimic human response under specific conditions. The Turing Test was introduced in
+                Turing's 1950 paper, "Computing Machinery and Intelligence," which considered the question, "Can
+                machines think?"</p>
+            <div class="agent-diagram">
+                <h4>Turing Test Setup</h4>
+                <div class="agent-diagram-placeholder">Image: Computer (Player A), Human (Player B), Interrogator
+                    (Player C)</div>
+                <p style="font-size:0.9em; margin-top:5px;">The test involves three players: a computer, a human
+                    responder, and a human interrogator. The interrogator is isolated and tries to determine which
+                    player is the computer based on typed responses.</p>
+            </div>
+            <p>The conversation between all players is via keyboard and screen so the result would not depend on the
+                machine's ability to convert words as speech. The test result does not depend on each correct answer,
+                but only how closely its responses like a human answer. The computer is permitted to do everything
+                possible to force a wrong identification by the interrogator.</p>
+            <h4>Features required for a machine to pass the Turing test:</h4>
+            <ul>
+                <li><strong>Natural language processing:</strong> NLP is required to communicate with Interrogator in
+                    general human language like English.</li>
+                <li><strong>Knowledge representation:</strong> To store and retrieve information during the test.</li>
+                <li><strong>Automated reasoning:</strong> To use the previously stored information for answering the
+                    questions.</li>
+                <li><strong>Machine learning:</strong> To adapt to new changes and can detect generalized patterns.</li>
+                <li><strong>Vision (For total Turing test):</strong> To recognize the interrogator actions and other
+                    objects during a test.</li>
+                <li><strong>Motor Control (For total Turing test):</strong> To act upon objects if requested.</li>
+            </ul>
+
+            <h4>Chatbots attempting the Turing test:</h4>
+            <ul>
+                <li><strong>ELIZA:</strong> A Natural language processing computer program created by Joseph Weizenbaum.
+                    It was created to demonstrate the ability of communication between machine and humans. It was one of
+                    the first chatbots, which has attempted the Turing Test.</li>
+                <li><strong>Parry:</strong> A chatbot created by Kenneth Colby in 1972. Parry was designed to simulate a
+                    person with Paranoid schizophrenia. Parry was tested using a variation of the Turing Test in the
+                    early 1970s.</li>
+                <li><strong>Eugene Goostman:</strong> A chatbot developed in Saint Petersburg in 2001. This bot has
+                    competed in the various number of Turing Test. In June 2012, at an event, Goostman won the
+                    competition promoted as largest-ever Turing test content, in which it has convinced 29% of judges
+                    that it was a human. Goostman resembled a 13-year old boy.</li>
+            </ul>
+
+            <h3>The Chinese Room Argument</h3>
+            <p>In the year 1980, John Searle presented "Chinese Room" thought experiment, in his paper "Mind, Brains,
+                and Program," which was against the validity of Turing's Test. According to his argument, programming a
+                computer may make it to understand a language, but it will not produce a real understanding of language
+                or consciousness in a computer.</p>
+            <p>He argued that Machines such as ELIZA and Parry could easily pass the Turing test by manipulating
+                keywords and symbols, but they had no real understanding of language. So it cannot be described as
+                "thinking" capability of a machine such as a human.</p>
+        </section>
+
+        <section id="interactive-quiz-agents">
+            <h2>Mini Quiz: Test Your Agent Knowledge!</h2>
+            <div class="quiz-container">
+                <div id="quiz">
+                    <div class="quiz-question" data-question="1">
+                        <p><strong>1. What does PEAS stand for in agent description?</strong></p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q1" value="a"> Program, Environment, Actuators,
+                                System</label>
+                            <label><input type="radio" name="q1" value="b"> Performance, Environment, Actuators,
+                                Sensors</label>
+                            <label><input type="radio" name="q1" value="c"> Perception, Execution, Analysis,
+                                State</label>
+                        </div>
+                        <p class="quiz-feedback" id="feedback-q1"></p>
+                    </div>
+                    <div class="quiz-question" data-question="2">
+                        <p><strong>2. Which type of agent uses a "condition-action rule" based only on the current
+                                percept?</strong></p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q2" value="a"> Model-based reflex agent</label>
+                            <label><input type="radio" name="q2" value="b"> Goal-based agent</label>
+                            <label><input type="radio" name="q2" value="c"> Simple reflex agent</label>
+                        </div>
+                        <p class="quiz-feedback" id="feedback-q2"></p>
+                    </div>
+                    <div class="quiz-question" data-question="3">
+                        <p><strong>3. An environment that can change while the agent is deliberating is called:</strong>
+                        </p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q3" value="a"> Static</label>
+                            <label><input type="radio" name="q3" value="b"> Dynamic</label>
+                            <label><input type="radio" name="q3" value="c"> Deterministic</label>
+                        </div>
+                        <p class="quiz-feedback" id="feedback-q3"></p>
+                    </div>
+                    <button id="submitQuiz">Submit Answers</button>
+                    <p id="quizScore" style="margin-top:15px; font-weight:bold;"></p>
+                </div>
+            </div>
+        </section>
+
+
+        <footer class="new-footer-container">
+            <div class="new-footer-buttons-wrapper">
+                <a href="topic-1.html" class="new-footer-button">
+                    ← Previous Topic: Introduction to AI
+                </a>
+                <a href="topic-3.html" <!-- Update this link when topic-3 is ready -->
+                    class="new-footer-button">
+                    Next Topic: Problem Solving & Search →
+                </a>
+            </div>
+            <a href="#" onclick="window.print(); return false;" class="new-footer-print-link">Print this page</a>
+            <p style="font-size: 0.9rem; color: var(--text-color); margin-top: 0.5rem;">© <span id="currentYear"></span>
+                Intelligent Agents in AI. All rights reserved.</p>
+        </footer>
+
+    </main>
+
+    <script>
+        // JavaScript from topic-1.html (Theme toggle, Throttled TOC highlighting, Footer year)
+        // For brevity, imagine all the JS from the previous optimized example is here
+        // Key parts will be included and updated if necessary.
+
+        // Dark/Light Mode Toggle (Same as topic-1)
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+        function setTheme(theme) { if (theme === 'dark') { body.classList.add('dark-mode'); themeToggle.innerHTML = '<i class="fas fa-sun"></i>'; localStorage.setItem('theme', 'dark'); } else { body.classList.remove('dark-mode'); themeToggle.innerHTML = '<i class="fas fa-moon"></i>'; localStorage.setItem('theme', 'light'); } }
+        const localTheme = localStorage.getItem('theme'); if (localTheme) { setTheme(localTheme); } else { setTheme(prefersDarkScheme.matches ? 'dark' : 'light'); }
+        themeToggle.addEventListener('click', () => { setTheme(body.classList.contains('dark-mode') ? 'light' : 'dark'); });
+        prefersDarkScheme.addEventListener('change', (e) => { if (!localStorage.getItem('theme')) { setTheme(e.matches ? 'dark' : 'light'); } });
+
+        // Table of Contents Generation & Active Scrolling (Optimized & Throttled - Same as topic-1)
+        const tocContainer = document.getElementById('toc');
+        const mainSections = Array.from(document.querySelectorAll('main section[id]'));
+        let tocLinkElements = [];
+        function throttle(func, limit) { let inThrottle; return function () { const args = arguments; const context = this; if (!inThrottle) { func.apply(context, args); inThrottle = true; setTimeout(() => inThrottle = false, limit); } } }
+        function updateTocAndSectionData() { const navbar = document.querySelector('.navbar'); const navbarHeight = navbar ? navbar.offsetHeight : 0; tocContainer.innerHTML = ''; tocLinkElements = []; mainSections.forEach(section => { const sectionTitleElement = section.querySelector('h2'); if (sectionTitleElement) { const listItem = document.createElement('li'); const link = document.createElement('a'); link.textContent = sectionTitleElement.textContent; link.href = `#${section.id}`; link.dataset.sectionId = section.id; listItem.appendChild(link); tocContainer.appendChild(listItem); tocLinkElements.push(link); } section.dataset.effectiveOffsetTop = section.offsetTop - navbarHeight - 30; }); }
+        function highlightActiveTocLink() { const scrollPosition = window.scrollY; let currentlyActiveSectionId = null; for (let i = mainSections.length - 1; i >= 0; i--) { const section = mainSections[i]; if (scrollPosition >= parseInt(section.dataset.effectiveOffsetTop || '0')) { currentlyActiveSectionId = section.id; break; } } tocLinkElements.forEach(link => { if (link.dataset.sectionId === currentlyActiveSectionId) { link.classList.add('active'); } else { link.classList.remove('active'); } }); }
+        if (mainSections.length > 0) { updateTocAndSectionData(); highlightActiveTocLink(); window.addEventListener('scroll', throttle(highlightActiveTocLink, 100)); window.addEventListener('resize', throttle(() => { updateTocAndSectionData(); highlightActiveTocLink(); }, 150)); }
+
+        // Mini Quiz Logic for Topic 2
+        const submitQuizButtonTopic2 = document.getElementById('submitQuiz'); // Ensure ID is unique if multiple quizzes are on one page, or reuse if only one quiz section
+        const quizQuestionElementsTopic2 = document.querySelectorAll('#interactive-quiz-agents .quiz-question'); // Scope to this section's quiz
+        const quizCorrectAnswersTopic2 = {
+            q1: { value: 'b', text: 'Performance, Environment, Actuators, Sensors' },
+            q2: { value: 'c', text: 'Simple reflex agent' },
+            q3: { value: 'b', text: 'Dynamic' }
+        };
+
+        if (submitQuizButtonTopic2) {
+            submitQuizButtonTopic2.addEventListener('click', () => {
+                let score = 0;
+                quizQuestionElementsTopic2.forEach(questionElement => {
+                    const questionId = 'q' + questionElement.dataset.question;
+                    const selectedOption = document.querySelector(`#interactive-quiz-agents input[name="${questionId}"]:checked`);
+                    const feedbackElement = document.getElementById(`feedback-${questionId}`); // Assumes feedback IDs are unique (e.g., feedback-q1, feedback-q2 for this quiz)
+                    const correctAnswerInfo = quizCorrectAnswersTopic2[questionId];
+
+                    if (selectedOption) {
+                        if (selectedOption.value === correctAnswerInfo.value) {
+                            score++;
+                            feedbackElement.textContent = "Correct!";
+                            feedbackElement.style.color = "var(--secondary-color)";
+                        } else {
+                            feedbackElement.textContent = `Incorrect. The correct answer is: ${correctAnswerInfo.text}.`;
+                            feedbackElement.style.color = "var(--accent-color)";
+                        }
+                    } else {
+                        feedbackElement.textContent = "Please select an answer.";
+                        feedbackElement.style.color = "var(--accent-color)";
+                    }
+                });
+                const quizScoreEl = document.getElementById('quizScore'); // Assumes a single quizScore element on the page
+                if (quizScoreEl) {
+                    quizScoreEl.textContent = `You scored ${score} out of ${quizQuestionElementsTopic2.length}.`;
+                }
+            });
+        }
+
+        // Footer current year (Same as topic-1)
+        const currentYearSpan = document.getElementById('currentYear');
+        if (currentYearSpan) {
+            currentYearSpan.textContent = new Date().getFullYear();
+        }
+    </script>
+</body>
+
+</html>

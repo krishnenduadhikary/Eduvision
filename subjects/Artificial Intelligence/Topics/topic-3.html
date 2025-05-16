@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problem Solving & Search Strategies in AI</title>
+    <meta name="description"
+        content="Explore AI problem solving, state space search, uninformed and informed search algorithms (BFS, DFS, A*), local search (Hill Climbing, Simulated Annealing), and CSP.">
+    <meta name="keywords"
+        content="AI Problem Solving, Search Algorithms, Uninformed Search, Informed Search, Heuristic Search, BFS, DFS, UCS, A*, Hill Climbing, Simulated Annealing, CSP, State Space Search">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* CSS from topic-1.html - For brevity, imagine all the CSS from the previous example is here */
+        /* Key structural CSS will be included, specific element styles might be summarized */
+        :root {
+            --primary-color-light: #3498db;
+            /* Blue */
+            --secondary-color-light: #2ecc71;
+            /* Green */
+            --accent-color-light: #e67e22;
+            /* Orange */
+            --background-color-light: #f4f7f6;
+            --text-color-light: #333;
+            --card-bg-light: #ffffff;
+            --border-color-light: #e0e0e0;
+            --code-bg-light: #eef;
+
+            --primary-color-dark: #5dade2;
+            /* Lighter Blue */
+            --secondary-color-dark: #58d68d;
+            /* Lighter Green */
+            --accent-color-dark: #f5b041;
+            /* Lighter Orange */
+            --background-color-dark: #1e272e;
+            --text-color-dark: #f0f0f0;
+            --card-bg-dark: #2c3a47;
+            --border-color-dark: #444;
+            --code-bg-dark: #2a2a40;
+
+            --primary-color: var(--primary-color-light);
+            --secondary-color: var(--secondary-color-light);
+            --accent-color: var(--accent-color-light);
+            --background-color: var(--background-color-light);
+            --text-color: var(--text-color-light);
+            --card-bg: var(--card-bg-light);
+            --border-color: var(--border-color-light);
+            --code-bg: var(--code-bg-light);
+
+            --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --font-mono: 'Courier New', Courier, monospace;
+            --font-logo: 'Nunito', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            --primary-color: var(--primary-color-dark);
+            --secondary-color: var(--secondary-color-dark);
+            --accent-color: var(--accent-color-dark);
+            --background-color: var(--background-color-dark);
+            --text-color: var(--text-color-dark);
+            --card-bg: var(--card-bg-dark);
+            --border-color: var(--border-color-dark);
+            --code-bg: var(--code-bg-dark);
+        }
+
+        /* Eduvision Logo (Same as topic-1) */
+        .eduvishion-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1050;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvishion-logo .text-2xl {
+            font-family: var(--font-logo);
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvishion-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvishion-logo .text-yellow-300 {
+            color: #fde047 !important;
+        }
+
+        .eduvishion-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+        }
+
+        .eduvishion-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvishion-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Navbar (Same as topic-1) */
+        .navbar {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-left-spacer {
+            flex-basis: 50px;
+            flex-shrink: 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .navbar-brand i {
+            margin-right: 0.5rem;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            flex-basis: 50px;
+            flex-shrink: 0;
+            text-align: right;
+        }
+
+        /* Sidebar (Same as topic-1) */
+        .sidebar {
+            position: fixed;
+            top: 77px;
+            left: 0;
+            width: 280px;
+            height: calc(100vh - 77px);
+            background-color: var(--card-bg);
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 1px solid var(--border-color);
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li a {
+            display: block;
+            padding: 8px 0;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s, padding-left 0.2s, background-color 0.2s;
+            border-radius: 4px;
+        }
+
+        .sidebar ul li a:hover {
+            color: var(--accent-color);
+            padding-left: 10px;
+        }
+
+        .sidebar ul li a.active {
+            color: var(--accent-color);
+            padding-left: 10px;
+            font-weight: bold;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-mode .sidebar ul li a.active {
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Main Content Area (Same as topic-1) */
+        .main-content {
+            margin-left: 300px;
+            padding: 2rem 3rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 4rem 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-section p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+
+        /* Syllabus Bar (Same as topic-1, with updated topic number) */
+        .syllabus-bar-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 0.75rem;
+            background-color: var(--card-bg);
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.07);
+            border: 1px solid var(--border-color);
+        }
+
+        .syllabus-bar-back-link {
+            display: flex;
+            align-items: center;
+            font-size: 0.875rem;
+            color: #2563eb;
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            text-decoration: none;
+            transition: background-color 0.15s, color 0.15s;
+            margin-bottom: 0.5rem;
+        }
+
+        .dark-mode .syllabus-bar-back-link {
+            color: #5dade2;
+        }
+
+        .dark-mode .syllabus-bar-back-link:hover {
+            color: #8ecae6;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .syllabus-bar-back-link:hover {
+            color: #1d4ed8;
+            background-color: #eff6ff;
+        }
+
+        .syllabus-bar-back-link svg {
+            height: 1.25rem;
+            width: 1.25rem;
+            margin-right: 0.375rem;
+            fill: currentColor;
+        }
+
+        .syllabus-bar-topic-badge {
+            background-color: #2563eb;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.375rem 1rem;
+            border-radius: 9999px;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        @media (min-width: 640px) {
+            .syllabus-bar-container {
+                flex-direction: row;
+            }
+
+            .syllabus-bar-back-link {
+                margin-bottom: 0;
+            }
+
+            .syllabus-bar-topic-badge {
+                font-size: 0.875rem;
+            }
+        }
+
+        /* General Content Styles (Same as topic-1) */
+        section {
+            margin-bottom: 3rem;
+            padding-top: 70px;
+            margin-top: -70px;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-size: 1.7rem;
+            color: var(--secondary-color);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        h4 {
+            font-size: 1.3rem;
+            color: var(--accent-color);
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        p,
+        li {
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        ul,
+        ol {
+            padding-left: 25px;
+        }
+
+        .callout {
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 5px solid var(--accent-color);
+            background-color: var(--card-bg);
+            border-radius: 0 5px 5px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .callout.info {
+            border-left-color: var(--primary-color);
+        }
+
+        .callout.success {
+            border-left-color: var(--secondary-color);
+        }
+
+        .callout.warning {
+            border-left-color: #f39c12;
+        }
+
+        details {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+        }
+
+        summary {
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--primary-color);
+            padding: 0.5rem 0;
+        }
+
+        summary::marker {
+            color: var(--accent-color);
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            color: var(--text-color);
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.95em;
+            border: 1px solid var(--border-color);
+        }
+
+        .highlight {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        /* Diagram Styles (Generic placeholder, use <img> for actual images) */
+        .diagram {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 1.5rem auto;
+            max-width: 600px;
+            /* Adjust as needed */
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+        }
+
+        .diagram img,
+        .diagram-placeholder {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        .diagram-placeholder {
+            border: 2px dashed var(--border-color);
+            padding: 20px;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        .algorithm-comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        .algorithm-comparison-table th,
+        .algorithm-comparison-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+        }
+
+        .algorithm-comparison-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .algorithm-comparison-table tr:nth-child(even) {
+            background-color: var(--background-color);
+        }
+
+
+        /* New Footer Styles (Same as topic-1, with link updates) */
+        .new-footer-container {
+            margin-top: 4rem;
+            padding-top: 2.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .new-footer-buttons-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            align-items: center;
+        }
+
+        .new-footer-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            background-color: #2563eb;
+            color: white !important;
+            border-radius: 9999px;
+            text-decoration: none;
+            transition: background-color 0.15s, box-shadow 0.15s;
+            font-weight: 500;
+            font-size: 0.875rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            min-width: 280px;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .new-footer-button:hover {
+            background-color: #1d4ed8;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .new-footer-button:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+
+        .new-footer-print-link {
+            margin-top: 1rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .new-footer-print-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (min-width: 640px) {
+            .new-footer-buttons-wrapper {
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 1rem;
+            }
+
+            .new-footer-button {
+                margin-bottom: 0;
+            }
+        }
+
+        /* Quiz Styles (Same as topic-1) */
+        .quiz-container {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-question {
+            margin-bottom: 15px;
+        }
+
+        .quiz-options label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .quiz-options input {
+            margin-right: 8px;
+        }
+
+        .quiz-feedback {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Responsive Adjustments (Same as topic-1) */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                box-shadow: none;
+                top: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+
+            .navbar {
+                padding: 0.8rem 1rem;
+            }
+
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+
+            .nav-left-spacer,
+            .theme-toggle {
+                flex-basis: 40px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .eduvishion-logo {
+                top: 12px;
+                left: 12px;
+            }
+
+            .eduvishion-logo .text-2xl {
+                font-size: 1.3rem;
+            }
+
+            .eduvishion-logo svg {
+                height: 1.2em;
+                width: 1.2em;
+            }
+
+            .navbar {
+                padding: 1rem;
+                justify-content: center;
+                position: relative;
+            }
+
+            .nav-left-spacer {
+                display: none;
+            }
+
+            .navbar-brand {
+                flex-grow: 0;
+                margin-right: auto;
+                margin-left: 50px;
+                font-size: 1.3rem;
+            }
+
+            .theme-toggle {
+                position: absolute;
+                right: 1rem;
+                top: 50%;
+                transform: translateY(-50%);
+                flex-basis: auto;
+                font-size: 1.2rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            h3 {
+                font-size: 1.5rem;
+            }
+
+            .syllabus-bar-container {
+                padding: 0.5rem;
+            }
+
+            .syllabus-bar-back-link {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.6rem;
+            }
+
+            .syllabus-bar-topic-badge {
+                font-size: 0.7rem;
+                padding: 0.3rem 0.8rem;
+            }
+
+            .new-footer-button {
+                font-size: 0.8rem;
+                padding: 0.6rem 1.2rem;
+                min-width: auto;
+                width: 90%;
+            }
+
+            .new-footer-buttons-wrapper {
+                flex-direction: column;
+            }
+
+            .new-footer-buttons-wrapper .new-footer-button:first-child {
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        /* Print Styles (Same as topic-1) */
+        @media print {
+            body {
+                font-size: 10pt;
+                color: #000 !important;
+                background-color: #fff !important;
+            }
+
+            .navbar,
+            .sidebar,
+            .theme-toggle,
+            .hero-section .btn,
+            .quiz-container,
+            .new-footer-container,
+            details summary::marker,
+            .eduvishion-logo,
+            .syllabus-bar-container,
+            .new-footer-print-link {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 0;
+            }
+
+            section {
+                padding-top: 0;
+                margin-top: 0;
+                margin-bottom: 1.5rem;
+                page-break-after: auto;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4 {
+                color: #000 !important;
+                border: none !important;
+                page-break-after: avoid;
+            }
+
+            .callout {
+                border-left: 3px solid #ccc !important;
+                background-color: #f9f9f9 !important;
+            }
+
+            a {
+                text-decoration: none;
+                color: #000 !important;
+            }
+
+            a[href^="http"]:after {
+                content: " (" attr(href) ")";
+            }
+
+            pre {
+                background-color: #f0f0f0 !important;
+                border: 1px solid #ccc !important;
+                color: #000 !important;
+            }
+
+            .diagram,
+            .diagram img {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvishion-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../index.html" class="flex items-center group">
+                <span class="text-white">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+                    fill="none">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-white">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-left-spacer"></div>
+        <a href="#" class="navbar-brand"><i class="fas fa-search-location"></i> Problem Solving & Search</a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+        </button>
+    </nav>
+
+    <aside class="sidebar" id="sidebar">
+        <h3>Table of Contents</h3>
+        <ul id="toc"></ul>
+    </aside>
+
+    <main class="main-content">
+        <header class="hero-section">
+            <h1>AI Problem Solving & Search Strategies</h1>
+            <p>Mastering the art of formulating problems and navigating search spaces with AI algorithms.</p>
+        </header>
+
+        <div class="syllabus-bar-container">
+            <a href="../ai.html" class="syllabus-bar-back-link"> <!-- Ensure this path is correct -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                        clip-rule="evenodd" />
+                </svg>
+                Back to Syllabus
+            </a>
+            <div class="syllabus-bar-topic-badge">
+                Topic 3
+            </div>
+        </div>
+
+        <section id="intro-problem-solving">
+            <h2>Introduction to AI Problem Solving</h2>
+            <p>Problem solving has been the key area of concern for Artificial Intelligence. It is a process of
+                generating solutions from observed data or given conditions. It's not always possible to use direct
+                methods; often, AI needs to use indirect or model-based methods, which typically involve search.</p>
+            <h4>To solve a problem of building a system, you should take the following steps:</h4>
+            <ol>
+                <li>Define the problem accurately including detailed specifications and what constitutes a suitable
+                    solution.</li>
+                <li>Scrutinize the problem carefully, for some features may have a central affect on the chosen method
+                    of solution.</li>
+                <li>Segregate and represent the background knowledge needed in the solution of the problem.</li>
+                <li>Choose the best solving techniques for the problem to solve it.</li>
+            </ol>
+            <p>A <strong class="highlight">'problem'</strong> is characterized by a set of goals, a set of objects, and
+                a set of operations. These could be ill-defined and may evolve during problem solving.</p>
+            <p>A <strong class="highlight">'problem space'</strong> is an abstract space which encompasses all valid
+                states that can be generated by the application of any combination of operators on any combination of
+                objects. A solution is a combination of operations and objects that achieve the goals.</p>
+            <p>A <strong class="highlight">'search'</strong> refers to the search for a solution in a problem space.
+                Search proceeds with different types of 'search control strategies'.</p>
+
+            <div class="diagram">
+                <h4>AI-Driven Problem-Solving Workflow</h4>
+                <div class="diagram-placeholder">Image: Circular flowchart: Data Collection → Data Pre-processing →
+                    Training AI Models → Analysis & Inference → Solution Generation → Validation & Refinement →
+                    Deployment & Integration → Monitoring & Iteration</div>
+            </div>
+
+            <h3>General Problem Solver (GPS)</h3>
+            <p>The General Problem Solver (GPS) was a computer program created in 1957 by Simon and Newell to build a
+                universal problem solver machine. GPS was based on Simon and Newell's theoretical work on logic
+                machines. GPS in principle can solve any formalized symbolic problem, such as theorems proof and
+                geometric problems and chess playing. GPS solved many simple problems, such as the Towers of Hanoi, that
+                could be sufficiently formalized, but GPS could not solve any real-world problems.</p>
+        </section>
+
+        <section id="formulating-problems">
+            <h2>Formulating Problems for AI (State Space Search)</h2>
+            <p>To build a system to solve a particular problem, we need to define the problem precisely. This involves
+                finding input situations as well as final situations for an acceptable solution to the problem.</p>
+            <h4>Problem definitions require:</h4>
+            <ol>
+                <li>A <strong class="highlight">state space</strong> that contains all possible configurations of
+                    relevant objects.</li>
+                <li>One or more <strong class="highlight">initial states</strong> from which the problem-solving process
+                    may start.</li>
+                <li>One or more <strong class="highlight">goal states</strong> that would be acceptable solutions.</li>
+                <li>A set of <strong class="highlight">rules (operators)</strong> that describe the actions available.
+                </li>
+            </ol>
+            <p>The problem can then be solved by using the rules, in combination with an appropriate control strategy,
+                to move through the problem space until a path from an initial state to a goal state is found. This
+                process is known as 'search'.</p>
+            <div class="diagram">
+                <h4>Graph vs. Tree Representation</h4>
+                <div class="diagram-placeholder">Image: Diagram showing a generic graph and a tree structure (Fig 2.1
+                    from data)</div>
+                <p>A problem space is represented by a directed graph, where nodes represent search states and paths
+                    represent the operators applied to change the state. Trees are often used to simplify search
+                    algorithms as they decrease complexity, though some nodes might be duplicated.</p>
+            </div>
+
+            <h4>Example: The Water Jug Problem</h4>
+            <p>We use two jugs called four and three; four holds a maximum of four gallons of water and three a maximum
+                of three gallons of water. How can we get two gallons of water in the four-gallon jug? The state space
+                is a set of ordered pairs (x, y) where x is water in the four-gallon jug and y is water in the
+                three-gallon jug.</p>
+            <details>
+                <summary>Water Jug Problem Details (Initial State, Goal State, Rules)</summary>
+                <p><strong>Initial State:</strong> (0, 0)</p>
+                <p><strong>Goal State:</strong> (2, n) where n can be any value.</p>
+                <p><strong>Production Rules:</strong> (Examples from Fig 2.2)</p>
+                <ol>
+                    <li>(x, y) if x < 4 → (4, y)   {Fill 4-gallon jug}</li>
+                    <li>(x, y) if y < 3 → (x, 3)   {Fill 3-gallon jug}</li>
+                    <li>(x, y) if x > 0 → (0, y)   {Empty 4-gallon jug}</li>
+                    <li>(x, y) if y > 0 → (x, 0)   {Empty 3-gallon jug}</li>
+                    <li>(x, y) if x+y ≥ 3 and y < 3 → (x-(3-y), 3)   {Pour from 4 to 3 until 3 is full}</li>
+                    <li>... and other rules for pouring between jugs and emptying.</li>
+                </ol>
+                <div class="diagram">
+                    <div class="diagram-placeholder">Table: Fig 2.3 One Solution to the Water Jug Problem</div>
+                </div>
+            </details>
+        </section>
+
+        <section id="search-algorithms-intro">
+            <h2>Core Problem-Solving Strategies in AI: Search Algorithms</h2>
+            <p>Search algorithms are fundamental in AI, used to explore possible solutions in a structured manner. They
+                can be broadly categorized.</p>
+            <div class="diagram">
+                <h4>AI Search Algorithms Overview</h4>
+                <div class="diagram-placeholder">Image: Hierarchy of AI Search Algorithms (Uninformed, Informed,
+                    Optimization, Graph Search)</div>
+            </div>
+            <h3>Problem Solving with Generative AI</h3>
+            <p>This problem-solving statement focuses on using Generative AI to address various challenges. The typical
+                pipeline involves:</p>
+            <div class="diagram">
+                <h4>Generative AI Problem-Solving Pipeline</h4>
+                <div class="diagram-placeholder">Image: Flowchart: Problem Definition → Data Collection → Model Training
+                    → Evaluation & Fine-tuning → Deployment. With examples for image, text, music generation.</div>
+            </div>
+        </section>
+
+        <section id="uninformed-search">
+            <h2>Uninformed (Blind) Search Algorithms</h2>
+            <p>These algorithms explore the search space without any domain-specific knowledge about the problem, other
+                than the problem definition itself. They do not use heuristics.</p>
+            <details>
+                <summary>1. Breadth-First Search (BFS)</summary>
+                <p>BFS explores all nodes at the present depth level before moving on to nodes at the next depth level.
+                    It uses a FIFO queue.</p>
+                <ul>
+                    <li><strong>Completeness:</strong> Yes (if the branching factor is finite).</li>
+                    <li><strong>Optimality:</strong> Yes (if all step costs are equal).</li>
+                    <li><strong>Time Complexity:</strong> O(b<sup>d</sup>) where b is branching factor, d is depth of
+                        solution.</li>
+                    <li><strong>Space Complexity:</strong> O(b<sup>d</sup>) (stores all explored nodes).</li>
+                </ul>
+                <div class="diagram">
+                    <div class="diagram-placeholder">Image: BFS tree traversal example and graph example.</div>
+                </div>
+            </details>
+            <details>
+                <summary>2. Depth-First Search (DFS)</summary>
+                <p>DFS explores as far down a branch as possible before backtracking. It uses a LIFO stack.</p>
+                <ul>
+                    <li><strong>Completeness:</strong> No (can get stuck in infinite loops on infinite graphs without
+                        cycle detection or depth limits). Yes for finite graphs.</li>
+                    <li><strong>Optimality:</strong> No (may find a suboptimal solution first).</li>
+                    <li><strong>Time Complexity:</strong> O(b<sup>m</sup>) where m is maximum depth of search space.
+                    </li>
+                    <li><strong>Space Complexity:</strong> O(bm) (stores only the current path and unexplored siblings).
+                    </li>
+                </ul>
+                <div class="diagram">
+                    <div class="diagram-placeholder">Image: DFS tree traversal example and graph example.</div>
+                </div>
+            </details>
+            <details>
+                <summary>3. Uniform Cost Search (UCS)</summary>
+                <p>UCS expands the node with the least path cost (g(n)) from the start node. It uses a priority queue.
+                    It is optimal when step costs are non-negative.</p>
+                <ul>
+                    <li><strong>Completeness:</strong> Yes (if step costs > ε > 0).</li>
+                    <li><strong>Optimality:</strong> Yes.</li>
+                    <li><strong>Time Complexity:</strong> O(b<sup>1+C*/ε</sup>) where C\* is cost of optimal solution.
+                    </li>
+                    <li><strong>Space Complexity:</strong> O(b<sup>1+C*/ε</sup>).</li>
+                </ul>
+                <div class="diagram">
+                    <div class="diagram-placeholder">Image: UCS graph example.</div>
+                </div>
+            </details>
+            <details>
+                <summary>4. Depth-Limited Search (DLS)</summary>
+                <p>DLS is DFS with a predetermined depth limit `l`. Solves the infinite path problem of DFS but
+                    introduces incompleteness if the shallowest goal is beyond the limit.</p>
+            </details>
+            <details>
+                <summary>5. Iterative Deepening Search (IDS) / Iterative Deepening DFS (IDDFS)</summary>
+                <p>IDS combines benefits of DFS (space complexity) and BFS (completeness, optimality for unit costs). It
+                    performs DLS repeatedly with increasing depth limits (0, 1, 2, ...). While it re-generates nodes,
+                    it's often preferred when search space is large and depth of solution is unknown.</p>
+            </details>
+        </section>
+
+        <section id="informed-search">
+            <h2>Informed (Heuristic) Search Algorithms</h2>
+            <p>These algorithms use domain-specific knowledge (heuristics) to find solutions more efficiently. A
+                heuristic function, h(n), estimates the cost from node n to the nearest goal.</p>
+            <h3>What is a Heuristic?</h3>
+            <p>A heuristic is a technique designed for solving a problem more quickly when classic methods are too slow,
+                or for finding an approximate solution when classic methods fail to find any exact solution. This is
+                achieved by trading optimality, completeness, accuracy, or precision for speed. Heuristics are rules of
+                thumb, educated guesses, intuitive judgments, or simply common sense.</p>
+            <div class="diagram">
+                <h4>Heuristic Search Techniques Overview</h4>
+                <div class="diagram-placeholder">Image: Hierarchical tree of search algorithms showing No Heuristics vs.
+                    Informed Search branches (Fig. Different Search Algorithms from data).</div>
+            </div>
+            <details>
+                <summary>1. Greedy Best-First Search</summary>
+                <p>Expands the node that appears to be closest to the goal, based solely on the heuristic function h(n).
+                    It's "greedy" because it tries to get to the goal as fast as possible without considering the cost
+                    already incurred.</p>
+                <ul>
+                    <li><strong>Completeness:</strong> No (can get stuck in loops or go down an infinite path).</li>
+                    <li><strong>Optimality:</strong> No.</li>
+                    <li><strong>Time Complexity:</strong> O(b<sup>m</sup>) in worst case, but a good heuristic can
+                        reduce this significantly.</li>
+                    <li><strong>Space Complexity:</strong> O(b<sup>m</sup>) in worst case.</li>
+                </ul>
+            </details>
+            <details>
+                <summary>2. A* Search</summary>
+                <p>A\* search is one of the most widely used best-first search algorithms. It evaluates nodes by
+                    combining g(n) (the cost to reach the node) and h(n) (the estimated cost from the node to the goal):
+                    <strong class="highlight">f(n) = g(n) + h(n)</strong>.</p>
+                <div class="diagram">
+                    <h4>A\* Search Formula</h4>
+                    <div class="diagram-placeholder">Image: f(n) = g(n) + h(n) breakdown diagram.</div>
+                </div>
+                <ul>
+                    <li><strong>Completeness:</strong> Yes (if branching factor is finite and step costs > ε > 0).</li>
+                    <li><strong>Optimality:</strong> Yes, if the heuristic h(n) is <strong
+                            class="highlight">admissible</strong> (never overestimates the true cost to the goal) and,
+                        for graph search, <strong class="highlight">consistent</strong> (monotonicity: h(n) ≤ cost(n,
+                        n') + h(n')).</li>
+                    <li><strong>Time Complexity:</strong> Exponential in worst case, but highly dependent on the quality
+                        of the heuristic.</li>
+                    <li><strong>Space Complexity:</strong> Keeps all generated nodes in memory, O(b<sup>d</sup>).</li>
+                </ul>
+                <div class="diagram">
+                    <h4>A\* Search Example</h4>
+                    <div class="diagram-placeholder">Image: A* search graph example with g(n), h(n), f(n) values and
+                        solution steps (like the one from page 2 and 3 of A* search data).</div>
+                </div>
+            </details>
+            <details>
+                <summary>3. AO* Search (And-Or Graph Search)</summary>
+                <p>AO* search is used for problems that can be decomposed into subproblems, where some subproblems (AND
+                    nodes) must all be solved, or one of several alternative subproblems (OR nodes) must be solved. This
+                    is common in problem reduction scenarios.</p>
+                <p>It uses heuristic estimates and revises them as the search progresses, trying to find the most
+                    promising solution tree.</p>
+                <div class="diagram">
+                    <h4>AO* Search Example (And-Or Graph)</h4>
+                    <div class="diagram-placeholder">Image: AND-OR graph example and steps for AO* (like in the provided
+                        data).</div>
+                </div>
+            </details>
+        </section>
+
+        <section id="local-search">
+            <h2>Local Search Algorithms</h2>
+            <p>Local search algorithms operate using a single current node (rather than multiple paths) and generally
+                move only to neighbors of that state. They are not systematic but can be very efficient. They are often
+                used for optimization problems.</p>
+            <h4>How does AI-driven Local Search work?</h4>
+            <ol>
+                <li><strong>Initialization:</strong> Start with an initial solution.</li>
+                <li><strong>Evaluation:</strong> Evaluate the quality of the solution using an objective function.</li>
+                <li><strong>Neighborhood search:</strong> Generate neighboring solutions by small modifications.</li>
+                <li><strong>Selection:</strong> Choose the best neighboring solution.</li>
+                <li><strong>Termination:</strong> Stop when a criterion is met (e.g., no improvement, max iterations).
+                </li>
+            </ol>
+            <details>
+                <summary>1. Hill Climbing</summary>
+                <p>Hill climbing is a "greedy" local search algorithm that continuously moves in the direction of
+                    increasing value (uphill) to find the peak or best state. It terminates when it reaches a peak where
+                    no neighbor has a higher value.</p>
+                <ul>
+                    <li><strong>Simple Hill Climbing:</strong> Selects the first better neighbor.</li>
+                    <li><strong>Steepest-Ascent Hill Climbing:</strong> Examines all neighbors and picks the one with
+                        the greatest improvement.</li>
+                    <li><strong>Stochastic Hill Climbing:</strong> Chooses a better neighbor at random.</li>
+                </ul>
+                <h4>Problems with Hill Climbing:</h4>
+                <ul>
+                    <li><strong>Local Maxima:</strong> Peaks that are not the global maximum.</li>
+                    <li><strong>Plateaus:</strong> Flat areas where no neighbor is better.</li>
+                    <li><strong>Ridges:</strong> Areas where movement in any single direction is downhill, but the ridge
+                        itself slopes upwards.</li>
+                </ul>
+                <div class="diagram">
+                    <h4>Hill Climbing State Space Diagram</h4>
+                    <div class="diagram-placeholder">Image: Graph showing local maximum, global maximum, shoulder,
+                        plateau (like the one from your data).</div>
+                </div>
+            </details>
+            <details>
+                <summary>2. Simulated Annealing</summary>
+                <p>Simulated annealing is a probabilistic technique for approximating the global optimum of a given
+                    function. It allows "bad" moves (downhill) occasionally, with decreasing probability as the search
+                    progresses (controlled by a "temperature" parameter). This helps escape local optima.</p>
+                <h4>Basic Steps:</h4>
+                <ol>
+                    <li>Start with an initial solution and high temperature.</li>
+                    <li>Generate a new neighboring solution.</li>
+                    <li>If better, accept it.</li>
+                    <li>If worse, accept it with a probability that depends on the temperature and how much worse it is.
+                    </li>
+                    <li>Decrease temperature.</li>
+                    <li>Repeat until a stopping criterion is met.</li>
+                </ol>
+            </details>
+        </section>
+
+        <section id="csp">
+            <h2>Constraint Satisfaction Problems (CSP)</h2>
+            <p>CSPs involve finding solutions that satisfy a set of constraints. A state is defined by an assignment of
+                values to a set of variables, and a goal test is a set of constraints that the values must obey.</p>
+            <h4>Key Components:</h4>
+            <ul>
+                <li><strong>Variables (X):</strong> A set of variables {X<sub>1</sub>, ..., X<sub>n</sub>}.</li>
+                <li><strong>Domains (D):</strong> A set of domains {D<sub>1</sub>, ..., D<sub>n</sub>}, one for each
+                    variable.</li>
+                <li><strong>Constraints (C):</strong> A set of constraints specifying allowable combinations of values.
+                </li>
+            </ul>
+            <h4>Techniques for Solving CSPs:</h4>
+            <ul>
+                <li><strong>Backtracking Search:</strong> A depth-first search that assigns values to variables one by
+                    one and backtracks when a variable has no legal values left to assign or a constraint is violated.
+                </li>
+                <li><strong>Forward Checking:</strong> When a variable X is assigned a value, check each unassigned
+                    variable Y that is connected to X by a constraint and delete from Y's domain any value inconsistent
+                    with the value chosen for X.</li>
+                <li><strong>Constraint Propagation (e.g., Arc Consistency):</strong> Enforcing constraints across
+                    variables to reduce the search space. For example, for an arc X → Y, X is arc-consistent with
+                    respect to Y if for every value in D<sub>X</sub>, there is some value in D<sub>Y</sub> that is
+                    consistent.</li>
+            </ul>
+            <details>
+                <summary>Example: Cryptarithmetic (SEND + MORE = MONEY)</summary>
+                <p>Assign unique digits (0-9) to letters S, E, N, D, M, O, R, Y such that the addition is correct.
+                    Constraints: M ≠ 0, all letters have unique digits.</p>
+                <div class="diagram">
+                    <h4>SEND + MORE = MONEY</h4>
+                    <pre style="text-align: left; font-size: 1.2em; background-color: var(--background-color);">
+  S E N D
++ M O R E
+-----------
+M O N E Y
+                    </pre>
+                    <div class="diagram-placeholder">Solution Tree/Derivation for SEND + MORE = MONEY</div>
+                </div>
+            </details>
+        </section>
+
+        <section id="problem-characteristics-production">
+            <h2>Problem Characteristics & Production Systems</h2>
+            <h3>Problem Characteristics for Analysis</h3>
+            <p>To use heuristic search effectively, analyze the problem for characteristics like:</p>
+            <ul>
+                <li>Decomposability into independent subproblems.</li>
+                <li>Possibility of undoing solution steps (recoverable vs. irrecoverable).</li>
+                <li>Predictability of the problem universe (certain vs. uncertain outcomes).</li>
+                <li>Nature of solution (state vs. path).</li>
+                <li>Role of knowledge.</li>
+            </ul>
+            <h3>Production Systems</h3>
+            <p>Production systems provide a structure for performing search. They consist of:</p>
+            <ol>
+                <li>A set of rules (IF-THEN or condition-action pairs).</li>
+                <li>A database of current facts (working memory).</li>
+                <li>A control strategy that specifies rule selection and conflict resolution.</li>
+                <li>A rule firing module.</li>
+            </ol>
+        </section>
+
+        <section id="search-complexity">
+            <h2>Search Algorithm Performance and Complexity</h2>
+            <p>When evaluating search algorithms, we consider:</p>
+            <ul>
+                <li><strong>Completeness:</strong> Does it always find a solution if one exists?</li>
+                <li><strong>Optimality:</strong> Does it always find the least-cost solution?</li>
+                <li><strong>Time Complexity:</strong> How long does it take as a function of problem size?</li>
+                <li><strong>Space Complexity:</strong> How much memory does it need?</li>
+            </ul>
+            <h4>Big-O Notation:</h4>
+            <p>Big-O notation describes the limiting behavior of a function when the argument tends towards a particular
+                value or infinity. It's used to classify algorithms according to their running time or space
+                requirements as the input size grows.</p>
+            <ul>
+                <li>O(1): Constant time/space.</li>
+                <li>O(log n): Logarithmic.</li>
+                <li>O(n): Linear.</li>
+                <li>O(n log n): Log-linear.</li>
+                <li>O(n<sup>2</sup>): Quadratic.</li>
+                <li>O(2<sup>n</sup>): Exponential.</li>
+                <li>O(n!): Factorial.</li>
+            </ul>
+        </section>
+
+        <section id="interactive-quiz-search">
+            <h2>Mini Quiz: Search Strategies</h2>
+            <div class="quiz-container">
+                <div id="quiz">
+                    <div class="quiz-question" data-question="1">
+                        <p><strong>1. Which search algorithm always finds the shortest path in an unweighted
+                                graph?</strong></p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q1" value="a"> Depth-First Search (DFS)</label>
+                            <label><input type="radio" name="q1" value="b"> Breadth-First Search (BFS)</label>
+                            <label><input type="radio" name="q1" value="c"> Greedy Best-First Search</label>
+                        </div>
+                        <p class="quiz-feedback" id="feedback-q1"></p>
+                    </div>
+                    <div class="quiz-question" data-question="2">
+                        <p><strong>2. A* search uses the evaluation function f(n) = ?</strong></p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q2" value="a"> g(n) - h(n)</label>
+                            <label><input type="radio" name="q2" value="b"> h(n) only</label>
+                            <label><input type="radio" name="q2" value="c"> g(n) + h(n)</label>
+                        </div>
+                        <p class="quiz-feedback" id="feedback-q2"></p>
+                    </div>
+                    <div class="quiz-question" data-question="3">
+                        <p><strong>3. Which problem can cause Hill Climbing to get stuck?</strong></p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q3" value="a"> Admissible heuristic</label>
+                            <label><input type="radio" name="q3" value="b"> Local maximum</label>
+                            <label><input type="radio" name="q3" value="c"> Consistent heuristic</label>
+                        </div>
+                        <p class="quiz-feedback" id="feedback-q3"></p>
+                    </div>
+                    <button id="submitQuiz">Submit Answers</button>
+                    <p id="quizScore" style="margin-top:15px; font-weight:bold;"></p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="new-footer-container">
+            <div class="new-footer-buttons-wrapper">
+                <a href="topic-2.html" class="new-footer-button">
+                    ← Previous Topic: Intelligent Agents
+                </a>
+                <a href="topic-4.html" <!-- Update this link when topic-4 is ready -->
+                    class="new-footer-button">
+                    Next Topic: Game Playing & Adversarial Search →
+                </a>
+            </div>
+            <a href="#" onclick="window.print(); return false;" class="new-footer-print-link">Print this page</a>
+            <p style="font-size: 0.9rem; color: var(--text-color); margin-top: 0.5rem;">© <span id="currentYear"></span>
+                Problem Solving & Search. All rights reserved.</p>
+        </footer>
+
+    </main>
+
+    <script>
+        // JavaScript from topic-1.html (Theme toggle, Throttled TOC highlighting, Footer year)
+        // For brevity, imagine all the JS from the previous optimized example is here
+        // Key parts will be included and updated if necessary.
+
+        // Dark/Light Mode Toggle (Same as topic-1)
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+        function setTheme(theme) { if (theme === 'dark') { body.classList.add('dark-mode'); themeToggle.innerHTML = '<i class="fas fa-sun"></i>'; localStorage.setItem('theme', 'dark'); } else { body.classList.remove('dark-mode'); themeToggle.innerHTML = '<i class="fas fa-moon"></i>'; localStorage.setItem('theme', 'light'); } }
+        const localTheme = localStorage.getItem('theme'); if (localTheme) { setTheme(localTheme); } else { setTheme(prefersDarkScheme.matches ? 'dark' : 'light'); }
+        themeToggle.addEventListener('click', () => { setTheme(body.classList.contains('dark-mode') ? 'light' : 'dark'); });
+        prefersDarkScheme.addEventListener('change', (e) => { if (!localStorage.getItem('theme')) { setTheme(e.matches ? 'dark' : 'light'); } });
+
+        // Table of Contents Generation & Active Scrolling (Optimized & Throttled - Same as topic-1)
+        const tocContainer = document.getElementById('toc');
+        const mainSections = Array.from(document.querySelectorAll('main section[id]'));
+        let tocLinkElements = [];
+        function throttle(func, limit) { let inThrottle; return function () { const args = arguments; const context = this; if (!inThrottle) { func.apply(context, args); inThrottle = true; setTimeout(() => inThrottle = false, limit); } } }
+        function updateTocAndSectionData() { const navbar = document.querySelector('.navbar'); const navbarHeight = navbar ? navbar.offsetHeight : 0; tocContainer.innerHTML = ''; tocLinkElements = []; mainSections.forEach(section => { const sectionTitleElement = section.querySelector('h2'); if (sectionTitleElement) { const listItem = document.createElement('li'); const link = document.createElement('a'); link.textContent = sectionTitleElement.textContent; link.href = `#${section.id}`; link.dataset.sectionId = section.id; listItem.appendChild(link); tocContainer.appendChild(listItem); tocLinkElements.push(link); } section.dataset.effectiveOffsetTop = section.offsetTop - navbarHeight - 30; }); }
+        function highlightActiveTocLink() { const scrollPosition = window.scrollY; let currentlyActiveSectionId = null; for (let i = mainSections.length - 1; i >= 0; i--) { const section = mainSections[i]; if (scrollPosition >= parseInt(section.dataset.effectiveOffsetTop || '0')) { currentlyActiveSectionId = section.id; break; } } tocLinkElements.forEach(link => { if (link.dataset.sectionId === currentlyActiveSectionId) { link.classList.add('active'); } else { link.classList.remove('active'); } }); }
+        if (mainSections.length > 0) { updateTocAndSectionData(); highlightActiveTocLink(); window.addEventListener('scroll', throttle(highlightActiveTocLink, 100)); window.addEventListener('resize', throttle(() => { updateTocAndSectionData(); highlightActiveTocLink(); }, 150)); }
+
+        // Mini Quiz Logic for Topic 3
+        const submitQuizButtonTopic3 = document.getElementById('submitQuiz');
+        const quizQuestionElementsTopic3 = document.querySelectorAll('#interactive-quiz-search .quiz-question');
+        const quizCorrectAnswersTopic3 = {
+            q1: { value: 'b', text: 'Breadth-First Search (BFS)' },
+            q2: { value: 'c', text: 'g(n) + h(n)' },
+            q3: { value: 'b', text: 'Local maximum' }
+        };
+
+        if (submitQuizButtonTopic3) {
+            submitQuizButtonTopic3.addEventListener('click', () => {
+                let score = 0;
+                quizQuestionElementsTopic3.forEach(questionElement => {
+                    const questionId = 'q' + questionElement.dataset.question;
+                    const selectedOption = document.querySelector(`#interactive-quiz-search input[name="${questionId}"]:checked`);
+                    const feedbackElement = document.getElementById(`feedback-${questionId}`);
+                    const correctAnswerInfo = quizCorrectAnswersTopic3[questionId];
+
+                    if (selectedOption) {
+                        if (selectedOption.value === correctAnswerInfo.value) {
+                            score++;
+                            feedbackElement.textContent = "Correct!";
+                            feedbackElement.style.color = "var(--secondary-color)";
+                        } else {
+                            feedbackElement.textContent = `Incorrect. The correct answer is: ${correctAnswerInfo.text}.`;
+                            feedbackElement.style.color = "var(--accent-color)";
+                        }
+                    } else {
+                        feedbackElement.textContent = "Please select an answer.";
+                        feedbackElement.style.color = "var(--accent-color)";
+                    }
+                });
+                const quizScoreEl = document.getElementById('quizScore');
+                if (quizScoreEl) {
+                    quizScoreEl.textContent = `You scored ${score} out of ${quizQuestionElementsTopic3.length}.`;
+                }
+            });
+        }
+
+        // Footer current year (Same as topic-1)
+        const currentYearSpan = document.getElementById('currentYear');
+        if (currentYearSpan) {
+            currentYearSpan.textContent = new Date().getFullYear();
+        }
+    </script>
+</body>
+
+</html>

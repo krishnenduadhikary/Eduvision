@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Playing & Adversarial Search in AI</title>
+    <meta name="description"
+        content="Explore AI game playing, game theory, Minimax algorithm, Alpha-Beta pruning, and strategic considerations in adversarial search.">
+    <meta name="keywords"
+        content="AI Game Playing, Adversarial Search, Game Theory, Minimax, Alpha-Beta Pruning, Game Trees, Tic-Tac-Toe AI, Chess AI">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* CSS from topic-1.html - For brevity, imagine all the CSS from the previous example is here */
+        /* Key structural CSS will be included, specific element styles might be summarized */
+        :root {
+            --primary-color-light: #3498db;
+            /* Blue */
+            --secondary-color-light: #2ecc71;
+            /* Green */
+            --accent-color-light: #e67e22;
+            /* Orange */
+            --background-color-light: #f4f7f6;
+            --text-color-light: #333;
+            --card-bg-light: #ffffff;
+            --border-color-light: #e0e0e0;
+            --code-bg-light: #eef;
+
+            --primary-color-dark: #5dade2;
+            /* Lighter Blue */
+            --secondary-color-dark: #58d68d;
+            /* Lighter Green */
+            --accent-color-dark: #f5b041;
+            /* Lighter Orange */
+            --background-color-dark: #1e272e;
+            --text-color-dark: #f0f0f0;
+            --card-bg-dark: #2c3a47;
+            --border-color-dark: #444;
+            --code-bg-dark: #2a2a40;
+
+            --primary-color: var(--primary-color-light);
+            --secondary-color: var(--secondary-color-light);
+            --accent-color: var(--accent-color-light);
+            --background-color: var(--background-color-light);
+            --text-color: var(--text-color-light);
+            --card-bg: var(--card-bg-light);
+            --border-color: var(--border-color-light);
+            --code-bg: var(--code-bg-light);
+
+            --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --font-mono: 'Courier New', Courier, monospace;
+            --font-logo: 'Nunito', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            --primary-color: var(--primary-color-dark);
+            --secondary-color: var(--secondary-color-dark);
+            --accent-color: var(--accent-color-dark);
+            --background-color: var(--background-color-dark);
+            --text-color: var(--text-color-dark);
+            --card-bg: var(--card-bg-dark);
+            --border-color: var(--border-color-dark);
+            --code-bg: var(--code-bg-dark);
+        }
+
+        /* Eduvision Logo (Same as topic-1) */
+        .eduvishion-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1050;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvishion-logo .text-2xl {
+            font-family: var(--font-logo);
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvishion-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvishion-logo .text-yellow-300 {
+            color: #fde047 !important;
+        }
+
+        .eduvishion-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+        }
+
+        .eduvishion-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvishion-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Navbar (Same as topic-1) */
+        .navbar {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-left-spacer {
+            flex-basis: 50px;
+            flex-shrink: 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .navbar-brand i {
+            margin-right: 0.5rem;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            flex-basis: 50px;
+            flex-shrink: 0;
+            text-align: right;
+        }
+
+        /* Sidebar (Same as topic-1) */
+        .sidebar {
+            position: fixed;
+            top: 77px;
+            left: 0;
+            width: 280px;
+            height: calc(100vh - 77px);
+            background-color: var(--card-bg);
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 1px solid var(--border-color);
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li a {
+            display: block;
+            padding: 8px 0;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s, padding-left 0.2s, background-color 0.2s;
+            border-radius: 4px;
+        }
+
+        .sidebar ul li a:hover {
+            color: var(--accent-color);
+            padding-left: 10px;
+        }
+
+        .sidebar ul li a.active {
+            color: var(--accent-color);
+            padding-left: 10px;
+            font-weight: bold;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-mode .sidebar ul li a.active {
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Main Content Area (Same as topic-1) */
+        .main-content {
+            margin-left: 300px;
+            padding: 2rem 3rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 4rem 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-section p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+
+        /* Syllabus Bar (Same as topic-1, with updated topic number) */
+        .syllabus-bar-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 0.75rem;
+            background-color: var(--card-bg);
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.07);
+            border: 1px solid var(--border-color);
+        }
+
+        .syllabus-bar-back-link {
+            display: flex;
+            align-items: center;
+            font-size: 0.875rem;
+            color: #2563eb;
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            text-decoration: none;
+            transition: background-color 0.15s, color 0.15s;
+            margin-bottom: 0.5rem;
+        }
+
+        .dark-mode .syllabus-bar-back-link {
+            color: #5dade2;
+        }
+
+        .dark-mode .syllabus-bar-back-link:hover {
+            color: #8ecae6;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .syllabus-bar-back-link:hover {
+            color: #1d4ed8;
+            background-color: #eff6ff;
+        }
+
+        .syllabus-bar-back-link svg {
+            height: 1.25rem;
+            width: 1.25rem;
+            margin-right: 0.375rem;
+            fill: currentColor;
+        }
+
+        .syllabus-bar-topic-badge {
+            background-color: #2563eb;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.375rem 1rem;
+            border-radius: 9999px;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        @media (min-width: 640px) {
+            .syllabus-bar-container {
+                flex-direction: row;
+            }
+
+            .syllabus-bar-back-link {
+                margin-bottom: 0;
+            }
+
+            .syllabus-bar-topic-badge {
+                font-size: 0.875rem;
+            }
+        }
+
+        /* General Content Styles (Same as topic-1) */
+        section {
+            margin-bottom: 3rem;
+            padding-top: 70px;
+            margin-top: -70px;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-size: 1.7rem;
+            color: var(--secondary-color);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        h4 {
+            font-size: 1.3rem;
+            color: var(--accent-color);
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        p,
+        li {
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        ul,
+        ol {
+            padding-left: 25px;
+        }
+
+        .callout {
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 5px solid var(--accent-color);
+            background-color: var(--card-bg);
+            border-radius: 0 5px 5px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .callout.info {
+            border-left-color: var(--primary-color);
+        }
+
+        .callout.success {
+            border-left-color: var(--secondary-color);
+        }
+
+        .callout.warning {
+            border-left-color: #f39c12;
+        }
+
+        details {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+        }
+
+        summary {
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--primary-color);
+            padding: 0.5rem 0;
+        }
+
+        summary::marker {
+            color: var(--accent-color);
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            color: var(--text-color);
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+            border: 1px solid var(--border-color);
+            line-height: 1.5;
+        }
+
+        code {
+            font-family: var(--font-mono);
+        }
+
+        .highlight {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        /* Diagram Styles (Generic placeholder, use <img> for actual images) */
+        .diagram {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 1.5rem auto;
+            max-width: 550px;
+            /* Adjust as needed */
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+        }
+
+        .diagram img,
+        .diagram-placeholder {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        .diagram-placeholder {
+            border: 2px dashed var(--border-color);
+            padding: 20px;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        .game-tree-node {
+            border: 1px solid var(--primary-color);
+            background-color: var(--background-color);
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin: 5px;
+            display: inline-block;
+        }
+
+        /* New Footer Styles (Same as topic-1, with link updates) */
+        .new-footer-container {
+            margin-top: 4rem;
+            padding-top: 2.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .new-footer-buttons-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            align-items: center;
+        }
+
+        .new-footer-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            background-color: #2563eb;
+            color: white !important;
+            border-radius: 9999px;
+            text-decoration: none;
+            transition: background-color 0.15s, box-shadow 0.15s;
+            font-weight: 500;
+            font-size: 0.875rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            min-width: 280px;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .new-footer-button:hover {
+            background-color: #1d4ed8;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .new-footer-button:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+
+        .new-footer-print-link {
+            margin-top: 1rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .new-footer-print-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (min-width: 640px) {
+            .new-footer-buttons-wrapper {
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 1rem;
+            }
+
+            .new-footer-button {
+                margin-bottom: 0;
+            }
+        }
+
+        /* Quiz Styles (Same as topic-1) */
+        .quiz-container {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-question {
+            margin-bottom: 15px;
+        }
+
+        .quiz-options label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .quiz-options input {
+            margin-right: 8px;
+        }
+
+        .quiz-feedback {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Responsive Adjustments (Same as topic-1) */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                box-shadow: none;
+                top: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+
+            .navbar {
+                padding: 0.8rem 1rem;
+            }
+
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+
+            .nav-left-spacer,
+            .theme-toggle {
+                flex-basis: 40px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .eduvishion-logo {
+                top: 12px;
+                left: 12px;
+            }
+
+            .eduvishion-logo .text-2xl {
+                font-size: 1.3rem;
+            }
+
+            .eduvishion-logo svg {
+                height: 1.2em;
+                width: 1.2em;
+            }
+
+            .navbar {
+                padding: 1rem;
+                justify-content: center;
+                position: relative;
+            }
+
+            .nav-left-spacer {
+                display: none;
+            }
+
+            .navbar-brand {
+                flex-grow: 0;
+                margin-right: auto;
+                margin-left: 50px;
+                font-size: 1.3rem;
+            }
+
+            .theme-toggle {
+                position: absolute;
+                right: 1rem;
+                top: 50%;
+                transform: translateY(-50%);
+                flex-basis: auto;
+                font-size: 1.2rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            h3 {
+                font-size: 1.5rem;
+            }
+
+            .syllabus-bar-container {
+                padding: 0.5rem;
+            }
+
+            .syllabus-bar-back-link {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.6rem;
+            }
+
+            .syllabus-bar-topic-badge {
+                font-size: 0.7rem;
+                padding: 0.3rem 0.8rem;
+            }
+
+            .new-footer-button {
+                font-size: 0.8rem;
+                padding: 0.6rem 1.2rem;
+                min-width: auto;
+                width: 90%;
+            }
+
+            .new-footer-buttons-wrapper {
+                flex-direction: column;
+            }
+
+            .new-footer-buttons-wrapper .new-footer-button:first-child {
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        /* Print Styles (Same as topic-1) */
+        @media print {
+            body {
+                font-size: 10pt;
+                color: #000 !important;
+                background-color: #fff !important;
+            }
+
+            .navbar,
+            .sidebar,
+            .theme-toggle,
+            .hero-section .btn,
+            .quiz-container,
+            .new-footer-container,
+            details summary::marker,
+            .eduvishion-logo,
+            .syllabus-bar-container,
+            .new-footer-print-link {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 0;
+            }
+
+            section {
+                padding-top: 0;
+                margin-top: 0;
+                margin-bottom: 1.5rem;
+                page-break-after: auto;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4 {
+                color: #000 !important;
+                border: none !important;
+                page-break-after: avoid;
+            }
+
+            .callout {
+                border-left: 3px solid #ccc !important;
+                background-color: #f9f9f9 !important;
+            }
+
+            a {
+                text-decoration: none;
+                color: #000 !important;
+            }
+
+            a[href^="http"]:after {
+                content: " (" attr(href) ")";
+            }
+
+            pre {
+                background-color: #f0f0f0 !important;
+                border: 1px solid #ccc !important;
+                color: #000 !important;
+            }
+
+            .diagram,
+            .diagram img {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvishion-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../index.html" class="flex items-center group">
+                <span class="text-white">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+                    fill="none">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-white">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-left-spacer"></div>
+        <a href="#" class="navbar-brand"><i class="fas fa-chess"></i> Game Playing & Adversarial Search</a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+        </button>
+    </nav>
+
+    <aside class="sidebar" id="sidebar">
+        <h3>Table of Contents</h3>
+        <ul id="toc"></ul>
+    </aside>
+
+    <main class="main-content">
+        <header class="hero-section">
+            <h1>Mastering AI Game Playing</h1>
+            <p>Understanding adversarial search, Minimax, Alpha-Beta pruning, and strategic game theory in AI.</p>
+        </header>
+
+        <div class="syllabus-bar-container">
+            <a href="../ai.html" class="syllabus-bar-back-link"> <!-- Ensure this path is correct -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                        clip-rule="evenodd" />
+                </svg>
+                Back to Syllabus
+            </a>
+            <div class="syllabus-bar-topic-badge">
+                Topic 4
+            </div>
+        </div>
+
+        <section id="intro-game-playing">
+            <h2>Introduction to Game Playing in AI</h2>
+            <p>Game playing has always been a fascinating domain for artificial intelligence (AI). From the early days
+                of computer science to the current era of advanced deep learning systems, games have served as
+                benchmarks for AI development. They offer structured environments with clear rules, making them ideal
+                for training algorithms to solve complex problems. With AI's ability to learn, adapt, and make strategic
+                decisions, it is now becoming an essential player in various gaming domains, reshaping how we experience
+                and interact with games.</p>
+            <p>Game Playing is an important domain of artificial intelligence. Games don't require much knowledge; the
+                only knowledge we need to provide is the rules, legal moves and the conditions of winning or losing the
+                game. Both players try to win the game. So, both of them try to make the best move possible at each
+                turn. Searching techniques like BFS (Breadth First Search) are not accurate for this as the branching
+                factor is very high, so searching will take a lot of time. Game playing in AI is an active area of
+                research and has many practical applications, including game development, education, and military
+                training.</p>
+        </section>
+
+        <section id="types-of-games">
+            <h2>Types of Games in AI</h2>
+            <p>Games can be classified based on several characteristics, which influence the strategies AI uses:</p>
+            <ul>
+                <li><strong>Perfect vs. Imperfect Information:</strong>
+                    <ul>
+                        <li><strong class="highlight">Perfect Information:</strong> All players can see the exact state
+                            of the game. Examples: Chess, Checkers, Go, Othello, Backgammon.</li>
+                        <li><strong class="highlight">Imperfect Information:</strong> Some information is hidden from
+                            players. Examples: Scrabble, Bridge, Poker, most multi-player video games.</li>
+                    </ul>
+                </li>
+                <li><strong>Deterministic vs. Stochastic:</strong>
+                    <ul>
+                        <li><strong class="highlight">Deterministic:</strong> The outcome of an action is fully
+                            determined by the choice of action. Example: Chess.</li>
+                        <li><strong class="highlight">Stochastic:</strong> The outcome of an action is partially
+                            determined by chance (e.g., dice rolls, card shuffles). Examples: Backgammon, Poker.</li>
+                    </ul>
+                </li>
+            </ul>
+            <p>This topic primarily focuses on <strong class="highlight">two-player, perfect information, deterministic,
+                    zero-sum games</strong> (where one player's gain is the other's loss).</p>
+        </section>
+
+        <section id="human-vs-computer">
+            <h2>Historical Milestones: Human vs. Computer</h2>
+            <p>AI has achieved remarkable success in various games, often surpassing human champions:</p>
+            <details>
+                <summary>Key Milestones</summary>
+                <ul>
+                    <li><strong>Checkers:</strong> 1994 - Chinook (UofA) beat human world champion Marion Tinsley.</li>
+                    <li><strong>Chess:</strong> 1997 - IBM's Deep Blue beat world champion Garry Kasparov. 2002 - Fritz
+                        drew with Vladimir Kramnik.</li>
+                    <li><strong>Othello:</strong> 1997 - Logistello (NEC Research) beat world champion Takeshi Murakami.
+                        Today, human champions often refuse to play top computer programs.</li>
+                    <li><strong>Go:</strong> Master-level play achieved by AI (e.g., AlphaGo by DeepMind in 2016 beating
+                        Lee Sedol), a game once thought too complex for AI to master due to its vast search space.</li>
+                    <li><strong>Scrabble:</strong> 1998 - Maven (UofA) beats world champion Adam Logan.</li>
+                    <li><strong>Poker:</strong> 2008 - Polaris (UofA) beats some top online human players. More recent
+                        AIs like Pluribus and Libratus have shown superhuman performance in multi-player no-limit Texas
+                        Hold'em.</li>
+                    <li><strong>Bridge:</strong> 1988 - Ginsberg's program placed 12th in world championships.
+                        Coordination remains difficult.</li>
+                    <li><strong>Commercial, Multi-player Games (e.g., Dota 2, StarCraft II):</strong> Very hard problems
+                        with real-time constraints, dynamic opponents, and imperfect information. Progress is being
+                        made, often with the goal of creating "interesting" AI opponents rather than just defeating
+                        humans.</li>
+                </ul>
+            </details>
+        </section>
+
+        <section id="game-playing-as-search">
+            <h2>Game Playing as Search</h2>
+            <p>We can formulate two-player, perfect information, deterministic games as search problems:</p>
+            <ul>
+                <li><strong>State:</strong> The current configuration of the board/game.</li>
+                <li><strong>Operators (Actions):</strong> Legal moves available to the current player.</li>
+                <li><strong>Initial State:</strong> The starting configuration of the game.</li>
+                <li><strong>Terminal States (Goal):</strong> States where the game is won, lost, or drawn.</li>
+                <li><strong>Utility (Cost/Payoff):</strong> A function that assigns a numerical value to terminal
+                    states. For example: +1 for winning, -1 for losing, 0 for a draw. More complex games might use
+                    points, money, etc.</li>
+            </ul>
+            <p>The goal is to find a <strong class="highlight">strategy</strong> (a way of picking moves) that maximizes
+                the AI's utility, assuming the opponent plays optimally to minimize the AI's utility.</p>
+
+            <h3>The Adversarial Search Challenge</h3>
+            <p>Game playing search is different from standard search problems because of the presence of a <strong
+                    class="highlight">malicious opponent</strong>.</p>
+            <ul>
+                <li>The opponent is trying to make things good for itself and bad for our AI.</li>
+                <li>We have to simulate the opponent's decision-making process.</li>
+            </ul>
+            <p>The main idea is to define utility from a single agent's perspective:</p>
+            <ul>
+                <li>A <strong class="highlight">MAX player</strong> (our AI) who wants to maximize its utility.</li>
+                <li>A <strong class="highlight">MIN player</strong> (the opponent) who wants to minimize MAX's utility
+                    (which is equivalent to maximizing their own utility in a zero-sum game).</li>
+            </ul>
+        </section>
+
+        <section id="minimax-algorithm">
+            <h2>Minimax Algorithm</h2>
+            <p>The Minimax algorithm is a decision-making algorithm used in AI, game theory, and decision theory for
+                two-player zero-sum games. It determines the optimal move for a player assuming that the opponent also
+                plays optimally. It's a depth-first, depth-limited search procedure.</p>
+            <h4>Core Idea:</h4>
+            <ol>
+                <li>Expand a complete search tree (game tree) until terminal states are reached and their utilities can
+                    be computed.</li>
+                <li>Go back up from the leaves towards the current state:
+                    <ul>
+                        <li>At each <strong class="highlight">MIN node</strong> (opponent's turn), back up the <strong
+                                class="highlight">worst (minimum)</strong> value among its children.</li>
+                        <li>At each <strong class="highlight">MAX node</strong> (AI's turn), back up the <strong
+                                class="highlight">best (maximum)</strong> value among its children.</li>
+                    </ul>
+                </li>
+            </ol>
+            <div class="diagram">
+                <h4>Minimax Search Tree Example</h4>
+                <div class="diagram-placeholder">Image: Generic Minimax tree with MAX/MIN levels and backed-up values
+                    (like the one with root value 3).</div>
+            </div>
+
+            <h4>Minimax Algorithm (Recursive Definition):</h4>
+            <pre><code>MINIMAX(Node n) = 
+  UTILITY(n)                             if n is a terminal state
+  max<sub>s ∈ Successors(n)</sub> MINIMAX(s)      if n is a MAX node
+  min<sub>s ∈ Successors(n)</sub> MINIMAX(s)      if n is a MIN node</code></pre>
+
+            <h4>Working of Minimax (Example: Tic-Tac-Toe):</h4>
+            <p>Tic-Tac-Toe is a simple game to illustrate Minimax:</p>
+            <ol>
+                <li>Start with the initial game state.</li>
+                <li>Generate all possible moves for the current player.</li>
+                <li>Evaluate each move by simulating the resulting game state and assigning a score (utility) using
+                    Minimax.</li>
+                <li>If the game is over (win, lose, draw), assign a utility score accordingly (+1 for MAX win, -1 for
+                    MIN win/MAX loss, 0 for draw).</li>
+                <li>If a maximum depth is reached (for complex games) or the game is over, return the score.</li>
+                <li>If it's MAX's turn, select the move leading to the highest Minimax value.</li>
+                <li>If it's MIN's turn, select the move leading to the lowest Minimax value.</li>
+                <li>Repeat steps until the game is over or a decision is made.</li>
+            </ol>
+            <div class="diagram">
+                <h4>Tic-Tac-Toe Game Tree with Utility</h4>
+                <div class="diagram-placeholder">Image: Tic-Tac-Toe game tree with initial moves and terminal states
+                    showing +1, 0, -1 utilities.</div>
+            </div>
+
+            <details>
+                <summary>Properties of Minimax Search</summary>
+                <ul>
+                    <li><strong>Completeness:</strong> Yes, if the game tree is finite.</li>
+                    <li><strong>Optimality:</strong> Yes, against an optimal opponent. If the opponent doesn't play
+                        optimally, Minimax might still find a good move, but not necessarily the absolute best against
+                        that specific sub-optimal play.</li>
+                    <li><strong>Time Complexity:</strong> O(b<sup>m</sup>), where 'b' is the branching factor (number of
+                        legal moves per state) and 'm' is the maximum depth of the game tree.</li>
+                    <li><strong>Space Complexity:</strong> O(bm) for a depth-first exploration (stores nodes along the
+                        current path).</li>
+                </ul>
+            </details>
+
+            <h4>Limitations of Minimax:</h4>
+            <p>The main drawback is its high time complexity. For games like Chess (b ≈ 35, m ≈ 100 for "reasonable"
+                games), an exact solution using pure Minimax is impossible. This leads to the need for:
+            <ul>
+                <li><strong>Depth Limits (Cutoff):</strong> Stop searching after a certain depth.</li>
+                <li><strong>Evaluation Functions:</strong> Estimate the utility of non-terminal states.</li>
+                <li><strong>Pruning Techniques:</strong> Like Alpha-Beta Pruning.</li>
+            </ul>
+            </p>
+
+            <h4>Evaluation Functions:</h4>
+            <p>For games where the terminal states are too deep to reach, we use an evaluation function to estimate the
+                expected utility of a game from a given position.
+                <br>Example for Chess: Assign values to pieces (Pawn=1, Knight=3, etc.). Score = (Sum of AI's pieces) -
+                (Sum of opponent's pieces).
+                <br>More sophisticated functions use weighted features:
+                <code>w<sub>1</sub>f<sub>1</sub>(s) + w<sub>2</sub>f<sub>2</sub>(s) + ...</code> (e.g., material
+                balance, mobility, king safety).
+            </p>
+            <p>Evaluation functions are often approximate and more accurate near the end of the game. Only the <strong
+                    class="highlight">order</strong> of the numbers matters for Minimax decision if the transformation
+                is monotonic.</p>
+        </section>
+
+        <section id="alpha-beta-pruning">
+            <h2>Alpha-Beta Pruning</h2>
+            <p>Alpha-Beta Pruning is an optimization technique for the Minimax algorithm. It reduces the number of nodes
+                evaluated in the search tree by "pruning" branches that cannot influence the final decision. It returns
+                the same move as Minimax would, but by examining fewer states.</p>
+            <h4>Core Idea:</h4>
+            <p>Keep track of two values during the search:</p>
+            <ul>
+                <li><strong class="highlight">Alpha (α):</strong> The best (highest-value) choice found so far along the
+                    path for MAX. Initialized to -∞.</li>
+                <li><strong class="highlight">Beta (β):</strong> The best (lowest-value) choice found so far along the
+                    path for MIN. Initialized to +∞.</li>
+            </ul>
+            <p>Pruning occurs when the current value of a node being examined is worse than the current α or β value for
+                its ancestors. Specifically:
+            <ul>
+                <li>If a MIN node's value becomes less than or equal to α (MAX's current best guaranteed score), MAX
+                    will never choose this path, so further exploration of this MIN node's children is unnecessary.
+                    (Prune below this MIN node: β ≤ α)</li>
+                <li>If a MAX node's value becomes greater than or equal to β (MIN's current best guaranteed score for
+                    MAX), MIN will never allow this path, so further exploration of this MAX node's children is
+                    unnecessary. (Prune below this MAX node: α ≥ β)</li>
+            </ul>
+            The main condition for Alpha-Beta pruning is: <strong class="highlight">α ≥ β</strong>.</p>
+
+            <div class="diagram">
+                <h4>Alpha-Beta Pruning Example</h4>
+                <div class="diagram-placeholder">Image: Game tree showing how Alpha-Beta values propagate and where
+                    pruning occurs (like the example with a branch crossed out).</div>
+            </div>
+
+            <details>
+                <summary>Alpha-Beta Algorithm (Conceptual Pseudocode)</summary>
+                <p>Instead of a single MinimaxValue function, Alpha-Beta uses two mutually recursive functions, MaxValue
+                    and MinValue, each taking the current state, alpha, and beta as parameters.</p>
+                <pre><code>// MaxValue function for MAX player
+function MaxValue(state, alpha, beta):
+  if CutoffTest(state) or TerminalTest(state):
+    return Evaluation(state)
+  v = -infinity
+  for each successor s of state:
+    v = max(v, MinValue(s, alpha, beta))
+    if v >= beta: // Pruning condition for MAX
+      return v 
+    alpha = max(alpha, v)
+  return v
+
+// MinValue function for MIN player
+function MinValue(state, alpha, beta):
+  if CutoffTest(state) or TerminalTest(state):
+    return Evaluation(state)
+  v = +infinity
+  for each successor s of state:
+    v = min(v, MaxValue(s, alpha, beta))
+    if v <= alpha: // Pruning condition for MIN
+      return v
+    beta = min(beta, v)
+  return v
+</code></pre>
+            </details>
+
+            <details>
+                <summary>Properties of Alpha-Beta Pruning</summary>
+                <ul>
+                    <li><strong>Result:</strong> Pruning does not affect the final Minimax value returned (it yields the
+                        same result as Minimax).</li>
+                    <li><strong>Efficiency:</strong> The effectiveness of pruning heavily depends on <strong
+                            class="highlight">move ordering</strong>.
+                        <ul>
+                            <li>With perfect ordering (best moves explored first), the time complexity can be reduced to
+                                approximately O(b<sup>m/2</sup>), effectively doubling the searchable depth.</li>
+                            <li>With worst ordering, no pruning occurs, and complexity remains O(b<sup>m</sup>).</li>
+                            <li>On average, with random ordering, complexity is often around O(b<sup>3m/4</sup>).</li>
+                        </ul>
+                    </li>
+                    <li>Demonstrates the value of reasoning about which computations are important.</li>
+                </ul>
+            </details>
+
+            <h4>Drawbacks of Alpha-Beta Pruning:</h4>
+            <ul>
+                <li>If the branching factor is very large (e.g., in Go, b ≈ 300), search depth is still limited.</li>
+                <li>Optimal play is guaranteed against an optimal opponent if search proceeds to the end. However, if
+                    heuristics are used or the opponent is not optimal, the assumptions might not hold perfectly.</li>
+            </ul>
+        </section>
+
+        <section id="game-trees-strategy">
+            <h2>Game Trees and Strategic Considerations</h2>
+            <p>A <strong class="highlight">game tree</strong> is a directed graph whose nodes are positions in a game
+                and whose edges are moves. The complete game tree for a game starts at the initial position and contains
+                all possible moves from each position; the leaves are terminal positions.</p>
+            <p>Each level of the tree is often called a <strong class="highlight">ply</strong>. For example, a 2-ply
+                search looks two moves ahead (one for MAX, one for MIN).</p>
+            <p>Strategic considerations in AI game playing involve:</p>
+            <ul>
+                <li><strong>Choosing an appropriate search depth (cutoff):</strong> Balancing computational cost with
+                    search quality.</li>
+                <li><strong>Designing effective evaluation functions:</strong> Crucial when a full search to terminal
+                    states is infeasible.</li>
+                <li><strong>Move ordering for Alpha-Beta Pruning:</strong> Heuristics can be used to order moves to
+                    maximize pruning.</li>
+                <li><strong>Handling uncertainty and imperfect information:</strong> Requires different techniques
+                    beyond standard Minimax (e.g., Monte Carlo Tree Search for games like Go, or modeling opponent
+                    beliefs).</li>
+            </ul>
+            <div class="diagram">
+                <h4>Tic-Tac-Toe Search Tree (1 Ply)</h4>
+                <div class="diagram-placeholder">Image: Tic-Tac-Toe game tree showing the initial state and the first
+                    level of possible moves (1 Ply).</div>
+            </div>
+        </section>
+
+        <section id="interactive-quiz-gameplaying">
+            <h2>Mini Quiz: Game Playing Concepts</h2>
+            <div class="quiz-container">
+                <div id="quiz">
+                    <div class="quiz-question" data-question="1">
+                        <p><strong>1. In the Minimax algorithm, what does the MAX player try to do?</strong></p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q1" value="a"> Minimize the utility value.</label>
+                            <label><input type="radio" name="q1" value="b"> Maximize the utility value.</label>
+                            <label><input type="radio" name="q1" value="c"> Reach a draw state.</label>
+                        </div>
+                        <p class="quiz-feedback" id="feedback-q1"></p>
+                    </div>
+                    <div class="quiz-question" data-question="2">
+                        <p><strong>2. What is the primary purpose of Alpha-Beta Pruning?</strong></p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q2" value="a"> To find a better solution than
+                                Minimax.</label>
+                            <label><input type="radio" name="q2" value="b"> To reduce the number of nodes evaluated by
+                                Minimax.</label>
+                            <label><input type="radio" name="q2" value="c"> To handle games with imperfect
+                                information.</label>
+                        </div>
+                        <p class="quiz-feedback" id="feedback-q2"></p>
+                    </div>
+                    <div class="quiz-question" data-question="3">
+                        <p><strong>3. A game where all players know the complete state of the game at all times is
+                                called:</strong></p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q3" value="a"> Stochastic game</label>
+                            <label><input type="radio" name="q3" value="b"> Imperfect information game</label>
+                            <label><input type="radio" name="q3" value="c"> Perfect information game</label>
+                        </div>
+                        <p class="quiz-feedback" id="feedback-q3"></p>
+                    </div>
+                    <button id="submitQuiz">Submit Answers</button>
+                    <p id="quizScore" style="margin-top:15px; font-weight:bold;"></p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="new-footer-container">
+            <div class="new-footer-buttons-wrapper">
+                <a href="topic-3.html" class="new-footer-button">
+                    ← Previous Topic: Problem Solving & Search
+                </a>
+                <a href="topic-5.html" <!-- Update this link when topic-5 is ready -->
+                    class="new-footer-button">
+                    Next Topic: Knowledge Representation & Reasoning →
+                </a>
+            </div>
+            <a href="#" onclick="window.print(); return false;" class="new-footer-print-link">Print this page</a>
+            <p style="font-size: 0.9rem; color: var(--text-color); margin-top: 0.5rem;">© <span id="currentYear"></span>
+                Game Playing & Adversarial Search. All rights reserved.</p>
+        </footer>
+
+    </main>
+
+    <script>
+        // JavaScript from topic-1.html (Theme toggle, Throttled TOC highlighting, Footer year)
+        // For brevity, imagine all the JS from the previous optimized example is here
+        // Key parts will be included and updated if necessary.
+
+        // Dark/Light Mode Toggle (Same as topic-1)
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+        function setTheme(theme) { if (theme === 'dark') { body.classList.add('dark-mode'); themeToggle.innerHTML = '<i class="fas fa-sun"></i>'; localStorage.setItem('theme', 'dark'); } else { body.classList.remove('dark-mode'); themeToggle.innerHTML = '<i class="fas fa-moon"></i>'; localStorage.setItem('theme', 'light'); } }
+        const localTheme = localStorage.getItem('theme'); if (localTheme) { setTheme(localTheme); } else { setTheme(prefersDarkScheme.matches ? 'dark' : 'light'); }
+        themeToggle.addEventListener('click', () => { setTheme(body.classList.contains('dark-mode') ? 'light' : 'dark'); });
+        prefersDarkScheme.addEventListener('change', (e) => { if (!localStorage.getItem('theme')) { setTheme(e.matches ? 'dark' : 'light'); } });
+
+        // Table of Contents Generation & Active Scrolling (Optimized & Throttled - Same as topic-1)
+        const tocContainer = document.getElementById('toc');
+        const mainSections = Array.from(document.querySelectorAll('main section[id]'));
+        let tocLinkElements = [];
+        function throttle(func, limit) { let inThrottle; return function () { const args = arguments; const context = this; if (!inThrottle) { func.apply(context, args); inThrottle = true; setTimeout(() => inThrottle = false, limit); } } }
+        function updateTocAndSectionData() { const navbar = document.querySelector('.navbar'); const navbarHeight = navbar ? navbar.offsetHeight : 0; tocContainer.innerHTML = ''; tocLinkElements = []; mainSections.forEach(section => { const sectionTitleElement = section.querySelector('h2'); if (sectionTitleElement) { const listItem = document.createElement('li'); const link = document.createElement('a'); link.textContent = sectionTitleElement.textContent; link.href = `#${section.id}`; link.dataset.sectionId = section.id; listItem.appendChild(link); tocContainer.appendChild(listItem); tocLinkElements.push(link); } section.dataset.effectiveOffsetTop = section.offsetTop - navbarHeight - 30; }); }
+        function highlightActiveTocLink() { const scrollPosition = window.scrollY; let currentlyActiveSectionId = null; for (let i = mainSections.length - 1; i >= 0; i--) { const section = mainSections[i]; if (scrollPosition >= parseInt(section.dataset.effectiveOffsetTop || '0')) { currentlyActiveSectionId = section.id; break; } } tocLinkElements.forEach(link => { if (link.dataset.sectionId === currentlyActiveSectionId) { link.classList.add('active'); } else { link.classList.remove('active'); } }); }
+        if (mainSections.length > 0) { updateTocAndSectionData(); highlightActiveTocLink(); window.addEventListener('scroll', throttle(highlightActiveTocLink, 100)); window.addEventListener('resize', throttle(() => { updateTocAndSectionData(); highlightActiveTocLink(); }, 150)); }
+
+        // Mini Quiz Logic for Topic 4
+        const submitQuizButtonTopic4 = document.getElementById('submitQuiz');
+        const quizQuestionElementsTopic4 = document.querySelectorAll('#interactive-quiz-gameplaying .quiz-question');
+        const quizCorrectAnswersTopic4 = {
+            q1: { value: 'b', text: 'Maximize the utility value.' },
+            q2: { value: 'b', text: 'To reduce the number of nodes evaluated by Minimax.' },
+            q3: { value: 'c', text: 'Perfect information game' }
+        };
+
+        if (submitQuizButtonTopic4) {
+            submitQuizButtonTopic4.addEventListener('click', () => {
+                let score = 0;
+                quizQuestionElementsTopic4.forEach(questionElement => {
+                    const questionId = 'q' + questionElement.dataset.question;
+                    const selectedOption = document.querySelector(`#interactive-quiz-gameplaying input[name="${questionId}"]:checked`);
+                    const feedbackElement = document.getElementById(`feedback-${questionId}`);
+                    const correctAnswerInfo = quizCorrectAnswersTopic4[questionId];
+
+                    if (selectedOption) {
+                        if (selectedOption.value === correctAnswerInfo.value) {
+                            score++;
+                            feedbackElement.textContent = "Correct!";
+                            feedbackElement.style.color = "var(--secondary-color)";
+                        } else {
+                            feedbackElement.textContent = `Incorrect. The correct answer is: ${correctAnswerInfo.text}.`;
+                            feedbackElement.style.color = "var(--accent-color)";
+                        }
+                    } else {
+                        feedbackElement.textContent = "Please select an answer.";
+                        feedbackElement.style.color = "var(--accent-color)";
+                    }
+                });
+                const quizScoreEl = document.getElementById('quizScore');
+                if (quizScoreEl) {
+                    quizScoreEl.textContent = `You scored ${score} out of ${quizQuestionElementsTopic4.length}.`;
+                }
+            });
+        }
+
+        // Footer current year (Same as topic-1)
+        const currentYearSpan = document.getElementById('currentYear');
+        if (currentYearSpan) {
+            currentYearSpan.textContent = new Date().getFullYear();
+        }
+    </script>
+</body>
+
+</html>

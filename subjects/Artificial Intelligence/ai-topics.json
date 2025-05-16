@@ -3,68 +3,78 @@
   "subtitle": "Explore the foundations of intelligent systems and algorithms",
   "topics": [
     {
-      "title": "Introduction to AI",
-      "description": "Definition, importance, history, milestones, types, and applications of AI.",
+      "title": "Introduction to Artificial Intelligence",
+      "description": "Definition and scope of AI, historical evolution, key milestones, different types of AI (Narrow, General, Super), and diverse applications across industries. Comparison between AI and human intelligence.",
       "resources": ["Notes", "Video"]
     },
     {
-      "title": "Fundamentals of AI",
-      "description": "Intelligent agents, problem-solving, search strategies, and game playing.",
+      "title": "Intelligent Agents",
+      "description": "Concept of agents and environments (PEAS description). Understanding rationality, autonomy, and types of agent architectures: simple reflex, model-based reflex, goal-based, utility-based, and learning agents.",
       "resources": ["Examples", "Simulation"]
     },
     {
-      "title": "Knowledge Representation and Reasoning",
-      "description": "Logic, inference mechanisms, knowledge-based systems, and ontologies.",
+      "title": "Problem Solving & Search Strategies",
+      "description": "Formulating problems for AI. Uninformed search algorithms (BFS, DFS, UCS, DLS, IDS). Informed (Heuristic) search algorithms (Greedy Best-First, A* Search). Local search (Hill Climbing, Simulated Annealing) and Constraint Satisfaction Problems (CSP).",
       "resources": ["Notes", "Examples"]
     },
     {
-      "title": "Machine Learning Basics",
-      "description": "Introduction to ML, workflow, overfitting, underfitting, and bias-variance tradeoff.",
+      "title": "Game Playing and Adversarial Search",
+      "description": "Introduction to game theory in AI. Minimax algorithm for optimal decision-making in two-player games. Alpha-Beta Pruning for optimizing Minimax. Game trees and strategic considerations.",
       "resources": ["Video", "Examples"]
     },
     {
-      "title": "Supervised Learning",
-      "description": "Regression, classification, ensemble methods, and evaluation metrics.",
+      "title": "Knowledge Representation & Reasoning",
+      "description": "Using propositional and first-order logic for knowledge representation. Inference techniques (Forward/Backward Chaining). Rule-based systems, semantic networks, frames, and ontologies. Reasoning under uncertainty (Bayesian networks, fuzzy logic).",
+      "resources": ["Notes", "Examples"]
+    },
+    {
+      "title": "Machine Learning Fundamentals",
+      "description": "Overview of Machine Learning. Types: Supervised, Unsupervised, Reinforcement Learning. The ML workflow, model evaluation metrics (accuracy, precision, recall, F1-score), concepts of overfitting, underfitting, and bias-variance tradeoff. Feature engineering and data preprocessing techniques.",
+      "resources": ["Video", "Examples"]
+    },
+    {
+      "title": "Supervised Learning Algorithms",
+      "description": "Regression models (Linear, Logistic). Classification algorithms (Decision Trees, K-Nearest Neighbors, Support Vector Machines, Naive Bayes). Ensemble methods (Random Forest, Bagging, Boosting like AdaBoost, Gradient Boosting). Cross-validation and hyperparameter tuning.",
       "resources": ["Practice", "Notes"]
     },
     {
-      "title": "Unsupervised Learning",
-      "description": "Clustering, dimensionality reduction, and association rule learning.",
+      "title": "Unsupervised Learning Algorithms",
+      "description": "Clustering techniques (K-Means, Hierarchical Clustering, DBSCAN). Dimensionality reduction methods (Principal Component Analysis - PCA, t-SNE). Association rule mining (Apriori algorithm, FP-Growth).",
       "resources": ["Examples", "Notes"]
     },
     {
       "title": "Reinforcement Learning",
-      "description": "Basics, MDPs, Q-learning, and deep reinforcement learning.",
+      "description": "Core concepts of Reinforcement Learning. Markov Decision Processes (MDPs). Value iteration and Policy iteration. Q-learning and SARSA algorithms. Introduction to Deep Q-Networks (DQN).",
       "resources": ["Simulation", "Practice"]
     },
     {
-      "title": "Neural Networks and Deep Learning",
-      "description": "Artificial neurons, backpropagation, CNNs, RNNs, GANs, and transfer learning.",
+      "title": "Neural Networks & Deep Learning",
+      "description": "From biological to artificial neurons. Perceptrons and Multi-Layer Perceptrons (MLPs). Backpropagation algorithm. Activation functions. Architectures: Convolutional Neural Networks (CNNs), Recurrent Neural Networks (RNNs), LSTMs, GANs. Transfer learning and pre-trained models.",
       "resources": ["Video", "Examples"]
     },
     {
       "title": "Natural Language Processing (NLP)",
-      "description": "Text preprocessing, language modeling, transformers, and NLP applications.",
+      "description": "Text preprocessing (tokenization, stemming, lemmatization). Language models (N-grams, Word Embeddings like Word2Vec, GloVe, BERT). Named Entity Recognition (NER), Part-of-Speech (POS) tagging, sentiment analysis. Transformers and attention mechanisms. Chatbots and text generation.",
       "resources": ["Notes", "Practice"]
     },
     {
       "title": "Computer Vision",
-      "description": "Image processing, classification, object detection, and segmentation.",
+      "description": "Fundamentals of image processing. Feature extraction techniques (SIFT, SURF, HOG). Image classification, object detection (e.g., YOLO, SSD), and image segmentation. Applications like face recognition and optical character recognition (OCR).",
       "resources": ["Examples", "Video"]
     },
     {
-      "title": "Advanced AI Topics",
-      "description": "Explainable AI, ethics, privacy, and autonomous systems.",
+      "title": "Advanced AI Topics & Ethics",
+      "description": "Explainable AI (XAI) for model transparency. Ethical considerations in AI: bias, fairness, accountability, and privacy. AI in autonomous systems (e.g., self-driving cars), robotics. Applications in healthcare, finance, and education.",
       "resources": ["Notes", "Case Studies"]
     },
     {
-      "title": "Tools, Libraries, and Frameworks",
-      "description": "Python, essential libraries, ML/DL frameworks, deployment, and version control.",
+      "title": "AI Tools & Frameworks",
+      "description": "Programming with Python for AI. Essential libraries: NumPy, Pandas, Scikit-learn, OpenCV. Deep Learning frameworks: TensorFlow, PyTorch, Keras. Model deployment tools (Flask, Streamlit, Docker). Version control (Git) and experiment tracking (MLflow).",
       "resources": ["Tutorials", "Documentation"]
     },
     {
-      "title": "AI Trends and Future Scope",
-      "description": "AI in industries, AGI, emerging trends, and career paths.",
+      "title": "Future of AI & Emerging Trends",
+      "description": "The quest for Artificial General Intelligence (AGI). AI and consciousness. AI in Industry 4.0. Emerging technologies like Edge AI, Federated Learning, and Quantum Machine Learning. Research frontiers, career paths, and future opportunities in AI.",
       "resources": ["Articles", "Videos"]
     }
   ]
