@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en" class=""> <!-- Start with no 'dark' class, JS will add -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unix MCQ Challenge - Chapter 2 (File System)</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Logo Styles (Integrated into header flow) */
+        .header-logo .text-2xl {
+            font-size: 1.6rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .header-logo .logo-text-part {
+            /* Color will be handled by Tailwind text-gray-700 dark:text-gray-100 by default, or override if needed */
+        }
+
+        /* Make logo text distinctly visible in both modes if it clashes */
+        html:not(.dark) .header-logo .logo-text-part {
+            color: #374151;
+            /* Tailwind gray-700 for light mode if needed */
+        }
+
+        html.dark .header-logo .logo-text-part {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode */
+        }
+
+        .header-logo .logo-icon-part {
+            color: #F59E0B;
+            /* Tailwind amber-500, good contrast */
+            transition: color 0.3s;
+        }
+
+        .header-logo a:hover .logo-icon-part {
+            color: #D97706;
+            /* Tailwind amber-600 */
+        }
+
+        .header-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.4em;
+            width: 1.4em;
+            margin: 0 2px;
+        }
+
+        /* Ensure sticky header background is consistent */
+        header.sticky {
+            background-color: #f9fafb;
+            /* Tailwind gray-50 */
+        }
+
+        html.dark header.sticky {
+            background-color: #1f2937;
+            /* Tailwind gray-800 */
+        }
+
+        /* Ensure sub-header info card also respects dark mode */
+        #quizHeaderInfo {
+            background-color: #ffffff;
+            /* Tailwind white */
+        }
+
+        html.dark #quizHeaderInfo {
+            background-color: #374151;
+            /* Tailwind gray-700 */
+        }
+
+
+        .quiz-question-block {
+            transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+            opacity: 0.6;
+        }
+
+        .quiz-question-block.active-question {
+            opacity: 1;
+            transform: scale(1.01);
+            box-shadow: 0 0 15px rgba(80, 120, 255, 0.2);
+        }
+
+        html.dark .quiz-question-block.active-question {
+            box-shadow: 0 0 15px rgba(100, 150, 255, 0.3);
+        }
+
+        .quiz-question-block.answered-question {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .quiz-question-block.answered-question .option-btn {
+            pointer-events: none;
+            cursor: default;
+        }
+
+        .quiz-question-block .option-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .option-btn {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .option-btn:not(:disabled):hover {
+            transform: translateY(-2px) scale(1.01);
+            /* box-shadow: 0 4px 12px rgba(0,0,0,0.1); Tailwind's shadow-md or shadow-lg can be used directly on class */
+        }
+
+        html.dark .option-btn:not(:disabled):hover {
+            /* box-shadow: 0 4px 12px rgba(255,255,255,0.08); */
+        }
+
+        .option-btn.correct {
+            background-color: #10B981 !important;
+            /* green-500 */
+            color: white !important;
+            border-color: #059669 !important;
+            /* green-600 */
+        }
+
+        .option-btn.incorrect {
+            background-color: #EF4444 !important;
+            /* red-500 */
+            color: white !important;
+            border-color: #DC2626 !important;
+            /* red-600 */
+        }
+
+        .option-btn.actual-correct-unselected {
+            background-color: #D1FAE5 !important;
+            /* green-100 */
+            color: #065F46 !important;
+            /* green-700 */
+            border-color: #6EE7B7 !important;
+            /* green-300 */
+            animation: pulse-subtle-green 2s infinite;
+        }
+
+        html.dark .option-btn.actual-correct-unselected {
+            background-color: #064E3B !important;
+            color: #A7F3D0 !important;
+            border-color: #10B981 !important;
+        }
+
+
+        @keyframes pulse-subtle-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        .explanation-area {
+            min-height: 70px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            overflow: hidden;
+            background-color: #ffffff;
+            /* Light mode */
+        }
+
+        html.dark .explanation-area {
+            background-color: #374151;
+            /* Tailwind gray-700 for dark mode */
+        }
+
+        .explanation-area.visible {
+            opacity: 1;
+        }
+
+        /* Fix dark mode for feedback area */
+        .feedback-area {
+            color: #374151;
+            /* Light mode text color */
+        }
+
+        html.dark .feedback-area {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode text color */
+        }
+
+        /* Fix dark mode for question block */
+        .quiz-question-block {
+            background-color: #f9fafb;
+            /* Light mode */
+        }
+
+        html.dark .quiz-question-block {
+            background-color: #1f2937;
+            /* Tailwind gray-800 for dark mode */
+        }
+    </style>
+
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
+
+    <div class="container mx-auto p-4 min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="sticky mb-6 top-0 z-50 py-3 shadow-md bg-gray-50 dark:bg-gray-800">
+            <!-- Top part of the header: Logo, Title, Dark Mode Toggle -->
+            <div class="container mx-auto flex justify-between items-center px-2 sm:px-4">
+                <!-- Eduvision Logo -->
+                <div class="header-logo">
+                    <div class="text-2xl font-bold">
+                        <a href="../../index.html" class="flex items-center group">
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">Edu</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="logo-icon-part" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">ision</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Page Title -->
+                <h1 class="mx-4 text-lg sm:text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500 text-center flex-grow whitespace-nowrap cursor-pointer"
+                    onclick="window.location.href='unix-mcq.html'">
+                    Unix MCQ Challenge
+                </h1>
+
+                <!-- Dark Mode Toggle -->
+                <div class="flex-shrink-0">
+                    <button id="darkModeToggle"
+                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none transition-colors duration-300"
+                        aria-label="Toggle Dark Mode">
+                        <!-- Icon will be set by JS -->
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bottom part of the header: Quiz Info Card -->
+            <div id="quizHeaderInfo" class="bg-white dark:bg-gray-700 p-3 mt-3 rounded-lg shadow-md container mx-auto">
+                <h2 id="mainChapterTitle" class="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-2"></h2>
+                <div class="flex justify-between items-center text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">
+                    <span id="questionProgressText">Answered: 0 / 0</span>
+                    <span id="scoreDisplay">Score: 0</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                    <div id="progressBar"
+                        class="bg-gradient-to-r from-blue-500 to-purple-600 h-2.5 rounded-full transition-all duration-500 ease-out"
+                        style="width: 0%"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area for All Questions -->
+        <main id="quizContentArea"
+            class="flex-grow bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl transition-colors duration-300 mt-4">
+            <!-- Topics and Questions will be dynamically inserted here -->
+        </main>
+
+        <!-- Navigation Area (for Next Chapter) -->
+        <div id="overallNavigation" class="mt-8 mb-4 flex justify-center">
+            <button id="nextChapterBtn"
+                class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 hidden">
+                <!-- Text and onclick will be set by JS -->
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
+            © 2023 Interactive MCQ Platform.
+        </footer>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                chapterName: "Unix MCQ on File System",
+                topics: [
+                    {
+                        topicName: "File Categories",
+                        questions: [
+                            {
+                                id: "fc_q1", question: "1. A file is a container for storing information.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "We can define a file as a stream of characters or a container for storing information. While working in a UNIX environment, we came across three categories of files which are classified as- ordinary file, directory file and device file."
+                            },
+                            {
+                                id: "fc_q2", question: "2. In how many broad categories, files are divided into UNIX?",
+                                options: ["2", "4", "5", "3"], correctAnswer: "3",
+                                explanation: "Files are divided into three major categories i.e. ordinary file, directory file and device file. The characteristics of these three categories of files differ from each other and each category has a predefined use."
+                            },
+                            {
+                                id: "fc_q3", question: "3. In UNIX, the file name and file size are stored in the file itself.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "A UNIX file’s size is not stored in the file, nor its name. All this information is stored separately in a separate area of hard disk which is not directly accessible to humans, but only to the kernel."
+                            },
+                            {
+                                id: "fc_q4", question: "4. The most common file type is ___",
+                                options: ["ordinary file", "directory file", "device file", "ordinary file and directory file"], correctAnswer: "ordinary file",
+                                explanation: "The most common file type is an ordinary file or a regular file. It contains data as a stream of characters. Ordinary files are also of two types, text file and binary file."
+                            },
+                            {
+                                id: "fc_q5", question: "5. What is a directory file?",
+                                options: ["a directory containing data", "a directory containing details of the files and subdirectories it contains", "a directory contains files", "a directory containing data and files"], correctAnswer: "a directory containing details of the files and subdirectories it contains",
+                                explanation: "A directory file contains no data but some details of the subdirectories and files that it contains. Directory files contain an entry for every file and subdirectory in it and each entry has some necessary information regarding files and subdirectories."
+                            },
+                            {
+                                id: "fc_q6", question: "6. Each entry of directory file has component(s) namely _____",
+                                options: ["filename", "inode number", "filename and inode number", "file size"], correctAnswer: "filename and inode number",
+                                explanation: "Every entry of the directory file contains information about files and subdirectories and each entry has two components:\n-> Filename\n-> A unique identification number (called inode number)."
+                            },
+                            {
+                                id: "fc_q7", question: "7. Device files are used by the kernel for operating the device.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Device files are nothing but special files which does not contain a stream of characters but some attributes related to the devices which govern the operation of a device. The kernel reads this file for the attributes to perform operations on any device."
+                            },
+                            {
+                                id: "fc_q8", question: "8. When we log in, the UNIX places us in a directory, called ______ directory",
+                                options: ["home", "main", "parent", "current"], correctAnswer: "home",
+                                explanation: "When we log in, the system automatically places us in a directory called Home directory. We can change our directory if we want and can also view our home directory using the shell variable, HOME."
+                            },
+                            {
+                                id: "fc_q9", question: "9. UNIX treats everything as a file.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "All physical devices such as printers, hard disk are treated as files by the UNIX system. Even the kernel, shell and main memory is treated as a file by UNIX operating system."
+                            },
+                            {
+                                id: "fc_q10", question: "10. The root directory is represented by ___",
+                                options: ["", "/", "*", "$"], correctAnswer: "/",
+                                explanation: "The root directory (/) serves as a reference point for all the files. All the files are hierarchically below it. All files in UNIX are related to one another. The file system in UNIX is a collection of all these related files (ordinary, directory and device files) organized in a hierarchical manner."
+                            },
+                            {
+                                id: "fc_q11", question: "11. UNIX imposes no rule for framing filename extensions.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "UNIX imposes no rules for framing filename extensions. For example, a shell script doesn’t need to have the .sh implication, even though it helps in identification. In all cases, it’s the application that imposes the restriction. For example, C compiler expects C program filenames to end with .c ."
+                            },
+                            {
+                                id: "fc_q12", question: "12. _____ and _____ cannot be used in a filename.",
+                                options: ["/, NULL", "$,^", "., %", "NULL, $"], correctAnswer: "/, NULL",
+                                explanation: "UNIX imposes no rules in framing filename extensions but there are some special characters which cannot be used while naming a file. / and NULL are the characters which cannot be used in a filename."
+                            },
+                            {
+                                id: "fc_q13", question: "13. Filenames in UNIX are not case-sensitive.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "Since UNIX is sensitive to case, filenames are also. Hence, chap01, Chap01 and CHAP01 are three different files and can exist in the same directory."
+                            },
+                            {
+                                id: "fc_q14", question: "14. We should avoid filenames starting with a – (hyphen).",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Those files which have filename starting with a (-) are difficult to remove and many commands can interpret such filename as an option which could lead to a miserable situation."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "File Handling Commands: pwd, cd",
+                        questions: [
+                            {
+                                id: "fhc_q1", question: "1. Which command is used for printing the current working directory?",
+                                options: ["HOME", "cd", "pwd", "dir"], correctAnswer: "pwd",
+                                explanation: "pwd command is used for checking our current directory. Current directory is the directory in which we are currently working. pwd displays the absolute pathname i.e. with respect to the root directory.\n$ pwd\n/home/user01/Krishnendu19"
+                            },
+                            {
+                                id: "fhc_q2", question: "2. Which command is used for changing the current directory?",
+                                options: ["cd", "cp", "pwd", "rm"], correctAnswer: "cd",
+                                explanation: "cd (change directory) command is used for moving around the file system. cd command is usually invoked with a argument. After invocation, it changes the current directory to the directory specified as argument. Cp command is used for copying files while rm command is used for deleting files.\nFor example: our current directory is /bin/user06 and we want to change our directory to a directory named dir_one which is inside the user06 directory. To do so, type the following:\n$ cd dir_one\n$pwd\n/bin/user06/dir_one"
+                            },
+                            {
+                                id: "fhc_q3", question: "3. cd command cannot be used without any argument.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "cd command can be used without any arguments. When it used in such a way, then it changes our current directory to home directory."
+                            },
+                            {
+                                id: "fhc_q4", question: "4. Which command is used for creating directories?",
+                                options: ["rmdir", "mkdir", "cd", "cp"], correctAnswer: "mkdir",
+                                explanation: "Directories in UNIX are created using mkdir command. The name of the directory to be created is specified as an argument to the mkdir command. For example, to create a dir named dir_01 in the current directory we can use the following command,\n$ mkdir dir_01"
+                            },
+                            {
+                                id: "fhc_q5", question: "5. We can create multiple directories by single invocation of mkdir command.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Multiple directories can be created by one mkdir command.\n$ mkdir dir_01  dir_02  dir_03"
+                            },
+                            {
+                                id: "fhc_q6", question: "6. What does the following command do?\n\n$ mkdir dir   dir/dir_01/dir_02",
+                                options: ["create dir, dir_01 and dir_02", "creates dir_02", "creates dir only", "throws an error"], correctAnswer: "create dir, dir_01 and dir_02",
+                                explanation: "The above command first creates a directory named dir and after that it creates a subdirectory dir_01 under dir. At last, it creates another subdirectory dir_02 under dir_01. Thus a directory tree is formed in which directory dir is the parent directory and dir_01, dir_02 are subdirectories."
+                            },
+                            {
+                                id: "fhc_q7", question: "7. Sometimes we are unable to create a directory because ______________",
+                                options: ["the directory may already exist in the current directory", "there may be an ordinary file by the same name in the current directory", "the permissions set for the current directory does not allow the creation", "the directory may exist, there may be an ordinary file, the permissions set for the current directory does not allow the creation"], correctAnswer: "the directory may exist, there may be an ordinary file, the permissions set for the current directory does not allow the creation",
+                                explanation: "Sometimes we are not able to create directory because of multiple reasons as stated above."
+                            },
+                            {
+                                id: "fhc_q8", question: "8. Which command is used for removing an empty directory?",
+                                options: ["mkdir", "rmdir", "del", "remove"], correctAnswer: "rmdir",
+                                explanation: "rmdir command is used for removing directories provided the directory should be empty. For example, to remove a directory named dir_001 in the current directory type the following command on the terminal.\n$ rmdir  dir_001"
+                            },
+                            {
+                                id: "fhc_q9", question: "9. Multiple directories can be removed using single rmdir command.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Like mkdir command, we can delete multiple directories using one shot of rmdir command. While deleting directories and subdirectories, a reverse logic is applied i.e. first the subdirectories or the child directories are removed and then their parent directories.\n$  rmdir  dir   dir/dir_01/dir_02"
+                            },
+                            {
+                                id: "fhc_q10", question: "10. For creating or removing directories, the user must be positioned above the directory or in the parent directory of the directory, on which the operation is to perform.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "For performing any operation on the file system, the user must be hierarchically above the directory or should be in parent directory of the directory on which the operation is to be performed. Without following this rule, the user will not be able to perform any operation on the file system."
+                            },
+                            {
+                                id: "fhc_q11", question: "11. If rmdir dir001 fails, what could be the reason(s)?",
+                                options: ["dir001 doesn’t exist", "dir001 is not empty", "permissions of dir001 doesn’t allow to remove it", "dir001 doesn’t exist, dir001 is not empty and permissions of dir001 doesn’t allow to remove it"], correctAnswer: "dir001 doesn’t exist, dir001 is not empty and permissions of dir001 doesn’t allow to remove it",
+                                explanation: "There could be multiple reasons which could lead to failure while removing a directory. Major reasons could be:\n-> directory doesn’t exists.\n-> directory is not empty.\n-> permissions of directory doesn’t allow to remove it."
+                            },
+                            {
+                                id: "fhc_q12", question: "12. pwd and echo $HOME will display the same output.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "pwd is used for displaying the absolute pathname of our current working dircectory while $HOME displays the absolute pathname of our home directory.\n$ echo  $HOME\n/home/user08			    // displays home directory\n$ pwd\n/home/user08/documents/template	   // displays current directory"
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Absolute and Relative Pathnames",
+                        questions: [
+                            {
+                                id: "arp_q1", question: "1. Pathname is a sequence of symbols and directories indicating the location of a file.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "pathname is basically a sequence of symbols and filenames which indicates the location of our file in the hierarchical file system. pathname is of two types – absolute and relative pathnames. For example,\n$ pwd\n/users09/dir01/documents	// pathname indicating our current directory"
+                            },
+                            {
+                                id: "arp_q2", question: "2. What is an absolute pathname?",
+                                options: ["pathname relative to a parent directory", "pathname relative to the root (/)", "pathname relative to parent and current directory", "pathname relative to the current directory"], correctAnswer: "pathname relative to the root (/)",
+                                explanation: "When a file’s pathname is determined with respect to the root(/), such a pathname is called absolute pathname. No two files in a UNIX system can have same absolute pathnames. Two files can be of same name but in different directories hence their pathname would be different from each other. For example, /bin/user06/dir_01 is an example of absolute pathname."
+                            },
+                            {
+                                id: "arp_q3", question: "3. What is a relative pathname?",
+                                options: ["pathname relative to parent directory", "pathname relative to root (/)", "pathname relative to parent and current directory", "pathname relative to current directory"], correctAnswer: "pathname relative to parent and current directory",
+                                explanation: "When a file uses its parent or current directory as a reference for navigation, such a pathname is called absolute pathname.\n$ pwd\n/user08/kumar/documents/directory001	// absolute pathname"
+                            },
+                            {
+                                id: "arp_q4", question: "4. Which of the following cryptic symbols are used in relative pathname?",
+                                options: ["( . )", "( . . )", "$", "( . ) and ( . . )"], correctAnswer: "( . ) and ( . . )",
+                                explanation: "Relative pathname uses two cryptic symbols which are ( . ) and ( . . )\n(.) a single dot represent the current directory.\n( . . ) two dots represent the parent directory."
+                            },
+                            {
+                                id: "arp_q5", question: "5. $ cd . . is used to move ___ level up in the file hierarchy.",
+                                options: ["two", "one", "three", "zero"], correctAnswer: "one",
+                                explanation: "( . . ) two dots represent the parent directory. So cd . . will make us move one level up. For example,\n$ pwd\n/user08/docs/template	         // current working directory\n$ cd . .		        // one level up\n$ pwd\n/user08/docs"
+                            },
+                            {
+                                id: "arp_q6", question: "6. $ cp file_01 . copies the file named file_01 in ____ directory",
+                                options: ["current", "parent", "root", "user"], correctAnswer: "current",
+                                explanation: "The ( . ) represents the current directory so the above command will create a copy of file_01 in the current working directory."
+                            },
+                            {
+                                id: "arp_q7", question: "7. cd /bin/user/directory/abc is an example of relative pathname.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "Whenever the pathname is relative to the root it is an example of relative pathname. The above pathname is also relative to the root, so it is an example of relative pathname."
+                            },
+                            {
+                                id: "arp_q8", question: "8. The output of $HOME is an example of absolute pathname.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "HOME is a shell variable which prints our home directory. The pathname specified by the output of HOME is an example of absolute pathname.\n$ HOME\n/home/users/user_06"
+                            },
+                            {
+                                id: "arp_q9", question: "9. The output of the following command is __________\n\n$ cp  abd/ .user_06",
+                                options: ["copies .user_06 file in current directory", "copies .user_06 file in parent directory of directory named abd", "undefined behaviour", "erroneous output"], correctAnswer: "copies .user_06 file in current directory",
+                                explanation: "( . ) single dot represents the current directory so the above command will copy the file in the current directory. (.) is a cryptic symbol which represents current working directory and is used in absolute pathname."
+                            },
+                            {
+                                id: "arp_q10", question: "10. For moving two level up in the file hierarchy system using cd command once, we separates ( . . ) by which symbol?",
+                                options: ["?", "$", "*", "/"], correctAnswer: "/",
+                                explanation: "For changing your directory to the parent of current directory we can use ( . . ) with cd command. If we want to move more than one level up then we can use the ( . . ) separated by / .\n$ cd . . / . .                       -moves two level up"
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "ls Command",
+                        questions: [
+                            {
+                                id: "lsc_q1", question: "1. Which command is used for listing files in a directory?",
+                                options: ["ps", "list", "ls", "wc"], correctAnswer: "ls",
+                                explanation: "ls command is one of the most powerful commands used in UNIX system. It comes available with a bunch of options for listing files available in the directory. There are a number of options like -l, -a which are used for listing files in different manners according to user’s need.\n$ ls\n001.sh\nFILE2\nabc.txt\ndir08"
+                            },
+                            {
+                                id: "lsc_q2", question: "2. Which option is used with ls command for long listing of files with seven attributes?",
+                                options: ["-a", "-l", "-x", "-i"], correctAnswer: "-l",
+                                explanation: "-l is used with ls command for long listing of files in ASCII collating sequence. The attributes displayed are:\n-> File type and permissions\n-> Links\n-> Ownership\n-> Group ownership\n-> File size\n-> Last modification time\n-> Filename\n\n$ ls   -l\ndrwxr-xr-x     5 abd      users   4096   Aug 12  08:30 go\ndrwx------      3 mash    users   4096   Nov 28  10:49 irc\ndrwxr-xr-x    2 ryan      users   32768  July 25   09:15 logs\ndrwxr-xr-x    8 anki      users   4096    Oct  2   17:13 src"
+                            },
+                            {
+                                id: "lsc_q3", question: "3. Which option is used with ls to display attributes of the directory ?",
+                                options: ["-a", "-ld", "-d", "-o"], correctAnswer: "-d",
+                                explanation: "ls command when used with directory name as an argument, lists all the files in the directory. To force ls to list the attributes of the directory we use the -ld option.\n$ ls  -ld\ndrwxr-xr-x     5 george   users   4096  Sep 25  08:30 go\ndrwx------      3 george   users   4096  Sep 27  10:49 irc\ndrwxr-xr-x    2 george   users   32768 Oct  4   09:15 logs\ndrwxr-xr-x    8 george   users   4096   Oct  2   17:13 src"
+                            },
+                            {
+                                id: "lsc_q4", question: "4. -a option is used with ls command for what purpose?",
+                                options: ["for showing hidden files", "for showing executables", "for showing directories", "for multi columnar output"], correctAnswer: "for showing hidden files",
+                                explanation: "-a option when used with ls command displays all the files including hidden files. Files beginning with a ( . ) are listed using -a option. There are certain files (filenames beginning with a . ) These files are not listed without -a option.\n$ ls  -ax\n./	. ./	calendar\n.file	.rhost	abc_001"
+                            },
+                            {
+                                id: "lsc_q5", question: "5. Which option is used with ls command to produce multi columnar output?",
+                                options: ["-x", "-F", "-a", "-v"], correctAnswer: "-x",
+                                explanation: "If there are multiple files present in a directory for listing, it is better that we display these files in multiple columns. For this purpose -x is used. For example,\n$ ls  -x\nFile1        file2       abc.txt\nDir08       res.c       txt05\nDep.lst   emp.sh    udisk"
+                            },
+                            {
+                                id: "lsc_q6", question: "6. What is the collating sequence of ls command for listing files?",
+                                options: ["Numerals > Uppercase > Lowercase", "Numerals > Lowercase > Uppercase", "Lowercase > Uppercase > Numerals", "Uppercase > Numerals > Lowercase"], correctAnswer: "Numerals > Uppercase > Lowercase",
+                                explanation: "The output of ls commad is arranged in ASCII collating sequence which is, filenames starting with Numerals first, then Uppercase, then lowercase.\n$ ls\n001_dir                 //numeral first\n09_abc\nABD.txt                //uppercase\nprog.sh		      //lowercase"
+                            },
+                            {
+                                id: "lsc_q7", question: "7. How can we identify executables and directories from the output of ls command?",
+                                options: ["using -F option", "using -x option", "using -a option", "using -i option"], correctAnswer: "using -F option",
+                                explanation: "The output of the ls command simply displays filenames without indicating the file type. For identifying the file type we use -F option. The output of ls -F displays filenames with two symbols * and /, which are type indicators. The filenames containing * are executables while those containing / are directories.\n$ ls  -Fx\n008abc.txt       TOX.sh*     calendar*\nDept.lst           helpdir/     progs/"
+                            },
+                            {
+                                id: "lsc_q8", question: "8. $ ls -R outputs all files and subdirectories in a recursive manner.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "The above command traverses the directory tree in a recursive manner until no subdirectories are left. In simple words, we can say that it produces a recursive listing of files."
+                            },
+                            {
+                                id: "lsc_q9", question: "9. -r option is same as -R option in ls command.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "Both -r and -R are different options and performs different tasks. -r is used to sort the filenames in reverse order while sorting while -R is used for recursive listing of files."
+                            },
+                            {
+                                id: "lsc_q10", question: "10. What does the -S option do in ls command?",
+                                options: ["sorts according to modification time", "sorts according to last access time", "sorts according to file size", "sorts according to inode number"], correctAnswer: "sorts according to file size",
+                                explanation: "ls -S sorts the filenames according to the file size with largest size first.\ndrwxr-xr-x     5 abd      users    78988  Aug 12  08:30 go\ndrwx------      3 mash    users   56899   Nov 28  10:49 irc\ndrwxr-xr-x    2 ryan      users   32768  July 25   09:15 logs\ndrwxr-xr-x    8 anki      users    4096    Oct  2   17:13 src"
+                            },
+                            {
+                                id: "lsc_q11", question: "11. ls -s prints the allocated file size in blocks.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Files are stored onto the disk in terms of block size. The block size allocated to the file can be displayed using -s option with ls command."
+                            },
+                            {
+                                id: "lsc_q12", question: "12. -u option sorts the files according to ____",
+                                options: ["last modification time", "last access time", "ASCII collating sequence", "file size"], correctAnswer: "last access time",
+                                explanation: "ls -u displays the filenames based on the value of the last access time of the file i.e. it sorts all the filenames according to their last access time."
+                            },
+                            {
+                                id: "lsc_q13", question: "13. -t option sorts the files according to ____",
+                                options: ["last modification time", "last access time", "ASCII collating sequence", "file size"], correctAnswer: "last modification time",
+                                explanation: "ls -t displays the filenames based on the value of the last modification time of the file i.e. it sorts all the filenames in accordance with their last modification time."
+                            },
+                            {
+                                id: "lsc_q14", question: "14. The output of ls dir* is ___",
+                                options: ["all files in the current directory", "all files in the directory having a filename starting with dir", "no filename is displayed", "erroneous"], correctAnswer: "all files in the directory having a filename starting with dir",
+                                explanation: "The above command displays those files in the directory, the names of which will be starting with a prefix ‘dir’. Here * is a meta-character which is used for pattern matching.\n$ ls  dir*\ndir01\ndir02\ndir00.txt"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const mainChapterTitleEl = document.getElementById('mainChapterTitle');
+        const questionProgressTextEl = document.getElementById('questionProgressText');
+        const scoreDisplayEl = document.getElementById('scoreDisplay');
+        const progressBarEl = document.getElementById('progressBar');
+        const quizContentAreaEl = document.getElementById('quizContentArea');
+        const nextChapterBtn = document.getElementById('nextChapterBtn');
+
+        let currentChapterIndex = 0; // This page handles only one chapter, so index 0 of quizData
+        let score = 0;
+        let totalQuestionsInChapter = 0;
+        let questionsAnsweredCount = 0;
+        let allQuestionElementsMap = new Map();
+        let currentActiveQuestionId = null;
+
+        const sunIcon = `<i class="fas fa-sun text-xl text-yellow-400"></i>`;
+        const moonIcon = `<i class="fas fa-moon text-xl text-gray-700 dark:text-yellow-400"></i>`;
+
+        function setDarkMode(isDark) {
+            const htmlEl = document.documentElement;
+            if (isDark) {
+                htmlEl.classList.add('dark');
+                darkModeToggle.innerHTML = sunIcon;
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                htmlEl.classList.remove('dark');
+                darkModeToggle.innerHTML = moonIcon;
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            setDarkMode(!document.documentElement.classList.contains('dark'));
+        });
+
+        function renderChapter() {
+            quizContentAreaEl.innerHTML = '';
+            allQuestionElementsMap.clear();
+            const chapterData = quizData[currentChapterIndex];
+            mainChapterTitleEl.textContent = chapterData.chapterName;
+
+            score = 0;
+            questionsAnsweredCount = 0;
+            totalQuestionsInChapter = 0;
+            let firstQuestionId = null;
+
+            chapterData.topics.forEach(topic => {
+                totalQuestionsInChapter += topic.questions.length;
+            });
+            updateProgressAndScore();
+
+            chapterData.topics.forEach((topic) => {
+                const topicHeader = document.createElement('h3');
+                topicHeader.className = 'text-xl md:text-2xl font-semibold text-purple-600 dark:text-purple-400 mt-10 mb-6 pt-6 border-t border-gray-300 dark:border-gray-600 first:mt-0 first:pt-0 first:border-t-0';
+                topicHeader.textContent = topic.topicName;
+                quizContentAreaEl.appendChild(topicHeader);
+
+                topic.questions.forEach((q) => {
+                    if (!firstQuestionId) firstQuestionId = q.id;
+
+                    const questionBlock = document.createElement('div');
+                    questionBlock.id = `qblock-${q.id}`;
+                    questionBlock.className = 'quiz-question-block mb-10 p-5 bg-gray-50 dark:bg-gray-750 rounded-xl shadow-lg';
+                    questionBlock.dataset.questionId = q.id;
+
+                    const questionTextEl = document.createElement('p');
+                    questionTextEl.className = 'text-md md:text-lg font-medium mb-5 text-gray-800 dark:text-gray-200';
+                    questionTextEl.innerHTML = q.question.replace(/\n/g, '<br>');
+                    questionBlock.appendChild(questionTextEl);
+
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.className = 'grid grid-cols-1 md:grid-cols-2 gap-3 mb-4';
+                    q.options.forEach((option, optionIdx) => {
+                        const button = document.createElement('button');
+                        button.innerHTML = `<span class="text-left flex-grow">${String.fromCharCode(97 + optionIdx)}) ${option}</span>`;
+                        button.className = 'option-btn w-full text-left p-3 bg-gray-200 dark:bg-gray-600 hover:bg-blue-100 dark:hover:bg-blue-800 rounded-lg border-2 border-gray-300 dark:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-between disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow-md';
+                        button.dataset.questionId = q.id;
+                        button.dataset.optionIndex = optionIdx;
+                        button.disabled = true;
+                        button.addEventListener('click', handleAnswerSelection);
+                        optionsContainer.appendChild(button);
+                    });
+                    questionBlock.appendChild(optionsContainer);
+
+                    const feedbackEl = document.createElement('div');
+                    feedbackEl.className = 'feedback-area min-h-[25px] text-sm mb-2';
+                    questionBlock.appendChild(feedbackEl);
+
+                    const explanationEl = document.createElement('div');
+                    explanationEl.className = 'explanation-area p-3 rounded-md text-sm leading-relaxed';
+                    explanationEl.innerHTML = `<strong class="block mb-1">Explanation:</strong> ${q.explanation.replace(/\n/g, '<br>')}`;
+                    questionBlock.appendChild(explanationEl);
+
+
+                    quizContentAreaEl.appendChild(questionBlock);
+                    allQuestionElementsMap.set(q.id, questionBlock);
+                });
+            });
+
+            if (firstQuestionId) {
+                activateQuestion(firstQuestionId);
+            }
+            nextChapterBtn.classList.add('hidden');
+            nextChapterBtn.textContent = "Next Chapter ➝ Handling Ordinary Files";
+            nextChapterBtn.onclick = () => {
+                window.location.href = 'chapter-3.html'; // Assuming chapter 3 will be chapter-3.html
+            };
+        }
+
+        function activateQuestion(questionId) {
+            if (currentActiveQuestionId) {
+                const prevActiveBlock = allQuestionElementsMap.get(currentActiveQuestionId);
+                if (prevActiveBlock) {
+                    prevActiveBlock.classList.remove('active-question');
+                }
+            }
+
+            currentActiveQuestionId = questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+            if (questionBlock) {
+                questionBlock.classList.add('active-question');
+                questionBlock.querySelectorAll('.option-btn').forEach(btn => btn.disabled = false);
+                setTimeout(() => {
+                    const rect = questionBlock.getBoundingClientRect();
+                    const headerHeight = document.querySelector('header.sticky').offsetHeight || 150;
+                    if (rect.top < headerHeight || rect.bottom > (window.innerHeight - 50)) {
+                        questionBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 150);
+            }
+        }
+
+
+        function findQuestionData(questionId) {
+            for (const topic of quizData[currentChapterIndex].topics) {
+                const question = topic.questions.find(q => q.id === questionId);
+                if (question) return question;
+            }
+            return null;
+        }
+
+        function handleAnswerSelection(event) {
+            const selectedButton = event.currentTarget;
+            const questionId = selectedButton.dataset.questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+
+            if (!questionBlock || questionBlock.classList.contains('answered-question')) return;
+
+            const questionData = findQuestionData(questionId);
+            if (!questionData) return;
+
+            const selectedOptionIndex = parseInt(selectedButton.dataset.optionIndex);
+            const selectedOptionText = questionData.options[selectedOptionIndex];
+            const correctAnswerText = questionData.correctAnswer;
+
+            const feedbackEl = questionBlock.querySelector('.feedback-area');
+            const explanationEl = questionBlock.querySelector('.explanation-area');
+            const allOptionButtonsInBlock = questionBlock.querySelectorAll('.option-btn');
+
+            allOptionButtonsInBlock.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-blue-100', 'dark:hover:bg-blue-800', 'hover:shadow-md');
+            });
+
+            if (selectedOptionText === correctAnswerText) {
+                score++;
+                selectedButton.classList.add('correct');
+                feedbackEl.innerHTML = `<p class="text-green-600 dark:text-green-400 font-semibold"><i class="fas fa-check-circle mr-2"></i>Correct!</p>`;
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackEl.innerHTML = `<p class="text-red-600 dark:text-red-400 font-semibold"><i class="fas fa-times-circle mr-2"></i>Incorrect. The correct answer is highlighted.</p>`;
+                allOptionButtonsInBlock.forEach(btn => {
+                    if (questionData.options[parseInt(btn.dataset.optionIndex)] === correctAnswerText) {
+                        btn.classList.add('actual-correct-unselected');
+                        btn.classList.remove('incorrect');
+                    }
+                });
+            }
+
+            explanationEl.classList.add('visible');
+
+            questionBlock.classList.add('answered-question');
+            questionBlock.classList.remove('active-question');
+            questionsAnsweredCount++;
+            updateProgressAndScore();
+
+            setTimeout(() => {
+                let nextQuestionIdToActivate = null;
+                let foundCurrent = false;
+                for (const topic of quizData[currentChapterIndex].topics) {
+                    for (const q of topic.questions) {
+                        if (foundCurrent) {
+                            nextQuestionIdToActivate = q.id;
+                            break;
+                        }
+                        if (q.id === questionId) {
+                            foundCurrent = true;
+                        }
+                    }
+                    if (nextQuestionIdToActivate) break;
+                }
+
+                if (nextQuestionIdToActivate) {
+                    activateQuestion(nextQuestionIdToActivate);
+                } else {
+                    showChapterEnd();
+                }
+            }, 1500);
+        }
+
+        function updateProgressAndScore() {
+            scoreDisplayEl.textContent = `Score: ${score}`;
+            questionProgressTextEl.textContent = `Answered: ${questionsAnsweredCount} / ${totalQuestionsInChapter}`;
+            const progressPercentage = totalQuestionsInChapter > 0 ? (questionsAnsweredCount / totalQuestionsInChapter) * 100 : 0;
+            progressBarEl.style.width = `${progressPercentage}%`;
+        }
+
+        function showChapterEnd() {
+            nextChapterBtn.classList.remove('hidden');
+            // nextChapterBtn.onclick is already set in renderChapter
+
+            const endMessage = document.createElement('p');
+            endMessage.className = "text-center text-xl font-semibold mt-10 p-6 bg-blue-50 dark:bg-blue-900 rounded-lg";
+            endMessage.textContent = `Chapter 2 Complete! Your final score: ${score} out of ${totalQuestionsInChapter}.`;
+            quizContentAreaEl.appendChild(endMessage);
+            endMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+            const currentTheme = localStorage.getItem('darkMode');
+
+            if (currentTheme === 'enabled') {
+                setDarkMode(true);
+            } else if (currentTheme === 'disabled') {
+                setDarkMode(false);
+            } else {
+                setDarkMode(prefersDarkScheme.matches);
+            }
+
+            prefersDarkScheme.addEventListener('change', e => {
+                if (localStorage.getItem('darkMode') === null) {
+                    setDarkMode(e.matches);
+                }
+            });
+
+            renderChapter();
+        });
+
+    </script>
+</body>
+
+</html>

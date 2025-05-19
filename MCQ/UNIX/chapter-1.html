@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en" class=""> <!-- Start with no 'dark' class, JS will add -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unix MCQ Challenge - Chapter 1 (Layout Fixed)</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Logo Styles (Integrated into header flow) */
+        .header-logo .text-2xl {
+            font-size: 1.6rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .header-logo .logo-text-part {
+            /* Color will be handled by Tailwind text-gray-700 dark:text-gray-100 by default, or override if needed */
+        }
+
+        /* Make logo text distinctly visible in both modes if it clashes */
+        html:not(.dark) .header-logo .logo-text-part {
+            color: #374151;
+            /* Tailwind gray-700 for light mode if needed */
+        }
+
+        html.dark .header-logo .logo-text-part {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode */
+        }
+
+        .header-logo .logo-icon-part {
+            color: #F59E0B;
+            /* Tailwind amber-500, good contrast */
+            transition: color 0.3s;
+        }
+
+        .header-logo a:hover .logo-icon-part {
+            color: #D97706;
+            /* Tailwind amber-600 */
+        }
+
+        .header-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.4em;
+            width: 1.4em;
+            margin: 0 2px;
+        }
+
+        /* Ensure sticky header background is consistent */
+        header.sticky {
+            background-color: #f9fafb;
+            /* Tailwind gray-50 */
+        }
+
+        html.dark header.sticky {
+            background-color: #1f2937;
+            /* Tailwind gray-800 */
+        }
+
+        /* Ensure sub-header info card also respects dark mode */
+        #quizHeaderInfo {
+            background-color: #ffffff;
+            /* Tailwind white */
+        }
+
+        html.dark #quizHeaderInfo {
+            background-color: #374151;
+            /* Tailwind gray-700 */
+        }
+
+
+        .quiz-question-block {
+            transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+            opacity: 0.6;
+        }
+
+        .quiz-question-block.active-question {
+            opacity: 1;
+            transform: scale(1.01);
+            box-shadow: 0 0 15px rgba(80, 120, 255, 0.2);
+        }
+
+        html.dark .quiz-question-block.active-question {
+            box-shadow: 0 0 15px rgba(100, 150, 255, 0.3);
+        }
+
+        .quiz-question-block.answered-question {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .quiz-question-block.answered-question .option-btn {
+            pointer-events: none;
+            cursor: default;
+        }
+
+        .quiz-question-block .option-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .option-btn {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .option-btn:not(:disabled):hover {
+            transform: translateY(-2px) scale(1.01);
+            /* box-shadow: 0 4px 12px rgba(0,0,0,0.1); Tailwind's shadow-md or shadow-lg can be used directly on class */
+        }
+
+        html.dark .option-btn:not(:disabled):hover {
+            /* box-shadow: 0 4px 12px rgba(255,255,255,0.08); */
+        }
+
+        .option-btn.correct {
+            background-color: #10B981 !important;
+            /* green-500 */
+            color: white !important;
+            border-color: #059669 !important;
+            /* green-600 */
+        }
+
+        .option-btn.incorrect {
+            background-color: #EF4444 !important;
+            /* red-500 */
+            color: white !important;
+            border-color: #DC2626 !important;
+            /* red-600 */
+        }
+
+        .option-btn.actual-correct-unselected {
+            background-color: #D1FAE5 !important;
+            /* green-100 */
+            color: #065F46 !important;
+            /* green-700 */
+            border-color: #6EE7B7 !important;
+            /* green-300 */
+            animation: pulse-subtle-green 2s infinite;
+        }
+
+        html.dark .option-btn.actual-correct-unselected {
+            background-color: #064E3B !important;
+            color: #A7F3D0 !important;
+            border-color: #10B981 !important;
+        }
+
+
+        @keyframes pulse-subtle-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        .explanation-area {
+            min-height: 70px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            overflow: hidden;
+            background-color: #ffffff;
+            /* Light mode */
+        }
+
+        html.dark .explanation-area {
+            background-color: #374151;
+            /* Tailwind gray-700 for dark mode */
+        }
+
+        .explanation-area.visible {
+            opacity: 1;
+        }
+
+        /* Fix dark mode for feedback area */
+        .feedback-area {
+            color: #374151;
+            /* Light mode text color */
+        }
+
+        html.dark .feedback-area {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode text color */
+        }
+
+        /* Fix dark mode for question block */
+        .quiz-question-block {
+            background-color: #f9fafb;
+            /* Light mode */
+        }
+
+        html.dark .quiz-question-block {
+            background-color: #1f2937;
+            /* Tailwind gray-800 for dark mode */
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
+
+    <div class="container mx-auto p-4 min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="sticky mb-6 top-0 z-50 py-3 shadow-md bg-gray-50 dark:bg-gray-800">
+            <!-- Top part of the header: Logo, Title, Dark Mode Toggle -->
+            <div class="container mx-auto flex justify-between items-center px-2 sm:px-4">
+                <!-- Eduvision Logo -->
+                <div class="header-logo">
+                    <div class="text-2xl font-bold">
+                        <a href="../../index.html" class="flex items-center group">
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">Edu</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="logo-icon-part" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">ision</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Page Title -->
+                <h1 class="mx-4 text-lg sm:text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500 text-center flex-grow whitespace-nowrap cursor-pointer"
+                    onclick="window.location.href='unix-mcq.html'">
+                    Unix MCQ Challenge
+                </h1>
+
+                <!-- Dark Mode Toggle -->
+                <div class="flex-shrink-0">
+                    <button id="darkModeToggle"
+                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none transition-colors duration-300"
+                        aria-label="Toggle Dark Mode">
+                        <!-- Icon will be set by JS -->
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bottom part of the header: Quiz Info Card -->
+            <div id="quizHeaderInfo" class="bg-white dark:bg-gray-700 p-3 mt-3 rounded-lg shadow-md container mx-auto">
+                <h2 id="mainChapterTitle" class="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-2"></h2>
+                <div class="flex justify-between items-center text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">
+                    <span id="questionProgressText">Answered: 0 / 0</span>
+                    <span id="scoreDisplay">Score: 0</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                    <div id="progressBar"
+                        class="bg-gradient-to-r from-blue-500 to-purple-600 h-2.5 rounded-full transition-all duration-500 ease-out"
+                        style="width: 0%"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area for All Questions -->
+        <main id="quizContentArea"
+            class="flex-grow bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl transition-colors duration-300 mt-4">
+            <!-- Topics and Questions will be dynamically inserted here -->
+        </main>
+
+        <!-- Navigation Area (for Next Chapter) -->
+        <div id="overallNavigation" class="mt-8 mb-4 flex justify-center">
+            <button id="nextChapterBtn"
+                class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 hidden"
+                onclick="window.location.href='chapter-2.html'">
+                Next Chapter ➝ File System
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
+            © 2023 Interactive MCQ Platform.
+        </footer>
+    </div>
+
+    <script>
+        // Ensure all quizData questions are here
+        const quizData = [
+            {
+                chapterName: "Unix MCQ on Architecture & General Purpose Utilities",
+                topics: [
+                    {
+                        topicName: "Unix Basics",
+                        questions: [
+                            {
+                                id: "ub_q1", question: "1. What is UNIX?",
+                                options: ["an operating system", "a text editor", "programming language", "software program"], correctAnswer: "an operating system",
+                                explanation: "UNIX is an operating system developed in the early 1970’s at Bell Labs by Dennis Ritchie, Ken Thompson, and others. It is a multiuser, multitasking and timesharing operating system. The power of UNIX is derived from its commands and their multiple options."
+                            },
+                            {
+                                id: "ub_q2", question: "2. In which language UNIX is written?",
+                                options: ["JAVA", "Python", "C++", "C"], correctAnswer: "C",
+                                explanation: "UNIX was originally written in Assembly language but Dennis Ritchie and Ken Thompson wanted an operating system which could run on more than one type of hardware. So in 1973, they rewrote the whole operating system in C language due to which one of the strongest features i.e. portability was added to the operating system."
+                            },
+                            {
+                                id: "ub_q3", question: "3. Which of the following is not a feature of UNIX?",
+                                options: ["multitasking", "multiuser", "portability", "easy to use"], correctAnswer: "easy to use",
+                                explanation: "UNIX is a multitasking operating system i.e. a user can run multiple tasks concurrently. Similarly, it is a multiuser system because it permits working with multiple users on a single operating system. But a major disadvantage of UNIX lies in the fact that the richness provided by its commands requires a special type of commitment to understand the subject. i.e. the user must be well aware of commands he is using and the functions performed by them."
+                            },
+                            {
+                                id: "ub_q4", question: "4. Which of the following is not a part of all the versions of UNIX?",
+                                options: ["Kernel and Shell", "Commands and utilities", "Graphical user interface", "System Calls"], correctAnswer: "Graphical user interface",
+                                explanation: "The kernel is the heart of the operating system while the shell is the utility which processes our requests. While system calls are a handful of functions which are used to interact with the kernel and make available the services provided by the operating system. A Graphical user interface (GUI) is available in UNIX, but the traditional UNIX interface is the command line only."
+                            },
+                            {
+                                id: "ub_q5", question: "5. Which of the following is not true about UNIX?",
+                                options: ["Many people can use a UNIX based computer at the same time; hence UNIX is called as a multiuser system", "A user can run multiple programs at the same time; hence UNIX is called a multitasking environment", "UNIX was not written in ‘C’ language", "Linux is also known as a version of UNIX"], correctAnswer: "UNIX was not written in ‘C’ language",
+                                explanation: "One of the most attractive features of UNIX is that it supports multi-user and multitasking environment which makes it so popular among its users. There are many UNIX variants available in the market. Solaris Unix, AIX, HP Unix, BSD are some of the examples. Linux is also a flavor of UNIX which is freely available. Unix was developed in 1969 by AT&T employees Ken Thompson, Dennis Ritchie, Douglas McIlroy, and Joe Ossanna at Bell Labs and was written in ‘C’."
+                            },
+                            {
+                                id: "ub_q6", question: "6. POSIX is a set of standards specified for establishing compatibility between operating systems.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "POSIX- Portable Operating System Interface for Computer Environment is basically a set of standards specified by IEEE for establishing compatibility between operating systems, especially which are UNIX based. For example, if we write a program relying on POSIX standards, we can easily port it among a large family of Unix derivatives (including Linux)."
+                            },
+                            {
+                                id: "ub_q7", question: "7. Shell is a command interpreter used for interacting with a UNIX system.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Computers don’t have any capability of translating commands into actions. To do so we require shell-a command interpreter which translates our commands into actions. It is actually the interface between the user and kernel. There could be multiple shells in action on a single system."
+                            },
+                            {
+                                id: "ub_q8", question: "8. Which part of the UNIX operating system interacts with the hardware?",
+                                options: ["Kernel", "Shell", "vi editor", "application program"], correctAnswer: "Kernel",
+                                explanation: "The kernel is the core of the operating system. It is a collection of routines written in C which directly communicates with the hardware. User programs that need to interact with the hardware access the services of the kernel. There is only one kernel running on a system, unlike shells which can be multiple."
+                            },
+                            {
+                                id: "ub_q9", question: "9. Two UNIX systems may or may not use the same set of system calls.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "All UNIX flavors have one thing in common, they use the same system calls which are described in POSIX specification."
+                            },
+                            {
+                                id: "ub_q10", question: "10. What is a superuser?",
+                                options: ["system manager", "normal user", "administrator", "a user with special rights"], correctAnswer: "system manager",
+                                explanation: "A superuser (root) is the UNIX system manager which can perform special tasks like killing any executing program, resetting other users passwords, change users permissions and performing other system management tasks. The administrator can switch to superuser by issuing su command."
+                            },
+                            {
+                                id: "ub_q11", question: "11. What is the windowing system of UNIX known as?",
+                                options: ["X Window system", "LINUX", "Red Hat", "DOS"], correctAnswer: "X Window system",
+                                explanation: "The X window system, commonly known as X, is a windowing system developed at MIT. It is an open-source, network transparent, client-server based system that provides a Graphical user interface. X is primarily used on UNIX variants but it is also available for other operating systems also."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Unix Commands",
+                        questions: [
+                            {
+                                id: "uc_q1", question: "1. What are Commands?",
+                                options: ["specific instructions for performing a particular task", "part of the operating system", "part of the shell", "special instructions"], correctAnswer: "specific instructions for performing a particular task",
+                                explanation: "Commands are basically specific instructions which are given by the users to perform a particular piece of a task. In UNIX, commands are entered by the user through a command line interface which further is processed by the command interpreter i.e. Shell."
+                            },
+                            {
+                                id: "uc_q2", question: "2. In how many categories, commands of UNIX operating system classified?",
+                                options: ["1", "2", "Many", "0"], correctAnswer: "2",
+                                explanation: "There are two broad categories in which the classification of commands is based on UNIX. They are namely—external commands and internal commands. External commands are those commands that have an independent existence in the /bin directory i.e. these are the executables which are present in separate files while Internal commands are built-in commands which are built into the shell. Example, ‘ls’ is an external command while ‘echo’ is an internal command."
+                            },
+                            {
+                                id: "uc_q3", question: "3. Which command is used for extracting the details of the operating system?",
+                                options: ["cd", "echo", "uname", "wc"], correctAnswer: "uname",
+                                explanation: "uname command is used for extracting the details like name, version of the operating system running on the machine. the cd command is used for changing directories and echo command is used for displaying the contents of a string on to the output stream. wc command is used for counting words and other details in a file."
+                            },
+                            {
+                                id: "uc_q4", question: "4. The sequences of directories that a shell searches while looking for a command is specified in the PATH variable.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "When we specify a command, the shell searches for that command in the list of directories specified in the PATH variable and then executes it after locating the command successfully."
+                            },
+                            {
+                                id: "uc_q5", question: "5. Options are also arguments but begin with a -.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Arguments are parameters which are specified along with commands so that the command can perform an operation or take input from that parameter while options are also arguments but they are predetermined i.e. they perform a particular task. For example, echo hello. In this command hello is an argument while in ls – l, -l is an option."
+                            },
+                            {
+                                id: "uc_q6", question: "6. Which of the following is not a valid option of uname?",
+                                options: ["-a", "-s", "-v", "-z"], correctAnswer: "-z",
+                                explanation: "uname command is used for printing the information about the current system. -a is used for printing all the information including version name, kernel name, kernel release, machine hardware name etc. -s is used for printing only the kernel name while -v is used for printing the kernel version."
+                            },
+                            {
+                                id: "uc_q7", question: "7. How can we specify more than one command in the command line at the same time?",
+                                options: ["using ;", "using >", "using ==", "not possible"], correctAnswer: "using ;",
+                                explanation: "UNIX allows us to specify more than one command at the same time in the command line. To do so, we have to separate each command from each other using (;). For example, wc file1 ; ls -l file1 . The > symbol allows us to redirects the output of the command(s). For example, wc file1 > file2. Now, file2 will contain the output produced by the wc file1 command. Both ; and > are called metacharacters."
+                            },
+                            {
+                                id: "uc_q8", question: "8. Which command is used to display the documentation of commands in UNIX?",
+                                options: ["help", "search", "whatis", "man"], correctAnswer: "man",
+                                explanation: "UNIX provides us with a facility of man command, which is used for getting documentation of any command. For example, to seek help on wc command simply type man wc. This will simply display all the possible operations, options, description, synopsis of wc command. The POSIX specification requires only one available option with man command i.e. -k, which prints a one-line description of the command. whatis command is also available on many UNIX systems which also displays a one-line description of the command. man -f emulates the behavior of whatis command."
+                            },
+                            {
+                                id: "uc_q9", question: "9. Which command is used for displaying date and calendar in UNIX?",
+                                options: ["date and cal", "DATE and CAL", "date and calendar", "dt and cl"], correctAnswer: "date and cal",
+                                explanation: "date command is used for displaying the current system date and time while cal command is used to see the calendar of any specific month/year."
+                            },
+                            {
+                                id: "uc_q10", question: "10. What is the output of who command?",
+                                options: ["display information about users who are currently logged in.", "display file hierarchy", "display administrator information", "display processes"], correctAnswer: "display information about users who are currently logged in.",
+                                explanation: "who command output the details of the users who are currently logged in to the system. The output includes username, terminal name (on which they are logged in), date and time of their login etc."
+                            },
+                            {
+                                id: "uc_q11", question: "11. What are meta-characters?",
+                                options: ["special characters having predefined meaning to the shell", "special symbols", "shell symbols", "command symbols"], correctAnswer: "special characters having predefined meaning to the shell",
+                                explanation: "meta-characters are special characters having a predefined meaning to the shell. They are used as wild cards for special purposes like pattern matching, output redirecting etc. *, |, < are meta-characters."
+                            },
+                            {
+                                id: "uc_q12", question: "12. Which command is used for displaying date in the format dd/mm/yyyy ?",
+                                options: ["date +%m", "date +%h", "date +\"%d/%m/%Y\"", "date +\"%h %m\""], correctAnswer: "date +\"%d/%m/%Y\"",
+                                explanation: "Date command can use format specifiers as arguments with each specifiers preceding with a + , followed by % operator and a single character for describing the format.\n$ date +%m         -display current month\n$ date +%h          -display the name of the month\n$ date +\"%h %m\"  -display both month and month name"
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Unix General Purpose Commands – 1",
+                        questions: [
+                            {
+                                id: "gpc1_q1", question: "1. echo command is used for _________",
+                                options: ["displaying errors", "displaying operating system details", "displaying diagnostic messages", "displaying date and time"], correctAnswer: "displaying diagnostic messages",
+                                explanation: "echo command is generally used for displaying diagnostic messages on to the terminal or to issue prompt for reading the user input. All shells now have echo built in i.e. it is an internal command.\n$ echo hello\nhello"
+                            },
+                            {
+                                id: "gpc1_q2", question: "2. What are escape sequences?",
+                                options: ["special characters beginning with a \\ (backslash)", "special commands", "special utilities", "a sequence of characters"], correctAnswer: "special characters beginning with a \\ (backslash)",
+                                explanation: "An escape sequence is generally a two character string which begins with a \\. The role of escape sequences is that they change the state of computer or the peripheral devices attached to it, For example, \\n is an escape sequence which implies a new line character."
+                            },
+                            {
+                                id: "gpc1_q3", question: "3. Which of the following is not a valid escape sequence in UNIX?",
+                                options: ["\\n", "\\t", "\\v", "\\d"], correctAnswer: "\\d",
+                                explanation: "\\n denotes a new line character\n\\t denotes a space tab while \n\\v denotes a vertical tab."
+                            },
+                            {
+                                id: "gpc1_q4", question: "4. Which command is used as an alternative to echo command?",
+                                options: ["ls", "printf", "wc", "ps"], correctAnswer: "printf",
+                                explanation: "printf command is available on most UNIX systems and it behaves much like a substitution for echo command. It supports many of the formats which are used by C’s printf function. printf is also an external command."
+                            },
+                            {
+                                id: "gpc1_q5", question: "5. For what purpose bc command is used?",
+                                options: ["as a calculator", "as an editor", "as a process table viewer", "for copying files"], correctAnswer: "as a calculator",
+                                explanation: "bc command is used for invoking calculator on UNIX system. It comes with a wide library for performing calculations. The power of this tool can be derived from the fact, that it can perform calculations up to and above 900 digits!"
+                            },
+                            {
+                                id: "gpc1_q6", question: "6. script command is used for___________",
+                                options: ["recording history", "recording our session", "recording passwords", "recording scripts"], correctAnswer: "recording our session",
+                                explanation: "script command is basically used for recording our login session in a file. All the keystrokes, output, error messages that are encountered while our session will be stored in a file which we can view later. The name of the file in which the session is stored is typescript."
+                            },
+                            {
+                                id: "gpc1_q7", question: "7. Which of the following is a valid option with script command?",
+                                options: ["-b", "-a", "-d", "-x"], correctAnswer: "-a",
+                                explanation: "script command overwrites any previous typescript that may exist. -a option allows us to append our session to the existing typescript file without overwriting to it.\nFor example, script -a\nWe can also record our session to a different log file by using the following command.\nscript   file_one"
+                            },
+                            {
+                                id: "gpc1_q8", question: "8. mailx command is used for sending and receiving emails.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Since UNIX is a multiuser system, so communication between systems seems to be natural and important. For this purpose mailx command is used. Through mailx command, we can send and receive emails to different users on same host network or different network. The addressing scheme uses a combination of username and machine name. For example,\nmailx  bob  (bob is on same host)\nmailx  bob@saturn  (bob is on networked host saturn)"
+                            },
+                            {
+                                id: "gpc1_q9", question: "9. Which of the following function cannot be performed by mailx command?",
+                                options: ["sending and receiving emails", "reply to the sender", "forward, delete and print mails", "un-send mails"], correctAnswer: "un-send mails",
+                                explanation: "mailx command can perform various functions apart from sending and receiving emails such as replying to the sender and all recipients, forward it to others, save it to a different folder, delete it, print it. To view received emails, simply type mailx command and hit enter."
+                            },
+                            {
+                                id: "gpc1_q10", question: "10. Which of the following is not an internal command used by mailx?",
+                                options: ["N", "d", "q", "a"], correctAnswer: "a",
+                                explanation: "There are various internal commands used by mailx each of which performs a specified task.\nN , prints the message numbered N\nd , deletes the current message( if N is not specified along with it)\nq , quits the mailx  program"
+                            },
+                            {
+                                id: "gpc1_q11", question: "11. -H option is used with who command for what purpose?",
+                                options: ["display output with header information", "display output with a more detailed version", "display output with trailer information", "display output in columnar form"], correctAnswer: "display output with header information",
+                                explanation: "While most UNIX commands have a feature to avoid cluttering the display with display information, who command does have a header option( -H ). This option prints the column headers also.\n$ who  -H\nNAME              LINE\t      TIME\t             PID\nAbd\t           pts/12     Aug 12  17:51\t     11040\nMash\t           pts/14     Aug 12  17:57          11045"
+                            },
+                            {
+                                id: "gpc1_q12", question: "12. Two or more users can have same login name in the output of who command.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Yes, UNIX provides us a feature that two users can login with the same username at the same time on the same network host."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "General Purpose Commands – 2",
+                        questions: [
+                            {
+                                id: "gpc2_q1", question: "1. history command displays the log of recently used commands.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "History command displays the list of recently used commands by the user which means whatever commands are used by the user in the current session will be displayed on the terminal using history command."
+                            },
+                            {
+                                id: "gpc2_q2", question: "2. Which command is used by the user to change their login password in UNIX?",
+                                options: ["man", "reset", "passwd", "cp"], correctAnswer: "passwd",
+                                explanation: "Since UNIX is a multiuser system, it requires a password from every user who wants to log in to the system to help ensure that all the data and files of the user are secure from hackers and errant users. A user can simply change his/her login password by using the passwd command. Simply type this command on the terminal and then enter the old password, which after successful verification would allow the user to input a new password for his login."
+                            },
+                            {
+                                id: "gpc2_q3", question: "3. Which command handles a character stream by duplicating its input?",
+                                options: ["tree", "tee", "tty", "ls"], correctAnswer: "tee",
+                                explanation: "tee is an external command which handles a stream of characters by duplicating its input. It saves one copy in a file and writes the other to standard output. tee command can be placed anywhere in a pipeline.\n$ who  |  tee  user.txt"
+                            },
+                            {
+                                id: "gpc2_q4", question: "4. We can use man command for displaying the documentation of man itself.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Since man is also a UNIX command, it is necessary to know how man itself is used. For this purpose, use the same command to view its own documentation:\n$ man man\t// viewing man pages with man"
+                            },
+                            {
+                                id: "gpc2_q5", question: "5. When backspace doesn’t work to erase characters, we can use _____",
+                                options: ["ctrl-f", "ctrl-h", "ctrl-c", "ctrl-u"], correctAnswer: "ctrl-h",
+                                explanation: "Sometimes it may happen that backspace doesn’t work and whenever it is pressed, ^H is displayed on the terminal. To resolve this problem, we can use control key i.e. ctrl-H. Ctrl-u is used for killing a line altogether without executing it and Ctrl-c interrupts the program and bring back the prompt."
+                            },
+                            {
+                                id: "gpc2_q6", question: "6. For interrupting a command, we can use _____",
+                                options: ["ctrl-f", "esc", "ctrl-h", "ctrl-c"], correctAnswer: "ctrl-c",
+                                explanation: "Sometimes, a program goes on running on for an hour and does not seem to complete. To interrupt that command we can use the control key, ctrl-c. Ctrl-h is used to erase character by character when backspace doesn’t work."
+                            },
+                            {
+                                id: "gpc2_q7", question: "7. Ctrl-S stops scrolling of screen output and ________",
+                                options: ["locks terminal", "delete a character", "locks keyboard", "delete a line"], correctAnswer: "locks keyboard",
+                                explanation: "There are various keyboard commands to try when things go wrong. One of these commands is Ctrl-s which stops scrolling of screen output and locks the keyboard."
+                            },
+                            {
+                                id: "gpc2_q8", question: "8. Which control unlocks the keyboard?",
+                                options: ["ctrl-u", "ctrl-c", "ctrl-z", "ctrl-q"], correctAnswer: "ctrl-q",
+                                explanation: "ctrl-q resumes the scrolling of screen output and unlocks the keyboard. Ctrl-h is used to erase character by character when backspace doesn’t work while and Ctrl-c interrupts the program and bring back the prompt."
+                            },
+                            {
+                                id: "gpc2_q9", question: "9. Which command is used for killing a line?",
+                                options: ["ctrl-k", "del", "esc", "ctrl-u"], correctAnswer: "ctrl-u",
+                                explanation: "If the command line contains too many mistakes, we could prefer to kill the line altogether without executing it using ctrl-u. It erases everything in the line and returns the cursor to the beginning of the line."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const mainChapterTitleEl = document.getElementById('mainChapterTitle');
+        const questionProgressTextEl = document.getElementById('questionProgressText');
+        const scoreDisplayEl = document.getElementById('scoreDisplay');
+        const progressBarEl = document.getElementById('progressBar');
+        const quizContentAreaEl = document.getElementById('quizContentArea');
+        const nextChapterBtn = document.getElementById('nextChapterBtn');
+
+        let currentChapterIndex = 0;
+        let score = 0;
+        let totalQuestionsInChapter = 0;
+        let questionsAnsweredCount = 0;
+        let allQuestionElementsMap = new Map();
+        let currentActiveQuestionId = null;
+
+        const sunIcon = `<i class="fas fa-sun text-xl text-yellow-400"></i>`;
+        const moonIcon = `<i class="fas fa-moon text-xl text-gray-700 dark:text-yellow-400"></i>`; // Moon icon was fine
+
+        function setDarkMode(isDark) {
+            const htmlEl = document.documentElement;
+            if (isDark) {
+                htmlEl.classList.add('dark');
+                darkModeToggle.innerHTML = sunIcon;
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                htmlEl.classList.remove('dark');
+                darkModeToggle.innerHTML = moonIcon;
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            setDarkMode(!document.documentElement.classList.contains('dark'));
+        });
+
+        function renderChapter() {
+            quizContentAreaEl.innerHTML = '';
+            allQuestionElementsMap.clear();
+            const chapterData = quizData[currentChapterIndex];
+            mainChapterTitleEl.textContent = chapterData.chapterName;
+
+            score = 0;
+            questionsAnsweredCount = 0;
+            totalQuestionsInChapter = 0;
+            let firstQuestionId = null;
+
+            chapterData.topics.forEach(topic => {
+                totalQuestionsInChapter += topic.questions.length;
+            });
+            updateProgressAndScore();
+
+            chapterData.topics.forEach((topic) => {
+                const topicHeader = document.createElement('h3');
+                topicHeader.className = 'text-xl md:text-2xl font-semibold text-purple-600 dark:text-purple-400 mt-10 mb-6 pt-6 border-t border-gray-300 dark:border-gray-600 first:mt-0 first:pt-0 first:border-t-0';
+                topicHeader.textContent = topic.topicName;
+                quizContentAreaEl.appendChild(topicHeader);
+
+                topic.questions.forEach((q) => {
+                    if (!firstQuestionId) firstQuestionId = q.id;
+
+                    const questionBlock = document.createElement('div');
+                    questionBlock.id = `qblock-${q.id}`;
+                    questionBlock.className = 'quiz-question-block mb-10 p-5 bg-gray-50 dark:bg-gray-750 rounded-xl shadow-lg'; // Tailwind bg-gray-50 and dark:bg-gray-750
+                    questionBlock.dataset.questionId = q.id;
+
+                    const questionTextEl = document.createElement('p');
+                    questionTextEl.className = 'text-md md:text-lg font-medium mb-5 text-gray-800 dark:text-gray-200';
+                    questionTextEl.innerHTML = q.question.replace(/\n/g, '<br>');
+                    questionBlock.appendChild(questionTextEl);
+
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.className = 'grid grid-cols-1 md:grid-cols-2 gap-3 mb-4';
+                    q.options.forEach((option, optionIdx) => {
+                        const button = document.createElement('button');
+                        button.innerHTML = `<span class="text-left flex-grow">${String.fromCharCode(97 + optionIdx)}) ${option}</span>`;
+                        // Tailwind classes for option buttons
+                        button.className = 'option-btn w-full text-left p-3 bg-gray-200 dark:bg-gray-600 hover:bg-blue-100 dark:hover:bg-blue-800 rounded-lg border-2 border-gray-300 dark:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-between disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow-md';
+                        button.dataset.questionId = q.id;
+                        button.dataset.optionIndex = optionIdx;
+                        button.disabled = true;
+                        button.addEventListener('click', handleAnswerSelection);
+                        optionsContainer.appendChild(button);
+                    });
+                    questionBlock.appendChild(optionsContainer);
+
+                    const feedbackEl = document.createElement('div');
+                    feedbackEl.className = 'feedback-area min-h-[25px] text-sm mb-2';
+                    questionBlock.appendChild(feedbackEl);
+
+                    const explanationEl = document.createElement('div');
+                    explanationEl.className = 'explanation-area p-3 rounded-md text-sm leading-relaxed';
+                    explanationEl.innerHTML = `<strong class="block mb-1">Explanation:</strong> ${q.explanation.replace(/\n/g, '<br>')}`;
+                    questionBlock.appendChild(explanationEl);
+
+
+                    quizContentAreaEl.appendChild(questionBlock);
+                    allQuestionElementsMap.set(q.id, questionBlock);
+                });
+            });
+
+            if (firstQuestionId) {
+                activateQuestion(firstQuestionId);
+            }
+            nextChapterBtn.classList.add('hidden');
+        }
+
+        function activateQuestion(questionId) {
+            if (currentActiveQuestionId) {
+                const prevActiveBlock = allQuestionElementsMap.get(currentActiveQuestionId);
+                if (prevActiveBlock) {
+                    prevActiveBlock.classList.remove('active-question');
+                }
+            }
+
+            currentActiveQuestionId = questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+            if (questionBlock) {
+                questionBlock.classList.add('active-question');
+                questionBlock.querySelectorAll('.option-btn').forEach(btn => btn.disabled = false);
+                setTimeout(() => {
+                    const rect = questionBlock.getBoundingClientRect();
+                    const headerHeight = document.querySelector('header.sticky').offsetHeight || 150; // Target sticky header
+                    if (rect.top < headerHeight || rect.bottom > (window.innerHeight - 50)) {
+                        questionBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 150);
+            }
+        }
+
+
+        function findQuestionData(questionId) {
+            for (const topic of quizData[currentChapterIndex].topics) {
+                const question = topic.questions.find(q => q.id === questionId);
+                if (question) return question;
+            }
+            return null;
+        }
+
+        function handleAnswerSelection(event) {
+            const selectedButton = event.currentTarget;
+            const questionId = selectedButton.dataset.questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+
+            if (!questionBlock || questionBlock.classList.contains('answered-question')) return;
+
+            const questionData = findQuestionData(questionId);
+            if (!questionData) return;
+
+            const selectedOptionIndex = parseInt(selectedButton.dataset.optionIndex);
+            const selectedOptionText = questionData.options[selectedOptionIndex];
+            const correctAnswerText = questionData.correctAnswer;
+
+            const feedbackEl = questionBlock.querySelector('.feedback-area');
+            const explanationEl = questionBlock.querySelector('.explanation-area');
+            const allOptionButtonsInBlock = questionBlock.querySelectorAll('.option-btn');
+
+            allOptionButtonsInBlock.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-blue-100', 'dark:hover:bg-blue-800', 'hover:shadow-md');
+            });
+
+            if (selectedOptionText === correctAnswerText) {
+                score++;
+                selectedButton.classList.add('correct');
+                feedbackEl.innerHTML = `<p class="text-green-600 dark:text-green-400 font-semibold"><i class="fas fa-check-circle mr-2"></i>Correct!</p>`;
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackEl.innerHTML = `<p class="text-red-600 dark:text-red-400 font-semibold"><i class="fas fa-times-circle mr-2"></i>Incorrect. The correct answer is highlighted.</p>`;
+                allOptionButtonsInBlock.forEach(btn => {
+                    if (questionData.options[parseInt(btn.dataset.optionIndex)] === correctAnswerText) {
+                        btn.classList.add('actual-correct-unselected');
+                        btn.classList.remove('incorrect');
+                    }
+                });
+            }
+
+            explanationEl.classList.add('visible');
+
+            questionBlock.classList.add('answered-question');
+            questionBlock.classList.remove('active-question');
+            questionsAnsweredCount++;
+            updateProgressAndScore();
+
+            setTimeout(() => {
+                let nextQuestionIdToActivate = null;
+                let foundCurrent = false;
+                for (const topic of quizData[currentChapterIndex].topics) {
+                    for (const q of topic.questions) {
+                        if (foundCurrent) {
+                            nextQuestionIdToActivate = q.id;
+                            break;
+                        }
+                        if (q.id === questionId) {
+                            foundCurrent = true;
+                        }
+                    }
+                    if (nextQuestionIdToActivate) break;
+                }
+
+                if (nextQuestionIdToActivate) {
+                    activateQuestion(nextQuestionIdToActivate);
+                } else {
+                    showChapterEnd();
+                }
+            }, 1500);
+        }
+
+        function updateProgressAndScore() {
+            scoreDisplayEl.textContent = `Score: ${score}`;
+            questionProgressTextEl.textContent = `Answered: ${questionsAnsweredCount} / ${totalQuestionsInChapter}`;
+            const progressPercentage = totalQuestionsInChapter > 0 ? (questionsAnsweredCount / totalQuestionsInChapter) * 100 : 0;
+            progressBarEl.style.width = `${progressPercentage}%`;
+        }
+
+        function showChapterEnd() {
+            nextChapterBtn.classList.remove('hidden');
+            nextChapterBtn.onclick = () => {
+                window.location.href = 'chapter-2.html';
+            };
+
+            const endMessage = document.createElement('p');
+            endMessage.className = "text-center text-xl font-semibold mt-10 p-6 bg-blue-50 dark:bg-blue-900 rounded-lg";
+            endMessage.textContent = `Chapter 1 Complete! Your final score: ${score} out of ${totalQuestionsInChapter}.`;
+            quizContentAreaEl.appendChild(endMessage);
+            endMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+            const currentTheme = localStorage.getItem('darkMode');
+
+            if (currentTheme === 'enabled') {
+                setDarkMode(true);
+            } else if (currentTheme === 'disabled') {
+                setDarkMode(false);
+            } else {
+                setDarkMode(prefersDarkScheme.matches);
+            }
+
+            prefersDarkScheme.addEventListener('change', e => {
+                if (localStorage.getItem('darkMode') === null) {
+                    setDarkMode(e.matches);
+                }
+            });
+
+            renderChapter();
+        });
+
+    </script>
+</body>
+
+</html>

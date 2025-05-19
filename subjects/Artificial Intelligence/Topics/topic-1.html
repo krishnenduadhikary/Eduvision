@@ -6,11 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Introduction to Artificial Intelligence</title>
     <meta name="description"
-        content="A comprehensive guide to Artificial Intelligence: definition, history, types, applications, and comparison with human intelligence.">
+        content="A comprehensive guide to Artificial Intelligence: definition, history, types (Narrow, General, Super, Reactive, Limited Memory, Theory of Mind, Self-Aware), applications, and comparison with human intelligence.">
     <meta name="keywords"
-        content="AI, Artificial Intelligence, Machine Learning, Deep Learning, AI History, AI Types, AI Applications, Narrow AI, General AI, Super AI">
+        content="AI, Artificial Intelligence, Machine Learning, Deep Learning, AI History, AI Types, AI Applications, Narrow AI, General AI, Super AI, Reactive Machines, Limited Memory AI, Theory of Mind AI, Self-Aware AI">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
+        /* === Existing CSS from previous optimized topic-1.html === */
         /* Reset and Base Styles */
         :root {
             --primary-color-light: #3498db;
@@ -120,11 +121,8 @@
             display: inline-block;
             vertical-align: middle;
             height: 1.5em;
-            /* Explicit height */
             width: 1.5em;
-            /* Explicit width */
             margin: 0 2px;
-            /* Explicit margin */
         }
 
         /* Navigation & Header */
@@ -205,7 +203,6 @@
             text-decoration: none;
             font-size: 0.95rem;
             transition: color 0.2s, padding-left 0.2s, background-color 0.2s;
-            /* Added background-color for active */
             border-radius: 4px;
         }
 
@@ -219,13 +216,11 @@
             padding-left: 10px;
             font-weight: bold;
             background-color: rgba(0, 0, 0, 0.05);
-            /* Subtle active background */
         }
 
         .dark-mode .sidebar ul li a.active {
             background-color: rgba(255, 255, 255, 0.08);
         }
-
 
         /* Main Content Area */
         .main-content {
@@ -311,8 +306,6 @@
         }
 
         @media (min-width: 640px) {
-
-            /* sm breakpoint */
             .syllabus-bar-container {
                 flex-direction: row;
             }
@@ -325,7 +318,6 @@
                 font-size: 0.875rem;
             }
         }
-
 
         section {
             margin-bottom: 3rem;
@@ -367,7 +359,6 @@
             padding-left: 25px;
         }
 
-        /* Visual Enhancements */
         .callout {
             padding: 1.5rem;
             margin: 1.5rem 0;
@@ -389,8 +380,6 @@
             border-left-color: #f39c12;
         }
 
-        /* Yellow */
-
         .highlight {
             background-color: var(--accent-color);
             color: white;
@@ -399,8 +388,8 @@
             font-weight: bold;
         }
 
-        /* Diagrams and Visuals */
-        .diagram-container {
+        .diagram-container,
+        .diagram {
             background-color: var(--card-bg);
             padding: 20px;
             border-radius: 8px;
@@ -493,7 +482,6 @@
             font-size: 0.9em;
         }
 
-        /* Interactive Elements */
         details {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -568,7 +556,6 @@
             color: #d19a66;
         }
 
-
         .quiz-container {
             background-color: var(--card-bg);
             padding: 20px;
@@ -596,7 +583,6 @@
             font-weight: bold;
         }
 
-        /* Timeline */
         .timeline {
             position: relative;
             max-width: 100%;
@@ -622,7 +608,6 @@
         }
 
         .timeline-item::after {
-            /* The circles on the timeline */
             content: '';
             position: absolute;
             width: 25px;
@@ -644,7 +629,6 @@
         }
 
         .left::before {
-            /* The arrows */
             content: " ";
             height: 0;
             position: absolute;
@@ -688,7 +672,6 @@
             color: var(--primary-color);
         }
 
-        /* Comparison Table */
         .comparison-table {
             width: 100%;
             border-collapse: collapse;
@@ -717,7 +700,6 @@
             color: var(--text-color);
         }
 
-        /* Application Icons */
         .app-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -745,7 +727,6 @@
             color: var(--primary-color);
         }
 
-        /* New Footer Styles */
         .new-footer-container {
             margin-top: 4rem;
             padding-top: 2.5rem;
@@ -805,8 +786,6 @@
         }
 
         @media (min-width: 640px) {
-
-            /* sm breakpoint */
             .new-footer-buttons-wrapper {
                 flex-direction: row;
                 justify-content: flex-end;
@@ -818,92 +797,6 @@
             }
         }
 
-
-        /* Print Styles */
-        @media print {
-            body {
-                font-size: 10pt;
-                color: #000 !important;
-                background-color: #fff !important;
-            }
-
-            .navbar,
-            .sidebar,
-            .theme-toggle,
-            .hero-section .btn,
-            .quiz-container,
-            .new-footer-container,
-            details summary::marker,
-            .eduvishion-logo,
-            .syllabus-bar-container,
-            .new-footer-print-link {
-                display: none;
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding: 0;
-            }
-
-            section {
-                padding-top: 0;
-                margin-top: 0;
-                margin-bottom: 1.5rem;
-                page-break-after: auto;
-            }
-
-            h1,
-            h2,
-            h3,
-            h4 {
-                color: #000 !important;
-                border: none !important;
-                page-break-after: avoid;
-            }
-
-            .callout {
-                border-left: 3px solid #ccc !important;
-                background-color: #f9f9f9 !important;
-            }
-
-            .venn-diagram,
-            .ai-types-diagram,
-            .app-grid {
-                page-break-inside: avoid;
-            }
-
-            a {
-                text-decoration: none;
-                color: #000 !important;
-            }
-
-            a[href^="http"]:after {
-                content: " (" attr(href) ")";
-            }
-
-            pre {
-                background-color: #f0f0f0 !important;
-                border: 1px solid #ccc !important;
-                color: #000 !important;
-            }
-
-            .comparison-table th {
-                background-color: #eee !important;
-                color: #000 !important;
-            }
-
-            .comparison-table td,
-            .comparison-table th {
-                border: 1px solid #ccc !important;
-            }
-
-            .highlight {
-                background-color: #ddd !important;
-                color: #000 !important;
-            }
-        }
-
-        /* Responsive adjustments */
         @media (max-width: 992px) {
             .sidebar {
                 width: 100%;
@@ -970,7 +863,6 @@
 
         @media (max-width: 600px) {
             .eduvishion-logo {
-                /* Make logo smaller and adjust position if it overlaps navbar toggle on small screens */
                 top: 12px;
                 left: 12px;
             }
@@ -986,40 +878,29 @@
 
             .navbar {
                 padding: 1rem;
-            }
-
-            .navbar-brand {
-                font-size: 1.3rem;
+                justify-content: center;
+                position: relative;
             }
 
             .nav-left-spacer {
                 display: none;
             }
 
-            /* Hide spacer to give more room */
-            .navbar {
-                justify-content: center;
-                position: relative;
-            }
-
-            /* Center brand */
             .navbar-brand {
                 flex-grow: 0;
                 margin-right: auto;
                 margin-left: 50px;
+                font-size: 1.3rem;
             }
 
-            /* Adjust brand positioning */
             .theme-toggle {
                 position: absolute;
-                /* Position toggle absolutely within navbar */
                 right: 1rem;
                 top: 50%;
                 transform: translateY(-50%);
                 flex-basis: auto;
                 font-size: 1.2rem;
             }
-
 
             .main-content {
                 padding: 1rem;
@@ -1084,6 +965,137 @@
                 min-width: auto;
                 width: 90%;
             }
+
+            .new-footer-buttons-wrapper {
+                flex-direction: column;
+            }
+
+            .new-footer-buttons-wrapper .new-footer-button:first-child {
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        @media print {
+            body {
+                font-size: 10pt;
+                color: #000 !important;
+                background-color: #fff !important;
+            }
+
+            .navbar,
+            .sidebar,
+            .theme-toggle,
+            .hero-section .btn,
+            .quiz-container,
+            .new-footer-container,
+            details summary::marker,
+            .eduvishion-logo,
+            .syllabus-bar-container,
+            .new-footer-print-link {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 0;
+            }
+
+            section {
+                padding-top: 0;
+                margin-top: 0;
+                margin-bottom: 1.5rem;
+                page-break-after: auto;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4 {
+                color: #000 !important;
+                border: none !important;
+                page-break-after: avoid;
+            }
+
+            .callout {
+                border-left: 3px solid #ccc !important;
+                background-color: #f9f9f9 !important;
+            }
+
+            .venn-diagram,
+            .ai-types-diagram,
+            .app-grid,
+            .diagram {
+                page-break-inside: avoid;
+            }
+
+            a {
+                text-decoration: none;
+                color: #000 !important;
+            }
+
+            a[href^="http"]:after {
+                content: " (" attr(href) ")";
+            }
+
+            pre {
+                background-color: #f0f0f0 !important;
+                border: 1px solid #ccc !important;
+                color: #000 !important;
+            }
+
+            .comparison-table th {
+                background-color: #eee !important;
+                color: #000 !important;
+            }
+
+            .comparison-table td,
+            .comparison-table th {
+                border: 1px solid #ccc !important;
+            }
+
+            .highlight {
+                background-color: #ddd !important;
+                color: #000 !important;
+            }
+        }
+
+        /* Added styles for the new 'Types of AI' diagram */
+        .ai-classification-diagram {
+            display: flex;
+            justify-content: space-around;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+            /* Allow wrapping on smaller screens */
+        }
+
+        .classification-box {
+            background-color: var(--card-bg);
+            border: 2px solid var(--secondary-color);
+            border-radius: 8px;
+            padding: 20px;
+            width: 45%;
+            /* Adjust width for two boxes */
+            min-width: 280px;
+            /* Minimum width before wrapping */
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .classification-box h4 {
+            color: var(--secondary-color);
+            margin-top: 0;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .classification-box ul {
+            list-style: disc;
+            padding-left: 20px;
+        }
+
+        .classification-box li {
+            margin-bottom: 0.5rem;
         }
     </style>
 </head>
@@ -1106,7 +1118,7 @@
     </div>
 
     <nav class="navbar">
-        <div class="nav-left-spacer"></div> <!-- Invisible spacer for balance, hidden on small screens -->
+        <div class="nav-left-spacer"></div>
         <a href="#" class="navbar-brand"><i class="fas fa-brain"></i> Intro to AI</a>
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
             <i class="fas fa-moon"></i>
@@ -1125,7 +1137,7 @@
         </header>
 
         <div class="syllabus-bar-container">
-            <a href="../ai.html" class="syllabus-bar-back-link"> <!-- Ensure this path is correct -->
+            <a href="../ai.html" class="syllabus-bar-back-link">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                     <path fill-rule="evenodd"
                         d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
@@ -1138,9 +1150,15 @@
             </div>
         </div>
 
-        <!-- ... (rest of the HTML content from your previous version remains unchanged here) ... -->
         <section id="what-is-ai">
             <h2>What is Artificial Intelligence?</h2>
+            <p>The term artificial intelligence may be used for any computer that has characteristics similar to the
+                human brain, including the ability to think critically, make decisions, and increase productivity. The
+                foundation of AI is human insights that may be determined in such a manner that machines can easily
+                realize the jobs, from the most simple to the most complicated.</p>
+            <p>Insights that are synthesized are the result of intellectual activity, including study, analysis, logic,
+                and observation. Tasks, including robotics, control mechanisms, computer vision, scheduling, and data
+                mining, fall under the umbrella of artificial intelligence.</p>
             <p>Artificial Intelligence (AI) is a broad and dynamic field of computer science focused on creating systems
                 capable of performing tasks that typically require human intelligence. The term "Artificial
                 Intelligence" is composed of two words: "Artificial" defines "man-made," and "Intelligence" defines
@@ -1170,6 +1188,7 @@
         </section>
 
         <section id="goals-of-ai">
+            <!-- Content from previous topic-1.html -->
             <h2>Goals of Artificial Intelligence</h2>
             <p>Following are the main goals of Artificial Intelligence, driving research and development in the field:
             </p>
@@ -1205,6 +1224,7 @@
         </section>
 
         <section id="history-of-ai">
+            <!-- Content from previous topic-1.html -->
             <h2>Historical Evolution of AI</h2>
             <p>Artificial Intelligence is not a new word and not a new technology for researchers. This technology is
                 much older than you would imagine. There are even myths of mechanical men in Ancient Greek and Egyptian
@@ -1305,171 +1325,672 @@
 
         <section id="types-of-ai">
             <h2>Types of Artificial Intelligence</h2>
-            <p>Artificial Intelligence can be categorized based on its capabilities and functionalities. The primary
-                classification divides AI into three main levels or types:</p>
+            <p>AI can be classified in several ways. A common approach is to categorize AI based on its <strong
+                    class="highlight">capabilities</strong> and its <strong class="highlight">functionalities</strong>.
+            </p>
 
-            <div class="diagram-container">
-                <h4>Three Stages of AI Development</h4>
-                <div class="ai-types-diagram">
-                    <div class="ai-type-box">
-                        <i class="fas fa-robot"></i>
-                        <h5>Stage 1: Artificial Narrow Intelligence (ANI)</h5>
-                        <p><strong>Also known as:</strong> Weak AI</p>
-                        <p>Specializes in one area and solves one problem. Examples: Siri, Alexa, self-driving cars,
-                            recommendation systems.</p>
+            <div class="diagram">
+                <h4>Types of AI Classification</h4>
+                <!-- Placeholder for the "Types of AI" diagram. You can replace this with an <img> tag if you have the image file -->
+                <div class="ai-classification-diagram">
+                    <div class="classification-box">
+                        <h4>Types of AI Based on Capabilities</h4>
+                        <ul>
+                            <li>Artificial Narrow Intelligence (ANI)</li>
+                            <li>Artificial General Intelligence (AGI)</li>
+                            <li>Artificial Superintelligence (ASI)</li>
+                        </ul>
                     </div>
-                    <div class="ai-type-box">
-                        <i class="fas fa-brain"></i>
-                        <h5>Stage 2: Artificial General Intelligence (AGI)</h5>
-                        <p><strong>Also known as:</strong> Strong AI, Deep AI</p>
-                        <p>Refers to a computer that is as smart as a human across the board. Can perform any
-                            intellectual task a human can. (Largely hypothetical).</p>
-                    </div>
-                    <div class="ai-type-box">
-                        <i class="fas fa-infinity"></i>
-                        <h5>Stage 3: Artificial Superintelligence (ASI)</h5>
-                        <p><strong>Also known as:</strong> - </p>
-                        <p>An intellect that is much smarter than the best human brains in practically every field.
-                            (Hypothetical).</p>
+                    <div class="classification-box">
+                        <h4>Types of AI Based on Functionalities</h4>
+                        <ul>
+                            <li>Reactive Machines</li>
+                            <li>Limited Memory</li>
+                            <li>Theory of Mind</li>
+                            <li>Self-Aware AI</li>
+                        </ul>
                     </div>
                 </div>
             </div>
 
-            <h3>1. Artificial Narrow Intelligence (ANI) / Weak AI</h3>
-            <p>ANI, also known as Weak AI, is goal-oriented and designed to perform singular tasks. These machines
-                function under minimal limitations and stimulate human behavior based on certain parameters. ANI makes
-                use of NLP or natural language processing to perform tasks. It's the only type of AI we have
-                successfully realized to date.</p>
-            <details>
-                <summary>Examples of Weak or Narrow AI:</summary>
-                <ul>
-                    <li>Siri, Alexa, Cortana, Google Assistant</li>
-                    <li>IBM's Watson (as used in Jeopardy!)</li>
-                    <li>Self-driving cars (specialized task)</li>
-                    <li>Facial recognition software</li>
-                    <li>Email spam filters</li>
-                    <li>Recommendation engines (Netflix, Amazon)</li>
-                    <li>Prediction tools</li>
-                    <li>Chatbots and speech recognition systems</li>
-                </ul>
-            </details>
+            <h3>Types of AI Based on Capabilities</h3>
+            <p>This classification focuses on the AI's ability to perform tasks compared to human intelligence.</p>
 
-            <h3>2. Artificial General Intelligence (AGI) / Strong AI</h3>
-            <p>AGI, also known as Strong AI or Deep AI, refers to the concept of machines that can mimic human
-                intelligence or behavior, with the ability to learn and apply its intelligence to solve any problem.
-                Scientists have not yet achieved this level of intelligence. Significant research is needed for machines
-                to become conscious through programming a set of cognitive abilities.</p>
-            <details>
-                <summary>Key Properties of AGI (if realized):</summary>
-                <ul>
-                    <li>Reasoning and problem-solving</li>
-                    <li>Knowledge representation and common sense</li>
-                    <li>Planning and learning</li>
-                    <li>Natural language understanding and communication</li>
-                    <li>Perception and interaction with the environment</li>
-                    <li>Creativity and emotional intelligence (potentially)</li>
-                    <li>Recognition, Recall, Hypothesis testing, Imagination, Analogy, Implication</li>
-                </ul>
-            </details>
-            <p>It is difficult to predict whether strong AI will continue to advance, but with speech and facial
-                recognition continuously showing advancements, there is a slight possibility that we can expect growth
-                in this level of AI too.</p>
-
-            <h3>3. Artificial Superintelligence (ASI)</h3>
-            <p>ASI is a hypothetical concept where machine intelligence surpasses human capabilities and becomes
-                self-aware. This level of AI doesn't exist in the current world. ASI could potentially be better than
-                humans at art, sports, math, science, and more. The decision-making ability of a super-intelligence
-                would be greater than that of a human being. The concept has been the muse for many films and science
-                fiction novels. Its consequences are unknown and its impact cannot be measured yet.</p>
-
-            <div class="callout warning">
-                <strong>A Note on Terminology:</strong> Sometimes "Deep AI" is used interchangeably with AGI. However,
-                "Deep Learning" is a *subset* of Machine Learning, which itself is a subset of AI.
+            <h4>1. Artificial Narrow Intelligence (ANI) / Weak AI</h4>
+            <p>Narrow AI, also known as Weak AI or Artificial Narrow Intelligence (ANI), is the most prevalent and
+                widely used form of AI in our current technological landscape. These systems are designed to perform
+                specific tasks within a limited domain, often outperforming humans in terms of speed and accuracy. It's
+                the only type of AI we have successfully realized to date.</p>
+            <h5>Characteristics of Narrow AI:</h5>
+            <ul>
+                <li>Specialization in a single task or narrow domain.</li>
+                <li>Inability to transfer knowledge to other tasks.</li>
+                <li>Lack of true understanding or consciousness.</li>
+                <li>Reliance on pre-programmed rules or machine learning algorithms trained on specific datasets.</li>
+            </ul>
+            <h5>Real-world examples of Narrow AI:</h5>
+            <ul>
+                <li>Virtual Assistants: Siri, Alexa, and Google Assistant.</li>
+                <li>Recommendation Systems: Netflix, Amazon, and Spotify.</li>
+                <li>Image Recognition: Facebook's facial recognition for photo tagging.</li>
+                <li>Natural Language Processing: Chatbots and language translation services.</li>
+                <li>Game AI: Chess engines like Deep Blue and AlphaZero.</li>
+                <li>Autonomous vehicles: These self-driving cars use a combination of Narrow AI technologies to navigate
+                    roads, recognize traffic signs, and make decisions in real-time.</li>
+            </ul>
+            <div class="callout info">
+                <h5>Narrow AI Components in Autonomous Vehicles</h5>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Function</th>
+                            <th>AI Technology Used</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Computer Vision</td>
+                            <td>Identify objects and road signs</td>
+                            <td>Convolutional Neural Networks</td>
+                        </tr>
+                        <tr>
+                            <td>Localization</td>
+                            <td>Determine vehicle's position</td>
+                            <td>GPS and sensor fusion algorithms</td>
+                        </tr>
+                        <tr>
+                            <td>Path Planning</td>
+                            <td>Calculate optimal route</td>
+                            <td>Graph search algorithms</td>
+                        </tr>
+                        <tr>
+                            <td>Decision Making</td>
+                            <td>React to road conditions</td>
+                            <td>Rule-based systems and machine learning</td>
+                        </tr>
+                        <tr>
+                            <td>Natural Language Processing</td>
+                            <td>Interact with passengers</td>
+                            <td>Speech recognition and synthesis</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
+            <div class="callout">
+                <h5>Further Examples of Narrow AI in Use:</h5>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Application</th>
+                            <th>Description</th>
+                            <th>Benefits</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>IBM Watson Health</td>
+                            <td>AI-assisted diagnosis processing medical images</td>
+                            <td>Enhanced accuracy in identifying diseases</td>
+                        </tr>
+                        <tr>
+                            <td>PayPal</td>
+                            <td>Fraud detection using transaction data analysis</td>
+                            <td>Improved security measures and user trust</td>
+                        </tr>
+                        <tr>
+                            <td>Bank of America's Erica</td>
+                            <td>Virtual assistant handling customer inquiries</td>
+                            <td>Streamlined user interaction and support</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>While Narrow AI excels in its specific domains, it has significant limitations. For instance, a
+                chess-playing AI like Deep Blue can defeat world champions but cannot apply its strategic thinking to
+                other games or real-world problems. Similarly, a language translation AI cannot engage in meaningful
+                conversations or understand the context beyond its training data.</p>
 
-            <div class="diagram-container">
-                <h4>AI, Machine Learning, and Deep Learning</h4>
-                <p>These terms are often used interchangeably, but they have distinct meanings and relationships:</p>
-                <div class="venn-diagram">
-                    <div class="venn-circle ai-circle">Artificial Intelligence (AI)<br><small>(The broad concept of
-                            machines simulating human intelligence)</small></div>
-                    <div class="venn-circle ml-circle">Machine Learning (ML)<br><small>(Algorithms that allow systems to
-                            learn from data)</small></div>
-                    <div class="venn-circle dl-circle">Deep Learning (DL)<br><small>(A subset of ML using neural
-                            networks with many layers)</small></div>
+            <h4>2. Artificial General Intelligence (AGI) / Strong AI</h4>
+            <p>General AI, or Artificial General Intelligence (AGI), is a big goal in AI. It aims to make machines think
+                like humans in many ways. Unlike Narrow AI, which does only one thing, AGI can learn and feel emotions
+                like us. It's all about making AI smart and aware, like humans. AGI refers to the concept of machines
+                that can mimic human intelligence or behavior, with the ability to learn and apply its intelligence to
+                solve any problem. Scientists have not yet achieved this level of intelligence.</p>
+            <h5>Characteristics & Key Attributes of General AI:</h5>
+            The path to AGI is filled with key traits:
+            <ul>
+                <li><strong>Versatility:</strong> AGI wants to handle many tasks, not just one. Ability to perform any
+                    intellectual task that a human can.</li>
+                <li><strong>Human-like Cognition:</strong> It's all about making AI think like us.</li>
+                <li><strong>Self-Improvement:</strong> AGI should get better on its own from what it learns.</li>
+                <li><strong>Understanding Context:</strong> It needs to get situations and act right based on what's
+                    happening.</li>
+                <li><strong>Transfer learning and adaptation</strong> to new situations.</li>
+                <li><strong>Self-awareness and consciousness</strong> (debated).</li>
+                <li><strong>Emotional and social intelligence</strong>.</li>
+            </ul>
+            <h5>The Challenge of Achieving General AI:</h5>
+            Making general AI is hard. There are big hurdles:
+            <ul>
+                <li><strong>Replicating/Understanding Human Cognition:</strong> Figuring out how we think is tough. The
+                    human brain's complexity and our limited understanding of consciousness make it difficult.</li>
+                <li><strong>Common Sense Reasoning:</strong> Humans possess an intuitive understanding of the world,
+                    which is challenging to replicate in machines.</li>
+                <li><strong>Emotional Intelligence:</strong> Human interaction relies heavily on emotional cues and
+                    social context, which are difficult to quantify and program.</li>
+                <li><strong>Technological Limitations:</strong> Today's tech can't make systems that really understand
+                    things deeply across diverse domains.</li>
+                <li><strong>Ethical Decision-Making:</strong> Creating AI systems that can make morally sound decisions
+                    in complex situations is a significant challenge.</li>
+                <li><strong>Generalization and Transfer Learning:</strong> While humans can easily apply knowledge from
+                    one domain to another, AI systems struggle with this type of generalization.</li>
+                <li><strong>Ethical Considerations:</strong> Safety, knowing if AI is conscious, and job loss are big
+                    worries.</li>
+            </ul>
+            <details>
+                <summary>Hypothetical AGI Scenario: Managing City Infrastructure</summary>
+                <p>Imagine an AGI system tasked with managing a city's infrastructure. It would need to:</p>
+                <ul>
+                    <li>Analyze traffic patterns and optimize transportation systems.</li>
+                    <li>Monitor and maintain water and power supplies.</li>
+                    <li>Coordinate emergency services.</li>
+                    <li>Balance economic development with environmental conservation.</li>
+                    <li>Understand and respond to citizens' needs and complaints.</li>
+                </ul>
+                <p>Such a system would require an incredible breadth of knowledge and the ability to make complex
+                    decisions based on ever-changing data and priorities.</p>
+            </details>
+            <h5>Approaches being explored for AGI development:</h5>
+            <ol>
+                <li><strong>Neural Architecture Search:</strong> Automated methods for designing optimal neural network
+                    structures.</li>
+                <li><strong>Meta-Learning:</strong> Training AI systems to learn how to learn, enabling faster
+                    adaptation.</li>
+                <li><strong>Reinforcement Learning:</strong> Teaching AI agents through trial and error in complex,
+                    simulated environments.</li>
+                <li><strong>Cognitive Architectures:</strong> Attempting to model the structure and processes of the
+                    human mind.</li>
+                <li><strong>Neuromorphic Computing:</strong> Designing hardware that mimics biological neural networks.
+                </li>
+                </παιdiv>
+                </details>
+
+                <h4>3. Artificial Superintelligence (ASI)</h4>
+                <p>Artificial Superintelligence (ASI) represents the pinnacle of artificial intelligence – a
+                    hypothetical form of AI that surpasses human intelligence in every aspect. This concept goes beyond
+                    the capabilities of General AI, imagining a future where machines possess intellectual capacities
+                    that are orders of magnitude greater than the brightest human minds. ASI could potentially be better
+                    than humans at art, sports, math, science, and more.</p>
+                <h5>Key characteristics of Superintelligent AI:</h5>
+                <ul>
+                    <li>Vastly superior problem-solving and creative abilities.</li>
+                    <li>Rapid self-improvement and learning.</li>
+                    <li>Ability to process and analyze enormous amounts of data instantaneously.</li>
+                    <li>Potential for technological singularity – a point of runaway technological growth.</li>
+                </ul>
+                <h5>Potential Capabilities of Superintelligent AI:</h5>
+                <ol>
+                    <li><strong>Scientific Breakthroughs:</strong> Solving complex problems that have eluded humans for
+                        centuries.</li>
+                    <li><strong>Technological Advancements:</strong> Driving unprecedented progress in areas like
+                        nanotechnology, space exploration, or even reversing aging.</li>
+                    <li><strong>Global Optimization:</strong> Addressing global issues like climate change, resource
+                        allocation, and poverty.</li>
+                    <li><strong>Cognitive Enhancement:</strong> Developing ways to enhance human cognitive abilities.
+                    </li>
+                    <li><strong>Philosophical Insights:</strong> Providing new perspectives on consciousness, ethics,
+                        and reality.</li>
+                </ol>
+                <details>
+                    <summary>Hypothetical ASI Scenario: Solving the Global Energy Crisis</summary>
+                    <p>Imagine an ASI system tasked with solving the global energy crisis. It might:</p>
+                    <ul>
+                        <li>Analyze all known and theoretical energy sources.</li>
+                        <li>Simulate countless scenarios to optimize energy production and distribution.</li>
+                        <li>Develop new materials for ultra-efficient solar panels and energy storage.</li>
+                        <li>Design safe and clean nuclear fusion reactors.</li>
+                        <li>Create a global smart grid that perfectly balances supply and demand.</li>
+                        <li>Invent entirely new forms of energy generation based on advanced physics.</li>
+                    </ul>
+                </details>
+                <h5>Concerns and Potential Risks of ASI:</h5>
+                <ul>
+                    <li><strong>Control Problem:</strong> Ensuring ASI aligns with human values and goals.</li>
+                    <li><strong>Existential Risk:</strong> An unaligned ASI could pose a threat to humanity.</li>
+                    <li><strong>Economic Disruption:</strong> Potential for widespread job obsolescence.</li>
+                    <li><strong>Ethical Considerations:</strong> Questions about consciousness, rights for artificial
+                        beings, and the role of humans.</li>
+                    <li><strong>Security Risks:</strong> A malicious actor gaining control of an ASI.</li>
+                </ul>
+                <div class="callout warning">
+                    <h5>Potential Impacts of Superintelligent AI</h5>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Area</th>
+                                <th>Positive Potential</th>
+                                <th>Negative Potential</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Science</td>
+                                <td>Rapid scientific breakthroughs</td>
+                                <td>Unpredictable or dangerous discoveries</td>
+                            </tr>
+                            <tr>
+                                <td>Technology</td>
+                                <td>Exponential technological growth</td>
+                                <td>Technological dependence or misuse</td>
+                            </tr>
+                            <tr>
+                                <td>Economy</td>
+                                <td>Unprecedented prosperity and efficiency</td>
+                                <td>Mass unemployment and economic instability</td>
+                            </tr>
+                            <tr>
+                                <td>Environment</td>
+                                <td>Solutions to climate change and pollution</td>
+                                <td>Unforeseen ecological consequences</td>
+                            </tr>
+                            <tr>
+                                <td>Human Society</td>
+                                <td>Enhanced human capabilities and longevity</td>
+                                <td>Loss of human agency or purpose</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
+                <p>The path to Superintelligent AI is uncertain, and many experts debate whether it's even possible or
+                    if we would recognize it if it emerged. Some theories suggest that the development of ASI could lead
+                    to an "intelligence explosion," where the AI rapidly improves itself, leading to unforeseeable
+                    consequences.</p>
+
+                <h3>Types of AI Based on Functionalities</h3>
+                <p>This classification, proposed by Arend Hintze, describes AI systems based on how they operate and
+                    their level of sophistication in mimicking human thought processes.</p>
+                <details>
+                    <summary>1. Reactive Machines</summary>
+                    <p>Reactive machines are the most basic type of AI. They can perceive their environment directly and
+                        act on what they see. They don't have a memory of past experiences and cannot use past
+                        information to inform current decisions. They operate purely on current data.
+                        <br><strong>Example:</strong> IBM's Deep Blue, the chess-playing computer, was a reactive
+                        machine. It could identify pieces on the chessboard and know how each moves, predict what moves
+                        might be next for it and its opponent, and choose the optimal move from among the possibilities.
+                        It couldn't learn from past games.
+                    </p>
+                </details>
+                <details>
+                    <summary>2. Limited Memory</summary>
+                    <p>Limited memory AI systems can store past experiences or some data for a short period. They can
+                        use this stored information to make better decisions. Most modern AI systems, such as
+                        self-driving cars or chatbots, fall into this category.
+                        <br><strong>Example:</strong> Self-driving cars observe other cars’ speed and direction. They
+                        can't keep this information forever, but they use it for a short period to make decisions like
+                        when to change lanes.
+                    </p>
+                </details>
+                <details>
+                    <summary>3. Theory of Mind (Hypothetical)</summary>
+                    <p>Theory of Mind AI is a more advanced, currently hypothetical, type of AI. Such systems would be
+                        able to understand human thoughts, emotions, beliefs, and intentions. This level of AI would be
+                        capable of social interaction, understanding that other beings have their own mental states that
+                        affect their behavior.
+                        <br><strong>Example:</strong> An AI that could understand why a person is frustrated or happy
+                        and respond empathetically or strategically based on that understanding. This is still an area
+                        of active research.
+                    </p>
+                </details>
+                <details>
+                    <summary>4. Self-Aware AI (Hypothetical)</summary>
+                    <p>Self-aware AI is the most advanced and entirely hypothetical stage of AI development. These
+                        systems would have a sense of self, consciousness, and an understanding of their own existence.
+                        They would be ableto understand their own internal states, predict feelings of others, and make
+                        inferences. This is the stuff of science fiction and is far beyond current capabilities.
+                        <br><strong>Example:</strong> AI characters in movies like HAL 9000 from "2001: A Space Odyssey"
+                        or Skynet from "The Terminator" (though often portrayed negatively).
+                    </p>
+                </details>
+
+                <h3>Key Similarities Between Different AI Types (Capabilities-based)</h3>
+                <p>While Narrow AI, General AI, and Super AI have different roles, they share many similarities. They
+                    all use algorithms to process data, making machines learn and decide. Each type aims to mimic human
+                    skills, automate tasks, and boost productivity in many fields.</p>
                 <ul>
-                    <li><strong>Artificial Intelligence (AI):</strong> The overall field of creating intelligent
-                        machines.</li>
-                    <li><strong>Machine Learning (ML):</strong> A subfield of AI that enables systems to learn from data
-                        without being explicitly programmed. It uses algorithms to parse data, learn from it, and then
-                        make a determination or prediction.</li>
-                    <li><strong>Deep Learning (DL):</strong> A specialized subfield of ML that uses artificial neural
-                        networks with multiple layers (deep neural networks) to analyze various factors of data. It's
-                        particularly powerful for tasks like image recognition and natural language processing.</li>
+                    <li>All three types need lots of data to train well.</li>
+                    <li>Narrow AI is great at specific tasks like speech recognition. General AI tries to understand
+                        more like humans. Super AI aims for even more advanced thinking.</li>
+                    <li>Super AI is still just an idea, but it wants to think beyond what humans can.</li>
+                    <li>Learning constantly is key for all AI types. It helps them get better with new experiences.</li>
+                    <li>The main similarity is their ability to handle repetitive tasks. This helps a lot in many
+                        industries.</li>
                 </ul>
-            </div>
+
+                <h3>Comparison of AI Types (Capabilities-based)</h3>
+                <div class="callout info">
+                    <h4>Quick Comparison: Narrow AI vs General AI</h4>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Aspect</th>
+                                <th>Narrow AI</th>
+                                <th>General AI</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Functionality</td>
+                                <td>Task-specific</td>
+                                <td>Multi-tasking</td>
+                            </tr>
+                            <tr>
+                                <td>Cognitive Ability</td>
+                                <td>Limited to design</td>
+                                <td>Human-like cognition</td>
+                            </tr>
+                            <tr>
+                                <td>Learning</td>
+                                <td>Static learning (often)</td>
+                                <td>Adaptive learning</td>
+                            </tr>
+                            <tr>
+                                <td>Context Understanding</td>
+                                <td>Poor</td>
+                                <td>Highly developed</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout">
+                    <h4>Attribute Comparison: ANI, AGI, ASI</h4>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Attribute</th>
+                                <th>Narrow AI</th>
+                                <th>General AI</th>
+                                <th>Superintelligent AI</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Task Specificity</td>
+                                <td>High</td>
+                                <td>Low</td>
+                                <td>Very Low</td>
+                            </tr>
+                            <tr>
+                                <td>Breadth of Knowledge</td>
+                                <td>Low</td>
+                                <td>High</td>
+                                <td>Extremely High</td>
+                            </tr>
+                            <tr>
+                                <td>Learning Speed</td>
+                                <td>Moderate</td>
+                                <td>High</td>
+                                <td>Extremely High</td>
+                            </tr>
+                            <tr>
+                                <td>Creativity</td>
+                                <td>Low</td>
+                                <td>High</td>
+                                <td>Extremely High</td>
+                            </tr>
+                            <tr>
+                                <td>Self-Improvement</td>
+                                <td>None/Limited</td>
+                                <td>Moderate</td>
+                                <td>Extremely High</td>
+                            </tr>
+                            <tr>
+                                <td>Human-like Reasoning</td>
+                                <td>Very Low</td>
+                                <td>High</td>
+                                <td>Beyond Human</td>
+                            </tr>
+                            <tr>
+                                <td>Potential Impact on Society</td>
+                                <td>Moderate</td>
+                                <td>High</td>
+                                <td>Extremely High</td>
+                            </tr>
+                            <tr>
+                                <td>Current Technological Feasibility</td>
+                                <td>High</td>
+                                <td>Low</td>
+                                <td>Very Low</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout success">
+                    <h4>Detailed Comparison: ANI, AGI, ASI</h4>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Narrow AI (ANI)</th>
+                                <th>General AI (AGI)</th>
+                                <th>Super AI (ASI)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Definition</td>
+                                <td>AI designed for specific tasks</td>
+                                <td>AI with human-like cognitive abilities</td>
+                                <td>AI that surpasses human intelligence</td>
+                            </tr>
+                            <tr>
+                                <td>Scope</td>
+                                <td>Limited to predefined tasks</td>
+                                <td>Broad range of tasks and learning capabilities</td>
+                                <td>Capable of surpassing human intellect in all domains</td>
+                            </tr>
+                            <tr>
+                                <td>Characteristics</td>
+                                <td>Specialized, efficient, limited flexibility</td>
+                                <td>Adaptive, versatile, human-like reasoning</td>
+                                <td>Superior intelligence, self-improving, comprehensive knowledge</td>
+                            </tr>
+                            <tr>
+                                <td>Current Status</td>
+                                <td>Widely used</td>
+                                <td>In research and development</td>
+                                <td>Theoretical</td>
+                            </tr>
+                            <tr>
+                                <td>Applications</td>
+                                <td>Voice assistants, recommendation systems, image recognition</td>
+                                <td>(Theoretical) Advanced robotics, smart assistants, autonomous vehicles with full
+                                    contextual understanding</td>
+                                <td>(Theoretical) Solving global challenges, scientific advancements</td>
+                            </tr>
+                            <tr>
+                                <td>Benefits</td>
+                                <td>Increased efficiency, enhanced accuracy, cost savings</td>
+                                <td>Human-like problem-solving, improved adaptability, enhanced interaction</td>
+                                <td>Accelerating discoveries, addressing global issues</td>
+                            </tr>
+                            <tr>
+                                <td>Limitations</td>
+                                <td>Lack of flexibility, data dependency, ethical concerns</td>
+                                <td>Technical complexity, ethical and social implications, resource-intensive</td>
+                                <td>Control problem, existential risks, ethical considerations</td>
+                            </tr>
+                            <tr>
+                                <td>Examples</td>
+                                <td>Amazon Alexa, Netflix recommendations, self-driving cars (current tech)</td>
+                                <td>(Theoretical) Smart assistants with full contextual understanding, versatile robots
+                                </td>
+                                <td>(Theoretical) AI solving complex global problems, surpassing human creativity</td>
+                            </tr>
+                            <tr>
+                                <td>Development Stage</td>
+                                <td>Mature and widely implemented</td>
+                                <td>Active research and development</td>
+                                <td>Theoretical discussions and debates</td>
+                            </tr>
+                            <tr>
+                                <td>Ethical Concerns</td>
+                                <td>Bias in data, transparency issues</td>
+                                <td>Responsible development, societal impact</td>
+                                <td>Alignment with human values, fairness, accountability</td>
+                            </tr>
+                            <tr>
+                                <td>Potential Risks</td>
+                                <td>Misuse, lack of oversight</td>
+                                <td>Misaligned objectives, potential misuse</td>
+                                <td>Loss of control, existential threats</td>
+                            </tr>
+                            <tr>
+                                <td>Future Prospects</td>
+                                <td>Expanded applications, improved functionalities</td>
+                                <td>Achieving human-like cognition, widespread integration</td>
+                                <td>Unknown; significant ethical and safety challenges</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <div class="diagram-container">
+                    <h4>AI, Machine Learning, and Deep Learning Relationship</h4>
+                    <div class="venn-diagram">
+                        <div class="venn-circle ai-circle">Artificial Intelligence (AI)<br><small>(The broad concept of
+                                machines simulating human intelligence)</small></div>
+                        <div class="venn-circle ml-circle">Machine Learning (ML)<br><small>(Algorithms that allow
+                                systems to learn from data)</small></div>
+                        <div class="venn-circle dl-circle">Deep Learning (DL)<br><small>(A subset of ML using neural
+                                networks with many layers)</small></div>
+                    </div>
+                    <ul>
+                        <li><strong>Artificial Intelligence (AI):</strong> The overall field of creating intelligent
+                            machines.</li>
+                        <li><strong>Machine Learning (ML):</strong> A subfield of AI that enables systems to learn from
+                            data
+                            without being explicitly programmed. It uses algorithms to parse data, learn from it, and
+                            then
+                            make a determination or prediction.</li>
+                        <li><strong>Deep Learning (DL):</strong> A specialized subfield of ML that uses artificial
+                            neural
+                            networks with multiple layers (deep neural networks) to analyze various factors of data.
+                            It's
+                            particularly powerful for tasks like image recognition and natural language processing.</li>
+                    </ul>
+                </div>
         </section>
 
         <section id="ai-vs-human">
             <h2>AI vs. Human Intelligence</h2>
             <p>While AI aims to replicate or simulate human intelligence, there are fundamental differences and
                 complementary strengths.</p>
+
+            <h3>What is Human Intelligence?</h3>
+            <p>The origins of human intelligence and conduct may be traced back to the individual's unique combination
+                of genetics, upbringing, and exposure to various situations and environments. And it hinges entirely on
+                one's freedom to shape his or her environment via the application of newly acquired information. The
+                information it provides is varied. For example, it may provide information on a person with a similar
+                skill set or background, or it may reveal diplomatic information that a locator or spy was tasked with
+                obtaining. After everything is said and done, it is able to deliver information about interpersonal
+                relationships and the arrangement of interests.</p>
+
+            <div class="diagram">
+                <h4>AI vs Human Intelligence Visualization</h4>
+                <div class="diagram-placeholder">Image: Split brain with circuits on one side (AI) and organic patterns
+                    on the other (Human).</div>
+            </div>
+
             <table class="comparison-table">
                 <thead>
                     <tr>
                         <th>Aspect</th>
+                        <th>Artificial Intelligence (AI)</th>
                         <th>Human Intelligence</th>
-                        <th>Artificial Intelligence (Current ANI)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><strong>Learning</strong></td>
-                        <td>Learns from few examples, abstract concepts, intuition, experience. Can transfer knowledge
-                            broadly.</td>
-                        <td>Typically requires large datasets. Excels at pattern recognition in specific domains.
-                            Limited transfer learning.</td>
+                        <td>Definition</td>
+                        <td>Machine systems designed to perform tasks requiring intelligence.</td>
+                        <td>Cognitive and emotional abilities inherent to humans.</td>
                     </tr>
                     <tr>
-                        <td><strong>Reasoning</strong></td>
-                        <td>Combines logic, emotion, ethics, common sense. Can handle ambiguity and novel situations.
-                        </td>
-                        <td>Primarily logical and rule-based (or pattern-based for ML). Struggles with true common sense
-                            and novel, unstructured problems.</td>
+                        <td>Learning Process</td>
+                        <td>Relies on training data, algorithms, and defined rules.</td>
+                        <td>Learns through experiences, intuition, and reasoning.</td>
                     </tr>
                     <tr>
-                        <td><strong>Speed & Scalability</strong></td>
-                        <td>Relatively slow processing. Limited multitasking.</td>
-                        <td>Extremely fast processing. Highly scalable for repetitive tasks. Can process vast amounts of
-                            data.</td>
+                        <td>Creativity</td>
+                        <td>Limited to patterns in training data; lacks true innovation.</td>
+                        <td>Capable of abstract, imaginative, and original thought.</td>
                     </tr>
                     <tr>
-                        <td><strong>Consistency & Accuracy</strong></td>
-                        <td>Prone to fatigue, bias, errors, emotional influence.</td>
-                        <td>Highly consistent and accurate for programmed tasks (if data is good). No fatigue.</td>
+                        <td>Adaptability</td>
+                        <td>Adjusts based on programming and data; slower in unfamiliar contexts.</td>
+                        <td>Adapts quickly to new, unpredictable environments.</td>
                     </tr>
                     <tr>
-                        <td><strong>Adaptability</strong></td>
-                        <td>Highly adaptable to new environments and tasks. Creative problem-solving.</td>
-                        <td>Limited adaptability outside its trained domain. Requires retraining for new tasks.</td>
+                        <td>Emotional Understanding</td>
+                        <td>Cannot truly feel emotions; mimics emotional responses if programmed.</td>
+                        <td>Naturally experiences and understands complex emotions.</td>
                     </tr>
                     <tr>
-                        <td><strong>Creativity & Emotion</strong></td>
-                        <td>Possesses genuine creativity, consciousness, emotions, empathy.</td>
-                        <td>Can simulate creativity (e.g., generative art) but lacks genuine understanding or emotion.
-                            No consciousness.</td>
+                        <td>Decision-Making</td>
+                        <td>Based on logic, data patterns, and algorithms.</td>
+                        <td>Balances logic, intuition, and emotional factors.</td>
                     </tr>
                     <tr>
-                        <td><strong>Scope</strong></td>
-                        <td>Broad, general-purpose intelligence.</td>
-                        <td>Narrow, specialized for specific tasks (ANI). AGI is hypothetical.</td>
+                        <td>Speed</td>
+                        <td>Processes data and computations much faster than humans.</td>
+                        <td>Slower in computation but excels in contextual understanding.</td>
                     </tr>
                     <tr>
-                        <td><strong>Data Processing</strong></td>
-                        <td>Uses intuition, experience, and limited data for decisions.</td>
-                        <td>Uses supervised and unsupervised learning to process data (Weak AI). Can use clustering and
-                            association to process data (Strong AI - theoretical application).</td>
+                        <td>Memory</td>
+                        <td>Unlimited and precise, depending on hardware.</td>
+                        <td>Limited and subject to forgetting or distortion.</td>
+                    </tr>
+                    <tr>
+                        <td>Learning Limits</td>
+                        <td>Restricted by available data and computational power.</td>
+                        <td>Potentially limitless, influenced by curiosity and motivation.</td>
+                    </tr>
+                    <tr>
+                        <td>Physical Capabilities</td>
+                        <td>Depends on robotics; can work in hazardous environments.</td>
+                        <td>Limited by physical endurance and biological constraints.</td>
+                    </tr>
+                    <tr>
+                        <td>Ethics and Morality</td>
+                        <td>Operates without inherent ethics unless programmed to follow guidelines.</td>
+                        <td>Capable of ethical and moral reasoning.</td>
+                    </tr>
+                    <tr>
+                        <td>Energy Efficiency</td>
+                        <td>Requires significant energy to operate (e.g., servers, cooling).</td>
+                        <td>Highly energy-efficient in relation to complexity of tasks.</td>
+                    </tr>
+                    <tr>
+                        <td>Error Handling</td>
+                        <td>Repeats errors unless explicitly corrected.</td>
+                        <td>Learns from mistakes intuitively.</td>
+                    </tr>
+                    <tr>
+                        <td>Contextual Awareness</td>
+                        <td>Limited; struggles with subtle context and ambiguity.</td>
+                        <td>Deep understanding of complex and nuanced contexts.</td>
+                    </tr>
+                    <tr>
+                        <td>Dependency</td>
+                        <td>Dependent on human input for creation, maintenance, and updates.</td>
+                        <td>Independent and self-reliant for survival and growth.</td>
+                    </tr>
+                    <tr>
+                        <td>Evolution</td>
+                        <td>Evolves rapidly with technological advancements.</td>
+                        <td>Evolves biologically over generations.</td>
                     </tr>
                 </tbody>
             </table>
@@ -1485,92 +2006,79 @@
         </section>
 
         <section id="applications-of-ai">
+            <!-- Content from previous topic-1.html -->
             <h2>Diverse Applications Across Industries</h2>
             <p>AI has various applications in today's society. It is becoming essential for today's time because it can
                 solve complex problems with an efficient way in multiple industries. AI is making our daily life more
                 comfortable and fast.</p>
             <div class="app-grid">
-                <div class="app-card">
-                    <i class="fas fa-rocket"></i>
+                <div class="app-card"> <i class="fas fa-rocket"></i>
                     <h4>Astronomy</h4>
                     <p>Solving complex universe problems, understanding its origin, works, classifying celestial
                         objects, and analyzing vast datasets from telescopes.</p>
                 </div>
-                <div class="app-card">
-                    <i class="fas fa-heartbeat"></i>
+                <div class="app-card"> <i class="fas fa-heartbeat"></i>
                     <h4>Healthcare</h4>
                     <p>Faster diagnosis, drug discovery, personalized medicine, robotic surgery, patient monitoring, and
                         predicting disease outbreaks.</p>
                 </div>
-                <div class="app-card">
-                    <i class="fas fa-gamepad"></i>
+                <div class="app-card"> <i class="fas fa-gamepad"></i>
                     <h4>Gaming</h4>
                     <p>Creating intelligent NPCs, dynamic game environments, procedural content generation, and
                         personalized player experiences.</p>
                 </div>
-                <div class="app-card">
-                    <i class="fas fa-chart-line"></i>
+                <div class="app-card"> <i class="fas fa-chart-line"></i>
                     <h4>Finance</h4>
                     <p>Algorithmic trading, fraud detection, credit scoring, customer service chatbots, risk management,
                         and personalized financial advice.</p>
                 </div>
-                <div class="app-card">
-                    <i class="fas fa-shield-alt"></i>
+                <div class="app-card"> <i class="fas fa-shield-alt"></i>
                     <h4>Data Security</h4>
                     <p>Detecting and responding to cyber-attacks, identifying vulnerabilities, automating security
                         tasks, and enhancing threat intelligence (e.g., AEG bot, AI2 Platform).</p>
                 </div>
-                <div class="app-card">
-                    <i class="fas fa-users"></i>
+                <div class="app-card"> <i class="fas fa-users"></i>
                     <h4>Social Media</h4>
                     <p>Content curation, friend suggestions, targeted advertising, sentiment analysis, fake news
                         detection, and managing user profiles.</p>
                 </div>
-                <div class="app-card">
-                    <i class="fas fa-plane"></i>
+                <div class="app-card"> <i class="fas fa-plane"></i>
                     <h4>Travel & Transport</h4>
                     <p>Route optimization, self-driving vehicles, flight scheduling, personalized travel
                         recommendations, and AI-powered chatbots for customer service.</p>
                 </div>
-                <div class="app-card">
-                    <i class="fas fa-car"></i>
+                <div class="app-card"> <i class="fas fa-car"></i>
                     <h4>Automotive Industry</h4>
                     <p>Self-driving cars (e.g., Tesla), driver assistance systems, predictive maintenance, manufacturing
                         optimization, and virtual assistants (e.g. TeslaBot).</p>
                 </div>
-                <div class="app-card">
-                    <i class="fas fa-cogs"></i>
+                <div class="app-card"> <i class="fas fa-cogs"></i>
                     <h4>Robotics</h4>
                     <p>Intelligent robots for manufacturing, logistics, healthcare (e.g. Erica, Sophia), exploration,
                         and personal assistance. Can perform tasks with their own experiences without pre-programming.
                     </p>
                 </div>
-                <div class="app-card">
-                    <i class="fas fa-film"></i>
+                <div class="app-card"> <i class="fas fa-film"></i>
                     <h4>Entertainment</h4>
                     <p>Recommendation engines (Netflix, Spotify), content creation (music, art), special effects in
                         movies, and personalized media experiences.</p>
                 </div>
-                <div class="app-card">
-                    <i class="fas fa-leaf"></i>
+                <div class="app-card"> <i class="fas fa-leaf"></i>
                     <h4>Agriculture</h4>
                     <p>Precision farming, crop monitoring (robotics, solid & crop monitoring), pest detection,
                         predictive analysis for yields, and optimizing resource usage.</p>
                 </div>
-                <div class="app-card">
-                    <i class="fas fa-shopping-cart"></i>
+                <div class="app-card"> <i class="fas fa-shopping-cart"></i>
                     <h4>E-commerce</h4>
                     <p>Personalized recommendations, chatbots for customer support, fraud detection, inventory
                         management, and dynamic pricing.</p>
                 </div>
-                <div class="app-card">
-                    <i class="fas fa-graduation-cap"></i>
+                <div class="app-card"> <i class="fas fa-graduation-cap"></i>
                     <h4>Education</h4>
                     <p>Personalized learning paths, automated grading, intelligent tutoring systems, AI teaching
                         assistants, and accessible education tools.</p>
                 </div>
-                <div class="app-card">
-                    <i class="fas fa-mobile-alt"></i>
+                <div class="app-card"> <i class="fas fa-mobile-alt"></i>
                     <h4>Intelligent Apps (I-Apps)</h4>
                     <p>Software for mobile devices using AI/ML for everyday tasks: email organization, scheduling,
                         virtual assistants (Chatbots, Siri, Alexa, Cortana).</p>
@@ -1579,8 +2087,8 @@
         </section>
 
         <section id="interactive-elements">
+            <!-- Content from previous topic-1.html -->
             <h2>Interactive Elements</h2>
-
             <h3>Toggle Box Example</h3>
             <details>
                 <summary>Pros and Cons of Current AI (ANI)</summary>
@@ -1602,7 +2110,6 @@
                     <li>Ethical concerns regarding privacy, autonomy, and decision-making.</li>
                 </ul>
             </details>
-
             <h3>Simple Python AI "Hello World"</h3>
             <p>While not "intelligent" in the human sense, this shows a basic Python function often used in introductory
                 programming contexts related to AI/ML libraries.</p>
@@ -1616,7 +2123,6 @@
     <span class="comment"># In a real AI, this would be the entry point to a more complex system.</span>
     <span class="number">data_points</span> = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]
     <span class="keyword">print</span>(<span class="string">f"Analyzing {len(data_points)} data points..."</span>)</code></pre>
-
             <h3>Mini Quiz: Test Your Knowledge!</h3>
             <div class="quiz-container">
                 <div id="quiz">
@@ -1638,6 +2144,16 @@
                         </div>
                         <p class="quiz-feedback" id="feedback-q2"></p>
                     </div>
+                    <div class="quiz-question" data-question="3">
+                        <p><strong>3. Which type of AI is designed for a specific task?</strong></p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q3" value="a"> Artificial General Intelligence
+                                (AGI)</label>
+                            <label><input type="radio" name="q3" value="b"> Artificial Narrow Intelligence (ANI)</label>
+                            <label><input type="radio" name="q3" value="c"> Artificial Superintelligence (ASI)</label>
+                        </div>
+                        <p class="quiz-feedback" id="feedback-q3"></p>
+                    </div>
                     <button id="submitQuiz">Submit Answers</button>
                     <p id="quizScore" style="margin-top:15px; font-weight:bold;"></p>
                 </div>
@@ -1645,6 +2161,7 @@
         </section>
 
         <section id="further-exploration">
+            <!-- Content from previous topic-1.html -->
             <h2>Further Exploration</h2>
             <div class="callout info">
                 <h4><i class="fas fa-lightbulb"></i> Did You Know?</h4>
@@ -1652,7 +2169,6 @@
                     automatons or artificial beings with human-like intelligence. For example, Talos from Greek
                     mythology was a giant bronze automaton built to protect Europa in Crete.</p>
             </div>
-
             <h3>Frequently Asked Questions (FAQs)</h3>
             <details>
                 <summary>Is AI the same as Machine Learning?</summary>
@@ -1674,7 +2190,6 @@
                     there's ongoing research, achieving AGI presents enormous scientific and engineering challenges.
                     There's no consensus on if or when it might be realized.</p>
             </details>
-
             <h3>Resources and Tools</h3>
             <p>For those interested in diving deeper into AI:</p>
             <ul>
@@ -1697,9 +2212,8 @@
         <footer class="new-footer-container">
             <div class="new-footer-buttons-wrapper">
                 <!-- No Previous Topic button for the first topic -->
-                <a href="topic-2.html" <!-- Make sure this link is correct for your structure -->
-                    class="new-footer-button">
-                    Next Topic: →
+                <a href="topic-2.html" class="new-footer-button">
+                    Next Topic: Intelligent Agents →
                 </a>
             </div>
             <a href="#" onclick="window.print(); return false;" class="new-footer-print-link">Print this page</a>
@@ -1746,10 +2260,9 @@
 
         // Table of Contents Generation & Active Scrolling
         const tocContainer = document.getElementById('toc');
-        const mainSections = Array.from(document.querySelectorAll('main section[id]')); // NodeList to Array
+        const mainSections = Array.from(document.querySelectorAll('main section[id]'));
         let tocLinkElements = [];
 
-        // Throttle function to limit execution rate of a function
         function throttle(func, limit) {
             let inThrottle;
             return function () {
@@ -1767,8 +2280,8 @@
             const navbar = document.querySelector('.navbar');
             const navbarHeight = navbar ? navbar.offsetHeight : 0;
 
-            tocContainer.innerHTML = ''; // Clear existing TOC before repopulating
-            tocLinkElements = []; // Reset array of TOC link elements
+            tocContainer.innerHTML = '';
+            tocLinkElements = [];
 
             mainSections.forEach(section => {
                 const sectionTitleElement = section.querySelector('h2');
@@ -1777,13 +2290,12 @@
                     const link = document.createElement('a');
                     link.textContent = sectionTitleElement.textContent;
                     link.href = `#${section.id}`;
-                    link.dataset.sectionId = section.id; // Store section ID for easy lookup
+                    link.dataset.sectionId = section.id;
                     listItem.appendChild(link);
                     tocContainer.appendChild(listItem);
                     tocLinkElements.push(link);
                 }
-                // Store the calculated effective offset on the section element for quick access
-                section.dataset.effectiveOffsetTop = section.offsetTop - navbarHeight - 30; // 30px buffer
+                section.dataset.effectiveOffsetTop = section.offsetTop - navbarHeight - 30;
             });
         }
 
@@ -1791,10 +2303,8 @@
             const scrollPosition = window.scrollY;
             let currentlyActiveSectionId = null;
 
-            // Iterate backwards through sections to find the one currently in view
             for (let i = mainSections.length - 1; i >= 0; i--) {
                 const section = mainSections[i];
-                // Use the pre-calculated offset stored in dataset, converting to integer
                 if (scrollPosition >= parseInt(section.dataset.effectiveOffsetTop || '0')) {
                     currentlyActiveSectionId = section.id;
                     break;
@@ -1810,17 +2320,14 @@
             });
         }
 
-        // Initial setup for TOC
         if (mainSections.length > 0) {
-            updateTocAndSectionData();    // Populate TOC and calculate initial offsets
-            highlightActiveTocLink();       // Highlight based on initial scroll position
-
-            // Attach throttled event listeners
-            window.addEventListener('scroll', throttle(highlightActiveTocLink, 100)); // Throttle scroll checks to every 100ms
+            updateTocAndSectionData();
+            highlightActiveTocLink();
+            window.addEventListener('scroll', throttle(highlightActiveTocLink, 100));
             window.addEventListener('resize', throttle(() => {
-                updateTocAndSectionData(); // Recalculate offsets and repopulate TOC on resize
+                updateTocAndSectionData();
                 highlightActiveTocLink();
-            }, 150)); // Throttle resize checks
+            }, 150));
         }
 
         // Mini Quiz Logic
@@ -1828,7 +2335,8 @@
         const quizQuestionElements = document.querySelectorAll('.quiz-question');
         const quizCorrectAnswers = {
             q1: { value: 'b', text: 'Artificial Narrow Intelligence' },
-            q2: { value: 'b', text: '1956' }
+            q2: { value: 'b', text: '1956' },
+            q3: { value: 'b', text: 'Artificial Narrow Intelligence (ANI)' } // Corrected for new Q3
         };
 
         if (submitQuizButton) {
@@ -1840,23 +2348,25 @@
                     const feedbackElement = document.getElementById(`feedback-${questionId}`);
                     const correctAnswerInfo = quizCorrectAnswers[questionId];
 
-                    if (selectedOption) {
-                        if (selectedOption.value === correctAnswerInfo.value) {
-                            score++;
-                            feedbackElement.textContent = "Correct!";
-                            feedbackElement.style.color = "var(--secondary-color)";
+                    if (correctAnswerInfo) { // Check if answer info exists for this question
+                        if (selectedOption) {
+                            if (selectedOption.value === correctAnswerInfo.value) {
+                                score++;
+                                feedbackElement.textContent = "Correct!";
+                                feedbackElement.style.color = "var(--secondary-color)";
+                            } else {
+                                feedbackElement.textContent = `Incorrect. The correct answer is: ${correctAnswerInfo.text}.`;
+                                feedbackElement.style.color = "var(--accent-color)";
+                            }
                         } else {
-                            feedbackElement.textContent = `Incorrect. The correct answer is: ${correctAnswerInfo.text}.`;
+                            feedbackElement.textContent = "Please select an answer.";
                             feedbackElement.style.color = "var(--accent-color)";
                         }
-                    } else {
-                        feedbackElement.textContent = "Please select an answer.";
-                        feedbackElement.style.color = "var(--accent-color)";
                     }
                 });
                 const quizScoreEl = document.getElementById('quizScore');
                 if (quizScoreEl) {
-                    quizScoreEl.textContent = `You scored ${score} out of ${quizQuestionElements.length}.`;
+                    quizScoreEl.textContent = `You scored ${score} out of ${Object.keys(quizCorrectAnswers).length}.`;
                 }
             });
         }
