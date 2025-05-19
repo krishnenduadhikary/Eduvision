@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en" class=""> <!-- Start with no 'dark' class, JS will add -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unix MCQ Challenge - Chapter 5 (Vi Editor)</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Logo Styles (Integrated into header flow) */
+        .header-logo .text-2xl {
+            font-size: 1.6rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .header-logo .logo-text-part {
+            /* Color will be handled by Tailwind text-gray-700 dark:text-gray-100 by default, or override if needed */
+        }
+
+        /* Make logo text distinctly visible in both modes if it clashes */
+        html:not(.dark) .header-logo .logo-text-part {
+            color: #374151;
+            /* Tailwind gray-700 for light mode if needed */
+        }
+
+        html.dark .header-logo .logo-text-part {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode */
+        }
+
+        .header-logo .logo-icon-part {
+            color: #F59E0B;
+            /* Tailwind amber-500, good contrast */
+            transition: color 0.3s;
+        }
+
+        .header-logo a:hover .logo-icon-part {
+            color: #D97706;
+            /* Tailwind amber-600 */
+        }
+
+        .header-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.4em;
+            width: 1.4em;
+            margin: 0 2px;
+        }
+
+        /* Ensure sticky header background is consistent */
+        header.sticky {
+            background-color: #f9fafb;
+            /* Tailwind gray-50 */
+        }
+
+        html.dark header.sticky {
+            background-color: #1f2937;
+            /* Tailwind gray-800 */
+        }
+
+        /* Ensure sub-header info card also respects dark mode */
+        #quizHeaderInfo {
+            background-color: #ffffff;
+            /* Tailwind white */
+        }
+
+        html.dark #quizHeaderInfo {
+            background-color: #374151;
+            /* Tailwind gray-700 */
+        }
+
+
+        .quiz-question-block {
+            transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+            opacity: 0.6;
+        }
+
+        .quiz-question-block.active-question {
+            opacity: 1;
+            transform: scale(1.01);
+            box-shadow: 0 0 15px rgba(80, 120, 255, 0.2);
+        }
+
+        html.dark .quiz-question-block.active-question {
+            box-shadow: 0 0 15px rgba(100, 150, 255, 0.3);
+        }
+
+        .quiz-question-block.answered-question {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .quiz-question-block.answered-question .option-btn {
+            pointer-events: none;
+            cursor: default;
+        }
+
+        .quiz-question-block .option-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .option-btn {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .option-btn:not(:disabled):hover {
+            transform: translateY(-2px) scale(1.01);
+            /* box-shadow: 0 4px 12px rgba(0,0,0,0.1); Tailwind's shadow-md or shadow-lg can be used directly on class */
+        }
+
+        html.dark .option-btn:not(:disabled):hover {
+            /* box-shadow: 0 4px 12px rgba(255,255,255,0.08); */
+        }
+
+        .option-btn.correct {
+            background-color: #10B981 !important;
+            /* green-500 */
+            color: white !important;
+            border-color: #059669 !important;
+            /* green-600 */
+        }
+
+        .option-btn.incorrect {
+            background-color: #EF4444 !important;
+            /* red-500 */
+            color: white !important;
+            border-color: #DC2626 !important;
+            /* red-600 */
+        }
+
+        .option-btn.actual-correct-unselected {
+            background-color: #D1FAE5 !important;
+            /* green-100 */
+            color: #065F46 !important;
+            /* green-700 */
+            border-color: #6EE7B7 !important;
+            /* green-300 */
+            animation: pulse-subtle-green 2s infinite;
+        }
+
+        html.dark .option-btn.actual-correct-unselected {
+            background-color: #064E3B !important;
+            color: #A7F3D0 !important;
+            border-color: #10B981 !important;
+        }
+
+
+        @keyframes pulse-subtle-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        .explanation-area {
+            min-height: 70px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            overflow: hidden;
+            background-color: #ffffff;
+            /* Light mode */
+        }
+
+        html.dark .explanation-area {
+            background-color: #374151;
+            /* Tailwind gray-700 for dark mode */
+        }
+
+        .explanation-area.visible {
+            opacity: 1;
+        }
+
+        /* Fix dark mode for feedback area */
+        .feedback-area {
+            color: #374151;
+            /* Light mode text color */
+        }
+
+        html.dark .feedback-area {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode text color */
+        }
+
+        /* Fix dark mode for question block */
+        .quiz-question-block {
+            background-color: #f9fafb;
+            /* Light mode */
+        }
+
+        html.dark .quiz-question-block {
+            background-color: #1f2937;
+            /* Tailwind gray-800 for dark mode */
+        }
+    </style>
+
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
+
+    <div class="container mx-auto p-4 min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="sticky mb-6 top-0 z-50 py-3 shadow-md bg-gray-50 dark:bg-gray-800">
+            <!-- Top part of the header: Logo, Title, Dark Mode Toggle -->
+            <div class="container mx-auto flex justify-between items-center px-2 sm:px-4">
+                <!-- Eduvision Logo -->
+                <div class="header-logo">
+                    <div class="text-2xl font-bold">
+                        <a href="../../index.html" class="flex items-center group">
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">Edu</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="logo-icon-part" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">ision</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Page Title -->
+                <h1 class="mx-4 text-lg sm:text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500 text-center flex-grow whitespace-nowrap cursor-pointer"
+                    onclick="window.location.href='unix-mcq.html'">
+                    Unix MCQ Challenge
+                </h1>
+
+                <!-- Dark Mode Toggle -->
+                <div class="flex-shrink-0">
+                    <button id="darkModeToggle"
+                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none transition-colors duration-300"
+                        aria-label="Toggle Dark Mode">
+                        <!-- Icon will be set by JS -->
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bottom part of the header: Quiz Info Card -->
+            <div id="quizHeaderInfo" class="bg-white dark:bg-gray-700 p-3 mt-3 rounded-lg shadow-md container mx-auto">
+                <h2 id="mainChapterTitle" class="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-2"></h2>
+                <div class="flex justify-between items-center text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">
+                    <span id="questionProgressText">Answered: 0 / 0</span>
+                    <span id="scoreDisplay">Score: 0</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                    <div id="progressBar"
+                        class="bg-gradient-to-r from-blue-500 to-purple-600 h-2.5 rounded-full transition-all duration-500 ease-out"
+                        style="width: 0%"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area for All Questions -->
+        <main id="quizContentArea"
+            class="flex-grow bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl transition-colors duration-300 mt-4">
+            <!-- Topics and Questions will be dynamically inserted here -->
+        </main>
+
+        <!-- Navigation Area (for Next Chapter) -->
+        <div id="overallNavigation" class="mt-8 mb-4 flex justify-center">
+            <button id="nextChapterBtn"
+                class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 hidden">
+                <!-- Text and onclick will be set by JS -->
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
+            © 2023 Interactive MCQ Platform.
+        </footer>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                chapterName: "Unix MCQ on Vi Editor",
+                topics: [
+                    {
+                        topicName: "Vi Basics and Modes – 1",
+                        questions: [
+                            {
+                                id: "vibm1_q1", question: "1. Which editor is used by the UNIX system to edit files?",
+                                options: ["vi", "notepad", "word", "notepad++"], correctAnswer: "vi",
+                                explanation: "It doesn’t matter what kind of work we are doing on a UNIX system, we always need an editor to edit some system files or ordinary files. For this purpose, vi editor is used in UNIX. Currently, vim (vi improved) is an improved version which is supported by LINUX systems."
+                            },
+                            {
+                                id: "vibm1_q2", question: "2. What does the following command do?\n\n    $ vi  file001",
+                                options: ["open file named file001", "edit file named file001", "delete a file named file001", "open file if it exists else creates a new file"], correctAnswer: "open file if it exists else creates a new file",
+                                explanation: "vi editor can be used for creating and editing files. In the above command, if file001 already exists, then the contents of the file will be displayed. Otherwise, an empty file named file001 will be created."
+                            },
+                            {
+                                id: "vibm1_q3", question: "3. Which option is used by vi editor to open a file in read mode only?",
+                                options: ["-r", "-R", "-d", "-f"], correctAnswer: "-R",
+                                explanation: "To open an existing file in read-mode only, -R is used with the filename (as an argument). For example,\n$ vi  -R  file001       // open file in read mode only"
+                            },
+                            {
+                                id: "vibm1_q4", question: "4. How many types of modes are used by vi editor?",
+                                options: ["2", "4", "3", "1"], correctAnswer: "3",
+                                explanation: "Before working with vi editor, it is necessary to be familiar with the modes in which vi editor works. There are three different kinds of modes, namely command mode, input mode and ex mode each of which is used for a specific purpose."
+                            },
+                            {
+                                id: "vibm1_q5", question: "5. What is the default mode of vi editor?",
+                                options: ["Command mode", "Input mode", "Ex mode", "Insert mode"], correctAnswer: "Command mode",
+                                explanation: "The default mode of vi editor is command mode, where every key which is pressed is interpreted as a command to run on the text. To perform operations on text like deleting, copying, the first step you’ll have to follow is to be in the command mode so that you can run commands according to your suitability."
+                            },
+                            {
+                                id: "vibm1_q6", question: "6. To insert text into a file, _____ mode is used.",
+                                options: ["Command mode", "Input mode", "Ex mode", "def mode"], correctAnswer: "Input mode",
+                                explanation: "Input mode provides us with a feature of inputting text in files. Every key pressed in this mode is recorded in the file."
+                            },
+                            {
+                                id: "vibm1_q7", question: "7. ex mode is used for what purpose?",
+                                options: ["file handling", "substitution", "file handling and substitution", "Inputting text in files"], correctAnswer: "file handling and substitution",
+                                explanation: "ex mode performs various file handling and substitution operations like saving the file, quitting the editor, search and replace operations etc."
+                            },
+                            {
+                                id: "vibm1_q8", question: "8. Which one of the following key is used to switch from command mode to input mode?",
+                                options: ["i", ":", "esc", ";"], correctAnswer: "i",
+                                explanation: "To switch from command mode to input mode press the ‘i’ key."
+                            },
+                            {
+                                id: "vibm1_q9", question: "9. ____ key is used for switching to command mode from input mode.",
+                                options: ["i", "A", ":", "esc"], correctAnswer: "esc",
+                                explanation: "Command mode allows us to enter commands for performing operations on the text entered. To switch from the input mode to command mode press the ‘esc’ key. This operation will not be displayed on the screen but changes our mode to command mode."
+                            },
+                            {
+                                id: "vibm1_q10", question: "10. Which of the following key is used to enter in ex-mode?",
+                                options: ["ESC", "i", ":", ";"], correctAnswer: ":",
+                                explanation: "To enter into ex-mode press the ‘:’ key. After that, we can press any ex-mode command followed by [Enter] to perform suitable operations."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Vi Basics and Modes – 2",
+                        questions: [
+                            {
+                                id: "vibm2_q1", question: "1. ex-mode is used to save our work.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "One of the major functions performed in ex-mode is, saving our work. For example, to save our file invoke the following command :\n:w [Enter]\n\"file001\", 10 lines, 456 characters"
+                            },
+                            {
+                                id: "vibm2_q2", question: "2. Commands inputted in command mode don’t appear on the terminal.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Command mode is the mode in which we can pass commands to act on text, using most of the keys of the keyboard. Pressing a key doesn’t show it on screen but may perform a function like moving the cursor to the next line, deleting a line etc."
+                            },
+                            {
+                                id: "vibm2_q3", question: "3. To clear the screen in vi editor, _____ is used.",
+                                options: ["ctrl-h", "ctrl-l", "ctrl-p", "ctrl-v"], correctAnswer: "ctrl-l",
+                                explanation: "If the screen gets garbled due to some reasons, we can use ctrl-l in command mode to wipe out. It will simply clear your terminal."
+                            },
+                            {
+                                id: "vibm2_q4", question: "4. vi commands are not case sensitive.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "vi commands are case-sensitive. For example, ‘a’ and ‘A’ are different commands."
+                            },
+                            {
+                                id: "vibm2_q5", question: "5. While entering text in input mode the data is saved in _____",
+                                options: ["buffer", "disk", "RAM", "cache"], correctAnswer: "buffer",
+                                explanation: "If the file has not been saved yet then whatever we are inputting in it is stored in a temporary storage called buffer. To save the data entered in the buffer, we have to switch to ex-mode."
+                            },
+                            {
+                                id: "vibm2_q6", question: "6. To quit vi editor without saving the buffer we can use",
+                                options: [":q", ":c", ":w", ":q!"], correctAnswer: ":q!",
+                                explanation: "For quitting vi editor, there are numerous ways available in ex-mode as well as in command mode. One way of which is to type ‘:q!’ in ex-mode."
+                            },
+                            {
+                                id: "vibm2_q7", question: "7. The first UNIX editor was ____",
+                                options: ["emacs", "ex", "ed", "vi"], correctAnswer: "ed",
+                                explanation: "The first editor that was used in UNIX systems was ‘ed’. The main reason behind the replacement of ‘ed’ was that it can only edit files in the current directory and cannot execute shell commands."
+                            },
+                            {
+                                id: "vibm2_q8", question: "8. One of the most important features of vi editor is _______",
+                                options: ["available mostly across all UNIX platforms", "easy to learn", "latest editor", "powerful than other editors"], correctAnswer: "available mostly across all UNIX platforms",
+                                explanation: "vi is a versatile editor which is now standard on all UNIX systems."
+                            },
+                            {
+                                id: "vibm2_q9", question: "9. The “ed” text editor is no longer in use.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "‘ed’ text editor is still in use but not that much as compared to vi, because the main reason behind the replacement of ‘ed’ was that it can only edit files in current directory and cannot execute shell commands."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Vi-Input Mode",
+                        questions: [
+                            {
+                                id: "viim_q1", question: "1. Input mode is used for ____________",
+                                options: ["editing text in files", "invoking commands on files", "saving files", "performing substitution"], correctAnswer: "editing text in files",
+                                explanation: "To enter text in a file, we have to first switch to input mode. To enter into input mode, press ‘i’ once. Any key pressed after that will appear on the screen as text input."
+                            },
+                            {
+                                id: "viim_q2", question: "2. Which command is used to insert text before the current cursor location?",
+                                options: ["a", "A", "I", "i"], correctAnswer: "i",
+                                explanation: "If the ‘i’ command is invoked with the cursor positioned on the existing text, text on the right of the cursor will be shifted further right without getting overwritten."
+                            },
+                            {
+                                id: "viim_q3", question: "3. Which command will be used to insert text at the beginning of the line?",
+                                options: ["i", "I", "a", "A"], correctAnswer: "I",
+                                explanation: "‘I’ command is used to insert text at the beginning of current line irrespective of the cursor position in the current line."
+                            },
+                            {
+                                id: "viim_q4", question: "4. To append text after the current cursor location, we can use ____ command",
+                                options: ["A", "a", "i", "I"], correctAnswer: "a",
+                                explanation: "To append text after the current cursor location, use the ‘a’ command. If there is already existing text after the cursor location then it will be simply shifted towards the right."
+                            },
+                            {
+                                id: "viim_q5", question: "5. Which command appends text at the end of the current line?",
+                                options: ["A", "a", "i", "I"], correctAnswer: "A",
+                                explanation: "To append text at end of current line use ‘A’ command. It appends the text at line extreme."
+                            },
+                            {
+                                id: "viim_q6", question: "6. To replace a single character, we use ____ command",
+                                options: ["r", "R", "s", "i"], correctAnswer: "r",
+                                explanation: "To replace a single character based on cursor location, ‘r’ command is used. To replace a single character, type ‘r’ followed by the character that replaces it. It replaces a single character under the cursor."
+                            },
+                            {
+                                id: "viim_q7", question: "7. vi automatically switches from command mode to input mode when we press ‘r’.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "When ‘r’ is pressed, vi momentarily switches from command mode to input mode and returns to command mode automatically after the new character is entered."
+                            },
+                            {
+                                id: "viim_q8", question: "8. To replace all text on the right of the cursor position, we use ____ command.",
+                                options: ["r", "R", "s", "I"], correctAnswer: "R",
+                                explanation: "The only difference between ‘r’ and ‘R’ is that ‘R’ can replace all text on the right of the cursor position while ‘r’ only replaces a single character."
+                            },
+                            {
+                                id: "viim_q9", question: "9. Which one of the following command is used to replace a single character with many?",
+                                options: ["s", "r", "R", "S"], correctAnswer: "s",
+                                explanation: "‘s’ is used to replace a single character with many characters. It replaces a single character based on the current cursor position with a group of characters."
+                            },
+                            {
+                                id: "viim_q10", question: "10. To replace 5 characters with new characters, which one of the following will be used?",
+                                options: ["s", "5S", "5s", "S"], correctAnswer: "5s",
+                                explanation: "To replace multiple characters, we can use the repeat factor. 5s replaces five characters with new text whatever will be entered."
+                            },
+                            {
+                                id: "viim_q11", question: "11. To replace the entire line irrespective of cursor position, we can use ____ command",
+                                options: ["s", "10s", "S", "10s"], correctAnswer: "S",
+                                explanation: "‘S’ replaces the entire line with a stream of characters entered irrespective of the current cursor position. The current line is deleted while using ‘S’ command."
+                            },
+                            {
+                                id: "viim_q12", question: "12. After using ‘s’ or ‘S’, we are automatically left in insert mode.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "After replacing text with ‘s’ or ‘S’ we are automatically left in insert mode."
+                            },
+                            {
+                                id: "viim_q13", question: "13. Which command creates a space for entering a new line of text below the current cursor location?",
+                                options: ["o", "O", "a", "S"], correctAnswer: "o",
+                                explanation: "‘o’ command allows us to create a new line for entering the new text below the current cursor location."
+                            },
+                            {
+                                id: "viim_q14", question: "14. To create a space for entering a new line of text above the current cursor location, ‘O’ command is used.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "‘O’ command allows us to insert an empty line above the current cursor location. Hence, to create a space for entering a new line of text above the current cursor location, ‘O’ command is used."
+                            },
+                            {
+                                id: "viim_q15", question: "15. Which of the following command is not used for entering or replacing text?",
+                                options: ["‘a’ and ‘A’", "‘s’ and ‘S’", "‘r’ and ‘R’", ":q"], correctAnswer: ":q",
+                                explanation: "All the above commands are used for either appending or replacing except :q which is used in ex-mode to quit from vi editor."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Vi-Ex Mode – 1",
+                        questions: [
+                            {
+                                id: "viex1_q1", question: "1. To save the editing performed on a file, we have to switch to ______ mode",
+                                options: ["command", "input", "ex", "insert"], correctAnswer: "ex",
+                                explanation: "ex-mode allows us a feature in which we can save the editing that we have performed on a file. ex-mode also provides us features like quitting vi editor, substitution etc."
+                            },
+                            {
+                                id: "viex1_q2", question: "2. Pressing ‘:’ in command mode invokes which mode of vi editor?",
+                                options: ["ex-mode", "insert mode", "command mode", "input mode"], correctAnswer: "ex-mode",
+                                explanation: "To invoke ex-mode we’ve to press the ‘:’ key in command mode. After pressing : , we are in ex-mode. Now simply type any command of ex-mode to perform a suitable function."
+                            },
+                            {
+                                id: "viex1_q3", question: "3. To save a file and return to shell prompt, which one of the following command will be used in ex-mode?",
+                                options: [":w", "‘:x’", ":a", ":f"], correctAnswer: "‘:x’",
+                                explanation: "Pressing ‘:x’ in ex-mode will save the file on the disk and returns the shell prompt."
+                            },
+                            {
+                                id: "viex1_q4", question: "4. To save a file and remain in vi editor, which one of the following command will be used?",
+                                options: [":w", "‘:x’", ":q", ":a"], correctAnswer: ":w",
+                                explanation: "For saving a file and to remain in editor we can use ‘:w’ command in ex-mode. It is generally considered a good practice to save the contents of buffer regularly while working with files using ‘:w’."
+                            },
+                            {
+                                id: "viex1_q5", question: "5. After pressing ‘:w’, we can normally resume our editing work.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Pressing ‘:w’ doesn’t quit the editor but simply saves the editing we’ve done so far in the specified file."
+                            },
+                            {
+                                id: "viex1_q6", question: "6. We can specify the filename with ‘:w’ command.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "To save our editing to a different file, we can specify the name of the file in which we want to save the work. To do this, simply provide the filename as an argument with ‘:w’ command. For example, to save the contents to file named ‘file002’, use the following command:\n:w  file002 [Enter]"
+                            },
+                            {
+                                id: "viex1_q7", question: "7. Which command is used for saving and quitting the editor simultaneously?",
+                                options: [":q", ":w", "‘:x’", ":f"], correctAnswer: "‘:x’",
+                                explanation: "‘:x’ command saves our content and quits the editor simultaneously. This command is invoked in ex-mode."
+                            },
+                            {
+                                id: "viex1_q8", question: "8. Which of the following command is a substitute for ‘:x’ command?",
+                                options: ["‘:x’", ":wq", ":q", ":w"], correctAnswer: ":wq",
+                                explanation: "We can also use the ‘:wq’ command to save and quit editor but it requires an additional keystroke and it is not recommended for use."
+                            },
+                            {
+                                id: "viex1_q9", question: "9. Which one of the following is the best way of saving and quitting the editor?",
+                                options: ["ZZ", ":wq", ":w", "‘:x’"], correctAnswer: "ZZ",
+                                explanation: "The best and preferred way to save and quit the editor is to use ZZ, a command mode command which is way better then ‘:x’ or :wq."
+                            },
+                            {
+                                id: "viex1_q10", question: "10. Which command is used to abort the editing and quit the editing mode?",
+                                options: [":w", ":wq", ":q", "‘:x’"], correctAnswer: ":q",
+                                explanation: "It is possible to abort the editing process and quit the editing mode without saving the buffer. The quit (:q) command performs this job."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Vi-Ex Mode – 2",
+                        questions: [
+                            {
+                                id: "viex2_q1", question: "1. Quit (:q) command doesn’t work if the buffer is unsaved.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Quit command has a safety mechanism that prevents us from aborting if the contents of the buffer are modified but not saved."
+                            },
+                            {
+                                id: "viex2_q2", question: "2. Which of the following command will be used if we want to abort editing and quit the editor even if the buffer has been changed and not saved?",
+                                options: [":q", ":b", ":q!", ":w"], correctAnswer: ":q!",
+                                explanation: "If the buffer has been changed and we still want to abandon the changes, then ‘:q!’ is used. It simply ignores all the changes made and quits without displaying any warning questions."
+                            },
+                            {
+                                id: "viex2_q3", question: "3. In ex-mode, current line is represented by ___",
+                                options: [":", "$", ">", "."], correctAnswer: ".",
+                                explanation: "In ex-mode, the current line is represented by a (.) while : is used to invoke the ex-mode commands. The > is a redirection symbol used for redirecting output to a specified file."
+                            },
+                            {
+                                id: "viex2_q4", question: "4. In ex-mode, last line is represented by ___",
+                                options: [":", "$", ">", "."], correctAnswer: "$",
+                                explanation: "To represent the last line in ex-mode, ‘$’ is used."
+                            },
+                            {
+                                id: "viex2_q5", question: "5. ‘:w’ command can be used to write selected lines.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Apart from saving our editing, we can use ‘:w’ command for writing selected lines. For example,\n: 1,40w file002        //writes  line number 1 - number 40 to another file named file002.\n: 1,$w file002        // writes line number 1 - last line to another file named file002."
+                            },
+                            {
+                                id: "viex2_q6", question: "6. Which of the following command will be used to write the 4th line to file named file002?",
+                                options: [": 1,40w file002", ": 1,$w file002", ": 4w file002", ": 1,4w file002"], correctAnswer: ": 4w file002",
+                                explanation: "To write selected line(s) to another file, we can use ex-mode command ‘:w’ along with the line number and filename."
+                            },
+                            {
+                                id: "viex2_q7", question: "7. Which of the following is not a valid command?",
+                                options: [": .,$w file002", ":w 1,$ file002", ": .w file002", ": $w file002"], correctAnswer: ":w 1,$ file002",
+                                explanation: "First command will save from current line to the last line, the third command will save current line while the fourth command will save the last line in the file named file002."
+                            },
+                            {
+                                id: "viex2_q8", question: "8. How can we escape to the UNIX shell without quitting vi editor?",
+                                options: ["using ‘:sh’ command", "using ctrl-Z", "using ctrl-D", "using ‘:sh’ command and using ctrl-Z"], correctAnswer: "using ‘:sh’ command and using ctrl-Z",
+                                explanation: "We can escape to the shell without quitting the editor using ‘:sh’ command or ctrl-Z. Sometimes it is necessary to return to shell prompt to execute a UNIX command or compile our program. For this purpose, we use these commands."
+                            },
+                            {
+                                id: "viex2_q9", question: "9. To return back to the editor from shell prompt we use _____ command.",
+                                options: ["fg", "exit", "back", "fg and exit"], correctAnswer: "fg and exit",
+                                explanation: "To run to your editor, we can use either fg command or exit command. It depends on the way we escape to the UNIX shell. If we had escaped using ‘:sh’ then use exit command or ctrl-D to return to the editor and if you had used ctrl-Z then use fg command to return to the editor."
+                            },
+                            {
+                                id: "viex2_q10", question: "10. vi editor stores most of its information in a hidden swap file.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Accidents can happen while working on a system like a system or power failure. To recover from these kinds of issues vi stores most of its information in a hidden swap file. This file is removed on a successful exit from vi but it remains on the disk if there is an improper shutdown or power failure."
+                            },
+                            {
+                                id: "viex2_q11", question: "11. To recover from a crash, we can use ____ command.",
+                                options: [":recover", "-r", ": x", ":recover and -r"], correctAnswer: ":recover and -r",
+                                explanation: "To recover from a crash, we can use either the ex-mode command :recover or vi -r filename to recover as much of filename as possible."
+                            },
+                            {
+                                id: "viex2_q12", question: "12. The following command will save the contents of the buffer and overwrites the contents of existing file.\n\n:w!  file003",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Above command will work same like save as command in windows except that it will also replace the contents of file003 if it exists."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Navigation in Vi Editor – 1",
+                        questions: [
+                            {
+                                id: "vinav1_q1", question: "1. For navigation purposes, the mode should be _____ mode.",
+                                options: ["command", "input", "insert", "ex"], correctAnswer: "command",
+                                explanation: "To execute navigation commands, the user should be in command mode of vi editor."
+                            },
+                            {
+                                id: "vinav1_q2", question: "2. Which of the following keys are used to moving the cursor up and down?",
+                                options: ["k", "h", "l", "k and j"], correctAnswer: "k and j",
+                                explanation: "For moving the cursor up and down, we can use ‘k’ and ‘j’ keys respectively.\nk – moves the cursor up\nj – moves the cursor down"
+                            },
+                            {
+                                id: "vinav1_q3", question: "3. Which of the following keys is used to moving cursor leftwards along a line?",
+                                options: ["k", "h", "l", "j"], correctAnswer: "h",
+                                explanation: "For moving the cursor towards left, we can use ‘h’ key."
+                            },
+                            {
+                                id: "vinav1_q4", question: "4. Which one of the following keys are used to moving cursor rightwards along a line?",
+                                options: ["k", "h", "l", "j"], correctAnswer: "l",
+                                explanation: "For moving the cursor towards the right, we can use ‘l’ key."
+                            },
+                            {
+                                id: "vinav1_q5", question: "5. We can prefix the repeat factor with navigation keys (h, j, k and l).",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "The repeat factor can be used as a command prefix with all these four commands. For example, to move 20 characters to the right, we can use ’20l’."
+                            },
+                            {
+                                id: "vinav1_q6", question: "6. Which one of the following command is invalid?",
+                                options: ["20h", "5l", "4k", "3d"], correctAnswer: "3d",
+                                explanation: "All the above commands except 3d are navigation commands with prefixed repeat factor."
+                            },
+                            {
+                                id: "vinav1_q7", question: "7. We can perform word navigation in vi editor.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Moving character by character is not always enough so we can perform navigation word by word by using word navigation commands (b, e and w)."
+                            },
+                            {
+                                id: "vinav1_q8", question: "8. Using ‘b’ command we can _____________",
+                                options: ["move back to the beginning of the word", "move forward to the end of the word", "move forward to the beginning of the word", "move back to the end of the word"], correctAnswer: "move back to the beginning of the word",
+                                explanation: "We can use ‘b’ command to move back to the beginning of the word. To do so, simply press ‘b’ once for performing navigation a single time."
+                            },
+                            {
+                                id: "vinav1_q9", question: "9. Using ‘e’ command we can _____________",
+                                options: ["move back to the beginning of the word", "move forward to the end of the word", "move forward to the beginning of the word", "move back to the end of the word"], correctAnswer: "move forward to the end of the word",
+                                explanation: "We can use ‘e’ command to move forward to the end of the word. To do so, simply press ‘e’ once for performing navigation a single time."
+                            },
+                            {
+                                id: "vinav1_q10", question: "10. Using ‘w’ command we can _____________",
+                                options: ["move back to the beginning of the word", "move forward to the end of the word", "move forward to the beginning of the word", "move back to the end of the word"], correctAnswer: "move forward to the beginning of the word",
+                                explanation: "We can use ‘w’ command to move forward to the beginning of the word. To do so, simply press ‘w’ once for performing navigation a single time."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Navigation in Vi Editor – 2",
+                        questions: [
+                            {
+                                id: "vinav2_q1", question: "1. We can prefix repeat factor with word navigation commands.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "We can prefix repeat factor with word navigation commands for ease of navigation. For example, 5w takes the cursor 5 words forward while 5b takes the cursor 5 words backwards."
+                            },
+                            {
+                                id: "vinav2_q2", question: "2. Which command is used for moving the cursor to the line extreme?",
+                                options: ["|, 0", "&", "%", "L"], correctAnswer: "|, 0",
+                                explanation: "For moving the cursor to the beginning or end of the line we can use line extreme navigation commands (0,| and $). ‘|’ or ‘0’ moves the cursor to the first character of a line."
+                            },
+                            {
+                                id: "vinav2_q3", question: "3. ____ command moves the cursor to the end of next line.",
+                                options: ["0", "|", "%", "$"], correctAnswer: "$",
+                                explanation: "‘$’ command is used to navigate the cursor to the end of next line. This symbol is also used in ex-mode to represent the last line."
+                            },
+                            {
+                                id: "vinav2_q4", question: "4. Which of the following commands will move the cursor to the end of line number 30 if the current position of the cursor is line number 01?",
+                                options: ["30$", "30|", "30b", "30%"], correctAnswer: "30$",
+                                explanation: "We can prefix the repeat factor while working with line extreme navigation commands."
+                            },
+                            {
+                                id: "vinav2_q5", question: "5. Which of the following control keys will be used for scrolling one page forward?",
+                                options: ["ctrl-f", "ctrl-b", "ctrl-z", "ctrl-v"], correctAnswer: "ctrl-f",
+                                explanation: "Faster navigation can be achieved in vi using control keys for scrolling text in the window page by page. Ctrl-b scrolls one page backwards."
+                            },
+                            {
+                                id: "vinav2_q6", question: "6. We can scroll halve page using control keys.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "To scroll half a page we can use control keys like ctrl-d and ctrl-u.\nCtrl-d  - scrolls half page forward\nCtrl-u  - scrolls Half page backwards"
+                            },
+                            {
+                                id: "vinav2_q7", question: "7. To navigate 20 pages forward, we can use ______ command.",
+                                options: ["20 ctrl-b", "20 ctrl-d", "20 ctrl-u", "20 ctrl-f"], correctAnswer: "20 ctrl-f",
+                                explanation: "To navigate through 20 pages simultaneously we can prefix the repeat factor with control keys."
+                            },
+                            {
+                                id: "vinav2_q8", question: "8. Which command is used to know the current line number?",
+                                options: ["ctrl-f", "ctrl-b", "ctrl-z", "ctrl-g"], correctAnswer: "ctrl-g",
+                                explanation: "At any time, to know the current line number we can use ctrl-g."
+                            },
+                            {
+                                id: "vinav2_q9", question: "9. Which key is used for absolute movement?",
+                                options: ["f", "G", "M", "ctrl-g"], correctAnswer: "G", // Corrected from M to G based on explanation
+                                explanation: "For absolute movement, we can use the ‘G’ command along with the prefix factor to locate offending lines. For example,\n42G    // goes to line number 40\n1G    // goes to line number 1\nG    // goes to end of file"
+                            },
+                            {
+                                id: "vinav2_q10", question: "10. Which of the following commands of ex-mode is equivalent to ‘G’ command in command mode?",
+                                options: [": .", ": $", ": %", ":w"], correctAnswer: ": $",
+                                explanation: "ex-mode offers equivalent commands for moving between lines. ‘G’ command moves the cursor to end of the file which can also be achieved using ‘: $’ command in ex-mode."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Editing Text in Vi Editor – 1",
+                        questions: [
+                            {
+                                id: "viet1_q1", question: "1. Copying is referred to as yanking in vi editor.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Copying text or characters is known as yanking in vi editor."
+                            },
+                            {
+                                id: "viet1_q2", question: "2. Which key is used for deleting text?",
+                                options: ["d", "y", "k", "f"], correctAnswer: "d",
+                                explanation: "‘d’ is not a command but is used as ‘dd’ to delete entire lines. For example, to a delete a line invoke the command mode and press dd and the entire line will be deleted."
+                            },
+                            {
+                                id: "viet1_q3", question: "3. Which command is used for deleting a single character?",
+                                options: ["d", "dd", "x", "w"], correctAnswer: "x",
+                                explanation: "The simplest text deletion is achieved using ‘x’ command. This command deletes the character under the cursor and then the text on the right shifts towards the left to fill up space."
+                            },
+                            {
+                                id: "viet1_q4", question: "4. Which command is used for deleting the character on the left of the cursor?",
+                                options: ["x", "X", "dd", "d"], correctAnswer: "X",
+                                explanation: "For deleting a single character, we can use ‘X’ command. It deletes a single character but to the left of the cursor."
+                            },
+                            {
+                                id: "viet1_q5", question: "5. Which of the following command is used to delete a single line?",
+                                options: ["dd", "x", "X", "d"], correctAnswer: "dd",
+                                explanation: "We can delete entire lines with ‘dd’ command. Just move the cursor anywhere on the line and press ‘dd’ and the entire line will be deleted."
+                            },
+                            {
+                                id: "viet1_q6", question: "6. Which of the following commands will be used to delete 6 lines from the current cursor location?",
+                                options: ["6d", "6X", "6dd", "6x"], correctAnswer: "6dd",
+                                explanation: "‘dd’ command can be used with repeat factor to delete multiple lines at a single time. 6dd will delete the current line and 5 lines below."
+                            },
+                            {
+                                id: "viet1_q7", question: "7. Which command is used for putting deleted lines or part of lines at a different location?",
+                                options: ["p and P", "x", "dd", "y"], correctAnswer: "p and P",
+                                explanation: "Using ‘p’ and ‘P’ command we can put deleted text at a different location. For example, if we’d deleted a single character using ‘x’ then we can put that character at another location by placing the cursor at that location and pressing ‘p’ or ‘P’."
+                            },
+                            {
+                                id: "viet1_q8", question: "8. Both ‘p’ and ‘P’ command puts text right/left or above/below on the basis of line deleted.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "If we’d deleted a part of a line, then ‘p’ will put it to the right of the cursor and ‘P’ will put it to the left of the cursor. Similarly, if we’d deleted the entire line then ‘p’ will put it below the current cursor and ‘P’ will put it above the cursor."
+                            },
+                            {
+                                id: "viet1_q9", question: "9. To copy (yank) lines in vi editor, we use ______ command.",
+                                options: ["dd", "x", "p", "yy"], correctAnswer: "yy",
+                                explanation: "To copy lines in vi editor, we can use ‘yy’ command. It works similarly as ‘dd’ command. For example, to yank 5 lines from current cursor we can use the command ‘5yy’."
+                            },
+                            {
+                                id: "viet1_q10", question: "10. To copy 10 lines from the current cursor location, we can use _____",
+                                options: ["10y", "10yy", "yy10", "10x"], correctAnswer: "10yy",
+                                explanation: "Since yanking is performed by the yy command hence to copy the current line and 9 lines below we can use the command ’10yy’."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Editing Text in Vi Editor – 2",
+                        questions: [
+                            {
+                                id: "viet2_q1", question: "1. We can use ‘yy’ command for copy and paste operation.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "We can copy lines using ‘yy’ command and paste it at another location using ‘p’ or ‘P’ command."
+                            },
+                            {
+                                id: "viet2_q2", question: "2. Which command is used for joining lines?",
+                                options: ["J", "j", "yy", "jn"], correctAnswer: "J",
+                                explanation: "To join current line with the line(s) following it, we can use join (J) command. It just pulls up the following line by terminating the new line character between the current line and following line."
+                            },
+                            {
+                                id: "viet2_q3", question: "3. Which command will be used to join 4 lines with the current line?",
+                                options: ["5J", "4J", "6J", "4j"], correctAnswer: "5J",
+                                explanation: "Join command joins the current line with the following number of lines. For example,5J    // joins current line with following four lines"
+                            },
+                            {
+                                id: "viet2_q4", question: "4. Which of the following undo a most recent single editing change?",
+                                options: ["u", "U", "uu", "yy"], correctAnswer: "u",
+                                explanation: "To reverse the last change you made to the buffer press the ‘u’ key. This will restore the state of the buffer by undoing the most recent action taken."
+                            },
+                            {
+                                id: "viet2_q5", question: "5. ___ command allows us to undo a number of changes that have been made to a single line before moving away from that line.",
+                                options: ["u", "U", "dd", "yy"], correctAnswer: "U",
+                                explanation: "When a number of changes have to be made to a single line, vi allows us to discard all changes before you move away from the line. If the cursor has been moved to another line before invoking ‘U’, this command will not work."
+                            },
+                            {
+                                id: "viet2_q6", question: "6. Which command is used to redo the changes made by the undo command?",
+                                options: ["ctrl-l", "ctrl-r", "ctrl-g", "ctrl-f"], correctAnswer: "ctrl-r",
+                                explanation: "We can use the control key (ctrl-r) to redo the changes which are made by the undo command."
+                            },
+                            {
+                                id: "viet2_q7", question: "7. ’10u’ command will reverse our 10 last editing actions.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "We can undo multiple changes using ‘u’ command by prefixing repeat factor with command. For example,\n10u        // reverses our last 10 editing actions"
+                            },
+                            {
+                                id: "viet2_q8", question: "8. Which symbol is used for repeating the last command?",
+                                options: ["$", "*", ".", "_"], correctAnswer: ".",
+                                explanation: "Using (.) operator, we can simply repeat the last command that was used. The principle behind repeat command is, use the actual command once and then repeat it at other places with dot (.) command."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Commands for Searching, Replacing and Substituting in Vi Editor",
+                        questions: [
+                            {
+                                id: "visrs_q1", question: "1. Which of the following symbols are used for searching a pattern in vi?",
+                                options: ["/", "?", "%", "/ and ?"], correctAnswer: "/ and ?",
+                                explanation: "vi is extremely strong in searching for a pattern. Searching can be made both in forward and in reverse directions using / and ? respectively."
+                            },
+                            {
+                                id: "visrs_q2", question: "2. ____ searches for a first instance of a pattern in forwarding direction.",
+                                options: ["/", "%", "&", "?"], correctAnswer: "/",
+                                explanation: "We can use / symbol in command mode for searching a particular pattern in forwarding direction. The search begins forward to position the cursor on the first instance of the word. For example, if we are looking for the string “print” then we can use the following command:\n/print  [Enter]        // searches forward"
+                            },
+                            {
+                                id: "visrs_q3", question: "3. ____ searches for a first instance of a pattern in the backward direction.",
+                                options: ["/", "%", "&", "?"], correctAnswer: "?",
+                                explanation: "We can use ? symbol in command mode for searching a particular pattern in the backward direction. The search begins backwards to position the cursor on the first instance of the word. For example, if we are looking for the string “print” then we use the following command:\n\n?print  [Enter]        // searches backward"
+                            },
+                            {
+                                id: "visrs_q4", question: "4. Which command is used for repeating the search in the same direction?",
+                                options: ["n", "N", "nn", "NN"], correctAnswer: "n",
+                                explanation: "For repeating a search in the same direction in which the previous search was made with either / or ? we can use ‘n’ command. In this way, we can press ‘n’ repeatedly to scan all instances of the pattern."
+                            },
+                            {
+                                id: "visrs_q5", question: "5. Which command is used to reverse the direction of repeating the search?",
+                                options: ["n", "N", "nn", "NN"], correctAnswer: "N",
+                                explanation: "‘N’ reverses the direction pursued by ‘n’, which means that we can use it to retrace our search path."
+                            },
+                            {
+                                id: "visrs_q6", question: "6. Substitution command is an ex-mode command.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "vi offers a powerful feature, that is of substitution, which is achieved with the ex-mode substitute (s) command. It lets us replace a pattern in a file with some other pattern."
+                            },
+                            {
+                                id: "visrs_q7", question: "7. Which of the following symbol is used for substitution command?",
+                                options: ["n", "N", "s", "S"], correctAnswer: "s",
+                                explanation: "For replacing a pattern with another pattern we use substitution command which is represented by ‘s’."
+                            },
+                            {
+                                id: "visrs_q8", question: "8. Which of the following is a correct syntax for performing substitution on a file?",
+                                options: [":address/source_pattern/target_pattern/flag", ":address/target_pattern source_pattern/flag", ":address/flag", ":address"], correctAnswer: ":address/source_pattern/target_pattern/flag",
+                                explanation: "For performing substitution, the correct syntax is:\n:address/source_pattern/target_pattern/flag\nFor example, if we want to perform substitution on line number 1 to 50, source pattern is ‘directory’ and target pattern is ‘member’ then,\n:1,$s/directory/member/g"
+                            },
+                            {
+                                id: "visrs_q9", question: "9. We cannot leave the flag field empty while performing the substitution.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "There are many flags like ‘g’, ‘gc’ which are used as flags. For example, when we left the flag field empty in the following command:\n:1,$s/directory/member\nThen substitution will only be carried out for the first occurrence in each addressed line."
+                            },
+                            {
+                                id: "visrs_q10", question: "10. The target pattern is optional.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "The target pattern specified is optional while performing the substitution. If the target pattern is left out, then instances of the source pattern in all addressed lines are deleted.\n:1,$s/directory/ /g        // every instance of ‘directory’ will be deleted from each line."
+                            },
+                            {
+                                id: "visrs_q11", question: "11. Which of the following commands can be used to replace ‘professor’ with ‘director’ throughout the whole file?",
+                                options: ["1,$s/professor/director/g", "%s/professor/director/g", "1,$s/professor/director", "1,$s/professor/director/g and %s/professor/director/g"], correctAnswer: "1,$s/professor/director/g and %s/professor/director/g",
+                                explanation: "We can replace 1,$ with %. It will work same as 1,$. ‘g’ flag is used for global replacement."
+                            },
+                            {
+                                id: "visrs_q12", question: "12. Which of the following flag will be used for interactive substitution?",
+                                options: ["g", "G", "gc", "cg"], correctAnswer: "gc",
+                                explanation: "For selectively replacing a string we can use ‘gc’ flag. Here ‘c’ is used as a confirmatory parameter at the end. Each line is selected in turn and then waits for our response, whether to replace the selected pattern or not. A ‘y’ performs the substitution and any other response doesn’t."
+                            },
+                            {
+                                id: "visrs_q13", question: "13. Which one of the following commands will be used to delete all the instances of string ‘manager’ in file003?",
+                                options: ["1,$s/manager/ /g", "%s/manager/director/g", "1,$s/professor/director", "%s/manager/ /"], correctAnswer: "1,$s/manager/ /g",
+                                explanation: "When the target pattern is left empty, then all the instances of the source pattern are deleted within the addressed lines in the file."
+                            },
+                            {
+                                id: "visrs_q14", question: "14. Which one of the following command is invalid?",
+                                options: ["/printf", "?scanf", ":%/abd/mash/wc", ":1,%/file01/file02/g"], correctAnswer: ":1,%/file01/file02/g",
+                                explanation: "/printf - searches for string “printf”\n?scanf  	- searches for string “scanf”\n:%/abd/mash/wc - replaces the string ‘abd’ to ‘mas\nh’ using confirmatory flag\n:1,%/file01/file02/g - invalid command"
+                            },
+                            {
+                                id: "visrs_q15", question: "15. Search and replace operations can also use regular expressions for matching multiple patterns.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Both search and replace operations can make use of regular expressions for matching multiple patterns."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const mainChapterTitleEl = document.getElementById('mainChapterTitle');
+        const questionProgressTextEl = document.getElementById('questionProgressText');
+        const scoreDisplayEl = document.getElementById('scoreDisplay');
+        const progressBarEl = document.getElementById('progressBar');
+        const quizContentAreaEl = document.getElementById('quizContentArea');
+        const nextChapterBtn = document.getElementById('nextChapterBtn');
+
+        let currentChapterIndex = 0; // This page handles only one chapter
+        let score = 0;
+        let totalQuestionsInChapter = 0;
+        let questionsAnsweredCount = 0;
+        let allQuestionElementsMap = new Map();
+        let currentActiveQuestionId = null;
+
+        const sunIcon = `<i class="fas fa-sun text-xl text-yellow-400"></i>`;
+        const moonIcon = `<i class="fas fa-moon text-xl text-gray-700 dark:text-yellow-400"></i>`;
+
+        function setDarkMode(isDark) {
+            const htmlEl = document.documentElement;
+            if (isDark) {
+                htmlEl.classList.add('dark');
+                darkModeToggle.innerHTML = sunIcon;
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                htmlEl.classList.remove('dark');
+                darkModeToggle.innerHTML = moonIcon;
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            setDarkMode(!document.documentElement.classList.contains('dark'));
+        });
+
+        function renderChapter() {
+            quizContentAreaEl.innerHTML = '';
+            allQuestionElementsMap.clear();
+            const chapterData = quizData[currentChapterIndex];
+            mainChapterTitleEl.textContent = chapterData.chapterName;
+
+            score = 0;
+            questionsAnsweredCount = 0;
+            totalQuestionsInChapter = 0;
+            let firstQuestionId = null;
+
+            chapterData.topics.forEach(topic => {
+                totalQuestionsInChapter += topic.questions.length;
+            });
+            updateProgressAndScore();
+
+            chapterData.topics.forEach((topic) => {
+                const topicHeader = document.createElement('h3');
+                topicHeader.className = 'text-xl md:text-2xl font-semibold text-purple-600 dark:text-purple-400 mt-10 mb-6 pt-6 border-t border-gray-300 dark:border-gray-600 first:mt-0 first:pt-0 first:border-t-0';
+                topicHeader.textContent = topic.topicName;
+                quizContentAreaEl.appendChild(topicHeader);
+
+                topic.questions.forEach((q) => {
+                    if (!firstQuestionId) firstQuestionId = q.id;
+
+                    const questionBlock = document.createElement('div');
+                    questionBlock.id = `qblock-${q.id}`;
+                    questionBlock.className = 'quiz-question-block mb-10 p-5 bg-gray-50 dark:bg-gray-750 rounded-xl shadow-lg';
+                    questionBlock.dataset.questionId = q.id;
+
+                    const questionTextEl = document.createElement('p');
+                    questionTextEl.className = 'text-md md:text-lg font-medium mb-5 text-gray-800 dark:text-gray-200';
+                    questionTextEl.innerHTML = q.question.replace(/\n/g, '<br>');
+                    questionBlock.appendChild(questionTextEl);
+
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.className = 'grid grid-cols-1 md:grid-cols-2 gap-3 mb-4';
+                    q.options.forEach((option, optionIdx) => {
+                        const button = document.createElement('button');
+                        button.innerHTML = `<span class="text-left flex-grow">${String.fromCharCode(97 + optionIdx)}) ${option}</span>`;
+                        button.className = 'option-btn w-full text-left p-3 bg-gray-200 dark:bg-gray-600 hover:bg-blue-100 dark:hover:bg-blue-800 rounded-lg border-2 border-gray-300 dark:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-between disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow-md';
+                        button.dataset.questionId = q.id;
+                        button.dataset.optionIndex = optionIdx;
+                        button.disabled = true;
+                        button.addEventListener('click', handleAnswerSelection);
+                        optionsContainer.appendChild(button);
+                    });
+                    questionBlock.appendChild(optionsContainer);
+
+                    const feedbackEl = document.createElement('div');
+                    feedbackEl.className = 'feedback-area min-h-[25px] text-sm mb-2';
+                    questionBlock.appendChild(feedbackEl);
+
+                    const explanationEl = document.createElement('div');
+                    explanationEl.className = 'explanation-area p-3 rounded-md text-sm leading-relaxed';
+                    explanationEl.innerHTML = `<strong class="block mb-1">Explanation:</strong> ${q.explanation.replace(/\n/g, '<br>')}`;
+                    questionBlock.appendChild(explanationEl);
+
+
+                    quizContentAreaEl.appendChild(questionBlock);
+                    allQuestionElementsMap.set(q.id, questionBlock);
+                });
+            });
+
+            if (firstQuestionId) {
+                activateQuestion(firstQuestionId);
+            }
+            nextChapterBtn.classList.add('hidden');
+            nextChapterBtn.textContent = "Next Chapter ➝ Unix Shell"; // Updated text
+            nextChapterBtn.onclick = () => {
+                window.location.href = 'chapter-6.html'; // Assuming chapter 6
+            };
+        }
+
+        function activateQuestion(questionId) {
+            if (currentActiveQuestionId) {
+                const prevActiveBlock = allQuestionElementsMap.get(currentActiveQuestionId);
+                if (prevActiveBlock) {
+                    prevActiveBlock.classList.remove('active-question');
+                }
+            }
+
+            currentActiveQuestionId = questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+            if (questionBlock) {
+                questionBlock.classList.add('active-question');
+                questionBlock.querySelectorAll('.option-btn').forEach(btn => btn.disabled = false);
+                setTimeout(() => {
+                    const rect = questionBlock.getBoundingClientRect();
+                    const headerHeight = document.querySelector('header.sticky').offsetHeight || 150;
+                    if (rect.top < headerHeight || rect.bottom > (window.innerHeight - 50)) {
+                        questionBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 150);
+            }
+        }
+
+
+        function findQuestionData(questionId) {
+            for (const topic of quizData[currentChapterIndex].topics) {
+                const question = topic.questions.find(q => q.id === questionId);
+                if (question) return question;
+            }
+            return null;
+        }
+
+        function handleAnswerSelection(event) {
+            const selectedButton = event.currentTarget;
+            const questionId = selectedButton.dataset.questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+
+            if (!questionBlock || questionBlock.classList.contains('answered-question')) return;
+
+            const questionData = findQuestionData(questionId);
+            if (!questionData) return;
+
+            const selectedOptionIndex = parseInt(selectedButton.dataset.optionIndex);
+            const selectedOptionText = questionData.options[selectedOptionIndex];
+            const correctAnswerText = questionData.correctAnswer;
+
+            const feedbackEl = questionBlock.querySelector('.feedback-area');
+            const explanationEl = questionBlock.querySelector('.explanation-area');
+            const allOptionButtonsInBlock = questionBlock.querySelectorAll('.option-btn');
+
+            allOptionButtonsInBlock.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-blue-100', 'dark:hover:bg-blue-800', 'hover:shadow-md');
+            });
+
+            if (selectedOptionText === correctAnswerText) {
+                score++;
+                selectedButton.classList.add('correct');
+                feedbackEl.innerHTML = `<p class="text-green-600 dark:text-green-400 font-semibold"><i class="fas fa-check-circle mr-2"></i>Correct!</p>`;
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackEl.innerHTML = `<p class="text-red-600 dark:text-red-400 font-semibold"><i class="fas fa-times-circle mr-2"></i>Incorrect. The correct answer is highlighted.</p>`;
+                allOptionButtonsInBlock.forEach(btn => {
+                    if (questionData.options[parseInt(btn.dataset.optionIndex)] === correctAnswerText) {
+                        btn.classList.add('actual-correct-unselected');
+                        btn.classList.remove('incorrect');
+                    }
+                });
+            }
+
+            explanationEl.classList.add('visible');
+
+            questionBlock.classList.add('answered-question');
+            questionBlock.classList.remove('active-question');
+            questionsAnsweredCount++;
+            updateProgressAndScore();
+
+            setTimeout(() => {
+                let nextQuestionIdToActivate = null;
+                let foundCurrent = false;
+                for (const topic of quizData[currentChapterIndex].topics) {
+                    for (const q of topic.questions) {
+                        if (foundCurrent) {
+                            nextQuestionIdToActivate = q.id;
+                            break;
+                        }
+                        if (q.id === questionId) {
+                            foundCurrent = true;
+                        }
+                    }
+                    if (nextQuestionIdToActivate) break;
+                }
+
+                if (nextQuestionIdToActivate) {
+                    activateQuestion(nextQuestionIdToActivate);
+                } else {
+                    showChapterEnd();
+                }
+            }, 1500);
+        }
+
+        function updateProgressAndScore() {
+            scoreDisplayEl.textContent = `Score: ${score}`;
+            questionProgressTextEl.textContent = `Answered: ${questionsAnsweredCount} / ${totalQuestionsInChapter}`;
+            const progressPercentage = totalQuestionsInChapter > 0 ? (questionsAnsweredCount / totalQuestionsInChapter) * 100 : 0;
+            progressBarEl.style.width = `${progressPercentage}%`;
+        }
+
+        function showChapterEnd() {
+            nextChapterBtn.classList.remove('hidden');
+            // nextChapterBtn.onclick is already set in renderChapter
+
+            const endMessage = document.createElement('p');
+            endMessage.className = "text-center text-xl font-semibold mt-10 p-6 bg-blue-50 dark:bg-blue-900 rounded-lg";
+            endMessage.textContent = `Chapter 5 Complete! Your final score: ${score} out of ${totalQuestionsInChapter}.`;
+            quizContentAreaEl.appendChild(endMessage);
+            endMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+            const currentTheme = localStorage.getItem('darkMode');
+
+            if (currentTheme === 'enabled') {
+                setDarkMode(true);
+            } else if (currentTheme === 'disabled') {
+                setDarkMode(false);
+            } else {
+                setDarkMode(prefersDarkScheme.matches);
+            }
+
+            prefersDarkScheme.addEventListener('change', e => {
+                if (localStorage.getItem('darkMode') === null) {
+                    setDarkMode(e.matches);
+                }
+            });
+
+            renderChapter();
+        });
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en" class=""> <!-- Start with no 'dark' class, JS will add -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unix MCQ Challenge - Chapter 6 (Shell)</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Logo Styles (Integrated into header flow) */
+        .header-logo .text-2xl {
+            font-size: 1.6rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .header-logo .logo-text-part {
+            /* Color will be handled by Tailwind text-gray-700 dark:text-gray-100 by default, or override if needed */
+        }
+
+        /* Make logo text distinctly visible in both modes if it clashes */
+        html:not(.dark) .header-logo .logo-text-part {
+            color: #374151;
+            /* Tailwind gray-700 for light mode if needed */
+        }
+
+        html.dark .header-logo .logo-text-part {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode */
+        }
+
+        .header-logo .logo-icon-part {
+            color: #F59E0B;
+            /* Tailwind amber-500, good contrast */
+            transition: color 0.3s;
+        }
+
+        .header-logo a:hover .logo-icon-part {
+            color: #D97706;
+            /* Tailwind amber-600 */
+        }
+
+        .header-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.4em;
+            width: 1.4em;
+            margin: 0 2px;
+        }
+
+        /* Ensure sticky header background is consistent */
+        header.sticky {
+            background-color: #f9fafb;
+            /* Tailwind gray-50 */
+        }
+
+        html.dark header.sticky {
+            background-color: #1f2937;
+            /* Tailwind gray-800 */
+        }
+
+        /* Ensure sub-header info card also respects dark mode */
+        #quizHeaderInfo {
+            background-color: #ffffff;
+            /* Tailwind white */
+        }
+
+        html.dark #quizHeaderInfo {
+            background-color: #374151;
+            /* Tailwind gray-700 */
+        }
+
+
+        .quiz-question-block {
+            transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+            opacity: 0.6;
+        }
+
+        .quiz-question-block.active-question {
+            opacity: 1;
+            transform: scale(1.01);
+            box-shadow: 0 0 15px rgba(80, 120, 255, 0.2);
+        }
+
+        html.dark .quiz-question-block.active-question {
+            box-shadow: 0 0 15px rgba(100, 150, 255, 0.3);
+        }
+
+        .quiz-question-block.answered-question {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .quiz-question-block.answered-question .option-btn {
+            pointer-events: none;
+            cursor: default;
+        }
+
+        .quiz-question-block .option-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .option-btn {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .option-btn:not(:disabled):hover {
+            transform: translateY(-2px) scale(1.01);
+            /* box-shadow: 0 4px 12px rgba(0,0,0,0.1); Tailwind's shadow-md or shadow-lg can be used directly on class */
+        }
+
+        html.dark .option-btn:not(:disabled):hover {
+            /* box-shadow: 0 4px 12px rgba(255,255,255,0.08); */
+        }
+
+        .option-btn.correct {
+            background-color: #10B981 !important;
+            /* green-500 */
+            color: white !important;
+            border-color: #059669 !important;
+            /* green-600 */
+        }
+
+        .option-btn.incorrect {
+            background-color: #EF4444 !important;
+            /* red-500 */
+            color: white !important;
+            border-color: #DC2626 !important;
+            /* red-600 */
+        }
+
+        .option-btn.actual-correct-unselected {
+            background-color: #D1FAE5 !important;
+            /* green-100 */
+            color: #065F46 !important;
+            /* green-700 */
+            border-color: #6EE7B7 !important;
+            /* green-300 */
+            animation: pulse-subtle-green 2s infinite;
+        }
+
+        html.dark .option-btn.actual-correct-unselected {
+            background-color: #064E3B !important;
+            color: #A7F3D0 !important;
+            border-color: #10B981 !important;
+        }
+
+
+        @keyframes pulse-subtle-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        .explanation-area {
+            min-height: 70px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            overflow: hidden;
+            background-color: #ffffff;
+            /* Light mode */
+        }
+
+        html.dark .explanation-area {
+            background-color: #374151;
+            /* Tailwind gray-700 for dark mode */
+        }
+
+        .explanation-area.visible {
+            opacity: 1;
+        }
+
+        /* Fix dark mode for feedback area */
+        .feedback-area {
+            color: #374151;
+            /* Light mode text color */
+        }
+
+        html.dark .feedback-area {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode text color */
+        }
+
+        /* Fix dark mode for question block */
+        .quiz-question-block {
+            background-color: #f9fafb;
+            /* Light mode */
+        }
+
+        html.dark .quiz-question-block {
+            background-color: #1f2937;
+            /* Tailwind gray-800 for dark mode */
+        }
+    </style>
+
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
+
+    <div class="container mx-auto p-4 min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="sticky mb-6 top-0 z-50 py-3 shadow-md bg-gray-50 dark:bg-gray-800">
+            <!-- Top part of the header: Logo, Title, Dark Mode Toggle -->
+            <div class="container mx-auto flex justify-between items-center px-2 sm:px-4">
+                <!-- Eduvision Logo -->
+                <div class="header-logo">
+                    <div class="text-2xl font-bold">
+                        <a href="../../index.html" class="flex items-center group">
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">Edu</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="logo-icon-part" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">ision</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Page Title -->
+                <h1 class="mx-4 text-lg sm:text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500 text-center flex-grow whitespace-nowrap cursor-pointer"
+                    onclick="window.location.href='unix-mcq.html'">
+                    Unix MCQ Challenge
+                </h1>
+
+                <!-- Dark Mode Toggle -->
+                <div class="flex-shrink-0">
+                    <button id="darkModeToggle"
+                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none transition-colors duration-300"
+                        aria-label="Toggle Dark Mode">
+                        <!-- Icon will be set by JS -->
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bottom part of the header: Quiz Info Card -->
+            <div id="quizHeaderInfo" class="bg-white dark:bg-gray-700 p-3 mt-3 rounded-lg shadow-md container mx-auto">
+                <h2 id="mainChapterTitle" class="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-2"></h2>
+                <div class="flex justify-between items-center text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">
+                    <span id="questionProgressText">Answered: 0 / 0</span>
+                    <span id="scoreDisplay">Score: 0</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                    <div id="progressBar"
+                        class="bg-gradient-to-r from-blue-500 to-purple-600 h-2.5 rounded-full transition-all duration-500 ease-out"
+                        style="width: 0%"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area for All Questions -->
+        <main id="quizContentArea"
+            class="flex-grow bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl transition-colors duration-300 mt-4">
+            <!-- Topics and Questions will be dynamically inserted here -->
+        </main>
+
+        <!-- Navigation Area (for Next Chapter) -->
+        <div id="overallNavigation" class="mt-8 mb-4 flex justify-center">
+            <button id="nextChapterBtn"
+                class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 hidden">
+                <!-- Text and onclick will be set by JS -->
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
+            © 2023 Interactive MCQ Platform.
+        </footer>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                chapterName: "Unix Multiple Choice Questions on Shell",
+                topics: [
+                    {
+                        topicName: "Shell Basics",
+                        questions: [
+                            {
+                                id: "sb_q1", question: "1. Shell provides us with an interface to the operating system.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Shell provides us with an interface to communicate with the UNIX operating system. It is also called command interpreter because it gathers our input and executes commands accordingly. In simple words, it is actually the interface between the user and the kernel and has the capability of translating commands into actions."
+                            },
+                            {
+                                id: "sb_q2", question: "2. On a UNIX system, there can be ____ shells running simultaneously.",
+                                options: ["1", "2", "many", "4"], correctAnswer: "many",
+                                explanation: "Even though there is only one kernel running on our system, there can be multiple shells running in action –one for each user who is logged in. As we know that computers don’t have any inherent capability of translating commands into actions, this piece of a task is performed by the command interpreter –known as the shell."
+                            },
+                            {
+                                id: "sb_q3", question: "3. There can be multiple kernels on a single UNIX system.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "There cannot be multiple kernels running on a single UNIX system, however, there can be multiple shells in action –each for a user who is logged in. There is only and only one kernel with which every shell interact in a UNIX system."
+                            },
+                            {
+                                id: "sb_q4", question: "4. The prompt issued by the shell is called ______",
+                                options: ["prompt", "command translator", "command prompt", "command executor"], correctAnswer: "command prompt",
+                                explanation: "The prompt issued by the shell is called a command prompt which is represented by $. However, the symbol for the command prompt differs according to the shell on which we are working. When the command prompt is displayed, we can type any command followed by an Enter for performing our task."
+                            },
+                            {
+                                id: "sb_q5", question: "5. In UNIX there are ___ major types of shells.",
+                                options: ["2", "3", "4", "many"], correctAnswer: "2",
+                                explanation: "In UNIX, there are two major types of shells.\n• Bourne shell\n• C shell\nThese two categories are further divided into subcategories.\nBourne shell has the following subcategories:-\n• Bourne shell (sh)\n• Korn shell (ksh)\n• Bourne Again shell (bash)\n• POSIX shell (sh)\nC shell has the following subcategories:-\n• C shell (csh)\n• TENEX/TOPS C shell (tcsh)"
+                            },
+                            {
+                                id: "sb_q6", question: "6. What is the default symbol for command prompt in Bourne shell?",
+                                options: ["$", "%", "#", "@"], correctAnswer: "$",
+                                explanation: "If we are using bourne shell on our system, then the default prompt will be represented by $."
+                            },
+                            {
+                                id: "sb_q7", question: "7. What is the default symbol for command prompt in C shell?",
+                                options: ["$", "%", "#", "@"], correctAnswer: "%",
+                                explanation: "If we are using C shell on our system, then the default prompt will be represented by %."
+                            },
+                            {
+                                id: "sb_q8", question: "8. Which one of the following command will display the name of the shell we are working on?",
+                                options: ["echo shell", "echo $", "echo $SHELL", "echo $$"], correctAnswer: "echo $SHELL",
+                                explanation: "When we run the command echo $SHELL, it will display the current shell on which we are working. The output of the command is the absolute pathname of the shell’s command file. If $SHELL evaluates to/bin/bash, our login shell is bash."
+                            },
+                            {
+                                id: "sb_q9", question: "9. Which shell is the most common and best to use?",
+                                options: ["Korn shell", "POSIX shell", "C shell", "Bash shell"], correctAnswer: "Bash shell",
+                                explanation: "Bash is near POSIX-compliant and probably the best shell to use. It is the most common shell used in UNIX systems. Bash is an acronym which stands for –“Bourne Again SHell”. It was first released in 1989 and was distributed widely as the default login shell for most Linux distributions."
+                            },
+                            {
+                                id: "sb_q10", question: "10. Which command does not terminates unless we log out of the system?",
+                                options: ["history", "shell", "echo", "login"], correctAnswer: "shell",
+                                explanation: "When we log on to a UNIX system, we first see a prompt. This prompt remains there until we key in something. Even when we think the system is idling, a UNIX command is always running at the terminal. This command is known as the shell. The shell is with us all the time and doesn’t terminates unless we log out."
+                            },
+                            {
+                                id: "sb_q11", question: "11. In Shell’s interpretive cycle, the shell first scans for ____ in the entered command.",
+                                options: ["characters", "priority", "meta-characters", "wildcards"], correctAnswer: "meta-characters",
+                                explanation: "In Shell’s interpretive cycle, the shell first issues a prompt and waits for the user to enter the command. After the command is entered, the shell scans the command line for meta-characters and expands the abbreviations (like the * in rm*) to recreate a simplified command line."
+                            },
+                            {
+                                id: "sb_q12", question: "12. Which of the following expression is a correct wildcard pattern if we want an expression in which the last character is not numeric?",
+                                options: ["*[!0]", "*[0-9]", "[0-9]", "*[!0-9]"], correctAnswer: "*[!0-9]",
+                                explanation: "Wildcards are used for pattern matching. The command *[!0-9] will match all expression containing any characters except that the last character entered is not numeric. Here ‘!’ is used for NOT.\n *[!0]        // last characters should not be 0 in the expression\n *[0-9]          // any expression where the last character is a numeric\n [0-9]        // expression should only contains digits\n *[!0-9]            // the last character should not be numeric in the expression"
+                            },
+                            {
+                                id: "sb_q13", question: "13. The shell waits for the command to complete and normally can’t do any work while the command is executing.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "After the shell has issued the prompt and the scanning for meta-characters has been performed it passes the command on the command line to the kernel for execution. After that, the shell waits for the command to complete its execution and normally we can’t do any other work while the command is executing."
+                            },
+                            {
+                                id: "sb_q14", question: "14. Which of the following is/are true about Shell?",
+                                options: ["Shell is a multi-faceted program", "Shell is a command interpreter", "Shell provides us with an environment to work in", "Shell is a multi-faceted, command interpreter and provides an environment to work in"], correctAnswer: "Shell is a multi-faceted, command interpreter and provides an environment to work in",
+                                explanation: "Shell is the agency that sits between the user and the UNIX system. It is a unique and multi-faceted program. It is also called command-interpreter because it interprets our command entered. It is also a programming language. From another point of view, the shell also provides us with an environment to work in."
+                            },
+                            {
+                                id: "sb_q15", question: "15. To change the login shell in some system (like Linux) we can use ____ command.",
+                                options: ["chshell", "chshl", "chsh", "ch"], correctAnswer: "chsh",
+                                explanation: "Some systems, offer the chsh command that can change the user’s login shell. This command will accept the full pathname of an executable file on the system. -s option is used with chsh command. However, it will issue a warning if the shell is not listed in the /etc/shells file. For example,\nchsh  -s /bin/korn abd        //set user abd’s login shell to /bin/Korn"
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Pattern Matching, Escaping and Quoting – 1",
+                        questions: [
+                            {
+                                id: "pmeq1_q1", question: "1. Wildcards are special characters which are used to replace or represent one or more characters.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "A wildcard is a special character which can be used as a substitute for any of a class of characters, which increases the flexibility and efficiency of searching and replacing. For example, to remove all the files with a filename starting with ‘chap’ prefix, we can use the command rm chap*. Here * is used as a wildcard for matching all filenames starting with ‘chap’."
+                            },
+                            {
+                                id: "pmeq1_q2", question: "2. Which of the following is not a wild-card?",
+                                options: ["*", "?", "$", "%"], correctAnswer: "$", // Corrected from c to $
+                                explanation: "The ‘$’ sign represents the shell prompt while all the other characters belong to a category of shell wildcards.\n‘*’     // matches any number of characters\n‘?’    // matches a single character"
+                            },
+                            {
+                                id: "pmeq1_q3", question: "3. What does the following command do?\n$ echo *",
+                                options: ["error", "undefined behavior", "displays “*”", "lists all filenames in the current directory"], correctAnswer: "lists all filenames in the current directory",
+                                explanation: "When we use echo command with only * as the argument we simply see a list of file. All the filenames in the current directory are displayed on the terminal. Since we know that * is a wildcard that can match any number of character. Here it is used as solitary to match all filenames."
+                            },
+                            {
+                                id: "pmeq1_q4", question: "4. Which command would be most suitable to remove the following files?\n\ndirx  diry  dirz  dirzw",
+                                options: ["rm dir?", "rm dirx diry dirz dirzw", "rm *", "rm dir*"], correctAnswer: "rm dir?",
+                                explanation: "Since we know that ? can be used to match a single character. In the above scenario, all the filenames are same except that the last character in all filenames is different. So we can use the ? meta-character."
+                            },
+                            {
+                                id: "pmeq1_q5", question: "5. Which of the following files will not be deleted using “rm chap??” ?",
+                                options: ["chap01", "chap02", "chaptd", "chactd"], correctAnswer: "chactd",
+                                explanation: "Since ? is used to match a single character, ?? can match two characters. So the above command will remove all files with a filename starting with a prefix ‘chap’, followed by any two characters."
+                            },
+                            {
+                                id: "pmeq1_q6", question: "6. Which of the following command will list all the hidden filenames in our directory having at least three characters after the dot (.)?",
+                                options: ["ls", "ls -a", "ls .???*", "ls *"], correctAnswer: "ls .???*",
+                                explanation: "The * doesn’t match all files beginning with a (.) dot. So if we need to lists all the hidden filenames in our directory having at least three characters after the dot (.) we can use the following command,\n$ ls  .???*\n.bash_pro    .chap01        .netspak    .profile        //list of hidden files"
+                            },
+                            {
+                                id: "pmeq1_q7", question: "7. * and ? cannot match ____",
+                                options: ["/", "$", ".", "/ and ."], correctAnswer: "/ and .",
+                                explanation: "There are two things which * and ? cannot match. First is, they cannot match filenames starting with a dot (.). Second is, they cannot match / in the pathname. For example, we cannot use cd /usr?local to switch to /usr/local. It will generate an error."
+                            },
+                            {
+                                id: "pmeq1_q8", question: "8. rm chap0[1234] will delete all of the following files.\n\n   chap01  chap02  chap03  chap04",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "We can frame restrictive patterns with the character class. The character class comprises a set of characters enclosed by the rectangular brackets, [ and ], but it matches a single character in the class. For example, the pattern [abcd] is a character class that can match a single character – an a, b, c or d. Similarly, we can combine the character class with any string or any other wildcard expression. Hence, the command rm chap0[1234] will delete chap01 chap02 chap03 chap04."
+                            },
+                            {
+                                id: "pmeq1_q9", question: "9. Which of the following files will not be listed using the following command?\n\nls chap0[1-4]",
+                                options: ["chap02", "chap05", "chap01", "chap04"], correctAnswer: "chap05",
+                                explanation: "Range specification is also possible inside the class using a hyphen (-). The two characters on either side of it form the range of characters to be matched. So the command ls chap0[1-4] can match chap01, chap02, chap03, chap04. But chap05 cannot be matched because the range inside the character class is from 1 to 4."
+                            },
+                            {
+                                id: "pmeq1_q10", question: "10. Which of the following symbol is used for negating the character class?",
+                                options: [".", "*", "!", "%"], correctAnswer: "!",
+                                explanation: "We can use the ! as the first symbol for negating the character class. For example,\n*.[!tx]        //matches all filenames with single character extension but not .t or .x \n[!a-zA-Z]*    // matches all filenames that don’t begin with a alphabetic character."
+                            },
+                            {
+                                id: "pmeq1_q11", question: "11. Which of the following shell doesn’t support ! symbol for negating the character class?",
+                                options: ["bash", "ksh", "POSIX", "C"], // Corrected: bash appears twice, assuming one was ksh
+                                correctAnswer: "C",
+                                explanation: "The ! symbol cannot be used to negate a character class in a C shell. In fact, C shell doesn’t provide any mechanism for doing so."
+                            },
+                            {
+                                id: "pmeq1_q12", question: "12. The command cd * will work.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "As we know that cd command is used for changing directories, the command cd * will work only when there is only one file in the current directory and that file should also be a directory. Otherwise, this command is invalid."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Pattern Matching, Escaping and Quoting – 2",
+                        questions: [
+                            {
+                                id: "pmeq2_q1", question: "1. Providing a backslash (\\) before the wild card to remove its special meaning is called _____",
+                                options: ["escaping", "quoting", "listing", "pattern matching"], correctAnswer: "escaping",
+                                explanation: "We know that shell uses some special characters to match filenames or perform other search and replace operations. But if the filename itself contains those special characters, then it could be a great nuisance. For dealing with such files we use escaping and quoting.\nEscaping means providing a backslash (\\) before the wild card so that its special meaning could be removed. For example, if we want to remove a file named chap*, then using the command rm chap* will delete all the file beginning with a prefix ’chap’. In this situation, we can use the following command,\n$  rm chap\\*"
+                            },
+                            {
+                                id: "pmeq2_q2", question: "2. Enclosing the wild card or the entire pattern within quotes is called ___",
+                                options: ["escaping", "quoting", "listing", "pattern matching"], correctAnswer: "quoting",
+                                explanation: "There is another way to turn off the meaning of the metacharacter. When a command argument is enclosed in quotes, the meaning of all special characters is turned off. This method is called quoting. For example,$ echo ‘\\’        //displays a \\"
+                            },
+                            {
+                                id: "pmeq2_q3", question: "3. To remove the file named my document.txt, which one of the following commands will be used?",
+                                options: ["rm my\\ document.txt", "rm my document.txt", "rm *", "rm my_document.txt"], correctAnswer: "rm my\\ document.txt",
+                                explanation: "Apart from metacharacters, there are other characters that are special like the space character. The shell uses it to delimit command line arguments. So to remove the file my document.txt we can use escaping. The backslash will make the shell to ignore the space. Hence file will be removed easily."
+                            },
+                            {
+                                id: "pmeq2_q4", question: "4. We can escape the \\ itself using escaping.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Sometimes we may need to interpret the \\ itself literally. To do so we need another \\ before it. For example,\n$ echo \\\\        // displays \\"
+                            },
+                            {
+                                id: "pmeq2_q5", question: "5. For escaping the newline character we can use ____",
+                                options: ["/", "\\", "?", "\\n"], correctAnswer: "\\",
+                                explanation: "The newline character is also special, it marks the end of the command line. Some command lines that uses several arguments can be long enough to overflow to the next line. To split the wrapped line into two lines, make sure you input a \\ before pressing [Enter]."
+                            },
+                            {
+                                id: "pmeq2_q6", question: "6. The output of the following command is ______________\n\n$ echo ‘The special character $ echo hello and | ls chap*’",
+                                options: ["undefined output", "erroneous", "hello", "The special character $ echo hello and | ls chap*"], correctAnswer: "The special character $ echo hello and | ls chap*",
+                                explanation: "Quoting is another way to turn off the meaning of a meta-character. When a command argument is enclosed in quotes, the meanings of all enclosed special characters are turned off."
+                            },
+                            {
+                                id: "pmeq2_q7", question: "7. Double quotes are more permissive than single quotes and allow the evaluation of the $ and ` itself.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "When a command argument is enclosed in single quotes, the meaning of all enclosed special characters is turned off. But when we enclose the same in double quotes, we cannot protect the $ and ` (backquote). For example,\n$ echo ‘$SHELL’      // displays $SHELL\n$ echo “$SHELL”     // evaluates $SHELL and then display"
+                            },
+                            {
+                                id: "pmeq2_q8", question: "8. Which of the following command will remove the file named * ?",
+                                options: ["rm *", "rm ‘*’", "rm \\*", "rm ‘*’ and rm \\*"], correctAnswer: "rm ‘*’ and rm \\*",
+                                explanation: "To suppress the nature of wildcard * we can use either escaping or quoting. The \\ symbol will suppress the feature of wildcard and will remove the file named *. Similarly using quoting we can turn off the meaning of the meta character."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Redirection and Pipes – 1",
+                        questions: [
+                            {
+                                id: "rp1_q1", question: "1. Redirection is a process of switching of the standard stream of data.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Redirection is a process in which switching of the standard stream of data is performed so that it comes from a source other than its default source or so that it goes to some destination other than its default destination."
+                            },
+                            {
+                                id: "rp1_q2", question: "2. How many files are used for representing different standard streams?",
+                                options: ["1", "2", "4", "3"], correctAnswer: "3",
+                                explanation: "The shell associates three files with the terminal –two for display and one for the keyboard. These special files are actually streams of characters which many commands see as input and output. Each stream is associated with a default device –which is terminal. These three files are:\n• Standard Input\n• Standard output\n• Standard error"
+                            },
+                            {
+                                id: "rp1_q3", question: "3. Which stream is connected to the display?",
+                                options: ["standard input", "standard output", "standard error", "error"], correctAnswer: "standard output",
+                                explanation: "Standard output is the file (or stream) which is used for representing output, and is connected to the display. Each command which uses the display for its output will find this file always open and available. The file will be automatically closed after the command has completed its execution."
+                            },
+                            {
+                                id: "rp1_q4", question: "4. Which stream is used for representing error messages?",
+                                options: ["standard input", "standard output", "standard error", "error"], correctAnswer: "standard error",
+                                explanation: "The standard error (or stream) is used for representing error messages that emanate from the command or shell. This stream is also connected to the display as error messages are displayed on the terminal."
+                            },
+                            {
+                                id: "rp1_q5", question: "5. The command wc < sample.txt will count data from the file sample.txt.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "When wc is used without any arguments it will read the data from the default source which is a keyboard. In the above command, redirection symbol < is present. The following steps are performed:\n1. On seeing the <, the shell opens the disk file, sample.txt for reading.\n2. wc performs its execution and displays the output."
+                            },
+                            {
+                                id: "rp1_q6", question: "6. Which symbol is used for taking input from standard input?",
+                                options: ["&", "%", "–", "$"], correctAnswer: "–",
+                                explanation: "When a command takes input from multiple sources –say a file and standard input, the – symbol is used to indicate the sequence of taking input. For example,\n// first take input from standard input and then foo\n$ cat  -  foo\n \n// first take input from foo then from standard input and after that from bar\n$ cat  foo  -  bar"
+                            },
+                            {
+                                id: "rp1_q7", question: "7. Which of the following symbol(s) can be used to redirect the output to a file or another program?",
+                                options: ["|", ">", ">>", "|, >, and >>"], correctAnswer: "|, >, and >>", // Corrected to include all three based on explanation
+                                explanation: "All commands displaying output on the terminal actually write to the standard output file as a stream of characters and not directly to the terminal as such. The symbol > will replace the default destination (terminal) with any file by using the > operator, followed by the filename while the symbol >> is used to append to a file. | is used to give input to another program."
+                            },
+                            {
+                                id: "rp1_q8", question: "8. The >> symbol is used to overwrite the existing file if it exists.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "The shell provides the >> symbol (right chevron used twice) to append to an existing file. For example,\n//Do a word count program on sample.txt and append the output to newfile as shown below.\n$ wc sample.txt >> newfile"
+                            },
+                            {
+                                id: "rp1_q9", question: "9. Which file descriptor is used to represent standard error stream?",
+                                options: ["0", "1", "2", "3"], correctAnswer: "2",
+                                explanation: "Each of the three standard files is represented by a number called as a file descriptor. A file is opened using its pathname, but subsequent read and write operations identify the file by this file descriptor. Whenever we enter an incorrect command or try to open a non-existent file, certain diagnostic messages are displayed onto the terminal. This is the standard error stream whose default destination is the terminal."
+                            },
+                            {
+                                id: "rp1_q10", question: "10. We can redirect the error message to file named newfile using __________ command.",
+                                options: ["cat foo errorfile", "cat foo >errorfile", "cat errorfile>foo", "cat foo 2>errorfile"], correctAnswer: "cat foo 2>errorfile",
+                                explanation: "Redirecting standard error requires the 2> symbol. Suppose if foo doesn’t exist then an error message ‘cannot open foo’ will be generated but we can send this message to another file. But here > and >> cannot be used. We have to use 2> symbol as the file descriptor number 2 represents the standard error stream."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Redirection and Pipes – 2",
+                        questions: [
+                            {
+                                id: "rp2_q1", question: "1. The category of commands which uses both standard input and standard output are called ____",
+                                options: ["directory oriented commands", "standard input commands", "filters", "standard output commands"], correctAnswer: "filters",
+                                explanation: "UNIX commands can be grouped into four categories:\nDirectory-oriented (mkdir,rmdir)\nCommands like ls, pwd that write to standard output\nCommands like lp that read from standard input\nFilters – commands which use both standard input and standard output (like bc)"
+                            },
+                            {
+                                id: "rp2_q2", question: "2. The contents of file001 are:\n\n    232\n    25*50\nWhat will be the contents of result.txt?\nbc  < file001 > result.txt",
+                                options: ["undefined", "erroneous", "429467296, 1250", "1650"], correctAnswer: "429467296, 1250", // Example, bc might produce specific output
+                                explanation: "We can redirect bc’s standard input to come from file001 and save the output in another file named result.txt. bc obtained the expressions from the redirected standard input, processed them and sent out the results to a redirected output stream. Here bc command is used as a filter."
+                            },
+                            {
+                                id: "rp2_q3", question: "3. Which of the following files are known as special files in UNIX?",
+                                options: ["sample.txt", "/dev/null", "/dev/tty", "/dev/null and /dev/tty"], correctAnswer: "/dev/null and /dev/tty",
+                                explanation: "There are two special files named /dev/null and /dev/tty which is used in UNIX for special purposes. For example, if we want to check whether the program runs successfully without seeing its output on the screen or may not want to save output in a file either. For this purpose, a special file /dev/null is used. It accepts any stream without growing in size. The second file /dev/tty is the one used for indicating one’s terminal."
+                            },
+                            {
+                                id: "rp2_q4", question: "4. The size of /dev/null is always zero.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "UNIX has a special file that simply accepts any stream without growing in size. This file is /dev/null. This file is used for redirecting error messages away from the terminal so that they don’t appear on the screen. This file is pseudo-device because like other device files, it’s not associated with any physical device."
+                            },
+                            {
+                                id: "rp2_q5", question: "5. Which symbol is used to redirect error messages to /dev/null?",
+                                options: ["%", "$", ">", "<"], correctAnswer: ">",
+                                explanation: "As we redirect our output using > symbol to other files in simple commands, this technique can also be used to redirect error messages to /dev/null file. For example,\n$ cmp  file01  file02 >  /dev/null"
+                            },
+                            {
+                                id: "rp2_q6", question: "6. Which file is used for indicating terminals?",
+                                options: ["/dev/tty", "/dev/null", "terminal file", "device file"], correctAnswer: "/dev/tty",
+                                explanation: "/dev/tty is another special file which is used for representing one’s terminal. Consider user1 is working on terminal /dev/pts/1 and user 2 is working on /dev/pts/2. Then, both the users can refer to their own terminals with the same filename. For example, if user 1 issues the command\n$ who > /dev/tty\nThen, the list of users is sent to the terminal he is currently using — dev/pts/1. Similarly, user 2 can also issue the same command to see the output on his terminal, /dev/pts/2.\n/dev/tty can be accessed by multiple users without conflict."
+                            },
+                            {
+                                id: "rp2_q7", question: "7. Which symbol is used to connect different streams?",
+                                options: ["|", ">", "<", "~"], correctAnswer: "|",
+                                explanation: "The shell can connect different streams using a special operator called pipe (|) and avoid creation of disk file. We can connect two commands using this operator so that one command can take the output of other as its input. For example,\n$ who | wc -l        // count number of lines in the output of who command."
+                            },
+                            {
+                                id: "rp2_q8", question: "8. We can use the > symbol along with pipe in a command.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "There is no restriction on the number of commands we can use in a pipeline except that we should know the behavioral properties of these commands to place there. For example, consider this command:\n$ ls  | wc  -l  > output.txt    \n// number of lines counted by wc command from the output of ls //are stored in a file named output.txt."
+                            },
+                            {
+                                id: "rp2_q9", question: "9. What is the output of the following command?\n\n$ wc  -c  *.c",
+                                options: ["total size of .c files", "size of each .c file", "undefined", "erroneous"], correctAnswer: "total size of .c files",
+                                explanation: "We can make the command ignorant of its source using the pipeline. Above command is also an example of the same. It will simply display the total size of those files having a .c extension in the current directory."
+                            },
+                            {
+                                id: "rp2_q10", question: "10. In a pipeline, the command on the left of | must use standard output and one on the right must use standard input.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "There is a restriction which is applied while using a pipeline. In a pipeline, the command on the left of | must use standard output (stream) and one on the right must use standard input (stream). Otherwise, an error will be generated or the output will be erroneous."
+                            },
+                            {
+                                id: "rp2_q11", question: "11. Which command saves one copy of character stream in a file and store the other to standard output?",
+                                options: ["who", "ls", "tee", "wc"], correctAnswer: "tee",
+                                explanation: "tee command handles a character stream by duplicating its input. It saves one copy in a file and writes the other to standard output. For example,\n$ who  | tee  user.txt\nAbove command will the save the output of who command in a file named user.txt as well as it will also display the output of who command on the terminal."
+                            },
+                            {
+                                id: "rp2_q12", question: "12. tee is an internal command.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "tee is an external command and not a feature of the shell. tee command handles a character stream by duplicating its input. It saves one copy in a file and writes the other to standard output."
+                            },
+                            {
+                                id: "rp2_q13", question: "13. Which of the following is not true about tee command?",
+                                options: ["it is a feature of the shell", "it is an external command", "tee command duplicates its input", "tee is an internal command"], correctAnswer: "it is a feature of the shell", // Also "tee is an internal command" is not true
+                                explanation: "tee command is not a feature of the shell. tee command handles a character stream by duplicating its input. It saves one copy in a file and writes the other to standard output. It is an external command."
+                            },
+                            {
+                                id: "rp2_q14", question: "14. Apart from its use in redirection, /dev/tty can also be used as an argument to some commands.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "/dev/tty can be used as an argument to some UNIX commands. Because the terminal is also a file we can use the device name /dev/tty as an argument to some commands like tee. For example,\n$ who  |  tee  /dev/tty  | wc  -l            // same as who | wc  -l\nIn the above command, tee saved the output of who in /dev/tty, thus effectively showing it on the screen and wc -l counted the number of lines from another stream."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Command Substitution and Shell Variables",
+                        questions: [
+                            {
+                                id: "cssv_q1", question: "1. Shell enables one or more arguments to be obtained from the standard output of another command. This feature is called _________",
+                                options: ["command substitution", "argument substitution", "shell substitution", "korn"], correctAnswer: "command substitution",
+                                explanation: "Apart from a pipeline, shell enables connecting of two commands in another way. Shell enables one or more arguments to be obtained from the standard output of another command. This feature is called command substitution. For example, to display output like:\nToday’s date is Sat  Jan 05 17:25:41  IST 2002\nWe can use the following command\n$ echo “Today’s date is `date`”        // date is an argument to echo command"
+                            },
+                            {
+                                id: "cssv_q2", question: "2. Which of the following meta-character is used in command substitution?",
+                                options: ["`", "‘", "“", ">"], correctAnswer: "`",
+                                explanation: "When scanning the command line, the shell looks for another metacharacter i.e. ` (the backquote) usually placed on the top-left of our keyboard, and it should not be confused with a single quote (‘)."
+                            },
+                            {
+                                id: "cssv_q3", question: "3. Command substitution is enabled in single quotes also.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "Command substitution is enabled only when we use double quotes. If we use single quotes, it will not work. For example,\n$ echo ‘today’s date is `date` ‘\nOutput will be: today’s date is `date`\n$ echo “today’s date is `date` “\nOutput will be: today’s date is  Sat  Jan 05 17:25:41  IST 2017"
+                            },
+                            {
+                                id: "cssv_q4", question: "4. POSIX recommends the use of ____ instead of archaic `command ` for command substitution.",
+                                options: ["|", "#", "%", "$"], correctAnswer: "$",
+                                explanation: "POSIX recommends the use of the form $(command) instead of archaic `command` for command substitution. For example, to display the date using command substitution use the following command:\n$ echo The date is $(date)\nOutput: The date is  Sat  Jan 05 17:25:41  IST 2017"
+                            },
+                            {
+                                id: "cssv_q5", question: "5. Which of the following shell doesn’t support the command substitution using $ recommended by POSIX?",
+                                options: ["Korn", "bash", "C", "bourne"], correctAnswer: "bourne",
+                                explanation: "Whether or not we use POSIX notation for command substitution is something up to the user. But we should make sure that we do not have to run our shell scripts with the Bourne shell because $(command) is not supported by Bourne shell."
+                            },
+                            {
+                                id: "cssv_q6", question: "6. Which symbol is used for assigning a value to variables?",
+                                options: ["$", "&", "=", "@"], correctAnswer: "=",
+                                explanation: "The shell supports variables that are useful both in the command line and shell scripts. These variables are called shell variables like pwd. A variable assignment is of the form variable=value(no spaces around =). For example,\n$ count=10        // a variable named count is assigned a value of 10"
+                            },
+                            {
+                                id: "cssv_q7", question: "7. Which symbol is used for evaluation of variables?",
+                                options: ["$", "&", "=", "@"], correctAnswer: "$",
+                                explanation: "The shell supports variables that are useful both in the command line and shell scripts. These variables are called shell variables like TERM and SHELL. A variable assignment is of the form variable=value(no spaces around =), but its evaluation requires the $ as a prefix to the variable name. For example,\n$ count=10\n$ echo $count        // output will be 10"
+                            },
+                            {
+                                id: "cssv_q8", question: "8. Which of the following is a correct initialization of variables to null strings?",
+                                options: ["x=", "x=’ ‘", "x=” “", "x=, x=’ ‘, x=” “"], correctAnswer: "x=, x=’ ‘, x=” “",
+                                explanation: "All shell variables are initialized to null strings by a string. While explicit assignment of null strings can be performed with x=’ ‘ or x=” “ or x="
+                            },
+                            {
+                                id: "cssv_q9", question: "9. A variable can be removed using _____",
+                                options: ["unset", "readonly", "del", "bash"], correctAnswer: "unset",
+                                explanation: "A variable can be removed using the unset command. unset in an internal command. For example, if we want to undefine a variable x then,\n$ unset  x"
+                            },
+                            {
+                                id: "cssv_q10", question: "10. readonly command is used to protect a variable from reassignment.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "A variable can be protected from reassignment by readonly command. unset is also an internal command. For example, to protect a variable x from reassignment use the following command,\n$ readonly  x            // x can’t be reassigned now"
+                            },
+                            {
+                                id: "cssv_q11", question: "11. C shell uses which command for assigning values to variables?",
+                                options: ["=", "set", "unset", "$"], correctAnswer: "set",
+                                explanation: "The C shell uses the set statement to set variables. There is a restriction that there either has to be whitespace on both sides of = or none at all. For example, for assigning a value to a variable named count, use the following command:\n$ set count=1 \nOr \n$ set count=1"
+                            },
+                            {
+                                id: "cssv_q12", question: "12. The variable assignment as x = 10 (whitespace on both sides of =) will work if we are not using C shell?",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "If we are using any other shell other than C shell, the assignment in the form x = 10 will produce an error because the shell will interpret x as a command and =,10 as its arguments."
+                            },
+                            {
+                                id: "cssv_q13", question: "13. What will the result when we evaluate this statement?\n\n$ directory=’pwd’=`pwd`",
+                                options: ["output of pwd command along with string pwd=", "undefined output", "erroneous", "directory variable will hold string pwd"], correctAnswer: "output of pwd command along with string pwd=",
+                                explanation: "In the above statement, the string pwd, = and the output of pwd command are concatenated and saved in the directory variable. So the above statement will evaluate the current working directory as:\npwd=/home/usr10/doc"
+                            },
+                            {
+                                id: "cssv_q14", question: "14. Which of the following is not a system defined variable?",
+                                options: ["$PATH", "$HOME", "$SHELL", "$cd"], correctAnswer: "$cd",
+                                explanation: "PATH is the shell variable which stores the list of directories that the shell searches for locating commands. HOME prints our home directory while SHELL prints the absolute pathname of our login shell. cd is a command which is used for changing directories or moving through file hierarchy."
+                            },
+                            {
+                                id: "cssv_q15", question: "15. Which of the following is an invalid variable?",
+                                options: ["_user", "us01", "-txtfile", "txt123"], correctAnswer: "-txtfile",
+                                explanation: "UNIX restricts some rule for defining a variable. A variable name must begin with either an underscore (_) or alphanumeric character followed by one or more alphanumeric or underscore characters.\nFollowing are some valid variable names:\nUser01        user_01    _user67\nFollowing are some invalid variable names:\n2_var        user!        -textfile"
+                            },
+                            {
+                                id: "cssv_q16", question: "16. Command substitution requires the command to use ________",
+                                options: ["standard input", "standard output", "standard error", "all of the mentioned"], correctAnswer: "standard output",
+                                explanation: "The shell enables one or more command arguments to be obtained from the standard output of another command. This feature is called command substitution and it requires the command to use the standard output (stream)."
+                            },
+                            {
+                                id: "cssv_q17", question: "17. The command is valid.\n\n$ ls  -lRa  $HOME  > home.ls",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Above command will save the entire home directory structure including the hidden files in a file named home.ls because we have used -l, -a, -R, all the files including hidden ones are recursively saved in a separate file named home.ls"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const mainChapterTitleEl = document.getElementById('mainChapterTitle');
+        const questionProgressTextEl = document.getElementById('questionProgressText');
+        const scoreDisplayEl = document.getElementById('scoreDisplay');
+        const progressBarEl = document.getElementById('progressBar');
+        const quizContentAreaEl = document.getElementById('quizContentArea');
+        const nextChapterBtn = document.getElementById('nextChapterBtn');
+
+        let currentChapterIndex = 0; // This page handles only one chapter
+        let score = 0;
+        let totalQuestionsInChapter = 0;
+        let questionsAnsweredCount = 0;
+        let allQuestionElementsMap = new Map();
+        let currentActiveQuestionId = null;
+
+        const sunIcon = `<i class="fas fa-sun text-xl text-yellow-400"></i>`;
+        const moonIcon = `<i class="fas fa-moon text-xl text-gray-700 dark:text-yellow-400"></i>`;
+
+        function setDarkMode(isDark) {
+            const htmlEl = document.documentElement;
+            if (isDark) {
+                htmlEl.classList.add('dark');
+                darkModeToggle.innerHTML = sunIcon;
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                htmlEl.classList.remove('dark');
+                darkModeToggle.innerHTML = moonIcon;
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            setDarkMode(!document.documentElement.classList.contains('dark'));
+        });
+
+        function renderChapter() {
+            quizContentAreaEl.innerHTML = '';
+            allQuestionElementsMap.clear();
+            const chapterData = quizData[currentChapterIndex];
+            mainChapterTitleEl.textContent = chapterData.chapterName;
+
+            score = 0;
+            questionsAnsweredCount = 0;
+            totalQuestionsInChapter = 0;
+            let firstQuestionId = null;
+
+            chapterData.topics.forEach(topic => {
+                totalQuestionsInChapter += topic.questions.length;
+            });
+            updateProgressAndScore();
+
+            chapterData.topics.forEach((topic) => {
+                const topicHeader = document.createElement('h3');
+                topicHeader.className = 'text-xl md:text-2xl font-semibold text-purple-600 dark:text-purple-400 mt-10 mb-6 pt-6 border-t border-gray-300 dark:border-gray-600 first:mt-0 first:pt-0 first:border-t-0';
+                topicHeader.textContent = topic.topicName;
+                quizContentAreaEl.appendChild(topicHeader);
+
+                topic.questions.forEach((q) => {
+                    if (!firstQuestionId) firstQuestionId = q.id;
+
+                    const questionBlock = document.createElement('div');
+                    questionBlock.id = `qblock-${q.id}`;
+                    questionBlock.className = 'quiz-question-block mb-10 p-5 bg-gray-50 dark:bg-gray-750 rounded-xl shadow-lg';
+                    questionBlock.dataset.questionId = q.id;
+
+                    const questionTextEl = document.createElement('p');
+                    questionTextEl.className = 'text-md md:text-lg font-medium mb-5 text-gray-800 dark:text-gray-200';
+                    questionTextEl.innerHTML = q.question.replace(/\n/g, '<br>');
+                    questionBlock.appendChild(questionTextEl);
+
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.className = 'grid grid-cols-1 md:grid-cols-2 gap-3 mb-4';
+                    q.options.forEach((option, optionIdx) => {
+                        const button = document.createElement('button');
+                        button.innerHTML = `<span class="text-left flex-grow">${String.fromCharCode(97 + optionIdx)}) ${option}</span>`;
+                        button.className = 'option-btn w-full text-left p-3 bg-gray-200 dark:bg-gray-600 hover:bg-blue-100 dark:hover:bg-blue-800 rounded-lg border-2 border-gray-300 dark:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-between disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow-md';
+                        button.dataset.questionId = q.id;
+                        button.dataset.optionIndex = optionIdx;
+                        button.disabled = true;
+                        button.addEventListener('click', handleAnswerSelection);
+                        optionsContainer.appendChild(button);
+                    });
+                    questionBlock.appendChild(optionsContainer);
+
+                    const feedbackEl = document.createElement('div');
+                    feedbackEl.className = 'feedback-area min-h-[25px] text-sm mb-2';
+                    questionBlock.appendChild(feedbackEl);
+
+                    const explanationEl = document.createElement('div');
+                    explanationEl.className = 'explanation-area p-3 rounded-md text-sm leading-relaxed';
+                    explanationEl.innerHTML = `<strong class="block mb-1">Explanation:</strong> ${q.explanation.replace(/\n/g, '<br>')}`;
+                    questionBlock.appendChild(explanationEl);
+
+
+                    quizContentAreaEl.appendChild(questionBlock);
+                    allQuestionElementsMap.set(q.id, questionBlock);
+                });
+            });
+
+            if (firstQuestionId) {
+                activateQuestion(firstQuestionId);
+            }
+            nextChapterBtn.classList.add('hidden');
+            // Set next chapter button text and link if there is a next chapter
+            // For example:
+            // nextChapterBtn.textContent = "Next Chapter ➝ Chapter 7 Name";
+            // nextChapterBtn.onclick = () => {
+            //     window.location.href = 'chapter-7.html';
+            // };
+            // If this is the last chapter, you might want to hide the button or change its text to "End of Quiz" or similar
+            nextChapterBtn.textContent = "Go to Main Page";
+            nextChapterBtn.onclick = () => {
+                window.location.href = 'unix-mcq.html'; // Or your main index page
+            };
+        }
+
+        function activateQuestion(questionId) {
+            if (currentActiveQuestionId) {
+                const prevActiveBlock = allQuestionElementsMap.get(currentActiveQuestionId);
+                if (prevActiveBlock) {
+                    prevActiveBlock.classList.remove('active-question');
+                }
+            }
+
+            currentActiveQuestionId = questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+            if (questionBlock) {
+                questionBlock.classList.add('active-question');
+                questionBlock.querySelectorAll('.option-btn').forEach(btn => btn.disabled = false);
+                setTimeout(() => {
+                    const rect = questionBlock.getBoundingClientRect();
+                    const headerHeight = document.querySelector('header.sticky').offsetHeight || 150;
+                    if (rect.top < headerHeight || rect.bottom > (window.innerHeight - 50)) {
+                        questionBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 150);
+            }
+        }
+
+
+        function findQuestionData(questionId) {
+            for (const topic of quizData[currentChapterIndex].topics) {
+                const question = topic.questions.find(q => q.id === questionId);
+                if (question) return question;
+            }
+            return null;
+        }
+
+        function handleAnswerSelection(event) {
+            const selectedButton = event.currentTarget;
+            const questionId = selectedButton.dataset.questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+
+            if (!questionBlock || questionBlock.classList.contains('answered-question')) return;
+
+            const questionData = findQuestionData(questionId);
+            if (!questionData) return;
+
+            const selectedOptionIndex = parseInt(selectedButton.dataset.optionIndex);
+            const selectedOptionText = questionData.options[selectedOptionIndex];
+            const correctAnswerText = questionData.correctAnswer;
+
+            const feedbackEl = questionBlock.querySelector('.feedback-area');
+            const explanationEl = questionBlock.querySelector('.explanation-area');
+            const allOptionButtonsInBlock = questionBlock.querySelectorAll('.option-btn');
+
+            allOptionButtonsInBlock.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-blue-100', 'dark:hover:bg-blue-800', 'hover:shadow-md');
+            });
+
+            if (selectedOptionText === correctAnswerText) {
+                score++;
+                selectedButton.classList.add('correct');
+                feedbackEl.innerHTML = `<p class="text-green-600 dark:text-green-400 font-semibold"><i class="fas fa-check-circle mr-2"></i>Correct!</p>`;
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackEl.innerHTML = `<p class="text-red-600 dark:text-red-400 font-semibold"><i class="fas fa-times-circle mr-2"></i>Incorrect. The correct answer is highlighted.</p>`;
+                allOptionButtonsInBlock.forEach(btn => {
+                    if (questionData.options[parseInt(btn.dataset.optionIndex)] === correctAnswerText) {
+                        btn.classList.add('actual-correct-unselected');
+                        btn.classList.remove('incorrect');
+                    }
+                });
+            }
+
+            explanationEl.classList.add('visible');
+
+            questionBlock.classList.add('answered-question');
+            questionBlock.classList.remove('active-question');
+            questionsAnsweredCount++;
+            updateProgressAndScore();
+
+            setTimeout(() => {
+                let nextQuestionIdToActivate = null;
+                let foundCurrent = false;
+                for (const topic of quizData[currentChapterIndex].topics) {
+                    for (const q of topic.questions) {
+                        if (foundCurrent) {
+                            nextQuestionIdToActivate = q.id;
+                            break;
+                        }
+                        if (q.id === questionId) {
+                            foundCurrent = true;
+                        }
+                    }
+                    if (nextQuestionIdToActivate) break;
+                }
+
+                if (nextQuestionIdToActivate) {
+                    activateQuestion(nextQuestionIdToActivate);
+                } else {
+                    showChapterEnd();
+                }
+            }, 1500);
+        }
+
+        function updateProgressAndScore() {
+            scoreDisplayEl.textContent = `Score: ${score}`;
+            questionProgressTextEl.textContent = `Answered: ${questionsAnsweredCount} / ${totalQuestionsInChapter}`;
+            const progressPercentage = totalQuestionsInChapter > 0 ? (questionsAnsweredCount / totalQuestionsInChapter) * 100 : 0;
+            progressBarEl.style.width = `${progressPercentage}%`;
+        }
+
+        function showChapterEnd() {
+            nextChapterBtn.classList.remove('hidden');
+            // nextChapterBtn.onclick is already set in renderChapter
+
+            const endMessage = document.createElement('p');
+            endMessage.className = "text-center text-xl font-semibold mt-10 p-6 bg-blue-50 dark:bg-blue-900 rounded-lg";
+            endMessage.textContent = `Chapter 6 Complete! Your final score: ${score} out of ${totalQuestionsInChapter}.`;
+            quizContentAreaEl.appendChild(endMessage);
+            endMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+            const currentTheme = localStorage.getItem('darkMode');
+
+            if (currentTheme === 'enabled') {
+                setDarkMode(true);
+            } else if (currentTheme === 'disabled') {
+                setDarkMode(false);
+            } else {
+                setDarkMode(prefersDarkScheme.matches);
+            }
+
+            prefersDarkScheme.addEventListener('change', e => {
+                if (localStorage.getItem('darkMode') === null) {
+                    setDarkMode(e.matches);
+                }
+            });
+
+            renderChapter();
+        });
+
+    </script>
+</body>
+
+</html>

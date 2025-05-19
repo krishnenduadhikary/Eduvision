@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en" class=""> <!-- Start with no 'dark' class, JS will add -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unix MCQ Challenge - Chapter 11 (Essential Shell Programming)</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Logo Styles (Integrated into header flow) */
+        .header-logo .text-2xl {
+            font-size: 1.6rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .header-logo .logo-text-part {
+            /* Color will be handled by Tailwind text-gray-700 dark:text-gray-100 by default, or override if needed */
+        }
+
+        /* Make logo text distinctly visible in both modes if it clashes */
+        html:not(.dark) .header-logo .logo-text-part {
+            color: #374151;
+            /* Tailwind gray-700 for light mode if needed */
+        }
+
+        html.dark .header-logo .logo-text-part {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode */
+        }
+
+        .header-logo .logo-icon-part {
+            color: #F59E0B;
+            /* Tailwind amber-500, good contrast */
+            transition: color 0.3s;
+        }
+
+        .header-logo a:hover .logo-icon-part {
+            color: #D97706;
+            /* Tailwind amber-600 */
+        }
+
+        .header-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.4em;
+            width: 1.4em;
+            margin: 0 2px;
+        }
+
+        /* Ensure sticky header background is consistent */
+        header.sticky {
+            background-color: #f9fafb;
+            /* Tailwind gray-50 */
+        }
+
+        html.dark header.sticky {
+            background-color: #1f2937;
+            /* Tailwind gray-800 */
+        }
+
+        /* Ensure sub-header info card also respects dark mode */
+        #quizHeaderInfo {
+            background-color: #ffffff;
+            /* Tailwind white */
+        }
+
+        html.dark #quizHeaderInfo {
+            background-color: #374151;
+            /* Tailwind gray-700 */
+        }
+
+
+        .quiz-question-block {
+            transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+            opacity: 0.6;
+        }
+
+        .quiz-question-block.active-question {
+            opacity: 1;
+            transform: scale(1.01);
+            box-shadow: 0 0 15px rgba(80, 120, 255, 0.2);
+        }
+
+        html.dark .quiz-question-block.active-question {
+            box-shadow: 0 0 15px rgba(100, 150, 255, 0.3);
+        }
+
+        .quiz-question-block.answered-question {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .quiz-question-block.answered-question .option-btn {
+            pointer-events: none;
+            cursor: default;
+        }
+
+        .quiz-question-block .option-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .option-btn {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .option-btn:not(:disabled):hover {
+            transform: translateY(-2px) scale(1.01);
+            /* box-shadow: 0 4px 12px rgba(0,0,0,0.1); Tailwind's shadow-md or shadow-lg can be used directly on class */
+        }
+
+        html.dark .option-btn:not(:disabled):hover {
+            /* box-shadow: 0 4px 12px rgba(255,255,255,0.08); */
+        }
+
+        .option-btn.correct {
+            background-color: #10B981 !important;
+            /* green-500 */
+            color: white !important;
+            border-color: #059669 !important;
+            /* green-600 */
+        }
+
+        .option-btn.incorrect {
+            background-color: #EF4444 !important;
+            /* red-500 */
+            color: white !important;
+            border-color: #DC2626 !important;
+            /* red-600 */
+        }
+
+        .option-btn.actual-correct-unselected {
+            background-color: #D1FAE5 !important;
+            /* green-100 */
+            color: #065F46 !important;
+            /* green-700 */
+            border-color: #6EE7B7 !important;
+            /* green-300 */
+            animation: pulse-subtle-green 2s infinite;
+        }
+
+        html.dark .option-btn.actual-correct-unselected {
+            background-color: #064E3B !important;
+            color: #A7F3D0 !important;
+            border-color: #10B981 !important;
+        }
+
+
+        @keyframes pulse-subtle-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        .explanation-area {
+            min-height: 70px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            overflow: hidden;
+            background-color: #ffffff;
+            /* Light mode */
+        }
+
+        html.dark .explanation-area {
+            background-color: #374151;
+            /* Tailwind gray-700 for dark mode */
+        }
+
+        .explanation-area.visible {
+            opacity: 1;
+        }
+
+        /* Fix dark mode for feedback area */
+        .feedback-area {
+            color: #374151;
+            /* Light mode text color */
+        }
+
+        html.dark .feedback-area {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode text color */
+        }
+
+        /* Fix dark mode for question block */
+        .quiz-question-block {
+            background-color: #f9fafb;
+            /* Light mode */
+        }
+
+        html.dark .quiz-question-block {
+            background-color: #1f2937;
+            /* Tailwind gray-800 for dark mode */
+        }
+    </style>
+
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
+
+    <div class="container mx-auto p-4 min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="sticky mb-6 top-0 z-50 py-3 shadow-md bg-gray-50 dark:bg-gray-800">
+            <!-- Top part of the header: Logo, Title, Dark Mode Toggle -->
+            <div class="container mx-auto flex justify-between items-center px-2 sm:px-4">
+                <!-- Eduvision Logo -->
+                <div class="header-logo">
+                    <div class="text-2xl font-bold">
+                        <a href="../../index.html" class="flex items-center group">
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">Edu</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="logo-icon-part" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">ision</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Page Title -->
+                <h1 class="mx-4 text-lg sm:text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500 text-center flex-grow whitespace-nowrap cursor-pointer"
+                    onclick="window.location.href='unix-mcq.html'">
+                    Unix MCQ Challenge
+                </h1>
+
+                <!-- Dark Mode Toggle -->
+                <div class="flex-shrink-0">
+                    <button id="darkModeToggle"
+                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none transition-colors duration-300"
+                        aria-label="Toggle Dark Mode">
+                        <!-- Icon will be set by JS -->
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bottom part of the header: Quiz Info Card -->
+            <div id="quizHeaderInfo" class="bg-white dark:bg-gray-700 p-3 mt-3 rounded-lg shadow-md container mx-auto">
+                <h2 id="mainChapterTitle" class="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-2"></h2>
+                <div class="flex justify-between items-center text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">
+                    <span id="questionProgressText">Answered: 0 / 0</span>
+                    <span id="scoreDisplay">Score: 0</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                    <div id="progressBar"
+                        class="bg-gradient-to-r from-blue-500 to-purple-600 h-2.5 rounded-full transition-all duration-500 ease-out"
+                        style="width: 0%"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area for All Questions -->
+        <main id="quizContentArea"
+            class="flex-grow bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl transition-colors duration-300 mt-4">
+            <!-- Topics and Questions will be dynamically inserted here -->
+        </main>
+
+        <!-- Navigation Area (for Next Chapter) -->
+        <div id="overallNavigation" class="mt-8 mb-4 flex justify-center">
+            <button id="nextChapterBtn"
+                class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 hidden">
+                <!-- Text and onclick will be set by JS -->
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
+            © 2023 Interactive MCQ Platform.
+        </footer>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                chapterName: "Unix MCQ on Essential Shell Programming",
+                topics: [
+                    {
+                        topicName: "Shell Programming using read Command and Command Line Arguments",
+                        questions: [
+                            {
+                                id: "sp_rc_cla_q1", question: "1. What is a shell script?",
+                                options: ["group of commands", "a file containing special symbols", "a file containing a series of commands", "group of functions"], correctAnswer: "a file containing a series of commands",
+                                explanation: "When we have to execute a series of commands altogether, we store them in a file which is itself executed as a shell script. A shell script is basically a computer program designed to be run by the UNIX shell."
+                            },
+                            {
+                                id: "sp_rc_cla_q2", question: "2. Shell scripts need to be saved with an extension .sh .",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "It’s not mandatory to save script files with .sh extension but we do so for our own convention as it makes it easy to match them with wildcards."
+                            },
+                            {
+                                id: "sp_rc_cla_q3", question: "3. Shell scripts are executed in a separate child shell process.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Shell scripts are executed in a separate child process, and this sub-shell need not be of the same type as our login shell. In other words, even if our login shell is bourne, we can use a Korn sub-shell to run our script."
+                            },
+                            {
+                                id: "sp_rc_cla_q4", question: "4. The first line in any shell script begins with a _____",
+                                options: ["&", "!", "$", "#"], correctAnswer: "#",
+                                explanation: "When the comment character (#) is placed anywhere in a line; the shell ignores all characters on its right. However, this rule doesn’t apply to the first line which is the interpreter line. It always begins with #! and followed by the pathname of the shell to be used for running the script.\n#!/bin/sh                   // first line defining the pathname\n# script.sh                // name of the script"
+                            },
+                            {
+                                id: "sp_rc_cla_q5", question: "5. To run the script, we should make it executable first by using _____",
+                                options: ["chmod +x", "chmod +r", "chmod +w", "chmod +rwx"], correctAnswer: "chmod +x",
+                                explanation: "Before we run the script, it is essential to make the script executable first. After that invoke the script name to run the script. For making the script executable, we have to use chmod +x script_name."
+                            },
+                            {
+                                id: "sp_rc_cla_q6", question: "6. To spawn a child of our own choice for running the script, we can use ___ command.",
+                                options: ["ps", "pr", "sh", "$$"], correctAnswer: "sh",
+                                explanation: "We know that shell scripts are executed by a child shell. But we can also explicitly spawn a child of our own choice by using the sh command along with script name as an argument. When used in this way, the interpreter line is ignored by the shell."
+                            },
+                            {
+                                id: "sp_rc_cla_q7", question: "7. Which command is used for making the scripts interactive?",
+                                options: ["ip", "input", "read", "write"], correctAnswer: "read",
+                                explanation: "read command is used for making scripts interactive. It is used for taking input from the user. Input supplied from the keyboard is entered into the variable used with the read command. For example,\n#!/bin/sh                \n# emp.sh\necho ”enter your name”\nread Uname                  //read input from the user\necho $Uname                // display input entered by the user"
+                            },
+                            {
+                                id: "sp_rc_cla_q8", question: "8. read command is shell’s internal tool.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "read command is the shell’s internal tool for taking input from the user i.e. it makes the scripts interactive."
+                            },
+                            {
+                                id: "sp_rc_cla_q9", question: "9. A single read statement can be used with one or more variables.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "A single read statement can be used with one or more variables to let us enter multiple arguments. For example,\nread FirstName LastName"
+                            },
+                            {
+                                id: "sp_rc_cla_q10", question: "10. What are positional parameters?",
+                                options: ["special variables for assigning arguments from the command line", "pattern matching parameters", "special variables for reading user input", "special variables and patterns"], correctAnswer: "special variables for assigning arguments from the command line",
+                                explanation: "Shell scripts can also take input from command line. When arguments are specified with a shell script, they are assigned to certain special variables called positional parameters."
+                            },
+                            {
+                                id: "sp_rc_cla_q11", question: "11. The first argument is read by the shell into the parameter ___",
+                                options: ["1$", "$3", "$$", "$1"], correctAnswer: "$1",
+                                explanation: "Command line arguments are stored into positional parameters. The first argument is read by the shell into the parameter $1, second argument in $2 and so on."
+                            },
+                            {
+                                id: "sp_rc_cla_q12", question: "12. The complete set of positional parameters is stored in ______ as a single string.",
+                                options: ["$n", "$#", "$*", "$$"], correctAnswer: "$*",
+                                explanation: "There are some special parameters used by the shell. One of which is $*, which stores the complete set of positional parameters as a single string."
+                            },
+                            {
+                                id: "sp_rc_cla_q13", question: "13. Which of the following is used for storing the number of positional parameters?",
+                                options: ["$n", "$#", "$*", "$2"], correctAnswer: "$#",
+                                explanation: "$# is used for storing the number of arguments specified. It lets us design scripts that check whether the right number of arguments have been entered. For example, the following script shows the use of positional parameters:\n#!/bin/sh                \n# emp.sh\necho “ The number of arguments specified are $#\nThe arguments are $*”\nNow execute the script:\n$ emp.sh  director.lst            // director.lst is command line argument given to the script.\nThe number of arguments specified is 1\nThe arguments are director.lst"
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Logical Operators and Conditional Execution",
+                        questions: [
+                            {
+                                id: "loce_q1", question: "1. Which of the following operators are used for logical execution?",
+                                options: ["||", "&&", "%%", "&& and ||"], correctAnswer: "&& and ||",
+                                explanation: "The operators && and || are used for logical execution i.e. they act as AND, OR condition respectively. The syntax for using these operators is:\ncommand1 && command2\ncommand1 || command2"
+                            },
+                            {
+                                id: "loce_q2", question: "2. When we use &&, the second command is executed only when first succeeds.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "The shell provides two operators that allow conditional execution, one of which is &&. It delimits two commands; the second command is executed only when the first command succeeds."
+                            },
+                            {
+                                id: "loce_q3", question: "3. When we use ||, both the commands are executed.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "|| is an operator used by the shell for conditional execution. It plays an inverse role in which the second command is executed only when the first fails."
+                            },
+                            {
+                                id: "loce_q4", question: "4. The syntax for using && is ______________",
+                                options: ["cmd1 && cmd2", "cmd1 cmd2 &&", "cmd1 & cmd2&", "cmd1"], correctAnswer: "cmd1 && cmd2",
+                                explanation: "The shell provides two operators that allow conditional execution –the && and ||. The syntax for using these operators is:\ncmd1 && cmd2\ncmd1 || cmd2"
+                            },
+                            {
+                                id: "loce_q5", question: "5. To perform decision depending on the fulfillment of certain criteria, ____ is used.",
+                                options: ["if", "else", "for", "if and else"], correctAnswer: "if and else",
+                                explanation: "The if and else statement makes two-way decisions depending on the fulfillment of certain criteria. These statements are used in UNIX as they are used in other programming languages. For example,\nIf command is successful\nThen\n    Execute command\nElse\n    Execute command\nFi"
+                            },
+                            {
+                                id: "loce_q6", question: "6. Every if is closed with a corresponding ____",
+                                options: ["else", "fi", "if", "else if"], correctAnswer: "fi",
+                                explanation: "if and else statements are used for making two-way decisions. Every if is closed with the corresponding fi. If we don’t do this we’ll encounter an error."
+                            },
+                            {
+                                id: "loce_q7", question: "7. To check more than two conditions, ___ is used with if-else statements.",
+                                options: ["while", "for", "elif", "for"], correctAnswer: "elif",
+                                explanation: "if-else statements makes two-way decisions depending on the fulfillment of certain conditions. But if we want to check more than two conditions we can use elif statement. For example,\nIf command is successful\nThen\n    Execute command\nElif  command is successful\n    Then\n    Execute command\nElse. . .    \nFi"
+                            },
+                            {
+                                id: "loce_q8", question: "8. The name of the script is stored in which special parameter?",
+                                options: ["$1", "$0", "$#", "$*"], correctAnswer: "$0",
+                                explanation: "There are some special parameters used by the shell. One of which is $0 which stores the name of the program."
+                            },
+                            {
+                                id: "loce_q9", question: "9. Which of the following is not a special parameter used by the shell?",
+                                options: ["$$", "$*", "$?", "$-"], correctAnswer: "$-",
+                                explanation: "        $$ - displays PID of the current shell\n        $* - displays the complete set of positional parameters as a single string\n        $?  - displays exit status of the last command"
+                            },
+                            {
+                                id: "loce_q10", question: "10. To know the exit status of a command, we can use ____",
+                                options: ["$$", "$*", "$?", "$-"], correctAnswer: "$?",
+                                explanation: "The parameter $? stores the exit status of the last command. It displays the value if the command succeeds and a non zero value if it fails.\n$ grep director.lst  emp.lst  >/dev/null ; echo $?\n1                        // success"
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Using test and [ ] to Evaluate Expressions – 1",
+                        questions: [
+                            {
+                                id: "test1_q1", question: "1. test command can be used to check which of the following?",
+                                options: ["Compare two numbers", "Compare two strings", "Check attributes of a file", "All of the mentioned"], correctAnswer: "All of the mentioned",
+                                explanation: "When we use if to evaluate expressions, we need the test statement because the true or false values returned by expressions can’t be directly handled by if. The test uses certain operators to evaluate the condition on its right and returns either true or false exit status. test works in three ways:\n• compares two numbers\n• compare two strings or a single one for a null value\n• check a file’s attributes"
+                            },
+                            {
+                                id: "test1_q2", question: "2. Which of the following operators is used with test for comparison of numeric values?",
+                                options: ["-eq", "-ne", "-gg", "–eq and -ne"], correctAnswer: "–eq and -ne",
+                                explanation: "There are some comparison operators which are used by test. For example,\n-eq    -    equal to\n-ne    -    not equal to"
+                            },
+                            {
+                                id: "test1_q3", question: "3. We can use comparison operators without a ‘-‘.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "Every numerical comparison operator used by the test begin a hyphen, followed by a two letter string and enclosed by a whitespace on either side."
+                            },
+                            {
+                                id: "test1_q4", question: "4. ___ implies greater than and ____ implies less than.",
+                                options: ["gt, le", "gt, lt", "ge,le", "ge,lt"], correctAnswer: "gt, lt",
+                                explanation: "There are some comparison operators which are used by test. For example,\ngt implies greater than, lt implies less than, le implies less than or equal to, ge implies greater than or equal to."
+                            },
+                            {
+                                id: "test1_q5", question: "5. Which of the following operator is used as a shorthand for test?",
+                                options: ["% %", "[ ]", "& &", "( )"], correctAnswer: "[ ]",
+                                explanation: "UNIX provides a shorthand for test i.e. [ ]. We can use this pair of rectangular brackets enclosing the expression. Thus the following two are equal,\ntest $x  -eq  $y\n[ $x  -eq  $y ]"
+                            },
+                            {
+                                id: "test1_q6", question: "6. It is essential to use whitespaces when we use [].",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "We must provide whitespaces around the operators (like -eq), their operands (like $x) and inside the [ and ]."
+                            },
+                            {
+                                id: "test1_q7", question: "7. test and [ ] can be used for string comparison.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "test can be used to compare strings with another set of operators (like = for equality of strings and != for inequality). For example, [ ! -z $string ] negates [ -z $string ]."
+                            },
+                            {
+                                id: "test1_q8", question: "8. Which one of the following option is used for AND operation in test command?",
+                                options: ["-o", "-a", "-e", "-an"], correctAnswer: "-a",
+                                explanation: "test also permits the checking of more than one condition in the same line using -a (AND) operator. For example,\nIf [ -n “$fname -a  -n “$lname” ]; then\n. . ."
+                            },
+                            {
+                                id: "test1_q9", question: "9. Which one of the following option is used for OR operation in test command?",
+                                options: ["-o", "-a", "-e", "-an"], correctAnswer: "-o",
+                                explanation: "test also permits the checking of more than one condition in the same line using -o (OR) operator. For example,\nIf [ -n “$fname -o  -n “$lname” ] ; then\n. . ."
+                            },
+                            {
+                                id: "test1_q10", question: "10. Which one of the following option is used for checking that the string is not null?",
+                                options: ["-a", "-o", "-z", "-n"], correctAnswer: "-n",
+                                explanation: "test can be used to compare strings with another set of operators. -n is used for checking if the string is not null. For example,\nIf [ -n “$fname ] ;\nthen\necho “$fname”"
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Using test and [ ] to Evaluate Expressions – 2",
+                        questions: [
+                            {
+                                id: "test2_q1", question: "1. Which one of the following option is used for checking that the string is NULL string?",
+                                options: ["-a", "-o", "-z", "-n"], correctAnswer: "-z",
+                                explanation: "test can be used to compare strings with another set of operators. -z is used for checking if the string is null. For example,\nIf [ -z “$fname ] ;\nthen\necho “NULL string”"
+                            },
+                            {
+                                id: "test2_q2", question: "2. We can use a test to test various file attributes.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "test can also be used to test the various file attributes like its type (ordinary, regular or symbolic link) or its permissions (read, write, execute, etc)."
+                            },
+                            {
+                                id: "test2_q3", question: "3. Which option is used for checking if the file exists or not?",
+                                options: ["-e", "-a", "-n", "-f"], correctAnswer: "-e",
+                                explanation: "test can also be used to test the various file attributes like its type (ordinary, regular or symbolic link). To check whether the file exists or not, we can use the -e option. For example,\nIf [ -e $1 ]; then\n     echo “ file exists”"
+                            },
+                            {
+                                id: "test2_q4", question: "4. Which of the following option is used for checking if the file is readable or not?",
+                                options: ["-r", "-f", "-n", "-z"], correctAnswer: "-r",
+                                explanation: "To check if the file exists and is readable we can use -r option. The syntax is -r filename."
+                            },
+                            {
+                                id: "test2_q5", question: "5. Which of the following option is used for checking if the file is writable or not?",
+                                options: ["-e", "-f", "-n", "-w"], correctAnswer: "-w",
+                                explanation: "To check if the file exists and is writable we can use -w option. The syntax is -w filename."
+                            },
+                            {
+                                id: "test2_q6", question: "6. To check if the file exists and is executable we have to use ___ option with test.",
+                                options: ["-e", "-f", "-x", "-w"], correctAnswer: "-x",
+                                explanation: "If we want to check whether the file exists and is executable we have to use the -x option. The syntax is -x filename."
+                            },
+                            {
+                                id: "test2_q7", question: "7. -d option is used for checking if the file exists and is a directory.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "If we want to check whether the file exists and is a directory we have to use the -d option. The syntax is -d filename."
+                            },
+                            {
+                                id: "test2_q8", question: "8. ____ option is used for checking whether a particular file is older than a specified file.",
+                                options: ["-ef", "-old", "-nt", "-ot"], correctAnswer: "-ot",
+                                explanation: "If we have two file namely file01 and file02 and we want to check if file01 is older than file02, we have to use -ot option with test. The syntax is file01 -ot file02. Similarly, to check whether file01 is newer than file02 we’ve to use -nt option. These commands work in korn and bash shell only."
+                            },
+                            {
+                                id: "test2_q9", question: "9. To check if two files are linked to each other, we can use -ef option.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "If we have two files namely file01 and file02 and we want to check if file01 is linked with file02, we have to use -ef option with test. The syntax is file01 -ef file02."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Case and Expr Command",
+                        questions: [
+                            {
+                                id: "case_expr_q1", question: "1. ____ statement matches an expression for more than one alternative.",
+                                options: ["for", "while", "elif", "case"], correctAnswer: "case",
+                                explanation: "The case statement is the second conditional offered by the shell. This statement matches an expression for more than one alternative. case statements are used in menu-driven programs. The syntax of the case statement is:\ncase expression in\n   pattern1) commands1 ;;\n   pattern2) commands2 ;;\n   . . . . .\nesac"
+                            },
+                            {
+                                id: "case_expr_q2", question: "2. Every pattern in case statement in terminated with a _____",
+                                options: [";", ":", ";;", "//"], correctAnswer: ";;",
+                                explanation: "case statement matches an expression for more than one alternative. Every pattern in the case statement is terminated with a ;; .\ncase expression in\n   pattern1) commands1 ;;\n   pattern2) commands2 ;;\n   . . . . .\nesac"
+                            },
+                            {
+                                id: "case_expr_q3", question: "3. case statement should have a corresponding closing esac.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Alike every if statement is closed with a fi, case statement should also be closed with a corresponding esac. Without it, we’ll encounter an error."
+                            },
+                            {
+                                id: "case_expr_q4", question: "4. The ___ option in case statement matches any option not matched by the previous options.",
+                                options: ["^", "$", "*", "//"], correctAnswer: "*",
+                                explanation: "The last option (*) or the default option is used for matching any option which is not matched by any of the previously specified options. For example,\ncase “$choice” in\n   1)  ls  -l ;;\n   2)  ps -f ;;\n   3) who\n   *) echo “invalid option” \nesac"
+                            },
+                            {
+                                id: "case_expr_q5", question: "5. case can also be used for matching multiple patterns.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "case statement can also specify the same action for more than one pattern. Suppose, a programmer wants to develop a logic for both Y or y (or N or n), then he/she can make use of the case statement in the following manner:\necho “do you wish to continue? (y/n) : ”\nread answer\ncase  “$answer” in\n    y|Y) ;;            //NULL statement, no action to be performed \n    n|N) exit ;;"
+                            },
+                            {
+                                id: "case_expr_q6", question: "6. case can also use wildcards to pattern matching.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "case statement has superb string matching feature that uses wildcards. It uses the filename matching meta-characters *, ? and the character class for matching strings."
+                            },
+                            {
+                                id: "case_expr_q7", question: "7. Which command is used for computation and string handling?",
+                                options: ["expr", "case", "if", "read"], correctAnswer: "expr",
+                                explanation: "The bourne shell can check whether an integer is greater than another or not, but it doesn’t have any computing features at all. It has to rely totally on expr command for that purpose. This command performs two functions:\n• Performs arithmetic operations on integers\n• Manipulates strings"
+                            },
+                            {
+                                id: "case_expr_q8", question: "8. expr can perform ____ arithmetic operations.",
+                                options: ["2", "4", "5", "3"], correctAnswer: "5",
+                                explanation: "expr command can perform four basic arithmetic operations as well as the modulus function. For example,\n$ x=5  y=10\n$ expr $x + $y\n$ expr $x - $y\n$ expr $x \\* $y        // asterisk has to escaped\n$ expr $y / $x\n$ expr $y % $x"
+                            },
+                            {
+                                id: "case_expr_q9", question: "9. Which of the following is performed by expr string handling’s function?",
+                                options: ["determine the length of string", "extract a substring", "locate the position of a character in a string", "determine the length of string, extract and locate the position of the string"], correctAnswer: "determine the length of string, extract and locate the position of the string",
+                                explanation: "Though expr’s string handling features are not that elegant, bourne shell users hardly have any choice. For evaluating strings expr uses two expressions separated by a colon."
+                            },
+                            {
+                                id: "case_expr_q10", question: "10. The string to be worked upon is placed on the left of the colon when using expr string handling function.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "For evaluating strings expr uses two expressions separated by a colon. The string to be worked upon is placed on the left of the colon while a regular expression is placed on its right."
+                            },
+                            {
+                                id: "case_expr_q11", question: "11. Which symbol is used for finding the length of the string?",
+                                options: [".", "*", ".*", ".*."], correctAnswer: ".*",
+                                explanation: "The length of the string can be extracted using .* . This regular expression signifies to expr that it has to display the number of characters matching the pattern i.e. the length of the entire string. For example,\n$ expr “sanfoundry” :  ‘.*’\n10"
+                            },
+                            {
+                                id: "case_expr_q12", question: "12. Which of the following pattern is used for extracting a substring using expr?",
+                                options: ["/( )", "\\(. .\\)", ". .\\)", "\\\\("], correctAnswer: "\\(. .\\)",
+                                explanation: "expr can extract a substring enclosed by the escaped characters \\ ( and \\). For example, to extract ‘03’ from the string 2003 use the following command:\n$ str= 2003\n$ expr “$str” :  ‘. .\\(. .\\)’\n03"
+                            },
+                            {
+                                id: "case_expr_q13", question: "13. For locating the first position of a character in a string we can use expr command.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "expr command can also locate the first occurrence of character inside a string. For example, to locate the position of character d in the string ‘abdullah’, we have to count the number of characters which are not ‘d’ ([^d]*),\n$ str=abdullah ; expr “$str”  :  ‘[^d]*d’\n3"
+                            },
+                            {
+                                id: "case_expr_q14", question: "14. expr is a _____ command",
+                                options: ["internal", "external", "shell", "derived"], correctAnswer: "external",
+                                explanation: "expr command is an external command."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Shell Programming using Various Commands – 1",
+                        questions: [
+                            {
+                                id: "spvc1_q1", question: "1. Which of the following commands let us perform a set of instructions repeatedly?",
+                                options: ["for", "while", "until", "for, while, until"], correctAnswer: "for, while, until",
+                                explanation: "For repeatedly performing a set of instructions, we have to use loops. Shell features three types of loops —while, for and until. All of them repeat the instruction set enclosed by certain keywords."
+                            },
+                            {
+                                id: "spvc1_q2", question: "2. Which of the following keywords are used in while loop?",
+                                options: ["do", "done", "then", "do and done"], correctAnswer: "do and done",
+                                explanation: "while loop repeatedly performs a set of instructions until the control command returns a true exit status. The general syntax for while loop is:\nwhile  condition is true\ndo\n   commands\ndone"
+                            },
+                            {
+                                id: "spvc1_q3", question: "3. until loop operates with a reverse logic as used in while loop.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Shell also offers an until statement which operates with a reverse logic used in while. With until the loop body is executed as long as the condition remains false."
+                            },
+                            {
+                                id: "spvc1_q4", question: "4. Which one of the following is used for looping with a list?",
+                                options: ["while", "until", "case", "for"], correctAnswer: "for",
+                                explanation: "The shell’s for loop differs in structure as used in C. for loop doesn’t test a condition but it uses a list instead. The syntax for using for loop is:\nfor variable in list\ndo\n    commands\ndone"
+                            },
+                            {
+                                id: "spvc1_q5", question: "5. Which of the following loop statements uses do and done keyword?",
+                                options: ["for", "while", "case", "for and while"], correctAnswer: "for and while",
+                                explanation: "Like while loop, for also uses the keywords do and done, but the additional parameters used in for are variables and list."
+                            },
+                            {
+                                id: "spvc1_q6", question: "6. Which command is used for changing filename extensions?",
+                                options: ["chown", "rename", "basename", "rm"], correctAnswer: "basename",
+                                explanation: "basename command is used for changing the extensions of a group of filenames. It extracts the “base” filename from an absolute filename. For example,\n$ basename  file01.txt  txt\nfile01            // txt stripped off"
+                            },
+                            {
+                                id: "spvc1_q7", question: "7. Which command is used by the shell for manipulating positional parameters?",
+                                options: ["set", "cut", "case", "paste"], correctAnswer: "set",
+                                explanation: "set statement is an internal command which assigns its arguments to positional parameters $1, $2 and so on. For example, the following command will assign the value 1345 to $1 and 5678 to $2,\n$ set 1345  5678\n$ _\n$ echo “\\$1 is $1, \\$2 is $2”\n$1 is 1345, $2 is 5678"
+                            },
+                            {
+                                id: "spvc1_q8", question: "8. ____ statement is used for shifting arguments left.",
+                                options: ["set", "shift", "cut", "paste"], correctAnswer: "shift",
+                                explanation: "shift statement transfers the content of a positional parameter to its immediate lower numbered one. This process continues as many times as shift is invoked. For example, when called once, $2 becomes $1 and $3 becomes $2 and so on.\n$ echo “$@”\nWed Jan 8 09:48:44 IST 2017\n$ echo $1 $2 $3\nWed Jan 8\n$ shift\n$ echo $1 $2 $3\nJan 8 09:48:44        // parameters shifted"
+                            },
+                            {
+                                id: "spvc1_q9", question: "9. Which one of the following is an internal command?",
+                                options: ["cut", "expr", "set", "Is"], correctAnswer: "set",
+                                explanation: "set statement is an internal command which assigns its arguments to positional parameters $1, $2 and so on. While cut, Is and expr are external commands."
+                            },
+                            {
+                                id: "spvc1_q10", question: "10. Which symbol is used with the set command for command substitution?",
+                                options: ["–", "—", "??", "_"], correctAnswer: "—",
+                                explanation: "set statement can also be used for command substitution. There can be a problem especially when the output of the command begins with a-.It may happen that set interprets it as an option. To avoid this condition, we have to use — (double hyphen) immediately after set. For example,\n$ set -- `ls -lfile01`        //first - now taken care of"
+                            },
+                            {
+                                id: "spvc1_q11", question: "11. The ____ allows us to read data from the same file containing the script.",
+                                options: [">>", "<<", "!!", "—"], correctAnswer: "<<",
+                                explanation: "It may happen that the data our program wants to read is fixed and limited. The shell uses << symbol to read data from the same file containing the script. This is referred to as a here document, signifying that the data is here rather than in a separate file."
+                            },
+                            {
+                                id: "spvc1_q12", question: "12. Any command using standard input can take the input from here document.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "The shell uses >> symbol to read data from the same file containing the script. This is referred to as a here document. It allows any command (which uses standard input) to take input from it."
+                            },
+                            {
+                                id: "spvc1_q13", question: "13. Which of the following command doesn’t accept a filename as an argument?",
+                                options: ["cut", "ls", "paste", "mailx"], correctAnswer: "mailx",
+                                explanation: "The mailx command doesn’t accept any filename as its argument. So if we want to give input to the mailx command, we can use the here document."
+                            },
+                            {
+                                id: "spvc1_q14", question: "14. We can use the here document with interactive programs also.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Many commands require input from the user. So we can use the here document with interactive programs also. In this manner, we can instruct any script to take the input non-interactively by supplying the input using the here document. For example,\n$ empone.sh <<END        //empone.sh is a script\n>manager\n>emp.lst            \n> END\nHence by using the above commands, we can search for the pattern ‘manager’ in emp.lst ."
+                            },
+                            {
+                                id: "spvc1_q15", question: "15. ____ command is the appropriate way to interrupt a program.",
+                                options: ["kill", "SIGKILL", "INT", "trap"], correctAnswer: "trap",
+                                explanation: "Any shell script is terminated when the interrupt key is pressed. But this is not the appropriate way of doing so. For interrupting any program we should use the trap command."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Shell Programming using Various Commands – 2",
+                        questions: [
+                            {
+                                id: "spvc2_q1", question: "1. Which of the following option is used with a set for debugging shell scripts?",
+                                options: ["-a", "-x", "-d", "-e"], correctAnswer: "-x",
+                                explanation: "As we know that set command is used for assigning values to positional parameters, it also serves as debugging tool. For this purpose, we’ve to use -x option with it."
+                            },
+                            {
+                                id: "spvc2_q2", question: "2. Suppose x =10, then what will be the value of x$x$?",
+                                options: ["undefined", "erroneous", "100", "x10$"], correctAnswer: "x10$",
+                                explanation: "Since x contains the value 10, and $ symbol is used with any variable for displaying its value. So $x will display 10. Hence the output will be x10$."
+                            },
+                            {
+                                id: "spvc2_q3", question: "3. Given x=10 then,\nx$x$ == $x$x.\nThe given statement is ____",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "x$x$ will be equal to x10$ and $x$x will be equal to 1010. Hence they are not equal."
+                            },
+                            {
+                                id: "spvc2_q4", question: "4. A shell script stopped running when we change its name. Why?",
+                                options: ["location of the file changed", "we can’t change the name of the script", "$0 was used in the script", "many possible reasons"], correctAnswer: "$0 was used in the script",
+                                explanation: "A shell script will stop running when we change its name if we’d used the positional parameter $0 in it as $0 contains the name of the script file."
+                            },
+                            {
+                                id: "spvc2_q5", question: "5. Where is the exit status of a command stored?",
+                                options: ["$0", "$>", "$1", "$?"], correctAnswer: "$?",
+                                explanation: "The exit status of a command is that particular value which is returned by the command to its parent. This value is stored in $?."
+                            },
+                            {
+                                id: "spvc2_q6", question: "6. Which of the following is false?",
+                                options: ["here document provides standard input to any script non interactively", "read command is used for making scripts interactive", "$* stores the number of arguments specified", "&& and || are logical operators"], correctAnswer: "$* stores the number of arguments specified",
+                                explanation: "The shell uses << symbol to read data from the same file containing the script. This is referred to as a here document. read command allows us to take input from the user to make the script interactive. && and || are logical operators which allow conditional execution. $* stores the complete set of positional parameters as a single string."
+                            },
+                            {
+                                id: "spvc2_q7", question: "7. test statement cannot ______",
+                                options: ["compare two numbers", "compare two strings", "compare two files", "check a file’s attributes"], correctAnswer: "compare two files",
+                                explanation: "test works in three ways:\n• compare two numbers\n• compare two strings\n• check a file’s attributes"
+                            },
+                            {
+                                id: "spvc2_q8", question: "8. ____ option is used with a test for checking if the file exists and has the size greater than zero.",
+                                options: ["-f", "-r", "-e", "-s"], correctAnswer: "-s",
+                                explanation: "test can also be used for performing various file tests like checking whether the file is a regular file, or is it readable, writable or executable. To check whether the file exists and has the size greater than zero, we have to use -s option with test. For example,\n$ test -s filename"
+                            },
+                            {
+                                id: "spvc2_q9", question: "9. Every time shift command is used, the leftmost variable is lost.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "shift statement is used for shifting the positional parameters to its immediate lower ones. Every time we use shift, the leftmost variable gets lost; s it should be saved in a variable before using shift."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Administrator Specific Commands and Privileges – 1",
+                        questions: [
+                            {
+                                id: "admin1_q1", question: "1. The system administrator is also known as _____",
+                                options: ["master user", "superuser", "root user", "master and super user"], correctAnswer: "master and super user",
+                                explanation: "The system administrator has access to huge powers. This entrusted person is also known as the root user or superuser."
+                            },
+                            {
+                                id: "admin1_q2", question: "2. Which of the following functionalities is carried by the root user?",
+                                options: ["managing disk space", "performing backup", "changing attributes of a file", "managing disk space, performing backup, changing attributes of a file"], correctAnswer: "managing disk space, performing backup, changing attributes of a file",
+                                explanation: "superuser or the root user has access to vast powers like he/she is responsible for managing the disk space, performing backups, changing attributes of files, maintaining user accounts etc."
+                            },
+                            {
+                                id: "admin1_q3", question: "3. What is the login name of system administrator?",
+                                options: ["root", "su", "master", "admin"], correctAnswer: "root",
+                                explanation: "UNIX provides a special login name for system administrator i.e. root. This account doesn’t need to be created separately but comes with every system. The password for the root user is set at the time of installation."
+                            },
+                            {
+                                id: "admin1_q4", question: "4. What is the prompt for system administrator?",
+                                options: ["$", "%", "#", "&"], correctAnswer: "#",
+                                explanation: "The prompt of the root user is # whereas the prompt for normal users or non-privileged users is % or $."
+                            },
+                            {
+                                id: "admin1_q5", question: "5. When we log in as root user we are placed in ____",
+                                options: ["/bin", "/root", "/system", "/admin"], correctAnswer: "/root",
+                                explanation: "When we log in to the system as root user we are normally placed in the root’s home directory. Depending on the system we are using this directory can be / or /root."
+                            },
+                            {
+                                id: "admin1_q6", question: "6. The PATH for superuser doesn’t include current directory.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Since we know that the superuser has to constantly navigate through the file system, it may happen that he/she unintentionally execute the scripts or programs written by other users. That’s why the PATH for a superuser doesn’t include the current directory."
+                            },
+                            {
+                                id: "admin1_q7", question: "7. Which command is used for acquiring superuser status?",
+                                options: ["pu", "su", "admn", "super"], correctAnswer: "su",
+                                explanation: "Any user can acquire the status of superuser by using the su command. The only condition that needs to be fulfilled here is, he/she must be aware of the root password. For example,\n$ su\nPassword: *****        //root’s password\n#pwd\n/home/abd             //prompt changes ( super user mode)"
+                            },
+                            {
+                                id: "admin1_q8", question: "8. Which of the following is used for creating user’s environment?",
+                                options: ["su", "su –", "-su", "su – –"], correctAnswer: "su –",
+                                explanation: "The administrator can create a simulated environment using su – for any user. This command creates the user’s environment without taking the login-password route. For example,\n$ su - abd\nAbove command will execute abd’s .profile and creates a temporary abd’s environment."
+                            },
+                            {
+                                id: "admin1_q9", question: "9. User’s environment mode created using su – is terminated using ____",
+                                options: ["ctrl-v", "ctrl-q", "ctrl-d", "ctrl-f"], correctAnswer: "ctrl-d",
+                                explanation: "The administrator can create a simulated environment using su – for any user. This mode runs a separate sub-shell and is terminated using ctrl-d or exit."
+                            },
+                            {
+                                id: "admin1_q10", question: "10. Which command is used by the system administrator to set the date of the system?",
+                                options: ["dt", "su", "date", "chdt"], correctAnswer: "date",
+                                explanation: "date command is used by users for displaying the system date. Same command is used by the system administrator to change/set the system date. The argument is an eight-character string of the form MMDDhhmm. For example,\n# date 08122134\nSun Aug  12 21:34:00 IST 2018"
+                            },
+                            {
+                                id: "admin1_q11", question: "11. ____ command allows superuser to communicate with users.",
+                                options: ["comm", "cron", "date", "wall"], correctAnswer: "wall",
+                                explanation: "The wall command can be used by the administrator to address all users simultaneously. For example,\n# wall\nKindly everyone shut down the system before leaving the lab.\n[ctrl-d]\nAll the users currently logged in will receive this message on their terminal."
+                            },
+                            {
+                                id: "admin1_q12", question: "12. ____ command is used for setting limits on file size.",
+                                options: ["limit", "flimit", "ulimit", "flim"], correctAnswer: "ulimit",
+                                explanation: "The ulimit command is used for imposing a restriction on the maximum size of the file that a user is permitted to create on the system. For example,\n# ulimit  209788        // measured in 512-byte locks"
+                            },
+                            {
+                                id: "admin1_q13", question: "13. The access to the use of at and batch is restricted and controlled by ___ and ____",
+                                options: ["at.allow, batch.allow", "at.allow, at.deny", "at.allow , batch.deny", "batch. deny, batch.allow"], correctAnswer: "at.allow, at.deny",
+                                explanation: "The access to the use of at and batch is restricted and controlled by the files at.allow and at.deny. If at.allow is present, only those users which are listed in this file can use at and batch. If this file is not present then the system checks at.deny for users who are blocked from using these commands."
+                            },
+                            {
+                                id: "admin1_q14", question: "14. If both at.allow and at.deny are not present, only the system administrator can access at and batch command.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "The access to the use of at and batch is restricted and controlled by the files at.allow and at.deny. If at.allow is present, only those users which are listed in this file can use at and batch. If this file is not present then the system checks at.deny for users who are blocked from using these commands. If neither file is present, only the administrator can invoke at and batch."
+                            },
+                            {
+                                id: "admin1_q15", question: "15. ____ command is used by the superuser for changing root’s password.",
+                                options: ["pd", "password", "passwd", "pwd"], correctAnswer: "passwd",
+                                explanation: "The passwd command prompts for existing password when this command is used by a non-privileged user but when the same command is used by the superuser it behaves much leniently and doesn’t ask for the old password this time. For example,\n# passwd\n/* diagnostic messages displayed */\nNew-password : ******\nRe-enter password: ******\nPassword Changed"
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Administrator Specific Commands and Privileges – 2",
+                        questions: [
+                            {
+                                id: "admin2_q1", question: "1. The SUID for any file can be set by the administrator using ____",
+                                options: ["chmod", "chmod u+s filename", "chmod s filename", "chmod us filename"], correctAnswer: "chmod u+s filename",
+                                explanation: "The SUID (set-user-ID) lets a process have the privileges of the owner of the file during the instance of the program. The SUID for any file can be set by the administrator using chmod command. For example,\n# chod u+s  filename."
+                            },
+                            {
+                                id: "admin2_q2", question: "2. The superuser can set the sticky bit.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "The sticky bit (also called the saved text bit) when applied to a regular file ensures that the text image of the program with the bit set is permanently kept in the swap area. The sticky bit also comes with a security feature when applied to directories. To apply the sticky bit to a directory superuser can use 1 as the additional bit with chmod in the following manner:\n# chmod  1775  dirone\n# ls  -l  a.txt\ndrwxrwxr-t  2     abd     dialin     2048   Apr 23  09:04   Dirone"
+                            },
+                            {
+                                id: "admin2_q3", question: "3. Which of the following commands are used for the maintenance of user accounts?",
+                                options: ["useradd", "usermod", "userdel", "useradd, usermod, userdel"], correctAnswer: "useradd, usermod, userdel",
+                                explanation: "For the creation and maintenance of user accounts, UNIX provides to the superuser three commands —useradd, usermod and userdel."
+                            },
+                            {
+                                id: "admin2_q4", question: "4. _____ command is used for creating a new group.",
+                                options: ["chgrp", "chown", "addgrp", "groupadd"], correctAnswer: "groupadd",
+                                explanation: "groupadd command allows us to create a new group. For example, to create a group named OFFICEMANAG with a GID (group ID) of 398, use the following command:\ngroupadd -g 398  OFFICEMANAG"
+                            },
+                            {
+                                id: "admin2_q5", question: "5. For adding a new user to the system, we have to use ____ command.",
+                                options: ["grpadd", "useradd", "uadd", "adduser"], correctAnswer: "useradd",
+                                explanation: "The useradd command is used to add new users to the system. Before using this command the super user should provide all the parameters related to the user in the command line itself. For example,\n# useradd  -u  134  -g  OFFICEMANAG  -c  “The RDMS”  -d  /home/group   -s   /bin/bash   -m group"
+                            },
+                            {
+                                id: "admin2_q6", question: "6. All the user information is stored in _____",
+                                options: ["etc/passwd", "bin/passwd", "bin/users/passwd", "etc/shadow"], correctAnswer: "etc/passwd",
+                                explanation: "All the user information except the password encryption is stored in /etc/passwd. The encryption itself is stored in /etc/shadow. There are seven fields in /etc/passwd."
+                            },
+                            {
+                                id: "admin2_q7", question: "7. Which of the following is not a field stored in /etc/passwd?",
+                                options: ["username", "password", "UID, GID", "encrypted password"], correctAnswer: "encrypted password",
+                                explanation: "The password encryption itself is stored in /etc/shadow while there are seven fields in /etc/passwd namely:\n• Username\n• Password\n• UID\n• GID\n• GCOS\n• HOME directory\n• Login shell"
+                            },
+                            {
+                                id: "admin2_q8", question: "8. Which command is used by the administrator to modify some parameters of existing users?",
+                                options: ["userdel", "userchange", "useradd", "usermod"], correctAnswer: "usermod",
+                                explanation: "usermod command is used for modifying some parameters set with useradd. For example, sometimes users need to change their login shell, to do so root user will invoke the following command:\n# usermod  -s  /bin/bash   oracle        //sets bash as the login shell for user oracle"
+                            },
+                            {
+                                id: "admin2_q9", question: "9. userdel is used for removing users from the system.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "We can remove users from the system using the userdel command. To remove a particular user from the system, use the following command:\n# userdel  oracle    // remove user amed oracle from system but doesn’t delete his files"
+                            },
+                            {
+                                id: "admin2_q10", question: "10. shutdown command is used by the administrator for shutting down the system.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "The system administrator is also responsible for shutting down the system. For this purpose, shutdown command is used. This command performs various activities before shutting the system."
+                            },
+                            {
+                                id: "admin2_q11", question: "11. Which option is used with shutdown command to override the default waiting time?",
+                                options: ["-g", "-e", "-s", "-i"], correctAnswer: "-g",
+                                explanation: "-g option is used with shutdown command to override the default waiting time (one minute). For example,\nshutdown  -g2            // shut down the machine after 2 minutes"
+                            },
+                            {
+                                id: "admin2_q12", question: "12. Which one of the following command will shutdown and reboot the system?",
+                                options: ["shutdown -g2", "shutdown -g2 i6", "shutdown -g2 -g0", "shutdown -y -g0 -i6"], correctAnswer: "shutdown -y -g0 -i6",
+                                explanation: "-y option is used with shutdown command for shutting the system immediately. Similarly, we can use the shutdown command to turn the machine off in various ways. To shut down and reboot the system, use the following command:\nshutdown -y -g0 -i6."
+                            },
+                            {
+                                id: "admin2_q13", question: "13. Which command is used for reporting free space on the disk?",
+                                options: ["fd", "df", "du", "sg"], correctAnswer: "df",
+                                explanation: "As we know that, UNIX OS is supported by various multiple file systems. The df (disk free) command reports the amount of space available for each file system separately."
+                            },
+                            {
+                                id: "admin2_q14", question: "14. ___ option is used with df command for displaying the total amount of disk space in the file system.",
+                                options: ["-a", "-d", "-t", "-e"], correctAnswer: "-t",
+                                explanation: "The -t (total) option when used with df command displays free space on each file system as well as the total amount of disk space in the file system."
+                            },
+                            {
+                                id: "admin2_q15", question: "15. ___ option is used with df command for displaying the total amount of disk space in the file system in terms of Kilobytes.",
+                                options: ["-a", "-d", "-t", "-k"], correctAnswer: "-k",
+                                explanation: "The df (disk free) command reports the amount of space available for each file system separately. -k option is used with df command for displaying the total amount of disk space in the file system in terms of Kilobytes."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Administrator Specific Commands and Privileges – 3",
+                        questions: [
+                            {
+                                id: "admin3_q1", question: "1. Which command is used to find out the consumption of a specific directory?",
+                                options: ["du", "df", "mem", "dv"], correctAnswer: "du",
+                                explanation: "Sometimes, we may need to find out the consumption of a specific directory rather than an entire file system. For this purpose, du command is used. This command reports usage by recursive examination of the directory structure."
+                            },
+                            {
+                                id: "admin3_q2", question: "2. Which option is used with du command for finding only the summary of disk usage by a specific directory?",
+                                options: ["-e", "-f", "-e", "-s"], correctAnswer: "-s",
+                                explanation: "If we use the du command, then by default it displays the usage of each subdirectory of its argument along with a summary at the end. If we want to display the only summary then we can use -s option with du command. For example,\n# du  -s  /home/user10/doc\n78954    /home/user10/doc"
+                            },
+                            {
+                                id: "admin3_q3", question: "3. du command can also be used for reporting the disk space consumed by each user.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Most of the dynamic space in the system is consumed by users, their directories and files. We can use the following command if we want to know the disk space consumed by each user.\n# du  -s  /home/*"
+                            },
+                            {
+                                id: "admin3_q4", question: "4. A device file contains no data.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "A device file is a file which is built into the kernel for each and every device of the system. Whenever we open a device, read or write to it, all these functions are performed using device files."
+                            },
+                            {
+                                id: "admin3_q5", question: "5. All the device files are stored in _____",
+                                options: ["kernel", "/home/usr", "/dev", "/home"], correctAnswer: "/dev",
+                                explanation: "A device file is a file which is built into the kernel for each and every device of the system. All the device files are stored in /dev or in its subdirectories. To view the list of device files on your system, use the following command:\n# ls  -l  /dev"
+                            },
+                            {
+                                id: "admin3_q6", question: "6. The set of routines needed to operate a specific device is known as ________",
+                                options: ["device file", "device program", "device driver", "device software"], correctAnswer: "device driver",
+                                explanation: "The set of routines needed to operate a specific device is known as a device driver. Whenever a particular device is accessed, the kernel calls the correct device driver and passes some parameters to it."
+                            },
+                            {
+                                id: "admin3_q7", question: "7. For formatting diskettes, we can use the _______ command.",
+                                options: ["format", "fdformat", "frmt", "format and fdformat"], correctAnswer: "format and fdformat",
+                                explanation: "Before backing up data to a floppy, we may need to format it. For this purpose, either format or fdformat command is used (whichever is supported by your system)."
+                            },
+                            {
+                                id: "admin3_q8", question: "8. ___ command performs copying of diskettes.",
+                                options: ["pp", "df", "du", "dd"], correctAnswer: "dd",
+                                explanation: "dd (disk jump) command can be used in copying files systems, but is majorly used for copying media (floppies and tapes)."
+                            },
+                            {
+                                id: "admin3_q9", question: "9. Which of the following is a backup program?",
+                                options: ["bckup", "trap", "ciop", "cpio"], correctAnswer: "cpio",
+                                explanation: "As a system administrator, you are responsible for creating a backup of the data which resides on your system. For this purpose, there are mainly two backup programs which are extensively used i.e. cpio and tar. The cpio command copies files to and from a backup device."
+                            },
+                            {
+                                id: "admin3_q10", question: "10. cpio program can be used with redirection and piping.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "The cpio command copies files to and from a backup device. It uses the standard input for taking the list of filenames and then copies them with their content and header to standard output which can also be redirected to a file or a device. Hence, cpio can be used with redirection and piping."
+                            },
+                            {
+                                id: "admin3_q11", question: "11. Which of the following options are used with the cpio program?",
+                                options: ["-a", "-i", "-o", "-i and -o"], correctAnswer: "-i and -o",
+                                explanation: "cpio command uses two key options, -o (output) and -i (input). The -o option is used for backing up files while the -i option is used for restoring files."
+                            },
+                            {
+                                id: "admin3_q12", question: "12. tar command uses ___ option for backing up files.",
+                                options: ["-a", "-c", "-d", "-f"], correctAnswer: "-c",
+                                explanation: "The tar (tape archive) command is more powerful than cpio command. For creating a backup using tar, we have to use the -c option. For example,\n# tar -cvf  /dev/rdsk/f0987yu   /home/user/doc/SQL"
+                            },
+                            {
+                                id: "admin3_q13", question: "13. For restoring files using tar, ____ option is used.",
+                                options: ["-a", "-c", "-v", "-x"], correctAnswer: "-x",
+                                explanation: "Files can be restored using -x option with the tar command. When no file or directory is specified it restores all the files from the backup device.\n# tar  -xvf  /dev/rdsk/f0987yu"
+                            },
+                            {
+                                id: "admin3_q14", question: "14. For displaying the archive, -t option is used with the tar command.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "-t option alike cpio is also used with tar command for displaying the archive. For example,\n# tar  -tvf  /dev/rdsk/f0987yu"
+                            },
+                            {
+                                id: "admin3_q15", question: "15. tar command can use the standard input to obtain its file list.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "tar command cannot use the standard input to obtain its file list. It accepts only file and directory name as arguments."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const mainChapterTitleEl = document.getElementById('mainChapterTitle');
+        const questionProgressTextEl = document.getElementById('questionProgressText');
+        const scoreDisplayEl = document.getElementById('scoreDisplay');
+        const progressBarEl = document.getElementById('progressBar');
+        const quizContentAreaEl = document.getElementById('quizContentArea');
+        const nextChapterBtn = document.getElementById('nextChapterBtn');
+
+        let currentChapterIndex = 0; // This page handles only one chapter
+        let score = 0;
+        let totalQuestionsInChapter = 0;
+        let questionsAnsweredCount = 0;
+        let allQuestionElementsMap = new Map();
+        let currentActiveQuestionId = null;
+
+        const sunIcon = `<i class="fas fa-sun text-xl text-yellow-400"></i>`;
+        const moonIcon = `<i class="fas fa-moon text-xl text-gray-700 dark:text-yellow-400"></i>`;
+
+        function setDarkMode(isDark) {
+            const htmlEl = document.documentElement;
+            if (isDark) {
+                htmlEl.classList.add('dark');
+                darkModeToggle.innerHTML = sunIcon;
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                htmlEl.classList.remove('dark');
+                darkModeToggle.innerHTML = moonIcon;
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            setDarkMode(!document.documentElement.classList.contains('dark'));
+        });
+
+        function renderChapter() {
+            quizContentAreaEl.innerHTML = '';
+            allQuestionElementsMap.clear();
+            const chapterData = quizData[currentChapterIndex];
+            mainChapterTitleEl.textContent = chapterData.chapterName;
+
+            score = 0;
+            questionsAnsweredCount = 0;
+            totalQuestionsInChapter = 0;
+            let firstQuestionId = null;
+
+            chapterData.topics.forEach(topic => {
+                totalQuestionsInChapter += topic.questions.length;
+            });
+            updateProgressAndScore();
+
+            chapterData.topics.forEach((topic) => {
+                const topicHeader = document.createElement('h3');
+                topicHeader.className = 'text-xl md:text-2xl font-semibold text-purple-600 dark:text-purple-400 mt-10 mb-6 pt-6 border-t border-gray-300 dark:border-gray-600 first:mt-0 first:pt-0 first:border-t-0';
+                topicHeader.textContent = topic.topicName;
+                quizContentAreaEl.appendChild(topicHeader);
+
+                topic.questions.forEach((q) => {
+                    if (!firstQuestionId) firstQuestionId = q.id;
+
+                    const questionBlock = document.createElement('div');
+                    questionBlock.id = `qblock-${q.id}`;
+                    questionBlock.className = 'quiz-question-block mb-10 p-5 bg-gray-50 dark:bg-gray-750 rounded-xl shadow-lg';
+                    questionBlock.dataset.questionId = q.id;
+
+                    const questionTextEl = document.createElement('p');
+                    questionTextEl.className = 'text-md md:text-lg font-medium mb-5 text-gray-800 dark:text-gray-200';
+                    questionTextEl.innerHTML = q.question.replace(/\n/g, '<br>');
+                    questionBlock.appendChild(questionTextEl);
+
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.className = 'grid grid-cols-1 md:grid-cols-2 gap-3 mb-4';
+                    q.options.forEach((option, optionIdx) => {
+                        const button = document.createElement('button');
+                        button.innerHTML = `<span class="text-left flex-grow">${String.fromCharCode(97 + optionIdx)}) ${option}</span>`;
+                        button.className = 'option-btn w-full text-left p-3 bg-gray-200 dark:bg-gray-600 hover:bg-blue-100 dark:hover:bg-blue-800 rounded-lg border-2 border-gray-300 dark:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-between disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow-md';
+                        button.dataset.questionId = q.id;
+                        button.dataset.optionIndex = optionIdx;
+                        button.disabled = true;
+                        button.addEventListener('click', handleAnswerSelection);
+                        optionsContainer.appendChild(button);
+                    });
+                    questionBlock.appendChild(optionsContainer);
+
+                    const feedbackEl = document.createElement('div');
+                    feedbackEl.className = 'feedback-area min-h-[25px] text-sm mb-2';
+                    questionBlock.appendChild(feedbackEl);
+
+                    const explanationEl = document.createElement('div');
+                    explanationEl.className = 'explanation-area p-3 rounded-md text-sm leading-relaxed';
+                    explanationEl.innerHTML = `<strong class="block mb-1">Explanation:</strong> ${q.explanation.replace(/\n/g, '<br>')}`;
+                    questionBlock.appendChild(explanationEl);
+
+
+                    quizContentAreaEl.appendChild(questionBlock);
+                    allQuestionElementsMap.set(q.id, questionBlock);
+                });
+            });
+
+            if (firstQuestionId) {
+                activateQuestion(firstQuestionId);
+            }
+            nextChapterBtn.classList.add('hidden');
+            nextChapterBtn.textContent = "Next Chapter ➝ Awk & Perl";
+            nextChapterBtn.onclick = () => {
+                window.location.href = 'chapter-12.html'; // Assuming chapter 12
+            };
+        }
+
+        function activateQuestion(questionId) {
+            if (currentActiveQuestionId) {
+                const prevActiveBlock = allQuestionElementsMap.get(currentActiveQuestionId);
+                if (prevActiveBlock) {
+                    prevActiveBlock.classList.remove('active-question');
+                }
+            }
+
+            currentActiveQuestionId = questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+            if (questionBlock) {
+                questionBlock.classList.add('active-question');
+                questionBlock.querySelectorAll('.option-btn').forEach(btn => btn.disabled = false);
+                setTimeout(() => {
+                    const rect = questionBlock.getBoundingClientRect();
+                    const headerHeight = document.querySelector('header.sticky').offsetHeight || 150;
+                    if (rect.top < headerHeight || rect.bottom > (window.innerHeight - 50)) {
+                        questionBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 150);
+            }
+        }
+
+
+        function findQuestionData(questionId) {
+            for (const topic of quizData[currentChapterIndex].topics) {
+                const question = topic.questions.find(q => q.id === questionId);
+                if (question) return question;
+            }
+            return null;
+        }
+
+        function handleAnswerSelection(event) {
+            const selectedButton = event.currentTarget;
+            const questionId = selectedButton.dataset.questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+
+            if (!questionBlock || questionBlock.classList.contains('answered-question')) return;
+
+            const questionData = findQuestionData(questionId);
+            if (!questionData) return;
+
+            const selectedOptionIndex = parseInt(selectedButton.dataset.optionIndex);
+            const selectedOptionText = questionData.options[selectedOptionIndex];
+            const correctAnswerText = questionData.correctAnswer;
+
+            const feedbackEl = questionBlock.querySelector('.feedback-area');
+            const explanationEl = questionBlock.querySelector('.explanation-area');
+            const allOptionButtonsInBlock = questionBlock.querySelectorAll('.option-btn');
+
+            allOptionButtonsInBlock.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-blue-100', 'dark:hover:bg-blue-800', 'hover:shadow-md');
+            });
+
+            if (selectedOptionText === correctAnswerText) {
+                score++;
+                selectedButton.classList.add('correct');
+                feedbackEl.innerHTML = `<p class="text-green-600 dark:text-green-400 font-semibold"><i class="fas fa-check-circle mr-2"></i>Correct!</p>`;
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackEl.innerHTML = `<p class="text-red-600 dark:text-red-400 font-semibold"><i class="fas fa-times-circle mr-2"></i>Incorrect. The correct answer is highlighted.</p>`;
+                allOptionButtonsInBlock.forEach(btn => {
+                    if (questionData.options[parseInt(btn.dataset.optionIndex)] === correctAnswerText) {
+                        btn.classList.add('actual-correct-unselected');
+                        btn.classList.remove('incorrect');
+                    }
+                });
+            }
+
+            explanationEl.classList.add('visible');
+
+            questionBlock.classList.add('answered-question');
+            questionBlock.classList.remove('active-question');
+            questionsAnsweredCount++;
+            updateProgressAndScore();
+
+            setTimeout(() => {
+                let nextQuestionIdToActivate = null;
+                let foundCurrent = false;
+                for (const topic of quizData[currentChapterIndex].topics) {
+                    for (const q of topic.questions) {
+                        if (foundCurrent) {
+                            nextQuestionIdToActivate = q.id;
+                            break;
+                        }
+                        if (q.id === questionId) {
+                            foundCurrent = true;
+                        }
+                    }
+                    if (nextQuestionIdToActivate) break;
+                }
+
+                if (nextQuestionIdToActivate) {
+                    activateQuestion(nextQuestionIdToActivate);
+                } else {
+                    showChapterEnd();
+                }
+            }, 1500);
+        }
+
+        function updateProgressAndScore() {
+            scoreDisplayEl.textContent = `Score: ${score}`;
+            questionProgressTextEl.textContent = `Answered: ${questionsAnsweredCount} / ${totalQuestionsInChapter}`;
+            const progressPercentage = totalQuestionsInChapter > 0 ? (questionsAnsweredCount / totalQuestionsInChapter) * 100 : 0;
+            progressBarEl.style.width = `${progressPercentage}%`;
+        }
+
+        function showChapterEnd() {
+            nextChapterBtn.classList.remove('hidden');
+            // nextChapterBtn.onclick is already set in renderChapter
+
+            const endMessage = document.createElement('p');
+            endMessage.className = "text-center text-xl font-semibold mt-10 p-6 bg-blue-50 dark:bg-blue-900 rounded-lg";
+            endMessage.textContent = `Chapter 11 Complete! Your final score: ${score} out of ${totalQuestionsInChapter}.`;
+            quizContentAreaEl.appendChild(endMessage);
+            endMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+            const currentTheme = localStorage.getItem('darkMode');
+
+            if (currentTheme === 'enabled') {
+                setDarkMode(true);
+            } else if (currentTheme === 'disabled') {
+                setDarkMode(false);
+            } else {
+                setDarkMode(prefersDarkScheme.matches);
+            }
+
+            prefersDarkScheme.addEventListener('change', e => {
+                if (localStorage.getItem('darkMode') === null) {
+                    setDarkMode(e.matches);
+                }
+            });
+
+            renderChapter();
+        });
+
+    </script>
+</body>
+
+</html>

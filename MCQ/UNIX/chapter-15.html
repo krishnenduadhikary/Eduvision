@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en" class=""> <!-- Start with no 'dark' class, JS will add -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unix MCQ Challenge - Chapter 15 (Process Control & System Performance)</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Logo Styles (Integrated into header flow) */
+        .header-logo .text-2xl {
+            font-size: 1.6rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .header-logo .logo-text-part {
+            /* Color will be handled by Tailwind text-gray-700 dark:text-gray-100 by default, or override if needed */
+        }
+
+        /* Make logo text distinctly visible in both modes if it clashes */
+        html:not(.dark) .header-logo .logo-text-part {
+            color: #374151;
+            /* Tailwind gray-700 for light mode if needed */
+        }
+
+        html.dark .header-logo .logo-text-part {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode */
+        }
+
+        .header-logo .logo-icon-part {
+            color: #F59E0B;
+            /* Tailwind amber-500, good contrast */
+            transition: color 0.3s;
+        }
+
+        .header-logo a:hover .logo-icon-part {
+            color: #D97706;
+            /* Tailwind amber-600 */
+        }
+
+        .header-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.4em;
+            width: 1.4em;
+            margin: 0 2px;
+        }
+
+        /* Ensure sticky header background is consistent */
+        header.sticky {
+            background-color: #f9fafb;
+            /* Tailwind gray-50 */
+        }
+
+        html.dark header.sticky {
+            background-color: #1f2937;
+            /* Tailwind gray-800 */
+        }
+
+        /* Ensure sub-header info card also respects dark mode */
+        #quizHeaderInfo {
+            background-color: #ffffff;
+            /* Tailwind white */
+        }
+
+        html.dark #quizHeaderInfo {
+            background-color: #374151;
+            /* Tailwind gray-700 */
+        }
+
+
+        .quiz-question-block {
+            transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+            opacity: 0.6;
+        }
+
+        .quiz-question-block.active-question {
+            opacity: 1;
+            transform: scale(1.01);
+            box-shadow: 0 0 15px rgba(80, 120, 255, 0.2);
+        }
+
+        html.dark .quiz-question-block.active-question {
+            box-shadow: 0 0 15px rgba(100, 150, 255, 0.3);
+        }
+
+        .quiz-question-block.answered-question {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .quiz-question-block.answered-question .option-btn {
+            pointer-events: none;
+            cursor: default;
+        }
+
+        .quiz-question-block .option-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .option-btn {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .option-btn:not(:disabled):hover {
+            transform: translateY(-2px) scale(1.01);
+            /* box-shadow: 0 4px 12px rgba(0,0,0,0.1); Tailwind's shadow-md or shadow-lg can be used directly on class */
+        }
+
+        html.dark .option-btn:not(:disabled):hover {
+            /* box-shadow: 0 4px 12px rgba(255,255,255,0.08); */
+        }
+
+        .option-btn.correct {
+            background-color: #10B981 !important;
+            /* green-500 */
+            color: white !important;
+            border-color: #059669 !important;
+            /* green-600 */
+        }
+
+        .option-btn.incorrect {
+            background-color: #EF4444 !important;
+            /* red-500 */
+            color: white !important;
+            border-color: #DC2626 !important;
+            /* red-600 */
+        }
+
+        .option-btn.actual-correct-unselected {
+            background-color: #D1FAE5 !important;
+            /* green-100 */
+            color: #065F46 !important;
+            /* green-700 */
+            border-color: #6EE7B7 !important;
+            /* green-300 */
+            animation: pulse-subtle-green 2s infinite;
+        }
+
+        html.dark .option-btn.actual-correct-unselected {
+            background-color: #064E3B !important;
+            color: #A7F3D0 !important;
+            border-color: #10B981 !important;
+        }
+
+
+        @keyframes pulse-subtle-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        .explanation-area {
+            min-height: 70px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            overflow: hidden;
+            background-color: #ffffff;
+            /* Light mode */
+        }
+
+        html.dark .explanation-area {
+            background-color: #374151;
+            /* Tailwind gray-700 for dark mode */
+        }
+
+        .explanation-area.visible {
+            opacity: 1;
+        }
+
+        /* Fix dark mode for feedback area */
+        .feedback-area {
+            color: #374151;
+            /* Light mode text color */
+        }
+
+        html.dark .feedback-area {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode text color */
+        }
+
+        /* Fix dark mode for question block */
+        .quiz-question-block {
+            background-color: #f9fafb;
+            /* Light mode */
+        }
+
+        html.dark .quiz-question-block {
+            background-color: #1f2937;
+            /* Tailwind gray-800 for dark mode */
+        }
+    </style>
+
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
+
+    <div class="container mx-auto p-4 min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="sticky mb-6 top-0 z-50 py-3 shadow-md bg-gray-50 dark:bg-gray-800">
+            <!-- Top part of the header: Logo, Title, Dark Mode Toggle -->
+            <div class="container mx-auto flex justify-between items-center px-2 sm:px-4">
+                <!-- Eduvision Logo -->
+                <div class="header-logo">
+                    <div class="text-2xl font-bold">
+                        <a href="../../index.html" class="flex items-center group">
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">Edu</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="logo-icon-part" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">ision</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Page Title -->
+                <h1 class="mx-4 text-lg sm:text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500 text-center flex-grow whitespace-nowrap cursor-pointer"
+                    onclick="window.location.href='unix-mcq.html'">
+                    Unix MCQ Challenge
+                </h1>
+
+                <!-- Dark Mode Toggle -->
+                <div class="flex-shrink-0">
+                    <button id="darkModeToggle"
+                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none transition-colors duration-300"
+                        aria-label="Toggle Dark Mode">
+                        <!-- Icon will be set by JS -->
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bottom part of the header: Quiz Info Card -->
+            <div id="quizHeaderInfo" class="bg-white dark:bg-gray-700 p-3 mt-3 rounded-lg shadow-md container mx-auto">
+                <h2 id="mainChapterTitle" class="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-2"></h2>
+                <div class="flex justify-between items-center text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">
+                    <span id="questionProgressText">Answered: 0 / 0</span>
+                    <span id="scoreDisplay">Score: 0</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                    <div id="progressBar"
+                        class="bg-gradient-to-r from-blue-500 to-purple-600 h-2.5 rounded-full transition-all duration-500 ease-out"
+                        style="width: 0%"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area for All Questions -->
+        <main id="quizContentArea"
+            class="flex-grow bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl transition-colors duration-300 mt-4">
+            <!-- Topics and Questions will be dynamically inserted here -->
+        </main>
+
+        <!-- Navigation Area (for Next Chapter) -->
+        <div id="overallNavigation" class="mt-8 mb-4 flex justify-center">
+            <button id="nextChapterBtn"
+                class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 hidden">
+                <!-- Text and onclick will be set by JS -->
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
+            © 2023 Interactive MCQ Platform.
+        </footer>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                chapterName: "Unix MCQ on Process Control & Unix System Performance",
+                topics: [
+                    {
+                        topicName: "Process Control Basics",
+                        questions: [
+                            {
+                                id: "pcb_q1", question: "1. UNIX supports preemptive multitasking.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "UNIX supports preemptive multitasking, which means that the kernel pre-empts the process when its time period expires."
+                            },
+                            {
+                                id: "pcb_q2", question: "2. The collection of memory locations that the process can access is called _______",
+                                options: ["process table", "process space", "virtual address space", "virtual space"], correctAnswer: "virtual address space",
+                                explanation: "Processes have their origin in executable program files on disk. The collection of memory locations that a process can access is called virtual address space. It is organized into a number of segments."
+                            },
+                            {
+                                id: "pcb_q3", question: "3. The virtual address space consists of ____ segments.",
+                                options: ["4", "5", "3", "2"], correctAnswer: "5",
+                                explanation: "The virtual address space consists of a number of segments which are:\n• Text segment\n• Data segment\n• Stack\n• Heap\n• Command line arguments and environment variables."
+                            },
+                            {
+                                id: "pcb_q4", question: "4. The segment representing the constants, globals and static variables is called:",
+                                options: ["text segment", "data segment", "stack", "heap"], correctAnswer: "data segment",
+                                explanation: "The segment representing the constants, globals and static variables which are used in the program is called data segment."
+                            },
+                            {
+                                id: "pcb_q5", question: "5. The stack stores the _______",
+                                options: ["arguments and local variables", "address to return to", "global variables", "arguments and local variables and address to return"], correctAnswer: "arguments and local variables and address to return",
+                                explanation: "The stack stores the arguments and the local variables of function as well as the address to return to. It grows and shrinks in size as functions are involved and complete execution."
+                            },
+                            {
+                                id: "pcb_q6", question: "6. The attributes of every process are stored in ____",
+                                options: ["data table", "inode table", "process table", "heap"], correctAnswer: "process table",
+                                explanation: "The attributes of a process are stored in a fairly large data structure that represents an entry in the process table."
+                            },
+                            {
+                                id: "pcb_q7", question: "7. The entire process life cycle is built around ___ system calls.",
+                                options: ["3", "4", "2", "5"], correctAnswer: "4",
+                                explanation: "The entire process life cycle is built around four system calls – fork, exec (not actually a system call), wait and _exit."
+                            },
+                            {
+                                id: "pcb_q8", question: "8. Which of the following system call is used for replicating a process?",
+                                options: ["fork", "exec", "wait", "_exit"], correctAnswer: "fork",
+                                explanation: "The forking mechanism of process creation uses the fork system call to create a process. Each process is assigned a PID which is used for process handling purposes."
+                            },
+                            {
+                                id: "pcb_q9", question: "9. Which of the following functions is used for handling environment variables of a process?",
+                                options: ["getenv", "setenv", "letenv", "getenv and setenv"], correctAnswer: "getenv and setenv",
+                                explanation: "Forking mechanism also transmits the parent’s environment to the child since environment variables are constituents of parent’s address space. POSIX specifies two functions getenv and setenv for handlings environment variables."
+                            },
+                            {
+                                id: "pcb_q10", question: "10. A process can be terminated using the exit or _exit system call.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "If we place the exit or _exit system call anywhere in the program, the process will terminate as soon as that statement is executed."
+                            },
+                            {
+                                id: "pcb_q11", question: "11. Both exit and _exit system call share an identical syntax.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "exit and _exit are one of the four basic system calls used in the process life cycle. They both share an identical syntax.\nvoid _exit (int status;)\nvoid exit (int status);"
+                            },
+                            {
+                                id: "pcb_q12", question: "12. The parent process picks up the exit status of a child using ___ system call.",
+                                options: ["wait", "waitp", "exec", "kill"], correctAnswer: "wait",
+                                explanation: "When a child process terminates, its exit status is placed along with other information in the process table. The parent picks this exit status using the wait system call."
+                            },
+                            {
+                                id: "pcb_q13", question: "13. Which of the following system call is more powerful (in waiting mechanism) than wait system call?",
+                                options: ["waitp", "waitpid", "kill", "run"], correctAnswer: "waitpid",
+                                explanation: "wait system call suffers from a number of limitations. It blocks until a child dies and if a parent spawns several children, wait returns the moment one of them dies. Wait also can’t handle process group. For these reasons, the waitpid system call is used."
+                            },
+                            {
+                                id: "pcb_q14", question: "14. If the child dies first but the entry of that child in the process table is still present, then that process is called ____",
+                                options: ["orphan", "zombie", "termin", "daemon"], correctAnswer: "zombie",
+                                explanation: "If the child dies first but the entry of that child in the process table is still presnt, then that process is said to be zombie state."
+                            },
+                            {
+                                id: "pcb_q15", question: "15. Every process belongs to a process group.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Every process belongs to a process group. Each process in the group has the same process group-id. The group has a leader whose process group ID is same as its PID."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Process Control System Calls – 1",
+                        questions: [
+                            {
+                                id: "pcsc1_q1", question: "1. ____ exec is responsible for executing programs on a UNIX system.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "If we want to run a separate program in a forked process, it is done by exec. This operation replaces the entire address space with that of a new program. In other words, the fork is responsible for creating a process but it actually the exec that executes the program on a UNIX system."
+                            },
+                            {
+                                id: "pcsc1_q2", question: "2. Which of the following system call is used for duplicating file descriptor?",
+                                options: ["dup", "decr", "exec", "execv"], correctAnswer: "dup",
+                                explanation: "The dup system call supplicates the file descriptor fields and returns the lowest number available for allocation."
+                            },
+                            {
+                                id: "pcsc1_q3", question: "3. We can also duplicate the file descriptor using ___",
+                                options: ["dup1", "dup2", "exevr", "exec"], correctAnswer: "dup2",
+                                explanation: "Sometimes, dup call can fail in duplicating a file descriptor. In that case, the dup2 system call is used which provides a better way of replicating file descriptor."
+                            },
+                            {
+                                id: "pcsc1_q4", question: "4. Which of the following system call is preferred over dup and dup2 for replicating file descriptor?",
+                                options: ["dup3", "fcn", "fcntl", "exec"], correctAnswer: "fcntl",
+                                explanation: "POSIX calls dup and dup2 “redundant” functions and advocates the use of fcntl system call."
+                            },
+                            {
+                                id: "pcsc1_q5", question: "5. Which of the following system call is used for inter-process communication?",
+                                options: ["fork", "pipe", "fcntl", "exec"], correctAnswer: "pipe",
+                                explanation: "UNIX has a very elaborative scheme for two processes to communicate with each other. Pipe is a system call which provides a half-duplex communication channel. Pipe takes an array of two integers as its only argument, which it populates with two file descriptors."
+                            },
+                            {
+                                id: "pcsc1_q6", question: "6. We can use pipe with fork system call.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "To make pipe work in tandem with fork, the usual procedure is to create the pipe before forking the process."
+                            },
+                            {
+                                id: "pcsc1_q7", question: "7. The action that a signal takes on receipt of a signal is called ____",
+                                options: ["reposition", "disposition", "composition", "event"], correctAnswer: "disposition",
+                                explanation: "A signal is represented by an integer and its symbolic name. A signal is a mechanism used by the kernel to communicate the occurrence of an event to a process. The action that a signal takes on receipt of a signal is called disposition."
+                            },
+                            {
+                                id: "pcsc1_q8", question: "8. The sources from where the signals can be generated are:",
+                                options: ["keyboard", "hardware", "a C program", "keyboard, hardware, a C program"], correctAnswer: "keyboard, hardware, a C program",
+                                explanation: "The event that generates the signal can take place in the hardware, in the OS or elsewhere. It can be generated from the keyboard eg; SIGINT signal or it can be generated from the hardware eg; SIGILL."
+                            },
+                            {
+                                id: "pcsc1_q9", question: "9. There are _____ signals that are generated from the keyboard.",
+                                options: ["2", "3", "1", "5"], correctAnswer: "3",
+                                explanation: "There are 3 signals that have their origin in the keyboard and all these three signals affect the foreground job. For example, ctrl-c generates the SIGINT signal (terminates the process), ctrl-\\ generates the SIGQUIT signal which directs a process to produce a core dump, ctrl-z sends SIGSTOP to all the processes of foreground process group."
+                            },
+                            {
+                                id: "pcsc1_q10", question: "10. Which of the following signals are generated from the hardware?",
+                                options: ["SIGFPE", "SIGILL", "SIGSEGV", "SIGFPE, SIGILL, SIGSEGV"], // Corrected option d
+                                correctAnswer: "SIGFPE, SIGILL, SIGSEGV",
+                                explanation: "Signals can be generated from hardware too like SIGFPE is generated on account of an arithmetic operation, SIGILL is generated for illegal instruction and SIGSEGV is generated for memory access violation. All these signals result in the termination of the process."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Process Control System Calls – 2",
+                        questions: [
+                            {
+                                id: "pcsc2_q1", question: "1. ___ system call behaves in an identical manner to the kill command.",
+                                options: ["alarm", "kill", "pause", "signal"], correctAnswer: "kill",
+                                explanation: "kill system call behaves in an identical manner to the kill command. kill sends a signal but doesn’t necessarily kill a process."
+                            },
+                            {
+                                id: "pcsc2_q2", question: "2. Which library function uses kill to send any signal to the current process?",
+                                options: ["getc", "raise", "catch", "try"], correctAnswer: "raise",
+                                explanation: "kill sends a signal but doesn’t necessarily kill a process. Kill system call is used by the library function raise to send any signal to the current process."
+                            },
+                            {
+                                id: "pcsc2_q3", question: "3. Which system call is used to set a timer that generates the SIGALARM signal?",
+                                options: ["pause", "alarm", "read", "signal"], correctAnswer: "alarm",
+                                explanation: "The alarm call is used to set a timer that generates the SIGALRM signal after the timeout period."
+                            },
+                            {
+                                id: "pcsc2_q4", question: "4. If two users execute the same program, the memory requirements are doubled.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "If two users execute the same program then memory requirements are not doubled, the text segment in the virtual address space is shared."
+                            },
+                            {
+                                id: "pcsc2_q5", question: "5. Address space of a process is virtual.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "We say that the address space of a process is virtual because the address specified in the executable doesn’t point to the actual memory location. The virtual addresses are translated into a physical address at runtime by memory management unit (MMU)."
+                            },
+                            {
+                                id: "pcsc2_q6", question: "6. Which of the following system calls returns one or more file descriptors?",
+                                options: ["dup, dup2", "fcntl", "pipe", "dup, dup2, fcntl and pipe"], correctAnswer: "dup, dup2, fcntl and pipe",
+                                explanation: "dup, dup2, fcntl and pipe are the system calls which returns one or more file descriptors when invoked."
+                            },
+                            {
+                                id: "pcsc2_q7", question: "7. The environment variables are available in _____",
+                                options: ["*environ[ ]", "env[ ]", "env", "pipe"], correctAnswer: "*environ[ ]",
+                                explanation: "The environment variables transmitted from parent process to child are available in environ[ ] variable."
+                            },
+                            {
+                                id: "pcsc2_q8", question: "8. Which of the following functions are used for obtaining and setting the value of environment variables?",
+                                options: ["getenv", "setenv", "env", "getenv and setenv"], correctAnswer: "getenv and setenv",
+                                explanation: "The environment variables transmitted from parent process to child are available in environ[ ] variable. POSIX specifies two functions, getenv and setenv to obtain and set these values."
+                            },
+                            {
+                                id: "pcsc2_q9", question: "9. Which of the following action can be taken by a process upon receiving a signal?",
+                                options: ["ignore the signal", "terminate the process", "suspend the process", "ignore the signal, terminate and suspend the process"], correctAnswer: "ignore the signal, terminate and suspend the process",
+                                explanation: "How a process responds to a signal depends on how things are set up in the program representing the process. However, there are mainly three actions that a program can take upon receiving a signal i.e. ignore the signal and continue execution normally, terminate the process, suspend (stop) the program."
+                            },
+                            {
+                                id: "pcsc2_q10", question: "10. What is the default disposition of most signals?",
+                                options: ["ignore the signal", "terminate the process", "suspend the process", "kill the signal"], correctAnswer: "terminate the process",
+                                explanation: "The action that a signal takes on receipt of a signal is called disposition. The default disposition of most signals is to terminate the process."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Performance Components and Tools",
+                        questions: [
+                            {
+                                id: "pct_q1", question: "1. Which of the following resources are required to be managed and monitored?",
+                                options: ["CPU time", "I/O time", "Disk space", "CPU time, I/O time, disk space"], correctAnswer: "CPU time, I/O time, disk space",
+                                explanation: "A typical UNIX system has some major resources that are required to be monitored. These resources include CPU time, I/O time, disk space, network time. There are many tools available which provides us with guidelines on how to diagnose and fix performance problems."
+                            },
+                            {
+                                id: "pct_q2", question: "2. System time comprises ____ components.",
+                                options: ["5", "4", "3", "8"], correctAnswer: "5",
+                                explanation: "There are five major components which take up the system time. These are -User state CPU, system state CPU, I/O time and network time, virtual memory performance, application program."
+                            },
+                            {
+                                id: "pct_q3", question: "3. Which command is used to display all the running and active real-time processes?",
+                                options: ["tp", "top", "vmstat", "lsof"], correctAnswer: "top",
+                                explanation: "top command is system monitoring program which is used to display all the running and active real-time process. It displays CPU usage, memory usage, swap memory, cache size, buffer size, process PID and much more."
+                            },
+                            {
+                                id: "pct_q4", question: "4. ____ command displays the list of all open files and processes.",
+                                options: ["top", "lsof", "vmstat", "pipe"], correctAnswer: "lsof",
+                                explanation: "lsof command is a system monitoring program which displays the list of all open files and processes. The open file includes pipe, devices, network sockets, disk files, processes."
+                            },
+                            {
+                                id: "pct_q5", question: "5. ____ is a simple tool that will collect and show system input and output storage device statistics.",
+                                options: ["top", "lsof", "vmstat", "Iostat"], correctAnswer: "Iostat",
+                                explanation: "Iostat is a system monitoring tool which is used to display system input and output storage device statistics."
+                            },
+                            {
+                                id: "pct_q6", question: "6. sar is a command line tool for collecting, viewing and recording performance data.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "sar is a command line tool for collecting, viewing and recording performance data. Sar (system activity report) is used to report on various system loads, including system loads, CPU activity, memory/paging, device load, network."
+                            },
+                            {
+                                id: "pct_q7", question: "7. To override the default action and catch the signal ____ system call is used.",
+                                options: ["sig", "SIGKILL", "signal", "SIGINT"], correctAnswer: "signal",
+                                explanation: "The default disposition of a signal is to terminate the process. However, we can override the default action and catch the signal using system call using the signal system call. Using signal system call."
+                            },
+                            {
+                                id: "pct_q8", question: "8. Which of the following functions can be performed using signal system call?",
+                                options: ["ignore the signal", "restore the default", "invoke a signal handling function", "ignore the signal, restore the default and invoke a signal handling function"], correctAnswer: "ignore the signal, restore the default and invoke a signal handling function",
+                                explanation: "signal system call doesn’t generate any signal but only specifies its disposition. Using signal call we can either ignore the signal, restore the default (if it was changed earlier) or invoke a signal handling function."
+                            },
+                            {
+                                id: "pct_q9", question: "9. Which of the following signals can neither be ignored nor catch?",
+                                options: ["SIGKILL", "SIGSTOP", "SIGKILL and SIGSTOP", "SIGALR"], correctAnswer: "SIGKILL and SIGSTOP",
+                                explanation: "Irrespective of the action you take, there are two signals that we can neither ignore nor catch by invoking a signal handler. They are SIGKILL and SIGSTOP."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const mainChapterTitleEl = document.getElementById('mainChapterTitle');
+        const questionProgressTextEl = document.getElementById('questionProgressText');
+        const scoreDisplayEl = document.getElementById('scoreDisplay');
+        const progressBarEl = document.getElementById('progressBar');
+        const quizContentAreaEl = document.getElementById('quizContentArea');
+        const nextChapterBtn = document.getElementById('nextChapterBtn');
+
+        let currentChapterIndex = 0; // This page handles only one chapter
+        let score = 0;
+        let totalQuestionsInChapter = 0;
+        let questionsAnsweredCount = 0;
+        let allQuestionElementsMap = new Map();
+        let currentActiveQuestionId = null;
+
+        const sunIcon = `<i class="fas fa-sun text-xl text-yellow-400"></i>`;
+        const moonIcon = `<i class="fas fa-moon text-xl text-gray-700 dark:text-yellow-400"></i>`;
+
+        function setDarkMode(isDark) {
+            const htmlEl = document.documentElement;
+            if (isDark) {
+                htmlEl.classList.add('dark');
+                darkModeToggle.innerHTML = sunIcon;
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                htmlEl.classList.remove('dark');
+                darkModeToggle.innerHTML = moonIcon;
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            setDarkMode(!document.documentElement.classList.contains('dark'));
+        });
+
+        function renderChapter() {
+            quizContentAreaEl.innerHTML = '';
+            allQuestionElementsMap.clear();
+            const chapterData = quizData[currentChapterIndex];
+            mainChapterTitleEl.textContent = chapterData.chapterName;
+
+            score = 0;
+            questionsAnsweredCount = 0;
+            totalQuestionsInChapter = 0;
+            let firstQuestionId = null;
+
+            chapterData.topics.forEach(topic => {
+                totalQuestionsInChapter += topic.questions.length;
+            });
+            updateProgressAndScore();
+
+            chapterData.topics.forEach((topic) => {
+                const topicHeader = document.createElement('h3');
+                topicHeader.className = 'text-xl md:text-2xl font-semibold text-purple-600 dark:text-purple-400 mt-10 mb-6 pt-6 border-t border-gray-300 dark:border-gray-600 first:mt-0 first:pt-0 first:border-t-0';
+                topicHeader.textContent = topic.topicName;
+                quizContentAreaEl.appendChild(topicHeader);
+
+                topic.questions.forEach((q) => {
+                    if (!firstQuestionId) firstQuestionId = q.id;
+
+                    const questionBlock = document.createElement('div');
+                    questionBlock.id = `qblock-${q.id}`;
+                    questionBlock.className = 'quiz-question-block mb-10 p-5 bg-gray-50 dark:bg-gray-750 rounded-xl shadow-lg';
+                    questionBlock.dataset.questionId = q.id;
+
+                    const questionTextEl = document.createElement('p');
+                    questionTextEl.className = 'text-md md:text-lg font-medium mb-5 text-gray-800 dark:text-gray-200';
+                    questionTextEl.innerHTML = q.question.replace(/\n/g, '<br>');
+                    questionBlock.appendChild(questionTextEl);
+
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.className = 'grid grid-cols-1 md:grid-cols-2 gap-3 mb-4';
+                    q.options.forEach((option, optionIdx) => {
+                        const button = document.createElement('button');
+                        button.innerHTML = `<span class="text-left flex-grow">${String.fromCharCode(97 + optionIdx)}) ${option}</span>`;
+                        button.className = 'option-btn w-full text-left p-3 bg-gray-200 dark:bg-gray-600 hover:bg-blue-100 dark:hover:bg-blue-800 rounded-lg border-2 border-gray-300 dark:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-between disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow-md';
+                        button.dataset.questionId = q.id;
+                        button.dataset.optionIndex = optionIdx;
+                        button.disabled = true;
+                        button.addEventListener('click', handleAnswerSelection);
+                        optionsContainer.appendChild(button);
+                    });
+                    questionBlock.appendChild(optionsContainer);
+
+                    const feedbackEl = document.createElement('div');
+                    feedbackEl.className = 'feedback-area min-h-[25px] text-sm mb-2';
+                    questionBlock.appendChild(feedbackEl);
+
+                    const explanationEl = document.createElement('div');
+                    explanationEl.className = 'explanation-area p-3 rounded-md text-sm leading-relaxed';
+                    explanationEl.innerHTML = `<strong class="block mb-1">Explanation:</strong> ${q.explanation.replace(/\n/g, '<br>')}`;
+                    questionBlock.appendChild(explanationEl);
+
+
+                    quizContentAreaEl.appendChild(questionBlock);
+                    allQuestionElementsMap.set(q.id, questionBlock);
+                });
+            });
+
+            if (firstQuestionId) {
+                activateQuestion(firstQuestionId);
+            }
+            nextChapterBtn.classList.add('hidden');
+            nextChapterBtn.textContent = "Go To The Home Page";
+            nextChapterBtn.onclick = () => {
+                window.location.href = 'unix-mcq.html';
+            };
+        }
+
+        function activateQuestion(questionId) {
+            if (currentActiveQuestionId) {
+                const prevActiveBlock = allQuestionElementsMap.get(currentActiveQuestionId);
+                if (prevActiveBlock) {
+                    prevActiveBlock.classList.remove('active-question');
+                }
+            }
+
+            currentActiveQuestionId = questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+            if (questionBlock) {
+                questionBlock.classList.add('active-question');
+                questionBlock.querySelectorAll('.option-btn').forEach(btn => btn.disabled = false);
+                setTimeout(() => {
+                    const rect = questionBlock.getBoundingClientRect();
+                    const headerHeight = document.querySelector('header.sticky').offsetHeight || 150;
+                    if (rect.top < headerHeight || rect.bottom > (window.innerHeight - 50)) {
+                        questionBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 150);
+            }
+        }
+
+
+        function findQuestionData(questionId) {
+            for (const topic of quizData[currentChapterIndex].topics) {
+                const question = topic.questions.find(q => q.id === questionId);
+                if (question) return question;
+            }
+            return null;
+        }
+
+        function handleAnswerSelection(event) {
+            const selectedButton = event.currentTarget;
+            const questionId = selectedButton.dataset.questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+
+            if (!questionBlock || questionBlock.classList.contains('answered-question')) return;
+
+            const questionData = findQuestionData(questionId);
+            if (!questionData) return;
+
+            const selectedOptionIndex = parseInt(selectedButton.dataset.optionIndex);
+            const selectedOptionText = questionData.options[selectedOptionIndex];
+            const correctAnswerText = questionData.correctAnswer;
+
+            const feedbackEl = questionBlock.querySelector('.feedback-area');
+            const explanationEl = questionBlock.querySelector('.explanation-area');
+            const allOptionButtonsInBlock = questionBlock.querySelectorAll('.option-btn');
+
+            allOptionButtonsInBlock.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-blue-100', 'dark:hover:bg-blue-800', 'hover:shadow-md');
+            });
+
+            if (selectedOptionText === correctAnswerText) {
+                score++;
+                selectedButton.classList.add('correct');
+                feedbackEl.innerHTML = `<p class="text-green-600 dark:text-green-400 font-semibold"><i class="fas fa-check-circle mr-2"></i>Correct!</p>`;
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackEl.innerHTML = `<p class="text-red-600 dark:text-red-400 font-semibold"><i class="fas fa-times-circle mr-2"></i>Incorrect. The correct answer is highlighted.</p>`;
+                allOptionButtonsInBlock.forEach(btn => {
+                    if (questionData.options[parseInt(btn.dataset.optionIndex)] === correctAnswerText) {
+                        btn.classList.add('actual-correct-unselected');
+                        btn.classList.remove('incorrect');
+                    }
+                });
+            }
+
+            explanationEl.classList.add('visible');
+
+            questionBlock.classList.add('answered-question');
+            questionBlock.classList.remove('active-question');
+            questionsAnsweredCount++;
+            updateProgressAndScore();
+
+            setTimeout(() => {
+                let nextQuestionIdToActivate = null;
+                let foundCurrent = false;
+                for (const topic of quizData[currentChapterIndex].topics) {
+                    for (const q of topic.questions) {
+                        if (foundCurrent) {
+                            nextQuestionIdToActivate = q.id;
+                            break;
+                        }
+                        if (q.id === questionId) {
+                            foundCurrent = true;
+                        }
+                    }
+                    if (nextQuestionIdToActivate) break;
+                }
+
+                if (nextQuestionIdToActivate) {
+                    activateQuestion(nextQuestionIdToActivate);
+                } else {
+                    showChapterEnd();
+                }
+            }, 1500);
+        }
+
+        function updateProgressAndScore() {
+            scoreDisplayEl.textContent = `Score: ${score}`;
+            questionProgressTextEl.textContent = `Answered: ${questionsAnsweredCount} / ${totalQuestionsInChapter}`;
+            const progressPercentage = totalQuestionsInChapter > 0 ? (questionsAnsweredCount / totalQuestionsInChapter) * 100 : 0;
+            progressBarEl.style.width = `${progressPercentage}%`;
+        }
+
+        function showChapterEnd() {
+            nextChapterBtn.classList.remove('hidden');
+            // nextChapterBtn.onclick is already set in renderChapter
+
+            const endMessage = document.createElement('p');
+            endMessage.className = "text-center text-xl font-semibold mt-10 p-6 bg-blue-50 dark:bg-blue-900 rounded-lg";
+            endMessage.textContent = `Chapter 15 Complete! Your final score: ${score} out of ${totalQuestionsInChapter}.`;
+            quizContentAreaEl.appendChild(endMessage);
+
+            const wishingNote = document.createElement('p');
+            wishingNote.className = "text-center text-lg font-medium mt-6 p-4 bg-green-50 dark:bg-green-900 rounded-lg text-green-700 dark:text-green-300";
+            wishingNote.innerHTML = "Congratulations on completing the Unix 1000 MCQ Challenge!<br>Wish you the best in your endeavor to learn and master Unix!";
+            quizContentAreaEl.appendChild(wishingNote);
+
+            wishingNote.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+            const currentTheme = localStorage.getItem('darkMode');
+
+            if (currentTheme === 'enabled') {
+                setDarkMode(true);
+            } else if (currentTheme === 'disabled') {
+                setDarkMode(false);
+            } else {
+                setDarkMode(prefersDarkScheme.matches);
+            }
+
+            prefersDarkScheme.addEventListener('change', e => {
+                if (localStorage.getItem('darkMode') === null) {
+                    setDarkMode(e.matches);
+                }
+            });
+
+            renderChapter();
+        });
+
+    </script>
+</body>
+
+</html>

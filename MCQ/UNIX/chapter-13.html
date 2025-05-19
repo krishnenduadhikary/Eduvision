@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en" class=""> <!-- Start with no 'dark' class, JS will add -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unix MCQ Challenge - Chapter 13 (Advanced Vi)</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Logo Styles (Integrated into header flow) */
+        .header-logo .text-2xl {
+            font-size: 1.6rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .header-logo .logo-text-part {
+            /* Color will be handled by Tailwind text-gray-700 dark:text-gray-100 by default, or override if needed */
+        }
+
+        /* Make logo text distinctly visible in both modes if it clashes */
+        html:not(.dark) .header-logo .logo-text-part {
+            color: #374151;
+            /* Tailwind gray-700 for light mode if needed */
+        }
+
+        html.dark .header-logo .logo-text-part {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode */
+        }
+
+        .header-logo .logo-icon-part {
+            color: #F59E0B;
+            /* Tailwind amber-500, good contrast */
+            transition: color 0.3s;
+        }
+
+        .header-logo a:hover .logo-icon-part {
+            color: #D97706;
+            /* Tailwind amber-600 */
+        }
+
+        .header-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.4em;
+            width: 1.4em;
+            margin: 0 2px;
+        }
+
+        /* Ensure sticky header background is consistent */
+        header.sticky {
+            background-color: #f9fafb;
+            /* Tailwind gray-50 */
+        }
+
+        html.dark header.sticky {
+            background-color: #1f2937;
+            /* Tailwind gray-800 */
+        }
+
+        /* Ensure sub-header info card also respects dark mode */
+        #quizHeaderInfo {
+            background-color: #ffffff;
+            /* Tailwind white */
+        }
+
+        html.dark #quizHeaderInfo {
+            background-color: #374151;
+            /* Tailwind gray-700 */
+        }
+
+
+        .quiz-question-block {
+            transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+            opacity: 0.6;
+        }
+
+        .quiz-question-block.active-question {
+            opacity: 1;
+            transform: scale(1.01);
+            box-shadow: 0 0 15px rgba(80, 120, 255, 0.2);
+        }
+
+        html.dark .quiz-question-block.active-question {
+            box-shadow: 0 0 15px rgba(100, 150, 255, 0.3);
+        }
+
+        .quiz-question-block.answered-question {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .quiz-question-block.answered-question .option-btn {
+            pointer-events: none;
+            cursor: default;
+        }
+
+        .quiz-question-block .option-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .option-btn {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .option-btn:not(:disabled):hover {
+            transform: translateY(-2px) scale(1.01);
+            /* box-shadow: 0 4px 12px rgba(0,0,0,0.1); Tailwind's shadow-md or shadow-lg can be used directly on class */
+        }
+
+        html.dark .option-btn:not(:disabled):hover {
+            /* box-shadow: 0 4px 12px rgba(255,255,255,0.08); */
+        }
+
+        .option-btn.correct {
+            background-color: #10B981 !important;
+            /* green-500 */
+            color: white !important;
+            border-color: #059669 !important;
+            /* green-600 */
+        }
+
+        .option-btn.incorrect {
+            background-color: #EF4444 !important;
+            /* red-500 */
+            color: white !important;
+            border-color: #DC2626 !important;
+            /* red-600 */
+        }
+
+        .option-btn.actual-correct-unselected {
+            background-color: #D1FAE5 !important;
+            /* green-100 */
+            color: #065F46 !important;
+            /* green-700 */
+            border-color: #6EE7B7 !important;
+            /* green-300 */
+            animation: pulse-subtle-green 2s infinite;
+        }
+
+        html.dark .option-btn.actual-correct-unselected {
+            background-color: #064E3B !important;
+            color: #A7F3D0 !important;
+            border-color: #10B981 !important;
+        }
+
+
+        @keyframes pulse-subtle-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        .explanation-area {
+            min-height: 70px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            overflow: hidden;
+            background-color: #ffffff;
+            /* Light mode */
+        }
+
+        html.dark .explanation-area {
+            background-color: #374151;
+            /* Tailwind gray-700 for dark mode */
+        }
+
+        .explanation-area.visible {
+            opacity: 1;
+        }
+
+        /* Fix dark mode for feedback area */
+        .feedback-area {
+            color: #374151;
+            /* Light mode text color */
+        }
+
+        html.dark .feedback-area {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode text color */
+        }
+
+        /* Fix dark mode for question block */
+        .quiz-question-block {
+            background-color: #f9fafb;
+            /* Light mode */
+        }
+
+        html.dark .quiz-question-block {
+            background-color: #1f2937;
+            /* Tailwind gray-800 for dark mode */
+        }
+    </style>
+
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
+
+    <div class="container mx-auto p-4 min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="sticky mb-6 top-0 z-50 py-3 shadow-md bg-gray-50 dark:bg-gray-800">
+            <!-- Top part of the header: Logo, Title, Dark Mode Toggle -->
+            <div class="container mx-auto flex justify-between items-center px-2 sm:px-4">
+                <!-- Eduvision Logo -->
+                <div class="header-logo">
+                    <div class="text-2xl font-bold">
+                        <a href="../../index.html" class="flex items-center group">
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">Edu</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="logo-icon-part" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">ision</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Page Title -->
+                <h1 class="mx-4 text-lg sm:text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500 text-center flex-grow whitespace-nowrap cursor-pointer"
+                    onclick="window.location.href='unix-mcq.html'">
+                    Unix MCQ Challenge
+                </h1>
+
+                <!-- Dark Mode Toggle -->
+                <div class="flex-shrink-0">
+                    <button id="darkModeToggle"
+                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none transition-colors duration-300"
+                        aria-label="Toggle Dark Mode">
+                        <!-- Icon will be set by JS -->
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bottom part of the header: Quiz Info Card -->
+            <div id="quizHeaderInfo" class="bg-white dark:bg-gray-700 p-3 mt-3 rounded-lg shadow-md container mx-auto">
+                <h2 id="mainChapterTitle" class="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-2"></h2>
+                <div class="flex justify-between items-center text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">
+                    <span id="questionProgressText">Answered: 0 / 0</span>
+                    <span id="scoreDisplay">Score: 0</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                    <div id="progressBar"
+                        class="bg-gradient-to-r from-blue-500 to-purple-600 h-2.5 rounded-full transition-all duration-500 ease-out"
+                        style="width: 0%"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area for All Questions -->
+        <main id="quizContentArea"
+            class="flex-grow bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl transition-colors duration-300 mt-4">
+            <!-- Topics and Questions will be dynamically inserted here -->
+        </main>
+
+        <!-- Navigation Area (for Next Chapter) -->
+        <div id="overallNavigation" class="mt-8 mb-4 flex justify-center">
+            <button id="nextChapterBtn"
+                class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 hidden">
+                <!-- Text and onclick will be set by JS -->
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
+            © 2023 Interactive MCQ Platform.
+        </footer>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                chapterName: "Unix MCQ on Advanced Vi",
+                topics: [
+                    {
+                        topicName: "Operator-Command Combinations",
+                        questions: [
+                            {
+                                id: "occ_q1", question: "1. An operator can’t perform any function without being combined with a command or itself.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "An operator alone cannot perform any function unless it is combined with a command or itself. For example, by using dd or yy we can delete or copy a line respectively."
+                            },
+                            {
+                                id: "occ_q2", question: "2. For deleting the line form current cursor to the end of the line, we can use:",
+                                options: ["$", "d$", "dd", "$d"], correctAnswer: "d$", // Corrected original answer based on logic ($ is a motion)
+                                explanation: "dd command is a combination of the d operator with itself. vi can perform complex deletion when this operator is combined with a command of the command mode. For example,\nd$        //delete entire line fro current cursor location to end of line"
+                            },
+                            {
+                                id: "occ_q3", question: "3. dw will ________",
+                                options: ["deletes one line", "deletes one word", "deletes one character", "deletes one sentence"], correctAnswer: "deletes one word",
+                                explanation: "dd command is a combination of the d operator with itself. vi can perform complex deletion when this operator is combined with a command of the command mode. For example,\ndw            // deletes one word\n3dw           // deletes 3 words"
+                            },
+                            {
+                                id: "occ_q4", question: "4. For yanking text, ___ is used.",
+                                options: ["d", "y", "c", "G"], correctAnswer: "y",
+                                explanation: "The y operator is used for yanking (copying) text. It is used in the same way as d operator is used i.e. it is also combined with itself or with another command. For example,\n5yy            // yanks five lines"
+                            },
+                            {
+                                id: "occ_q5", question: "5. For pasting text, ____ is used.",
+                                options: ["p or P", "d or D", "C", "x or X"], correctAnswer: "p or P",
+                                explanation: "After yanking text with yy, we can paste it using either p or P. p paste the text below the current line while P paste the text above the current line."
+                            },
+                            {
+                                id: "occ_q6", question: "6. c operator is used for changing the text.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "For changing text, c operator is used. This operator is also combined with a command to perform the replacement. If dw deletes a word, cw changes it. This operator works in input mode. For example, to change the text from the present cursor location up to the end of line, use\nc$ or C"
+                            },
+                            {
+                                id: "occ_q7", question: "7. To change entire lines, ____ is used.",
+                                options: ["cc", "CC", "dd", "c$"], correctAnswer: "cc",
+                                explanation: "For changing text, c operator is used. This operator is also combined with a command to perform the replacement. To change entire lines, use the cc command."
+                            },
+                            {
+                                id: "occ_q8", question: "8. Which operator is used in vi to filter text?",
+                                options: ["%%", "&&", "$", "!"], correctAnswer: "!",
+                                explanation: "vi provides a marvellous feature of allowing UNIX filter to act on the text that’s displayed on the terminal. For filtering text screen,\n1. move to the beginning of the text to be acted upon and press !\n2. move to the other end of the text using navigation command like G\n3. Enter the command to act on the text."
+                            },
+                            {
+                                id: "occ_q9", question: "9. To delete from current cursor upto the first occurrence of }, which of the following will be used?",
+                                options: ["dd$}", "d /", "d / }", "}"], correctAnswer: "d / }",
+                                explanation: "We can perform many functions using operator-command combinations. For example, d / } will deletes from the current cursor upto first occurrence of } ."
+                            },
+                            {
+                                id: "occ_q10", question: "10. The command df. will _____",
+                                options: ["deletes entire line", "deletes entire paragraph", "deletes from current cursor up to first occurrence of .", "deletes zero lines"], // Corrected "occurrence of" to "occurrence of ."
+                                correctAnswer: "deletes from current cursor up to first occurrence of .",
+                                explanation: "The command df. is another example of operator-command combination. It deletes from cursor to first occurrence of a dot."
+                            },
+                            {
+                                id: "occ_q11", question: "11. To yank from current cursor up to first occurrence of string str in reverse direction, we can use:",
+                                options: ["y?str", "y!str", "yy str", "yy ! str"], correctAnswer: "y?str",
+                                explanation: "The command y?str is another example of operator-command combination. The operator ? is used with y operator for yanking a string in reverse direction."
+                            },
+                            {
+                                id: "occ_q12", question: "12. The following command will_________\n\n!! tr ‘[a-z]’  ‘[A-Z]’",
+                                options: ["throw an error", "undefined behavior", "changes the case of the current line from lower to uppercase", "changes the case of current line from upper to lowercase"], correctAnswer: "changes the case of the current line from lower to uppercase",
+                                explanation: "The ! operator when doubled is used for operating on current line. For example, we can change the case of current line from lowercase to uppercase by using the above command."
+                            },
+                            {
+                                id: "occ_q13", question: "13. The command c0 will change the text from current cursor to the end of line.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "The command c0 will change the text from current cursor to the beginning of line."
+                            },
+                            {
+                                id: "occ_q14", question: "14. To sort all lines from current cursor to end of line, ____ can be used.",
+                                options: ["sort .,$", "sort !G", "sort !,G", "!Gsort"], correctAnswer: "!Gsort",
+                                explanation: "The sort command is combined with ! and G operator for sorting from current cursor to the end of the line."
+                            },
+                            {
+                                id: "occ_q15", question: "15. Which of the following is not a valid operator-command combination?",
+                                options: ["5dd", "yy5", "cc", "yG"], correctAnswer: "yy5",
+                                explanation: "The command yy5 is not a valid one as we cannot prefix the command yy with an integer value."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Handling Multiple Files and Buffers",
+                        questions: [
+                            {
+                                id: "hmfb_q1", question: "1. Which of the following command is used for switching files?",
+                                options: [":e", "e!", "!e", "!r"], correctAnswer: ":e",
+                                explanation: "We can switch between multiple files without quitting the vi editor. For example, while working with one file, we can switch to another by using the following command,\n:e  file02        // switches to file02"
+                            },
+                            {
+                                id: "hmfb_q2", question: "2. For returning back to the original file after switching we can use:",
+                                options: [":e!", "ctrl-^", ":e#", "ctrl-^ and :e#"], correctAnswer: "ctrl-^ and :e#",
+                                explanation: "We can switch between multiple files without quitting the vi editor. For this purpose, :e command is used. For returning back to the original file, we can use one of the following commands:\n[Ctrl-^]            //toggles between previous and current file\n:e# 	           //same"
+                            },
+                            {
+                                id: "hmfb_q3", question: "3. When multiple filenames are used with vi, we can switch to next file using ___ command.",
+                                options: ["new", ":n", ":rew", ":prev"], correctAnswer: ":n", // Corrected from :rew to :n
+                                explanation: "When vi editor is used with multiple filenames, it loads the first file. We can switch to next file using :n command."
+                            },
+                            {
+                                id: "hmfb_q4", question: "4. We can move back to the previous file using ____ command.",
+                                options: ["new", ":n", ":rew", ":prev"], correctAnswer: ":prev", // Corrected from :rew to :prev
+                                explanation: "When vi editor is used with multiple filenames, it loads the first file. We can switch to next file using :n command. In this manner, we can reach to the last file. At any stage, we can move back to the first file using :rew command."
+                            },
+                            {
+                                id: "hmfb_q5", question: "5. :r !date inserts the output of date command in our file.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "We can also insert the output of any command in our file using :r command."
+                            },
+                            {
+                                id: "hmfb_q6", question: "6. To split the screen into multiple windows, we can use ____ command.",
+                                options: [":sp", ":new", ":n", ":r"], correctAnswer: ":sp",
+                                explanation: "We can also split our screen into multiple windows using :sp command. The window can be empty or it can contain a file, even a copy of the same file."
+                            },
+                            {
+                                id: "hmfb_q7", question: "7. To create a new window, ____ can be used.",
+                                options: [":sp", ":new", ":n", ":r"], correctAnswer: ":new", // Corrected from :n to :new
+                                explanation: "We can also create an empty window which will not be associated with any file. For this purpose, :new command is used. Now we can move between these windows using ctrl-w."
+                            },
+                            {
+                                id: "hmfb_q8", question: "8. To remove all other windows except the current one, which of the following command is used?",
+                                options: [":on", ":new", ":n", ":r"], correctAnswer: ":on",
+                                explanation: "To make the current window the only window on the screen and close all other windows use :on command. We can also kill the current window using :q."
+                            },
+                            {
+                                id: "hmfb_q9", question: "9. vi editor has ____ named buffers.",
+                                options: ["2", "4", "26", "5"], correctAnswer: "26",
+                                explanation: "vi editor stores the deleted text in an unnamed buffer. But this suffers some limitations. i.e. we can use only one buffer at one time. So vi uses 26 special named buffers which are named after the letters of the alphabet. For example,\n“a4yy            // yanks 4 lines into buffer a"
+                            },
+                            {
+                                id: "hmfb_q10", question: "10. To restore a number of recent deletions, numbered buffers are used.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "We often need to restore a number of recent deletions. Vi editor makes it possible to restore up to recent nine complete line deletions using its numbered buffers. For example,\n“1p            // restores most recent deletion"
+                            },
+                            {
+                                id: "hmfb_q11", question: "11. For restoring the contents of numbered buffers efficiently, ___ command is used.",
+                                options: [".", "$", ":nb", ":q"], correctAnswer: ".",
+                                explanation: "vi offers the dot command to restore the contents of any buffer efficiently. Every time this command is pressed, it steps through the buffer set to restore the contents of the next buffer."
+                            },
+                            {
+                                id: "hmfb_q12", question: "12. The technique of restoring line deletions from numbered buffers is applicable only to entire lines.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "The technique of restoring line deletions from numbered buffers is applicable only to entire lines. For example, we can’t restore five words deleted with 5dw unless it was the last editing action performed."
+                            },
+                            {
+                                id: "hmfb_q13", question: "13. vi used ___ to enter control characters.",
+                                options: ["ctrl-w", "ctrl-v", "ctrl-d", "esc"], correctAnswer: "ctrl-v",
+                                explanation: "In vi, some characters are directly enterable, but a control character has to be preceded by another control character for it to be interpreted properly. Vi used ctrl-v to precede any control character."
+                            },
+                            {
+                                id: "hmfb_q14", question: "14. To append contents of buffer to file01, we can use __________",
+                                options: [":w >> file01", ":r > file01", ":w > file01", ":r >> file01"], correctAnswer: ":w >> file01",
+                                explanation: "The command :w >> file01 will append the contents of buffer to the file specified."
+                            },
+                            {
+                                id: "hmfb_q15", question: "15. Which of the following is an invalid command?",
+                                options: [":r file01", ":e file01", ":e#", ":w # file01"], correctAnswer: ":w # file01",
+                                explanation: ": r file01 will read the contents of file01 below the current line. :e file01 will stop editing the current file and will edit file01. Similarly, :e# returns to editing most recently edited file."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Customizing Vi Editor",
+                        questions: [
+                            {
+                                id: "cve_q1", question: "1. For searching a character, ___ and ___ are used.",
+                                options: ["f, t", "n, w", "e, d", "k, n"], correctAnswer: "f, t",
+                                explanation: "For searching a character, we can take the cursor near or to a specific character in the current line. This is done with f and t commands."
+                            },
+                            {
+                                id: "cve_q2", question: "2. For moving the cursor forward to the first occurrence of a character, __ is used.",
+                                options: ["d", "t", "f", "n"], correctAnswer: "f",
+                                explanation: "For moving the cursor forward to the first occurrence of a character, f command is used followed by the character. For example,\nfch                // moves the cursor forward to the first occurrence of ch"
+                            },
+                            {
+                                id: "cve_q3", question: "3. t command positions the cursor a single character before the occurrence.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "t command works in a similar manner as f except the fact that it positions the cursor a single character before the occurrence."
+                            },
+                            {
+                                id: "cve_q4", question: "4. __ and __ commands works in a reverse manner as f and t.",
+                                options: ["F, T", "tf, ft", "z, x", "ff, tt"], correctAnswer: "F, T",
+                                explanation: "F and T perform the respective functions as f and t but in reverse direction."
+                            },
+                            {
+                                id: "cve_q5", question: "5. For repeating the character search , and ; are used.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "We can repeat the character search using the ; and , respectively. ; repeats the search in the same direction along which the previous search was made with f or t. Similarly (,) repeats the search in the opposite direction."
+                            },
+                            {
+                                id: "cve_q6", question: "6. For customizing vi, which of the following command is used?",
+                                options: ["set", "map", "abbr", "set, map, abbr"], correctAnswer: "set, map, abbr",
+                                explanation: "vi can be customized in the way we want. For this purpose, map, set and abbr commands are used."
+                            },
+                            {
+                                id: "cve_q7", question: "7. vi environment is determined by variable settings. These variables are controlled by ____ command.",
+                                options: [":set", ":abbr", ":map", "autowrite"], correctAnswer: ":set",
+                                explanation: "vi environment is determined by variable settings. These variables are controlled by :set command."
+                            },
+                            {
+                                id: "cve_q8", question: "8. For automatic indentation, ____ is used with : set command.",
+                                options: ["autowrite", "autoindent", "automode", "showmode"], correctAnswer: "autoindent",
+                                explanation: "To provide automatic indentation to or code, we can use the following statement:\n:set  autoindent"
+                            },
+                            {
+                                id: "cve_q9", question: "9. Which of the following is used with :set to customize vi to ignore case in pattern searches?",
+                                options: ["nomatch", "ignorecase", "nocase", "nomagic"], correctAnswer: "ignorecase",
+                                explanation: "To customize the vi to ignore case in pattern searches we can use the following statement:\n:set  ignorecase        // case-insensitive search"
+                            },
+                            {
+                                id: "cve_q10", question: "10. To change the default tab stop spaces in vi, ___ can be used with :set.",
+                                options: ["nomagic", "tabstop=n", "tab", "tabchange"], correctAnswer: "tabstop=n",
+                                explanation: "To change the default tab setting (8 spaces) to 4 spaces, :set tabstop=4 can be used."
+                            },
+                            {
+                                id: "cve_q11", question: "11. Which command is used for mapping keys of a keyboard?",
+                                options: ["set", "map", "abbr", "autowrite"], correctAnswer: "map",
+                                explanation: "The map command lets us assign the undefined keys or reassign the defined ones so that when such a key is pressed, it expands to a command sequence."
+                            },
+                            {
+                                id: "cve_q12", question: "12. /* and f* are same.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "/* will search the entire file for an asterisk, while f* looks for it in the current line only."
+                            },
+                            {
+                                id: "cve_q13", question: "13. For compiling a C program without leaving the editor, which command will be used?",
+                                options: ["cc %", ":! Cc", ":!cc %", ":!c"], correctAnswer: ":!cc %",
+                                explanation: "vi provides us with a feature of compiling a C program without leaving the editor by using the :!cc % command."
+                            },
+                            {
+                                id: "cve_q14", question: "14. Which of the following statement is not true?",
+                                options: ["f and t commands are used for searching a character", "y and yy are same", "vi has 26 named buffers", ":e# is used for toggling between files"], correctAnswer: "y and yy are same",
+                                explanation: "The y operator yanks text but it cannot perform any function unless it is combined with any command or itself."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const mainChapterTitleEl = document.getElementById('mainChapterTitle');
+        const questionProgressTextEl = document.getElementById('questionProgressText');
+        const scoreDisplayEl = document.getElementById('scoreDisplay');
+        const progressBarEl = document.getElementById('progressBar');
+        const quizContentAreaEl = document.getElementById('quizContentArea');
+        const nextChapterBtn = document.getElementById('nextChapterBtn');
+
+        let currentChapterIndex = 0; // This page handles only one chapter
+        let score = 0;
+        let totalQuestionsInChapter = 0;
+        let questionsAnsweredCount = 0;
+        let allQuestionElementsMap = new Map();
+        let currentActiveQuestionId = null;
+
+        const sunIcon = `<i class="fas fa-sun text-xl text-yellow-400"></i>`;
+        const moonIcon = `<i class="fas fa-moon text-xl text-gray-700 dark:text-yellow-400"></i>`;
+
+        function setDarkMode(isDark) {
+            const htmlEl = document.documentElement;
+            if (isDark) {
+                htmlEl.classList.add('dark');
+                darkModeToggle.innerHTML = sunIcon;
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                htmlEl.classList.remove('dark');
+                darkModeToggle.innerHTML = moonIcon;
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            setDarkMode(!document.documentElement.classList.contains('dark'));
+        });
+
+        function renderChapter() {
+            quizContentAreaEl.innerHTML = '';
+            allQuestionElementsMap.clear();
+            const chapterData = quizData[currentChapterIndex];
+            mainChapterTitleEl.textContent = chapterData.chapterName;
+
+            score = 0;
+            questionsAnsweredCount = 0;
+            totalQuestionsInChapter = 0;
+            let firstQuestionId = null;
+
+            chapterData.topics.forEach(topic => {
+                totalQuestionsInChapter += topic.questions.length;
+            });
+            updateProgressAndScore();
+
+            chapterData.topics.forEach((topic) => {
+                const topicHeader = document.createElement('h3');
+                topicHeader.className = 'text-xl md:text-2xl font-semibold text-purple-600 dark:text-purple-400 mt-10 mb-6 pt-6 border-t border-gray-300 dark:border-gray-600 first:mt-0 first:pt-0 first:border-t-0';
+                topicHeader.textContent = topic.topicName;
+                quizContentAreaEl.appendChild(topicHeader);
+
+                topic.questions.forEach((q) => {
+                    if (!firstQuestionId) firstQuestionId = q.id;
+
+                    const questionBlock = document.createElement('div');
+                    questionBlock.id = `qblock-${q.id}`;
+                    questionBlock.className = 'quiz-question-block mb-10 p-5 bg-gray-50 dark:bg-gray-750 rounded-xl shadow-lg';
+                    questionBlock.dataset.questionId = q.id;
+
+                    const questionTextEl = document.createElement('p');
+                    questionTextEl.className = 'text-md md:text-lg font-medium mb-5 text-gray-800 dark:text-gray-200';
+                    questionTextEl.innerHTML = q.question.replace(/\n/g, '<br>');
+                    questionBlock.appendChild(questionTextEl);
+
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.className = 'grid grid-cols-1 md:grid-cols-2 gap-3 mb-4';
+                    q.options.forEach((option, optionIdx) => {
+                        const button = document.createElement('button');
+                        button.innerHTML = `<span class="text-left flex-grow">${String.fromCharCode(97 + optionIdx)}) ${option}</span>`;
+                        button.className = 'option-btn w-full text-left p-3 bg-gray-200 dark:bg-gray-600 hover:bg-blue-100 dark:hover:bg-blue-800 rounded-lg border-2 border-gray-300 dark:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-between disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow-md';
+                        button.dataset.questionId = q.id;
+                        button.dataset.optionIndex = optionIdx;
+                        button.disabled = true;
+                        button.addEventListener('click', handleAnswerSelection);
+                        optionsContainer.appendChild(button);
+                    });
+                    questionBlock.appendChild(optionsContainer);
+
+                    const feedbackEl = document.createElement('div');
+                    feedbackEl.className = 'feedback-area min-h-[25px] text-sm mb-2';
+                    questionBlock.appendChild(feedbackEl);
+
+                    const explanationEl = document.createElement('div');
+                    explanationEl.className = 'explanation-area p-3 rounded-md text-sm leading-relaxed';
+                    explanationEl.innerHTML = `<strong class="block mb-1">Explanation:</strong> ${q.explanation.replace(/\n/g, '<br>')}`;
+                    questionBlock.appendChild(explanationEl);
+
+
+                    quizContentAreaEl.appendChild(questionBlock);
+                    allQuestionElementsMap.set(q.id, questionBlock);
+                });
+            });
+
+            if (firstQuestionId) {
+                activateQuestion(firstQuestionId);
+            }
+            nextChapterBtn.classList.add('hidden');
+            nextChapterBtn.textContent = "Next Chapter ➝ System Programming I – Files";
+            nextChapterBtn.onclick = () => {
+                window.location.href = 'chapter-14.html'; // Assuming chapter 14
+            };
+        }
+
+        function activateQuestion(questionId) {
+            if (currentActiveQuestionId) {
+                const prevActiveBlock = allQuestionElementsMap.get(currentActiveQuestionId);
+                if (prevActiveBlock) {
+                    prevActiveBlock.classList.remove('active-question');
+                }
+            }
+
+            currentActiveQuestionId = questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+            if (questionBlock) {
+                questionBlock.classList.add('active-question');
+                questionBlock.querySelectorAll('.option-btn').forEach(btn => btn.disabled = false);
+                setTimeout(() => {
+                    const rect = questionBlock.getBoundingClientRect();
+                    const headerHeight = document.querySelector('header.sticky').offsetHeight || 150;
+                    if (rect.top < headerHeight || rect.bottom > (window.innerHeight - 50)) {
+                        questionBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 150);
+            }
+        }
+
+
+        function findQuestionData(questionId) {
+            for (const topic of quizData[currentChapterIndex].topics) {
+                const question = topic.questions.find(q => q.id === questionId);
+                if (question) return question;
+            }
+            return null;
+        }
+
+        function handleAnswerSelection(event) {
+            const selectedButton = event.currentTarget;
+            const questionId = selectedButton.dataset.questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+
+            if (!questionBlock || questionBlock.classList.contains('answered-question')) return;
+
+            const questionData = findQuestionData(questionId);
+            if (!questionData) return;
+
+            const selectedOptionIndex = parseInt(selectedButton.dataset.optionIndex);
+            const selectedOptionText = questionData.options[selectedOptionIndex];
+            const correctAnswerText = questionData.correctAnswer;
+
+            const feedbackEl = questionBlock.querySelector('.feedback-area');
+            const explanationEl = questionBlock.querySelector('.explanation-area');
+            const allOptionButtonsInBlock = questionBlock.querySelectorAll('.option-btn');
+
+            allOptionButtonsInBlock.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-blue-100', 'dark:hover:bg-blue-800', 'hover:shadow-md');
+            });
+
+            if (selectedOptionText === correctAnswerText) {
+                score++;
+                selectedButton.classList.add('correct');
+                feedbackEl.innerHTML = `<p class="text-green-600 dark:text-green-400 font-semibold"><i class="fas fa-check-circle mr-2"></i>Correct!</p>`;
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackEl.innerHTML = `<p class="text-red-600 dark:text-red-400 font-semibold"><i class="fas fa-times-circle mr-2"></i>Incorrect. The correct answer is highlighted.</p>`;
+                allOptionButtonsInBlock.forEach(btn => {
+                    if (questionData.options[parseInt(btn.dataset.optionIndex)] === correctAnswerText) {
+                        btn.classList.add('actual-correct-unselected');
+                        btn.classList.remove('incorrect');
+                    }
+                });
+            }
+
+            explanationEl.classList.add('visible');
+
+            questionBlock.classList.add('answered-question');
+            questionBlock.classList.remove('active-question');
+            questionsAnsweredCount++;
+            updateProgressAndScore();
+
+            setTimeout(() => {
+                let nextQuestionIdToActivate = null;
+                let foundCurrent = false;
+                for (const topic of quizData[currentChapterIndex].topics) {
+                    for (const q of topic.questions) {
+                        if (foundCurrent) {
+                            nextQuestionIdToActivate = q.id;
+                            break;
+                        }
+                        if (q.id === questionId) {
+                            foundCurrent = true;
+                        }
+                    }
+                    if (nextQuestionIdToActivate) break;
+                }
+
+                if (nextQuestionIdToActivate) {
+                    activateQuestion(nextQuestionIdToActivate);
+                } else {
+                    showChapterEnd();
+                }
+            }, 1500);
+        }
+
+        function updateProgressAndScore() {
+            scoreDisplayEl.textContent = `Score: ${score}`;
+            questionProgressTextEl.textContent = `Answered: ${questionsAnsweredCount} / ${totalQuestionsInChapter}`;
+            const progressPercentage = totalQuestionsInChapter > 0 ? (questionsAnsweredCount / totalQuestionsInChapter) * 100 : 0;
+            progressBarEl.style.width = `${progressPercentage}%`;
+        }
+
+        function showChapterEnd() {
+            nextChapterBtn.classList.remove('hidden');
+            // nextChapterBtn.onclick is already set in renderChapter
+
+            const endMessage = document.createElement('p');
+            endMessage.className = "text-center text-xl font-semibold mt-10 p-6 bg-blue-50 dark:bg-blue-900 rounded-lg";
+            endMessage.textContent = `Chapter 13 Complete! Your final score: ${score} out of ${totalQuestionsInChapter}.`;
+            quizContentAreaEl.appendChild(endMessage);
+            endMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+            const currentTheme = localStorage.getItem('darkMode');
+
+            if (currentTheme === 'enabled') {
+                setDarkMode(true);
+            } else if (currentTheme === 'disabled') {
+                setDarkMode(false);
+            } else {
+                setDarkMode(prefersDarkScheme.matches);
+            }
+
+            prefersDarkScheme.addEventListener('change', e => {
+                if (localStorage.getItem('darkMode') === null) {
+                    setDarkMode(e.matches);
+                }
+            });
+
+            renderChapter();
+        });
+
+    </script>
+</body>
+
+</html>

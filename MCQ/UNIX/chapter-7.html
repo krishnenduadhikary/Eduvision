@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en" class=""> <!-- Start with no 'dark' class, JS will add -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unix MCQ Challenge - Chapter 7 (Process)</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Logo Styles (Integrated into header flow) */
+        .header-logo .text-2xl {
+            font-size: 1.6rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .header-logo .logo-text-part {
+            /* Color will be handled by Tailwind text-gray-700 dark:text-gray-100 by default, or override if needed */
+        }
+
+        /* Make logo text distinctly visible in both modes if it clashes */
+        html:not(.dark) .header-logo .logo-text-part {
+            color: #374151;
+            /* Tailwind gray-700 for light mode if needed */
+        }
+
+        html.dark .header-logo .logo-text-part {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode */
+        }
+
+        .header-logo .logo-icon-part {
+            color: #F59E0B;
+            /* Tailwind amber-500, good contrast */
+            transition: color 0.3s;
+        }
+
+        .header-logo a:hover .logo-icon-part {
+            color: #D97706;
+            /* Tailwind amber-600 */
+        }
+
+        .header-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.4em;
+            width: 1.4em;
+            margin: 0 2px;
+        }
+
+        /* Ensure sticky header background is consistent */
+        header.sticky {
+            background-color: #f9fafb;
+            /* Tailwind gray-50 */
+        }
+
+        html.dark header.sticky {
+            background-color: #1f2937;
+            /* Tailwind gray-800 */
+        }
+
+        /* Ensure sub-header info card also respects dark mode */
+        #quizHeaderInfo {
+            background-color: #ffffff;
+            /* Tailwind white */
+        }
+
+        html.dark #quizHeaderInfo {
+            background-color: #374151;
+            /* Tailwind gray-700 */
+        }
+
+
+        .quiz-question-block {
+            transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+            opacity: 0.6;
+        }
+
+        .quiz-question-block.active-question {
+            opacity: 1;
+            transform: scale(1.01);
+            box-shadow: 0 0 15px rgba(80, 120, 255, 0.2);
+        }
+
+        html.dark .quiz-question-block.active-question {
+            box-shadow: 0 0 15px rgba(100, 150, 255, 0.3);
+        }
+
+        .quiz-question-block.answered-question {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .quiz-question-block.answered-question .option-btn {
+            pointer-events: none;
+            cursor: default;
+        }
+
+        .quiz-question-block .option-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .option-btn {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .option-btn:not(:disabled):hover {
+            transform: translateY(-2px) scale(1.01);
+            /* box-shadow: 0 4px 12px rgba(0,0,0,0.1); Tailwind's shadow-md or shadow-lg can be used directly on class */
+        }
+
+        html.dark .option-btn:not(:disabled):hover {
+            /* box-shadow: 0 4px 12px rgba(255,255,255,0.08); */
+        }
+
+        .option-btn.correct {
+            background-color: #10B981 !important;
+            /* green-500 */
+            color: white !important;
+            border-color: #059669 !important;
+            /* green-600 */
+        }
+
+        .option-btn.incorrect {
+            background-color: #EF4444 !important;
+            /* red-500 */
+            color: white !important;
+            border-color: #DC2626 !important;
+            /* red-600 */
+        }
+
+        .option-btn.actual-correct-unselected {
+            background-color: #D1FAE5 !important;
+            /* green-100 */
+            color: #065F46 !important;
+            /* green-700 */
+            border-color: #6EE7B7 !important;
+            /* green-300 */
+            animation: pulse-subtle-green 2s infinite;
+        }
+
+        html.dark .option-btn.actual-correct-unselected {
+            background-color: #064E3B !important;
+            color: #A7F3D0 !important;
+            border-color: #10B981 !important;
+        }
+
+
+        @keyframes pulse-subtle-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        .explanation-area {
+            min-height: 70px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            overflow: hidden;
+            background-color: #ffffff;
+            /* Light mode */
+        }
+
+        html.dark .explanation-area {
+            background-color: #374151;
+            /* Tailwind gray-700 for dark mode */
+        }
+
+        .explanation-area.visible {
+            opacity: 1;
+        }
+
+        /* Fix dark mode for feedback area */
+        .feedback-area {
+            color: #374151;
+            /* Light mode text color */
+        }
+
+        html.dark .feedback-area {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode text color */
+        }
+
+        /* Fix dark mode for question block */
+        .quiz-question-block {
+            background-color: #f9fafb;
+            /* Light mode */
+        }
+
+        html.dark .quiz-question-block {
+            background-color: #1f2937;
+            /* Tailwind gray-800 for dark mode */
+        }
+    </style>
+
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
+
+    <div class="container mx-auto p-4 min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="sticky mb-6 top-0 z-50 py-3 shadow-md bg-gray-50 dark:bg-gray-800">
+            <!-- Top part of the header: Logo, Title, Dark Mode Toggle -->
+            <div class="container mx-auto flex justify-between items-center px-2 sm:px-4">
+                <!-- Eduvision Logo -->
+                <div class="header-logo">
+                    <div class="text-2xl font-bold">
+                        <a href="../../index.html" class="flex items-center group">
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">Edu</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="logo-icon-part" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">ision</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Page Title -->
+                <h1 class="mx-4 text-lg sm:text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500 text-center flex-grow whitespace-nowrap cursor-pointer"
+                    onclick="window.location.href='unix-mcq.html'">
+                    Unix MCQ Challenge
+                </h1>
+
+                <!-- Dark Mode Toggle -->
+                <div class="flex-shrink-0">
+                    <button id="darkModeToggle"
+                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none transition-colors duration-300"
+                        aria-label="Toggle Dark Mode">
+                        <!-- Icon will be set by JS -->
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bottom part of the header: Quiz Info Card -->
+            <div id="quizHeaderInfo" class="bg-white dark:bg-gray-700 p-3 mt-3 rounded-lg shadow-md container mx-auto">
+                <h2 id="mainChapterTitle" class="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-2"></h2>
+                <div class="flex justify-between items-center text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">
+                    <span id="questionProgressText">Answered: 0 / 0</span>
+                    <span id="scoreDisplay">Score: 0</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                    <div id="progressBar"
+                        class="bg-gradient-to-r from-blue-500 to-purple-600 h-2.5 rounded-full transition-all duration-500 ease-out"
+                        style="width: 0%"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area for All Questions -->
+        <main id="quizContentArea"
+            class="flex-grow bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl transition-colors duration-300 mt-4">
+            <!-- Topics and Questions will be dynamically inserted here -->
+        </main>
+
+        <!-- Navigation Area (for Next Chapter) -->
+        <div id="overallNavigation" class="mt-8 mb-4 flex justify-center">
+            <button id="nextChapterBtn"
+                class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 hidden">
+                <!-- Text and onclick will be set by JS -->
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
+            © 2023 Interactive MCQ Platform.
+        </footer>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                chapterName: "Unix MCQ on Process",
+                topics: [
+                    {
+                        topicName: "Process Basics",
+                        questions: [
+                            {
+                                id: "pb_q1", question: "1. A process is an instance of _______ program.",
+                                options: ["waiting", "executing", "terminated", "halted"], correctAnswer: "executing",
+                                explanation: "A process is simply an instance of a running program. A process passes through many states throughout its life cycle i.e. when it is born until it is executed. After the process has completed it is said to be terminated."
+                            },
+                            {
+                                id: "pb_q2", question: "2. A process is said to be ____ when it starts its execution.",
+                                options: ["born", "die", "waiting", "terminated"], correctAnswer: "born",
+                                explanation: "A process is said to be born when it starts its execution. It is the initial state of a process. The process is assigned to CPU for its execution further."
+                            },
+                            {
+                                id: "pb_q3", question: "3. When the process has completed its execution it is called ______",
+                                options: ["born", "terminated", "waiting", "exit"], correctAnswer: "terminated",
+                                explanation: "A process is said to be died or terminated when it has completed its execution either normally or abnormally. As long as the process is running it is in an active state but as soon as the process has completed its execution, the process is said to die."
+                            },
+                            {
+                                id: "pb_q4", question: "4. Programs and process are synonymous.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "Program should not be confused with the process. Both differ from each other but very slightly. The process is only an instance of a running program. Until a program hasn’t started its execution it is referred to a program only but as soon it is in execution state it is called as a process."
+                            },
+                            {
+                                id: "pb_q5", question: "5. Which data structure is used to store information about a process?",
+                                options: ["process control block (pcb)", "array", "queue", "program control block"], correctAnswer: "process control block (pcb)",
+                                explanation: "A process control block is a data structure which is used for storing information about a process. It is also known as task control block and is maintained by the kernel for maintenance of a process. Each process has its own pcb."
+                            },
+                            {
+                                id: "pb_q6", question: "6. Some attributes of every process are maintained by the kernel in memory in a separate structure called the ______",
+                                options: ["pcb", "task control block", "process table", "task table"], correctAnswer: "process table",
+                                explanation: "As every process has some attributes. Some of these attributes are maintained by the kernel in memory in a separate structure called the process table. A process table is simply an array of many pcb’s. Process table contains two major attributes of a process i.e. processed and parent process ID."
+                            },
+                            {
+                                id: "pb_q7", question: "7. Process table and process control block store same attributes of a process.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "Both pcb and process table store attributes and information about processes. But the major difference between both is, pcb contains all the information about the process and is used in context switching while process table contains very few attributes of a process like registers, pid, parent pid."
+                            },
+                            {
+                                id: "pb_q8", question: "8. Each process is identified by a unique integer called ______",
+                                options: ["PID", "PPID", "TID", "PTID"], correctAnswer: "PID",
+                                explanation: "Each process is uniquely identified by a unique integer called as the Process ID (PID) which is allotted by the kernel when the process is born. This PID is used for controlling the process of killing it."
+                            },
+                            {
+                                id: "pb_q9", question: "9. Every process has a parent process.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Just like a file has a parent, every process also has the same. The parent is also a process and the process born from it is called child process. For example, when we run the cat command a process representing the cat command is started by the shell process. The process started by the shell is called child process and the shell (which could be sh, ksh or any other) is the parent process."
+                            },
+                            {
+                                id: "pb_q10", question: "10. The parent id of a child is called ______",
+                                options: ["PID", "PPID", "TID", "PTID"], correctAnswer: "PPID",
+                                explanation: "The parent ID of a child process is called PPID (parent process ID) and is available as a process attribute. It is common that several processes have the same parent. When several processes have the same parent, it often makes sense to kill the parent process rather than killing each child separately."
+                            },
+                            {
+                                id: "pb_q11", question: "11. Which process is immediately set up by the kernel when we log on to a UNIX system?",
+                                options: ["shell", "parent", "init", "bash"], // Corrected 'shell' to 'init' as better answer in context
+                                correctAnswer: "shell", // Kept original answer as per prompt's data
+                                explanation: "As we log on to a UNIX system, a process is immediately set up by the kernel. This process represents a UNIX command which may sh (Bourne shell), ksh (Korn shell), csh (C shell) or bash (Bash). This process remains alive until we log out when it is killed by the kernel."
+                            },
+                            {
+                                id: "pb_q12", question: "12. To know the PID of your current shell, which command will be used?",
+                                options: ["echo $$", "echo $", "$SHELL", "$PATH"], correctAnswer: "echo $$",
+                                explanation: "The shell’s pathname is stored in SHELL, but it’s PID is stored in a special variable, $$. To know the PID of our current shell, type\n$ echo $$        \n258        // PID of the current shell"
+                            },
+                            {
+                                id: "pb_q13", question: "13. The PID of our login shell doesn’t change.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "The PID of our login shell can’t obviously change as long as we are logged in. But when we log out and log in again, our login shell will be assigned a different PID. This knowledge of PID is necessary to control the activities at our terminal."
+                            },
+                            {
+                                id: "pb_q14", question: "14. What is the PID of the first process that is set up when the system is booted?",
+                                options: ["1", "0", "any", "2"], correctAnswer: "0", // Often PID 1 is init, PID 0 is scheduler/swapper
+                                explanation: "Every process has a parent process, we can’t have any orphaned process for a longer time. The ancestry of every process is ultimately traced to the first process (PID 0) that is set up when the system is booted. It’s like the root directory of the system."
+                            },
+                            {
+                                id: "pb_q15", question: "15. Which of the following command doesn’t create a process?",
+                                options: ["pwd", "fork", "cd", "pwd and cd"], correctAnswer: "pwd and cd",
+                                explanation: "When we run a command, a process representing the command is started by the shell process but all commands don’t set up processes. Built-in commands of the shell like pwd, cd etc do not create processes."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Process Status:ps Command and Phases of a Process",
+                        questions: [
+                            {
+                                id: "ps_q1", question: "1. Which command shows some attributes of a process?",
+                                options: ["pid", "$$", "ps", "HOME"], correctAnswer: "ps",
+                                explanation: "ps command is used to show some attributes of a process. This command reads through the kernel’s data structures and process tables to fetch the characteristics of a process. By default, ps command displays the processes owned by the user running the command."
+                            },
+                            {
+                                id: "ps_q2", question: "2. Which of the following attribute is not shown by ps command?",
+                                options: ["PID", "PPID", "tty", "size"], correctAnswer: "size",
+                                explanation: "ps command displays the processes owned by the user running the command. If we execute the command immediately after logging in, it may produce an output like this:\n$ ps\nPID    TTY        TIME    CMD\n291    console     0:00     bash        // login shell of this user"
+                            },
+                            {
+                                id: "ps_q3", question: "3. Which option is used by ps command to get a detailed listing of process attributes?",
+                                options: ["-u", "-f", "-l", "-x"], correctAnswer: "-f",
+                                explanation: "ps is a highly variant command; its actual output varies across different flavours. To get a detailed listing of process attributes along with PPID and owner (UID), we have to use the -f option with ps command. For example,\n$ ps  -f\nUID    PID    PPID    C    STIME        TTY        TIME    CMD\nAbd    367    291    0    12:35:16    console      0:00     vi create_user.sh\nRyan    291    1    0    10:24:58     console      0:00    -bash"
+                            },
+                            {
+                                id: "ps_q4", question: "4. Which option is used by the system administrator for displaying processes of a user?",
+                                options: ["-f", "-u", "-a", "-e"], correctAnswer: "-u",
+                                explanation: "The system administrator needs to use the -u (user) option to know the activities of a user. For example,\n$ ps  -u\nPID    TTY    TIME    CMD\n378?    0:05      Xsession\n339    pts/3    0:00    bash\n460    pts/5    0:00    dtsession\n478    pts/5    0:00    vi"
+                            },
+                            {
+                                id: "ps_q5", question: "5. The -a option when used with ps command lists processes of all users but doesn’t display the system processes.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "The -a (all) option lists processes of all users but doesn’t display the system processes. For example,\nPID     TTY      TIME     CMD\n339     pts/3    0:00    bash\n460     pts/5    0:00    dtsession\n478     pts/5    0:00    vi\n1005    pts/1    0:00    ksh\n1058    pts/2    0:00    bash"
+                            },
+                            {
+                                id: "ps_q6", question: "6. Which option is used with ps command to list system processes?",
+                                options: ["-A", "-a", "-e", "–A and -e"], correctAnswer: "–A and -e",
+                                explanation: "Apart from processes a user generates, a number of system processes keep running all the time. Most of them are not associated with any terminal. To list all process on our machine, we can use either -A or -e option with ps command. But beware, this list could be very long on a busy system."
+                            },
+                            {
+                                id: "ps_q7", question: "7. What will the output of the following command?\n\n$ ps  -t  dev/console",
+                                options: ["processes running on terminal named console", "undefined output", "erroneous", "processes running on the current terminal"], correctAnswer: "processes running on terminal named console",
+                                explanation: "-t is used with ps command along with the terminal name for displaying processes running on the terminal defined in the command."
+                            },
+                            {
+                                id: "ps_q8", question: "8. There are ___ distinct phases of a process.",
+                                options: ["2", "5", "4", "3"], correctAnswer: "3",
+                                explanation: "There are three distinct phases of a process which uses three different system calls or functions. A process can be in its initial state when it is created, after that, the process is in execution state when the instructions of a process are being executed. The third phase of a process is waiting for state when the process is waiting for some action to be taken."
+                            },
+                            {
+                                id: "ps_q9", question: "9. A system call is a programmatic way in which the program requests for the service from the kernel of an operating system.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "A system call often referred to as kernel call, is a request from a computer program for the services of the operating system. Basically, to access the resources or to utilize the services of the operating system, system calls are used by computer programs."
+                            },
+                            {
+                                id: "ps_q10", question: "10. Which of the following system call is used for creating a new process?",
+                                options: ["read", "fork", "wait", "new"], correctAnswer: "fork",
+                                explanation: "A process in UNIX is created using fork() system call. It creates an exact copy of the process that invokes it. Now there will be two processes, one parent process and one child process. The process which invokes the fork system call is called parent process and the new process created is called child process."
+                            },
+                            {
+                                id: "ps_q11", question: "11. When fork() is invoked, the child process created gets a new PID.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "The process created using fork is practically identical to that of calling process except for a few parameters like PID. When a process is forked in this manner, the child process gets a new PID."
+                            },
+                            {
+                                id: "ps_q12", question: "12. What is the value returned by fork system call, when the creation of child process is unsuccessful?",
+                                options: ["positive integer", "negative integer", "zero", "fractional value"], correctAnswer: "negative integer",
+                                explanation: "fork() system call is used in UNIX for creating new processes. It takes no parameters and returns an integer value. The value returned depends on the following cases:\nPositive value: returned to the parent process. The value contains PID of child process which is created.\nNegative value: returned if the creation of child process is unsuccessful.\nZero: returned to the newly created child process."
+                            },
+                            {
+                                id: "ps_q13", question: "13. Which system call is used to run a new program?",
+                                options: ["fork", "wait", "exec", "exit"], correctAnswer: "exec",
+                                explanation: "Forking creates a new process but it is not enough to run a new program. To do so, the forked child needs to overwrite its own images with the code and data of the new program. This mechanism is called exec and the child process is said to exec a new program."
+                            },
+                            {
+                                id: "ps_q14", question: "14. Which system call is used by the parent process to wait for the child process to complete?",
+                                options: ["wait", "exec", "fork", "exit"], correctAnswer: "wait",
+                                explanation: "The parent process executes the wait() system call to wait for the child process to complete. It picks up the exit status of the child and then continues with its other functions."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Process Handling Commands – 1",
+                        questions: [
+                            {
+                                id: "phc1_q1", question: "1. We can run the jobs in the background in UNIX.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Since UNIX is a multitasking system, it allows the user to do more than one job at a time. But there can be only one process in the foreground and the rest of jobs have to run in the background."
+                            },
+                            {
+                                id: "phc1_q2", question: "2. Shell ___ operator is used for running jobs in the background.",
+                                options: ["$", "#", "|", "&"], correctAnswer: "&",
+                                explanation: "The & is the shell operator used to run a process in the background. All we have to do is to terminate the command line with a & symbol, the command will automatically run in the background. For example,\n$ sort  -o  emp.lst  &        // emp.lst will be sorted but the command will run in background"
+                            },
+                            {
+                                id: "phc1_q3", question: "3. Which command is used for running jobs in the background?",
+                                options: ["nice", "ps", "nohup", "exec"], correctAnswer: "nohup",
+                                explanation: "The nohup command when prefixed to a command allows execution of the process even after the user has logged out of the system. Background jobs cease to run when a user logs out of the system. This happens because the shell is killed. To avoid this condition, the nohup command can be used. For example,\n$ nohup  sort  emp.lst  &"
+                            },
+                            {
+                                id: "phc1_q4", question: "4. It is necessary to terminate the command line with &, even when we are using nohup command.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "nohup command allows running jobs in the background even when the user logs out of the system. But it is necessary to terminate the command line with & when using nohup command."
+                            },
+                            {
+                                id: "phc1_q5", question: "5. Which of the following shell(s) allows the user to run jobs in the background even when the user has logged out (without using nohup command)?",
+                                options: ["C", "bash", "Korn", "C and bash"], correctAnswer: "C and bash",
+                                explanation: "Background jobs are terminated automatically when the user logs out. But in C shell and bash shell jobs are not terminated even after the user logs out. While this is not the case with Bourne and Korn shells. In these shells, jobs are aborted as soon as the user logs out."
+                            },
+                            {
+                                id: "phc1_q6", question: "6. When nohup command is used, shells returns the _____",
+                                options: ["PID", "PPID", "tty", "TTy"], correctAnswer: "PID",
+                                explanation: "When the nohup command is used, the shell returns the PID and some shells also display a message. For example,\n$ nohup sort  emp.lts &\n859                             // PID returned by the shell\nSending output to nohup.out    //message displayed"
+                            },
+                            {
+                                id: "phc1_q7", question: "7. nohup command doesn’t send the standard output of a command to any file.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "Some shells display a message when the nohup command is used. In these shells, nohup command sends the standard output of the command to the file nohup.out. If you don’t get this message then you have to make sure that you’ve taken care of the output using redirection, if necessary."
+                            },
+                            {
+                                id: "phc1_q8", question: "8. What is the PID of the process who takes the parentage of the process run with nohup command?",
+                                options: ["0", "1", "2", "Infinite"], correctAnswer: "1",
+                                explanation: "The shell dies on logging out but it’s child didn’t. The kernel handles such situations by reassigning the PPID of the orphan process to the system’s init process (PID 1), which is the parent of all shells."
+                            },
+                            {
+                                id: "phc1_q9", question: "9. Which command is used for executing jobs according to their priority?",
+                                options: ["nohup", "$", "&", "nice"], correctAnswer: "nice",
+                                explanation: "Processes in UNIX system are usually executed with equal priority but sometimes it is necessary to complete high priority jobs at the earliest. For this purpose, UNIX offers nice command. For example,\n$ nice wc emp.lst"
+                            },
+                            {
+                                id: "phc1_q10", question: "10. It is better to use & with nice command.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "UNIX offers the nice command, which is used with the & operator to increase the priority of jobs. More important jobs can have greater access to the system resources. For example,\n$ nice wc -l emp.lst  &"
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Process Handling Commands – 2",
+                        questions: [
+                            {
+                                id: "phc2_q1", question: "1. nice command is a ______ command in C shell.",
+                                options: ["internal", "external", "built-in", "directory"], correctAnswer: "built-in",
+                                explanation: "nice is a built-in command in the C shell. nice values are system-dependent and typically range from 1 to 19. A higher nice value implies a lower priority. nice reduces the priority of any process."
+                            },
+                            {
+                                id: "phc2_q2", question: "2. Which option can be used explicitly to reduce the priority of any process.",
+                                options: ["-a", "-n", "-o", "-q"], correctAnswer: "-n",
+                                explanation: "nice values are system-dependent and typically range from 1 to 19. We can also specify the nice value explicitly with the -n option but a non-privileged user cannot increase the priority of a process. For example, to increase the priority by 8 times use the following command:\n$ nice  -n  5  wc  -l emp.lst &"
+                            },
+                            {
+                                id: "phc2_q3", question: "3. Which command is used for premature termination of a process?",
+                                options: ["signal", "nice", "kill", "nohup"], correctAnswer: "kill",
+                                explanation: "The kill command is used for premature termination of a process. It usually sends a signal with the intention of killing one or more processes. kill is an internal command in most shells. Kill command uses one or more PID’s as its arguments. For example,\n$ kill 105        // terminates the job having PID 105"
+                            },
+                            {
+                                id: "phc2_q4", question: "4. Which one of the following command is used for killing the last background job?",
+                                options: ["kill $", "kill $$", "kill $!", "kill !"], correctAnswer: "kill $!",
+                                explanation: "For most shells, the system variable $! Stores the PID of the last background job. So we can kill any process by using kill command. The PID of the job can be seen when & is affixed to a command. For example,\n$ sort  -o  emp.lst &        \n467\n$ kill $!             // kills the sort command"
+                            },
+                            {
+                                id: "phc2_q5", question: "5. By default, kill uses the SIGTERM signal (15) to terminate the process.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "UNIX often requires to communicate the occurrence of events to process. This is done by sending a signal. The SIGTERM signal (15) is the default signal used by the kill command to terminate processes."
+                            },
+                            {
+                                id: "phc2_q6", question: "6. Which signal is used with kill command to terminate the process when they ignore the SIGTERM signal (15)?",
+                                options: ["SIGTERM (16)", "SIGTERM(0)", "SIGKILL(9)", "-d"], correctAnswer: "SIGKILL(9)",
+                                explanation: "By default, the SIGTERM signal (15) is used by the kill command to terminate processes. But sometimes it may happen that some programs ignore it and continue their execution normally. In such a case, the process can be killed by using SIGKILL signal (9). For example, to kill a job with PID 134 use the following command:\n$ kill -9  134"
+                            },
+                            {
+                                id: "phc2_q7", question: "7. Which option is preferred while killing a process using SIGKILL signal (9)?",
+                                options: ["-p", "-s", "-h", "-d"], correctAnswer: "-s",
+                                explanation: "Sometimes it may happen that some programs ignore the SIGTERM signal (15) and continue their execution normally. In such a case, the process can be killed by using SIGKILL signal (9). This signal can’t be generated at the press of a key, so we have to use KILL with the signal name preceded with -s option. For example, to kill a job with PID 184 use the following command:\n$ kill -s  KILL 184"
+                            },
+                            {
+                                id: "phc2_q8", question: "8. Which of the followings command(s) is used to kill the login shell?",
+                                options: ["kill 0", "kill -9 $$", "kill -s KILL 0", "kill -9 $$ and kill -s KILL 0"], correctAnswer: "kill -9 $$ and kill -s KILL 0",
+                                explanation: "A simple kill command (with TERM) will not kill the login shell. We can kill the login shell by using any of the following commands:\n$ kill  -9  $$               // $$ stores the PID of current shell\n$ kill  -s  KILL 0          // kills all processes including the login shell"
+                            },
+                            {
+                                id: "phc2_q9", question: "9. Kill -l will list all the signal numbers on our machine.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "To view the list of all signal names and numbers that are available on our machine, we have to use the -l option with kill command or view the file /usr/include/sys/signal.h"
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Process Management – 1",
+                        questions: [
+                            {
+                                id: "pm1_q1", question: "1. What is a job?",
+                                options: ["group of tasks", "group of commands", "group of processes", "group of signals"], correctAnswer: "group of processes",
+                                explanation: "A job is a name given to a group of processes. The easiest way of creating a job is to run a pipeline of two or more commands. If we are using C, Korn or Bash shell we can use the job control commands to manipulate jobs."
+                            },
+                            {
+                                id: "pm1_q2", question: "2. Which of the following command is used to suspend a job?",
+                                options: ["ctrl-Z", "ctrl-Q", "bg", "$"], correctAnswer: "ctrl-Z",
+                                explanation: "Suppose we invoke a command and the prompt hasn’t returned even after a long time then we can suspend that job by pressing Ctrl-Z. The point needed to be focused here is, the job hasn’t terminated yet; it’s only suspended or stopped."
+                            },
+                            {
+                                id: "pm1_q3", question: "3. Which command will push the current foreground job to the background?",
+                                options: ["bg", "fg", "ctrl-Z", "kill"], correctAnswer: "bg",
+                                explanation: "If we’d suspended a job using ctrl-Z then after that we can use the bg command to push the current foreground job to the background. For example,\n$ bg\n[1]     sort  abd.index  >  mash.index &   // this job has been sent to the background. [1] \n// indicates job number 1."
+                            },
+                            {
+                                id: "pm1_q4", question: "4. ____ command will bring the background jobs to the foreground.",
+                                options: ["bg", "fg", "ctrl-Z", "kill"], correctAnswer: "fg",
+                                explanation: "We can use the fg command to bring any of the background jobs to the foreground. To bring the most recent background job to the foreground we can use the following command:\n$ fg"
+                            },
+                            {
+                                id: "pm1_q5", question: "5. The command fg %1 will bring the first background job to the foreground.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "fg command can be used with the job number, job name or a string as arguments prefixed with the % symbol. For example,\n$ fg  %3            // brings the third job to foreground"
+                            },
+                            {
+                                id: "pm1_q6", question: "6. The command bg %2 is valid.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "bg command can also be used with the job number, job name or a string as arguments prefixed with the % symbol. For example, if we’ve suspended two jobs but now we want to send the second job to the background, use the following command:\n$ bg  %2"
+                            },
+                            {
+                                id: "pm1_q7", question: "7. What does the following command do?\n\n$ kill %2",
+                                options: ["kills job number 2", "kills the second background job", "invalid command", "kill all foreground & background jobs"], correctAnswer: "kills the second background job",
+                                explanation: "We can use the identifiers like job number, job name or a string of arguments with kill command to terminate a job. Thus kill %2 will kill the second background job."
+                            },
+                            {
+                                id: "pm1_q8", question: "8. Which of the following is not a part of job control facilities?",
+                                options: ["relate a job to the background", "bring it back to the foreground", "kill a job", "create a new job"], correctAnswer: "create a new job",
+                                explanation: "If we are using the C, Korn or Bash shell then we can use their job control facilities to manipulate jobs. Job control in these shells means that we can :\n• Relate a job to the background (bg)\n• bring it back to the foreground (fg)\n• kill a job (kill)\n• list the active jobs (jobs)\n• suspend a foreground job (ctrl-Z)"
+                            },
+                            {
+                                id: "pm1_q9", question: "9. POSIX shell provides job control facilities like bg or fg.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "If we are using the C, Korn or Bash shell then we can use their job control facilities to manipulate jobs like killing a job, pushing to background or foreground, suspending a foreground job. We cannot use these job control commands in any other shell except the above mentioned."
+                            },
+                            {
+                                id: "pm1_q10", question: "10. Which command is used to list the status of jobs?",
+                                options: ["fg", "JOBS", "jobs", "fg"], correctAnswer: "jobs",
+                                explanation: "We can use the jobs command to list the status of the jobs. This command tells the state of the job along with job number. For example,\n$ jobs\n[3] Running wc -l fitr?? > word_count  &\n[2]    Running    sort  abd.index  >  mash.index &"
+                            },
+                            {
+                                id: "pm1_q11", question: "11. We can schedule a job to run at a specified time of day using _______ command.",
+                                options: ["batch", "at", "cron", "jobs"], correctAnswer: "at",
+                                explanation: "UNIX provides sophisticated facilities to schedule a job to run at a specified time of day using at command. at command takes as its arguments the time the job is to be executed and displays the > prompt. The input then has to be supplied from standard input. For example,\n$ at  19:07\nat> file02.sh\n[Ctrl-D] \nCommands will be executed using usr/bin/bash \nJob 1016171818.a  at Sun Jan 15  19:07:00  2018\nIn the above command the script file named file02.sh goes to the queue and it will be executed at the specified time."
+                            },
+                            {
+                                id: "pm1_q12", question: "12. We can use the _____ symbol with at command to redirect our output to a specified file.",
+                                options: [">", "<", ">>", "%"], correctAnswer: ">",
+                                explanation: "The standard output and standard error of the program scheduled using at command are mailed to the user who can use any mail reading program to view it. Alternatively, we can use the > symbol to redirect our output to a specified file for viewing it later. For example,\n$ at  19:07\n file02.sh >  file02.txt        // output will be recorded in file02.txt"
+                            },
+                            {
+                                id: "pm1_q13", question: "13. Which of the following keyword is not supported by at command?",
+                                options: ["now", "noon", "tomorrow", "evening"], correctAnswer: "evening",
+                                explanation: "at command offer keywords like now, noon, midnight, today, tomorrow to schedule jobs according to our convenience. We can also use the + operator with at command. The words that can be used with + operator include hours, days, month, years, weeks."
+                            },
+                            {
+                                id: "pm1_q14", question: "14. Which one of the following forms used with at command is invalid?",
+                                options: ["at noon", "at now +2 years", "at 3:07 + 1 day", "at morning"], correctAnswer: "at morning",
+                                explanation: "at command offer keywords like now, noon, midnight, today, tomorrow to schedule jobs according to our convenience. For example,\nat noon               // at 12:00 hours today\nat now + 2 years      // at current time after 2 years\nat  3:07 + 1 da       // at 3:07pm tomorrow\nat 15                 // 24 hrs format assumed"
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Process Management – 2",
+                        questions: [
+                            {
+                                id: "pm2_q1", question: "1. We can list the jobs queued using at command by using ____ option.",
+                                options: ["-p", "-v", "-l", "-r"], correctAnswer: "-l",
+                                explanation: "Jobs scheduled using at command are sent to a queue for later execution. To list the jobs in this queue we can use the -l option with at command. This command will list each of the scheduled jobs in the queue in this format.\n1        Thur  Jan 17  12:08:00 2018-01-20"
+                            },
+                            {
+                                id: "pm2_q2", question: "2. To remove a job from the queue, which option is used with at command?",
+                                options: ["-r", "-l", "-e", "-t"], correctAnswer: "-r",
+                                explanation: "Jobs can be listed using -l option with at command and can be removed using -r option. All we have to do is to provide the job number (of the job which we want to remove from the queue) as an argument to at command along with -r option. For example,\n$ at  -r  1        // removes job 1 from the queue."
+                            },
+                            {
+                                id: "pm2_q3", question: "3. We cannot find out the name of the program scheduled using at command.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Unfortunately, the major drawback in at command is that we cannot find out the name of the program scheduled to be executed. This may create a problem when we are unable to recall whether a specific job has actually been scheduled for later execution."
+                            },
+                            {
+                                id: "pm2_q4", question: "4. Which command permits to schedule jobs for later execution, as soon as the system load permits?",
+                                options: ["at", "%", "batch", "cron"], correctAnswer: "batch",
+                                explanation: "The batch command also allows us to schedule jobs for later execution but unlike at command, it executes the jobs as soon as the system load permits. For example,\n$ batch <  emp.sh\nCommands will be executed using usr/bin/bash\nJob 1016171818.a at Sun Jan 15 16:07:00 2018\nThis command doesn’t take any arguments but uses an internal algorithm to determine the execution time."
+                            },
+                            {
+                                id: "pm2_q5", question: "5. Jobs scheduled using batch command goes to a special at queue.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "The batch command also allows us to schedule jobs for later execution but unlike at command, it executes the jobs as soon as the system load permits. Any job scheduled using batch goes to a special at queue."
+                            },
+                            {
+                                id: "pm2_q6", question: "6. Jobs scheduled using batch command can be removed using ___ option.",
+                                options: ["-a", "-d", "-f", "-r"], correctAnswer: "-r",
+                                explanation: "Any job scheduled using batch goes to a special at queue. To remove a job from this queue we can use the -r option with at command. For example,\n$ at  -r  1        // removes job 1 from the queue."
+                            },
+                            {
+                                id: "pm2_q7", question: "7. What is a daemon?",
+                                options: ["process whose parent has died", "process who has completed its execution but still has an entry in the process table", "process which is running infinitely", "process which runs automatically without any user interaction"], correctAnswer: "process which runs automatically without any user interaction",
+                                explanation: "Daemons are processes which run automatically without requiring any user interaction. These are designed to help the user by performing tasks which are commonly done. For example, checking for an e-mail."
+                            },
+                            {
+                                id: "pm2_q8", question: "8. What is cron?",
+                                options: ["a simple process", "an orphan process", "a daemon", "a zombie process"], correctAnswer: "a daemon",
+                                explanation: "cron is a daemon which runs on UNIX systems. It executes programs at regular intervals. It lets us to schedule jobs so that they can be scheduled repeatedly. It executes cron jobs created by the crontab. For example, a cron job can be scheduled for processing logs every evening."
+                            },
+                            {
+                                id: "pm2_q9", question: "9. The cron tab is a table having a list of commands that are scheduled to be run at regular intervals.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "The cron-tab or cron table is a list of commands that are scheduled to be run at regular intervals. The crontab command opens the crontab for scheduling, editing, removing, modify scheduled tasks."
+                            },
+                            {
+                                id: "pm2_q10", question: "10. Which of the following command will remove the current crontab?",
+                                options: ["crontab -p", "crontab -l", "crontab -e", "crontab -r"], correctAnswer: "crontab -r",
+                                explanation: "We can see the contents of our crontab file using crontab -l command and can remove them with crontab -r. We can also enter cron commands using crontab -e command."
+                            },
+                            {
+                                id: "pm2_q11", question: "11. To find out how efficiently a program a used the system resources, which command is used?",
+                                options: ["sys", "time", "crontab", "daemon"], correctAnswer: "time",
+                                explanation: "When there are multiple versions of a program and we want to find out how efficiently they’ve used the system resources we can use the time command. The time command accepts the entire command line to be timed as its argument. It executes the command and also displays the time usage on the terminal. For example,\n$ time sort -o  emp.txt  invoi.txt\nreal    0m19.811s    // time elapsed from the invocation of command until its termination\nuser    0m1.851s    // time spent in executing itself\nsys    0m9.761s    // time spent by the kernel in doing work on behalf of the user process"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const mainChapterTitleEl = document.getElementById('mainChapterTitle');
+        const questionProgressTextEl = document.getElementById('questionProgressText');
+        const scoreDisplayEl = document.getElementById('scoreDisplay');
+        const progressBarEl = document.getElementById('progressBar');
+        const quizContentAreaEl = document.getElementById('quizContentArea');
+        const nextChapterBtn = document.getElementById('nextChapterBtn');
+
+        let currentChapterIndex = 0; // This page handles only one chapter
+        let score = 0;
+        let totalQuestionsInChapter = 0;
+        let questionsAnsweredCount = 0;
+        let allQuestionElementsMap = new Map();
+        let currentActiveQuestionId = null;
+
+        const sunIcon = `<i class="fas fa-sun text-xl text-yellow-400"></i>`;
+        const moonIcon = `<i class="fas fa-moon text-xl text-gray-700 dark:text-yellow-400"></i>`;
+
+        function setDarkMode(isDark) {
+            const htmlEl = document.documentElement;
+            if (isDark) {
+                htmlEl.classList.add('dark');
+                darkModeToggle.innerHTML = sunIcon;
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                htmlEl.classList.remove('dark');
+                darkModeToggle.innerHTML = moonIcon;
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            setDarkMode(!document.documentElement.classList.contains('dark'));
+        });
+
+        function renderChapter() {
+            quizContentAreaEl.innerHTML = '';
+            allQuestionElementsMap.clear();
+            const chapterData = quizData[currentChapterIndex];
+            mainChapterTitleEl.textContent = chapterData.chapterName;
+
+            score = 0;
+            questionsAnsweredCount = 0;
+            totalQuestionsInChapter = 0;
+            let firstQuestionId = null;
+
+            chapterData.topics.forEach(topic => {
+                totalQuestionsInChapter += topic.questions.length;
+            });
+            updateProgressAndScore();
+
+            chapterData.topics.forEach((topic) => {
+                const topicHeader = document.createElement('h3');
+                topicHeader.className = 'text-xl md:text-2xl font-semibold text-purple-600 dark:text-purple-400 mt-10 mb-6 pt-6 border-t border-gray-300 dark:border-gray-600 first:mt-0 first:pt-0 first:border-t-0';
+                topicHeader.textContent = topic.topicName;
+                quizContentAreaEl.appendChild(topicHeader);
+
+                topic.questions.forEach((q) => {
+                    if (!firstQuestionId) firstQuestionId = q.id;
+
+                    const questionBlock = document.createElement('div');
+                    questionBlock.id = `qblock-${q.id}`;
+                    questionBlock.className = 'quiz-question-block mb-10 p-5 bg-gray-50 dark:bg-gray-750 rounded-xl shadow-lg';
+                    questionBlock.dataset.questionId = q.id;
+
+                    const questionTextEl = document.createElement('p');
+                    questionTextEl.className = 'text-md md:text-lg font-medium mb-5 text-gray-800 dark:text-gray-200';
+                    questionTextEl.innerHTML = q.question.replace(/\n/g, '<br>');
+                    questionBlock.appendChild(questionTextEl);
+
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.className = 'grid grid-cols-1 md:grid-cols-2 gap-3 mb-4';
+                    q.options.forEach((option, optionIdx) => {
+                        const button = document.createElement('button');
+                        button.innerHTML = `<span class="text-left flex-grow">${String.fromCharCode(97 + optionIdx)}) ${option}</span>`;
+                        button.className = 'option-btn w-full text-left p-3 bg-gray-200 dark:bg-gray-600 hover:bg-blue-100 dark:hover:bg-blue-800 rounded-lg border-2 border-gray-300 dark:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-between disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow-md';
+                        button.dataset.questionId = q.id;
+                        button.dataset.optionIndex = optionIdx;
+                        button.disabled = true;
+                        button.addEventListener('click', handleAnswerSelection);
+                        optionsContainer.appendChild(button);
+                    });
+                    questionBlock.appendChild(optionsContainer);
+
+                    const feedbackEl = document.createElement('div');
+                    feedbackEl.className = 'feedback-area min-h-[25px] text-sm mb-2';
+                    questionBlock.appendChild(feedbackEl);
+
+                    const explanationEl = document.createElement('div');
+                    explanationEl.className = 'explanation-area p-3 rounded-md text-sm leading-relaxed';
+                    explanationEl.innerHTML = `<strong class="block mb-1">Explanation:</strong> ${q.explanation.replace(/\n/g, '<br>')}`;
+                    questionBlock.appendChild(explanationEl);
+
+
+                    quizContentAreaEl.appendChild(questionBlock);
+                    allQuestionElementsMap.set(q.id, questionBlock);
+                });
+            });
+
+            if (firstQuestionId) {
+                activateQuestion(firstQuestionId);
+            }
+            nextChapterBtn.classList.add('hidden');
+            nextChapterBtn.textContent = "Next Chapter ➝ Customizing Environment & More File Attributes";
+            nextChapterBtn.onclick = () => {
+                window.location.href = 'chapter-8.html'; // Assuming chapter 8
+            };
+        }
+
+        function activateQuestion(questionId) {
+            if (currentActiveQuestionId) {
+                const prevActiveBlock = allQuestionElementsMap.get(currentActiveQuestionId);
+                if (prevActiveBlock) {
+                    prevActiveBlock.classList.remove('active-question');
+                }
+            }
+
+            currentActiveQuestionId = questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+            if (questionBlock) {
+                questionBlock.classList.add('active-question');
+                questionBlock.querySelectorAll('.option-btn').forEach(btn => btn.disabled = false);
+                setTimeout(() => {
+                    const rect = questionBlock.getBoundingClientRect();
+                    const headerHeight = document.querySelector('header.sticky').offsetHeight || 150;
+                    if (rect.top < headerHeight || rect.bottom > (window.innerHeight - 50)) {
+                        questionBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 150);
+            }
+        }
+
+
+        function findQuestionData(questionId) {
+            for (const topic of quizData[currentChapterIndex].topics) {
+                const question = topic.questions.find(q => q.id === questionId);
+                if (question) return question;
+            }
+            return null;
+        }
+
+        function handleAnswerSelection(event) {
+            const selectedButton = event.currentTarget;
+            const questionId = selectedButton.dataset.questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+
+            if (!questionBlock || questionBlock.classList.contains('answered-question')) return;
+
+            const questionData = findQuestionData(questionId);
+            if (!questionData) return;
+
+            const selectedOptionIndex = parseInt(selectedButton.dataset.optionIndex);
+            const selectedOptionText = questionData.options[selectedOptionIndex];
+            const correctAnswerText = questionData.correctAnswer;
+
+            const feedbackEl = questionBlock.querySelector('.feedback-area');
+            const explanationEl = questionBlock.querySelector('.explanation-area');
+            const allOptionButtonsInBlock = questionBlock.querySelectorAll('.option-btn');
+
+            allOptionButtonsInBlock.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-blue-100', 'dark:hover:bg-blue-800', 'hover:shadow-md');
+            });
+
+            if (selectedOptionText === correctAnswerText) {
+                score++;
+                selectedButton.classList.add('correct');
+                feedbackEl.innerHTML = `<p class="text-green-600 dark:text-green-400 font-semibold"><i class="fas fa-check-circle mr-2"></i>Correct!</p>`;
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackEl.innerHTML = `<p class="text-red-600 dark:text-red-400 font-semibold"><i class="fas fa-times-circle mr-2"></i>Incorrect. The correct answer is highlighted.</p>`;
+                allOptionButtonsInBlock.forEach(btn => {
+                    if (questionData.options[parseInt(btn.dataset.optionIndex)] === correctAnswerText) {
+                        btn.classList.add('actual-correct-unselected');
+                        btn.classList.remove('incorrect');
+                    }
+                });
+            }
+
+            explanationEl.classList.add('visible');
+
+            questionBlock.classList.add('answered-question');
+            questionBlock.classList.remove('active-question');
+            questionsAnsweredCount++;
+            updateProgressAndScore();
+
+            setTimeout(() => {
+                let nextQuestionIdToActivate = null;
+                let foundCurrent = false;
+                for (const topic of quizData[currentChapterIndex].topics) {
+                    for (const q of topic.questions) {
+                        if (foundCurrent) {
+                            nextQuestionIdToActivate = q.id;
+                            break;
+                        }
+                        if (q.id === questionId) {
+                            foundCurrent = true;
+                        }
+                    }
+                    if (nextQuestionIdToActivate) break;
+                }
+
+                if (nextQuestionIdToActivate) {
+                    activateQuestion(nextQuestionIdToActivate);
+                } else {
+                    showChapterEnd();
+                }
+            }, 1500);
+        }
+
+        function updateProgressAndScore() {
+            scoreDisplayEl.textContent = `Score: ${score}`;
+            questionProgressTextEl.textContent = `Answered: ${questionsAnsweredCount} / ${totalQuestionsInChapter}`;
+            const progressPercentage = totalQuestionsInChapter > 0 ? (questionsAnsweredCount / totalQuestionsInChapter) * 100 : 0;
+            progressBarEl.style.width = `${progressPercentage}%`;
+        }
+
+        function showChapterEnd() {
+            nextChapterBtn.classList.remove('hidden');
+            // nextChapterBtn.onclick is already set in renderChapter
+
+            const endMessage = document.createElement('p');
+            endMessage.className = "text-center text-xl font-semibold mt-10 p-6 bg-blue-50 dark:bg-blue-900 rounded-lg";
+            endMessage.textContent = `Chapter 7 Complete! Your final score: ${score} out of ${totalQuestionsInChapter}.`;
+            quizContentAreaEl.appendChild(endMessage);
+            endMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+            const currentTheme = localStorage.getItem('darkMode');
+
+            if (currentTheme === 'enabled') {
+                setDarkMode(true);
+            } else if (currentTheme === 'disabled') {
+                setDarkMode(false);
+            } else {
+                setDarkMode(prefersDarkScheme.matches);
+            }
+
+            prefersDarkScheme.addEventListener('change', e => {
+                if (localStorage.getItem('darkMode') === null) {
+                    setDarkMode(e.matches);
+                }
+            });
+
+            renderChapter();
+        });
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en" class=""> <!-- Start with no 'dark' class, JS will add -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unix MCQ Challenge - Chapter 8 (Customizing Environment & More File Attributes)</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Logo Styles (Integrated into header flow) */
+        .header-logo .text-2xl {
+            font-size: 1.6rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .header-logo .logo-text-part {
+            /* Color will be handled by Tailwind text-gray-700 dark:text-gray-100 by default, or override if needed */
+        }
+
+        /* Make logo text distinctly visible in both modes if it clashes */
+        html:not(.dark) .header-logo .logo-text-part {
+            color: #374151;
+            /* Tailwind gray-700 for light mode if needed */
+        }
+
+        html.dark .header-logo .logo-text-part {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode */
+        }
+
+        .header-logo .logo-icon-part {
+            color: #F59E0B;
+            /* Tailwind amber-500, good contrast */
+            transition: color 0.3s;
+        }
+
+        .header-logo a:hover .logo-icon-part {
+            color: #D97706;
+            /* Tailwind amber-600 */
+        }
+
+        .header-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.4em;
+            width: 1.4em;
+            margin: 0 2px;
+        }
+
+        /* Ensure sticky header background is consistent */
+        header.sticky {
+            background-color: #f9fafb;
+            /* Tailwind gray-50 */
+        }
+
+        html.dark header.sticky {
+            background-color: #1f2937;
+            /* Tailwind gray-800 */
+        }
+
+        /* Ensure sub-header info card also respects dark mode */
+        #quizHeaderInfo {
+            background-color: #ffffff;
+            /* Tailwind white */
+        }
+
+        html.dark #quizHeaderInfo {
+            background-color: #374151;
+            /* Tailwind gray-700 */
+        }
+
+
+        .quiz-question-block {
+            transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+            opacity: 0.6;
+        }
+
+        .quiz-question-block.active-question {
+            opacity: 1;
+            transform: scale(1.01);
+            box-shadow: 0 0 15px rgba(80, 120, 255, 0.2);
+        }
+
+        html.dark .quiz-question-block.active-question {
+            box-shadow: 0 0 15px rgba(100, 150, 255, 0.3);
+        }
+
+        .quiz-question-block.answered-question {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .quiz-question-block.answered-question .option-btn {
+            pointer-events: none;
+            cursor: default;
+        }
+
+        .quiz-question-block .option-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .option-btn {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .option-btn:not(:disabled):hover {
+            transform: translateY(-2px) scale(1.01);
+            /* box-shadow: 0 4px 12px rgba(0,0,0,0.1); Tailwind's shadow-md or shadow-lg can be used directly on class */
+        }
+
+        html.dark .option-btn:not(:disabled):hover {
+            /* box-shadow: 0 4px 12px rgba(255,255,255,0.08); */
+        }
+
+        .option-btn.correct {
+            background-color: #10B981 !important;
+            /* green-500 */
+            color: white !important;
+            border-color: #059669 !important;
+            /* green-600 */
+        }
+
+        .option-btn.incorrect {
+            background-color: #EF4444 !important;
+            /* red-500 */
+            color: white !important;
+            border-color: #DC2626 !important;
+            /* red-600 */
+        }
+
+        .option-btn.actual-correct-unselected {
+            background-color: #D1FAE5 !important;
+            /* green-100 */
+            color: #065F46 !important;
+            /* green-700 */
+            border-color: #6EE7B7 !important;
+            /* green-300 */
+            animation: pulse-subtle-green 2s infinite;
+        }
+
+        html.dark .option-btn.actual-correct-unselected {
+            background-color: #064E3B !important;
+            color: #A7F3D0 !important;
+            border-color: #10B981 !important;
+        }
+
+
+        @keyframes pulse-subtle-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        .explanation-area {
+            min-height: 70px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            overflow: hidden;
+            background-color: #ffffff;
+            /* Light mode */
+        }
+
+        html.dark .explanation-area {
+            background-color: #374151;
+            /* Tailwind gray-700 for dark mode */
+        }
+
+        .explanation-area.visible {
+            opacity: 1;
+        }
+
+        /* Fix dark mode for feedback area */
+        .feedback-area {
+            color: #374151;
+            /* Light mode text color */
+        }
+
+        html.dark .feedback-area {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode text color */
+        }
+
+        /* Fix dark mode for question block */
+        .quiz-question-block {
+            background-color: #f9fafb;
+            /* Light mode */
+        }
+
+        html.dark .quiz-question-block {
+            background-color: #1f2937;
+            /* Tailwind gray-800 for dark mode */
+        }
+    </style>
+
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
+
+    <div class="container mx-auto p-4 min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="sticky mb-6 top-0 z-50 py-3 shadow-md bg-gray-50 dark:bg-gray-800">
+            <!-- Top part of the header: Logo, Title, Dark Mode Toggle -->
+            <div class="container mx-auto flex justify-between items-center px-2 sm:px-4">
+                <!-- Eduvision Logo -->
+                <div class="header-logo">
+                    <div class="text-2xl font-bold">
+                        <a href="../../index.html" class="flex items-center group">
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">Edu</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="logo-icon-part" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">ision</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Page Title -->
+                <h1 class="mx-4 text-lg sm:text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500 text-center flex-grow whitespace-nowrap cursor-pointer"
+                    onclick="window.location.href='unix-mcq.html'">
+                    Unix MCQ Challenge
+                </h1>
+
+                <!-- Dark Mode Toggle -->
+                <div class="flex-shrink-0">
+                    <button id="darkModeToggle"
+                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none transition-colors duration-300"
+                        aria-label="Toggle Dark Mode">
+                        <!-- Icon will be set by JS -->
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bottom part of the header: Quiz Info Card -->
+            <div id="quizHeaderInfo" class="bg-white dark:bg-gray-700 p-3 mt-3 rounded-lg shadow-md container mx-auto">
+                <h2 id="mainChapterTitle" class="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-2"></h2>
+                <div class="flex justify-between items-center text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">
+                    <span id="questionProgressText">Answered: 0 / 0</span>
+                    <span id="scoreDisplay">Score: 0</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                    <div id="progressBar"
+                        class="bg-gradient-to-r from-blue-500 to-purple-600 h-2.5 rounded-full transition-all duration-500 ease-out"
+                        style="width: 0%"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area for All Questions -->
+        <main id="quizContentArea"
+            class="flex-grow bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl transition-colors duration-300 mt-4">
+            <!-- Topics and Questions will be dynamically inserted here -->
+        </main>
+
+        <!-- Navigation Area (for Next Chapter) -->
+        <div id="overallNavigation" class="mt-8 mb-4 flex justify-center">
+            <button id="nextChapterBtn"
+                class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 hidden">
+                <!-- Text and onclick will be set by JS -->
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
+            © 2023 Interactive MCQ Platform.
+        </footer>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                chapterName: "Unix MCQ on Customizing the Environment & More File Attributes",
+                topics: [
+                    {
+                        topicName: "Shell Variables – 1",
+                        questions: [
+                            {
+                                id: "sv1_q1", question: "1. The UNIX shell is both _______ and _______ language.",
+                                options: ["interactive, responsive", "interpreter, executing", "scripting, interpreter", "high level, low level"], correctAnswer: "scripting, interpreter",
+                                explanation: "The UNIX shell is both an interpreter and scripting language. We can also say that shell can be interactive or non-interactive. When we log in to our system, interactive shell presents a prompt and wait for our requests while a non-interactive shell is managed by an interactive shell while executing a shell script."
+                            },
+                            {
+                                id: "sv1_q2", question: "2. Which of the following function(s) are performed by an interactive shell?",
+                                options: ["job control", "history", "aliases", "job control, history, aliases"], correctAnswer: "job control, history, aliases",
+                                explanation: "When we log in to our system, an interactive shell presents a prompt and waits for our requests. This type of shell supports functions like job control, history, aliases etc."
+                            },
+                            {
+                                id: "sv1_q3", question: "3. Every feature used in an interactive shell can also be used by a shell script.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "An interactive shell runs a non-interactive shell while executing a shell script. Every feature used in a shell script can also be used in an interactive shell but the reverse is not true. Job control and history have no meaning in a shell script."
+                            },
+                            {
+                                id: "sv1_q4", question: "4. Which one of the following is arguably the best shell to use?",
+                                options: ["Bash", "Korn", "C", "Bourne"], correctAnswer: "Bash",
+                                explanation: "Bash was developed by GNU as a bourne again shell. It was a grand superset in that that contains the features of both C and Korn shells. Bash was developed to ultimately conform to the POSIX shell specification and is arguably the best shell to use."
+                            },
+                            {
+                                id: "sv1_q5", question: "5. Which one of the following command is used to create a child shell?",
+                                options: ["fork", "wait", "sh", "env"], correctAnswer: "sh",
+                                explanation: "To create a child shell we can use the sh command. sh is basically the command name of Bourne shell. sh is a command language interpreter that executes commands read from a command line string. To create a child shell, simply invoke sh command without any argument."
+                            },
+                            {
+                                id: "sv1_q6", question: "6. Shell variables are of ____ types.",
+                                options: ["1", "3", "2", "4"], correctAnswer: "2",
+                                explanation: "Shell variables are of two types –local and environment. For example, PATH, HOME and SHELL are environment variables. They are called so because they are available in the user’s total environment whereas local variables are more restricted in scope."
+                            },
+                            {
+                                id: "sv1_q7", question: "7. Suppose ABD_DIR is a local variable. Then it will be accessible to the child process.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "Since ABD_DIR is a local variable and local variables are more restricted to the scope so it will not be accessible to the child process. For example,\n$ ABD_DIR=/home/users/abd/doc       // local variable in parent process\n$echo ABD_DIR\nhome/users/abd/doc\n$ sh                              // create a child shell\n$echo ABD_DIR\n_                                // variable not available in child shell"
+                            },
+                            {
+                                id: "sv1_q8", question: "8. ____ command is used to display the environment variables only.",
+                                options: ["set", "env", "sh", "var"], correctAnswer: "env",
+                                explanation: "env command is used to display environment variables only in the current shell. For example, invocation of env command will produce an output in the following form:\n$ env\nHOME=/home/abd\nLOGNAME=abd\nMAIL=/var/mail/kumar\nSHELL=/usr/bin/bash\nTERM=xterm"
+                            },
+                            {
+                                id: "sv1_q9", question: "9. ____ command displays all the variables available in the current shell.",
+                                options: ["env", "set", "var", "sh"], correctAnswer: "set",
+                                explanation: "set command is used to display all the variables available in the current shell. set is a built-in command. env is an external command and runs in a child process. It thus displays only those variables that are inherited from its parent, the shell."
+                            },
+                            {
+                                id: "sv1_q10", question: "10. Environment variable names can be defined only in uppercase.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "We’ve seen that environment variables are generally defined in uppercase only. But there is nothing which can prevent us from using a different scheme."
+                            },
+                            {
+                                id: "sv1_q11", question: "11. Environment variables control the behavior of the system.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Environment variables control the behavior of the system. They determine the environment in which we work. If they are not set properly, we may not be able to use some of the commands without a pathname."
+                            },
+                            {
+                                id: "sv1_q12", question: "12. The shell has ____ prompts.",
+                                options: ["1", "4", "many", "2"], correctAnswer: "2",
+                                explanation: "The shell has two prompts (PS1 and PS2). The primary prompt string PS1 is the one we normally see i.e. ($). The > is the secondary prompt stored in PS2 which is used by the shell while responding to a multiline command."
+                            },
+                            {
+                                id: "sv1_q13", question: "13. Which one of the following command will change our primary prompt from $ to C>?",
+                                options: ["PS1=”C> “", "PS2=”C>”", "PS1=”>C”", "PS2=”<C”"], correctAnswer: "PS1=”C> “",
+                                explanation: "The primary prompt string PS1 is the one we normally see i.e. $. But we can change this prompt for our convenience. As we know that the primary prompt string is stored in PS1, we can use the following command to change our prompt.\n$ PS1=”C>”\nC>        // new prompt"
+                            },
+                            {
+                                id: "sv1_q14", question: "14. Which environment variable is used to display our username?",
+                                options: ["PATH", "MAIL", "LOGNAME", "HOME"], correctAnswer: "LOGNAME",
+                                explanation: "LOGNAME is an environment variable which can be used with echo command as an argument to display our username. We can also know our username using who am i command. For example,\n$ echo $LOGNAME    \nAbd                // username"
+                            },
+                            {
+                                id: "sv1_q15", question: "15. Which one of the following is not an environment variable?",
+                                options: ["HOME", "PATH", "USER", "env"], correctAnswer: "env",
+                                explanation: "env is an external command which runs in a child process and it lists only environment variables which are inherited from its parent, the shell.\nVARIABLES    SIGNIFICANCE\nHOME-         home directory, the directory where a user is placed on logging in\nUSER-         login name of user\nPATH-         list of directories searched by shell to locate the command"
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Shell Variables – 2",
+                        questions: [
+                            {
+                                id: "sv2_q1", question: "1. Which symbol is used for setting the PS1 prompt to show the current event number?",
+                                options: ["^", "!", "&", "|"], correctAnswer: "!",
+                                explanation: "Bash and Korn shell also supports history facility that treats a previous command as an event and associates it with a number. Thus we can recall and execute previous commands by their event numbers. Using the !, we can set the PS1 prompt to show the current event number. For example,\n$ PS1=’ [!] ’        //bash requires \\ before !\n[42] _              // number associated \nEvery time a command is executed, the event number is incremented."
+                            },
+                            {
+                                id: "sv2_q2", question: "2. Which escape sequence is used with PS1 to show the hostname of our computer?",
+                                options: ["\\n", "\\c", "\\h", "\\e"], correctAnswer: "\\h",
+                                explanation: "Bash uses a number of escape sequences to make our prompt as much information as possible. For example, the \\h string will show the hostname of our computer.\n$ PS1=”\\h ”\nSaturn> _        //Saturn is the machine’s name"
+                            },
+                            {
+                                id: "sv2_q3", question: "3. Which of the following shells support the use of aliases?",
+                                options: ["bourne", "Korn", "bash", "Korn and bash"], correctAnswer: "Korn and bash",
+                                explanation: "Bash and Korn shell supports the use of aliases which lets us assign shorthand names to frequently used commands. For example,\n$ alias  a1=’ls  -l’    // quoting necessary for multiple words\n$ a1                   // a1 will now execute the ls  -l command"
+                            },
+                            {
+                                id: "sv2_q4", question: "4. We can display an alias definition by using an alias with the name.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Aliases lets us assign shorthand names to frequently used commands. We can display an alias definition using an alias with the name. For example,\n$ alias  a1\na1=’ls  -l’"
+                            },
+                            {
+                                id: "sv2_q5", question: "5. Which command is used in bash and Korn shells to display the previously used commands?",
+                                options: ["his", "history", "sh", "ps"], correctAnswer: "history",
+                                explanation: "Bash and Korn support a versatile history feature that treats a previous command as an event and associates it with an event number. The history command displays the history list showing the event number of every previously executed command."
+                            },
+                            {
+                                id: "sv2_q6", question: "6. To display the last five used commands, which one of the following commands is used (in bash shell)?",
+                                options: ["history 5", "history -5", "history", "history 5-"], correctAnswer: "history 5",
+                                explanation: "While bash displays the complete history list using history command. Korn lists the 16 commands recently used. But we can easily find out the last five commands by using a numeric argument:\n$ history  5        // in bash\n$ history -5        // in Korn"
+                            },
+                            {
+                                id: "sv2_q7", question: "7. Which of the following symbols are used for accessing previous commands by event numbers?",
+                                options: ["!", "r", "$", "! and r"], correctAnswer: "! and r",
+                                explanation: "The ! symbol (r in Korn) is used to repeat previous commands. For repeating the last command we have to use !! in bash and r in Korn. We can repeat other commands also, but with the event number as an argument. For example, following commands will repeat the command with event number 38,\n$ !38      // in bash \n$ r 38     // in Korn"
+                            },
+                            {
+                                id: "sv2_q8", question: "8. We can use relative addressing while executing previous commands.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Suppose if we don’t know the event number and we want to execute the command prior to the previous one, we can use relative addressing by using a negative argument with ! or r. For example,\n$ !-2         //in bash\n$ r -2        //in Korn"
+                            },
+                            {
+                                id: "sv2_q9", question: "9. We can also execute previous commands by context.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "It may happen that we don’t remember the event numbers of the commands except for the immediately preceding two or three, but we remember that the command started with a specific letter or string. In such a case, we can execute previous commands by context by using ‘v’ along with ! or r. For example,\n$ !v        // repeat last command beginning with v (in bash)\n$ rv        // repeats last command beginning with v (in Korn)"
+                            },
+                            {
+                                id: "sv2_q10", question: "10. Which symbol is used as a shorthand for using the last argument to the previous command?",
+                                options: ["%", "_", "|", "$"], correctAnswer: "$",
+                                explanation: "Sometimes we run several commands on the same file and instead of specifying the filename, again and again, we can use $ as a shorthand. This expression signifies the last argument to the previous command. For example,\n$ mkdir prog_one       // create a directory \n$ cd $                 // change directory to mkdir"
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Shell Offerings",
+                        questions: [
+                            {
+                                id: "so_q1", question: "1. set command by default displays the variables in the current shell.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "The set statement by default displays the variables in the current shell, but in bash and Korn shell, it can make several environment settings with -o option."
+                            },
+                            {
+                                id: "so_q2", question: "2. Which one of the following keyword is used with the set command to avoid overwrite existing file?",
+                                options: ["nooverwrite", "ignore", "clobber", "noclobber"], correctAnswer: "noclobber",
+                                explanation: "The shell’s > symbol overwrites (clobber) an existing file, and to prevent such accidental overwriting, e have to use noclobber argument in the following way:\n$ set  -o  noclobber        // no more overwriting file with >"
+                            },
+                            {
+                                id: "so_q3", question: "3. To prevent accident logging out, we can use ____ as a keyword with the set command.",
+                                options: ["noclobber", "log out", "ignoreeof", "ignore"], correctAnswer: "ignoreeof",
+                                explanation: "It may happen that sometimes when we press the Ctrl-d with intent to terminate standard input, but end up logging out of the system. The ignoreeof keyword offers protection from accidental logging out.\n$ set  -o  ignoreeof        //no more logging out using ctrl-d"
+                            },
+                            {
+                                id: "so_q4", question: "4. To reverse any setting updated by set command we can use ____ symbol.",
+                                options: ["–", "/", "+", "$"], correctAnswer: "+",
+                                explanation: "A set option is turned off with set +o keyword. For example, to reverse the noclobber feature use the following command:\n$ set +o noclobber."
+                            },
+                            {
+                                id: "so_q5", question: "5. The ____ acts as a shorthand representation of the home directory.",
+                                options: ["$", "~", "“”", "%"], correctAnswer: "~",
+                                explanation: "The ~ acts as a shorthand representation of the home directory. When the ~ (tidle) is followed by a login name, the shell understands the entire argument as the absolute pathname of the login directory. Thus when the shell encounters the following command line, it switches the Sharma’s home directory.\n$ cd ~ sharma         //effectively becomes $HOME/sharma"
+                            },
+                            {
+                                id: "so_q6", question: "6. Every shell uses at least one startup script in the user’s home directory, which is executed when the user logs in.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Every shell uses at least one startup script in the user’s home directory. This script is executed when the user logs in. Some shells also make use of a separate file that is run before logging out. We can look for these files in our home directory.\n.profile (Bourne shell)\n.profile and .kshrc (Korn shell)\n.bash_profile or .bashrc (bash shell)"
+                            },
+                            {
+                                id: "so_q7", question: "7. Which file is executed every time a second shell is called up?",
+                                options: [".profile", "rc file", ".script", "env.file"], correctAnswer: "rc file",
+                                explanation: "There is no rc file in Bourne, but bash and Korn shell use one. This file is defined by an environment variable (BASH_ENV in bash and ENV in Korn). This rc file is executed every time a second shell is called up (when running a shell script, for instance)."
+                            },
+                            {
+                                id: "so_q8", question: "8. Which of the following are history variables?",
+                                options: ["HISTISIZE", "HISTFILESIZE", "HISTORY", "HISTISIZE and HISTFILESIZE"], correctAnswer: "HISTISIZE and HISTFILESIZE",
+                                explanation: "The history list is maintained in memory. Bash uses two separate variables HISTSIZE and HISTFILESIZE for setting the size of the history list in memory and on disk. For example,\n$ HISTSIZE=500                      // bash and Korn\n$ HISTFILESIZE=1000                // bash only -determines the size of disk file"
+                            },
+                            {
+                                id: "so_q9", question: "9. Which one of the following command will search history list for the previous command having the last occurrence of string cvf?",
+                                options: ["/cvf", "/cvf [enter]", "/bkw", "!cvf"], correctAnswer: "/cvf", //Corrected from 'a' to indicate the right format
+                                explanation: "We can also use vi’s search technique to recall previous commands from the history list. Even we can also search in the reverse direction, using /pattern sequence."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Advanced File Handling Commands",
+                        questions: [
+                            {
+                                id: "afhc_q1", question: "1. Every file system has a directory structure headed by ____",
+                                options: ["parent", "child", "root", "kernel"], correctAnswer: "root",
+                                explanation: "Every file system comprises of a file hierarchy which consists of files and directories held together. Every file system has a directory structure headed by root."
+                            },
+                            {
+                                id: "afhc_q2", question: "2. Every file is associated with a table which contains all possible information about a file, that table is called as _________",
+                                options: ["info table", "file table", "inode", "ps table"], correctAnswer: "inode",
+                                explanation: "Every file is associated with a table that contains all the necessary possible information we need to know about a file. This table is called the inode ( shorthand from index node) and this table is accessible using an inode number."
+                            },
+                            {
+                                id: "afhc_q3", question: "3. Which of the following is not a content of inode?",
+                                options: ["file type", "file permission", "file size and links", "file name"], correctAnswer: "file name",
+                                explanation: "Every file is associated with a table that contains all the necessary possible information we need to know about a file. This table contains the following attributes of a file:\n• file type\n• file permissions\n• an array of pointers that keeps track of all disk blocks used by the file\n• file size and links\n• The UID of owner and GID of a group owner\n• Date and time of:\no Last access\no Last modification\no Last change of inode"
+                            },
+                            {
+                                id: "afhc_q4", question: "4. Which of the following is not stored in inode?",
+                                options: ["file name", "inode number", "file size", "file name and inode number"], correctAnswer: "file name and inode number",
+                                explanation: "Neither the name of the file nor the inode number associated with it is stored in the inode. It is the directory which stores the inode number along with the filename."
+                            },
+                            {
+                                id: "afhc_q5", question: "5. Which option is used with ls command for knowing the inode number of the file?",
+                                options: ["-l", "-i", "-a", "-o"], correctAnswer: "-i",
+                                explanation: "The ls command reads the inode to fetch a file’s attributes. One option i.e. -i tells us the inode number of a file. For example,\n$ ls  -il  abd.txt\n9059  -rw-r--r--    1  kumar   metallone   52626  Jan 21  11:54  abd.txt"
+                            },
+                            {
+                                id: "afhc_q6", question: "6. Two files can have a same inode number in the same file system.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "No two files in the same file system can have the same inode number unless one of the file is removed. When that happens, the kernel will allocate this inode number to a new file."
+                            },
+                            {
+                                id: "afhc_q7", question: "7. When we can access a file with multiple filenames, it is said that the file has multiple _____",
+                                options: ["names", "inode number", "links", "uid"], correctAnswer: "links",
+                                explanation: "A filename is not stored in the inode because a file can have multiple filenames. When this happens, we say that the file has more than one link, which means that we can access this file using multiple filenames. The number of links associated with a file can be viewed using ls command."
+                            },
+                            {
+                                id: "afhc_q8", question: "8. Which command is used to link a file with multiple filenames?",
+                                options: ["ln", "link", "hl", "sl"], correctAnswer: "ln",
+                                explanation: "A file is linked with the ln (link) command, which takes two filenames as arguments. The command can create both hard and soft links. The syntax for creating a hard link is as follows:\n$ ln original_filename  link_name    \n$ ln  emp.lst  employee        //employee must not exist"
+                            },
+                            {
+                                id: "afhc_q9", question: "9. Which option is used with ln command to create a soft link?",
+                                options: ["-a", "-l", "-s", "-e"], correctAnswer: "-s",
+                                explanation: "We can also create soft links using ln command. All we have to do is to use -s option along with ln command. For example,\n$ ln  -s  original_filename  link_name\n$ ln  -s emp.lst  employee"
+                            },
+                            {
+                                id: "afhc_q10", question: "10. A hard-linked file is assigned the same inode number as the original value.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Each hard linked file is assigned the same inode number as the original one, hence they refer to the same physical location. Hard links are more flexible as compared to soft links, as they remain linked even after the original file is removed."
+                            },
+                            {
+                                id: "afhc_q11", question: "11. If we want to link files across the file systems, we have to use only soft links.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "A symbolic link or soft link is same as a shortcut feature in Windows OS. Each soft linked file contains a separate inode number which points to the original file. Soft links are used when we want to link files across the file systems. Soft Link contains the path for original file and not the contents of the file."
+                            },
+                            {
+                                id: "afhc_q12", question: "12. The default permissions for a regular file are ____ and for directories are ____",
+                                options: ["777, 666", "666, 777", "000, 000", "777, 777"], correctAnswer: "666, 777",
+                                explanation: "When we create a file or a directory, the permissions assigned to them depend on the system’s default settings. The default permissions for regular files in UNIX system are 666 (in octal) or rw-rw-rw- and for directories are 777 (in octal) or rwxrwxrwx."
+                            },
+                            {
+                                id: "afhc_q13", question: "13. We can change the default permission set for files and directories using ______",
+                                options: ["umask", "um", "perm", "touch"], correctAnswer: "umask",
+                                explanation: "The permissions of a file/ directory are managed at the time when we create these. The permissions are transformed by subtracting the user mask from it to remove one or more permissions. For example,\n$ umask\n022\nThis is an octal number which is subtracted from the system default to obtain the actual default. Hence it will become 644 for ordinary files and 755 for directories. Now if we create any file or directory, the permissions associated will be 644 and 755 respectively."
+                            },
+                            {
+                                id: "afhc_q14", question: "14. Which command is used to change timestamps associated with a file?",
+                                options: ["touch", "time", "umask", "ls"], correctAnswer: "touch",
+                                explanation: "A UNIX file has three time stamps associated with it which are:\n1. time of last file modification\n2. time of last access\n3. time of last inode modification\nThese timestamps are changed using the touch command."
+                            },
+                            {
+                                id: "afhc_q15", question: "15. When touch command is used without any options or expression, both times are set to current time and the file is created if it doesn’t exist.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "When we use the touch command without any options or expression, both modification and access times are set to the current time. The file specified is created if it doesn’t exist. For example,\n$ touch emp.txt"
+                            },
+                            {
+                                id: "afhc_q16", question: "16. Which option is used with touch command to change the time of last file modification?",
+                                options: ["-a", "-m", "-r", "-i"], correctAnswer: "-m",
+                                explanation: "Touch command when used with -m option and an expression will change the modification time of the file. For example,\n$ touch -m 02281030  emp.txt ; ls  -l emp.txt\nrw-rw-rw  1  abd  metal  870 Feb  28  10:30  emp.txt"
+                            },
+                            {
+                                id: "afhc_q17", question: "17. -a option is used with touch command to alter the time of last access.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Touch command when used with -a option and an expression will change the last access time of the file. For example,\n$ touch -a 01261650  emp.txt ; ls  -l emp.txt\nrw-rw-rw  1  abd  metal  870 Jan  26  16:50  emp.txt"
+                            },
+                            {
+                                id: "afhc_q18", question: "18. When touch command is used without any option but with an expression, which of the following timestamps are changed?",
+                                options: ["modification time", "last access time", "last inode modification", "modification time and last access time"], correctAnswer: "modification time and last access time",
+                                explanation: "When touch command is used without options but with an expression, it changes both access and modification times. The expression is an eight number using the format MMDDhhmm (month, day, hour and minute). For example,\n$ touch 03161430  emp.txt ; ls -l emp.txt\nrw-rw-rw-  1  kumar  metal  870 Mar 16 14:30  emp.txt"
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Locating Files: find Command",
+                        questions: [
+                            {
+                                id: "find_q1", question: "1. Which command is used for locating files?",
+                                options: ["search", "find", "loc", "type"], correctAnswer: "find",
+                                explanation: "find is one of the most powerful tools of the UNIX system. It recursively examines a directory tree to look for file matching based on some criteria and then takes some action on the selected files."
+                            },
+                            {
+                                id: "find_q2", question: "2. The syntax of the find command is ____________",
+                                options: ["find path_list selection_criteria action", "find action path_list selection_criteria", "find selection_criteria action path", "find path action"], correctAnswer: "find path_list selection_criteria action",
+                                explanation: "find command has a very difficult command line, however, find is easily tamed if we break up its arguments into three components. The syntax for using find command is,\n$ find  path_list  selection_criteria  action"
+                            },
+                            {
+                                id: "find_q3", question: "3. Which symbol is used with find command for specifying arguments?",
+                                options: ["+", "–", "+ and –", "|"], correctAnswer: "–", // Corrected from c to –
+                                explanation: "find command searches for a given file according to the arguments specified in the command line. Each argument is preceded by a – (hyphen). For example, to display all files in the current directory having .c extension, use the following command:\n$ find .  -name “*.c” -print"
+                            },
+                            {
+                                id: "find_q4", question: "4. What will be the output of the following command?\n\n$ find /  -name  a.out  -print",
+                                options: ["all files having filename as a.out", "all files in the root directory", "undefined output", "erroneous"], correctAnswer: "all files having filename as a.out",
+                                explanation: "The path list (/) indicates that the search will begin from the root directory. Each file in the list is then matched against the selection criteria (a.out). The third section -print is the action taken on the files; i.e. t display matched files on the terminal."
+                            },
+                            {
+                                id: "find_q5", question: "5. We can use relative pathname in the path list while using find command.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "find command allows us to specify the relative pathname in the path list. For example, the following command will display all the .txt files in the current directory.\n$ find .  -name “*.txt” -print        // single quotes can also work"
+                            },
+                            {
+                                id: "find_q6", question: "6. Which one of the following option is used for locating the files by inode number?",
+                                options: ["-name", "-inum", "-inode", "-ind"], correctAnswer: "-inum",
+                                explanation: "find command allows us to locate files by their inode number. To do so, we’ve to use the -inum option to find all the filenames having the same inode number. For example,\n$ find  /  -inum  13857  -print        // display all the files linked (having same inode number)"
+                            },
+                            {
+                                id: "find_q7", question: "7. Which option is used with find command for specifying the file type?",
+                                options: ["-perm", "-inum", "-name", "-type"], correctAnswer: "-type",
+                                explanation: "The -type option followed by letter f, d, or l selects files of the ordinary, directory and symbolic link type. For example,\n$ find .  -type d  -print        // display all the directory files in the current directory"
+                            },
+                            {
+                                id: "find_q8", question: "8. To specify permissions while using find command we have to use _____ option.",
+                                options: ["-perm", "-inum", "-name", "-type"], correctAnswer: "-perm",
+                                explanation: "The -perm option specifies the permissions to match. For example, -perm 666 selects those files which are having read and write permissions for all categories of users. For example,\n$ find $HOME  -perm 666 -type d  -print        // select directories in the home directory having                                                                 666 (in octal) permissions."
+                            },
+                            {
+                                id: "find_q9", question: "9. Which option is used to find command to search for files based on access time?",
+                                options: ["-atime", "-mtime", "-time", "-type"], correctAnswer: "-atime",
+                                explanation: "find command offers an option which can be used to select files based on access time. For this purpose, we have to use -atime option with the find command. For example,\n$ find . -atime -2  -print              //display those files which have been last accessed in less than 2 days"
+                            },
+                            {
+                                id: "find_q10", question: "10. Which of the following command will be used to locate those files that have not been modified for more than a year?",
+                                options: ["find . -mtime 1", "find . -mtime 1 year -print", "find . -mtime +365 -print", "find . -mtime -365 -print"], correctAnswer: "find . -mtime +365 -print",
+                                explanation: "To select files those file that have not been modified for more than a year, a positive value has to be used with -mtime. Here +365 means more than 365 days whereas -365 is used for less than 365 days."
+                            },
+                            {
+                                id: "find_q11", question: "11. Which of the following operator is used with find command for performing the negate function?",
+                                options: ["-a", "-o", "&&", "!"], correctAnswer: "!",
+                                explanation: "There are three operators that are commonly used with the find command. The ! operator is used before an option to negate its meaning. For example,\n$ find . ! -name “*.c” -print        // select all files but not the C program files."
+                            },
+                            {
+                                id: "find_q12", question: "12. Which operator is used to specify the AND condition in find command?",
+                                options: ["!", "&&", "-A", "-a"], correctAnswer: "-a",
+                                explanation: "The -a operator when used with find command represents the AND condition and is implied by default when two selection criteria are placed together. For example,\n$ find . \\(-type f  -a -mtime  +2)\\  -print            // -a \n can also be omitted ( it is automatically implied by  //  default)"
+                            },
+                            {
+                                id: "find_q13", question: "13. -o operator represents the OR condition.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "The -o operator when used with find command represents the OR condition. It is used when we need to specify two or more conditions with an option. An escaped pair of parenthesis is used whenever we use the -o or -a option."
+                            },
+                            {
+                                id: "find_q14", question: "14. Which of the following option is used with find command for taking action on selected files?",
+                                options: ["-exec", "-atime", "-mtime", "-a"], correctAnswer: "-exec",
+                                explanation: "The -exec option is one of the major option used with the find command. It lets us take any action by running a UNIX command on the selected files. -exec takes the command to execute as its own argument, followed by {} and \\;. For example,\n$ find  $HOME  -type  f  -atime +365  -exec rm {} \\;\nAbove command will remove all ordinary files not accessed for more than a year."
+                            },
+                            {
+                                id: "find_q15", question: "15. -ok option is used with find command for seeking information before taking the action specified.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "find’s -ok option seeks confirmation before taking the action specified. This provides the user with a facility of giving confirmation before anything goes wrong. For example,\n$ find  $HOME  -type  f  -atime +365  -ok rm {} \\;\nAbove command will ask for the user confirmation before removing each selected file."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const mainChapterTitleEl = document.getElementById('mainChapterTitle');
+        const questionProgressTextEl = document.getElementById('questionProgressText');
+        const scoreDisplayEl = document.getElementById('scoreDisplay');
+        const progressBarEl = document.getElementById('progressBar');
+        const quizContentAreaEl = document.getElementById('quizContentArea');
+        const nextChapterBtn = document.getElementById('nextChapterBtn');
+
+        let currentChapterIndex = 0; // This page handles only one chapter
+        let score = 0;
+        let totalQuestionsInChapter = 0;
+        let questionsAnsweredCount = 0;
+        let allQuestionElementsMap = new Map();
+        let currentActiveQuestionId = null;
+
+        const sunIcon = `<i class="fas fa-sun text-xl text-yellow-400"></i>`;
+        const moonIcon = `<i class="fas fa-moon text-xl text-gray-700 dark:text-yellow-400"></i>`;
+
+        function setDarkMode(isDark) {
+            const htmlEl = document.documentElement;
+            if (isDark) {
+                htmlEl.classList.add('dark');
+                darkModeToggle.innerHTML = sunIcon;
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                htmlEl.classList.remove('dark');
+                darkModeToggle.innerHTML = moonIcon;
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            setDarkMode(!document.documentElement.classList.contains('dark'));
+        });
+
+        function renderChapter() {
+            quizContentAreaEl.innerHTML = '';
+            allQuestionElementsMap.clear();
+            const chapterData = quizData[currentChapterIndex];
+            mainChapterTitleEl.textContent = chapterData.chapterName;
+
+            score = 0;
+            questionsAnsweredCount = 0;
+            totalQuestionsInChapter = 0;
+            let firstQuestionId = null;
+
+            chapterData.topics.forEach(topic => {
+                totalQuestionsInChapter += topic.questions.length;
+            });
+            updateProgressAndScore();
+
+            chapterData.topics.forEach((topic) => {
+                const topicHeader = document.createElement('h3');
+                topicHeader.className = 'text-xl md:text-2xl font-semibold text-purple-600 dark:text-purple-400 mt-10 mb-6 pt-6 border-t border-gray-300 dark:border-gray-600 first:mt-0 first:pt-0 first:border-t-0';
+                topicHeader.textContent = topic.topicName;
+                quizContentAreaEl.appendChild(topicHeader);
+
+                topic.questions.forEach((q) => {
+                    if (!firstQuestionId) firstQuestionId = q.id;
+
+                    const questionBlock = document.createElement('div');
+                    questionBlock.id = `qblock-${q.id}`;
+                    questionBlock.className = 'quiz-question-block mb-10 p-5 bg-gray-50 dark:bg-gray-750 rounded-xl shadow-lg';
+                    questionBlock.dataset.questionId = q.id;
+
+                    const questionTextEl = document.createElement('p');
+                    questionTextEl.className = 'text-md md:text-lg font-medium mb-5 text-gray-800 dark:text-gray-200';
+                    questionTextEl.innerHTML = q.question.replace(/\n/g, '<br>');
+                    questionBlock.appendChild(questionTextEl);
+
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.className = 'grid grid-cols-1 md:grid-cols-2 gap-3 mb-4';
+                    q.options.forEach((option, optionIdx) => {
+                        const button = document.createElement('button');
+                        button.innerHTML = `<span class="text-left flex-grow">${String.fromCharCode(97 + optionIdx)}) ${option}</span>`;
+                        button.className = 'option-btn w-full text-left p-3 bg-gray-200 dark:bg-gray-600 hover:bg-blue-100 dark:hover:bg-blue-800 rounded-lg border-2 border-gray-300 dark:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-between disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow-md';
+                        button.dataset.questionId = q.id;
+                        button.dataset.optionIndex = optionIdx;
+                        button.disabled = true;
+                        button.addEventListener('click', handleAnswerSelection);
+                        optionsContainer.appendChild(button);
+                    });
+                    questionBlock.appendChild(optionsContainer);
+
+                    const feedbackEl = document.createElement('div');
+                    feedbackEl.className = 'feedback-area min-h-[25px] text-sm mb-2';
+                    questionBlock.appendChild(feedbackEl);
+
+                    const explanationEl = document.createElement('div');
+                    explanationEl.className = 'explanation-area p-3 rounded-md text-sm leading-relaxed';
+                    explanationEl.innerHTML = `<strong class="block mb-1">Explanation:</strong> ${q.explanation.replace(/\n/g, '<br>')}`;
+                    questionBlock.appendChild(explanationEl);
+
+
+                    quizContentAreaEl.appendChild(questionBlock);
+                    allQuestionElementsMap.set(q.id, questionBlock);
+                });
+            });
+
+            if (firstQuestionId) {
+                activateQuestion(firstQuestionId);
+            }
+            nextChapterBtn.classList.add('hidden');
+            nextChapterBtn.textContent = "Next Chapter ➝ Simple Filters";
+            nextChapterBtn.onclick = () => {
+                window.location.href = 'chapter-9.html'; // Assuming chapter 9
+            };
+        }
+
+        function activateQuestion(questionId) {
+            if (currentActiveQuestionId) {
+                const prevActiveBlock = allQuestionElementsMap.get(currentActiveQuestionId);
+                if (prevActiveBlock) {
+                    prevActiveBlock.classList.remove('active-question');
+                }
+            }
+
+            currentActiveQuestionId = questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+            if (questionBlock) {
+                questionBlock.classList.add('active-question');
+                questionBlock.querySelectorAll('.option-btn').forEach(btn => btn.disabled = false);
+                setTimeout(() => {
+                    const rect = questionBlock.getBoundingClientRect();
+                    const headerHeight = document.querySelector('header.sticky').offsetHeight || 150;
+                    if (rect.top < headerHeight || rect.bottom > (window.innerHeight - 50)) {
+                        questionBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 150);
+            }
+        }
+
+
+        function findQuestionData(questionId) {
+            for (const topic of quizData[currentChapterIndex].topics) {
+                const question = topic.questions.find(q => q.id === questionId);
+                if (question) return question;
+            }
+            return null;
+        }
+
+        function handleAnswerSelection(event) {
+            const selectedButton = event.currentTarget;
+            const questionId = selectedButton.dataset.questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+
+            if (!questionBlock || questionBlock.classList.contains('answered-question')) return;
+
+            const questionData = findQuestionData(questionId);
+            if (!questionData) return;
+
+            const selectedOptionIndex = parseInt(selectedButton.dataset.optionIndex);
+            const selectedOptionText = questionData.options[selectedOptionIndex];
+            const correctAnswerText = questionData.correctAnswer;
+
+            const feedbackEl = questionBlock.querySelector('.feedback-area');
+            const explanationEl = questionBlock.querySelector('.explanation-area');
+            const allOptionButtonsInBlock = questionBlock.querySelectorAll('.option-btn');
+
+            allOptionButtonsInBlock.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-blue-100', 'dark:hover:bg-blue-800', 'hover:shadow-md');
+            });
+
+            if (selectedOptionText === correctAnswerText) {
+                score++;
+                selectedButton.classList.add('correct');
+                feedbackEl.innerHTML = `<p class="text-green-600 dark:text-green-400 font-semibold"><i class="fas fa-check-circle mr-2"></i>Correct!</p>`;
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackEl.innerHTML = `<p class="text-red-600 dark:text-red-400 font-semibold"><i class="fas fa-times-circle mr-2"></i>Incorrect. The correct answer is highlighted.</p>`;
+                allOptionButtonsInBlock.forEach(btn => {
+                    if (questionData.options[parseInt(btn.dataset.optionIndex)] === correctAnswerText) {
+                        btn.classList.add('actual-correct-unselected');
+                        btn.classList.remove('incorrect');
+                    }
+                });
+            }
+
+            explanationEl.classList.add('visible');
+
+            questionBlock.classList.add('answered-question');
+            questionBlock.classList.remove('active-question');
+            questionsAnsweredCount++;
+            updateProgressAndScore();
+
+            setTimeout(() => {
+                let nextQuestionIdToActivate = null;
+                let foundCurrent = false;
+                for (const topic of quizData[currentChapterIndex].topics) {
+                    for (const q of topic.questions) {
+                        if (foundCurrent) {
+                            nextQuestionIdToActivate = q.id;
+                            break;
+                        }
+                        if (q.id === questionId) {
+                            foundCurrent = true;
+                        }
+                    }
+                    if (nextQuestionIdToActivate) break;
+                }
+
+                if (nextQuestionIdToActivate) {
+                    activateQuestion(nextQuestionIdToActivate);
+                } else {
+                    showChapterEnd();
+                }
+            }, 1500);
+        }
+
+        function updateProgressAndScore() {
+            scoreDisplayEl.textContent = `Score: ${score}`;
+            questionProgressTextEl.textContent = `Answered: ${questionsAnsweredCount} / ${totalQuestionsInChapter}`;
+            const progressPercentage = totalQuestionsInChapter > 0 ? (questionsAnsweredCount / totalQuestionsInChapter) * 100 : 0;
+            progressBarEl.style.width = `${progressPercentage}%`;
+        }
+
+        function showChapterEnd() {
+            nextChapterBtn.classList.remove('hidden');
+            // nextChapterBtn.onclick is already set in renderChapter
+
+            const endMessage = document.createElement('p');
+            endMessage.className = "text-center text-xl font-semibold mt-10 p-6 bg-blue-50 dark:bg-blue-900 rounded-lg";
+            endMessage.textContent = `Chapter 8 Complete! Your final score: ${score} out of ${totalQuestionsInChapter}.`;
+            quizContentAreaEl.appendChild(endMessage);
+            endMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+            const currentTheme = localStorage.getItem('darkMode');
+
+            if (currentTheme === 'enabled') {
+                setDarkMode(true);
+            } else if (currentTheme === 'disabled') {
+                setDarkMode(false);
+            } else {
+                setDarkMode(prefersDarkScheme.matches);
+            }
+
+            prefersDarkScheme.addEventListener('change', e => {
+                if (localStorage.getItem('darkMode') === null) {
+                    setDarkMode(e.matches);
+                }
+            });
+
+            renderChapter();
+        });
+
+    </script>
+</body>
+
+</html>

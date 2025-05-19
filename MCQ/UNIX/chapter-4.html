@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en" class=""> <!-- Start with no 'dark' class, JS will add -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unix MCQ Challenge - Chapter 4 (Basic File Attributes)</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Logo Styles (Integrated into header flow) */
+        .header-logo .text-2xl {
+            font-size: 1.6rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .header-logo .logo-text-part {
+            /* Color will be handled by Tailwind text-gray-700 dark:text-gray-100 by default, or override if needed */
+        }
+
+        /* Make logo text distinctly visible in both modes if it clashes */
+        html:not(.dark) .header-logo .logo-text-part {
+            color: #374151;
+            /* Tailwind gray-700 for light mode if needed */
+        }
+
+        html.dark .header-logo .logo-text-part {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode */
+        }
+
+        .header-logo .logo-icon-part {
+            color: #F59E0B;
+            /* Tailwind amber-500, good contrast */
+            transition: color 0.3s;
+        }
+
+        .header-logo a:hover .logo-icon-part {
+            color: #D97706;
+            /* Tailwind amber-600 */
+        }
+
+        .header-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.4em;
+            width: 1.4em;
+            margin: 0 2px;
+        }
+
+        /* Ensure sticky header background is consistent */
+        header.sticky {
+            background-color: #f9fafb;
+            /* Tailwind gray-50 */
+        }
+
+        html.dark header.sticky {
+            background-color: #1f2937;
+            /* Tailwind gray-800 */
+        }
+
+        /* Ensure sub-header info card also respects dark mode */
+        #quizHeaderInfo {
+            background-color: #ffffff;
+            /* Tailwind white */
+        }
+
+        html.dark #quizHeaderInfo {
+            background-color: #374151;
+            /* Tailwind gray-700 */
+        }
+
+
+        .quiz-question-block {
+            transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+            opacity: 0.6;
+        }
+
+        .quiz-question-block.active-question {
+            opacity: 1;
+            transform: scale(1.01);
+            box-shadow: 0 0 15px rgba(80, 120, 255, 0.2);
+        }
+
+        html.dark .quiz-question-block.active-question {
+            box-shadow: 0 0 15px rgba(100, 150, 255, 0.3);
+        }
+
+        .quiz-question-block.answered-question {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .quiz-question-block.answered-question .option-btn {
+            pointer-events: none;
+            cursor: default;
+        }
+
+        .quiz-question-block .option-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .option-btn {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .option-btn:not(:disabled):hover {
+            transform: translateY(-2px) scale(1.01);
+            /* box-shadow: 0 4px 12px rgba(0,0,0,0.1); Tailwind's shadow-md or shadow-lg can be used directly on class */
+        }
+
+        html.dark .option-btn:not(:disabled):hover {
+            /* box-shadow: 0 4px 12px rgba(255,255,255,0.08); */
+        }
+
+        .option-btn.correct {
+            background-color: #10B981 !important;
+            /* green-500 */
+            color: white !important;
+            border-color: #059669 !important;
+            /* green-600 */
+        }
+
+        .option-btn.incorrect {
+            background-color: #EF4444 !important;
+            /* red-500 */
+            color: white !important;
+            border-color: #DC2626 !important;
+            /* red-600 */
+        }
+
+        .option-btn.actual-correct-unselected {
+            background-color: #D1FAE5 !important;
+            /* green-100 */
+            color: #065F46 !important;
+            /* green-700 */
+            border-color: #6EE7B7 !important;
+            /* green-300 */
+            animation: pulse-subtle-green 2s infinite;
+        }
+
+        html.dark .option-btn.actual-correct-unselected {
+            background-color: #064E3B !important;
+            color: #A7F3D0 !important;
+            border-color: #10B981 !important;
+        }
+
+
+        @keyframes pulse-subtle-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        .explanation-area {
+            min-height: 70px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            overflow: hidden;
+            background-color: #ffffff;
+            /* Light mode */
+        }
+
+        html.dark .explanation-area {
+            background-color: #374151;
+            /* Tailwind gray-700 for dark mode */
+        }
+
+        .explanation-area.visible {
+            opacity: 1;
+        }
+
+        /* Fix dark mode for feedback area */
+        .feedback-area {
+            color: #374151;
+            /* Light mode text color */
+        }
+
+        html.dark .feedback-area {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode text color */
+        }
+
+        /* Fix dark mode for question block */
+        .quiz-question-block {
+            background-color: #f9fafb;
+            /* Light mode */
+        }
+
+        html.dark .quiz-question-block {
+            background-color: #1f2937;
+            /* Tailwind gray-800 for dark mode */
+        }
+    </style>
+
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
+
+    <div class="container mx-auto p-4 min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="sticky mb-6 top-0 z-50 py-3 shadow-md bg-gray-50 dark:bg-gray-800">
+            <!-- Top part of the header: Logo, Title, Dark Mode Toggle -->
+            <div class="container mx-auto flex justify-between items-center px-2 sm:px-4">
+                <!-- Eduvision Logo -->
+                <div class="header-logo">
+                    <div class="text-2xl font-bold">
+                        <a href="../../index.html" class="flex items-center group">
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">Edu</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="logo-icon-part" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">ision</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Page Title -->
+                <h1 class="mx-4 text-lg sm:text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500 text-center flex-grow whitespace-nowrap cursor-pointer"
+                    onclick="window.location.href='unix-mcq.html'">
+                    Unix MCQ Challenge
+                </h1>
+
+                <!-- Dark Mode Toggle -->
+                <div class="flex-shrink-0">
+                    <button id="darkModeToggle"
+                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none transition-colors duration-300"
+                        aria-label="Toggle Dark Mode">
+                        <!-- Icon will be set by JS -->
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bottom part of the header: Quiz Info Card -->
+            <div id="quizHeaderInfo" class="bg-white dark:bg-gray-700 p-3 mt-3 rounded-lg shadow-md container mx-auto">
+                <h2 id="mainChapterTitle" class="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-2"></h2>
+                <div class="flex justify-between items-center text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">
+                    <span id="questionProgressText">Answered: 0 / 0</span>
+                    <span id="scoreDisplay">Score: 0</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                    <div id="progressBar"
+                        class="bg-gradient-to-r from-blue-500 to-purple-600 h-2.5 rounded-full transition-all duration-500 ease-out"
+                        style="width: 0%"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area for All Questions -->
+        <main id="quizContentArea"
+            class="flex-grow bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl transition-colors duration-300 mt-4">
+            <!-- Topics and Questions will be dynamically inserted here -->
+        </main>
+
+        <!-- Navigation Area (for Next Chapter) -->
+        <div id="overallNavigation" class="mt-8 mb-4 flex justify-center">
+            <button id="nextChapterBtn"
+                class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 hidden">
+                <!-- Text and onclick will be set by JS -->
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
+            © 2023 Interactive MCQ Platform.
+        </footer>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                chapterName: "Unix MCQ on Basic File Attributes",
+                topics: [
+                    {
+                        topicName: "Listing File & Directory Attributes",
+                        questions: [
+                            {
+                                id: "fda_q1", question: "1. An attribute is a specification of an object that defines its property.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "An attribute defines the property of an object. In UNIX, every file has a set of attributes which defines the specification of the file."
+                            },
+                            {
+                                id: "fda_q2", question: "2. Which command is used to list the attributes of a file?",
+                                options: ["cp", "list", "ls", "attr"], correctAnswer: "ls",
+                                explanation: "ls command is used for listing the attributes of a file or directory. ls command when used with -l displays all the seven attributes of a file."
+                            },
+                            {
+                                id: "fda_q3", question: "3. Which one of the following is not an attribute displayed by ls command?",
+                                options: ["file permissions", "file ownership", "links", "word count of file"], correctAnswer: "word count of file",
+                                explanation: "When -l option is used with ls command it simply displays seven attributes of a file which are file type and permissions, links, ownership, group ownership, file size, last modification time, filename."
+                            },
+                            {
+                                id: "fda_q4", question: "4. What are links referred to as in file attributes?",
+                                options: ["number of filenames of a single file that are maintained by the system", "number of duplicates of a single file", "number of copies of a single file", "number of files present in a directory"], correctAnswer: "number of filenames of a single file that are maintained by the system",
+                                explanation: "Links are defined as the number of filenames of a single file that are maintained by the system. This file can be accessed through as many filenames as there is a number of links to that file."
+                            },
+                            {
+                                id: "fda_q5", question: "5. In how many categories are links divided?",
+                                options: ["1", "2", "4", "0"], correctAnswer: "2",
+                                explanation: "There are basically two types of links; hard link and soft links."
+                            },
+                            {
+                                id: "fda_q6", question: "6. Hard linked files are provided with the same inode number as the original one.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Hard linked files are provided with the same inode number as the original file so they refer to the same physical location of the file."
+                            },
+                            {
+                                id: "fda_q7", question: "7. Soft linked files are provided with different inode number as the original one.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Soft linked files are provided with a separate inode number each of which points to the original file location."
+                            },
+                            {
+                                id: "fda_q8", question: "8. Which option is used with ls command to list the directory attributes rather than its contents?",
+                                options: ["-b", "-a", "-l", "-d"], correctAnswer: "-d",
+                                explanation: "ls command when combined with -d option displays the attributes of a directory rather than its contents.\n$ ls  -ld  dir01"
+                            },
+                            {
+                                id: "fda_q9", question: "9. File attributes are of major concern as compared to directory attributes while performing operations on file system.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "Directory attributes are of major concern as compared to file attributes when performing any operation on file system because files are a part of directory or we can say that files are stored under the directory in the directory tree. So if directory attributes does not allow us to perform a particular operation on the directory than that operation can never be performed on the file which is stored inside that directory."
+                            },
+                            {
+                                id: "fda_q10", question: "10. A file contains 1026 bytes. How many bytes of disk space will it consume if size of a disk block is 1024 bytes?",
+                                options: ["1026", "1024", "2048", "4096"], correctAnswer: "2048",
+                                explanation: "Sine files are written to the disk in terms of block size, the size consumed by the file vary from the original size of the file. Suppose, if a file size is 800 bytes but the block size on the system is 1024 bytes, then that file will consume 1024 bytes on diskspace i.e. 1 block."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "File Ownership and Permissions",
+                        questions: [
+                            {
+                                id: "fop_q1", question: "1. A file can be recognized as an ordinary file or directory by ____ symbol.",
+                                options: ["$", "–", "*", "/"], correctAnswer: "–",
+                                explanation: "When ls command is used with -l option its displays attributes of a file in the multi-columnar form. The first column defines the file types and permissions associated with a file. If the permissions are preceded by a (-), then it is an ordinary file otherwise it is a directory."
+                            },
+                            {
+                                id: "fop_q2", question: "2. How many types of permissions a file has in UNIX?",
+                                options: ["1", "2", "3", "4"], correctAnswer: "3",
+                                explanation: "In UNIX system, a file can have three types of permissions -read, write and execute. Read permission means that the file is readable. Write permission means that the file can be edited while executing permission (for a directory) means that we can “pass through” the directory file for searching subdirectories."
+                            },
+                            {
+                                id: "fop_q3", question: "3. Permissions of a file are represented by which of the following characters?",
+                                options: ["r,w,x", "e,w,x", "x,w,e", "e,x,w"], correctAnswer: "r,w,x",
+                                explanation: "A file can have three types of permissions; read, write and execute which is represented by characters r, w and x respectively."
+                            },
+                            {
+                                id: "fop_q4", question: "4. A file named abd.txt has the following set of permissions\n\n -rwxrwxrwx\nAll the three operations i.e read, write and execute can be performed on the file by file owner, group owner and others.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "UNIX provides a three tired file protection system that determines the file access rights i.e. the permissions are dived into three groups as\nr w x     r w x     r w x\nThe first group has all the three permissions i.e. file is readable, writable and executable by the file owner.\nThe second group also has all the three permissions i.e. file is readable, writable and executable by the group owner.\nThe third group also has all the three permissions i.e. file is readable, writable and executable by others who are neither a part of the group nor they are an owner of the file.\nNormally this set of permissions is too dangerous!"
+                            },
+                            {
+                                id: "fop_q5", question: "5. Which of the following symbol is used to indicate the absence of a permission of a file?",
+                                options: ["$", "&", "+", "–"], correctAnswer: "–",
+                                explanation: "( – ) is used to indicate the absence of a single or set of permissions of a file. For example, if a file has all the three permissions for owner but is only readable by group members and others, then the set of permissions would be,\nrwx  r--  r--"
+                            },
+                            {
+                                id: "fop_q6", question: "6. When we create a file, we are the owner of a file.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "In most cases, the user which creates the file is regarded as owner of the file. The owner of the file can create, delete or edit the file or he can change the permissions associated with it."
+                            },
+                            {
+                                id: "fop_q7", question: "7. What is group ownership?",
+                                options: ["group of users who can access the file", "group of users who can create the file", "group of users who can edit the file", "group of users who can delete the file"], correctAnswer: "group of users who can access the file",
+                                explanation: "When the system administrator creates a user account, he assigns the user two parameters; UID (user ID) and GID (group ID). Group id denotes the group to which the user belongs.\nIn simple words, group ownership defines the group to which the file is accessible."
+                            },
+                            {
+                                id: "fop_q8", question: "8. A file has permissions as rwx r– —. A user other than the owner cannot edit the file.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Since the second and third group of permissions of a file are r– and — respectively. So the file is only readable and that too, only by the members of the group to which the file belongs."
+                            },
+                            {
+                                id: "fop_q9", question: "9. If a file is read protected, we can write to the file.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "If a file is not readable then it is obvious that we cannot write anything to the file. To write anything to a file it should be readable first. But if a file is writable then we can read the file easily but the reverse is not true."
+                            },
+                            {
+                                id: "fop_q10", question: "10. The write permission for a directory determines that ____________",
+                                options: ["we can write to a directory file", "we can read the directory file", "we can execute the directory file", "we can add or remove files to it"], correctAnswer: "we can add or remove files to it",
+                                explanation: "The write permission of a directory does not imply that we can write to the directory. Only kernel is allowed to do that. It simply means that we can create or remove files from the directory."
+                            },
+                            {
+                                id: "fop_q11", question: "11. If the file is write-protected and the directory has to write permission then we cannot delete the file.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "The term ‘write-protected’ has a limited meaning in the UNIX file system. A file which is write protected cannot be written, but it can be removed if the directory has to write permission."
+                            },
+                            {
+                                id: "fop_q12", question: "12. What is execute permission?",
+                                options: ["permission to execute the file", "permission to delete the file", "permission to rename the file", "permission to search or navigate through the directory"], correctAnswer: "permission to search or navigate through the directory",
+                                explanation: "Executing a directory does not make any sense, execute permission simply means that a user can “pass through” the directory while searching for subdirectories. When we use pathname with any command we should have execute permission for each of the directories involved in the complete pathname. For example,\ncd  users/users06/abd/dir01/file01.txt    // all directories should have execute permission."
+                            },
+                            {
+                                id: "fop_q13", question: "13. Which of the following is default permission set for ordinary files?",
+                                options: ["rw-rw-rw-", "rwxrwxrwx", "r–r–r–", "rw-rw-rwx"], correctAnswer: "rw-rw-rw-",
+                                explanation: "The default permission set for an ordinary file is rw-rw-rw i.e. it is readable and writable by owner, group member and others."
+                            },
+                            {
+                                id: "fop_q14", question: "14. Which of the following is default permission set for directories?",
+                                options: ["rw-rw-rw-", "rwxrwxrwx", "r–r–r–", "rw-rw-rwx"], correctAnswer: "rwxrwxrwx",
+                                explanation: "The default permission set for an ordinary file is rwxrwxrwx i.e. it is readable, writable, executable by owner, group members and others."
+                            },
+                            {
+                                id: "fop_q15", question: "15. A file owner does not have a permission to edit the file but the group to which the file owner belong do have the permission to edit it. Can owner edit the file?",
+                                options: ["Yes", "No", "Cannot be defined", "Error will be encountered"], correctAnswer: "No",
+                                explanation: "The file owner cannot edit the file because the owner’s permission overrides the group’s permission. In other words, the priority of owner’s permission is greater than group’s permission."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Changing File Ownership and Permissions – 1",
+                        questions: [
+                            {
+                                id: "cfop1_q1", question: "1. Which command is used to change the permissions of a file?",
+                                options: ["chmod", "ch", "chown", "chgrp"], correctAnswer: "chmod",
+                                explanation: "The chmod (change mode) command is used to change the permissions of files. This command can only be run by the owner of the file or by the super user."
+                            },
+                            {
+                                id: "cfop1_q2", question: "2. chmod command can take multiple filenames as arguments.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "We can change permissions of multiple files by using chmod command once. To change permissions of multiple files simultaneously just use the chmod command with multiple filenames as arguments."
+                            },
+                            {
+                                id: "cfop1_q3", question: "3. chmod command can be used in ____ ways.",
+                                options: ["3", "2", "5", "0"], correctAnswer: "2",
+                                explanation: "chmod command can be used in two manners i.e. relative (changes are specified to the current permissions) and absolute (final permissions are specified)."
+                            },
+                            {
+                                id: "cfop1_q4", question: "4. The expression used with chmod command to change permissions in a relative manner contains ____ components.",
+                                options: ["5", "2", "4", "3"], correctAnswer: "3",
+                                explanation: "chmod command takes an expression as its arguments which comprises of some letters and symbols. The expression comprises three components:-\n-> User category (user, group, others)\n-> The operation to be performed (assign or remove a permission)\n-> Type of permission (read, write, execute)."
+                            },
+                            {
+                                id: "cfop1_q5", question: "5. Which of the following characters specify the user and group category?",
+                                options: ["‘u’ and ‘g’", "‘g’ and ‘o’", "‘us’ and ‘gr’", "‘u’ and ‘o’"], correctAnswer: "‘u’ and ‘g’",
+                                explanation: "Each character specifies a particular category of users as follows:\n‘u’ stands for a user,\n‘g’ for ‘group’\n‘o’ for ‘others’."
+                            },
+                            {
+                                id: "cfop1_q6", question: "6. Which of the following symbol is used with chmod to assign permission to a file?",
+                                options: ["–", "/", "+", "*"], correctAnswer: "+",
+                                explanation: "To assign and remove permissions from a file, (+) and (-) symbols are used respectively.\n‘+’ symbol will assign a permission\n‘-‘ symbol will remove a permission"
+                            },
+                            {
+                                id: "cfop1_q7", question: "7. To assign execute permission to the user (owner) for a file named file01.txt, which of the following command will be used?",
+                                options: ["chmod u+r file01.txt", "chmod u+w file01.txt", "chmod u-x file01.txt", "chmod u+x file01.txt"], correctAnswer: "chmod u+x file01.txt",
+                                explanation: "To assign execute permission to the user, above command is stated as follows:\n u    -  for specifying the category of user.\n +    - for assigning permission.\n x    - to specify execute permission."
+                            },
+                            {
+                                id: "cfop1_q8", question: "8. What does the following command do?\n\n     $ chmod ugo +w  file01.txt",
+                                options: ["assign write permission to users, group and others", "assign write permission to the user (owner) only", "assign write permission to group and others", "command not executable"], correctAnswer: "assign write permission to users, group and others",
+                                explanation: "The string ugo combines all the three categories –user, group and others while (+) is used to assign the permission. ‘w’ specifies the write operation."
+                            },
+                            {
+                                id: "cfop1_q9", question: "9. Which character is used to replace ‘ugo’ string in chmod command?",
+                                options: ["a", "v", "x", "o"], correctAnswer: "a",
+                                explanation: "UNIX offers a shorthand symbol ‘a’ (all) that acts as a synonym for the ‘ugo’ string which represents all the categories of users.\n$ chmod a+w  file01		// assign write permission to user, group and others."
+                            },
+                            {
+                                id: "cfop1_q10", question: "10. To remove write permission from group and others, which one of the following commands will be used?",
+                                options: ["chmod go+w file01", "chmod go-w file01", "chmod ug-w file01", "chmod a-w file01"], correctAnswer: "chmod go-w file01",
+                                explanation: "To remove a certain permission from a category of users we use (-) symbol. So above command will remove write permission from group and others."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Changing File Ownership and Permissions – 2",
+                        questions: [
+                            {
+                                id: "cfop2_q1", question: "1. While changing permissions in an absolute manner, we explicitly set all the nine bits irrespective of the previous permissions of the file.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "The expression used by chmod in an absolute manner is a string of three octal numbers (base 8). A set of 3 bits represent a single octal digit.\n-> Read permission –4 (100 in octal)\n-> Write permission –2(010 in octal)\n-> Execute permission –1(001 in octal)\nFor each category, we add up these numbers. For example, if we have to set read and write permission then an octal number will be 110 (4+2)."
+                            },
+                            {
+                                id: "cfop2_q2", question: "2. What are the permission of file01 after executing this command?\n\n   chmod  777  file01",
+                                options: ["rwxrwxrwx", "rw-rw-rw", "r–r–r–", "r–r—-"], correctAnswer: "rwxrwxrwx",
+                                explanation: "Since the octal number for the above command is 777 and we know that 7(111) represents all the three sets of permissions (read, write and execute) for a category of user. As we have 777, the file is readable, writable and executable by anyone."
+                            },
+                            {
+                                id: "cfop2_q3", question: "3. A file named file01 should be readable, writable and executable only by the user(owner). Which one of the following set of command will be used?",
+                                options: ["chmod 700 file01", "chmod 000 file01", "chmod 477 file01", "chmod 777 file01"], correctAnswer: "chmod 700 file01",
+                                explanation: "Since 7(111) represents read, write, execute permission. So 700 will represent read, write, execute permission only for the user (owner)."
+                            },
+                            {
+                                id: "cfop2_q4", question: "4. A file has a permission set as 000 i.e. — — —. Can the file be deleted?",
+                                options: ["Yes", "No"], correctAnswer: "Yes",
+                                explanation: "The file having permission set as 000 is useless i.e. it is not readable, writable or executable. But we can delete the file using directory permissions. If the directory has write permission, we can easily add or remove a file from it."
+                            },
+                            {
+                                id: "cfop2_q5", question: "5. A file has a permission set as 777 ie rwxrwxrwx but the directory permissions are 400. If the user tries to delete the file, will he be able to do it?",
+                                options: ["Yes", "No"], correctAnswer: "No",
+                                explanation: "Since we have only read permissions for the directory and the directory permissions do not allow us to add or remove a file from it we cannot delete a file no matter what is the permission set of that file."
+                            },
+                            {
+                                id: "cfop2_q6", question: "6. Which command is used to change the ownership of a file?",
+                                options: ["chmod", "change", "ch", "chown"], correctAnswer: "chown",
+                                explanation: "For changing the file ownership, we use the chown command. chown transfer the ownership of a file to another user. The command requires the user-ID (UID) of the recipient. To change the ownership of a file from user01 to user02, use the following commands:\n1. Change your status to a super user.\n2. # chown mash  file01            // # indicates another shell \n3. exit"
+                            },
+                            {
+                                id: "cfop2_q7", question: "7. Which option is used for the recursive functioning of chmod command?",
+                                options: ["-R", "-r", "-l", "-i"], correctAnswer: "-R",
+                                explanation: "Like other UNIX commands, chmod can also descend a directory hierarchy and apply the expression to every file and subdirectories it finds. This is done using -R option. For example,\nchmod -R a+w  dir01\nThis command will make all files and subdirectories found in the tree walk executable by all users."
+                            },
+                            {
+                                id: "cfop2_q8", question: "8. Which command is used to change the group owner of the file?",
+                                options: ["chown", "ch", "chgrp", "chmod"], correctAnswer: "chgrp",
+                                explanation: "A user can change the group owner of a file but only to that group to which he belongs. A user can belong to more than one group and the one shown in /etc/psswd is the user’s main group."
+                            },
+                            {
+                                id: "cfop2_q9", question: "9. A user can change the group ownership of a file to another group to which he does not belong.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "Group ownership can be changed only to that group to which the user also belongs otherwise a user cannot change the group ownership of a file to another group to which he does not belong."
+                            },
+                            {
+                                id: "cfop2_q10", question: "10. Like chmod, chown and chgrp can also use ___ option.",
+                                options: ["-R", "-r", "-x", "-i"], correctAnswer: "-R",
+                                explanation: "Like chmod, chown and chgrp use the -R option to perform their operations in a recursive manner."
+                            },
+                            {
+                                id: "cfop2_q11", question: "11. UNIX allows the system administrator to use the only chown to change both owner and group.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "UNIX provides a special privilege for the system administrator to change both the owner and group using chown command only. The syntax requires two arguments to be separated by a (:). For example,\n \nchown  abd:grp01  file01.txt     // ownership to abd, group to grp01"
+                            },
+                            {
+                                id: "cfop2_q12", question: "12. Which symbol is used to change permissions for hidden files?",
+                                options: [".", "&", "$", "*"], correctAnswer: ".",
+                                explanation: "To change permissions for hidden files, use the (.) symbol with chmod command.\n \n$ chmod 755  .    // works on hidden files"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const mainChapterTitleEl = document.getElementById('mainChapterTitle');
+        const questionProgressTextEl = document.getElementById('questionProgressText');
+        const scoreDisplayEl = document.getElementById('scoreDisplay');
+        const progressBarEl = document.getElementById('progressBar');
+        const quizContentAreaEl = document.getElementById('quizContentArea');
+        const nextChapterBtn = document.getElementById('nextChapterBtn');
+
+        let currentChapterIndex = 0; // This page handles only one chapter
+        let score = 0;
+        let totalQuestionsInChapter = 0;
+        let questionsAnsweredCount = 0;
+        let allQuestionElementsMap = new Map();
+        let currentActiveQuestionId = null;
+
+        const sunIcon = `<i class="fas fa-sun text-xl text-yellow-400"></i>`;
+        const moonIcon = `<i class="fas fa-moon text-xl text-gray-700 dark:text-yellow-400"></i>`;
+
+        function setDarkMode(isDark) {
+            const htmlEl = document.documentElement;
+            if (isDark) {
+                htmlEl.classList.add('dark');
+                darkModeToggle.innerHTML = sunIcon;
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                htmlEl.classList.remove('dark');
+                darkModeToggle.innerHTML = moonIcon;
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            setDarkMode(!document.documentElement.classList.contains('dark'));
+        });
+
+        function renderChapter() {
+            quizContentAreaEl.innerHTML = '';
+            allQuestionElementsMap.clear();
+            const chapterData = quizData[currentChapterIndex];
+            mainChapterTitleEl.textContent = chapterData.chapterName;
+
+            score = 0;
+            questionsAnsweredCount = 0;
+            totalQuestionsInChapter = 0;
+            let firstQuestionId = null;
+
+            chapterData.topics.forEach(topic => {
+                totalQuestionsInChapter += topic.questions.length;
+            });
+            updateProgressAndScore();
+
+            chapterData.topics.forEach((topic) => {
+                const topicHeader = document.createElement('h3');
+                topicHeader.className = 'text-xl md:text-2xl font-semibold text-purple-600 dark:text-purple-400 mt-10 mb-6 pt-6 border-t border-gray-300 dark:border-gray-600 first:mt-0 first:pt-0 first:border-t-0';
+                topicHeader.textContent = topic.topicName;
+                quizContentAreaEl.appendChild(topicHeader);
+
+                topic.questions.forEach((q) => {
+                    if (!firstQuestionId) firstQuestionId = q.id;
+
+                    const questionBlock = document.createElement('div');
+                    questionBlock.id = `qblock-${q.id}`;
+                    questionBlock.className = 'quiz-question-block mb-10 p-5 bg-gray-50 dark:bg-gray-750 rounded-xl shadow-lg';
+                    questionBlock.dataset.questionId = q.id;
+
+                    const questionTextEl = document.createElement('p');
+                    questionTextEl.className = 'text-md md:text-lg font-medium mb-5 text-gray-800 dark:text-gray-200';
+                    questionTextEl.innerHTML = q.question.replace(/\n/g, '<br>');
+                    questionBlock.appendChild(questionTextEl);
+
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.className = 'grid grid-cols-1 md:grid-cols-2 gap-3 mb-4';
+                    q.options.forEach((option, optionIdx) => {
+                        const button = document.createElement('button');
+                        button.innerHTML = `<span class="text-left flex-grow">${String.fromCharCode(97 + optionIdx)}) ${option}</span>`;
+                        button.className = 'option-btn w-full text-left p-3 bg-gray-200 dark:bg-gray-600 hover:bg-blue-100 dark:hover:bg-blue-800 rounded-lg border-2 border-gray-300 dark:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-between disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow-md';
+                        button.dataset.questionId = q.id;
+                        button.dataset.optionIndex = optionIdx;
+                        button.disabled = true;
+                        button.addEventListener('click', handleAnswerSelection);
+                        optionsContainer.appendChild(button);
+                    });
+                    questionBlock.appendChild(optionsContainer);
+
+                    const feedbackEl = document.createElement('div');
+                    feedbackEl.className = 'feedback-area min-h-[25px] text-sm mb-2';
+                    questionBlock.appendChild(feedbackEl);
+
+                    const explanationEl = document.createElement('div');
+                    explanationEl.className = 'explanation-area p-3 rounded-md text-sm leading-relaxed';
+                    explanationEl.innerHTML = `<strong class="block mb-1">Explanation:</strong> ${q.explanation.replace(/\n/g, '<br>')}`;
+                    questionBlock.appendChild(explanationEl);
+
+
+                    quizContentAreaEl.appendChild(questionBlock);
+                    allQuestionElementsMap.set(q.id, questionBlock);
+                });
+            });
+
+            if (firstQuestionId) {
+                activateQuestion(firstQuestionId);
+            }
+            nextChapterBtn.classList.add('hidden');
+            nextChapterBtn.textContent = "Next Chapter ➝ Vi Editor"; // Updated text
+            nextChapterBtn.onclick = () => {
+                window.location.href = 'chapter-5.html'; // Assuming chapter 5
+            };
+        }
+
+        function activateQuestion(questionId) {
+            if (currentActiveQuestionId) {
+                const prevActiveBlock = allQuestionElementsMap.get(currentActiveQuestionId);
+                if (prevActiveBlock) {
+                    prevActiveBlock.classList.remove('active-question');
+                }
+            }
+
+            currentActiveQuestionId = questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+            if (questionBlock) {
+                questionBlock.classList.add('active-question');
+                questionBlock.querySelectorAll('.option-btn').forEach(btn => btn.disabled = false);
+                setTimeout(() => {
+                    const rect = questionBlock.getBoundingClientRect();
+                    const headerHeight = document.querySelector('header.sticky').offsetHeight || 150;
+                    if (rect.top < headerHeight || rect.bottom > (window.innerHeight - 50)) {
+                        questionBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 150);
+            }
+        }
+
+
+        function findQuestionData(questionId) {
+            for (const topic of quizData[currentChapterIndex].topics) {
+                const question = topic.questions.find(q => q.id === questionId);
+                if (question) return question;
+            }
+            return null;
+        }
+
+        function handleAnswerSelection(event) {
+            const selectedButton = event.currentTarget;
+            const questionId = selectedButton.dataset.questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+
+            if (!questionBlock || questionBlock.classList.contains('answered-question')) return;
+
+            const questionData = findQuestionData(questionId);
+            if (!questionData) return;
+
+            const selectedOptionIndex = parseInt(selectedButton.dataset.optionIndex);
+            const selectedOptionText = questionData.options[selectedOptionIndex];
+            const correctAnswerText = questionData.correctAnswer;
+
+            const feedbackEl = questionBlock.querySelector('.feedback-area');
+            const explanationEl = questionBlock.querySelector('.explanation-area');
+            const allOptionButtonsInBlock = questionBlock.querySelectorAll('.option-btn');
+
+            allOptionButtonsInBlock.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-blue-100', 'dark:hover:bg-blue-800', 'hover:shadow-md');
+            });
+
+            if (selectedOptionText === correctAnswerText) {
+                score++;
+                selectedButton.classList.add('correct');
+                feedbackEl.innerHTML = `<p class="text-green-600 dark:text-green-400 font-semibold"><i class="fas fa-check-circle mr-2"></i>Correct!</p>`;
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackEl.innerHTML = `<p class="text-red-600 dark:text-red-400 font-semibold"><i class="fas fa-times-circle mr-2"></i>Incorrect. The correct answer is highlighted.</p>`;
+                allOptionButtonsInBlock.forEach(btn => {
+                    if (questionData.options[parseInt(btn.dataset.optionIndex)] === correctAnswerText) {
+                        btn.classList.add('actual-correct-unselected');
+                        btn.classList.remove('incorrect');
+                    }
+                });
+            }
+
+            explanationEl.classList.add('visible');
+
+            questionBlock.classList.add('answered-question');
+            questionBlock.classList.remove('active-question');
+            questionsAnsweredCount++;
+            updateProgressAndScore();
+
+            setTimeout(() => {
+                let nextQuestionIdToActivate = null;
+                let foundCurrent = false;
+                for (const topic of quizData[currentChapterIndex].topics) {
+                    for (const q of topic.questions) {
+                        if (foundCurrent) {
+                            nextQuestionIdToActivate = q.id;
+                            break;
+                        }
+                        if (q.id === questionId) {
+                            foundCurrent = true;
+                        }
+                    }
+                    if (nextQuestionIdToActivate) break;
+                }
+
+                if (nextQuestionIdToActivate) {
+                    activateQuestion(nextQuestionIdToActivate);
+                } else {
+                    showChapterEnd();
+                }
+            }, 1500);
+        }
+
+        function updateProgressAndScore() {
+            scoreDisplayEl.textContent = `Score: ${score}`;
+            questionProgressTextEl.textContent = `Answered: ${questionsAnsweredCount} / ${totalQuestionsInChapter}`;
+            const progressPercentage = totalQuestionsInChapter > 0 ? (questionsAnsweredCount / totalQuestionsInChapter) * 100 : 0;
+            progressBarEl.style.width = `${progressPercentage}%`;
+        }
+
+        function showChapterEnd() {
+            nextChapterBtn.classList.remove('hidden');
+            // nextChapterBtn.onclick is already set in renderChapter
+
+            const endMessage = document.createElement('p');
+            endMessage.className = "text-center text-xl font-semibold mt-10 p-6 bg-blue-50 dark:bg-blue-900 rounded-lg";
+            endMessage.textContent = `Chapter 4 Complete! Your final score: ${score} out of ${totalQuestionsInChapter}.`;
+            quizContentAreaEl.appendChild(endMessage);
+            endMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+            const currentTheme = localStorage.getItem('darkMode');
+
+            if (currentTheme === 'enabled') {
+                setDarkMode(true);
+            } else if (currentTheme === 'disabled') {
+                setDarkMode(false);
+            } else {
+                setDarkMode(prefersDarkScheme.matches);
+            }
+
+            prefersDarkScheme.addEventListener('change', e => {
+                if (localStorage.getItem('darkMode') === null) {
+                    setDarkMode(e.matches);
+                }
+            });
+
+            renderChapter();
+        });
+
+    </script>
+</body>
+
+</html>

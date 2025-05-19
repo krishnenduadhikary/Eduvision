@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en" class=""> <!-- Start with no 'dark' class, JS will add -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unix MCQ Challenge - Chapter 12 (Awk & Perl)</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Logo Styles (Integrated into header flow) */
+        .header-logo .text-2xl {
+            font-size: 1.6rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .header-logo .logo-text-part {
+            /* Color will be handled by Tailwind text-gray-700 dark:text-gray-100 by default, or override if needed */
+        }
+
+        /* Make logo text distinctly visible in both modes if it clashes */
+        html:not(.dark) .header-logo .logo-text-part {
+            color: #374151;
+            /* Tailwind gray-700 for light mode if needed */
+        }
+
+        html.dark .header-logo .logo-text-part {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode */
+        }
+
+        .header-logo .logo-icon-part {
+            color: #F59E0B;
+            /* Tailwind amber-500, good contrast */
+            transition: color 0.3s;
+        }
+
+        .header-logo a:hover .logo-icon-part {
+            color: #D97706;
+            /* Tailwind amber-600 */
+        }
+
+        .header-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.4em;
+            width: 1.4em;
+            margin: 0 2px;
+        }
+
+        /* Ensure sticky header background is consistent */
+        header.sticky {
+            background-color: #f9fafb;
+            /* Tailwind gray-50 */
+        }
+
+        html.dark header.sticky {
+            background-color: #1f2937;
+            /* Tailwind gray-800 */
+        }
+
+        /* Ensure sub-header info card also respects dark mode */
+        #quizHeaderInfo {
+            background-color: #ffffff;
+            /* Tailwind white */
+        }
+
+        html.dark #quizHeaderInfo {
+            background-color: #374151;
+            /* Tailwind gray-700 */
+        }
+
+
+        .quiz-question-block {
+            transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+            opacity: 0.6;
+        }
+
+        .quiz-question-block.active-question {
+            opacity: 1;
+            transform: scale(1.01);
+            box-shadow: 0 0 15px rgba(80, 120, 255, 0.2);
+        }
+
+        html.dark .quiz-question-block.active-question {
+            box-shadow: 0 0 15px rgba(100, 150, 255, 0.3);
+        }
+
+        .quiz-question-block.answered-question {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .quiz-question-block.answered-question .option-btn {
+            pointer-events: none;
+            cursor: default;
+        }
+
+        .quiz-question-block .option-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .option-btn {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .option-btn:not(:disabled):hover {
+            transform: translateY(-2px) scale(1.01);
+            /* box-shadow: 0 4px 12px rgba(0,0,0,0.1); Tailwind's shadow-md or shadow-lg can be used directly on class */
+        }
+
+        html.dark .option-btn:not(:disabled):hover {
+            /* box-shadow: 0 4px 12px rgba(255,255,255,0.08); */
+        }
+
+        .option-btn.correct {
+            background-color: #10B981 !important;
+            /* green-500 */
+            color: white !important;
+            border-color: #059669 !important;
+            /* green-600 */
+        }
+
+        .option-btn.incorrect {
+            background-color: #EF4444 !important;
+            /* red-500 */
+            color: white !important;
+            border-color: #DC2626 !important;
+            /* red-600 */
+        }
+
+        .option-btn.actual-correct-unselected {
+            background-color: #D1FAE5 !important;
+            /* green-100 */
+            color: #065F46 !important;
+            /* green-700 */
+            border-color: #6EE7B7 !important;
+            /* green-300 */
+            animation: pulse-subtle-green 2s infinite;
+        }
+
+        html.dark .option-btn.actual-correct-unselected {
+            background-color: #064E3B !important;
+            color: #A7F3D0 !important;
+            border-color: #10B981 !important;
+        }
+
+
+        @keyframes pulse-subtle-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        .explanation-area {
+            min-height: 70px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            overflow: hidden;
+            background-color: #ffffff;
+            /* Light mode */
+        }
+
+        html.dark .explanation-area {
+            background-color: #374151;
+            /* Tailwind gray-700 for dark mode */
+        }
+
+        .explanation-area.visible {
+            opacity: 1;
+        }
+
+        /* Fix dark mode for feedback area */
+        .feedback-area {
+            color: #374151;
+            /* Light mode text color */
+        }
+
+        html.dark .feedback-area {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode text color */
+        }
+
+        /* Fix dark mode for question block */
+        .quiz-question-block {
+            background-color: #f9fafb;
+            /* Light mode */
+        }
+
+        html.dark .quiz-question-block {
+            background-color: #1f2937;
+            /* Tailwind gray-800 for dark mode */
+        }
+    </style>
+
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
+
+    <div class="container mx-auto p-4 min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="sticky mb-6 top-0 z-50 py-3 shadow-md bg-gray-50 dark:bg-gray-800">
+            <!-- Top part of the header: Logo, Title, Dark Mode Toggle -->
+            <div class="container mx-auto flex justify-between items-center px-2 sm:px-4">
+                <!-- Eduvision Logo -->
+                <div class="header-logo">
+                    <div class="text-2xl font-bold">
+                        <a href="../../index.html" class="flex items-center group">
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">Edu</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="logo-icon-part" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">ision</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Page Title -->
+                <h1 class="mx-4 text-lg sm:text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500 text-center flex-grow whitespace-nowrap cursor-pointer"
+                    onclick="window.location.href='unix-mcq.html'">
+                    Unix MCQ Challenge
+                </h1>
+
+                <!-- Dark Mode Toggle -->
+                <div class="flex-shrink-0">
+                    <button id="darkModeToggle"
+                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none transition-colors duration-300"
+                        aria-label="Toggle Dark Mode">
+                        <!-- Icon will be set by JS -->
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bottom part of the header: Quiz Info Card -->
+            <div id="quizHeaderInfo" class="bg-white dark:bg-gray-700 p-3 mt-3 rounded-lg shadow-md container mx-auto">
+                <h2 id="mainChapterTitle" class="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-2"></h2>
+                <div class="flex justify-between items-center text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">
+                    <span id="questionProgressText">Answered: 0 / 0</span>
+                    <span id="scoreDisplay">Score: 0</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                    <div id="progressBar"
+                        class="bg-gradient-to-r from-blue-500 to-purple-600 h-2.5 rounded-full transition-all duration-500 ease-out"
+                        style="width: 0%"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area for All Questions -->
+        <main id="quizContentArea"
+            class="flex-grow bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl transition-colors duration-300 mt-4">
+            <!-- Topics and Questions will be dynamically inserted here -->
+        </main>
+
+        <!-- Navigation Area (for Next Chapter) -->
+        <div id="overallNavigation" class="mt-8 mb-4 flex justify-center">
+            <button id="nextChapterBtn"
+                class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 hidden">
+                <!-- Text and onclick will be set by JS -->
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
+            © 2023 Interactive MCQ Platform.
+        </footer>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                chapterName: "Unix MCQ on Awk – An Advanced Filter & Perl – Master Manipulator",
+                topics: [
+                    {
+                        topicName: "Various Operations using Awk Command – 1",
+                        questions: [
+                            {
+                                id: "awk1_q1", question: "1. Which filter apart from perl, is the most powerful?",
+                                options: ["sed", "awk", "grep", "cut"], correctAnswer: "awk",
+                                explanation: "The awk command made a later entry in the UNIX system. Like sed, it combines features of several filters. It is one of the most powerful filter after perl."
+                            },
+                            {
+                                id: "awk1_q2", question: "2. Awk filter operates at field level.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "awk filter can do several things, it operates on field level and can easily access, transform and format individual fields in a line."
+                            },
+                            {
+                                id: "awk1_q3", question: "3. Which of the following will be used to print lines containing ‘manager’ in emp.lst?",
+                                options: ["awk ‘/manager/ { print }’ emp.lst", "awk ‘/manager { print }’ emp.lst", "awk ‘/manager/ { print } emp.lst", "awk ‘manager { print }’ emp.lst"], correctAnswer: "awk ‘/manager/ { print }’ emp.lst",
+                                explanation: "The syntax for using awk is:\nawk  options  ‘selection_criteria { action }’ file(s)"
+                            },
+                            {
+                                id: "awk1_q4", question: "4. The default action if selection_criteria is missing is ____",
+                                options: ["print", "split", "print and split", "no default action"], correctAnswer: "print",
+                                explanation: "If the selection_criteria is missing in awk command statement then the default action i.e. print is applied."
+                            },
+                            {
+                                id: "awk1_q5", question: "5. For pattern-matching, awk uses regular expressions in ____ style.",
+                                options: ["sed", "grep", "perl", "print"], correctAnswer: "sed",
+                                explanation: "For pattern-matching, awk uses regular expressions in sed-style. For example,\n$ awk -F “|” ‘/sa[kx]s*ena/’  emp.lst"
+                            },
+                            {
+                                id: "awk1_q6", question: "6. awk uses ______ for splitting a line into fields.",
+                                options: ["special parameters", "shell variables", "env variables", "command arguments"], correctAnswer: "special parameters",
+                                explanation: "awk uses the special parameter $0 to indicate the entire line. It also uses $1, $2, $3 …. to identify fields. For example,\n$ awk -F “|” ‘/sales/ { print $2, $4, $6 }’  emp.lst         \n // prints 2nd, 4th and 6th field where pattern is matched"
+                            },
+                            {
+                                id: "awk1_q7", question: "7. Which built-in variable is used by the awk to specify the line numbers?",
+                                options: ["AR", "NR", "$$", "$?"], correctAnswer: "NR",
+                                explanation: "awk uses the built-in variable NR to specify line numbers. For example, to select lines 3 to 6 use the following command:\n$ awk  -F “|” ‘NR == 3, NR == 6 { print NR, $2, $4 }’ emp.lst"
+                            },
+                            {
+                                id: "awk1_q8", question: "8. What is the default delimiter used by awk?",
+                                options: ["tab", "whitespace", "double space", "|"], correctAnswer: "whitespace",
+                                explanation: "awk is the only filter which uses whitespace as the default delimiter instead of a single space or tab."
+                            },
+                            {
+                                id: "awk1_q9", question: "9. The printf function uses ___ for string data and ___ for numeric.",
+                                options: ["%f, %l", "%s, %f", "%s, %d", "%s, %s"], correctAnswer: "%s, %d",
+                                explanation: "awk filter supports most of the formats used by the printf function in ‘C’ language. Here, %s format will be used for string and %d format for numeric."
+                            },
+                            {
+                                id: "awk1_q10", question: "10. awk doesn’t use $ in evaluation or assignment of variables.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "awk allows the use of user-defined variables but without declaring them. awk doesn’t use $ either in evaluation or in the assignment of a variable.\nX=”5”\nprint X            // prints 5"
+                            },
+                            {
+                                id: "awk1_q11", question: "11. A user-defined variable is initialized to ____",
+                                options: ["zero", "zero or null string", "null", "operator"], correctAnswer: "zero or null string",
+                                explanation: "A user-defined variable needs no initialization. It is implicitly initialized to zero or null string and awk has a mechanism of identifying the type and initial value of a variable."
+                            },
+                            {
+                                id: "awk1_q12", question: "12. awk uses ___ operator for concatenating strings.",
+                                options: [">", "|", "*", "no operator available"], correctAnswer: "no operator available",
+                                explanation: "awk provides no operator for string concatenation. To do so, we have to simply put two strings side by side:\nx=”sanf” ; y=”com”\nprint x y        // prints sanfcom"
+                            },
+                            {
+                                id: "awk1_q13", question: "13. awk uses __ and __ as comparison operators.",
+                                options: ["$$, ^^", "||, &&", "%%, ##", "||, @@"], correctAnswer: "||, &&",
+                                explanation: "awk uses the && and | | as logical operators in the same sense as used by the C. The following command looks for two strings in third field only using || operator.\n$ awk  -F “|” ‘$3== “director” || $3== “manager” { printf “%-20s  %-12s  %d\\n”, $2, $6}’ emp.lst"
+                            },
+                            {
+                                id: "awk1_q14", question: "14. awk allows the user to use variables of his own choice.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "awk has certain built-in variables like $0, NR, it also permits the user to use variables of his own choice. For example, following command print the name of those directors having salary>6000.\n$ awk  -F “|” ‘$3== “director” || $6 > 6000 { \n> count=count+1\n>printf “%-20s  %d\\n”, $2, $6}’ emp.lst"
+                            },
+                            {
+                                id: "awk1_q15", question: "15. Which option is used for reading an awk program from a file?",
+                                options: ["-e", "-f", "-i", "-F"], correctAnswer: "-f",
+                                explanation: "We can store large awk programs in a separate file and provide them with a .awk extension. For example,\n$ cat emp1.awk\n$3== “director” || $6 > 6000 { \ncount=count+1\nprintf “%-20s  %d\\n”, $2, $6}\n \n// commands written in emp1.awk are executed on emp.lst\n$ awk  -F “|” -f emp1.awk  emp.lst"
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Various Operations using Awk Command – 2",
+                        questions: [
+                            {
+                                id: "awk2_q1", question: "1. ____ section can be used if we’ve to print something before processing the first line.",
+                                options: ["end", "begin", "start", "first"], correctAnswer: "begin",
+                                explanation: "awk statements are usually applied to all the lines selected by the address. But if we want to print something before processing the first line, for example, a heading, then the BEGIN section can be used. The syntax is:\nBEGIN \n{ \n   action \n}"
+                            },
+                            {
+                                id: "awk2_q2", question: "2. ____ section can be used if we’ve to print something after processing the last line.",
+                                options: ["end", "begin", "start", "first"], correctAnswer: "end", // Corrected answer based on context of question
+                                explanation: "awk statements are usually applied to all the lines selected by the address. But if we want to print something after processing the first line, for example, a footer, then the END section can be used. The syntax is:\nEND \n{ \n    action \n}"
+                            },
+                            {
+                                id: "awk2_q3", question: "3. awk uses ____ for providing comments.",
+                                options: ["%%", "//", "#", "$$"], correctAnswer: "#",
+                                explanation: "Like shell, awk also used the # symbol for providing comments. For example,\nBEGIN \n{\n    printf “\\t\\t employee data\\n\\n”\n}              # demonstration of BEGIN section - (this is a comment line)"
+                            },
+                            {
+                                id: "awk2_q4", question: "4. Which of the following is a built-in variable for awk?",
+                                options: ["ps", "$0", "FS", "FN"], correctAnswer: "FS",
+                                explanation: "awk has several built-in variables like FS, OFS, NF each of which serves a different purpose."
+                            },
+                            {
+                                id: "awk2_q5", question: "5. FS defines the field separator.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "As we know that, awk uses a contiguous set of space as the default field delimiter. FS defines this field separator. For example,\nBEGIN { FS= “|” }         // | is the delimiter now"
+                            },
+                            {
+                                id: "awk2_q6", question: "6. Which built-in variable is used for defining the field delimiter in the output?",
+                                options: ["OFS", "FS", "NF", "ES"], correctAnswer: "OFS",
+                                explanation: "The OFS variable is used for specifying the field delimiter in the output. For example,\nBEGIN { OFS= “~” }    // output fields will be separated with a tidle."
+                            },
+                            {
+                                id: "awk2_q7", question: "7. The ____ variable stores the name of the file currently being processed.",
+                                options: ["OFS", "FILENAME", "NF", "ES"], correctAnswer: "FILENAME",
+                                explanation: "awk supports another built-in variable named FILENAME which stores the name of the file, currently being processed."
+                            },
+                            {
+                                id: "awk2_q8", question: "8. Which of the following is not a built-in variable used by awk?",
+                                options: ["ES", "FILENAME", "argv", "argc"], correctAnswer: "ES",
+                                explanation: "argv is used for storing the list of arguments while argc stores the number of arguments in the command line."
+                            },
+                            {
+                                id: "awk2_q9", question: "9. awk supports the use of arrays.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "awk supports the use of arrays but awk arrays differ from those arrays used in another programming language. These arrays are accessed normally using an index."
+                            },
+                            {
+                                id: "awk2_q10", question: "10. Which of the following is not true about awk arrays?",
+                                options: ["they are not expanded automatically", "they are initialized to zero or an empty string", "index can be a string also", "they are not formally defined"], correctAnswer: "they are not expanded automatically",
+                                explanation: "awk supports the use of arrays but awk arrays differ from those arrays used in another programming language. awk arrays are expanded automatically."
+                            },
+                            {
+                                id: "awk2_q11", question: "11. Which of the following is an associative array?",
+                                options: ["a[ ]", "arr[ ]", "envr [ ]", "ENVIRON[ ]"], correctAnswer: "ENVIRON[ ]",
+                                explanation: "awk doesn’t treat array indices as integers. Awk arrays are associative (hash) arrays. Similarly, ENVIRON[ ] is also an associative array, known as environment array which is used to store all environment variables."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Various Operations using Awk Command – 3",
+                        questions: [
+                            {
+                                id: "awk3_q1", question: "1. ____ function breaks up a string on the basis of delimiter.",
+                                options: ["length", "substr", "system", "split"], correctAnswer: "split",
+                                explanation: "The split function breaks a substr str on the basis of delimiter. The syntax is split (stg, arr, ch) where stg is the string to be broken, ch is delimeter and arr is the array which stores the fields."
+                            },
+                            {
+                                id: "awk3_q2", question: "2. For running a UNIX command within awk, we’ve to use ____ function.",
+                                options: ["length", "substr", "system", "split"], correctAnswer: "system",
+                                explanation: "For running a UNIX command within awk, we’ve to use system function. For example,\nBEGIN \n{\n      system(“date”)   // prints the system date \n}"
+                            },
+                            {
+                                id: "awk3_q3", question: "3. sqroot(x) function returns the square root of x.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "The sqrt(x) function is used for returning the square root of x."
+                            },
+                            {
+                                id: "awk3_q4", question: "4. Which of the following is supported by awk?",
+                                options: ["if", "while", "for", "if, while, for"], correctAnswer: "if, while, for",
+                                explanation: "awk generally supports all the functions and features of a modern programming language. It provides if condition for control flow and while, for loop for repeatedly executing the instructions."
+                            },
+                            {
+                                id: "awk3_q5", question: "5. print statement is necessary for printing a line.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "print statement is not necessary for printing a line. If the selection criteria is specified, the specified line is automatically printed."
+                            },
+                            {
+                                id: "awk3_q6", question: "6. awk uses _____ dimensional arrays.",
+                                options: ["one", "two", "multi", "three"], correctAnswer: "one",
+                                explanation: "awk supports one-dimensional arrays where the array subscript can be a string also."
+                            },
+                            {
+                                id: "awk3_q7", question: "7. awk has some built-in functions which are used for arithmetic and string operations.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "awk also has several built-in functions which are used for performing arithmetic as well as string operations. The arguments to these functions are passed in C style."
+                            },
+                            {
+                                id: "awk3_q8", question: "8. Which of the following is a built-in function for awk?",
+                                options: ["length", "index", "size", "length and index"], correctAnswer: "length and index",
+                                explanation: "awk has several built-in functions which are used for performing arithmetic as well as string operations. The length function is used for determining the length of its argument while the index is used for determining the position of a string str1 within another string str2."
+                            },
+                            {
+                                id: "awk3_q9", question: "9. The _____ function extracts a substring from a string.",
+                                options: ["length", "index", "size", "substr"], correctAnswer: "substr",
+                                explanation: "The substr function is used for extracting a substring from a string. The syntax for using this function is substr (str,m,n) where str is the string from which extraction is done. m represents the starting point of extraction and n indicates the number of characters to be extracted."
+                            },
+                            {
+                                id: "awk3_q10", question: "10. awk makes a distinction between numeric and string variables.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "awk has no procedure for a distinction between numeric and string variables. It can perform numeric computations for a string as well."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "perl – A General Purpose Tool – 1",
+                        questions: [
+                            {
+                                id: "perl1_q1", question: "1. Which one of the following is the most powerful filter?",
+                                options: ["awk", "grep", "sed", "perl"], correctAnswer: "perl",
+                                explanation: "A perl is the finest filter used on the UNIX system and is the finest of all (grep, sed, awk, tr). In fact, it combines the power of these. There is nothing can these filters can do and perl can’t."
+                            },
+                            {
+                                id: "perl1_q2", question: "2. A perl program runs in a special interpretive mode.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "A perl program runs in a special interpretive mode; the entire script is first compiled internally before getting executed."
+                            },
+                            {
+                                id: "perl1_q3", question: "3. To test whether perl is in your PATH, use ____",
+                                options: ["perl -e", "perl -i", "perl -el", "perl -ed"], correctAnswer: "perl -e",
+                                explanation: "Unlike other filters, script errors are generated before the execution of perl script file. To check whether perl exist on our system or not use this simple command:\n$ perl -e ‘print(“perl is present”) ;’"
+                            },
+                            {
+                                id: "perl1_q4", question: "4. It is often more convenient to save perl program files with ____ extension.",
+                                options: [".gp", ".sh", ".awk", ".pl"], correctAnswer: ".pl",
+                                explanation: "perl programs are often very big, hence it is better to use .pl extension with perl program files."
+                            },
+                            {
+                                id: "perl1_q5", question: "5. ___ function is used for removing the last character from the line.",
+                                options: ["cut", "chop", "erase", "split"], correctAnswer: "chop",
+                                explanation: "In many conditions, we may need to chop the last character –especially when there is a newline character. For this purpose, chop function is used."
+                            },
+                            {
+                                id: "perl1_q6", question: "6. perl variables have no type and no initialization.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Perl variables have no type and no initialization. Both the strings and numbers can be as large as our machine permits."
+                            },
+                            {
+                                id: "perl1_q7", question: "7. When a string is used for numeral computations, perl converts it into ___",
+                                options: ["character", "floating point number", "number", "boolean value"], correctAnswer: "number",
+                                explanation: "There are some attributes which we should keep in mind while using perl. One of which is, when we use string for numerical comparison or computation, perl immediately converts it into a number."
+                            },
+                            {
+                                id: "perl1_q8", question: "8. If a variable is undefined, its value is ____",
+                                options: ["0", "1", "NULL", "garbage"], correctAnswer: "0", // NULL string is numerically zero
+                                explanation: "When a variable is undefined, it is assumed to be a NULL string and NULL string is numerically zero."
+                            },
+                            {
+                                id: "perl1_q9", question: "9. Which of the following are concatenation operators?",
+                                options: ["/", ".", "_", "\\\\"], correctAnswer: ".",
+                                explanation: "Like in shell, concatenation is performed by placing two variables side by side. This case is not followed with perl. Rather perl uses . (dot) operator for concatenating two variables. For example,\n$ perl  -e  '$x=\"san\" ; $y=\"foundry\" ; print($x . $y);'\nsanfoundry"
+                            },
+                            {
+                                id: "perl1_q10", question: "10. To repeat a string, perl uses ___ operator.",
+                                options: ["/", ".", "x", "\\\\"], correctAnswer: "x",
+                                explanation: "perl uses the x operator to repeat a string. For example, the following command will print * 10 times;\n$ perl  -e  ‘print “*” x 10 ;’\n**********"
+                            },
+                            {
+                                id: "perl1_q11", question: "11. Which function is used by perl for displaying the length of a string?",
+                                options: ["string", "len", "split", "length"], correctAnswer: "length",
+                                explanation: "The length function is used by perl to return the length of any string. For example,\n$x= “Abdullah”;\nprint length($x);       // prints 8"
+                            },
+                            {
+                                id: "perl1_q12", question: "12. ___ function returns the first occurrence of a character in a string.",
+                                options: ["string", "index", "split", "length"], correctAnswer: "index",
+                                explanation: "The index function returns the first occurrence of a character in a string. For example,\n$x= “Abdullah”;\nprint index($x,u);     // prints 3"
+                            },
+                            {
+                                id: "perl1_q13", question: "13. For extracting a substring, ____ function is used.",
+                                options: ["string", "index", "substr", "length"], correctAnswer: "substr",
+                                explanation: "The substr function extracts a particular substring from a string based on the value of specified indices. For example,\n$x= “abcdefghijklm”\n$y= substr( $x, -3,2);   // extracts two characters from the third position on the right side\nprint “$y”;             // prints kl"
+                            },
+                            {
+                                id: "perl1_q14", question: "14. substr function is also used to alter an existing string.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "substr function works in a versatile way. It can also be used for altering an existing string i.e. we can edit an existing string. For example,\n$x= “abcdijklm”\nsubstr($x,4,0)= “efgh” ;    // stuff $x with efgh without replacing any charcaters\nprint “$x” ;               //$x is now abcdefghijklm"
+                            },
+                            {
+                                id: "perl1_q15", question: "15. Which function is used by perl for reversing a string?",
+                                options: ["rev", "reverse", "split", "substr"], correctAnswer: "reverse",
+                                explanation: "The reverse function, which can operate on strings as well as arrays is used to reverse the characters in a string and return the reversed string. For example,\n$x= “abcd” ;\nprint reverse($x) ;       / prints dcba"
+                            },
+                            {
+                                id: "perl1_q16", question: "16. Which function is used for handling substitutions in perl?",
+                                options: ["tr", "s", "str", "tr and s"], correctAnswer: "tr and s",
+                                explanation: "The s and tr functions handle all substitutions in perl. The s command is used in same way as it was used in sed while tr is used translating the characters in the same way as the UNIX tr command does."
+                            },
+                            {
+                                id: "perl1_q17", question: "17. Which escape character is used for identifying a word character?",
+                                options: ["\\s", "\\d", "\\w", "\\n"], correctAnswer: "\\w",
+                                explanation: "Perl offers some escaped characters to represent whitespace, digits and word boundaries. The most commonly used ones are:\n\\s - a whitespace character\n\\d - a digit\n\\w - a word character"
+                            },
+                            {
+                                id: "perl1_q18", question: "18. We can use find command for testing files with perl.",
+                                options: ["True", "False"], correctAnswer: "True", // Assuming 'test' command was meant as in `if -r $x`
+                                explanation: "Perl can also be used with test command for various file tests. For example,\n$x = “abc.txt” ;\nprint “File $x is readable\\n” if -r $x ;"
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "perl – A General Purpose Tool – 2",
+                        questions: [
+                            {
+                                id: "perl2_q1", question: "1. We can specify filenames in command line using perl.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "perl provides specific functions to open a file and perform I/O operations on it. The <> (diamond) operator is used for reading lines from a file. For example,\n perl  -e ‘print while (<>)’  dept.lst        // file opening implied"
+                            },
+                            {
+                                id: "perl2_q2", question: "2. Which of the following is referred to as default variable?",
+                                options: ["$0", "$1", "$!", "$_"], correctAnswer: "$_",
+                                explanation: "perl assigns the line read from input to a special variable $_; often called default variable. This is an extremely important variable, which can make our code compact."
+                            },
+                            {
+                                id: "perl2_q3", question: "3. ___ operator is used for selecting current line number.",
+                                options: ["$0", "$1", "$.", "$_"], correctAnswer: "$.",
+                                explanation: "perl stores the current line number in a special variable $. ($ followed by a dot). We can use it to represent a line address and select lines from anywhere:\nperl  -ne  'print if {$.  < 4}' foo"
+                            },
+                            {
+                                id: "perl2_q4", question: "4. ___ is known as range operator.",
+                                options: [". .", "$1", "$.", "$_"], correctAnswer: ". .",
+                                explanation: "perl . . (range operator) is a counterpart of awk’s NR variable. For example,\nthe following command prints 1,2,3,4,5\nfor each(1..5) \n{\n  print “$_”;\n}"
+                            },
+                            {
+                                id: "perl2_q5", question: "5. The command @x=(1. .10) will assign first ten integer values to the array ‘a’.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Lists and arrays lie at the heart of perl. Perl has a large number of functions to manipulate them. For example, in the following we’ve assigned three values to array @month:\n@month =  {“jan”, “feb”, “march”} ;        //$month[1] is feb"
+                            },
+                            {
+                                id: "perl2_q6", question: "6. The ___ prefix to an array name signifies the last index of the array.",
+                                options: ["$0", "$#", "#$", "$_"], correctAnswer: "$#",
+                                explanation: "The $# prefix to an array name signifies the last index of the array. It is always one less than the size of the array. For example,\n@month =  {“jan”, “feb”, “march”} ;\n$last_index = $#month;        //$last_index is “march”"
+                            },
+                            {
+                                id: "perl2_q7", question: "7. For deleting the elements from the left of the array ___ function is used.",
+                                options: ["pop", "push", "queue", "shift"], correctAnswer: "shift",
+                                explanation: "perl provides a handful of functions for manipulating the contents of an array. For example, perl uses shift function to delete the left-most element of an array.\n@list= (3. .5,9) ;    // this is 3,4,5,9\nshift(@list)         // now it is 4,5,9"
+                            },
+                            {
+                                id: "perl2_q8", question: "8. For deleting the elements from the right of the array ___ function is used.",
+                                options: ["pop", "push", "queue", "shift"], correctAnswer: "pop",
+                                explanation: "perl provides a handful of functions for manipulating the contents of any array. For example, perl uses the pop function to delete the right-most element of an array.\n@list= (3. .5,9) ;      // this is 3,4,5,9\npop(@list)             // now it is 3,4,5"
+                            },
+                            {
+                                id: "perl2_q9", question: "9. To add elements to the left side of the array ____ function is used.",
+                                options: ["pop", "push", "queue", "unshift"], correctAnswer: "unshift",
+                                explanation: "Ta add elements to the left side of the array, use the unshift function. For example,\n@list= (5,9) ;                // this is 5,9\nunshift( @list,1. .3) ;      // now it becomes 1,2,3,5,9"
+                            },
+                            {
+                                id: "perl2_q10", question: "10. To add elements to the right side of the array ____ function is used.",
+                                options: ["pop", "push", "queue", "unshift"], correctAnswer: "push",
+                                explanation: "Ta add elements to the right side of the array, use the push function. For example,\n@list= (5,9) ;            // this is 5,9\nunshift( @list,13) ;     // now it becomes 5,9,13" // Note: example seems to mix unshift and push, corrected for push
+                            },
+                            {
+                                id: "perl2_q11", question: "11. Which function can combine the functionalities of push, pop, unshift and shift?",
+                                options: ["splice", "add", "delete", "split"], correctAnswer: "splice",
+                                explanation: "The splice function can perform all the four functions performed by these functions. It uses upto four arguments to add or remove elements at any location of the array. The second argument is the offset from where we’ve to perform insertion or deletion, the third argument represents the number of elements to be removed. If it is 0, elements are to be added. The fourth argument specifies the new replaced list. For example,\n@list= (1,2,3,4,5,9) ;\nsplice(@list, 5, 0, 6. . 8);        //adds at 6th location -1,2,3,4,5,6,7,8,9"
+                            },
+                            {
+                                id: "perl2_q12", question: "12. For looping in a list, ____ is used.",
+                                options: ["for", "fordo", "foreach", "while"], correctAnswer: "foreach",
+                                explanation: "perl provides an extremely useful foreach construct to loop through a list. The syntax is,\nforeach $var (@arr) \n{\n   statements\n}"
+                            },
+                            {
+                                id: "perl2_q13", question: "13. perl also supports use of for loop in the following manner.\n\nfor($i=0;$i<3;$i++){ }",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "perl supports both foreach construct and for loop for looping purposes. For example,\nfor($i=0;$i<3;$i++){print(“hello”) ; }        //print “Hello” three times"
+                            },
+                            {
+                                id: "perl2_q14", question: "14. For splitting a line or expression into fields, __ is used.",
+                                options: ["foreach", "for", "split", "join"], correctAnswer: "split",
+                                explanation: "split breaks a particular line or expression into fields. These fields are assigned either to variables or an array. For example,\n($var1, $var2, $var3 . . . ) = split(/sep/,stg) ;\n@arr= split(/sep/,stg) ;      \n// splits string stg on sep (sep can be literal character or regular expression)"
+                            },
+                            {
+                                id: "perl2_q15", question: "15. ___ function is used for joining lists.",
+                                options: ["foreach", "for", "split", "join"], correctAnswer: "join",
+                                explanation: "The join function acts in an opposite manner to split. It combines its arguments into a single string and uses the delimiter as the first argument. For example,\n$weekstr = join( “ “, @week_arr) ;\n@weekstr = join(“ “, “mon”, “tue”, “wed”);\nprint $weekstr ;            // output will be mon, tue, wed"
+                            },
+                            {
+                                id: "perl2_q16", question: "16. perl is ____ of grep, tr, sed and awk.",
+                                options: ["subset", "superset", "child", "parent"], correctAnswer: "superset",
+                                explanation: "perl is a superset of grep, sed, awk and the shell. It can perform all the functions performed by all these and that too more efficiently."
+                            },
+                            {
+                                id: "perl2_q17", question: "17. The following will display :\n\nperl -e ‘print “UNIX” x 10 . “\\n” ;’",
+                                options: ["UNIX", "UNIX 10 times", "error message", "\\n"], correctAnswer: "UNIX 10 times",
+                                explanation: "The perl x operator is used for repeating a string. So the above command will print UNIX 10 times."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const mainChapterTitleEl = document.getElementById('mainChapterTitle');
+        const questionProgressTextEl = document.getElementById('questionProgressText');
+        const scoreDisplayEl = document.getElementById('scoreDisplay');
+        const progressBarEl = document.getElementById('progressBar');
+        const quizContentAreaEl = document.getElementById('quizContentArea');
+        const nextChapterBtn = document.getElementById('nextChapterBtn');
+
+        let currentChapterIndex = 0; // This page handles only one chapter
+        let score = 0;
+        let totalQuestionsInChapter = 0;
+        let questionsAnsweredCount = 0;
+        let allQuestionElementsMap = new Map();
+        let currentActiveQuestionId = null;
+
+        const sunIcon = `<i class="fas fa-sun text-xl text-yellow-400"></i>`;
+        const moonIcon = `<i class="fas fa-moon text-xl text-gray-700 dark:text-yellow-400"></i>`;
+
+        function setDarkMode(isDark) {
+            const htmlEl = document.documentElement;
+            if (isDark) {
+                htmlEl.classList.add('dark');
+                darkModeToggle.innerHTML = sunIcon;
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                htmlEl.classList.remove('dark');
+                darkModeToggle.innerHTML = moonIcon;
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            setDarkMode(!document.documentElement.classList.contains('dark'));
+        });
+
+        function renderChapter() {
+            quizContentAreaEl.innerHTML = '';
+            allQuestionElementsMap.clear();
+            const chapterData = quizData[currentChapterIndex];
+            mainChapterTitleEl.textContent = chapterData.chapterName;
+
+            score = 0;
+            questionsAnsweredCount = 0;
+            totalQuestionsInChapter = 0;
+            let firstQuestionId = null;
+
+            chapterData.topics.forEach(topic => {
+                totalQuestionsInChapter += topic.questions.length;
+            });
+            updateProgressAndScore();
+
+            chapterData.topics.forEach((topic) => {
+                const topicHeader = document.createElement('h3');
+                topicHeader.className = 'text-xl md:text-2xl font-semibold text-purple-600 dark:text-purple-400 mt-10 mb-6 pt-6 border-t border-gray-300 dark:border-gray-600 first:mt-0 first:pt-0 first:border-t-0';
+                topicHeader.textContent = topic.topicName;
+                quizContentAreaEl.appendChild(topicHeader);
+
+                topic.questions.forEach((q) => {
+                    if (!firstQuestionId) firstQuestionId = q.id;
+
+                    const questionBlock = document.createElement('div');
+                    questionBlock.id = `qblock-${q.id}`;
+                    questionBlock.className = 'quiz-question-block mb-10 p-5 bg-gray-50 dark:bg-gray-750 rounded-xl shadow-lg';
+                    questionBlock.dataset.questionId = q.id;
+
+                    const questionTextEl = document.createElement('p');
+                    questionTextEl.className = 'text-md md:text-lg font-medium mb-5 text-gray-800 dark:text-gray-200';
+                    questionTextEl.innerHTML = q.question.replace(/\n/g, '<br>');
+                    questionBlock.appendChild(questionTextEl);
+
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.className = 'grid grid-cols-1 md:grid-cols-2 gap-3 mb-4';
+                    q.options.forEach((option, optionIdx) => {
+                        const button = document.createElement('button');
+                        button.innerHTML = `<span class="text-left flex-grow">${String.fromCharCode(97 + optionIdx)}) ${option}</span>`;
+                        button.className = 'option-btn w-full text-left p-3 bg-gray-200 dark:bg-gray-600 hover:bg-blue-100 dark:hover:bg-blue-800 rounded-lg border-2 border-gray-300 dark:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-between disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow-md';
+                        button.dataset.questionId = q.id;
+                        button.dataset.optionIndex = optionIdx;
+                        button.disabled = true;
+                        button.addEventListener('click', handleAnswerSelection);
+                        optionsContainer.appendChild(button);
+                    });
+                    questionBlock.appendChild(optionsContainer);
+
+                    const feedbackEl = document.createElement('div');
+                    feedbackEl.className = 'feedback-area min-h-[25px] text-sm mb-2';
+                    questionBlock.appendChild(feedbackEl);
+
+                    const explanationEl = document.createElement('div');
+                    explanationEl.className = 'explanation-area p-3 rounded-md text-sm leading-relaxed';
+                    explanationEl.innerHTML = `<strong class="block mb-1">Explanation:</strong> ${q.explanation.replace(/\n/g, '<br>')}`;
+                    questionBlock.appendChild(explanationEl);
+
+
+                    quizContentAreaEl.appendChild(questionBlock);
+                    allQuestionElementsMap.set(q.id, questionBlock);
+                });
+            });
+
+            if (firstQuestionId) {
+                activateQuestion(firstQuestionId);
+            }
+            nextChapterBtn.classList.add('hidden');
+            nextChapterBtn.textContent = "Next Chapter ➝ Advanced Vi";
+            nextChapterBtn.onclick = () => {
+                window.location.href = 'chapter-13.html'; // Assuming chapter 13
+            };
+        }
+
+        function activateQuestion(questionId) {
+            if (currentActiveQuestionId) {
+                const prevActiveBlock = allQuestionElementsMap.get(currentActiveQuestionId);
+                if (prevActiveBlock) {
+                    prevActiveBlock.classList.remove('active-question');
+                }
+            }
+
+            currentActiveQuestionId = questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+            if (questionBlock) {
+                questionBlock.classList.add('active-question');
+                questionBlock.querySelectorAll('.option-btn').forEach(btn => btn.disabled = false);
+                setTimeout(() => {
+                    const rect = questionBlock.getBoundingClientRect();
+                    const headerHeight = document.querySelector('header.sticky').offsetHeight || 150;
+                    if (rect.top < headerHeight || rect.bottom > (window.innerHeight - 50)) {
+                        questionBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 150);
+            }
+        }
+
+
+        function findQuestionData(questionId) {
+            for (const topic of quizData[currentChapterIndex].topics) {
+                const question = topic.questions.find(q => q.id === questionId);
+                if (question) return question;
+            }
+            return null;
+        }
+
+        function handleAnswerSelection(event) {
+            const selectedButton = event.currentTarget;
+            const questionId = selectedButton.dataset.questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+
+            if (!questionBlock || questionBlock.classList.contains('answered-question')) return;
+
+            const questionData = findQuestionData(questionId);
+            if (!questionData) return;
+
+            const selectedOptionIndex = parseInt(selectedButton.dataset.optionIndex);
+            const selectedOptionText = questionData.options[selectedOptionIndex];
+            const correctAnswerText = questionData.correctAnswer;
+
+            const feedbackEl = questionBlock.querySelector('.feedback-area');
+            const explanationEl = questionBlock.querySelector('.explanation-area');
+            const allOptionButtonsInBlock = questionBlock.querySelectorAll('.option-btn');
+
+            allOptionButtonsInBlock.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-blue-100', 'dark:hover:bg-blue-800', 'hover:shadow-md');
+            });
+
+            if (selectedOptionText === correctAnswerText) {
+                score++;
+                selectedButton.classList.add('correct');
+                feedbackEl.innerHTML = `<p class="text-green-600 dark:text-green-400 font-semibold"><i class="fas fa-check-circle mr-2"></i>Correct!</p>`;
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackEl.innerHTML = `<p class="text-red-600 dark:text-red-400 font-semibold"><i class="fas fa-times-circle mr-2"></i>Incorrect. The correct answer is highlighted.</p>`;
+                allOptionButtonsInBlock.forEach(btn => {
+                    if (questionData.options[parseInt(btn.dataset.optionIndex)] === correctAnswerText) {
+                        btn.classList.add('actual-correct-unselected');
+                        btn.classList.remove('incorrect');
+                    }
+                });
+            }
+
+            explanationEl.classList.add('visible');
+
+            questionBlock.classList.add('answered-question');
+            questionBlock.classList.remove('active-question');
+            questionsAnsweredCount++;
+            updateProgressAndScore();
+
+            setTimeout(() => {
+                let nextQuestionIdToActivate = null;
+                let foundCurrent = false;
+                for (const topic of quizData[currentChapterIndex].topics) {
+                    for (const q of topic.questions) {
+                        if (foundCurrent) {
+                            nextQuestionIdToActivate = q.id;
+                            break;
+                        }
+                        if (q.id === questionId) {
+                            foundCurrent = true;
+                        }
+                    }
+                    if (nextQuestionIdToActivate) break;
+                }
+
+                if (nextQuestionIdToActivate) {
+                    activateQuestion(nextQuestionIdToActivate);
+                } else {
+                    showChapterEnd();
+                }
+            }, 1500);
+        }
+
+        function updateProgressAndScore() {
+            scoreDisplayEl.textContent = `Score: ${score}`;
+            questionProgressTextEl.textContent = `Answered: ${questionsAnsweredCount} / ${totalQuestionsInChapter}`;
+            const progressPercentage = totalQuestionsInChapter > 0 ? (questionsAnsweredCount / totalQuestionsInChapter) * 100 : 0;
+            progressBarEl.style.width = `${progressPercentage}%`;
+        }
+
+        function showChapterEnd() {
+            nextChapterBtn.classList.remove('hidden');
+            // nextChapterBtn.onclick is already set in renderChapter
+
+            const endMessage = document.createElement('p');
+            endMessage.className = "text-center text-xl font-semibold mt-10 p-6 bg-blue-50 dark:bg-blue-900 rounded-lg";
+            endMessage.textContent = `Chapter 12 Complete! Your final score: ${score} out of ${totalQuestionsInChapter}.`;
+            quizContentAreaEl.appendChild(endMessage);
+            endMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+            const currentTheme = localStorage.getItem('darkMode');
+
+            if (currentTheme === 'enabled') {
+                setDarkMode(true);
+            } else if (currentTheme === 'disabled') {
+                setDarkMode(false);
+            } else {
+                setDarkMode(prefersDarkScheme.matches);
+            }
+
+            prefersDarkScheme.addEventListener('change', e => {
+                if (localStorage.getItem('darkMode') === null) {
+                    setDarkMode(e.matches);
+                }
+            });
+
+            renderChapter();
+        });
+
+    </script>
+</body>
+
+</html>

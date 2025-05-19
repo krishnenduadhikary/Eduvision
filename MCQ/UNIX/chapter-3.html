@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en" class=""> <!-- Start with no 'dark' class, JS will add -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unix MCQ Challenge - Chapter 3 (Handling Ordinary Files)</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Logo Styles (Integrated into header flow) */
+        .header-logo .text-2xl {
+            font-size: 1.6rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .header-logo .logo-text-part {
+            /* Color will be handled by Tailwind text-gray-700 dark:text-gray-100 by default, or override if needed */
+        }
+
+        /* Make logo text distinctly visible in both modes if it clashes */
+        html:not(.dark) .header-logo .logo-text-part {
+            color: #374151;
+            /* Tailwind gray-700 for light mode if needed */
+        }
+
+        html.dark .header-logo .logo-text-part {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode */
+        }
+
+        .header-logo .logo-icon-part {
+            color: #F59E0B;
+            /* Tailwind amber-500, good contrast */
+            transition: color 0.3s;
+        }
+
+        .header-logo a:hover .logo-icon-part {
+            color: #D97706;
+            /* Tailwind amber-600 */
+        }
+
+        .header-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.4em;
+            width: 1.4em;
+            margin: 0 2px;
+        }
+
+        /* Ensure sticky header background is consistent */
+        header.sticky {
+            background-color: #f9fafb;
+            /* Tailwind gray-50 */
+        }
+
+        html.dark header.sticky {
+            background-color: #1f2937;
+            /* Tailwind gray-800 */
+        }
+
+        /* Ensure sub-header info card also respects dark mode */
+        #quizHeaderInfo {
+            background-color: #ffffff;
+            /* Tailwind white */
+        }
+
+        html.dark #quizHeaderInfo {
+            background-color: #374151;
+            /* Tailwind gray-700 */
+        }
+
+
+        .quiz-question-block {
+            transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+            opacity: 0.6;
+        }
+
+        .quiz-question-block.active-question {
+            opacity: 1;
+            transform: scale(1.01);
+            box-shadow: 0 0 15px rgba(80, 120, 255, 0.2);
+        }
+
+        html.dark .quiz-question-block.active-question {
+            box-shadow: 0 0 15px rgba(100, 150, 255, 0.3);
+        }
+
+        .quiz-question-block.answered-question {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .quiz-question-block.answered-question .option-btn {
+            pointer-events: none;
+            cursor: default;
+        }
+
+        .quiz-question-block .option-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .option-btn {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .option-btn:not(:disabled):hover {
+            transform: translateY(-2px) scale(1.01);
+            /* box-shadow: 0 4px 12px rgba(0,0,0,0.1); Tailwind's shadow-md or shadow-lg can be used directly on class */
+        }
+
+        html.dark .option-btn:not(:disabled):hover {
+            /* box-shadow: 0 4px 12px rgba(255,255,255,0.08); */
+        }
+
+        .option-btn.correct {
+            background-color: #10B981 !important;
+            /* green-500 */
+            color: white !important;
+            border-color: #059669 !important;
+            /* green-600 */
+        }
+
+        .option-btn.incorrect {
+            background-color: #EF4444 !important;
+            /* red-500 */
+            color: white !important;
+            border-color: #DC2626 !important;
+            /* red-600 */
+        }
+
+        .option-btn.actual-correct-unselected {
+            background-color: #D1FAE5 !important;
+            /* green-100 */
+            color: #065F46 !important;
+            /* green-700 */
+            border-color: #6EE7B7 !important;
+            /* green-300 */
+            animation: pulse-subtle-green 2s infinite;
+        }
+
+        html.dark .option-btn.actual-correct-unselected {
+            background-color: #064E3B !important;
+            color: #A7F3D0 !important;
+            border-color: #10B981 !important;
+        }
+
+
+        @keyframes pulse-subtle-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        .explanation-area {
+            min-height: 70px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            overflow: hidden;
+            background-color: #ffffff;
+            /* Light mode */
+        }
+
+        html.dark .explanation-area {
+            background-color: #374151;
+            /* Tailwind gray-700 for dark mode */
+        }
+
+        .explanation-area.visible {
+            opacity: 1;
+        }
+
+        /* Fix dark mode for feedback area */
+        .feedback-area {
+            color: #374151;
+            /* Light mode text color */
+        }
+
+        html.dark .feedback-area {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode text color */
+        }
+
+        /* Fix dark mode for question block */
+        .quiz-question-block {
+            background-color: #f9fafb;
+            /* Light mode */
+        }
+
+        html.dark .quiz-question-block {
+            background-color: #1f2937;
+            /* Tailwind gray-800 for dark mode */
+        }
+    </style>
+
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
+
+    <div class="container mx-auto p-4 min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="sticky mb-6 top-0 z-50 py-3 shadow-md bg-gray-50 dark:bg-gray-800">
+            <!-- Top part of the header: Logo, Title, Dark Mode Toggle -->
+            <div class="container mx-auto flex justify-between items-center px-2 sm:px-4">
+                <!-- Eduvision Logo -->
+                <div class="header-logo">
+                    <div class="text-2xl font-bold">
+                        <a href="../../index.html" class="flex items-center group">
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">Edu</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="logo-icon-part" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">ision</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Page Title -->
+                <h1 class="mx-4 text-lg sm:text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500 text-center flex-grow whitespace-nowrap cursor-pointer"
+                    onclick="window.location.href='unix-mcq.html'">
+                    Unix MCQ Challenge
+                </h1>
+
+                <!-- Dark Mode Toggle -->
+                <div class="flex-shrink-0">
+                    <button id="darkModeToggle"
+                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none transition-colors duration-300"
+                        aria-label="Toggle Dark Mode">
+                        <!-- Icon will be set by JS -->
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bottom part of the header: Quiz Info Card -->
+            <div id="quizHeaderInfo" class="bg-white dark:bg-gray-700 p-3 mt-3 rounded-lg shadow-md container mx-auto">
+                <h2 id="mainChapterTitle" class="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-2"></h2>
+                <div class="flex justify-between items-center text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">
+                    <span id="questionProgressText">Answered: 0 / 0</span>
+                    <span id="scoreDisplay">Score: 0</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                    <div id="progressBar"
+                        class="bg-gradient-to-r from-blue-500 to-purple-600 h-2.5 rounded-full transition-all duration-500 ease-out"
+                        style="width: 0%"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area for All Questions -->
+        <main id="quizContentArea"
+            class="flex-grow bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl transition-colors duration-300 mt-4">
+            <!-- Topics and Questions will be dynamically inserted here -->
+        </main>
+
+        <!-- Navigation Area (for Next Chapter) -->
+        <div id="overallNavigation" class="mt-8 mb-4 flex justify-center">
+            <button id="nextChapterBtn"
+                class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 hidden">
+                <!-- Text and onclick will be set by JS -->
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
+            © 2023 Interactive MCQ Platform.
+        </footer>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                chapterName: "Unix MCQ on Handling Ordinary Files",
+                topics: [
+                    {
+                        topicName: "Displaying and Creating Files – cat Command",
+                        questions: [
+                            {
+                                id: "cat_q1", question: "1. Which command is used for displaying contents of a file?",
+                                options: ["cp", "rm", "cat", "mkdir"], correctAnswer: "cat",
+                                explanation: "cat command is used to display the contents of a file. For displaying the contents, simply invoke the cat command with the filename (whose contents are to be displayed) as an argument. For example, if abd.txt file contains “HELLO WORLD” then,\n$ cat abd.txt\nHELLO WORLD"
+                            },
+                            {
+                                id: "cat_q2", question: "2. Apart from displaying file contents, cat command is also used for _____ files.",
+                                options: ["displaying", "deleting", "copying", "creating"], correctAnswer: "creating",
+                                explanation: "cat command is one of the most well-known commands of the UNIX system. It is generally used to display the contents of a file on the terminal but can also be used for creating files. Suppose to create a file abd.txt, type the following command\n$ cat  >  abd.txt\nNow the prompt vanishes. cat command now waits for the input to be entered by the user. After the input is entered, the user hits the ctrl-D button which marks the end of the file and thus the file and the contents entered by the user are saved."
+                            },
+                            {
+                                id: "cat_q3", question: "3. Multiple arguments as filenames can be specified in cat command.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "cat, like several other UNIX commands can accept more than one filename as arguments. For example,\n$ cat   file1   file2\nAbove command shows the contents of the second file immediately after the contents of the first file without any header information i.e. it concatenates the contents of two files on the terminal."
+                            },
+                            {
+                                id: "cat_q4", question: "4. Which symbol is used with cat command for creating files?",
+                                options: [">", "<", "*", "/"], correctAnswer: ">",
+                                explanation: "> symbol acts as a redirection symbol and records the input entered by the user in the specified file. For example,\n$ cat  > file_01\nUNIX is a powerful operating system        // input entered by the user\n[CTRL-D]"
+                            },
+                            {
+                                id: "cat_q5", question: "5. If we create a file using cat command with the same filename which already exists in the current directory then,",
+                                options: ["existing file is deleted", "new file will be created separately", "existing file will be overwritten", "an error will be produced"], correctAnswer: "existing file will be overwritten",
+                                explanation: "As cat command is also used to create files, so if we want to create a file with the same filename which already exists in the directory then the existing file will be overwritten."
+                            },
+                            {
+                                id: "cat_q6", question: "6. Which symbol is used to append an existing file?",
+                                options: [">", "<", ">>", "$"], correctAnswer: ">>",
+                                explanation: "cat command overwrites the existing file if we try to create another file with a similar filename as an existing file. To avoid this we can use the >> operator. For example, if file01 already exists and we want to append it, then use the following command:\n$ cat  >> file01"
+                            },
+                            {
+                                id: "cat_q7", question: "7. Which option is used with cat command for displaying non-printable characters?",
+                                options: ["-v", "-n", "-x", "-a"], correctAnswer: "-v",
+                                explanation: "If the file that we want to display contains nonprintable ASCII characters, then to display those characters we use -v option with the cat command. -n option is used for displaying the contents of the file along with line numbers."
+                            },
+                            {
+                                id: "cat_q8", question: "8. Which option is used with the cat command for displaying file with line numbers?",
+                                options: ["-n", "-v", "-a", "-x"], correctAnswer: "-n",
+                                explanation: "cat command supports -n option which is used for displaying file contents along with line number while -v is used for displaying nonprintable ASCII characters in the file."
+                            },
+                            {
+                                id: "cat_q9", question: "9. Which of the following cannot be performed by cat command?",
+                                options: ["displaying files", "creating files", "appending files", "deleting files"], correctAnswer: "deleting files",
+                                explanation: "cat command cannot delete files. It can only be used for viewing file contents, creating a file or appending to an existing file."
+                            },
+                            {
+                                id: "cat_q10", question: "10. What does cat file01 file01 file01 display?",
+                                options: ["error", "blank terminal", "contents of file01 three times successively", "contents of file01 single time"], correctAnswer: "contents of file01 three times successively",
+                                explanation: "When multiple filenames are specified as arguments with cat command, it concatenates the contents of all the files specified as arguments and displays the output on the terminal."
+                            },
+                            {
+                                id: "cat_q11", question: "11. Which files will be displayed by the following command:\n\ncat  *file*",
+                                options: ["all files in the directory", "all files with filename containing ‘file’", "no files will be displayed", "a single file"], correctAnswer: "all files with filename containing ‘file’",
+                                explanation: "Since * is a meta-character, here it is being used for pattern matching. So above command will search all the files in the directory having ‘file’ as a part of their filename. After that it will concatenate the output of all the searched files and display them on the terminal."
+                            },
+                            {
+                                id: "cat_q12", question: "12. Which command is used to create empty files?",
+                                options: ["cp", "cat", "touch", "create"], correctAnswer: "touch",
+                                explanation: "Touch command changes timestamps. It is also an easy way to create empty files.\nThe only argument required to be specified with touch command is the filename of the file to be created.\n$ touch file01"
+                            },
+                            {
+                                id: "cat_q13", question: "13. Which option is used with touch command which forces the command not to create file, if it does not exists.",
+                                options: ["-h", "-c", "-t", "-f"], correctAnswer: "-c",
+                                explanation: "In case if there is a strict requirement that touch command should not create a new file, we can use the -c option with it. Else if the file already exists then it will do nothing.\n$ touch -c newfile001"
+                            },
+                            {
+                                id: "cat_q14", question: "14. Which one of the following commands is incorrect?",
+                                options: ["cat file01", "cat > file01", "cat >> file1", "cat -a file01"], correctAnswer: "cat -a file01",
+                                explanation: "There is no such option as -a available with cat command.\ncat  file01		// display contents of file01\ncat > file01		// create a new file named 'file01'\ncat >> file1		// append to the file named 'file01'\ncat  -a file01		// invalid command"
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Copying a File – cp Command",
+                        questions: [
+                            {
+                                id: "cp_q1", question: "1. What is the function of cp command in UNIX?",
+                                options: ["list all the available files in the current directory", "delete a given file", "cp is a command used for copying files and directories", "change the directory"], correctAnswer: "cp is a command used for copying files and directories",
+                                explanation: "cp command is basically used for creating a copy of source file or a group of files. The syntax of the command requires at least two filenames to be specified. If both the files specified are ordinary files, the first file will be copied to the second file. The syntax of cp command is cp source_filename destination_filename. The contents of the source file will be copied to the destination file in the same directory.\n$ cp  file_01  file_02               // copies file_01 to file_02"
+                            },
+                            {
+                                id: "cp_q2", question: "2. What happens if the destination file specified in cp command does not exist?",
+                                options: ["file will not be copied", "an error will be produced", "destination file will be automatically created", "none of the mentioned"], correctAnswer: "destination file will be automatically created",
+                                explanation: "If the destination file does not exist, then cp command will automatically create a file with the same name and then it copies the contents of the source file to the file which is created. If the destination file already exists, then it will be overwritten with the contents of the source file."
+                            },
+                            {
+                                id: "cp_q3", question: "3. Which of the following is not an option of cp command?",
+                                options: ["-z", "-i", "-R", "-u"], correctAnswer: "-z",
+                                explanation: "cp command has many options available, each of which performs a unique task. (-i) is used for interactive copying (i.e.) it warns the user before overwriting the destination file. (-R) is used for copying the entire directory structure into another directory structure. (-u) copies only when the source file is newer than the destination file"
+                            },
+                            {
+                                id: "cp_q4", question: "4. What is the correct syntax for copying multiple files with a filename starting as ‘file’ into another file named as ‘directory_one’?",
+                                options: ["cp -i file directory_one", "cp -R file directory/directory_one", "cp file* directory_one", "none of the mentioned"], correctAnswer: "cp file* directory_one",
+                                explanation: "For copying multiple files with a common starting name such as (file, file001, file.txt, fileone.jpg, file-archive.zip) we use (“*”). An asterisk (“*”) is a wildcard – a special character which expands to match other characters. For example, cp file* directory_one will copy all the files whose name will be starting with ‘file’ into ‘directory_one’ file."
+                            },
+                            {
+                                id: "cp_q5", question: "5. How can we copy an entire directory under another directory?",
+                                options: ["using -R option", "using -a option", "using -u option", "none of the mentioned"], correctAnswer: "using -R option",
+                                explanation: "-R option is used to copy an entire directory structure into another one recursively. Here recursively means that the command can descend a directory and examine all the files in its subdirectories and then it will copy the entire structure. For example, cp -R prog_one new_prog. It will create a copy of contents of entire directory prog_one to new_prog if new_prog does not exist. Otherwise, if new_prog exists as a directory, then the whole structure of prog_one will be copied under new_prog as a subdirectory."
+                            },
+                            {
+                                id: "cp_q6", question: "6. How can we copy a file into our current directory?",
+                                options: ["cp file1", "cp file1 .", "cp file*", "none of the mentioned"], correctAnswer: "cp file1 .",
+                                explanation: "For creating a copy of a file into our current working directory we use the shorthand notation (.). For example, cp file1 . will create a copy of file1 into our current working directory with the same name."
+                            },
+                            {
+                                id: "cp_q7", question: "7. What does the following command do?\n\ncp -u * dir_file",
+                                options: ["copy all files to directory dir_file", "update all files", "delete all files", "update all files in the current working directory and copy newer ones to directory dir_file"], correctAnswer: "update all files in the current working directory and copy newer ones to directory dir_file",
+                                explanation: "(-u) option is used with cp command to update files and copy only when the source file is newer than destination file. So the above command will update all files in the current working directory and copy newer ones to directory dir_file."
+                            },
+                            {
+                                id: "cp_q8", question: "8. Sometimes it is not possible to copy a file.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Sometimes it may happen that we cannot copy a file because of the permissions associated with it. For example, If the permissions associated with a file are read-protected then we cannot copy the file."
+                            },
+                            {
+                                id: "cp_q9", question: "9. What does -i option do?",
+                                options: ["interactive copying", "recursively copying", "updating", "none of the mentioned"], correctAnswer: "interactive copying",
+                                explanation: "(-i) option is used for interactive copying. It means that suppose if we invoke a command like cp file1 file2 and if file2 already exists then it will be overwritten which can be a nightmare for many users. To avoid this, we use -i option. It provides us with a warning before overwriting a file. It asks the user whether to overwrite the file or not. The syntax is cp -i source_file dest_file.\n$ cp  -i  file_01  fo_02\ncp: overwrites fo_02 (yes/no)?             // asks before overwriting"
+                            },
+                            {
+                                id: "cp_q10", question: "10. To copy multiple files, the last destination file should be a directory.",
+                                options: ["False", "True"], correctAnswer: "True",
+                                explanation: "We can copy multiple files using a single invocation of cp command. To do so, the last name specified should be a directory. For example, cp file1 file2 file3 dir_one. It will copy all the three files to the directory named dir_one."
+                            },
+                            {
+                                id: "cp_q11", question: "11. -n option is used with cp command for what purpose?",
+                                options: ["existing file should not be overwritten", "to update file", "interactive copying", "recursive copying"], correctAnswer: "existing file should not be overwritten",
+                                explanation: "-n option is used with cp command when we do not want to want to overwrite the existing file. It means that if the destination file already exists, then it should not be overwritten."
+                            },
+                            {
+                                id: "cp_q12", question: "12. Which option is used with cp command for linking files instead of copying?",
+                                options: ["-v", "-l", "-f", "-x"], correctAnswer: "-l",
+                                explanation: "-l option is used with cp command for linking files instead of copying. When one file has more than one filenames, we say that the file has more than one link. This file can be accessed by more than one filename."
+                            },
+                            {
+                                id: "cp_q13", question: "13. $ cp -f copies forcefully.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "-f option copies forcefully when the permissions associated with a file does not allow performing the operation."
+                            },
+                            {
+                                id: "cp_q14", question: "14. -v option is used with cp command for displaying _____",
+                                options: ["errors", "informative messages", "diagnostic messages", "file contents"], correctAnswer: "informative messages",
+                                explanation: "cp -v displays the informative messages while copying files about what is happening. For example,\n$ cp -v  file01  file02"
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Deleting and Renaming files: rm and mv Command",
+                        questions: [
+                            {
+                                id: "rm_q1", question: "1. Which command is used for removing/deleting files in UNIX?",
+                                options: ["rmdir", "rm", "del", "mv"], correctAnswer: "rm",
+                                explanation: "rm command is used in UNIX to remove one or more files. It operates silently and should be used with caution. The filename of the file to be deleted is provided as an argument to rm command. For example, following command deletes abd.txt file.\n$ rm  abd.txt"
+                            },
+                            {
+                                id: "rm_q2", question: "2. We can delete multiple files using a single rm command.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Multiple files can be deleted in a single go using rm command. All we need to do is, provides multiple filenames as arguments to the rm command.\n$ rm  file1  file2  file3"
+                            },
+                            {
+                                id: "rm_q3", question: "3. To delete all files in a directory we use ______________",
+                                options: ["rmdir *", "mv *", "rm *", "del *"], correctAnswer: "rm *",
+                                explanation: "To delete all files in a directory, use (*) with rm command. It acts as a meta-character and delete all files without displaying any message on the terminal. So use this command cautiously."
+                            },
+                            {
+                                id: "rm_q4", question: "4. Some files cannot be deleted using rm command because of the permissions associated with it.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Whether we are able to remove a file depends on the permissions associated with the file/directory. So sometime it may happen that permissions of a file won’t allow us to delete it."
+                            },
+                            {
+                                id: "rm_q5", question: "5. Which option is used with rm command for interactive deletion?",
+                                options: ["-i", "-f", "-r", "-R"], correctAnswer: "-i",
+                                explanation: "Like in cp command, -i option is also used with rm command for interactive deletion. The prompts asks the user for confirmation before deleting the files.\n$ rm  file1  file2  file3\nrm: remove file1 (yes/no)? ?y\nrm: remove file1 (yes/no)? ?n\nrm: remove file1 (yes/no)? [Enter]       // any other response other than y/n leaves the file undeleted"
+                            },
+                            {
+                                id: "rm_q6", question: "6. Which option performs recursive deletion?",
+                                options: ["-r", "-R", "*", "-r and -R"], correctAnswer: "-r and -R",
+                                explanation: "With -r or -R option, rm performs a recursive walk in the file hierarchy and searches for every subdirectories and file within this directory, At each stage, it keeps on deleting everything it finds."
+                            },
+                            {
+                                id: "rm_q7", question: "7. Which one of the following command can delete a directory which is not empty?",
+                                options: ["rm -r", "rmdir", "rm *", "del *"], correctAnswer: "rm -r",
+                                explanation: "rm command normally does not remove directories but when it is used with -r option it does. So if we invoke a command like,\n$ rm  -r *		// deletes all files in the current directory and all its subdirectories"
+                            },
+                            {
+                                id: "rm_q8", question: "8. If we wish to delete a remove a file forcefully, we can use ____ option with rm command.",
+                                options: ["-i", "-r", "-R", "-f"], correctAnswer: "-f",
+                                explanation: "If a file is write-protected, we can remove it forcefully using -f option of rm command. For example,\n$ rm  -f  file.txt	// removes file.txt forcefully"
+                            },
+                            {
+                                id: "rm_q9", question: "9. Which command is used for removing file named -file.txt?",
+                                options: ["rm -file.txt", "rm file.txtrm", "rm — -file.txt", "rm -f file.txt"], correctAnswer: "rm — -file.txt",
+                                explanation: "To delete a file with filename beginning with a ” – “, we have to use ( — ) i.e. double-dash. ” — ” is used so that rm command does not misinterpret the filename as an option."
+                            },
+                            {
+                                id: "rm_q10", question: "10. Which command is used for renaming files?",
+                                options: ["rename", "mv", "cp", "move"], correctAnswer: "mv",
+                                explanation: "mv command is used for renaming files. This command does not create a copy of the file, it simply renames it. To rename file1 to file2 simply type,\n$ mv  file1  file2"
+                            },
+                            {
+                                id: "rm_q11", question: "11. If the destination file does not exists, then mv command creates it.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "If the destination file specified in the mv command does not exists it will be simply created. For example, if in the command mv file1 file2, if file2 does not exists then it will be created. Now file1 will be known as filename ‘file2’."
+                            },
+                            {
+                                id: "rm_q12", question: "12. What if the destination file specified in mv command already exists?",
+                                options: ["it will be deleted", "it will not be affected", "it will be overwritten", "an error will be produced"], correctAnswer: "it will be overwritten",
+                                explanation: "If the destination file already exists, then the contents of this file will be overwritten with the contents of a source file. For example, mv file01 dir01. If there already exists a file named dir01, then the contents of dir01 will be overwritten with the contents of file01."
+                            },
+                            {
+                                id: "rm_q13", question: "13. Apart from renaming files, mv command can also",
+                                options: ["move a file", "move a group of files", "rename a directory", "move a group of files and rename a directory"], correctAnswer: "move a group of files and rename a directory",
+                                explanation: "Apart from renaming files, mv command can also move a group of files to a different directory. For example,\n$ mv  abd.txt  mash.txt  ryan.txt   main_dir\nAbove command moves three files to main_dir directory."
+                            },
+                            {
+                                id: "rm_q14", question: "14. The inode number associated with a file is changed after renaming it.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "Every file has an inode number associated with it which is maintained by the kernel. This number is not disturbed even if we rename the file. It remains the same no matter how many times we rename the file."
+                            },
+                            {
+                                id: "rm_q15", question: "15. Which option is used for backing up destination file in mv command?",
+                                options: ["-b", "-f", "-v", "-i"], correctAnswer: "-b",
+                                explanation: "mv command renames the destination file if it already exists but when -b is used, it will add a suffix to the filename. This will save a copy of the original file instead of overwriting it. The default suffix is ( ~ )."
+                            },
+                            {
+                                id: "rm_q16", question: "16. Which option is used with mv command so that the destination file does not get overwritten?",
+                                options: ["-n", "-f", "-b", "-i"], correctAnswer: "-n",
+                                explanation: "If the destination file already exists in mv command then it will be overwritten which can be harmful. To avoid this we use -n option with mv so that the destination file does not get overwritten. -i option displays interactive messages and asks the user before overwriting the destination file."
+                            },
+                            {
+                                id: "rm_q17", question: "17. -f option when used with mv command overwrites existing files without prompting any messages.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "When -f option is used with mv command then, the system will not display any diagnostic messages on to the terminal. It will simply replace the existing file without any warning."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Comparing Files:comm, cmp and diff Command",
+                        questions: [
+                            {
+                                id: "comp_q1", question: "1. Which command is used for comparing two files?",
+                                options: ["cmp", "comp", "diff", "comm"], correctAnswer: "cmp",
+                                explanation: "cmp command is used for comparing two files byte by byte. It displays the first mismatch and its location on the terminal. It does not bother about subsequent mismatches but displays only the first mismatch. As soon as the first difference is found, the command terminates and outputs the line and byte in which there is a difference. For example,\n$ cmp  file01  file02\nfile01  file02 differ: Byte 20, Line 2\ndiff command is used for converting one file into another in order to make them identical and comm is used for displaying the common elements in both the files."
+                            },
+                            {
+                                id: "comp_q2", question: "2. What is the exit status of cmp command if both the files are identical?",
+                                options: ["0", "1", "2", "undefined"], correctAnswer: "0",
+                                explanation: "The exit status of cmp command is 0 if both the files are identical and 1 if both the files are different. The exit status is 2 if the program encounters a problem."
+                            },
+                            {
+                                id: "comp_q3", question: "3. Which option is used with cmp command to display a detailed list of mismatches?",
+                                options: ["-a", "-b", "-f", "-l"], correctAnswer: "-l",
+                                explanation: "cmp command by default only displays the first mismatch that occurs in both files. For a detailed list of all the mismatches, we use the -l option. It prints byte position and the byte value for all differing bytes."
+                            },
+                            {
+                                id: "comp_q4", question: "4. Which option is used with cmp command to limit the number of bytes to be compared?",
+                                options: ["-n", "-l", "-f", "-b"], correctAnswer: "-n",
+                                explanation: "We can limit the number of bytes to be compared by the cmp command by using -n option with it. For example, if we want to compare at most 50 bytes then the command will be written as:\n$ cmp  -n 50  file01  file02"
+                            },
+                            {
+                                id: "comp_q5", question: "5. How can we skip some initial bytes from both the files to be compared?",
+                                options: ["using -b option", "using -n option", "using -l option", "using -i option"], correctAnswer: "using -i option",
+                                explanation: "We can skip the number of initial bytes to be compared from both the files such that the cmp command will not consider that number of bytes while comparing both files. For this facility, we use -i option followed by the number of bytes to be skipped. For example, to skip the first 10 bytes use the following command,\ncmp  -i  10  file01  file02"
+                            },
+                            {
+                                id: "comp_q6", question: "6. -b option is used with cmp command to print the differing bytes in both files.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "-b option when used with cmp command print the byte number and the line number along with the differing bytes, where the first mismatch occur. For example,\n$ cmp -b  file01  file02\nfile01  file02 differ: Byte 20, Line 2 is 256 z 268 w\nIn the above output, the difference is in 17th byte, which is ‘z’ in file01 and ‘w’ in file02 respectively. The values 256 and 268 are the values for these bytes."
+                            },
+                            {
+                                id: "comp_q7", question: "7. Which command compares two sorted files line by line?",
+                                options: ["cmp", "diff", "comm", "sort"], correctAnswer: "comm",
+                                explanation: "comm command is used for comparing two sorted files line by line. When there is no option specified with comm command it produces three column output. For example, if we want to compare two files namely file01 and file02 then the first column will contain those entries which are unique to file01 whereas the second column will contain those entries which are unique to file02. The third column will contain the actual information i.e. those entries which are common to both fil01 and file02.\n$ comm  file01  file02\nSanfoundry\nProject\nGlobal\nLearning\nUNIX\nIn the above output, ‘Sanfoundry’ and ‘Learning’ are unique in file01 while ‘Global’ and ‘UNIX’ are unique in file02 whereas ‘Project’ is common to both the file."
+                            },
+                            {
+                                id: "comp_q8", question: "8. What will be the command if we want to suppress column 1 and column 2 in the output of comm Command?",
+                                options: ["comm -12", "comm -1-2", "comm -3", "comm -1,-2"], correctAnswer: "comm -12",
+                                explanation: "comm command provides us with an option for suppressing the columns in the output. For this task, we have to provide the column number as an option in the comm command. For example, -1 for column 1, -2 for column 2 and -3 for column 3."
+                            },
+                            {
+                                id: "comp_q9", question: "9. For comm command to work properly, files specified should be sorted.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "comm command only compares those files that are already sorted. If the files are not sorted it will throw an error message displaying “file not in sorted order”."
+                            },
+                            {
+                                id: "comp_q10", question: "10. Which command is used to display the differences between files?",
+                                options: ["comm", "diff", "cmp", "differ"], correctAnswer: "diff",
+                                explanation: "diff command is used for comparing files and displaying the differences between them.\ndiff command uses certain symbols and instructions to indicate the changes that are required to make two files identical. For example,\na – for appending\nc – for changing\nd – for deleting"
+                            },
+                            {
+                                id: "comp_q11", question: "11. When two files are identical, what is the output of diff command?",
+                                options: ["Files are identical", "Returns prompt", "No output", "Throws an error"], correctAnswer: "Returns prompt",
+                                explanation: "When two files are identical, diff command does not produce any output. It simply returns the shell prompt $. However, we can use the -s option to display an informative message on the terminal if the files are identical."
+                            },
+                            {
+                                id: "comp_q12", question: "12. Which option is used to produce multi columnar output in diff command?",
+                                options: ["-y", "-v", "-s", "-e"], correctAnswer: "-y",
+                                explanation: "-y option when used with diff command produces output in multiple columns. For example,\n$ diff  -y  file01  file02\nHii    Hii\nHello  |    Hell\nworld    world\nHere ( | ) symbol indicates that the lines are different in both files."
+                            },
+                            {
+                                id: "comp_q13", question: "13. If we are interested in knowing that whether the two files are identical or not, we can use ___ command.",
+                                options: ["comm", "diff", "cmp", "differ"], correctAnswer: "cmp",
+                                explanation: "All the three commands comm, diff and cmp are used for comparing files but if we are interested in knowing whether two files are identical or not we can use cmp command without any option. It will simply return the prompt without displaying any output if both the files are identical."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Counting File Data: wc Command",
+                        questions: [
+                            {
+                                id: "wc_q1", question: "1. Which command is used for counting words, lines and characters in a file?",
+                                options: ["diff", "count", "man", "wc"], correctAnswer: "wc",
+                                explanation: "UNIX provides a universal word counting program that allows us to count the number of words, lines and characters in a file. It takes a filename as an argument as produces a 4 column output.\n$ wc file01\n3   9   45  file01\nAbove output indicates that file01 contains 3 lines, 9 words and 45 characters."
+                            },
+                            {
+                                id: "wc_q2", question: "2. wc command cannot take multiple filenames as arguments.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "wc command can take multiple filenames as arguments. If multiple filenames are specified with wc command then it will produce a separate line of output for each file along with an additional line as a total count for all files specified. For example,\n$ wc  file01  file02  file03\n12    45      170    file01\n8     34      145    file02\n10    38      158    file03\n30    117     403    total"
+                            },
+                            {
+                                id: "wc_q3", question: "3. Which option is used for counting the number of lines in a file only.",
+                                options: ["-l", "-W", "-c", "-w"], correctAnswer: "-l",
+                                explanation: "-l option when used with wc command display only the number of lines in the specified file.\n\n$ wc  -l  file01\n3        // number of lines in file01"
+                            },
+                            {
+                                id: "wc_q4", question: "4. Which option is used for counting the number of words in a file only?",
+                                options: ["-l", "-W", "-c", "-w"], correctAnswer: "-w",
+                                explanation: "-w option when used with wc command display only the number of words in the specified file.\n$ wc  -w  file01\n15        // number of words in file01"
+                            },
+                            {
+                                id: "wc_q5", question: "5. Which option is used for counting the number of characters in a file only.",
+                                options: ["-l", "-W", "-c", "-w"], correctAnswer: "-c",
+                                explanation: "-c option when used with wc command display only the number of characters in the specified file.\n$ wc  -c  file01\n45        // number of characters in file01"
+                            },
+                            {
+                                id: "wc_q6", question: "6. wc command can also work on a data stream.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "wc command when invoked without any special symbol ( like < or | ) or an argument it reads the input from standard input. we have to provide the input from the keyboard and mark the end of input with Ctrl-D. For example,\n$ wc\nSanfoundry Global\nLearning project\nOffer internships to students\nCtrl-D\n3    8    65        // 3 lines, 8 words and 65 characters"
+                            },
+                            {
+                                id: "wc_q7", question: "7. What does the following command do?\n\n$ wc  sample.txt >  newfile",
+                                options: ["reads word count from sample.txt", "reads word count from newfile", "reads word count from sample.txt and write it to newfile", "error is produced"], correctAnswer: "reads word count from sample.txt and write it to newfile",
+                                explanation: "> symbol can be used with wc command for redirecting output. For example, the following command will read the input from sample.txt and redirect its output to newfile.\n$  wc  sample.txt >  newfile"
+                            },
+                            {
+                                id: "wc_q8", question: "8. Which command is used for printing a file?",
+                                options: ["lp", "pr", "pg", "more"], correctAnswer: "lp",
+                                explanation: "lp command is used for printing a single copy of the file specified as an argument to lp command. For example,\n$ lp  abd.txt\nRequest id id prl-890 (1 file )\nlp command notifies the request-id i.e. a combination of printer name(rpl) and job number (890)."
+                            },
+                            {
+                                id: "wc_q9", question: "9. Which option is used with lp command if there are more than one printers in the system?",
+                                options: ["-t", "-d", "-i", "-p"], correctAnswer: "-d",
+                                explanation: "lp command prints the file as a default printer has been already specified by the system administrator. In case if there is more than one printer in the system we have to use the -d option with the printer name to print the file. For example, if there is another printer named laser_001 then,\n$ lp  -dlaser_001  abd.txt"
+                            },
+                            {
+                                id: "wc_q10", question: "10. Which option is used for printing multiple copies of a file using lp command?",
+                                options: ["-l", "-i", "-t", "-n"], correctAnswer: "-n",
+                                explanation: "If we want to print multiple copies of a file, we can use the -n option followed by an integer i.e. the number of copies that we want to print. For example to print 5 copies of file abd.txt use the following command,\n$ lp  -n5  abd.txt"
+                            },
+                            {
+                                id: "wc_q11", question: "11. -t option prints the title on the first page.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "To print a specific title on the first page, we use the -t option followed by the string which we want to print as a title. For example,\n$ lp  -t \"UNIX and Shell programming\"  abd.txt"
+                            },
+                            {
+                                id: "wc_q12", question: "12. What does the following command do?\n\ncancel prl-320",
+                                options: ["cancel printing from printer ‘prl’", "cancel printing current job", "cancel printing job number 320 on printer name ‘prl’", "undefined behavior"], correctAnswer: "cancel printing job number 320 on printer name ‘prl’",
+                                explanation: "cancel command is used to cancel the jobs submitted by the user for printing. cancel command can cancel the job only when it is in print queue i.e. waiting to be assigned to a printer. If the printer has already started processing the job, cancel command will not work."
+                            },
+                            {
+                                id: "wc_q13", question: "13. Which command is used for knowing the file type?",
+                                options: ["file", "type", "filetype", "type of file"], correctAnswer: "file",
+                                explanation: "UNIX provides the file command for determining the type of file i.e. whether it is a text file, script file, archive file or any other type of file.\n$ file  file01\nfile01:    Text file"
+                            },
+                            {
+                                id: "wc_q14", question: "14. file command identifies the file type by examining the magic number of the file.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Magic number is the number which is embedded in the first few bytes of a file. Every file has a unique magic number which helps in identifying the file type."
+                            },
+                            {
+                                id: "wc_q15", question: "15. UNIX offers a pager named ____ which has replaced the original pager of UNIX called ____",
+                                options: ["more, less", "less, more", "more, pg", "pg, more"], correctAnswer: "more, pg",
+                                explanation: "The man command displays its output one page at a time. This is possible because it sends its output to a pager program. more pager is extensively used in UNIX system and it has replaced the original pager of UNIX i.e. pg. The task of a pager program is to simply display pages on the terminal. It can also be used to display the contents of a file.\n$ more  abd.txt   // contents of the file named abd.txt will be displayed."
+                            },
+                            {
+                                id: "wc_q16", question: "16. Which of the following is not an internal command for more?",
+                                options: ["q", "f", "b", "z"], correctAnswer: "z",
+                                explanation: "more pager offers a set of internal commands which are used for viewing pages differently. For scrolling one page at a time, use ‘f’ or the space bar. Similarly for scrolling backward press ‘b’ and for quitting the pager use ‘q’."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Compressing and Archiving Files – 1",
+                        questions: [
+                            {
+                                id: "ca1_q1", question: "1. Which of the following is used to compress files?",
+                                options: ["cmp", "gzip", "gunzip", "comm"], correctAnswer: "gzip",
+                                explanation: "To conserve disk space we need to compress a file. gzip is a very popular program used with one or more filenames for compression.\n$ gzip  file01.txt"
+                            },
+                            {
+                                id: "ca1_q2", question: "2. Which one of the following extension is provided by gzip to the compressed filename?",
+                                options: [".cm", ".gz", ".zip", ".zp"], correctAnswer: ".gz",
+                                explanation: "gzip adds an extension to the filename after compressing it and removes the original file. For example, if we compress a file named file01.txt using gzip then the new filename will be file01.txt.gz."
+                            },
+                            {
+                                id: "ca1_q3", question: "3. Which option is used with gzip command to check compression ratio for files?",
+                                options: ["-l", "-c", "-e", "-x"], correctAnswer: "-l",
+                                explanation: "Compression ratio is the ratio of, size of the original file to the size of a compressed file. We can check how much compression ratio is achieved using -l option with gzip.\n$ gzip -l abd.txt.gz  file01.txt.gz\nCompressed    Uncompressed        Ratio    	Uncompressed name\n788096        3875302             79.6%    	 abd.txt\n128341        372267              65.5%    	 file01.txt\n916437        4247569             78.9%    	 (totals)"
+                            },
+                            {
+                                id: "ca1_q4", question: "4. We can provide original filenames without .gz extension while checking compression ratio using gzip – l?",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Specifying the .gz extension is an optional feature which may be neglected. The command will work properly even without the extension."
+                            },
+                            {
+                                id: "ca1_q5", question: "5. Which option is used with gzip command for recursive compression?",
+                                options: ["-c", "-l", "-d", "-r"], correctAnswer: "-r",
+                                explanation: "Like many other UNIX commands, we can perform recursive compression. Through this process, we can compress all files in the directory. To perform this operation, -r option is used with gzip command.\n$ gzip  -r  dir_01        		// compress all files  in dir_01"
+                            },
+                            {
+                                id: "ca1_q6", question: "6. Which of the following is used for decompressing files?",
+                                options: ["GZIP", "gunzip", "uncmp", "cmp"], correctAnswer: "gunzip",
+                                explanation: "To restore our original and uncompressed file we can use gunzip with filename as an argument.\n$ gunzip  file_01.txt.gz"
+                            },
+                            {
+                                id: "ca1_q7", question: "7. We cannot uncompress files using gzip.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "gzip can also be used to uncompress files, all we have to do is to use -d option with gzip command.\n$ gzip -d file01.txt.gz"
+                            },
+                            {
+                                id: "ca1_q8", question: "8. We can provide multiple filenames as arguments to gunzip.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Multiple files can be unzipped using gunzip command by providing multiple filenames as arguments to the command."
+                            },
+                            {
+                                id: "ca1_q9", question: "9. Which of the following is a better agent than gzip?",
+                                options: ["bzip2", "bzip2 and bunzip2", "bunzip2", "allzip"], correctAnswer: "bzip2 and bunzip2",
+                                explanation: "For many years, gzip remained as the most favorite compression utility but now we have a better one called bzip2 (bzip2 and bunzip2). bzip2 is slower than gzip and it creates files with .bz2 extension."
+                            },
+                            {
+                                id: "ca1_q10", question: "10. Which of the following is an archival program?",
+                                options: ["arch", "archive", "ar", "tar"], correctAnswer: "tar",
+                                explanation: "For archiving files to the disk we use tar. It can be used to archive a group of files or an entire directory structure. tar program provides a handful of utilities like creating, maintaining, modifying and extracting files that are in tar format. Tar stands for ‘tape archival’."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Compressing and Archiving Files – 2",
+                        questions: [
+                            {
+                                id: "ca2_q1", question: "1. Which of the following key options is used with tar to create an archive?",
+                                options: ["-c", "-x", "-t", "-f archive name"], correctAnswer: "-c",
+                                explanation: "The tar program uses these specified key options where each key option performs a specific function.\n-c    creates an archive\n-x    extract files from an archive\n-t     display files in an archive\n-f  arch   -- specifies the archive arch."
+                            },
+                            {
+                                id: "ca2_q2", question: "2. To create an archive named abc.tar consisting of two files, file01 and file02, which of the following command will be used?",
+                                options: ["tar -cvf abc.tar file01 file02", "tar -cvf file01 file02 abc.tar", "tar -cv abc.tar file01 file02", "tar -c abc.tar file01 file02"], correctAnswer: "tar -cvf abc.tar file01 file02",
+                                explanation: "To create an archive -c option is used, -v is used to display the progress while tar works while -f is used to specify the name of the archive. All these options can be combined together as (-cvf)."
+                            },
+                            {
+                                id: "ca2_q3", question: "3. Which command will be used for extracting files from an archive named abc.tar?",
+                                options: ["tar -xvf abc.tar", "tar -cvf abc.tar", "tar -tvf abc.tar", "tar -t abc.tar"], correctAnswer: "tar -xvf abc.tar",
+                                explanation: "To extract files from an archive, we can use -x option along with -v and -f. Above command will extract all the files which are present in the archive named abc.tar."
+                            },
+                            {
+                                id: "ca2_q4", question: "4. Which of the following command is used for viewing the attributes of contents of an archive?",
+                                options: ["tar -tvf abc.tar", "tar -cvf abc.tar", "tar -xvf abc.tar", "tar -t abc.tar"], correctAnswer: "tar -tvf abc.tar",
+                                explanation: "-t option is used with tar for viewing the contents of the archive in a table manner. It does not extract files rather it simply shows their attributes in a suitable form containing file permissions, file size and file name.\n\n$ tar  -tvf  abc.tar"
+                            },
+                            {
+                                id: "ca2_q5", question: "5. Which option is used by tar to append files to the end of an archive?",
+                                options: ["-t", "-c", "-x", "-r"], correctAnswer: "-r",
+                                explanation: "We can append files to an archive which is created already using -r option with tar.\n$ tar  -rvf  file03  file04  abc.tar       // file03 and file04 will be added to abc.tar"
+                            },
+                            {
+                                id: "ca2_q6", question: "6. Which command is used for compressing and archiving files together?",
+                                options: ["gzip and tar", "gzip", "bzip2", "zip"], correctAnswer: "zip",
+                                explanation: "zip command combines the work of both gzip and tar i.e. it can compress and archive files together. The compression ratio using zip is lower as compared to bzip2 or gzip."
+                            },
+                            {
+                                id: "ca2_q7", question: "7. For using zip command, the first argument should be a compressed filename.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "For using zip command, the first argument should be a compressed filename, the remaining arguments are interpreted as files and directories to be compressed.\n$ zip  abc.zip  file01  file02"
+                            },
+                            {
+                                id: "ca2_q8", question: "8. For recursive compression, zip uses -r option.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Just like other UNIX commands, zip command can also perform recursive compression. In recursive compression, it will compress all the subdirectories and files that will be encountered while tracing the tree structure."
+                            },
+                            {
+                                id: "ca2_q9", question: "9. Which command is used for unzipping files which are compressed using zip command?",
+                                options: ["gunzip", "gzip", "unzip", "guzip"], correctAnswer: "unzip",
+                                explanation: "unzip command is used for restoring files which are compressed using zip command. To unzip a file, simply type the filename as an argument with unzip command.\n$ unzip  abc.zip"
+                            },
+                            {
+                                id: "ca2_q10", question: "10. If the uncompressed file already exists on disk, unzip asks for the user confirmation whether to replace the existing file or not.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "If we invoke the following command,\n$ unzip  archive.zip\nArchive: archive.zip\nInflating:  file01.html\nInflating:  diruser_guide.txt\nReplace file01.html?			//  Because file01.html already exists on disk, unzip asks the 					//  user whether to overwrite it or not."
+                            },
+                            {
+                                id: "ca2_q11", question: "11. Which option is used with unzip command to view the contents of a compressed archive?",
+                                options: ["-v", "-t", "-c", "-x"], correctAnswer: "-v",
+                                explanation: "We can view the compressed archive using the -v option. The output list will show both compressed and uncompressed size of each file in the archive along with the percentage of compression achieved.\n$ unzip -v  abc.zip"
+                            },
+                            {
+                                id: "ca2_q12", question: "12. zip and unzip can perform each and every function that is performed by gzip, gunzip and tar.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Using zip and unzip command we can compress, archive, uncompress files. So these two commands can perform all the functions which are performed by gzip, gunzip and tar."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const mainChapterTitleEl = document.getElementById('mainChapterTitle');
+        const questionProgressTextEl = document.getElementById('questionProgressText');
+        const scoreDisplayEl = document.getElementById('scoreDisplay');
+        const progressBarEl = document.getElementById('progressBar');
+        const quizContentAreaEl = document.getElementById('quizContentArea');
+        const nextChapterBtn = document.getElementById('nextChapterBtn');
+
+        let currentChapterIndex = 0; // This page handles only one chapter
+        let score = 0;
+        let totalQuestionsInChapter = 0;
+        let questionsAnsweredCount = 0;
+        let allQuestionElementsMap = new Map();
+        let currentActiveQuestionId = null;
+
+        const sunIcon = `<i class="fas fa-sun text-xl text-yellow-400"></i>`;
+        const moonIcon = `<i class="fas fa-moon text-xl text-gray-700 dark:text-yellow-400"></i>`;
+
+        function setDarkMode(isDark) {
+            const htmlEl = document.documentElement;
+            if (isDark) {
+                htmlEl.classList.add('dark');
+                darkModeToggle.innerHTML = sunIcon;
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                htmlEl.classList.remove('dark');
+                darkModeToggle.innerHTML = moonIcon;
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            setDarkMode(!document.documentElement.classList.contains('dark'));
+        });
+
+        function renderChapter() {
+            quizContentAreaEl.innerHTML = '';
+            allQuestionElementsMap.clear();
+            const chapterData = quizData[currentChapterIndex];
+            mainChapterTitleEl.textContent = chapterData.chapterName;
+
+            score = 0;
+            questionsAnsweredCount = 0;
+            totalQuestionsInChapter = 0;
+            let firstQuestionId = null;
+
+            chapterData.topics.forEach(topic => {
+                totalQuestionsInChapter += topic.questions.length;
+            });
+            updateProgressAndScore();
+
+            chapterData.topics.forEach((topic) => {
+                const topicHeader = document.createElement('h3');
+                topicHeader.className = 'text-xl md:text-2xl font-semibold text-purple-600 dark:text-purple-400 mt-10 mb-6 pt-6 border-t border-gray-300 dark:border-gray-600 first:mt-0 first:pt-0 first:border-t-0';
+                topicHeader.textContent = topic.topicName;
+                quizContentAreaEl.appendChild(topicHeader);
+
+                topic.questions.forEach((q) => {
+                    if (!firstQuestionId) firstQuestionId = q.id;
+
+                    const questionBlock = document.createElement('div');
+                    questionBlock.id = `qblock-${q.id}`;
+                    questionBlock.className = 'quiz-question-block mb-10 p-5 bg-gray-50 dark:bg-gray-750 rounded-xl shadow-lg';
+                    questionBlock.dataset.questionId = q.id;
+
+                    const questionTextEl = document.createElement('p');
+                    questionTextEl.className = 'text-md md:text-lg font-medium mb-5 text-gray-800 dark:text-gray-200';
+                    questionTextEl.innerHTML = q.question.replace(/\n/g, '<br>');
+                    questionBlock.appendChild(questionTextEl);
+
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.className = 'grid grid-cols-1 md:grid-cols-2 gap-3 mb-4';
+                    q.options.forEach((option, optionIdx) => {
+                        const button = document.createElement('button');
+                        button.innerHTML = `<span class="text-left flex-grow">${String.fromCharCode(97 + optionIdx)}) ${option}</span>`;
+                        button.className = 'option-btn w-full text-left p-3 bg-gray-200 dark:bg-gray-600 hover:bg-blue-100 dark:hover:bg-blue-800 rounded-lg border-2 border-gray-300 dark:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-between disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow-md';
+                        button.dataset.questionId = q.id;
+                        button.dataset.optionIndex = optionIdx;
+                        button.disabled = true;
+                        button.addEventListener('click', handleAnswerSelection);
+                        optionsContainer.appendChild(button);
+                    });
+                    questionBlock.appendChild(optionsContainer);
+
+                    const feedbackEl = document.createElement('div');
+                    feedbackEl.className = 'feedback-area min-h-[25px] text-sm mb-2';
+                    questionBlock.appendChild(feedbackEl);
+
+                    const explanationEl = document.createElement('div');
+                    explanationEl.className = 'explanation-area p-3 rounded-md text-sm leading-relaxed';
+                    explanationEl.innerHTML = `<strong class="block mb-1">Explanation:</strong> ${q.explanation.replace(/\n/g, '<br>')}`;
+                    questionBlock.appendChild(explanationEl);
+
+
+                    quizContentAreaEl.appendChild(questionBlock);
+                    allQuestionElementsMap.set(q.id, questionBlock);
+                });
+            });
+
+            if (firstQuestionId) {
+                activateQuestion(firstQuestionId);
+            }
+            nextChapterBtn.classList.add('hidden');
+            nextChapterBtn.textContent = "Next Chapter ➝ Unix Basic File Attributes"; // Updated text
+            nextChapterBtn.onclick = () => {
+                window.location.href = 'chapter-4.html'; // Assuming chapter 4
+            };
+        }
+
+        function activateQuestion(questionId) {
+            if (currentActiveQuestionId) {
+                const prevActiveBlock = allQuestionElementsMap.get(currentActiveQuestionId);
+                if (prevActiveBlock) {
+                    prevActiveBlock.classList.remove('active-question');
+                }
+            }
+
+            currentActiveQuestionId = questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+            if (questionBlock) {
+                questionBlock.classList.add('active-question');
+                questionBlock.querySelectorAll('.option-btn').forEach(btn => btn.disabled = false);
+                setTimeout(() => {
+                    const rect = questionBlock.getBoundingClientRect();
+                    const headerHeight = document.querySelector('header.sticky').offsetHeight || 150;
+                    if (rect.top < headerHeight || rect.bottom > (window.innerHeight - 50)) {
+                        questionBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 150);
+            }
+        }
+
+
+        function findQuestionData(questionId) {
+            for (const topic of quizData[currentChapterIndex].topics) {
+                const question = topic.questions.find(q => q.id === questionId);
+                if (question) return question;
+            }
+            return null;
+        }
+
+        function handleAnswerSelection(event) {
+            const selectedButton = event.currentTarget;
+            const questionId = selectedButton.dataset.questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+
+            if (!questionBlock || questionBlock.classList.contains('answered-question')) return;
+
+            const questionData = findQuestionData(questionId);
+            if (!questionData) return;
+
+            const selectedOptionIndex = parseInt(selectedButton.dataset.optionIndex);
+            const selectedOptionText = questionData.options[selectedOptionIndex];
+            const correctAnswerText = questionData.correctAnswer;
+
+            const feedbackEl = questionBlock.querySelector('.feedback-area');
+            const explanationEl = questionBlock.querySelector('.explanation-area');
+            const allOptionButtonsInBlock = questionBlock.querySelectorAll('.option-btn');
+
+            allOptionButtonsInBlock.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-blue-100', 'dark:hover:bg-blue-800', 'hover:shadow-md');
+            });
+
+            if (selectedOptionText === correctAnswerText) {
+                score++;
+                selectedButton.classList.add('correct');
+                feedbackEl.innerHTML = `<p class="text-green-600 dark:text-green-400 font-semibold"><i class="fas fa-check-circle mr-2"></i>Correct!</p>`;
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackEl.innerHTML = `<p class="text-red-600 dark:text-red-400 font-semibold"><i class="fas fa-times-circle mr-2"></i>Incorrect. The correct answer is highlighted.</p>`;
+                allOptionButtonsInBlock.forEach(btn => {
+                    if (questionData.options[parseInt(btn.dataset.optionIndex)] === correctAnswerText) {
+                        btn.classList.add('actual-correct-unselected');
+                        btn.classList.remove('incorrect');
+                    }
+                });
+            }
+
+            explanationEl.classList.add('visible');
+
+            questionBlock.classList.add('answered-question');
+            questionBlock.classList.remove('active-question');
+            questionsAnsweredCount++;
+            updateProgressAndScore();
+
+            setTimeout(() => {
+                let nextQuestionIdToActivate = null;
+                let foundCurrent = false;
+                for (const topic of quizData[currentChapterIndex].topics) {
+                    for (const q of topic.questions) {
+                        if (foundCurrent) {
+                            nextQuestionIdToActivate = q.id;
+                            break;
+                        }
+                        if (q.id === questionId) {
+                            foundCurrent = true;
+                        }
+                    }
+                    if (nextQuestionIdToActivate) break;
+                }
+
+                if (nextQuestionIdToActivate) {
+                    activateQuestion(nextQuestionIdToActivate);
+                } else {
+                    showChapterEnd();
+                }
+            }, 1500);
+        }
+
+        function updateProgressAndScore() {
+            scoreDisplayEl.textContent = `Score: ${score}`;
+            questionProgressTextEl.textContent = `Answered: ${questionsAnsweredCount} / ${totalQuestionsInChapter}`;
+            const progressPercentage = totalQuestionsInChapter > 0 ? (questionsAnsweredCount / totalQuestionsInChapter) * 100 : 0;
+            progressBarEl.style.width = `${progressPercentage}%`;
+        }
+
+        function showChapterEnd() {
+            nextChapterBtn.classList.remove('hidden');
+            // nextChapterBtn.onclick is already set in renderChapter
+
+            const endMessage = document.createElement('p');
+            endMessage.className = "text-center text-xl font-semibold mt-10 p-6 bg-blue-50 dark:bg-blue-900 rounded-lg";
+            endMessage.textContent = `Chapter 3 Complete! Your final score: ${score} out of ${totalQuestionsInChapter}.`;
+            quizContentAreaEl.appendChild(endMessage);
+            endMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+            const currentTheme = localStorage.getItem('darkMode');
+
+            if (currentTheme === 'enabled') {
+                setDarkMode(true);
+            } else if (currentTheme === 'disabled') {
+                setDarkMode(false);
+            } else {
+                setDarkMode(prefersDarkScheme.matches);
+            }
+
+            prefersDarkScheme.addEventListener('change', e => {
+                if (localStorage.getItem('darkMode') === null) {
+                    setDarkMode(e.matches);
+                }
+            });
+
+            renderChapter();
+        });
+
+    </script>
+</body>
+
+</html>

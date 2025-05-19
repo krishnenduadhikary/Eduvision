@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en" class=""> <!-- Start with no 'dark' class, JS will add -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unix MCQ Challenge - Chapter 14 (System Programming I – Files)</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Logo Styles (Integrated into header flow) */
+        .header-logo .text-2xl {
+            font-size: 1.6rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .header-logo .logo-text-part {
+            /* Color will be handled by Tailwind text-gray-700 dark:text-gray-100 by default, or override if needed */
+        }
+
+        /* Make logo text distinctly visible in both modes if it clashes */
+        html:not(.dark) .header-logo .logo-text-part {
+            color: #374151;
+            /* Tailwind gray-700 for light mode if needed */
+        }
+
+        html.dark .header-logo .logo-text-part {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode */
+        }
+
+        .header-logo .logo-icon-part {
+            color: #F59E0B;
+            /* Tailwind amber-500, good contrast */
+            transition: color 0.3s;
+        }
+
+        .header-logo a:hover .logo-icon-part {
+            color: #D97706;
+            /* Tailwind amber-600 */
+        }
+
+        .header-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.4em;
+            width: 1.4em;
+            margin: 0 2px;
+        }
+
+        /* Ensure sticky header background is consistent */
+        header.sticky {
+            background-color: #f9fafb;
+            /* Tailwind gray-50 */
+        }
+
+        html.dark header.sticky {
+            background-color: #1f2937;
+            /* Tailwind gray-800 */
+        }
+
+        /* Ensure sub-header info card also respects dark mode */
+        #quizHeaderInfo {
+            background-color: #ffffff;
+            /* Tailwind white */
+        }
+
+        html.dark #quizHeaderInfo {
+            background-color: #374151;
+            /* Tailwind gray-700 */
+        }
+
+
+        .quiz-question-block {
+            transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+            opacity: 0.6;
+        }
+
+        .quiz-question-block.active-question {
+            opacity: 1;
+            transform: scale(1.01);
+            box-shadow: 0 0 15px rgba(80, 120, 255, 0.2);
+        }
+
+        html.dark .quiz-question-block.active-question {
+            box-shadow: 0 0 15px rgba(100, 150, 255, 0.3);
+        }
+
+        .quiz-question-block.answered-question {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .quiz-question-block.answered-question .option-btn {
+            pointer-events: none;
+            cursor: default;
+        }
+
+        .quiz-question-block .option-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .option-btn {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .option-btn:not(:disabled):hover {
+            transform: translateY(-2px) scale(1.01);
+            /* box-shadow: 0 4px 12px rgba(0,0,0,0.1); Tailwind's shadow-md or shadow-lg can be used directly on class */
+        }
+
+        html.dark .option-btn:not(:disabled):hover {
+            /* box-shadow: 0 4px 12px rgba(255,255,255,0.08); */
+        }
+
+        .option-btn.correct {
+            background-color: #10B981 !important;
+            /* green-500 */
+            color: white !important;
+            border-color: #059669 !important;
+            /* green-600 */
+        }
+
+        .option-btn.incorrect {
+            background-color: #EF4444 !important;
+            /* red-500 */
+            color: white !important;
+            border-color: #DC2626 !important;
+            /* red-600 */
+        }
+
+        .option-btn.actual-correct-unselected {
+            background-color: #D1FAE5 !important;
+            /* green-100 */
+            color: #065F46 !important;
+            /* green-700 */
+            border-color: #6EE7B7 !important;
+            /* green-300 */
+            animation: pulse-subtle-green 2s infinite;
+        }
+
+        html.dark .option-btn.actual-correct-unselected {
+            background-color: #064E3B !important;
+            color: #A7F3D0 !important;
+            border-color: #10B981 !important;
+        }
+
+
+        @keyframes pulse-subtle-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        .explanation-area {
+            min-height: 70px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            overflow: hidden;
+            background-color: #ffffff;
+            /* Light mode */
+        }
+
+        html.dark .explanation-area {
+            background-color: #374151;
+            /* Tailwind gray-700 for dark mode */
+        }
+
+        .explanation-area.visible {
+            opacity: 1;
+        }
+
+        /* Fix dark mode for feedback area */
+        .feedback-area {
+            color: #374151;
+            /* Light mode text color */
+        }
+
+        html.dark .feedback-area {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode text color */
+        }
+
+        /* Fix dark mode for question block */
+        .quiz-question-block {
+            background-color: #f9fafb;
+            /* Light mode */
+        }
+
+        html.dark .quiz-question-block {
+            background-color: #1f2937;
+            /* Tailwind gray-800 for dark mode */
+        }
+    </style>
+
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
+
+    <div class="container mx-auto p-4 min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="sticky mb-6 top-0 z-50 py-3 shadow-md bg-gray-50 dark:bg-gray-800">
+            <!-- Top part of the header: Logo, Title, Dark Mode Toggle -->
+            <div class="container mx-auto flex justify-between items-center px-2 sm:px-4">
+                <!-- Eduvision Logo -->
+                <div class="header-logo">
+                    <div class="text-2xl font-bold">
+                        <a href="../../index.html" class="flex items-center group">
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">Edu</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="logo-icon-part" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">ision</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Page Title -->
+                <h1 class="mx-4 text-lg sm:text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500 text-center flex-grow whitespace-nowrap cursor-pointer"
+                    onclick="window.location.href='unix-mcq.html'">
+                    Unix MCQ Challenge
+                </h1>
+
+                <!-- Dark Mode Toggle -->
+                <div class="flex-shrink-0">
+                    <button id="darkModeToggle"
+                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none transition-colors duration-300"
+                        aria-label="Toggle Dark Mode">
+                        <!-- Icon will be set by JS -->
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bottom part of the header: Quiz Info Card -->
+            <div id="quizHeaderInfo" class="bg-white dark:bg-gray-700 p-3 mt-3 rounded-lg shadow-md container mx-auto">
+                <h2 id="mainChapterTitle" class="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-2"></h2>
+                <div class="flex justify-between items-center text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">
+                    <span id="questionProgressText">Answered: 0 / 0</span>
+                    <span id="scoreDisplay">Score: 0</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                    <div id="progressBar"
+                        class="bg-gradient-to-r from-blue-500 to-purple-600 h-2.5 rounded-full transition-all duration-500 ease-out"
+                        style="width: 0%"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area for All Questions -->
+        <main id="quizContentArea"
+            class="flex-grow bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl transition-colors duration-300 mt-4">
+            <!-- Topics and Questions will be dynamically inserted here -->
+        </main>
+
+        <!-- Navigation Area (for Next Chapter) -->
+        <div id="overallNavigation" class="mt-8 mb-4 flex justify-center">
+            <button id="nextChapterBtn"
+                class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 hidden">
+                <!-- Text and onclick will be set by JS -->
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
+            © 2023 Interactive MCQ Platform.
+        </footer>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                chapterName: "Unix MCQ on System Programming I – Files",
+                topics: [
+                    {
+                        topicName: "System Calls Basics – 1",
+                        questions: [
+                            {
+                                id: "scb1_q1", question: "1. A system call is a routine built into the kernel and performs a basic function.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "All UNIX systems offer around 200 special functions known as system calls. A system call is a routine built into the kernel and performs a very basic function that requires communication with the CPU, memory and devices."
+                            },
+                            {
+                                id: "scb1_q2", question: "2. When we execute a C program, CPU runs in ____ mode.",
+                                options: ["user", "kernel", "supervisory", "system"], correctAnswer: "user",
+                                explanation: "When we execute a C program, the CPU runs in user mode. It remains it this particular mode until a system call is invoked."
+                            },
+                            {
+                                id: "scb1_q3", question: "3. In ____ mode, the kernel runs on behalf of the user.",
+                                options: ["user", "kernel", "real", "all"], correctAnswer: "kernel",
+                                explanation: "Whenever a process invokes a system call, the CPU switches from user mode to kernel mode which is a more privileged mode. The kernel mode is also called as supervisor mode. In this mode, the kernel runs on behalf of the user and has access to any memory location and can execute any machine instruction."
+                            },
+                            {
+                                id: "scb1_q4", question: "4. All UNIX and LINUX systems have one thing in common which is ____",
+                                options: ["set of system calls", "set of commands", "set of instructions", "set of text editors"], correctAnswer: "set of system calls",
+                                explanation: "As we know that, all UNIX and LINUX systems have one thing in common; they use the same set of system calls."
+                            },
+                            {
+                                id: "scb1_q5", question: "5. The chmod command invokes the ____ system call.",
+                                options: ["chmod", "ch", "read", "change"], correctAnswer: "chmod",
+                                explanation: "Many commands and system calls share the same names. For example, the chmod command invokes the chmod system call."
+                            },
+                            {
+                                id: "scb1_q6", question: "6. For reading input, which of the following system call is used?",
+                                options: ["write", "rd", "read", "change"], correctAnswer: "read",
+                                explanation: "The standard C library offers a set of separate functions to read a block of data. For example, to read a block of data fread is used, for reading a line fgets is used and for reading a character fgetc is used. All these functions invoke the system call -read, which is available for reading input."
+                            },
+                            {
+                                id: "scb1_q7", question: "7. Which of the following system call is used for opening or creating a file?",
+                                options: ["read", "write", "open", "close"], correctAnswer: "open",
+                                explanation: "To read or write to a file, we first need to open it. For this purpose, open system call is used. Open has two forms ; the first forms assumes that the file already exists and the second form creates the file if it doesn’t."
+                            },
+                            {
+                                id: "scb1_q8", question: "8. There are ___ modes of opening a file.",
+                                options: ["4", "3", "2", "1"], correctAnswer: "3",
+                                explanation: "There are three modes of opening a file, out of which only one mode is required to be specified while opening the file. The three modes are, O_RDONLY, O_WRONLY, O_RDWR."
+                            },
+                            {
+                                id: "scb1_q9", question: "9. Which of the following mode is used for opening a file in both reading and writing?",
+                                options: ["O_RDONLY", "O_WRONLY", "O_RDWR", "O_WDR"], correctAnswer: "O_RDWR",
+                                explanation: "There are three modes of opening a file namely:\n O_RDONLY    -    opens files for reading\n O_WRONLY    -    opens file for writing \n O_RDWR      -   opens file for reading and writing"
+                            },
+                            {
+                                id: "scb1_q10", question: "10. open system call returns the file descriptor as ___",
+                                options: ["int", "float", "char", "double"], correctAnswer: "int",
+                                explanation: "open returns the file descriptor as an int. This is the lowest number available for allocation and is used as an argument by the other four calls (read, write, close, lseek)."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "System Calls Basics – 2",
+                        questions: [
+                            {
+                                id: "scb2_q1", question: "1. Which of the following system call is used for closing a file?",
+                                options: ["open", "lseek", "close", "write"], correctAnswer: "close",
+                                explanation: "A program automatically closes all open files before termination, but it’s a good practice to close them explicitly. The close system call is used for closing a file.\nint close (int fd)"
+                            },
+                            {
+                                id: "scb2_q2", question: "2. close system call returns ____",
+                                options: ["0", "-1", "1", "0 and -1"], correctAnswer: "0 and -1",
+                                explanation: "The return type of close system call is an integer. It either returns 0 if the file is closed successfully or -1 otherwise."
+                            },
+                            {
+                                id: "scb2_q3", question: "3. ____ system call is used for writing to a file.",
+                                options: ["read", "write", "close", "seek"], correctAnswer: "write",
+                                explanation: "write system call is required for writing to a file which has previously been opened with the open system call. write system call returns the number of characters written."
+                            },
+                            {
+                                id: "scb2_q4", question: "4. write system call returns -1 when ___________",
+                                options: ["if disk fills up while write is in progress", "when file doesn’t exist", "if the file size exceeds the system’s limit", "if disk fills up while write is in progress and if the file size exceeds"], correctAnswer: "if disk fills up while write is in progress and if the file size exceeds",
+                                explanation: "write system call returns the number of characters written. However, it will return -1 if if disk fills up while write is in progress or if the file size exceeds the system’s limit."
+                            },
+                            {
+                                id: "scb2_q5", question: "5. ____ system call is used for positioning the offset pointer.",
+                                options: ["read", "write", "open", "lseek"], correctAnswer: "lseek",
+                                explanation: "The lseek system call moves the file offset pointer to a specified point. It doesn’t do any physical I/O rather it determines the position in the file where the next I/O operation will take place."
+                            },
+                            {
+                                id: "scb2_q6", question: "6. Which of the following offset is used with lseek system call to set the offset pointer to the end of the file?",
+                                options: ["SEEK_SET", "SEEK_END", "SEEK_CUR", "SEEK_CR"], correctAnswer: "SEEK_END",
+                                explanation: "The offset signifies the position of the offset pointer which can take one of these three values:\n SEEK_SET    -    offset pointer set to the beginning of file\n SEEK_END    -    offset pointer set to the end of file\n SEEK_CUR    -    offset pointer remains at current location"
+                            },
+                            {
+                                id: "scb2_q7", question: "7. Which of the following system call is used for truncating a file?",
+                                options: ["truncate", "ftruncate", "trunk", "truncate and ftruncate"], correctAnswer: "truncate and ftruncate",
+                                explanation: "The truncate and ftruncate calls can truncate a file to any length. These calls are often used in combination with lseek to overwrite a certain segment of a file."
+                            },
+                            {
+                                id: "scb2_q8", question: "8. truncate needs the ___ of the file as an argument but ftruncate works with _______",
+                                options: ["pathname, file descriptor", "file descriptor, pathname", "pathname, pathname", "file descriptor, file descriptor"], correctAnswer: "pathname, file descriptor",
+                                explanation: "The truncate and ftruncate calls can truncate a file to any length. truncate needs the pathname of the file as an argument but ftruncate works with the file descriptor."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "File handling System Calls – 1",
+                        questions: [
+                            {
+                                id: "fhsc1_q1", question: "1. Which library function is used for printing error messages?",
+                                options: ["strerror", "stderror", "strer", "ptrerror"], correctAnswer: "strerror",
+                                explanation: "The library function strerror, uses the error number as argument and returns a pointer to the string representing the error."
+                            },
+                            {
+                                id: "fhsc1_q2", question: "2. perror also uses error number to print the error messages.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "There is another library function, perror which is used for printing the error messages. But perror doesn’t use the errno (error number) as an argument."
+                            },
+                            {
+                                id: "fhsc1_q3", question: "3. What is the significance of errno 13?",
+                                options: ["not a super user", "no such file and directory", "permission denied", "no space left on device"], correctAnswer: "permission denied", // Note: Original answer was 'b', corrected based on EACCES which is typically permission denied.
+                                explanation: "The errno 13 displays the message “permission denied”. The symbolic constant for this errno is EACCES."
+                            },
+                            {
+                                id: "fhsc1_q4", question: "4. What is the symbolic constant for errno 2?",
+                                options: ["EPERM", "ENOENT", "EIO", "EEXIST"], // Corrected from ENDENT to ENOENT
+                                correctAnswer: "ENOENT",
+                                explanation: "The symbolic constant for errno 2 is ENOENT. It displays the message “no such file and directory”."
+                            },
+                            {
+                                id: "fhsc1_q5", question: "5. Which of the following is not a valid symbolic constant?",
+                                options: ["EPERM", "ENOENT", "EIOR", "EEXIST"], // Corrected from ENDENT to ENOENT
+                                correctAnswer: "EIOR",
+                                explanation: "EPERM displays not a super user (errno 1), ENOENT displays no such file or directory (errno 2), EEXIST displays file exist (errno 17)."
+                            },
+                            {
+                                id: "fhsc1_q6", question: "6. How many data structures does the kernel maintain in memory that contain information about an open file?",
+                                options: ["3", "2", "5", "1"], correctAnswer: "3",
+                                explanation: "The kernel maintains three data structures in memory that contain all information about an open file that a process needs to access. These data structures are:\nThe file descriptor table\nThe file table\nThe vnode table"
+                            },
+                            {
+                                id: "fhsc1_q7", question: "7. The file descriptor table contains all file descriptors for a process.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "The file descriptor table contains all allocated file descriptors for a process. Each entry points to the file table. The file descriptor is stored along with a flag in this table."
+                            },
+                            {
+                                id: "fhsc1_q8", question: "8. The file table contains _________",
+                                options: ["mode of opening", "status flags", "offset pointer, reference count", "mode of opening, status flags, offset pointer and reference count"], // Corrected to 'offset pointer'
+                                correctAnswer: "mode of opening, status flags, offset pointer and reference count",
+                                explanation: "Every entry in the file descriptor table points to a file table. This table contains all the data which is relevant to an opened file."
+                            },
+                            {
+                                id: "fhsc1_q9", question: "9. The vnode table is also called _____",
+                                options: ["inode table", "file table", "vtable", "vttable"], correctAnswer: "inode table",
+                                explanation: "The file table contains a pointer to the vnode table, which is the third table in the scheme. It is also called as inode table. This table contains all the information present in the inode except that this structure is maintained in memory."
+                            },
+                            {
+                                id: "fhsc1_q10", question: "10. Which of the following system calls performs the action of cd command?",
+                                options: ["chdir", "fchdir", "mkdir", "chdir and fchdir"], correctAnswer: "chdir and fchdir",
+                                explanation: "There are two system calls that perform the action of cd command. They are chdir and fchdir which uses pathname and a file descriptor respectively as an argument."
+                            },
+                            {
+                                id: "fhsc1_q11", question: "11. Directories can also be opened, read and written in the same way as regular files.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Directories are also files, and they can also be written, read and opened in the same way as regular files. We can use open, close and read system calls for performing these tasks."
+                            },
+                            {
+                                id: "fhsc1_q12", question: "12. For creating and removing directories, which of the following system calls are used?",
+                                options: ["mkdir", "rmdir", "chdir", "mkdir and rmdir"], correctAnswer: "mkdir and rmdir",
+                                explanation: "A non privileged user uses mkdir and rmdir calls for creating and removing directories respectively."
+                            },
+                            {
+                                id: "fhsc1_q13", question: "13. A super user can use ___ call for creating a directory.",
+                                options: ["mknod", "mkdr", "rmdir", "chdir"], correctAnswer: "mknod",
+                                explanation: "A superuser can use the mknod system call to create a directory but a non privileged user has to use the mkdir call."
+                            },
+                            {
+                                id: "fhsc1_q14", question: "14. For creating a hard and symbolic link, which system calls are used?",
+                                options: ["link, unlink", "link, symlink", "unlink, ulink", "hlink, slink"], correctAnswer: "link, symlink",
+                                explanation: "Unlike the ln command which creates both hard and symbolic links, the system call library has two separate functions, link and symlink for these tasks."
+                            },
+                            {
+                                id: "fhsc1_q15", question: "15. For removing a link, ____ is used.",
+                                options: ["link", "symlink", "unlink", "delink"], correctAnswer: "unlink",
+                                explanation: "The unlink system call removes the directory entry for the file (the argument) and decrements the link count in its inode by one."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "File Handling System Calls – 2",
+                        questions: [
+                            {
+                                id: "fhsc2_q1", question: "1. ____ system call is used for renaming a file, directory or symbolic link.",
+                                options: ["renam", "rename", "ren", "change"], correctAnswer: "rename",
+                                explanation: "The rename call is used for renaming any type of file. It can rename a file, a directory or a symbolic link."
+                            },
+                            {
+                                id: "fhsc2_q2", question: "2. S_IFxxx macros are used for checking the file types.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "All UNIX systems provide a set of macros beginning with S_IF (often called S_IFxxx macros) that provide us with a function of checking the file type. But modern UNIX system performs this task in a more simplified manner using S_ISxxx macros."
+                            },
+                            {
+                                id: "fhsc2_q3", question: "3. Which of the following macro returns true if the file type is a directory?",
+                                options: ["S_ISREG", "S_ISDIR", "S_ISCHR", "S_ISFIFO"], correctAnswer: "S_ISDIR",
+                                explanation: "The S_ISDIR macro returns true if the file type is a directory. The S_ISREG returns true if the file type is regular."
+                            },
+                            {
+                                id: "fhsc2_q4", question: "4. For checking a file access rights, ___ system call is used.",
+                                options: ["acc", "access", "axs", "filert"], correctAnswer: "access",
+                                explanation: "By using the access system call, we can check the file’s access rights. It looks at the real UID and real GID of the user running the program and determines that whether the file is accessible by the real user."
+                            },
+                            {
+                                id: "fhsc2_q5", question: "5. Which of the following is used with access call for checking the owner’s permissions?",
+                                options: ["R_OK", "W_OK", "X_OK", "R_OK, W_OK, X_OK"], correctAnswer: "R_OK, W_OK, X_OK",
+                                explanation: "By using the access system call, we can check the file’s access rights. We’ve to specify one of the following four values to define the permission which is needed to be tested.\nR_OK    -    read permission OK\nW_OK    -    write permission OK\nX_OK    -     execution permission OK\nF_OK    -    file exists"
+                            },
+                            {
+                                id: "fhsc2_q6", question: "6. chmod and fchmod calls are used for changing file permissions.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "chmod and fchmod calls are used for changing the file permissions. Chmod uses pathname for identifying a file while fchmod uses the file descriptor."
+                            },
+                            {
+                                id: "fhsc2_q7", question: "7. Both the owner and group owner can be changed by ____ call.",
+                                options: ["chown", "chgrp", "chuser", "ch"], correctAnswer: "chown",
+                                explanation: "The chown system call is used to change both the owner and group owner. It has three states; chown, fchown, lchown."
+                            },
+                            {
+                                id: "fhsc2_q8", question: "8. For changing the time stamps, _____ system call is invoked.",
+                                options: ["atime", "utime", "mtime", "ch"], correctAnswer: "utime",
+                                explanation: "utime system call is used to change a file’s modification and access times."
+                            },
+                            {
+                                id: "fhsc2_q9", question: "9. System calls and library functions are same.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "System calls are built into the kernel, but library functions are built on top of them. When a system call is invoked, the pre-processor switches to kernel mode and returns to the user mode when the call completes."
+                            },
+                            {
+                                id: "fhsc2_q10", question: "10. Which of the following system call uses file descriptor as an argument?",
+                                options: ["read", "write", "close", "read, write, close"], correctAnswer: "read, write, close",
+                                explanation: "A file descriptor is an integer which is allocated when a file is opened. It is used by all system calls that perform some operations on file -like read, write, close, lseek."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const mainChapterTitleEl = document.getElementById('mainChapterTitle');
+        const questionProgressTextEl = document.getElementById('questionProgressText');
+        const scoreDisplayEl = document.getElementById('scoreDisplay');
+        const progressBarEl = document.getElementById('progressBar');
+        const quizContentAreaEl = document.getElementById('quizContentArea');
+        const nextChapterBtn = document.getElementById('nextChapterBtn');
+
+        let currentChapterIndex = 0; // This page handles only one chapter
+        let score = 0;
+        let totalQuestionsInChapter = 0;
+        let questionsAnsweredCount = 0;
+        let allQuestionElementsMap = new Map();
+        let currentActiveQuestionId = null;
+
+        const sunIcon = `<i class="fas fa-sun text-xl text-yellow-400"></i>`;
+        const moonIcon = `<i class="fas fa-moon text-xl text-gray-700 dark:text-yellow-400"></i>`;
+
+        function setDarkMode(isDark) {
+            const htmlEl = document.documentElement;
+            if (isDark) {
+                htmlEl.classList.add('dark');
+                darkModeToggle.innerHTML = sunIcon;
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                htmlEl.classList.remove('dark');
+                darkModeToggle.innerHTML = moonIcon;
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            setDarkMode(!document.documentElement.classList.contains('dark'));
+        });
+
+        function renderChapter() {
+            quizContentAreaEl.innerHTML = '';
+            allQuestionElementsMap.clear();
+            const chapterData = quizData[currentChapterIndex];
+            mainChapterTitleEl.textContent = chapterData.chapterName;
+
+            score = 0;
+            questionsAnsweredCount = 0;
+            totalQuestionsInChapter = 0;
+            let firstQuestionId = null;
+
+            chapterData.topics.forEach(topic => {
+                totalQuestionsInChapter += topic.questions.length;
+            });
+            updateProgressAndScore();
+
+            chapterData.topics.forEach((topic) => {
+                const topicHeader = document.createElement('h3');
+                topicHeader.className = 'text-xl md:text-2xl font-semibold text-purple-600 dark:text-purple-400 mt-10 mb-6 pt-6 border-t border-gray-300 dark:border-gray-600 first:mt-0 first:pt-0 first:border-t-0';
+                topicHeader.textContent = topic.topicName;
+                quizContentAreaEl.appendChild(topicHeader);
+
+                topic.questions.forEach((q) => {
+                    if (!firstQuestionId) firstQuestionId = q.id;
+
+                    const questionBlock = document.createElement('div');
+                    questionBlock.id = `qblock-${q.id}`;
+                    questionBlock.className = 'quiz-question-block mb-10 p-5 bg-gray-50 dark:bg-gray-750 rounded-xl shadow-lg';
+                    questionBlock.dataset.questionId = q.id;
+
+                    const questionTextEl = document.createElement('p');
+                    questionTextEl.className = 'text-md md:text-lg font-medium mb-5 text-gray-800 dark:text-gray-200';
+                    questionTextEl.innerHTML = q.question.replace(/\n/g, '<br>');
+                    questionBlock.appendChild(questionTextEl);
+
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.className = 'grid grid-cols-1 md:grid-cols-2 gap-3 mb-4';
+                    q.options.forEach((option, optionIdx) => {
+                        const button = document.createElement('button');
+                        button.innerHTML = `<span class="text-left flex-grow">${String.fromCharCode(97 + optionIdx)}) ${option}</span>`;
+                        button.className = 'option-btn w-full text-left p-3 bg-gray-200 dark:bg-gray-600 hover:bg-blue-100 dark:hover:bg-blue-800 rounded-lg border-2 border-gray-300 dark:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-between disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow-md';
+                        button.dataset.questionId = q.id;
+                        button.dataset.optionIndex = optionIdx;
+                        button.disabled = true;
+                        button.addEventListener('click', handleAnswerSelection);
+                        optionsContainer.appendChild(button);
+                    });
+                    questionBlock.appendChild(optionsContainer);
+
+                    const feedbackEl = document.createElement('div');
+                    feedbackEl.className = 'feedback-area min-h-[25px] text-sm mb-2';
+                    questionBlock.appendChild(feedbackEl);
+
+                    const explanationEl = document.createElement('div');
+                    explanationEl.className = 'explanation-area p-3 rounded-md text-sm leading-relaxed';
+                    explanationEl.innerHTML = `<strong class="block mb-1">Explanation:</strong> ${q.explanation.replace(/\n/g, '<br>')}`;
+                    questionBlock.appendChild(explanationEl);
+
+
+                    quizContentAreaEl.appendChild(questionBlock);
+                    allQuestionElementsMap.set(q.id, questionBlock);
+                });
+            });
+
+            if (firstQuestionId) {
+                activateQuestion(firstQuestionId);
+            }
+            nextChapterBtn.classList.add('hidden');
+            nextChapterBtn.textContent = "Next Chapter ➝ Process Control & System Performance";
+            nextChapterBtn.onclick = () => {
+                window.location.href = 'chapter-15.html'; // Assuming chapter 15
+            };
+        }
+
+        function activateQuestion(questionId) {
+            if (currentActiveQuestionId) {
+                const prevActiveBlock = allQuestionElementsMap.get(currentActiveQuestionId);
+                if (prevActiveBlock) {
+                    prevActiveBlock.classList.remove('active-question');
+                }
+            }
+
+            currentActiveQuestionId = questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+            if (questionBlock) {
+                questionBlock.classList.add('active-question');
+                questionBlock.querySelectorAll('.option-btn').forEach(btn => btn.disabled = false);
+                setTimeout(() => {
+                    const rect = questionBlock.getBoundingClientRect();
+                    const headerHeight = document.querySelector('header.sticky').offsetHeight || 150;
+                    if (rect.top < headerHeight || rect.bottom > (window.innerHeight - 50)) {
+                        questionBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 150);
+            }
+        }
+
+
+        function findQuestionData(questionId) {
+            for (const topic of quizData[currentChapterIndex].topics) {
+                const question = topic.questions.find(q => q.id === questionId);
+                if (question) return question;
+            }
+            return null;
+        }
+
+        function handleAnswerSelection(event) {
+            const selectedButton = event.currentTarget;
+            const questionId = selectedButton.dataset.questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+
+            if (!questionBlock || questionBlock.classList.contains('answered-question')) return;
+
+            const questionData = findQuestionData(questionId);
+            if (!questionData) return;
+
+            const selectedOptionIndex = parseInt(selectedButton.dataset.optionIndex);
+            const selectedOptionText = questionData.options[selectedOptionIndex];
+            const correctAnswerText = questionData.correctAnswer;
+
+            const feedbackEl = questionBlock.querySelector('.feedback-area');
+            const explanationEl = questionBlock.querySelector('.explanation-area');
+            const allOptionButtonsInBlock = questionBlock.querySelectorAll('.option-btn');
+
+            allOptionButtonsInBlock.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-blue-100', 'dark:hover:bg-blue-800', 'hover:shadow-md');
+            });
+
+            if (selectedOptionText === correctAnswerText) {
+                score++;
+                selectedButton.classList.add('correct');
+                feedbackEl.innerHTML = `<p class="text-green-600 dark:text-green-400 font-semibold"><i class="fas fa-check-circle mr-2"></i>Correct!</p>`;
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackEl.innerHTML = `<p class="text-red-600 dark:text-red-400 font-semibold"><i class="fas fa-times-circle mr-2"></i>Incorrect. The correct answer is highlighted.</p>`;
+                allOptionButtonsInBlock.forEach(btn => {
+                    if (questionData.options[parseInt(btn.dataset.optionIndex)] === correctAnswerText) {
+                        btn.classList.add('actual-correct-unselected');
+                        btn.classList.remove('incorrect');
+                    }
+                });
+            }
+
+            explanationEl.classList.add('visible');
+
+            questionBlock.classList.add('answered-question');
+            questionBlock.classList.remove('active-question');
+            questionsAnsweredCount++;
+            updateProgressAndScore();
+
+            setTimeout(() => {
+                let nextQuestionIdToActivate = null;
+                let foundCurrent = false;
+                for (const topic of quizData[currentChapterIndex].topics) {
+                    for (const q of topic.questions) {
+                        if (foundCurrent) {
+                            nextQuestionIdToActivate = q.id;
+                            break;
+                        }
+                        if (q.id === questionId) {
+                            foundCurrent = true;
+                        }
+                    }
+                    if (nextQuestionIdToActivate) break;
+                }
+
+                if (nextQuestionIdToActivate) {
+                    activateQuestion(nextQuestionIdToActivate);
+                } else {
+                    showChapterEnd();
+                }
+            }, 1500);
+        }
+
+        function updateProgressAndScore() {
+            scoreDisplayEl.textContent = `Score: ${score}`;
+            questionProgressTextEl.textContent = `Answered: ${questionsAnsweredCount} / ${totalQuestionsInChapter}`;
+            const progressPercentage = totalQuestionsInChapter > 0 ? (questionsAnsweredCount / totalQuestionsInChapter) * 100 : 0;
+            progressBarEl.style.width = `${progressPercentage}%`;
+        }
+
+        function showChapterEnd() {
+            nextChapterBtn.classList.remove('hidden');
+            // nextChapterBtn.onclick is already set in renderChapter
+
+            const endMessage = document.createElement('p');
+            endMessage.className = "text-center text-xl font-semibold mt-10 p-6 bg-blue-50 dark:bg-blue-900 rounded-lg";
+            endMessage.textContent = `Chapter 14 Complete! Your final score: ${score} out of ${totalQuestionsInChapter}.`;
+            quizContentAreaEl.appendChild(endMessage);
+            endMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+            const currentTheme = localStorage.getItem('darkMode');
+
+            if (currentTheme === 'enabled') {
+                setDarkMode(true);
+            } else if (currentTheme === 'disabled') {
+                setDarkMode(false);
+            } else {
+                setDarkMode(prefersDarkScheme.matches);
+            }
+
+            prefersDarkScheme.addEventListener('change', e => {
+                if (localStorage.getItem('darkMode') === null) {
+                    setDarkMode(e.matches);
+                }
+            });
+
+            renderChapter();
+        });
+
+    </script>
+</body>
+
+</html>

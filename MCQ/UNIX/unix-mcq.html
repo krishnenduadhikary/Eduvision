@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unix MCQ Challenge - Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Logo CSS from prompt */
+        .eduvishion-logo .text-2xl {
+            font-size: 1.7rem;
+            /* Applied from prompt */
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            /* Applied from prompt */
+            letter-spacing: 0.01em;
+            /* Applied from prompt */
+        }
+
+        .eduvishion-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvishion-logo .text-yellow-300 {
+            color: #fde047 !important;
+            /* Tailwind yellow-300 */
+        }
+
+        .eduvishion-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+            /* Tailwind yellow-200 */
+        }
+
+        .eduvishion-logo a {
+            text-decoration: none;
+            display: flex;
+            /* Applied from prompt */
+            align-items: center;
+            /* Applied from prompt */
+            gap: 2px;
+            /* Applied from prompt */
+        }
+
+        .eduvishion-logo svg {
+            display: inline-block;
+            /* Applied from prompt */
+            vertical-align: middle;
+            /* Applied from prompt */
+        }
+
+        /* Additional styles for awesome page */
+        .chapter-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .chapter-card:hover {
+            transform: translateY(-6px) scale(1.03);
+            /* Enhanced hover effect */
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15), 0 8px 8px rgba(0, 0, 0, 0.12);
+            /* Enhanced shadow */
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            /* Purple/Blue gradient */
+        }
+
+        html.dark .hero-gradient {
+            background: linear-gradient(135deg, #3730a3 0%, #5b21b6 100%);
+            /* Darker purple/blue for dark mode */
+        }
+
+        .chapter-icon-bg {
+            background-color: rgba(255, 255, 255, 0.15);
+            /* Light icon background for light mode */
+        }
+
+        html.dark .chapter-icon-bg {
+            background-color: rgba(0, 0, 0, 0.2);
+            /* Darker icon background for dark mode */
+        }
+
+        .chapter-card-content h2 {
+            min-height: 3em;
+            /* Ensure titles have enough space, adjust as needed */
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
+    <!-- Logo HTML from prompt -->
+    <div class="eduvishion-logo"
+        style="position: absolute; top: 20px; left: 20px; z-index: 1000; text-shadow: 0 1px 3px rgba(0,0,0,0.2);">
+        <div class="text-2xl font-bold" style="font-family: 'Nunito', sans-serif;">
+            <a href="../../index.html" class="flex items-center group" style="text-decoration: none;">
+                <span class="text-white">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+                    style="height: 1.5em; width: 1.5em; margin: 0 2px; vertical-align: middle;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-white">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="min-h-screen flex flex-col">
+        <!-- Hero Section -->
+        <header class="hero-gradient text-white pt-28 pb-20 px-4 text-center shadow-xl relative">
+            <button id="darkModeToggle"
+                class="absolute top-5 right-5 p-3 rounded-full hover:bg-white hover:bg-opacity-20 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 transition-all duration-300"
+                aria-label="Toggle Dark Mode">
+                <i class="fas fa-moon text-xl text-white"></i> <!-- Initial icon, JS will change it -->
+            </button>
+
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-black mb-6 tracking-tight"
+                style="text-shadow: 0 3px 6px rgba(0,0,0,0.4);">
+                Unix MCQ Challenge
+            </h1>
+            <p class="text-lg sm:text-xl font-light mb-10 max-w-3xl mx-auto"
+                style="text-shadow: 0 1px 3px rgba(0,0,0,0.3);">
+                Sharpen your Unix skills with our comprehensive MCQ series. Choose a chapter below to begin your journey
+                to mastery!
+            </p>
+        </header>
+
+        <!-- Chapters Section -->
+        <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 flex-grow">
+            <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12">
+                Select Your Chapter
+            </h2>
+            <div id="chapterList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10">
+                <!-- Chapters will be injected here by JavaScript -->
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-200 dark:bg-gray-800 text-center py-8 mt-auto">
+            <p class="text-gray-600 dark:text-gray-400 text-sm">
+                © <span id="currentYear"></span> Interactive MCQ Platform. All rights reserved.
+            </p>
+            <p class="text-gray-500 dark:text-gray-500 text-xs mt-1">
+                Happy Learning & Mastering Unix!
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Chapter data
+        const chapters = [
+            { title: "Architecture & General Purpose Utilities", file: "chapter-1.html", icon: "fa-cogs" },
+            { title: "File System", file: "chapter-2.html", icon: "fa-folder-open" },
+            { title: "Handling Ordinary Files", file: "chapter-3.html", icon: "fa-file-alt" },
+            { title: "Basic File Attributes", file: "chapter-4.html", icon: "fa-tags" },
+            { title: "Vi Editor", file: "chapter-5.html", icon: "fa-edit" },
+            { title: "Shell", file: "chapter-6.html", icon: "fa-terminal" },
+            { title: "Process", file: "chapter-7.html", icon: "fa-project-diagram" },
+            { title: "Customizing Environment & More File Attributes", file: "chapter-8.html", icon: "fa-sliders-h" },
+            { title: "Simple Filters", file: "chapter-9.html", icon: "fa-filter" },
+            { title: "Filters using Regular Expressions", file: "chapter-10.html", icon: "fa-code-branch" }, // Using code-branch as metaphor for regex
+            { title: "Essential Shell Programming", file: "chapter-11.html", icon: "fa-file-code" },
+            { title: "Awk & Perl", file: "chapter-12.html", icon: "fa-stream" }, // Stream for awk/perl processing
+            { title: "Advanced Vi", file: "chapter-13.html", icon: "fa-star" }, // Star for advanced
+            { title: "System Programming I – Files", file: "chapter-14.html", icon: "fa-microchip" }, // Microchip for system level
+            { title: "Process Control & System Performance", file: "chapter-15.html", icon: "fa-tachometer-alt" }
+        ];
+
+        const chapterListContainer = document.getElementById('chapterList');
+
+        chapters.forEach((chapter, index) => {
+            const chapterCard = `
+                <a href="${chapter.file}" class="chapter-card block bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden group border border-transparent hover:border-indigo-500 dark:hover:border-indigo-400">
+                    <div class="p-6 flex flex-col h-full">
+                        <div class="flex items-start mb-4">
+                            <div class="chapter-icon-bg p-4 rounded-full mr-4 text-indigo-500 dark:text-indigo-400 group-hover:bg-indigo-500 dark:group-hover:bg-indigo-400 group-hover:text-white dark:group-hover:text-gray-900 transition-all duration-300">
+                                <i class="fas ${chapter.icon || 'fa-book'} text-2xl"></i>
+                            </div>
+                            <div class="chapter-card-content flex-grow">
+                                <p class="text-xs text-indigo-500 dark:text-indigo-400 font-semibold tracking-wider uppercase mb-1">Chapter ${index + 1}</p>
+                                <h2 class="text-xl font-bold text-gray-800 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300 leading-tight">${chapter.title}</h2>
+                            </div>
+                        </div>
+                        <div class="mt-auto text-right">
+                            <span class="inline-flex items-center text-indigo-600 dark:text-indigo-400 font-semibold group-hover:text-indigo-700 dark:group-hover:text-indigo-300 transition-colors duration-300">
+                                Start Quiz
+                                <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform duration-300"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            `;
+            chapterListContainer.innerHTML += chapterCard;
+        });
+
+        // Dark Mode Toggle
+        const darkModeToggleButton = document.getElementById('darkModeToggle');
+        const htmlElement = document.documentElement;
+        const sunIconHTML = `<i class="fas fa-sun text-xl text-white"></i>`;
+        const moonIconHTML = `<i class="fas fa-moon text-xl text-white"></i>`;
+
+        function applyDarkMode(isDark) {
+            if (isDark) {
+                htmlElement.classList.add('dark');
+                darkModeToggleButton.innerHTML = sunIconHTML;
+                localStorage.setItem('unixMcqHomepageTheme', 'dark');
+            } else {
+                htmlElement.classList.remove('dark');
+                darkModeToggleButton.innerHTML = moonIconHTML;
+                localStorage.setItem('unixMcqHomepageTheme', 'light');
+            }
+        }
+
+        const savedTheme = localStorage.getItem('unixMcqHomepageTheme');
+        const prefersDarkColorScheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (savedTheme === 'dark' || (!savedTheme && prefersDarkColorScheme)) {
+            applyDarkMode(true);
+        } else {
+            applyDarkMode(false);
+        }
+
+        darkModeToggleButton.addEventListener('click', () => {
+            applyDarkMode(!htmlElement.classList.contains('dark'));
+        });
+
+        // Footer Current Year
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>

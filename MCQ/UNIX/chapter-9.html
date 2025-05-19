@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en" class=""> <!-- Start with no 'dark' class, JS will add -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unix MCQ Challenge - Chapter 9 (Simple Filters)</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Logo Styles (Integrated into header flow) */
+        .header-logo .text-2xl {
+            font-size: 1.6rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .header-logo .logo-text-part {
+            /* Color will be handled by Tailwind text-gray-700 dark:text-gray-100 by default, or override if needed */
+        }
+
+        /* Make logo text distinctly visible in both modes if it clashes */
+        html:not(.dark) .header-logo .logo-text-part {
+            color: #374151;
+            /* Tailwind gray-700 for light mode if needed */
+        }
+
+        html.dark .header-logo .logo-text-part {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode */
+        }
+
+        .header-logo .logo-icon-part {
+            color: #F59E0B;
+            /* Tailwind amber-500, good contrast */
+            transition: color 0.3s;
+        }
+
+        .header-logo a:hover .logo-icon-part {
+            color: #D97706;
+            /* Tailwind amber-600 */
+        }
+
+        .header-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.4em;
+            width: 1.4em;
+            margin: 0 2px;
+        }
+
+        /* Ensure sticky header background is consistent */
+        header.sticky {
+            background-color: #f9fafb;
+            /* Tailwind gray-50 */
+        }
+
+        html.dark header.sticky {
+            background-color: #1f2937;
+            /* Tailwind gray-800 */
+        }
+
+        /* Ensure sub-header info card also respects dark mode */
+        #quizHeaderInfo {
+            background-color: #ffffff;
+            /* Tailwind white */
+        }
+
+        html.dark #quizHeaderInfo {
+            background-color: #374151;
+            /* Tailwind gray-700 */
+        }
+
+
+        .quiz-question-block {
+            transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+            opacity: 0.6;
+        }
+
+        .quiz-question-block.active-question {
+            opacity: 1;
+            transform: scale(1.01);
+            box-shadow: 0 0 15px rgba(80, 120, 255, 0.2);
+        }
+
+        html.dark .quiz-question-block.active-question {
+            box-shadow: 0 0 15px rgba(100, 150, 255, 0.3);
+        }
+
+        .quiz-question-block.answered-question {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .quiz-question-block.answered-question .option-btn {
+            pointer-events: none;
+            cursor: default;
+        }
+
+        .quiz-question-block .option-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .option-btn {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .option-btn:not(:disabled):hover {
+            transform: translateY(-2px) scale(1.01);
+            /* box-shadow: 0 4px 12px rgba(0,0,0,0.1); Tailwind's shadow-md or shadow-lg can be used directly on class */
+        }
+
+        html.dark .option-btn:not(:disabled):hover {
+            /* box-shadow: 0 4px 12px rgba(255,255,255,0.08); */
+        }
+
+        .option-btn.correct {
+            background-color: #10B981 !important;
+            /* green-500 */
+            color: white !important;
+            border-color: #059669 !important;
+            /* green-600 */
+        }
+
+        .option-btn.incorrect {
+            background-color: #EF4444 !important;
+            /* red-500 */
+            color: white !important;
+            border-color: #DC2626 !important;
+            /* red-600 */
+        }
+
+        .option-btn.actual-correct-unselected {
+            background-color: #D1FAE5 !important;
+            /* green-100 */
+            color: #065F46 !important;
+            /* green-700 */
+            border-color: #6EE7B7 !important;
+            /* green-300 */
+            animation: pulse-subtle-green 2s infinite;
+        }
+
+        html.dark .option-btn.actual-correct-unselected {
+            background-color: #064E3B !important;
+            color: #A7F3D0 !important;
+            border-color: #10B981 !important;
+        }
+
+
+        @keyframes pulse-subtle-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        .explanation-area {
+            min-height: 70px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            overflow: hidden;
+            background-color: #ffffff;
+            /* Light mode */
+        }
+
+        html.dark .explanation-area {
+            background-color: #374151;
+            /* Tailwind gray-700 for dark mode */
+        }
+
+        .explanation-area.visible {
+            opacity: 1;
+        }
+
+        /* Fix dark mode for feedback area */
+        .feedback-area {
+            color: #374151;
+            /* Light mode text color */
+        }
+
+        html.dark .feedback-area {
+            color: #f3f4f6;
+            /* Tailwind gray-100 for dark mode text color */
+        }
+
+        /* Fix dark mode for question block */
+        .quiz-question-block {
+            background-color: #f9fafb;
+            /* Light mode */
+        }
+
+        html.dark .quiz-question-block {
+            background-color: #1f2937;
+            /* Tailwind gray-800 for dark mode */
+        }
+    </style>
+
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
+
+    <div class="container mx-auto p-4 min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="sticky mb-6 top-0 z-50 py-3 shadow-md bg-gray-50 dark:bg-gray-800">
+            <!-- Top part of the header: Logo, Title, Dark Mode Toggle -->
+            <div class="container mx-auto flex justify-between items-center px-2 sm:px-4">
+                <!-- Eduvision Logo -->
+                <div class="header-logo">
+                    <div class="text-2xl font-bold">
+                        <a href="../../index.html" class="flex items-center group">
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">Edu</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="logo-icon-part" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            <span class="logo-text-part text-gray-700 dark:text-gray-100">ision</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Page Title -->
+                <h1 class="mx-4 text-lg sm:text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500 text-center flex-grow whitespace-nowrap cursor-pointer"
+                    onclick="window.location.href='unix-mcq.html'">
+                    Unix MCQ Challenge
+                </h1>
+
+                <!-- Dark Mode Toggle -->
+                <div class="flex-shrink-0">
+                    <button id="darkModeToggle"
+                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none transition-colors duration-300"
+                        aria-label="Toggle Dark Mode">
+                        <!-- Icon will be set by JS -->
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bottom part of the header: Quiz Info Card -->
+            <div id="quizHeaderInfo" class="bg-white dark:bg-gray-700 p-3 mt-3 rounded-lg shadow-md container mx-auto">
+                <h2 id="mainChapterTitle" class="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-2"></h2>
+                <div class="flex justify-between items-center text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">
+                    <span id="questionProgressText">Answered: 0 / 0</span>
+                    <span id="scoreDisplay">Score: 0</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                    <div id="progressBar"
+                        class="bg-gradient-to-r from-blue-500 to-purple-600 h-2.5 rounded-full transition-all duration-500 ease-out"
+                        style="width: 0%"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area for All Questions -->
+        <main id="quizContentArea"
+            class="flex-grow bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl transition-colors duration-300 mt-4">
+            <!-- Topics and Questions will be dynamically inserted here -->
+        </main>
+
+        <!-- Navigation Area (for Next Chapter) -->
+        <div id="overallNavigation" class="mt-8 mb-4 flex justify-center">
+            <button id="nextChapterBtn"
+                class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 hidden">
+                <!-- Text and onclick will be set by JS -->
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
+            © 2023 Interactive MCQ Platform.
+        </footer>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                chapterName: "Multiple Choice Questions on Unix Simple Filters",
+                topics: [
+                    {
+                        topicName: "Filtering Commands – 1",
+                        questions: [
+                            {
+                                id: "fc1_q1", question: "1. Filter’s are a category of commands that take the advantage of shell redirection feature.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Filters are defined as a category of commands that takes the advantage of shell’s redirection features. A filter is capable of reading standard input and writing to standard output. The piping mechanism is an example of a filter which lets the standard output of one filter to serve as standard input to another."
+                            },
+                            {
+                                id: "fc1_q2", question: "2. Which command is used for preparing a file for printing?",
+                                options: ["cd", "cat", "print", "pr"], correctAnswer: "pr",
+                                explanation: "The pr command is used for preparing a file by adding suitable headers, footers and formatted text. This command is used with a filename as an argument. For example,\n$ pr  dept.lst\nMay  06  10:38  1998  dept.lst  Page 1\n01:accounts:6213\n02:admin:5423\n03:marketing:6521\n04:personnel:2365\n \n.....blank lines......."
+                            },
+                            {
+                                id: "fc1_q3", question: "3. pr command adds ____ lines of margin at the top and bottom.",
+                                options: ["5", "4", "2", "1"], correctAnswer: "5",
+                                explanation: "pr command is used for preparing a file for printing by adding suitable headers, footers and formatted text. It adds five lines of margin at the top and five at the bottom. The header shows the date and time of last modification of the file along with filename and page number."
+                            },
+                            {
+                                id: "fc1_q4", question: "4. Which option is used with pr command for printing multi-columnar output?",
+                                options: ["-p", "-k", "-d", "-pr"], correctAnswer: "-k",
+                                explanation: "-k option is used with pr command (where k is an integer) for printing in k columns. For example, if a file contains a series of 12 numbers then we can divide the output into 3 columns in this way:\n$ dept.lst | pr -3\nMay  06  10:38  1998  dept.lst  Page 1\n \n1    5    9\n2    6    10\n3    7    11\n4    8    12"
+                            },
+                            {
+                                id: "fc1_q5", question: "5. Which option is used with pr command to suppress the header and footers?",
+                                options: ["-p", "-k", "-t", "-n"], correctAnswer: "-t",
+                                explanation: "We can use the -t option with pr command if we want to suppress the headers and associated which are displayed with the output of pr command. For example,\n$ dept.lst | pr -t  -5        // no headers and footers; multi-columnar output\n1    5    9\n2    6    10\n3    7    11\n4    8    12"
+                            },
+                            {
+                                id: "fc1_q6", question: "6. Which option is used with pr command to display output along with line numbers?",
+                                options: ["-d", "-n", "-o n", "-t"], correctAnswer: "-n",
+                                explanation: "pr command offers many options which are used for producing the output in just the format we need. For example,\n-d double spaces input\n-n numbers lines, helps in debugging code\n-o n offsets lines by n spaces, increases left margin of the page\n$ pr  -t  -n  -d  -o  10  dept.lst\n    1    01:accounts:6213\n    2    02:admin:5423\n    3    03:marketing:6521\n    4    04:personnel:2365"
+                            },
+                            {
+                                id: "fc1_q7", question: "7. -h option is used with pr command to add a header of our choice.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "If we are not using the -t option with pr command then we can use the -h option to add a header of our choice. This option is followed by the header string. For example,\n$ pr  -h “Department List”  dept.lst"
+                            },
+                            {
+                                id: "fc1_q8", question: "8. ___ operator is used with pr command to start printing from a specific page.",
+                                options: ["–", "#", "+", "&"], correctAnswer: "+",
+                                explanation: "There’s an option available with pr command which lets the user to print from a specific page number. This function is performed by prefixing a + with the page number. For example, to print from page number 5, use the following command:\n$ pr +5  dept.lst"
+                            },
+                            {
+                                id: "fc1_q9", question: "9. Which command is used for displaying the beginning of a file?",
+                                options: ["pr", "head", "begin", "lp"], correctAnswer: "head",
+                                explanation: "The head command is used for displaying the top of the file. As the name suggests, it displays the beginning of the file which is specified as an argument to the command. For example,\n$ head emp.lst"
+                            },
+                            {
+                                id: "fc1_q10", question: "10. By default, how many lines are displayed using the head command?",
+                                options: ["5", "10", "4", "20"], correctAnswer: "10",
+                                explanation: "The head command, as the name suggests displays the top of the file. When this command is used without any option, it displays the first ten lines of the file."
+                            },
+                            {
+                                id: "fc1_q11", question: "11. Which option is used with the head command to specify line count to display?",
+                                options: ["-a", "-h", "-n", "-o"], correctAnswer: "-n",
+                                explanation: "We can use the -n option with the head command to specify a line count and display a specific number of lines of the file. -n option is followed by an integer value which donates the number of lines to be displayed. For example,\n$ head -n  3 emp.lst            // displays first 3 lines of emp.lst"
+                            },
+                            {
+                                id: "fc1_q12", question: "12. ___ command is used for displaying the end of the file.",
+                                options: ["head", "tail", "lp", "pr"], correctAnswer: "tail",
+                                explanation: "Complementing the head command, the tail command is used to display the end of the file. It provides an additional feature of addressing lines. By default, it displays the last ten lines of the file."
+                            },
+                            {
+                                id: "fc1_q13", question: "13. We can also use -n option with tail command.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Alike head command we can also use the -n option with the tail command to specify the line count to be displayed from the end of the file. For example,\n$ tail  -n  3  emp.lst            // displays last three lines"
+                            },
+                            {
+                                id: "fc1_q14", question: "14. Which symbol is used with the tail command to print the file from the selected line?",
+                                options: ["+", "–", "%%", "^"], correctAnswer: "+",
+                                explanation: "We can also address lines from the beginning instead of the end. The +count option allows us to do that, where count represents the line number from where the selection should begin. For example,\n$ tail +11 emp.lst        // start printing from 11th line onwards"
+                            },
+                            {
+                                id: "fc1_q15", question: "15. Which of the following command is incorrect?",
+                                options: ["pr dept.lst", "head -n 5 emp.lst", "tail -o +5 emp.lst", "tail -3 emp.lst"], correctAnswer: "tail -o +5 emp.lst",
+                                explanation: "The first command will prepare a file for printing by adding header, footers and formatted text. The command head -n 5 emp.lst will display the first 5 lines of emp.lst while the command tail -3 emp.lst will display the last 3 lines of emp.lst"
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Filtering Commands – 2",
+                        questions: [
+                            {
+                                id: "fc2_q1", question: "1. Which option is used with the tail command for extracting bytes instead of lines?",
+                                options: ["-f", "-n", "-c", "-a"], correctAnswer: "-c",
+                                explanation: "tail command supports the -c option followed by a positive integer or just an integer depending on whether the extraction is performed relative to the beginning or end of the file. For example,\n$ tail -c   511 foo   // extracts last 511 bytes from foo\n$ tail -c  +512 foo   // extracts everything after skipping the first 511 bytes"
+                            },
+                            {
+                                id: "fc2_q2", question: "2. To extract specific columns from a file, ____ command is used.",
+                                options: ["tail", "head", "pr", "cut"], correctAnswer: "cut",
+                                explanation: "To extract specific columns from a file, we can use cut command followed by -c option and list of column numbers, delimited by a comma. For example,\n$ cut  -c  6-22,24-32  emp.lst"
+                            },
+                            {
+                                id: "fc2_q3", question: "3.The expression cut -c -3 emp.lst will cut columns number _____",
+                                options: ["3", "1", "1-3", "0"], correctAnswer: "1-3",
+                                explanation: "cut command is used for cutting specific columns. Cut command uses a special feature for selecting a column from the beginning and up to end of a line. For example,\n$ cut -c -3 emp.lst            // extracts column 1-3\n$ cut -c  10-  emp.lst        // extracts from column number 10 to end of line"
+                            },
+                            {
+                                id: "fc2_q4", question: "4. ____ option is used with the cut command for cutting fields.",
+                                options: ["-c", "-n", "-f", "-a"], correctAnswer: "-f",
+                                explanation: "Sometimes we need to extract specific fields from a file instead of columns. For this purpose, -f option is used with cut command followed by an integer number representing the field. For example,\n$ cut  -f   2,3  emp.lst        // cut field number 2 and 3 from emp.lst"
+                            },
+                            {
+                                id: "fc2_q5", question: "5. What is the default delimiter used by the cut command for cutting fields?",
+                                options: ["space", "tab", "double tab", "underscore"], correctAnswer: "tab",
+                                explanation: "To extract useful data from a file, we use the cut command to cut fields rather than columns. The cut command uses tab as the default delimiter to cut fields."
+                            },
+                            {
+                                id: "fc2_q6", question: "6. Which option is used with the cut command for cutting field base on the value of our specified delimiter?",
+                                options: ["-a", "-f", "-d", "-e"], correctAnswer: "-d",
+                                explanation: "By default, the cut command uses tab as the default delimiter but we can specify our own delimiter using -d option. For example,\n$ cut  -d “ “ -f 1  emp.lst        // space is the delimiter\nRoot\nKumar\nSharma\nProject"
+                            },
+                            {
+                                id: "fc2_q7", question: "7. We have to specify whether we want to cut fields or columns while using cut command.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Before using cut command, we have to keep in mind that it is necessary to specify that whether we want to cut fields or columns. This can be specified using -f and -c option respectively."
+                            },
+                            {
+                                id: "fc2_q8", question: "8. The following command will produce an error.\n\n$ cut -d “|”  -f  1,4  emp.lst",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "Since cut uses the tab as the default field delimiter but we can also work with a different delimiter. Above command uses | (pipe) as the delimiter but we have to escape | in “ ” to prevent the shell from interpreting it as a pipeline character."
+                            },
+                            {
+                                id: "fc2_q9", question: "9. Which one of the following commands is incorrect?",
+                                options: ["$ cut -d “|” -f 1,4 emp.lst", "$ cut -c -3 emp.lst", "$ tail -c 511 foo", "$ tail -c foo"], correctAnswer: "$ tail -c foo",
+                                explanation: "tail(1) command is used for extracting bytes instead of lines while cut(1) command is used for extracting columns and fields. But if we are using tail(1) command, we have to specify an integer value after the -c option, otherwise, the command will fail."
+                            },
+                            {
+                                id: "fc2_q10", question: "10. Which command is used for pasting files?",
+                                options: ["cut", "paste", "tail", "head"], correctAnswer: "paste",
+                                explanation: "Whatever we’ve cut using cut command can be pasted back using paste command. This command is useful when we want to view files side by side by pasting them together. For example,\n$ paste file01  file02            // contents of both files will be pasted together\nAbd    01    98%\nMash    03    76%\nRyan    10    65%"
+                            },
+                            {
+                                id: "fc2_q11", question: "11. Whatever we have cut using cut command can be pasted back using paste command but vertically.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Whatever we’ve cut using cut command can be pasted back using paste command. This command is useful when we want to view files side by side by pasting them together. But this command pastes vertically rather than horizontally."
+                            },
+                            {
+                                id: "fc2_q12", question: "12. paste command uses space as the default field delimiter.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "Like cut command paste command also uses tab as the default field delimiter but we can use our own field delimiter using -d option with paste command."
+                            },
+                            {
+                                id: "fc2_q13", question: "13. _____ option is used with paste command if we want to specify our own delimiter.",
+                                options: ["-d", "-c", "-a", "-e"], correctAnswer: "-d",
+                                explanation: "Whatever we’ve cut using cut command can be pasted back using paste command. paste command also uses tab as the default field delimiter but we can use our own field delimiter using -d option with paste command. For example,\n$ paste -d “|” file01  file02        // | is used as delimiter\nAbd    |01 |98%\nMash |03 |76%\nRyan  |10 |65%"
+                            },
+                            {
+                                id: "fc2_q14", question: "14. Which option is used with paste command for joining lines?",
+                                options: ["-s", "-c", "-a", "-e"], correctAnswer: "-s",
+                                explanation: "The -s option joins the line in the same way the vi editor’s J does. Using this option on a file containing multiple lines will join all of these lines into a single one."
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Sort Command",
+                        questions: [
+                            {
+                                id: "sort_q1", question: "1. ____ command is used for sorting a file on specified fields.",
+                                options: ["cut", "sort", "pr", "tail"], correctAnswer: "sort",
+                                explanation: "Sorting is the ordering of data in ascending or descending order. The sort command is used for ordering a file. Like cut command, sort also identifies fields and perform sorting on specified fields. To sort any file, just provide the name of the file as an argument with sort command.\n$ sort emp.lst"
+                            },
+                            {
+                                id: "sort_q2", question: "2. By default, sort command reorders lines in ASCII collating sequence.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "By default, sort reorders lines in ASCII collating sequence i.e. whitespaces first, then numerals, uppercase letters and at last lowercase letters. But we can change this default sorting sequence using a certain sequence."
+                            },
+                            {
+                                id: "sort_q3", question: "3. Sort command uses ____ as default field delimiter.",
+                                options: ["tab", "single space", "double tab", "one or more continuous spaces"], correctAnswer: "one or more continuous spaces",
+                                explanation: "Unlike cut and paste command which uses tab as the default field delimiter, sort command uses one or more contiguous spaces as the default field separator."
+                            },
+                            {
+                                id: "sort_q4", question: "4. Which option is used with sort command to specify the field delimiter?",
+                                options: ["-a", "-t", "-k", "-n"], correctAnswer: "-t",
+                                explanation: "sort command uses one or more contiguous spaces as the default field separator but we can specify our own field delimiter using the option -t. For example, to perform sorting using | as the delimiter, use the following command:\n$ sort -t “|” file01\n1243|Abd    |01 |98%\n2345|Ryan |03 |76%\n2390|Mash  |10 |65%"
+                            },
+                            {
+                                id: "sort_q5", question: "5. Which option is used for sorting a file according to primary key?",
+                                options: ["-t", "-k", "-n", "-n"], correctAnswer: "-k",
+                                explanation: "sort command provides an option for sorting file according to our specified field. For this purpose, we have to use -k along with the field number (based on which we want to perform sorting). For example, to perform sorting on second field (name):\n$ sort -t “|” -k 2  file01\n1243|Abd    |01 |98%\n2345|Mash |10 |65%\n2390|Ryan  |03 |76%"
+                            },
+                            {
+                                id: "sort_q6", question: "6. The sort order can be reversed using ___ option.",
+                                options: ["-t", "-k", "-r", "-n"], correctAnswer: "-r",
+                                explanation: "The sort order can be reversed using -r option. For example, the following sequence reverse the order,\n$ sort -t “|” -k 2r  file01\n2390|Ryan  |03 |76%\n2345|Mash |10 |65% \n1243|Abd    |01 |98%"
+                            },
+                            {
+                                id: "sort_q7", question: "7. We can perform sorting on secondary key also using sort command.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "We can sort on more than one fields i.e. we can provide a secondary key to sort. For example, if the primary key is the third field and the secondary key is the second field, then we have to specify for every -k option, where the sort ends. This is done in the following manner:\n$ sort -t “|” -k 3,3  -k 2,2   shortlist\nThis command will sort the file according to the second and third field. 3,3 indicates that sorting starts and end on the third field."
+                            },
+                            {
+                                id: "sort_q8", question: "8. We cannot perform sorting on columns using sort command.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "We can also specify a character position within a field to the beginning of sort. For example, if we have to sort salary field then we can specify in the form -k m,n where n is the character position in mth field.\n$ sort -t “|”  -k  6.1,6.2 shortlist        // sort according to the first two digits of salary.\n// here salary is the 6th field."
+                            },
+                            {
+                                id: "sort_q9", question: "9. Which option is used when we’ve to sort files containing only numbers?",
+                                options: ["-n", "-a", "-d", "-u"], correctAnswer: "-n",
+                                explanation: "When sort command acts on a numeral, strange things can happen if a file contains only numerals. So we have to use the -n option with sort command. For example,\n$ sort  numfile                // without using -n\n10\n2\n27\n4\n$ sort  -n numfile            // using -n\n2\n4\n10\n27"
+                            },
+                            {
+                                id: "sort_q10", question: "10. _____ option is used with sort command for removing repeated lines.",
+                                options: ["-n", "-u", "-t", "-a"], correctAnswer: "-u",
+                                explanation: "sort provides an option i.e. -u (unique) which lets us remove repeated lines from a file. We can use this option with sort command to find unique occurrences in the file. For example,\n$ cut -d “|” -f3 emp.lst | sort  -u | tee design.lst\nAbove command will cut out the designation field from emp.lst, after that the output will be piped to sort command to find out the unique designations in the file. The output produced will be like:\nChairman\nd.g.m\ndirector\nexecutive\ng.m. "
+                            },
+                            {
+                                id: "sort_q11", question: "11. Which option is used by the sort command to redirect the output to a specified file?",
+                                options: ["-n", "-t", "-o", "-u"], correctAnswer: "-o",
+                                explanation: "Even though we can redirect the output of sort to a file, we can also use its -o option for specifying the output file. For example,\n$ sort  -o  sortedlist  -k  3  shortlist        // output stored in sortedlist"
+                            },
+                            {
+                                id: "sort_q12", question: "12. The name of the input and output files cannot be same while using sort command.",
+                                options: ["True", "False"], correctAnswer: "False",
+                                explanation: "Even though we can redirect the output of sort to a file, we can also use its -o option for specifying the output file. And the interesting fact is, the name of the input and output file can be same. For example,\n$ sort  -o  sortedlist  -k  3  shortlist       // output stored in sortedlist\n$ sort  -o shortlist  shortlist               // output stored in the same file"
+                            },
+                            {
+                                id: "sort_q13", question: "13. To check whether the file has actually been stored in the default order, we can use ____ option.",
+                                options: ["-n", "-a", "-d", "-c"], correctAnswer: "-c",
+                                explanation: "sort command provides an option with the use of which we can check whether the file has actually been stored in the default order. For example,\n$ sort  -c  shortlist\n_                // file is sorted"
+                            },
+                            {
+                                id: "sort_q14", question: "14. Which option is used with sort command to sort multiple files collectively?",
+                                options: ["-m", "-n", "-c", "-o"], correctAnswer: "-m",
+                                explanation: "When we use sort command with multiple filenames as arguments, it concatenates all of them and sorts them collectively. -m option usually makes the performance to suffer. For example, to sort three files, use the following command:\n$ sort  -m file01  file02  file03"
+                            }
+                        ]
+                    },
+                    {
+                        topicName: "Unique and tr Command",
+                        questions: [
+                            {
+                                id: "uniq_q1", question: "1. Which command is used for locating repeated and non-repeated lines?",
+                                options: ["sort", "uniq", "cut", "paste"], correctAnswer: "uniq",
+                                explanation: "When we concatenate or merge files, we can encounter the problem of duplicate entries creeping in. UNIX offers a special command (uniq) which can be used to handle these duplicate entries. We can also use the sort -u command for doing the same piece of work."
+                            },
+                            {
+                                id: "uniq_q2", question: "2. uniq command requires a sorted file as input.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "uniq command is used for locating repeated and non-repeated entries. But the most important requirement for using uniq command is, the file should be sorted. For example,\n$ sort dept.lst |  uniq  -  uniqlist        // output in uniqlist"
+                            },
+                            {
+                                id: "uniq_q3", question: "3. Which option is used with uniq command for selecting non-repeated lines?",
+                                options: ["-i", "-c", "-u", "-a"], correctAnswer: "-u",
+                                explanation: "To select unique lines, we can use the sort -u command. But uniq also offers an option (-u) which is used for selecting non-repeating entries in a field. For example,\n$ cut  -d  “|” -f3 emp.lst | sort  |uniq -u   \n // cut 3rd field from emp.lst, sort it and find unique entries"
+                            },
+                            {
+                                id: "uniq_q4", question: "4. Which option is used for selecting repeated entries?",
+                                options: ["-d", "-c", "-u", "-a"], correctAnswer: "-d",
+                                explanation: "The -d option when used with uniq command lets us select only one copy of duplicate entries. For example,\n$ cut  -d  “|” -f3 emp.lst | sort  |uniq -d\nd.g.m                    // only single copy of all duplicate entries\ndirector\nexecutive\ng.m. \nmanager"
+                            },
+                            {
+                                id: "uniq_q5", question: "5. ______ option is used for counting frequency of occurrence.",
+                                options: ["-d", "-c", "-u", "-a"], correctAnswer: "-c",
+                                explanation: "We can use the -c option with uniq command to count the frequency of occurrence of all lines along with the lines. For example,\n$ cut  -d  “|” -f3 emp.lst | sort  |uniq -c\n1 d.g.m                    \n2 director\n4 executive\n4 g.m. \n2 manager"
+                            },
+                            {
+                                id: "uniq_q6", question: "6. The output of the following command will be:\n\n$ uniq  foo1 foo2",
+                                options: ["erroneous", "output stored in foo2", "concatenates both files", "process foo1 and output is stored in foo2"], correctAnswer: "process foo1 and output is stored in foo2",
+                                explanation: "Like sort command, uniq command also accepts the output filename as an argument, but without using -o option. If we use the above command, it will simply process fo1 and overwrites foo2 with its output."
+                            },
+                            {
+                                id: "uniq_q7", question: "7. Which command is used for translating characters?",
+                                options: ["sort", "trans", "tr", "paste"], correctAnswer: "tr",
+                                explanation: "The translate (tr) filter is used for manipulating individual characters in a line. Usually, tr command translates characters using one or two compact expressions. The syntax for using tr command is,\n$ tr  options  expression1  expression2  standard input"
+                            },
+                            {
+                                id: "uniq_q8", question: "8. To replace | with ~, which one of the following commands will be used?",
+                                options: ["tr ‘|\\’ ‘~-‘", "tr ‘|\\’ ‘~-‘ > emp.lst", "tr | ~ emp.lst", "!"], // Corrected one option
+                                correctAnswer: "tr ‘|\\’ ‘~-‘ > emp.lst",
+                                explanation: "The translate (tr) filter is used for manipulating individual characters in a line. It replaces the first character in the first expression with the first character in the second expression."
+                            },
+                            {
+                                id: "uniq_q9", question: "9.\n\nhead -n 3 emp.lst | tr ‘[a-z]’  ‘[A-Z]’\nAbove command will change the case of text from lower to upper.",
+                                options: ["True", "False"], correctAnswer: "True",
+                                explanation: "Since we know that tr command doesn’t accept the filename as an argument, the input has to be redirected from a file or a pipe. Above command will change the case of first three lines of emp.lst from lowercase to uppercase."
+                            },
+                            {
+                                id: "uniq_q10", question: "10. Which option is used with tr command for deleting characters?",
+                                options: ["-d", "-c", "-n", "-a"], correctAnswer: "-d",
+                                explanation: "By using tr command we can delete the characters from a file. To perform this operation, we’ve to use -d option. For example,\n$ tr  -d  ‘|/’ < emp.lst |head  -n 3        //deletes | and / from the first three lines"
+                            },
+                            {
+                                id: "uniq_q11", question: "11. ______ option is used for compressing multiple consecutive characters.",
+                                options: ["-d", "-c", "-n", "-s"], correctAnswer: "-s",
+                                explanation: "tr command can also remove multiple consecutive characters from a line by using -s option. This will make the line squeeze from multiple consecutive occurrences of a character to a single character. For example, to squeeze multiple contiguous spaces use the following command:\n$ tr  -s  ‘  ‘ < emp.lst | head -n  3"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const mainChapterTitleEl = document.getElementById('mainChapterTitle');
+        const questionProgressTextEl = document.getElementById('questionProgressText');
+        const scoreDisplayEl = document.getElementById('scoreDisplay');
+        const progressBarEl = document.getElementById('progressBar');
+        const quizContentAreaEl = document.getElementById('quizContentArea');
+        const nextChapterBtn = document.getElementById('nextChapterBtn');
+
+        let currentChapterIndex = 0; // This page handles only one chapter
+        let score = 0;
+        let totalQuestionsInChapter = 0;
+        let questionsAnsweredCount = 0;
+        let allQuestionElementsMap = new Map();
+        let currentActiveQuestionId = null;
+
+        const sunIcon = `<i class="fas fa-sun text-xl text-yellow-400"></i>`;
+        const moonIcon = `<i class="fas fa-moon text-xl text-gray-700 dark:text-yellow-400"></i>`;
+
+        function setDarkMode(isDark) {
+            const htmlEl = document.documentElement;
+            if (isDark) {
+                htmlEl.classList.add('dark');
+                darkModeToggle.innerHTML = sunIcon;
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                htmlEl.classList.remove('dark');
+                darkModeToggle.innerHTML = moonIcon;
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            setDarkMode(!document.documentElement.classList.contains('dark'));
+        });
+
+        function renderChapter() {
+            quizContentAreaEl.innerHTML = '';
+            allQuestionElementsMap.clear();
+            const chapterData = quizData[currentChapterIndex];
+            mainChapterTitleEl.textContent = chapterData.chapterName;
+
+            score = 0;
+            questionsAnsweredCount = 0;
+            totalQuestionsInChapter = 0;
+            let firstQuestionId = null;
+
+            chapterData.topics.forEach(topic => {
+                totalQuestionsInChapter += topic.questions.length;
+            });
+            updateProgressAndScore();
+
+            chapterData.topics.forEach((topic) => {
+                const topicHeader = document.createElement('h3');
+                topicHeader.className = 'text-xl md:text-2xl font-semibold text-purple-600 dark:text-purple-400 mt-10 mb-6 pt-6 border-t border-gray-300 dark:border-gray-600 first:mt-0 first:pt-0 first:border-t-0';
+                topicHeader.textContent = topic.topicName;
+                quizContentAreaEl.appendChild(topicHeader);
+
+                topic.questions.forEach((q) => {
+                    if (!firstQuestionId) firstQuestionId = q.id;
+
+                    const questionBlock = document.createElement('div');
+                    questionBlock.id = `qblock-${q.id}`;
+                    questionBlock.className = 'quiz-question-block mb-10 p-5 bg-gray-50 dark:bg-gray-750 rounded-xl shadow-lg';
+                    questionBlock.dataset.questionId = q.id;
+
+                    const questionTextEl = document.createElement('p');
+                    questionTextEl.className = 'text-md md:text-lg font-medium mb-5 text-gray-800 dark:text-gray-200';
+                    questionTextEl.innerHTML = q.question.replace(/\n/g, '<br>');
+                    questionBlock.appendChild(questionTextEl);
+
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.className = 'grid grid-cols-1 md:grid-cols-2 gap-3 mb-4';
+                    q.options.forEach((option, optionIdx) => {
+                        const button = document.createElement('button');
+                        button.innerHTML = `<span class="text-left flex-grow">${String.fromCharCode(97 + optionIdx)}) ${option}</span>`;
+                        button.className = 'option-btn w-full text-left p-3 bg-gray-200 dark:bg-gray-600 hover:bg-blue-100 dark:hover:bg-blue-800 rounded-lg border-2 border-gray-300 dark:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-between disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow-md';
+                        button.dataset.questionId = q.id;
+                        button.dataset.optionIndex = optionIdx;
+                        button.disabled = true;
+                        button.addEventListener('click', handleAnswerSelection);
+                        optionsContainer.appendChild(button);
+                    });
+                    questionBlock.appendChild(optionsContainer);
+
+                    const feedbackEl = document.createElement('div');
+                    feedbackEl.className = 'feedback-area min-h-[25px] text-sm mb-2';
+                    questionBlock.appendChild(feedbackEl);
+
+                    const explanationEl = document.createElement('div');
+                    explanationEl.className = 'explanation-area p-3 rounded-md text-sm leading-relaxed';
+                    explanationEl.innerHTML = `<strong class="block mb-1">Explanation:</strong> ${q.explanation.replace(/\n/g, '<br>')}`;
+                    questionBlock.appendChild(explanationEl);
+
+
+                    quizContentAreaEl.appendChild(questionBlock);
+                    allQuestionElementsMap.set(q.id, questionBlock);
+                });
+            });
+
+            if (firstQuestionId) {
+                activateQuestion(firstQuestionId);
+            }
+            nextChapterBtn.classList.add('hidden');
+            nextChapterBtn.textContent = "Next Chapter ➝ Filters using Regular Expressions";
+            nextChapterBtn.onclick = () => {
+                window.location.href = 'chapter-10.html'; // Assuming chapter 10
+            };
+        }
+
+        function activateQuestion(questionId) {
+            if (currentActiveQuestionId) {
+                const prevActiveBlock = allQuestionElementsMap.get(currentActiveQuestionId);
+                if (prevActiveBlock) {
+                    prevActiveBlock.classList.remove('active-question');
+                }
+            }
+
+            currentActiveQuestionId = questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+            if (questionBlock) {
+                questionBlock.classList.add('active-question');
+                questionBlock.querySelectorAll('.option-btn').forEach(btn => btn.disabled = false);
+                setTimeout(() => {
+                    const rect = questionBlock.getBoundingClientRect();
+                    const headerHeight = document.querySelector('header.sticky').offsetHeight || 150;
+                    if (rect.top < headerHeight || rect.bottom > (window.innerHeight - 50)) {
+                        questionBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 150);
+            }
+        }
+
+
+        function findQuestionData(questionId) {
+            for (const topic of quizData[currentChapterIndex].topics) {
+                const question = topic.questions.find(q => q.id === questionId);
+                if (question) return question;
+            }
+            return null;
+        }
+
+        function handleAnswerSelection(event) {
+            const selectedButton = event.currentTarget;
+            const questionId = selectedButton.dataset.questionId;
+            const questionBlock = allQuestionElementsMap.get(questionId);
+
+            if (!questionBlock || questionBlock.classList.contains('answered-question')) return;
+
+            const questionData = findQuestionData(questionId);
+            if (!questionData) return;
+
+            const selectedOptionIndex = parseInt(selectedButton.dataset.optionIndex);
+            const selectedOptionText = questionData.options[selectedOptionIndex];
+            const correctAnswerText = questionData.correctAnswer;
+
+            const feedbackEl = questionBlock.querySelector('.feedback-area');
+            const explanationEl = questionBlock.querySelector('.explanation-area');
+            const allOptionButtonsInBlock = questionBlock.querySelectorAll('.option-btn');
+
+            allOptionButtonsInBlock.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-blue-100', 'dark:hover:bg-blue-800', 'hover:shadow-md');
+            });
+
+            if (selectedOptionText === correctAnswerText) {
+                score++;
+                selectedButton.classList.add('correct');
+                feedbackEl.innerHTML = `<p class="text-green-600 dark:text-green-400 font-semibold"><i class="fas fa-check-circle mr-2"></i>Correct!</p>`;
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackEl.innerHTML = `<p class="text-red-600 dark:text-red-400 font-semibold"><i class="fas fa-times-circle mr-2"></i>Incorrect. The correct answer is highlighted.</p>`;
+                allOptionButtonsInBlock.forEach(btn => {
+                    if (questionData.options[parseInt(btn.dataset.optionIndex)] === correctAnswerText) {
+                        btn.classList.add('actual-correct-unselected');
+                        btn.classList.remove('incorrect');
+                    }
+                });
+            }
+
+            explanationEl.classList.add('visible');
+
+            questionBlock.classList.add('answered-question');
+            questionBlock.classList.remove('active-question');
+            questionsAnsweredCount++;
+            updateProgressAndScore();
+
+            setTimeout(() => {
+                let nextQuestionIdToActivate = null;
+                let foundCurrent = false;
+                for (const topic of quizData[currentChapterIndex].topics) {
+                    for (const q of topic.questions) {
+                        if (foundCurrent) {
+                            nextQuestionIdToActivate = q.id;
+                            break;
+                        }
+                        if (q.id === questionId) {
+                            foundCurrent = true;
+                        }
+                    }
+                    if (nextQuestionIdToActivate) break;
+                }
+
+                if (nextQuestionIdToActivate) {
+                    activateQuestion(nextQuestionIdToActivate);
+                } else {
+                    showChapterEnd();
+                }
+            }, 1500);
+        }
+
+        function updateProgressAndScore() {
+            scoreDisplayEl.textContent = `Score: ${score}`;
+            questionProgressTextEl.textContent = `Answered: ${questionsAnsweredCount} / ${totalQuestionsInChapter}`;
+            const progressPercentage = totalQuestionsInChapter > 0 ? (questionsAnsweredCount / totalQuestionsInChapter) * 100 : 0;
+            progressBarEl.style.width = `${progressPercentage}%`;
+        }
+
+        function showChapterEnd() {
+            nextChapterBtn.classList.remove('hidden');
+            // nextChapterBtn.onclick is already set in renderChapter
+
+            const endMessage = document.createElement('p');
+            endMessage.className = "text-center text-xl font-semibold mt-10 p-6 bg-blue-50 dark:bg-blue-900 rounded-lg";
+            endMessage.textContent = `Chapter 9 Complete! Your final score: ${score} out of ${totalQuestionsInChapter}.`;
+            quizContentAreaEl.appendChild(endMessage);
+            endMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+            const currentTheme = localStorage.getItem('darkMode');
+
+            if (currentTheme === 'enabled') {
+                setDarkMode(true);
+            } else if (currentTheme === 'disabled') {
+                setDarkMode(false);
+            } else {
+                setDarkMode(prefersDarkScheme.matches);
+            }
+
+            prefersDarkScheme.addEventListener('change', e => {
+                if (localStorage.getItem('darkMode') === null) {
+                    setDarkMode(e.matches);
+                }
+            });
+
+            renderChapter();
+        });
+
+    </script>
+</body>
+
+</html>
