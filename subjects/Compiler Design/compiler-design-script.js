@@ -6,7 +6,7 @@ fetch("compiler-design-topics.json")
 
     const container = document.getElementById("topics-container");
 
-    data.topics.forEach(topic => {
+    data.topics.forEach((topic, index) => {
       const card = document.createElement("div");
       card.className = "topic-card";
 
@@ -15,6 +15,7 @@ fetch("compiler-design-topics.json")
         <div class="topic-desc">${topic.description}</div>
         <div class="resource-buttons">
           ${topic.resources.map(resource => `<button>${resource}</button>`).join("")}
+          <button onclick="location.href='Topics/topic-${index + 1}.html'">Explore</button>
         </div>
       `;
 

@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Compilers - Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #121828;
+            /* Dark blue-ish grey */
+            --primary-text-color: #e0e0e0;
+            --secondary-text-color: #b0b0b0;
+            --card-bg-color: #1a2035;
+            /* Slightly lighter dark blue */
+            --accent-color-blue: #6a82fb;
+            --accent-color-yellow: #fde047;
+            --border-color: #2a314b;
+            --code-bg-color: #282c34;
+            /* Common dark editor theme */
+            --code-text-color: #abb2bf;
+            --success-color: #28a745;
+            --error-color: #dc3545;
+            --font-primary: 'Roboto', sans-serif;
+            --font-secondary: 'Nunito', sans-serif;
+            --box-shadow-soft: 0 4px 15px rgba(0, 0, 0, 0.2);
+            --box-shadow-glow: 0 0 15px var(--accent-color-blue-transparent);
+            --accent-color-blue-transparent: rgba(106, 130, 251, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background-color: var(--bg-color);
+            color: var(--primary-text-color);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        .eduvishion-logo {
+            position: absolute;
+            top: 25px;
+            left: 40px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px var(--accent-color-blue-transparent);
+        }
+
+        .eduvishion-logo .text-2xl {
+            font-family: var(--font-secondary);
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvishion-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvishion-logo .text-yellow-300 {
+            color: var(--accent-color-yellow) !important;
+        }
+
+        .eduvishion-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvishion-logo a:hover .text-yellow-300 {
+            filter: brightness(1.2);
+        }
+
+        .eduvishion-logo svg {
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+            vertical-align: middle;
+            transition: color 0.3s ease;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--bg-color) 0%, #2c3e50 100%);
+            /* Dark gradient */
+            padding: 120px 40px 80px;
+            text-align: center;
+            position: relative;
+            border-bottom: 2px solid var(--accent-color-blue);
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            /* Subtle background pattern or stars */
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.5;
+            z-index: 0;
+        }
+
+        .hero-title {
+            font-family: var(--font-secondary);
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title span {
+            color: var(--accent-color-yellow);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--secondary-text-color);
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        section {
+            background-color: var(--card-bg-color);
+            padding: 30px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: var(--box-shadow-soft);
+            border: 1px solid var(--border-color);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h2 {
+            font-family: var(--font-secondary);
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--accent-color-blue);
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-color-yellow);
+            display: inline-block;
+        }
+
+        h3 {
+            font-family: var(--font-secondary);
+            font-size: 1.6rem;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+
+        p,
+        ul,
+        li {
+            font-size: 1.05rem;
+            color: var(--secondary-text-color);
+            margin-bottom: 15px;
+        }
+
+        ul {
+            list-style-position: inside;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        strong {
+            color: var(--primary-text-color);
+            font-weight: 500;
+        }
+
+        .diagram {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .diagram-text {
+            font-family: var(--font-secondary);
+            font-size: 1.1rem;
+            color: var(--primary-text-color);
+        }
+
+        .diagram-arrow {
+            font-size: 2rem;
+            color: var(--accent-color-yellow);
+            margin: 0 10px;
+            display: inline-block;
+            transform: translateY(4px);
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        .comparison-table th {
+            background-color: var(--accent-color-blue);
+            color: #fff;
+            font-family: var(--font-secondary);
+            font-weight: 700;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background-color: #1f2740;
+            /* Slightly different shade for rows */
+        }
+
+        /* Phases of Compiler Diagram */
+        .phases-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 20px;
+            background: var(--bg-color);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .phase-box,
+        .connector-box {
+            background-color: var(--card-bg-color);
+            color: var(--primary-text-color);
+            padding: 12px 20px;
+            border-radius: 6px;
+            border: 1px solid var(--accent-color-blue);
+            font-family: var(--font-secondary);
+            font-size: 0.95rem;
+            text-align: center;
+            box-shadow: var(--box-shadow-soft);
+            min-width: 200px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .phase-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px var(--accent-color-blue-transparent);
+        }
+
+        .arrow-down {
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 12px solid var(--accent-color-yellow);
+            margin: 5px auto;
+        }
+
+        .side-boxes {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .side-box {
+            background-color: #2c3a5f;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            border: 1px solid var(--accent-color-yellow);
+            color: var(--secondary-text-color);
+        }
+
+
+        /* Interactive Phase Explanation */
+        .interactive-phases {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--bg-color);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .phase-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .phase-tab {
+            padding: 10px 15px;
+            background-color: var(--card-bg-color);
+            color: var(--primary-text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+            font-family: var(--font-secondary);
+        }
+
+        .phase-tab:hover,
+        .phase-tab.active {
+            background-color: var(--accent-color-blue);
+            color: #fff;
+            border-color: var(--accent-color-blue);
+        }
+
+        .phase-content {
+            background-color: var(--code-bg-color);
+            color: var(--code-text-color);
+            padding: 20px;
+            border-radius: 6px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            white-space: pre-wrap;
+            min-height: 150px;
+            border: 1px solid var(--border-color);
+        }
+
+        .phase-content strong {
+            color: var(--accent-color-yellow);
+        }
+
+        /* Highlight keywords in output */
+
+        pre,
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--code-bg-color);
+            color: var(--code-text-color);
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+            margin: 15px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        code {
+            padding: 0.2em 0.4em;
+            margin: 0;
+            border-radius: 3px;
+        }
+
+        /* Inline code */
+
+        /* Interactive Tokenizer */
+        .tokenizer-demo {
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--bg-color);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .tokenizer-demo textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 10px;
+            background-color: var(--code-bg-color);
+            color: var(--code-text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: 'Courier New', Courier, monospace;
+            margin-bottom: 10px;
+            resize: vertical;
+        }
+
+        .tokenizer-demo button {
+            background-color: var(--accent-color-yellow);
+            color: var(--bg-color);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-family: var(--font-secondary);
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .tokenizer-demo button:hover {
+            background-color: #fdd835;
+            /* Slightly lighter yellow */
+        }
+
+        .tokenizer-demo #tokenizer-output {
+            margin-top: 15px;
+            background-color: var(--code-bg-color);
+            padding: 15px;
+            border-radius: 6px;
+            min-height: 100px;
+            white-space: pre-wrap;
+            color: var(--code-text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Next Topic Button */
+        .page-navigation {
+            text-align: center;
+            margin: 50px 0 30px;
+        }
+
+        .next-topic-button {
+            display: inline-block;
+            background-color: var(--accent-color-blue);
+            color: #fff;
+            padding: 15px 30px;
+            text-decoration: none;
+            font-family: var(--font-secondary);
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 8px;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: var(--box-shadow-soft);
+        }
+
+        .next-topic-button:hover {
+            background-color: #5a72d8;
+            /* Darker blue */
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px var(--accent-color-blue-transparent);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            font-size: 0.9rem;
+            color: var(--secondary-text-color);
+            border-top: 1px solid var(--border-color);
+            margin-top: 50px;
+        }
+
+        /* Animation for compiler phases */
+        .code-transformation {
+            position: relative;
+            min-height: 100px;
+            /* Adjust as needed */
+            padding: 15px;
+            background: var(--code-bg-color);
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 15px;
+        }
+
+        .code-step {
+            opacity: 0;
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: calc(100% - 30px);
+            transition: opacity 0.5s ease-in-out;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+        }
+
+        .code-step.active-step {
+            opacity: 1;
+            position: relative;
+            /* take up space in flow */
+        }
+
+        .code-step strong {
+            color: var(--accent-color-yellow);
+        }
+
+        .code-step .comment {
+            color: #5c6370;
+            font-style: italic;
+        }
+
+        /* Dim comments */
+        .code-step .keyword {
+            color: #c678dd;
+        }
+
+        .code-step .identifier {
+            color: #61afef;
+        }
+
+        .code-step .literal {
+            color: #98c379;
+        }
+
+        .code-step .operator {
+            color: #d19a66;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .eduvishion-logo {
+                position: static;
+                padding: 20px;
+                text-align: center;
+                background-color: var(--bg-color);
+                /* Ensure visibility if hero shrinks */
+            }
+
+            .hero-section {
+                padding: 80px 20px 60px;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            .phases-diagram {
+                padding: 10px;
+            }
+
+            .phase-box {
+                font-size: 0.85rem;
+                padding: 10px 15px;
+                min-width: 150px;
+            }
+
+            .phase-tabs {
+                justify-content: center;
+            }
+
+            .phase-tab {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvishion-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../index.html" class="flex items-center group">
+                <span class="text-white">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-white">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <header class="hero-section">
+        <h1 class="hero-title">Introduction to <span>Compilers</span></h1>
+        <p class="hero-subtitle">Discover the intricate world of compilers, the engines that transform human-readable
+            code into machine-executable instructions.</p>
+    </header>
+
+    <main>
+        <section id="what-is-compiler">
+            <h2>What is a Compiler?</h2>
+            <p>A compiler is a special program that translates source code written in a high-level programming language
+                (like C++, Java, or Python) into a lower-level language (like assembly language, machine code, or
+                bytecode). The primary goal of a compiler is to produce an executable program that can be run by a
+                computer's processor or a virtual machine.</p>
+            <p>Think of a compiler as a sophisticated translator. Just as a human translator converts text from one
+                human language to another, a compiler converts instructions from a programming language understandable
+                by humans to a language understandable by machines.</p>
+            <div class="diagram">
+                <span class="diagram-text">Source Code (e.g., C++)</span>
+                <span class="diagram-arrow">→</span>
+                <strong
+                    style="color: var(--accent-color-blue); padding: 5px 10px; border: 1px solid var(--accent-color-blue); border-radius: 4px; background: var(--bg-color);">Compiler</strong>
+                <span class="diagram-arrow">→</span>
+                <span class="diagram-text">Target Code (e.g., Machine Code)</span>
+            </div>
+            <h3>Key Functions:</h3>
+            <ul>
+                <li><strong>Translation:</strong> Converting high-level constructs to low-level instructions.</li>
+                <li><strong>Error Detection:</strong> Identifying syntax errors, type mismatches, and other issues in
+                    the source code.</li>
+                <li><strong>Optimization:</strong> Improving the generated code for better performance (speed, size).
+                </li>
+            </ul>
+        </section>
+
+        <section id="compiler-vs-interpreter">
+            <h2>Compiler vs. Interpreter</h2>
+            <p>Both compilers and interpreters are language translators, but they operate differently. Understanding
+                their distinctions is crucial for grasping how various programming languages are executed.</p>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Compiler</th>
+                        <th>Interpreter</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Translation Process</strong></td>
+                        <td>Translates the entire program at once before execution.</td>
+                        <td>Translates and executes the program line by line (or statement by statement).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Output</strong></td>
+                        <td>Generates an intermediate object code or executable file.</td>
+                        <td>Directly executes operations; no separate executable file is typically generated.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Execution Speed</strong></td>
+                        <td>Generally faster execution after compilation, as the translation is already done.</td>
+                        <td>Generally slower execution, as translation occurs during runtime for each line.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Error Detection</strong></td>
+                        <td>Reports errors after scanning the entire program (compile-time errors).</td>
+                        <td>Reports errors as soon as the first one is encountered during execution (runtime errors).
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Memory Usage</strong></td>
+                        <td>May require more memory for storing the intermediate/executable code.</td>
+                        <td>Can be more memory-efficient as it doesn't store a full translated program.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Debugging</strong></td>
+                        <td>Debugging can be complex as errors are reported collectively.</td>
+                        <td>Easier debugging for some error types as it stops at the error.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Platform Dependency</strong></td>
+                        <td>Generated executable is often platform-specific.</td>
+                        <td>More platform-independent, as long as the interpreter is available for the platform.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Examples</strong></td>
+                        <td>C, C++, Go, Rust, Swift. Java (compiles to bytecode, then JIT compiled/interpreted by JVM).
+                        </td>
+                        <td>Python, Ruby, Perl, JavaScript (traditionally; modern JS engines use JIT compilation).</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p><strong>Note:</strong> Many modern languages use a hybrid approach (e.g., Java compiles to bytecode,
+                which is then interpreted or Just-In-Time (JIT) compiled by the Java Virtual Machine. Python can also
+                produce bytecode files (.pyc)).</p>
+        </section>
+
+        <section id="phases-of-compiler">
+            <h2>Phases of a Compiler</h2>
+            <p>The compilation process is complex and is typically divided into several sequential phases. Each phase
+                takes the output of the previous phase as input and produces an intermediate representation of the
+                source program. These phases help in modularizing the compiler's design.</p>
+
+            <div class="phases-diagram">
+                <div class="phase-box">Source Program</div>
+                <div class="arrow-down"></div>
+                <div class="phase-box" data-phase="lexical">Lexical Analyzer (Scanner)</div>
+                <div class="arrow-down"></div>
+                <div class="phase-box" data-phase="syntax">Syntax Analyzer (Parser)</div>
+                <div class="arrow-down"></div>
+                <div class="phase-box" data-phase="semantic">Semantic Analyzer</div>
+                <div class="arrow-down"></div>
+                <div class="phase-box" data-phase="icg">Intermediate Code Generator</div>
+                <div class="arrow-down"></div>
+                <div class="phase-box" data-phase="optimizer">Code Optimizer</div>
+                <div class="arrow-down"></div>
+                <div class="phase-box" data-phase="codegen">Code Generator</div>
+                <div class="arrow-down"></div>
+                <div class="phase-box">Target Program</div>
+                <div class="side-boxes">
+                    <div class="side-box">Symbol Table Management</div>
+                    <div class="side-box">Error Handler</div>
+                </div>
+            </div>
+            <p>Two other important components, <strong>Symbol Table Management</strong> and <strong>Error
+                    Handling</strong>, interact with all phases.</p>
+
+            <h3>Interactive Phase Breakdown</h3>
+            <p>Let's trace a simple statement <code>let result = initial + rate * 60;</code> through the compilation
+                phases:</p>
+
+            <div class="interactive-phases">
+                <div class="phase-tabs">
+                    <button class="phase-tab active" data-target="lexical-output">1. Lexical Analysis</button>
+                    <button class="phase-tab" data-target="syntax-output">2. Syntax Analysis</button>
+                    <button class="phase-tab" data-target="semantic-output">3. Semantic Analysis</button>
+                    <button class="phase-tab" data-target="icg-output">4. Intermediate Code</button>
+                    <button class="phase-tab" data-target="optimizer-output">5. Code Optimization</button>
+                    <button class="phase-tab" data-target="codegen-output">6. Code Generation</button>
+                </div>
+                <div class="code-transformation">
+                    <div id="lexical-output" class="phase-content code-step active-step">
+                        <strong>Input:</strong> <code>let result = initial + rate * 60;</code>
+                        <strong>Output (Tokens):</strong>
+                        - <span class="keyword">KEYWORD</span>: <code>let</code>
+                        - <span class="identifier">IDENTIFIER</span>: <code>result</code>
+                        - <span class="operator">OPERATOR</span>: <code>=</code>
+                        - <span class="identifier">IDENTIFIER</span>: <code>initial</code>
+                        - <span class="operator">OPERATOR</span>: <code>+</code>
+                        - <span class="identifier">IDENTIFIER</span>: <code>rate</code>
+                        - <span class="operator">OPERATOR</span>: <code>*</code>
+                        - <span class="literal">LITERAL_NUMBER</span>: <code>60</code>
+                        - <span class="operator">SEPARATOR</span>: <code>;</code>
+                    </div>
+                    <div id="syntax-output" class="phase-content code-step">
+                        <strong>Input (Tokens):</strong> (From Lexical Analysis)
+                        <strong>Output (Abstract Syntax Tree - Simplified):</strong>
+                        <span class="operator">=</span> (ASSIGN)
+                        ├── <span class="identifier">result</span> (IDENTIFIER)
+                        └── <span class="operator">+</span> (ADD)
+                        ├── <span class="identifier">initial</span> (IDENTIFIER)
+                        └── <span class="operator">*</span> (MULTIPLY)
+                        ├── <span class="identifier">rate</span> (IDENTIFIER)
+                        └── <span class="literal">60</span> (LITERAL_NUMBER)
+                        <span class="comment">// This tree structure represents the grammatical hierarchy of the
+                            statement.</span>
+                    </div>
+                    <div id="semantic-output" class="phase-content code-step">
+                        <strong>Input (AST):</strong> (From Syntax Analysis)
+                        <strong>Output (Annotated AST / Semantic Checks):</strong>
+                        - Type Checking:
+                        - Verifies <code>initial</code>, <code>rate</code> are numeric types.
+                        - Confirms <code>60</code> is a number.
+                        - Deduces type of <code>rate * 60</code> (numeric).
+                        - Deduces type of <code>initial + (rate * 60)</code> (numeric).
+                        - Ensures <code>result</code> can be assigned a numeric value.
+                        - Symbol Table Updates:
+                        - <code>result</code>: type numeric, scope local
+                        - <code>initial</code>: type numeric, (assuming declared elsewhere)
+                        - <code>rate</code>: type numeric, (assuming declared elsewhere)
+                        <span class="comment">// All identifiers are checked for declaration and type
+                            compatibility.</span>
+                    </div>
+                    <div id="icg-output" class="phase-content code-step">
+                        <strong>Input (Annotated AST):</strong> (From Semantic Analysis)
+                        <strong>Output (Three-Address Code - Example):</strong>
+                        <span class="identifier">t1</span> = <span class="identifier">rate</span> <span
+                            class="operator">*</span> <span class="literal">60</span>
+                        <span class="identifier">t2</span> = <span class="identifier">initial</span> <span
+                            class="operator">+</span> <span class="identifier">t1</span>
+                        <span class="identifier">result</span> = <span class="identifier">t2</span>
+                        <span class="comment">// A machine-independent intermediate representation.</span>
+                    </div>
+                    <div id="optimizer-output" class="phase-content code-step">
+                        <strong>Input (Intermediate Code):</strong>
+                        <span class="identifier">t1</span> = <span class="identifier">rate</span> <span
+                            class="operator">*</span> <span class="literal">60</span>
+                        <span class="identifier">t2</span> = <span class="identifier">initial</span> <span
+                            class="operator">+</span> <span class="identifier">t1</span>
+                        <span class="identifier">result</span> = <span class="identifier">t2</span>
+                        <strong>Output (Optimized Intermediate Code - Example with Constant Folding if 'rate' and
+                            'initial' were constants):</strong>
+                        <span class="comment">// Assuming 'rate' = 2, 'initial' = 10 for this example:</span>
+                        <span class="identifier">t1</span> = <span class="literal">2</span> <span
+                            class="operator">*</span> <span class="literal">60</span> <span class="operator">→</span>
+                        <span class="identifier">t1</span> = <span class="literal">120</span> <span
+                            class="comment">(Constant Folding)</span>
+                        <span class="identifier">t2</span> = <span class="literal">10</span> <span
+                            class="operator">+</span> <span class="identifier">t1</span> <span class="operator">→</span>
+                        <span class="identifier">t2</span> = <span class="literal">10</span> <span
+                            class="operator">+</span> <span class="literal">120</span> <span class="operator">→</span>
+                        <span class="identifier">t2</span> = <span class="literal">130</span> <span
+                            class="comment">(Constant Propagation & Folding)</span>
+                        <span class="identifier">result</span> = <span class="identifier">t2</span> <span
+                            class="operator">→</span> <span class="identifier">result</span> = <span
+                            class="literal">130</span> <span class="comment">(Constant Propagation)</span>
+                        <span class="comment">// If not constants, other optimizations like register allocation planning
+                            might occur.</span>
+                    </div>
+                    <div id="codegen-output" class="phase-content code-step">
+                        <strong>Input (Optimized Intermediate Code):</strong>
+                        <span class="identifier">t1</span> = <span class="identifier">rate</span> <span
+                            class="operator">*</span> <span class="literal">60</span>
+                        <span class="identifier">t2</span> = <span class="identifier">initial</span> <span
+                            class="operator">+</span> <span class="identifier">t1</span>
+                        <span class="identifier">result</span> = <span class="identifier">t2</span>
+                        <strong>Output (Simplified Pseudo-Assembly Code):</strong>
+                        <span class="keyword">LOAD</span> R1, [address_of_rate] <span class="comment">// Load 'rate'
+                            into register R1</span>
+                        <span class="keyword">MULI</span> R1, R1, 60 <span class="comment">// Multiply R1 by immediate
+                            value 60</span>
+                        <span class="keyword">LOAD</span> R2, [address_of_initial] <span class="comment">// Load
+                            'initial' into register R2</span>
+                        <span class="keyword">ADD</span> R2, R2, R1 <span class="comment">// Add R1 to R2, store in
+                            R2</span>
+                        <span class="keyword">STORE</span> [address_of_result], R2 <span class="comment">// Store R2
+                            into memory location for 'result'</span>
+                        <span class="comment">// This is a machine-dependent representation.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="compiler-structure">
+            <h2>Compiler Structure</h2>
+            <p>A compiler is often structured into three main parts: the <strong>Frontend</strong>, the (optional)
+                <strong>Middle-end</strong>, and the <strong>Backend</strong>. This modular design promotes portability
+                and reusability.
+            </p>
+            <div class="diagram"
+                style="display: flex; justify-content: space-around; align-items: flex-start; text-align:left;">
+                <div
+                    style="flex:1; padding:10px; border:1px solid var(--accent-color-blue); border-radius:5px; margin:5px;">
+                    <h3 style="color:var(--accent-color-yellow); margin-top:0;">Frontend</h3>
+                    <p>Machine-Independent. Deals with the source language.</p>
+                    <ul>
+                        <li>Lexical Analysis</li>
+                        <li>Syntax Analysis</li>
+                        <li>Semantic Analysis</li>
+                        <li>(Often) Intermediate Code Generation</li>
+                    </ul>
+                </div>
+                <div style="display:flex; align-items:center; margin: 0 10px;">
+                    <span class="diagram-arrow" style="font-size: 2.5rem;">→</span>
+                </div>
+                <div
+                    style="flex:1; padding:10px; border:1px solid var(--accent-color-blue); border-radius:5px; margin:5px;">
+                    <h3 style="color:var(--accent-color-yellow); margin-top:0;">Middle-end (Optional)</h3>
+                    <p>Machine-Independent. Performs optimizations on IR.</p>
+                    <ul>
+                        <li>Analysis (Data flow, etc.)</li>
+                        <li>Transformations (Loop opt, etc.)</li>
+                    </ul>
+                </div>
+                <div style="display:flex; align-items:center; margin: 0 10px;">
+                    <span class="diagram-arrow" style="font-size: 2.5rem;">→</span>
+                </div>
+                <div
+                    style="flex:1; padding:10px; border:1px solid var(--accent-color-blue); border-radius:5px; margin:5px;">
+                    <h3 style="color:var(--accent-color-yellow); margin-top:0;">Backend</h3>
+                    <p>Machine-Dependent. Deals with the target architecture.</p>
+                    <ul>
+                        <li>Instruction Selection</li>
+                        <li>Register Allocation</li>
+                        <li>Machine-Specific Optimizations</li>
+                        <li>Code Generation (Target Code)</li>
+                    </ul>
+                </div>
+            </div>
+            <p>This separation allows, for example, multiple frontends (for different source languages like C, Java,
+                Python) to share a common middle-end and backend infrastructure. Similarly, a single frontend can target
+                multiple architectures (x86, ARM, MIPS) by using different backends.</p>
+        </section>
+
+        <section id="interactive-demo-tokenizer">
+            <h2>Interactive Demo: Live Tokenizer</h2>
+            <p>Try typing some simple code (e.g., <code>var count = 100; if (count > 50) print(count);</code>) into the
+                text area below and see how a basic lexical analyzer (tokenizer) breaks it down into a stream of tokens.
+            </p>
+            <div class="tokenizer-demo">
+                <textarea id="tokenizer-input" placeholder="Enter code here... e.g., x = y + 10 * z;"></textarea>
+                <button id="tokenize-btn">Tokenize It!</button>
+                <div id="tokenizer-output-title" style="margin-top: 15px; font-weight:bold; display:none;">Tokens:</div>
+                <pre id="tokenizer-output"></pre>
+            </div>
+        </section>
+
+    </main>
+
+    <nav class="page-navigation">
+        <a href="topic-2.html" class="next-topic-button">Next Topic: Lexical Analysis →</a>
+    </nav>
+
+    <footer>
+        <p>© 2024 Eduvision. All rights reserved. Empowering learning in Compiler Design.</p>
+    </footer>
+
+    <script>
+        // Scroll animations for sections
+        const sections = document.querySelectorAll('section');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Interactive Phases Tabs
+        const phaseTabs = document.querySelectorAll('.phase-tab');
+        const phaseContents = document.querySelectorAll('.phase-content');
+
+        phaseTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                phaseTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                const targetId = tab.dataset.target;
+                phaseContents.forEach(content => {
+                    content.classList.remove('active-step');
+                    if (content.id === targetId) {
+                        content.classList.add('active-step');
+                    }
+                });
+            });
+        });
+
+        // Basic Tokenizer Demo
+        const tokenizerInput = document.getElementById('tokenizer-input');
+        const tokenizeBtn = document.getElementById('tokenize-btn');
+        const tokenizerOutput = document.getElementById('tokenizer-output');
+        const tokenizerOutputTitle = document.getElementById('tokenizer-output-title');
+
+        tokenizeBtn.addEventListener('click', () => {
+            const code = tokenizerInput.value;
+            if (!code.trim()) {
+                tokenizerOutput.textContent = "Please enter some code to tokenize.";
+                tokenizerOutputTitle.style.display = 'none';
+                return;
+            }
+
+            const tokens = [];
+            // Very basic regex-based tokenizer for demonstration
+            // Order matters for matching (keywords before identifiers)
+            const tokenPatterns = [
+                { type: 'COMMENT_SL', regex: /^\/\/.*/ }, // Single line comment
+                { type: 'COMMENT_ML', regex: /^\/\*[\s\S]*?\*\// }, // Multi-line comment (basic)
+                { type: 'KEYWORD', regex: /^\b(let|var|const|if|else|while|for|function|return|class|true|false|null)\b/ },
+                { type: 'IDENTIFIER', regex: /^[a-zA-Z_][a-zA-Z0-9_]*/ },
+                { type: 'NUMBER', regex: /^[0-9]+(\.[0-9]+)?/ }, // Integer or float
+                { type: 'STRING', regex: /^"[^"]*"|'[^']*'/ }, // String literals
+                { type: 'OPERATOR', regex: /^[+\-*/%=<>&|!^~?:]+|==|!=|<=|>=|\+\+|--|&&|\|\|/ },
+                { type: 'SEPARATOR', regex: /^[;,(){}\[\]\.]/ },
+                { type: 'WHITESPACE', regex: /^\s+/ }, // To be ignored mostly
+                { type: 'UNKNOWN', regex: /^./ } // Match any other single character
+            ];
+
+            let remainingCode = code;
+            while (remainingCode.length > 0) {
+                let matched = false;
+                for (const pattern of tokenPatterns) {
+                    const match = remainingCode.match(pattern.regex);
+                    if (match && match[0]) {
+                        const value = match[0];
+                        if (pattern.type !== 'WHITESPACE' && pattern.type !== 'COMMENT_SL' && pattern.type !== 'COMMENT_ML') { // Ignore whitespace and comments for output
+                            tokens.push({ type: pattern.type, value: value });
+                        }
+                        remainingCode = remainingCode.substring(value.length);
+                        matched = true;
+                        break;
+                    }
+                }
+                if (!matched && remainingCode.length > 0) { // Should be caught by UNKNOWN
+                    // This case should ideally not be hit if UNKNOWN is last
+                    tokens.push({ type: 'ERROR', value: remainingCode[0] });
+                    remainingCode = remainingCode.substring(1);
+                }
+            }
+
+            if (tokens.length > 0) {
+                tokenizerOutputTitle.style.display = 'block';
+                tokenizerOutput.textContent = tokens.map(token => `(${token.type}, "${token.value}")`).join('\n');
+            } else {
+                tokenizerOutputTitle.style.display = 'none';
+                tokenizerOutput.textContent = "No tokens recognized (perhaps only whitespace or comments).";
+            }
+        });
+
+    </script>
+</body>
+
+</html>

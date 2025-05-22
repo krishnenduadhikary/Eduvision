@@ -1,0 +1,3396 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unsupervised Learning Algorithms</title>
+    <meta name="description"
+        content="Explore Unsupervised Learning algorithms including Clustering (K-Means, Hierarchical, DBSCAN), Association Rule Mining (Apriori, FP-Growth), and Dimensionality Reduction (PCA, t-SNE).">
+    <meta name="keywords"
+        content="Unsupervised Learning, Clustering, K-Means, Hierarchical Clustering, DBSCAN, Mean-Shift, Spectral Clustering, Association Rule Learning, Apriori, FP-Growth, ECLAT, Dimensionality Reduction, PCA, t-SNE, LDA, NMF, LLE, Isomap">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* CSS from topic-1.html - For brevity, imagine all the CSS from the previous example is here */
+        /* Key structural CSS will be included, specific element styles might be summarized */
+        :root {
+            --primary-color-light: #3498db;
+            /* Blue */
+            --secondary-color-light: #2ecc71;
+            /* Green */
+            --accent-color-light: #e67e22;
+            /* Orange */
+            --background-color-light: #f4f7f6;
+            --text-color-light: #333;
+            --card-bg-light: #ffffff;
+            --border-color-light: #e0e0e0;
+            --code-bg-light: #eef;
+
+            --primary-color-dark: #5dade2;
+            /* Lighter Blue */
+            --secondary-color-dark: #58d68d;
+            /* Lighter Green */
+            --accent-color-dark: #f5b041;
+            /* Lighter Orange */
+            --background-color-dark: #1e272e;
+            --text-color-dark: #f0f0f0;
+            --card-bg-dark: #2c3a47;
+            --border-color-dark: #444;
+            --code-bg-dark: #2a2a40;
+
+            --primary-color: var(--primary-color-light);
+            --secondary-color: var(--secondary-color-light);
+            --accent-color: var(--accent-color-light);
+            --background-color: var(--background-color-light);
+            --text-color: var(--text-color-light);
+            --card-bg: var(--card-bg-light);
+            --border-color: var(--border-color-light);
+            --code-bg: var(--code-bg-light);
+
+            --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --font-mono: 'Courier New', Courier, monospace;
+            --font-logo: 'Nunito', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            --primary-color: var(--primary-color-dark);
+            --secondary-color: var(--secondary-color-dark);
+            --accent-color: var(--accent-color-dark);
+            --background-color: var(--background-color-dark);
+            --text-color: var(--text-color-dark);
+            --card-bg: var(--card-bg-dark);
+            --border-color: var(--border-color-dark);
+            --code-bg: var(--code-bg-dark);
+        }
+
+        /* Eduvision Logo (Same as topic-1) */
+        .eduvishion-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1050;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvishion-logo .text-2xl {
+            font-family: var(--font-logo);
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvishion-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvishion-logo .text-yellow-300 {
+            color: #fde047 !important;
+        }
+
+        .eduvishion-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+        }
+
+        .eduvishion-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvishion-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Navbar (Same as topic-1) */
+        .navbar {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-left-spacer {
+            flex-basis: 50px;
+            flex-shrink: 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .navbar-brand i {
+            margin-right: 0.5rem;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            flex-basis: 50px;
+            flex-shrink: 0;
+            text-align: right;
+        }
+
+        /* Sidebar (Same as topic-1) */
+        .sidebar {
+            position: fixed;
+            top: 77px;
+            left: 0;
+            width: 280px;
+            height: calc(100vh - 77px);
+            background-color: var(--card-bg);
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 1px solid var(--border-color);
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li a {
+            display: block;
+            padding: 8px 0;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s, padding-left 0.2s, background-color 0.2s;
+            border-radius: 4px;
+        }
+
+        .sidebar ul li a.sub-item {
+            padding-left: 15px;
+            font-size: 0.9rem;
+        }
+
+        .sidebar ul li a.sub-item:hover {
+            padding-left: 25px;
+        }
+
+        .sidebar ul li a.sub-item.active {
+            padding-left: 25px;
+        }
+
+        .sidebar ul li a:hover {
+            color: var(--accent-color);
+            padding-left: 10px;
+        }
+
+        .sidebar ul li a.active {
+            color: var(--accent-color);
+            padding-left: 10px;
+            font-weight: bold;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-mode .sidebar ul li a.active {
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Main Content Area (Same as topic-1) */
+        .main-content {
+            margin-left: 300px;
+            padding: 2rem 3rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 4rem 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-section p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+
+        /* Syllabus Bar */
+        .syllabus-bar-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 0.75rem;
+            background-color: var(--card-bg);
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.07);
+            border: 1px solid var(--border-color);
+        }
+
+        .syllabus-bar-back-link {
+            display: flex;
+            align-items: center;
+            font-size: 0.875rem;
+            color: #2563eb;
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            text-decoration: none;
+            transition: background-color 0.15s, color 0.15s;
+            margin-bottom: 0.5rem;
+        }
+
+        .dark-mode .syllabus-bar-back-link {
+            color: #5dade2;
+        }
+
+        .dark-mode .syllabus-bar-back-link:hover {
+            color: #8ecae6;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .syllabus-bar-back-link:hover {
+            color: #1d4ed8;
+            background-color: #eff6ff;
+        }
+
+        .syllabus-bar-back-link svg {
+            height: 1.25rem;
+            width: 1.25rem;
+            margin-right: 0.375rem;
+            fill: currentColor;
+        }
+
+        .syllabus-bar-topic-badge {
+            background-color: #2563eb;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.375rem 1rem;
+            border-radius: 9999px;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        @media (min-width: 640px) {
+            .syllabus-bar-container {
+                flex-direction: row;
+            }
+
+            .syllabus-bar-back-link {
+                margin-bottom: 0;
+            }
+
+            .syllabus-bar-topic-badge {
+                font-size: 0.875rem;
+            }
+        }
+
+        /* General Content Styles (Same as topic-1) */
+        section {
+            margin-bottom: 3rem;
+            padding-top: 70px;
+            margin-top: -70px;
+        }
+
+        h2 {
+            /* Main sections: Clustering, Association, Dimensionality */
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            /* Algorithm names: K-Means, Apriori, PCA */
+            font-size: 1.8rem;
+            /* Slightly larger for main algorithm names */
+            color: var(--secondary-color);
+            /* Using secondary for algorithm names */
+            margin-top: 2.5rem;
+            /* More space before a new algorithm */
+            margin-bottom: 1.2rem;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 0.4rem;
+        }
+
+        h4 {
+            /* Sub-headings within an algorithm: How it works, Python Implementation */
+            font-size: 1.4rem;
+            color: var(--accent-color);
+            margin-top: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        h5 {
+            /* Further sub-headings: Step 1, Pros/Cons */
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            opacity: 0.9;
+            margin-top: 1.2rem;
+            margin-bottom: 0.7rem;
+        }
+
+
+        p,
+        li {
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        ul,
+        ol {
+            padding-left: 25px;
+            margin-bottom: 1rem;
+        }
+
+        ul li,
+        ol li {
+            margin-bottom: 0.5rem;
+        }
+
+        .callout {
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 5px solid var(--accent-color);
+            background-color: var(--card-bg);
+            border-radius: 0 5px 5px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .callout.info {
+            border-left-color: var(--primary-color);
+        }
+
+        .callout.success {
+            border-left-color: var(--secondary-color);
+        }
+
+        .callout.warning {
+            border-left-color: #f39c12;
+        }
+
+        details {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+        }
+
+        summary {
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--primary-color);
+            padding: 0.5rem 0;
+        }
+
+        summary::marker {
+            color: var(--accent-color);
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            color: var(--text-color);
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+            /* Slightly smaller for better fit */
+            border: 1px solid var(--border-color);
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        code {
+            /* Inline code */
+            font-family: var(--font-mono);
+            background-color: var(--code-bg);
+            padding: 0.1em 0.3em;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+
+        /* Diagram Styles (similar to agent-diagram) */
+        .algorithm-diagram,
+        .output-plot {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 1.5rem auto;
+            max-width: 600px;
+            /* Can adjust per diagram */
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+        }
+
+        .algorithm-diagram img,
+        .output-plot img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-top: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .algorithm-diagram p,
+        .output-plot p {
+            font-size: 0.9em;
+            margin-top: 0.5em;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .diagram-placeholder {
+            border: 2px dashed var(--border-color);
+            padding: 20px;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            opacity: 0.7;
+            font-style: italic;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            font-size: 0.95em;
+        }
+
+        th,
+        td {
+            border: 1px solid var(--border-color);
+            padding: 8px 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--code-bg);
+            /* Light background for headers */
+            font-weight: bold;
+        }
+
+        /* Responsive table */
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+
+        /* New Footer Styles (Same as topic-1, with link updates) */
+        .new-footer-container {
+            margin-top: 4rem;
+            padding-top: 2.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .new-footer-buttons-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            align-items: center;
+        }
+
+        .new-footer-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            background-color: #2563eb;
+            color: white !important;
+            border-radius: 9999px;
+            text-decoration: none;
+            transition: background-color 0.15s, box-shadow 0.15s;
+            font-weight: 500;
+            font-size: 0.875rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            min-width: 280px;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .new-footer-button:hover {
+            background-color: #1d4ed8;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .new-footer-button:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+
+        .new-footer-print-link {
+            margin-top: 1rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .new-footer-print-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (min-width: 640px) {
+            .new-footer-buttons-wrapper {
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 1rem;
+            }
+
+            .new-footer-button {
+                margin-bottom: 0;
+            }
+        }
+
+        /* Quiz Styles (Same as topic-1) */
+        .quiz-container {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-question {
+            margin-bottom: 15px;
+        }
+
+        .quiz-question p strong {
+            color: var(--text-color);
+        }
+
+
+        .quiz-options label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .quiz-options input {
+            margin-right: 8px;
+        }
+
+        .quiz-feedback {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Responsive Adjustments (Same as topic-1) */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                box-shadow: none;
+                top: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+
+            .navbar {
+                padding: 0.8rem 1rem;
+            }
+
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+
+            .nav-left-spacer,
+            .theme-toggle {
+                flex-basis: 40px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .eduvishion-logo {
+                top: 12px;
+                left: 12px;
+            }
+
+            .eduvishion-logo .text-2xl {
+                font-size: 1.3rem;
+            }
+
+            .eduvishion-logo svg {
+                height: 1.2em;
+                width: 1.2em;
+            }
+
+            .navbar {
+                padding: 1rem;
+                justify-content: center;
+                position: relative;
+            }
+
+            .nav-left-spacer {
+                display: none;
+            }
+
+            .navbar-brand {
+                flex-grow: 0;
+                margin-right: auto;
+                margin-left: 50px;
+                /* Adjusted for Eduvision logo space */
+                font-size: 1.3rem;
+            }
+
+            .theme-toggle {
+                position: absolute;
+                right: 1rem;
+                top: 50%;
+                transform: translateY(-50%);
+                flex-basis: auto;
+                font-size: 1.2rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-section p {
+                font-size: 1.1rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            h3 {
+                font-size: 1.5rem;
+            }
+
+            h4 {
+                font-size: 1.2rem;
+            }
+
+            h5 {
+                font-size: 1.1rem;
+            }
+
+
+            .syllabus-bar-container {
+                padding: 0.5rem;
+            }
+
+            .syllabus-bar-back-link {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.6rem;
+            }
+
+            .syllabus-bar-topic-badge {
+                font-size: 0.7rem;
+                padding: 0.3rem 0.8rem;
+            }
+
+            .new-footer-button {
+                font-size: 0.8rem;
+                padding: 0.6rem 1.2rem;
+                min-width: auto;
+                width: 90%;
+            }
+
+            .new-footer-buttons-wrapper {
+                flex-direction: column;
+            }
+
+            .new-footer-buttons-wrapper .new-footer-button:first-child {
+                margin-bottom: 0.5rem;
+            }
+
+            .algorithm-diagram,
+            .output-plot {
+                max-width: 100%;
+                padding: 10px;
+            }
+        }
+
+        /* Print Styles (Same as topic-1) */
+        @media print {
+            body {
+                font-size: 10pt;
+                color: #000 !important;
+                background-color: #fff !important;
+            }
+
+            .navbar,
+            .sidebar,
+            .theme-toggle,
+            .hero-section .btn,
+            .quiz-container,
+            .new-footer-container,
+            details summary::marker,
+            .eduvishion-logo,
+            .syllabus-bar-container,
+            .new-footer-print-link {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 0;
+            }
+
+            section {
+                padding-top: 0;
+                margin-top: 0;
+                margin-bottom: 1.5rem;
+                page-break-after: auto;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5 {
+                color: #000 !important;
+                border: none !important;
+                page-break-after: avoid;
+            }
+
+            .callout {
+                border-left: 3px solid #ccc !important;
+                background-color: #f9f9f9 !important;
+            }
+
+            a {
+                text-decoration: none;
+                color: #000 !important;
+            }
+
+            a[href^="http"]:after {
+                content: " (" attr(href) ")";
+            }
+
+            pre {
+                background-color: #f0f0f0 !important;
+                border: 1px solid #ccc !important;
+                color: #000 !important;
+                page-break-inside: avoid;
+                white-space: pre-wrap;
+                /* Ensure code wraps in print */
+                word-wrap: break-word;
+            }
+
+            table,
+            .algorithm-diagram,
+            .output-plot {
+                page-break-inside: avoid;
+            }
+
+            .algorithm-diagram img,
+            .output-plot img {
+                max-width: 80% !important;
+                /* Control image size in print */
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvishion-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../../index.html" class="flex items-center group">
+                <span class="text-white">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+                    fill="none">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-white">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-left-spacer"></div>
+        <a href="#" class="navbar-brand"><i class="fas fa-cogs"></i> Unsupervised Learning</a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+        </button>
+    </nav>
+
+    <aside class="sidebar" id="sidebar">
+        <h3>Table of Contents</h3>
+        <ul id="toc"></ul>
+    </aside>
+
+    <main class="main-content">
+        <header class="hero-section">
+            <h1>Unsupervised Learning Algorithms</h1>
+            <p>Discover hidden patterns and structures in data without predefined labels.</p>
+        </header>
+
+        <div class="syllabus-bar-container">
+            <a href="../ai.html" class="syllabus-bar-back-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                        clip-rule="evenodd" />
+                </svg>
+                Back to Syllabus
+            </a>
+            <div class="syllabus-bar-topic-badge">
+                Topic 8
+            </div>
+        </div>
+
+        <section id="intro-unsupervised">
+            <h2>Introduction to Unsupervised Learning</h2>
+            <p>Unsupervised learning is a type of machine learning where the model is trained on an unlabeled dataset.
+                The goal is to find hidden patterns, structures, or relationships within the data without any prior
+                guidance on what those patterns might be. Unlike supervised learning, there are no target variables or
+                output labels.</p>
+            <p>There are mainly 3 types of Algorithms which are used for Unsupervised dataset:</p>
+            <ul>
+                <li><strong>Clustering:</strong> Grouping similar data points together.</li>
+                <li><strong>Association Rule Learning:</strong> Discovering relationships between variables in large
+                    datasets (e.g., "if X is bought, Y is also likely bought").</li>
+                <li><strong>Dimensionality Reduction:</strong> Reducing the number of variables (features) in a dataset
+                    while preserving important information.</li>
+            </ul>
+        </section>
+
+        <section id="clustering-algorithms">
+            <h2>1. Clustering Algorithms</h2>
+            <p>Clustering in unsupervised machine learning is the process of grouping unlabeled data into clusters based
+                on their similarities. The goal of clustering is to identify patterns and relationships in the data
+                without any prior knowledge of the data's meaning.</p>
+            <p>Broadly this technique is applied to group data based on different patterns, such as similarities or
+                differences, our machine model finds. These algorithms are used to process raw, unclassified data
+                objects into groups. For example, we might use this technique to group clients based on the input
+                parameters provided by our data.</p>
+            <h4>Some common clustering algorithms:</h4>
+            <ul>
+                <li><a href="#kmeans-clustering">K-means Clustering</a>: Groups data into K clusters based on how close
+                    the points are to each other.</li>
+                <li><a href="#hierarchical-clustering">Hierarchical Clustering</a>: Creates clusters by building a tree
+                    step-by-step, either merging or splitting groups.</li>
+                <li><a href="#dbscan-clustering">Density-Based Clustering (DBSCAN)</a>: Finds clusters in dense areas
+                    and treats scattered points as noise.</li>
+                <li><a href="#mean-shift-clustering">Mean-Shift Clustering</a>: Discovers clusters by moving points
+                    toward the most crowded areas.</li>
+                <li><a href="#spectral-clustering">Spectral Clustering</a>: Groups data by analyzing connections between
+                    points using graphs.</li>
+            </ul>
+
+            <h3 id="kmeans-clustering">K-means Clustering</h3>
+            <p>K-Means Clustering is an Unsupervised Machine Learning algorithm which groups unlabeled dataset into
+                different clusters. It is used to organize data into groups based on their similarity.</p>
+            <h4>Understanding K-means Clustering</h4>
+            <div class="algorithm-diagram">
+                <div class="diagram-placeholder">Diagram: 01 Initialize Centroids → 02 Update Centroids → 03 Assign
+                    Points to Clusters → 04 Convergence Check</div>
+                <p>The K-Means algorithm iteratively performs these four steps.</p>
+            </div>
+
+            <h4>Use Case of K-Means Clustering</h4>
+            <div class="algorithm-diagram">
+                <div class="diagram-placeholder">Diagram showing four boxes: 01 Customer Segmentation (Grouping
+                    customers based on behavior), 02 Market Research (Analyzing market trends and consumer preferences),
+                    03 Image Compression (Reducing the size of images), 04 Anomaly Detection (Identifying unusual
+                    patterns).</div>
+            </div>
+
+            <h4>How k-means clustering works?</h4>
+            <p>We are given a data set of items with certain features and values for these features like a vector. The
+                task is to categorize those items into groups. To achieve this we will use the K-means algorithm. 'K' in
+                the name of the algorithm represents the number of groups/clusters we want to classify our items into.
+            </p>
+            <div class="algorithm-diagram">
+                <div class="diagram-placeholder">Diagram: Unlabelled Data (scattered points) → K-Means → Labelled
+                    Clusters (points grouped into three distinct colored circles with centroids marked 'X').</div>
+                <p>K means Clustering</p>
+            </div>
+            <p>The algorithm will categorize the items into k groups or clusters of similarity. To calculate that
+                similarity we will use the <strong class="highlight">Euclidean distance</strong> as a measurement. The
+                algorithm works as follows:</p>
+            <ol>
+                <li>First we randomly initialize k points called means or cluster centroids.</li>
+                <li>We categorize each item to its closest mean and we update the mean's coordinates, which are the
+                    averages of the items categorized in that cluster so far.</li>
+                <li>We repeat the process for a given number of iterations and at the end, we have our clusters.</li>
+            </ol>
+            <p>The "points" mentioned above are called means because they are the mean values of the items categorized
+                in them. To initialize these means, we have a lot of options. An intuitive method is to initialize the
+                means at random items in the data set. Another method is to initialize the means at random values
+                between the boundaries of the data set. For example for a feature x the items have values in [0,3] we
+                will initialize the means with values for x at [0,3].</p>
+
+            <h4>Implementation of K-Means Clustering in Python</h4>
+            <p>We will use blobs datasets and show how clusters are made.</p>
+            <h5>Step 1: Importing the necessary libraries</h5>
+            <p>We are importing Numpy, Matplotlib and scikit learn.</p>
+            <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_blobs</code></pre>
+
+            <h5>Step 2: Create custom dataset with make_blobs and plot it</h5>
+            <pre><code>X,y = make_blobs(n_samples = 500,n_features = 2,centers = 3,random_state = 23)
+
+fig = plt.figure(0)
+plt.grid(True)
+plt.scatter(X[:,0],X[:,1])
+plt.show()</code></pre>
+            <div class="output-plot">
+                <div class="diagram-placeholder">Output plot showing three distinct clusters of data points.</div>
+                <p>Clustering dataset</p>
+            </div>
+
+            <h5>Step 3: Initializing random centroids</h5>
+            <p>The code initializes three clusters for K-means clustering. It sets a random seed and generates random
+                cluster centers within a specified range and creates an empty list of points for each cluster.</p>
+            <pre><code>k = 3
+clusters = {}
+np.random.seed(23)
+
+for idx in range(k):
+    center = 2*(2*np.random.random((X.shape[1],))-1) # Example of random initialization
+    points = []
+    cluster = {
+        'center': center,
+        'points': points
+    }
+    clusters[idx] = cluster</code></pre>
+            <p>Output (example):</p>
+            <pre><code>{0: {'center': array([ 0.06919154,  1.78785042]), 'points': []},
+ 1: {'center': array([ 1.06183904, -0.87041662]), 'points': []},
+ 2: {'center': array([-1.11581855,  0.74488834]), 'points': []}}</code></pre>
+            <p>Random Centroids</p>
+
+            <h5>Step 4: Plotting random initialize center with data points</h5>
+            <pre><code>plt.scatter(X[:,0],X[:,1])
+plt.grid(True)
+for i in clusters:
+    center = clusters[i]['center']
+    plt.scatter(center[0],center[1],marker = '*',c = 'red')
+plt.show()</code></pre>
+            <div class="output-plot">
+                <div class="diagram-placeholder">Output plot showing data points with three red stars as initial random
+                    cluster centers.</div>
+                <p>Data points with random center</p>
+            </div>
+            <p>The plot displays a scatter plot of data points X[:,0], X[:,1]) with grid lines. It also marks the
+                initial cluster centers (red stars) generated for K-means clustering.</p>
+
+            <h5>Step 5: Defining Euclidean distance</h5>
+            <pre><code>def distance(p1,p2):
+    return np.sqrt(np.sum((p1-p2)**2))</code></pre>
+
+            <h5>Step 6: Creating function Assign and Update the cluster center</h5>
+            <p>This step assigns data points to the nearest cluster center and the M-step updates cluster centers based
+                on the mean of assigned points in K-means clustering.</p>
+            <pre><code>def assign_clusters(X, clusters):
+    for idx in range(X.shape[0]):
+        dist = []
+        curr_x = X[idx]
+        for i in range(k):
+            dis = distance(curr_x,clusters[i]['center'])
+            dist.append(dis)
+        curr_cluster = np.argmin(dist)
+        clusters[curr_cluster]['points'].append(curr_x)
+    return clusters
+
+def update_clusters(X, clusters):
+    for i in range(k):
+        points = np.array(clusters[i]['points'])
+        if points.shape[0] > 0:
+            new_center = points.mean(axis =0)
+            clusters[i]['center'] = new_center
+            clusters[i]['points'] = [] # Clear points for next iteration
+    return clusters</code></pre>
+
+            <h5>Step 7: Creating function to Predict the cluster for the datapoints</h5>
+            <pre><code>def pred_cluster(X, clusters):
+    pred = []
+    for i in range(X.shape[0]):
+        dist = []
+        for j in range(k):
+            dist.append(distance(X[i],clusters[j]['center']))
+        pred.append(np.argmin(dist))
+    return pred</code></pre>
+
+            <h5>Step 8: Assign, Update and predict the cluster center</h5>
+            <p>(Assuming a loop for iterations, e.g., 10 iterations)</p>
+            <pre><code># Example: Iteratively assign and update
+for _ in range(10): # Number of iterations
+    clusters = assign_clusters(X,clusters)
+    clusters = update_clusters(X,clusters)
+pred = pred_cluster(X,clusters)</code></pre>
+
+            <h5>Step 9: Plotting data points with their predicted cluster center</h5>
+            <pre><code>plt.scatter(X[:,0],X[:,1],c = pred)
+for i in clusters:
+    center = clusters[i]['center']
+    plt.scatter(center[0],center[1],marker = '^',c = 'red')
+plt.show()</code></pre>
+            <div class="output-plot">
+                <div class="diagram-placeholder">Output plot showing data points colored by their predicted clusters
+                    (e.g., purple, yellow, teal), with red triangles indicating the final cluster centers.</div>
+                <p>K-means Clustering</p>
+            </div>
+            <p>The plot shows data points colored by their predicted clusters. The red markers represent the updated
+                cluster centers after the E-M steps in the K-means clustering algorithm.</p>
+
+            <h3 id="hierarchical-clustering">Hierarchical Clustering</h3>
+            <p>In the real world data often lacks a target variable making supervised learning impractical. Have you
+                ever wondered how social networks like Facebook recommend friends or how scientists group similar
+                species together? These are some examples of hierarchical clustering that we will learn about in this
+                article.</p>
+            <h4>Why hierarchical clustering?</h4>
+            <p>Hierarchical clustering is a technique used to group similar data points together based on their
+                similarity creating a hierarchy or tree-like structure. The key idea is to begin with each data point as
+                its own separate cluster and then progressively merge or split them based on their similarity.</p>
+            <p>Lets understand this with the help of an example</p>
+            <p>Imagine you have four fruits with different weights: an <strong>apple (100g), a banana (120g), a cherry
+                    (50g), and a grape (30g)</strong>. Hierarchical clustering starts by treating each <em>fruit as its
+                    own group</em>.</p>
+            <ul>
+                <li>It then merges the closest groups based on their weights.</li>
+                <li>First, the cherry and grape are grouped together because they are the lightest.</li>
+                <li>Next, the apple and banana are grouped together.</li>
+            </ul>
+            <p>Finally, all the fruits are merged into one large group, showing how hierarchical clustering
+                progressively combines the most similar data points.</p>
+
+            <h4>Getting Started with Dendrogram</h4>
+            <p>A dendrogram is like a family tree for clusters. It shows how individual data points or groups of data
+                merge together. The bottom shows each data point as its own group, and as you move up, similar groups
+                are combined. The lower the merge point, the more similar the groups are. It helps you see how things
+                are grouped step by step.</p>
+            <div class="algorithm-diagram">
+                <div class="diagram-placeholder">Left side: Scatter plot with points P, Q, R, S, T, U. Right side:
+                    Dendrogram showing hierarchical clustering of these points. P and Q merge first, then S and T merge,
+                    R merges with ST, then U merges with RST, and finally PQ merges with RSTU.</div>
+                <p>Dendrogram</p>
+            </div>
+            <p>In this image, on the left side, there are five points labeled P, Q, R, S, and T (U is also shown in
+                diagram but not in text). These represent individual data points that are being clustered. On the right
+                side, there's a dendrogram, which shows how these points are grouped together step by step.</p>
+            <ul>
+                <li>At the bottom of the dendrogram, the points P, Q, R, S, and T are all separate.</li>
+                <li>As you move up, the closest points are merged into a single group.</li>
+                <li>The lines connecting the points show how they are progressively merged based on similarity.</li>
+                <li>The height at which they are connected shows how similar the points are to each other; the shorter
+                    the line, the more similar they are.</li>
+            </ul>
+
+            <h4>Types of Hierarchical Clustering</h4>
+            <p>Now that we understand the basics of hierarchical clustering, let's explore the two main types of
+                hierarchical clustering.</p>
+            <ol>
+                <li>Agglomerative Clustering</li>
+                <li>Divisive clustering</li>
+            </ol>
+
+            <h5>Hierarchical Agglomerative Clustering</h5>
+            <p>It is also known as the <strong>bottom-up approach</strong> or hierarchical agglomerative clustering
+                (HAC). Unlike flat clustering hierarchical clustering provides a structured way to group data. This
+                clustering algorithm does not require us to prespecify the number of clusters. Bottom-up algorithms
+                treat each data as a singleton cluster at the outset and then successively agglomerate pairs of clusters
+                until all clusters have been merged into a single cluster that contains all data.</p>
+            <div class="algorithm-diagram">
+                <div class="diagram-placeholder">Diagram showing agglomerative clustering: A, B, C, D, E, F start as
+                    individual clusters. Step 1: BC merge, DE merge. Step 2: BCD merge (error in image, should be BC and
+                    DEF or similar). Step 3: BCD and DEF merge. Step 4: ABCDEF merges. (The provided image has B,C ->
+                    BC; D,E -> DE; then BC, DE, F -> BC, DEF; then BC, DEF -> BCDEF; then A, BCDEF -> ABCDEF)</div>
+                <p>Hierarchical Agglomerative Clustering</p>
+            </div>
+
+            <h5>Workflow for Hierarchical Agglomerative clustering</h5>
+            <ol>
+                <li><strong>Start with individual points:</strong> Each data point is its own cluster. For example if
+                    you have 5 data points you start with 5 clusters each containing just one data point.</li>
+                <li><strong>Calculate distances between clusters:</strong> Calculate the distance between every pair of
+                    clusters. Initially since each cluster has one point this is the distance between the two data
+                    points.</li>
+                <li><strong>Merge the closest clusters:</strong> Identify the two clusters with the smallest distance
+                    and merge them into a single cluster.</li>
+                <li><strong>Update distance matrix:</strong> After merging you now have one less cluster. Recalculate
+                    the distances between the new cluster and the remaining clusters.</li>
+                <li><strong>Repeat steps 3 and 4:</strong> Keep merging the closest clusters and updating the distance
+                    matrix until you have only one cluster left.</li>
+                <li><strong>Create a dendrogram:</strong> As the process continues you can visualize the merging of
+                    clusters using a tree-like diagram called a dendrogram. It shows the hierarchy of how clusters are
+                    merged.</li>
+            </ol>
+
+            <h5>Python implementation of the above algorithm using the scikit-learn library:</h5>
+            <pre><code>from sklearn.cluster import AgglomerativeClustering
+import numpy as np
+
+X = np.array([[1, 2], [1, 4], [1, 0],
+              [4, 2], [4, 4], [4, 0]])
+
+clustering = AgglomerativeClustering(n_clusters=2).fit(X)
+print(clustering.labels_)</code></pre>
+            <p>Output:</p>
+            <pre><code>[1, 1, 1, 0, 0, 0]</code></pre>
+
+            <h5>Hierarchical Divisive clustering</h5>
+            <p>It is also known as a <strong>top-down approach</strong>. This algorithm also does not require to
+                prespecify the number of clusters. Top-down clustering requires a method for splitting a cluster that
+                contains the whole data and proceeds by splitting clusters recursively until individual data have been
+                split into singleton clusters.</p>
+            <h5>Workflow for Hierarchical Divisive clustering:</h5>
+            <ol>
+                <li><strong>Start with all data points in one cluster:</strong> Treat the entire dataset as a single
+                    large cluster.</li>
+                <li><strong>Split the cluster:</strong> Divide the cluster into two smaller clusters. The division is
+                    typically done by finding the two most dissimilar points in the cluster and using them to separate
+                    the data into two parts.</li>
+                <li><strong>Repeat the process:</strong> For each of the new clusters, repeat the splitting process:
+                    <ol type="a">
+                        <li>Choose the cluster with the most dissimilar points.</li>
+                        <li>Split it again into two smaller clusters.</li>
+                    </ol>
+                </li>
+                <li><strong>Stop when each data point is in its own cluster:</strong> Continue this process until every
+                    data point is its own cluster, or the stopping condition (such as a predefined number of clusters)
+                    is met.</li>
+            </ol>
+            <div class="algorithm-diagram">
+                <div class="diagram-placeholder">Diagram showing divisive clustering (reverse of agglomerative): ABCDEF
+                    starts as one cluster. Step 1: Splits into A and BCDEF. Step 2: BCDEF splits into BC and DEF. Step
+                    3: BC splits into B and C; DEF splits into DE and F. Step 4: DE splits into D and E.</div>
+                <p>Hierarchical Divisive Clustering</p>
+            </div>
+
+
+            <h4>Computing Distance Matrix</h4>
+            <p>While merging two clusters we check the distance between every pair of clusters and merge the pair with
+                the least distance/most similarity. But the question is how is that distance determined. There are
+                different ways of defining Inter Cluster distance/similarity. Some of them are:</p>
+            <ol>
+                <li><strong>Min Distance:</strong> Find the minimum distance between any two points of the cluster.</li>
+                <li><strong>Max Distance:</strong> Find the maximum distance between any two points of the cluster.</li>
+                <li><strong>Group Average:</strong> Find the average distance between every two points of the clusters.
+                </li>
+                <li><strong>Ward's Method:</strong> The similarity of two clusters is based on the increase in squared
+                    error when two clusters are merged.</li>
+            </ol>
+            <div class="algorithm-diagram">
+                <div class="diagram-placeholder">Four circular diagrams illustrating Min, Max, Group Average, and Ward's
+                    Method for calculating inter-cluster distances. Each shows two clusters with points and lines
+                    indicating the distances considered.</div>
+                <p>Distance Matrix Comparison in Hierarchical Clustering</p>
+            </div>
+
+            <h5>Implementations code for Distance Matrix Comparison</h5>
+            <pre><code>import numpy as np
+from scipy.cluster.hierarchy import dendrogram, linkage
+import matplotlib.pyplot as plt
+
+X = np.array([[1, 2], [1, 4], [1, 0],
+              [4, 2], [4, 4], [4, 0]])
+
+Z = linkage(X, 'ward') # Ward Distance
+
+dendrogram(Z) # Plotting the dendrogram
+plt.title('Hierarchical Clustering Dendrogram')
+plt.xlabel('Data point')
+plt.ylabel('Distance')
+plt.show()</code></pre>
+            <div class="output-plot">
+                <div class="diagram-placeholder">Output plot showing a dendrogram for the sample data using Ward's
+                    linkage. Data points 0,1,2 form one branch, and 3,4,5 form another.</div>
+                <p>Hierarchical Clustering Dendrogram</p>
+            </div>
+
+            <h3 id="dbscan-clustering">DBSCAN Clustering - Density based clustering</h3>
+            <p>DBSCAN is a density-based clustering algorithm that groups data points that are closely packed together
+                and marks outliers as noise based on their density in the feature space. It identifies clusters as dense
+                regions in the data space separated by areas of lower density. Unlike K-Means or hierarchical clustering
+                which assumes clusters are compact and spherical, DBSCAN perform well in handling real-world data
+                irregularities such as:</p>
+            <ul>
+                <li><strong>Arbitrary-Shaped Clusters:</strong> Clusters can take any shape not just circular or convex.
+                </li>
+                <li><strong>Noise and Outliers:</strong> It effectively identifies and handles noise points without
+                    assigning them to any cluster.</li>
+            </ul>
+            <div class="algorithm-diagram">
+                <div class="diagram-placeholder">Three plots: database 1, database 2, database 3. Database 1 & 2 show
+                    non-spherical clusters. Database 3 shows a spiral cluster with a central cluster. DBSCAN correctly
+                    identifies these shapes.</div>
+                <p>DBSCAN Clustering in ML | Density based clustering</p>
+            </div>
+            <p>The figure above shows a data set with clustering algorithms: K-Means and Hierarchical handling compact,
+                spherical clusters with varying noise tolerance while DBSCAN manages arbitrary-shaped clusters and noise
+                handling.</p>
+
+            <h4>Key Parameters in DBSCAN</h4>
+            <ol>
+                <li><strong>eps:</strong> This defines the radius of the neighborhood around a data point. If the
+                    distance between two points is less than or equal to eps they are considered neighbors. A common
+                    method to determine eps is by analyzing the k-distance graph. Choosing the right eps is important:
+                    <ul>
+                        <li>If eps is too small most points will be classified as noise.</li>
+                        <li>If eps is too large clusters may merge and the algorithm may fail to distinguish between
+                            them.</li>
+                    </ul>
+                </li>
+                <li><strong>MinPts:</strong> This is the minimum number of points required within the eps radius to form
+                    a dense region. A general rule of thumb is to set MinPts >= D+1 where D is the number of dimensions
+                    in the dataset.
+                    <p><em>For most cases a minimum value of MinPts = 3 is recommended.</em></p>
+                </li>
+            </ol>
+
+            <h4>How Does DBSCAN Work?</h4>
+            <p>DBSCAN works by categorizing data points into three types:</p>
+            <ol>
+                <li><strong>Core points</strong> which have a sufficient number of neighbors within a specified radius
+                    (epsilon).</li>
+                <li><strong>Border points</strong> which are near core points but lack enough neighbors to be core
+                    points themselves.</li>
+                <li><strong>Noise points</strong> which do not belong to any cluster.</li>
+            </ol>
+            <p>By iteratively expanding clusters from core points and connecting density-reachable points, DBSCAN forms
+                clusters without relying on rigid assumptions about their shape or size.</p>
+            <div class="algorithm-diagram">
+                <div class="diagram-placeholder">Diagram showing points with circles. A central "CORE POINT" has
+                    MinPts=4 within eps=1 unit. A "BORDER POINT" is within eps of a core point but doesn't have MinPts
+                    itself. A "NOISE" point is isolated.</div>
+            </div>
+
+            <h4>Steps in the DBSCAN Algorithm</h4>
+            <ol>
+                <li><strong>Identify Core Points:</strong> For each point in the dataset count the number of points
+                    within its eps neighborhood. If the count meets or exceeds MinPts mark the point as a core point.
+                </li>
+                <li><strong>Form Clusters:</strong> For each core point that is not already assigned to a cluster create
+                    a new cluster. Recursively find all density-connected points i.e points within the eps radius of the
+                    core point and add them to the cluster.</li>
+                <li><strong>Density Connectivity:</strong> Two points a and b are density-connected if there exists a
+                    chain of points where each point is within the eps radius of the next and at least one point in the
+                    chain is a core point. This chaining process ensures that all points in a cluster are connected
+                    through a series of dense regions.</li>
+                <li><strong>Label Noise Points:</strong> After processing all points any point that does not belong to a
+                    cluster is labeled as noise.</li>
+            </ol>
+
+            <h4>Python Implementation Steps</h4>
+            <h5>Step 1: Importing Libraries</h5>
+            <pre><code>import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.cluster import DBSCAN
+from sklearn import metrics
+from sklearn.datasets import make_blobs
+from sklearn.preprocessing import StandardScaler
+# from sklearn import datasets # (already imported make_blobs)</code></pre>
+
+            <h5>Step 2: Preparing Dataset</h5>
+            <p>We will create a dataset of 4 clusters using <code>make_blob</code>. The dataset have 300 points that are
+                grouped into 4 visible clusters.</p>
+            <pre><code># Load data in X
+X, y_true = make_blobs(n_samples=300, centers=4,
+                       cluster_std=0.50, random_state=0)
+# X = StandardScaler().fit_transform(X) # Optional scaling for some datasets
+</code></pre>
+
+            <h5>Step 3: Applying DBSCAN Clustering</h5>
+            <p>Now we apply DBSCAN clustering on our data, count it and visualize it using the matplotlib library.</p>
+            <ul>
+                <li><strong>eps=0.3:</strong> The radius to look for neighboring points.</li>
+                <li><strong>min_samples=10:</strong> Minimum number of points required to form a dense region a cluster.
+                </li>
+                <li><strong>labels:</strong> Cluster numbers for each point. -1 means the point is considered noise.
+                </li>
+            </ul>
+            <pre><code>db = DBSCAN(eps=0.3, min_samples=10).fit(X)
+core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
+core_samples_mask[db.core_sample_indices_] = True
+labels = db.labels_
+
+# Number of clusters in labels, ignoring noise if present.
+n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
+n_noise_ = list(labels).count(-1) # Count noise points
+
+print(f'Estimated number of clusters: {n_clusters_}')
+print(f'Estimated number of noise points: {n_noise_}')
+
+unique_labels = set(labels)
+colors = ['y', 'b', 'g', 'r'] # Adjust if more clusters expected
+plt.figure(figsize=(8, 6))
+for k_idx, col in zip(unique_labels, colors):
+    if k_idx == -1:
+        # Black used for noise.
+        col = 'k'
+
+    class_member_mask = (labels == k_idx)
+
+    xy = X[class_member_mask & core_samples_mask]
+    plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col,
+             markeredgecolor='k', markersize=10, label=f'Cluster {k_idx}' if k_idx !=-1 else 'Noise')
+
+    xy = X[class_member_mask & ~core_samples_mask]
+    plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col,
+             markeredgecolor='k', markersize=6, label=f'_Border {k_idx}')
+
+
+plt.title(f'Number of clusters: {n_clusters_}')
+plt.legend()
+plt.show()</code></pre>
+            <div class="output-plot">
+                <div class="diagram-placeholder">Output plot showing four distinct clusters (yellow, blue, green, red).
+                    Core points are larger, border points smaller. Any noise points would be black. Title: "number of
+                    clusters: 4".</div>
+                <p>Cluster of dataset</p>
+            </div>
+            <p>As shown in above output image cluster are shown in different colours like yellow, blue, green and red.
+            </p>
+
+            <h5>Step 4: Evaluation Metrics For DBSCAN Algorithm In Machine Learning</h5>
+            <p>We will use the Silhouette score and Adjusted rand score for evaluating clustering algorithms.</p>
+            <ul>
+                <li><strong>Silhouette's score</strong> is in the range of -1 to 1. A score near 1 denotes the best
+                    meaning that the data point i is very compact within the cluster to which it belongs and far away
+                    from the other clusters. The worst value is -1. Values near 0 denote overlapping clusters.</li>
+                <li><strong>Adjusted Rand Score</strong> is in the range of 0 to 1. More than 0.9 denotes excellent
+                    cluster recovery and above 0.8 is a good recovery. Less than 0.5 is considered to be poor recovery.
+                    (Note: The image says "Absolute Rand Score", but code uses adjusted_rand_score)</li>
+            </ul>
+            <pre><code>sc = metrics.silhouette_score(X, labels)
+print(f"Silhouette Coefficient: {sc:.2f}")
+ari = metrics.adjusted_rand_score(y_true, labels) # y_true comes from make_blobs
+print(f"Adjusted Rand Index: {ari:.2f}")</code></pre>
+            <p>Output (Example from image, actual values depend on parameters):</p>
+            <pre><code>Silhouette Coefficient: 0.13
+Adjusted Rand Index: 0.31</code></pre>
+            <p>Black points represent outliers. By changing the eps and the MinPts we can change the cluster
+                configuration.</p>
+
+            <h4>When Should We Use DBSCAN Over K-Means Clustering?</h4>
+            <p>DBSCAN and K-Means are both clustering algorithms that group together data that have the same
+                characteristic. However they work on different principles and are suitable for different types of data.
+                We prefer to use DBSCAN WHEN the data is not spherical in shape or the number of classes is not known
+                beforehand.</p>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>DBSCAN</th>
+                            <th>K-Means</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>In DBSCAN we need not specify the number of clusters.</td>
+                            <td>It is very sensitive to the number of clusters so it need to specified.</td>
+                        </tr>
+                        <tr>
+                            <td>Clusters formed in DBSCAN can be of any arbitrary shape.</td>
+                            <td>Clusters formed are spherical or convex in shape.</td>
+                        </tr>
+                        <tr>
+                            <td>It can work well with datasets having noise and outliers.</td>
+                            <td>It does not work well with outliers data. Outliers can skew the clusters in K-Means to a
+                                very large extent.</td>
+                        </tr>
+                        <tr>
+                            <td>In DBSCAN two parameters are required for training the Model.</td>
+                            <td>In K-Means only one parameter is required is for training the model.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="algorithm-diagram">
+                <div class="diagram-placeholder">Two side-by-side diagrams comparing DBSCAN and K-Means on non-spherical
+                    data (e.g., concentric circles, two moons). DBSCAN correctly identifies them, K-Means struggles. A
+                    third diagram shows DBSCAN identifying outliers.</div>
+                <p>DBSCAN vs K-Means clustering shapes and outlier handling.</p>
+            </div>
+
+            <h3 id="mean-shift-clustering">ML | Mean-Shift Clustering</h3>
+            <p>Meanshift is falling under the category of a clustering algorithm in contrast of Unsupervised learning
+                that assigns the data points to the clusters iteratively by shifting points towards the mode (mode is
+                the highest density of data points in the region, in the context of the Meanshift). As such, it is also
+                known as the <strong>Mode-seeking algorithm</strong>. Mean-shift algorithm has applications in the field
+                of image processing and computer vision.</p>
+            <p>Given a set of data points, the algorithm iteratively assigns each data point towards the closest cluster
+                centroid and direction to the closest cluster centroid is determined by where most of the points nearby
+                are at. So each iteration each data point will move closer to where the most points are at, which is or
+                will lead to the cluster center. When the algorithm stops, each point is assigned to a cluster.</p>
+            <p>Unlike the popular K-Means cluster algorithm, mean-shift does not require specifying the number of
+                clusters in advance. The number of clusters is determined by the algorithm with respect to the data.</p>
+            <div class="callout warning">
+                <strong>Note:</strong> The downside to Mean Shift is that it is computationally expensive
+                O(n<sup>2</sup>).
+            </div>
+            <p>Mean-shift clustering is a non-parametric, density-based clustering algorithm that can be used to
+                identify clusters in a dataset. It is particularly useful for datasets where the clusters have arbitrary
+                shapes and are not well-separated by linear boundaries.</p>
+
+            <h4>Kernel Density Estimation -</h4>
+            <p>The first step when applying mean shift clustering algorithms is representing your data in a mathematical
+                manner this means representing your data as points such as the set below.</p>
+            <div class="output-plot">
+                <div class="diagram-placeholder">Scatter plot showing three clusters of points.</div>
+            </div>
+            <p>Mean-shift builds upon the concept of kernel density estimation, in short KDE. Imagine that the above
+                data was sampled from a probability distribution. KDE is a method to estimate the underlying
+                distribution also called the probability density function for a set of data. It works by placing a
+                kernel on each point in the data set. A kernel is a fancy mathematical word for a weighting function
+                generally used in convolution. There are many different types of kernels, but the most popular one is
+                the Gaussian kernel. Adding up all of the individual kernels generates a probability surface example
+                density function. Depending on the kernel bandwidth parameter used, the resultant density function will
+                vary. Below is the KDE surface for our points above using a Gaussian kernel with a kernel bandwidth of
+                2.</p>
+            <h5>Surface plot:</h5>
+            <div class="output-plot">
+                <div class="diagram-placeholder">3D surface plot showing density peaks corresponding to the clusters.
+                </div>
+            </div>
+            <h5>Contour plot:</h5>
+            <div class="output-plot">
+                <div class="diagram-placeholder">2D contour plot showing density contours around the clusters. Title
+                    "Bandwidth Value: 2".</div>
+            </div>
+
+            <h4>Python implementation:</h4>
+            <pre><code>import numpy as np
+import pandas as pd # Not used in snippet
+from sklearn.cluster import MeanShift
+from sklearn.datasets import make_blobs
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D # For 3D plotting
+
+# We will be using the make_blobs method
+# in order to generate our own data.
+clusters_centers_data = [[2, 2, 2], [7, 7, 7], [5, 13, 13]] # Note: using 'clusters_centers_data' for clarity
+X, _ = make_blobs(n_samples = 150, centers = clusters_centers_data, cluster_std = 0.60)
+
+# After training the model, we store the
+# coordinates for the cluster centers
+ms = MeanShift()
+ms.fit(X)
+cluster_centers = ms.cluster_centers_
+
+# Finally We plot the data points
+# and centroids in a 3D graph.
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.scatter(X[:, 0], X[:, 1], X[:, 2], marker='o')
+ax.scatter(cluster_centers[:, 0], cluster_centers[:, 1], cluster_centers[:, 2],
+           marker='x', color='red', s=300, linewidth=5, zorder=10)
+plt.show()</code></pre>
+            <div class="output-plot">
+                <div class="diagram-placeholder">3D scatter plot showing three clusters of blue points with red 'x'
+                    markers for the identified cluster centers.</div>
+                <p>Try Code here Output:</p>
+            </div>
+
+            <p>To illustrate, suppose we are given a data set {u<sub>i</sub>} of points in d-dimensional space, sampled
+                from some larger population, and that we have chosen a kernel K having bandwidth parameter h. Together,
+                these data and kernel function returns the following kernel density estimator for the full population's
+                density function.</p>
+            <p style="text-align:center;">f<sub>K</sub>(<strong>u</strong>) = (1 / (n h<sup>d</sup>))
+                &Sigma;<sub>i=1</sub><sup>n</sup> K((<strong>u</strong> - <strong>u</strong><sub>i</sub>) / h)</p>
+            <p>The kernel function here is required to satisfy the following two conditions:</p>
+            <ol>
+                <li>&int; K(<strong>u</strong>)d<strong>u</strong> = 1</li>
+                <li>K(<strong>u</strong>) = K(||<strong>u</strong>||) for all values of <strong>u</strong></li>
+            </ol>
+            <p>-&gt; The first requirement is needed to ensure that our estimate is normalized. -&gt; The second is
+                associated with the symmetry of our space.</p>
+            <p>Two popular kernel functions that satisfy these conditions are given by-</p>
+            <ol>
+                <li>Flat/Uniform K(<strong>u</strong>) = 1/2 if -1 &le; ||<strong>u</strong>|| &le; 1, else 0</li>
+                <li>Gaussian = K(<strong>u</strong>) =
+                    (1/(2&pi;)<sup>d/2</sup>)e<sup>-(1/2)||<strong>u</strong>||<sup>2</sup></sup></li>
+            </ol>
+            <p>Below we plot an example in one dimension using the Gaussian kernel to estimate the density of some
+                population along the x-axis. We can see that each sample point adds a small Gaussian to our estimate,
+                centered about it and equations above may look a bit intimidating, but the graphic here should clarify
+                that the concept is pretty straightforward.</p>
+            <div class="output-plot">
+                <div class="diagram-placeholder">Plot showing individual Gaussian kernels (dashed lines) centered at
+                    data points, and their sum (solid black curve) representing the overall density estimate.</div>
+                <p>Example of kernel density estimation using a gaussian kernel for each data point. Adding up small
+                    Gaussians about each example returns our net estimate, the total density, the black curve.</p>
+            </div>
+
+            <h4>Iterative Mode Search -</h4>
+            <ol>
+                <li>Initialize random seed and window W.</li>
+                <li>Calculate the center of gravity (mean) of W.</li>
+                <li>Shift the search window to the mean.</li>
+                <li>Repeat Step 2 until convergence.</li>
+            </ol>
+            <div class="algorithm-diagram">
+                <div class="diagram-placeholder">Diagram illustrating Mean-Shift: A circular "Region of Interest"
+                    (window) over scattered points. An arrow points from its current center to the "Center of mass"
+                    (mean shift vector). The window iteratively moves.</div>
+            </div>
+
+            <h4>General algorithm outline -</h4>
+            <pre><code>for p in copied_points:
+    while not at_kde_peak:
+        p = shift(p, original_points)</code></pre>
+            <h4>Shift function looks like this -</h4>
+            <pre><code>def shift(p, original_points, kernel_bandwidth): # Added kernel_bandwidth
+    shift_x = float(0)
+    shift_y = float(0)
+    scale_factor = float(0)
+
+    for p_temp in original_points:
+        # numerator
+        dist = euclidean_dist(p, p_temp)
+        weight = kernel(dist, kernel_bandwidth) # kernel function like Gaussian
+        shift_x += p_temp[0] * weight
+        shift_y += p_temp[1] * weight
+        # denominator
+        scale_factor += weight
+    
+    shift_x = shift_x / scale_factor
+    shift_y = shift_y / scale_factor
+    return [shift_x, shift_y]</code></pre>
+            <!-- Helper functions euclidean_dist and kernel would be defined elsewhere -->
+
+            <h4>Pros:</h4>
+            <ul>
+                <li>Finds variable number of modes</li>
+                <li>Robust to outliers</li>
+                <li>General, application-independent tool</li>
+                <li>Model-free, doesn't assume any prior shape like spherical, elliptical, etc. on data clusters</li>
+                <li>Just a single parameter (window size h) where h has a physical meaning (unlike k-means)</li>
+            </ul>
+            <h4>Cons:</h4>
+            <ul>
+                <li>Output depends on window size</li>
+                <li>Window size (bandwidth) selection is not trivial</li>
+                <li>Computationally (relatively) expensive (approx 2s/image in example)</li>
+                <li>Doesn't scale well with dimension of feature space.</li>
+            </ul>
+
+            <h3 id="spectral-clustering">Spectral Clustering</h3>
+            <p>Spectral Clustering is a variant of the clustering algorithm that uses the connectivity between the data
+                points to form the clustering. It uses eigenvalues and eigenvectors of the data matrix to forecast the
+                data into lower dimensions space to cluster the data points. It is based on the idea of a graph
+                representation of data where the data point are represented as nodes and the similarity between the data
+                points are represented by an edge.</p>
+            <h4>Steps performed for spectral Clustering</h4>
+            <h5>Building the Similarity Graph Of The Data:</h5>
+            <p>This step builds the Similarity Graph in the form of an adjacency matrix which is represented by A. The
+                adjacency matrix can be built in the following manners:</p>
+            <ul>
+                <li><strong>Epsilon-neighbourhood Graph:</strong> A parameter epsilon is fixed beforehand. Then, each
+                    point is connected to all the points which lie in its epsilon-radius. If all the distances between
+                    any two points are similar in scale then typically the weights of the edges ie the distance between
+                    the two points are not stored since they do not provide any additional information. Thus, in this
+                    case, the graph built is an undirected and unweighted graph.</li>
+                <li><strong>K-Nearest Neighbours Graph:</strong> A parameter k is fixed beforehand. Then, for two
+                    vertices u and v, an edge is directed from u to v only if v is among the k-nearest neighbours of u.
+                    Note that this leads to the formation of a weighted and directed graph because it is not always the
+                    case that for each u having v as one of the k-nearest neighbours, it will be the same case for v
+                    having u among its k-nearest neighbours. To make this graph undirected, one of the following
+                    approaches is followed:-
+                    <ol type="a">
+                        <li>Direct an edge from u to v and from v to u if either v is among the k-nearest neighbours of
+                            u OR u is among the k-nearest neighbours of v.</li>
+                        <li>Direct an edge from u to v and from v to u if v is among the k-nearest neighbours of u AND u
+                            is among the k-nearest neighbours of v.</li>
+                    </ol>
+                </li>
+                <li><strong>Fully-Connected Graph:</strong> To build this graph, each point is connected with an
+                    undirected edge-weighted by the distance between the two points to every other point. Since this
+                    approach is used to model the local neighbourhood relationships thus typically the Gaussian
+                    similarity metric is used to calculate the distance.</li>
+            </ul>
+
+            <h5>Python Code For Graph Laplacian Matrix</h5>
+            <p>To compute it though first, the degree of a node needs to be defined. The degree of the ith node is given
+                by d<sub>i</sub> = &Sigma;<sub>j=1..n</sub>(w<sub>ij</sub>). Note that w<sub>ij</sub> is the edge
+                between the nodes i and j as defined in the adjacency matrix above.</p>
+            <pre><code># Defining the adjacency matrix
+import numpy as np
+A = np.array([
+    [0, 1, 1, 0, 0, 0, 0, 1, 1],
+    [1, 0, 1, 0, 0, 0, 0, 0, 0],
+    [1, 1, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 1, 1, 0, 0, 0],
+    [0, 0, 0, 1, 0, 1, 0, 0, 0],
+    [0, 0, 0, 1, 1, 0, 1, 0, 0],
+    [0, 0, 0, 0, 0, 1, 0, 1, 0],
+    [1, 0, 0, 0, 0, 0, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1, 0]])</code></pre>
+            <p>The degree matrix is defined as follows:- D<sub>ii</sub> = d<sub>i</sub>, D<sub>ij</sub> = 0 (i &ne; j)
+            </p>
+            <pre><code>D = np.diag(A.sum(axis=1))
+print(D)</code></pre>
+            <p>Thus the Graph Laplacian Matrix is defined as:- L = D - A</p>
+            <pre><code>L = D - A
+print(L)</code></pre>
+            <p>This Matrix is then normalized for mathematical efficiency. To reduce the dimensions, first, the
+                eigenvalues and the respective eigenvectors are calculated. If the number of clusters is k then the
+                first k eigenvalues and their eigenvectors are taken and stacked into a matrix such that the
+                eigenvectors are the columns.</p>
+
+            <h5>Code For Calculating eigenvalues and eigenvector of the matrix in Python</h5>
+            <pre><code># find eigenvalues and eigenvectors
+vals, vecs = np.linalg.eig(A) # Using A here, often L or normalized L is used for spectral clustering
+# print("Eigenvalues:", vals)
+# print("Eigenvectors:", vecs)
+</code></pre>
+
+            <h5>Clustering the Data:</h5>
+            <p>This process mainly involves clustering the reduced data by using any traditional clustering technique -
+                typically K-Means Clustering. First, each node is assigned a row of the normalized of the Graph
+                Laplacian Matrix. Then this data is clustered using any traditional technique. To transform the
+                clustering result, the node identifier is retained.</p>
+
+            <h4>Properties:</h4>
+            <ol>
+                <li><strong>Assumption-Less:</strong> This clustering technique, unlike other traditional techniques do
+                    not assume the data to follow some property. Thus this makes this technique to answer a more-generic
+                    class of clustering problems.</li>
+                <li><strong>Ease of implementation and Speed:</strong> This algorithm is easier to implement than other
+                    clustering algorithms and is also very fast as it mainly consists of mathematical computations.</li>
+                <li><strong>Not-Scalable:</strong> Since it involves the building of matrices and computation of
+                    eigenvalues and eigenvectors it is time-consuming for dense datasets.</li>
+                <li><strong>Dimensionality Reduction:</strong> The algorithm uses eigenvalue decomposition to reduce the
+                    dimensionality of the data, making it easier to visualize and analyze.</li>
+                <li><strong>Cluster Shape:</strong> This technique can handle non-linear cluster shapes, making it
+                    suitable for a wide range of applications.</li>
+                <li><strong>Noise Sensitivity:</strong> It is sensitive to noise and outliers, which may affect the
+                    quality of the resulting clusters.</li>
+                <li><strong>Number of Clusters:</strong> The algorithm requires the user to specify the number of
+                    clusters beforehand, which can be challenging in some cases.</li>
+                <li><strong>Memory Requirements:</strong> The algorithm requires significant memory to store the
+                    similarity matrix, which can be a limitation for large datasets.</li>
+            </ol>
+
+            <h4>Credit Card Data Clustering Using Spectral Clustering</h4>
+            <p>The below steps demonstrate how to implement Spectral Clustering using Sklearn. The data for the
+                following steps is the Credit Card Data which can be downloaded from Kaggle</p>
+            <h5>Step 1: Importing the required libraries</h5>
+            <pre><code>import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.cluster import SpectralClustering
+from sklearn.preprocessing import StandardScaler, normalize
+from sklearn.decomposition import PCA
+from sklearn.metrics import silhouette_score
+# import os # For changing directory, can be omitted if data is in same folder
+</code></pre>
+
+            <h5>Step 2: Loading and Cleaning the Data</h5>
+            <pre><code># Changing the working location to the location of the data
+# cd "C:\Users\Dev\Desktop\kaggle\Credit_card" # This line is environment specific
+
+# Loading the data
+X = pd.read_csv('CC_GENERAL.csv')
+
+# Dropping the CUST_ID column from the data
+X = X.drop('CUST_ID', axis = 1)
+
+# Handling the missing values if any
+X.fillna(method ='ffill', inplace = True)
+X.head()</code></pre>
+            <div class="output-plot">
+                <div class="diagram-placeholder">Table showing head of Credit Card dataset with columns like BALANCE,
+                    PURCHASES etc.</div>
+            </div>
+
+            <h5>Step 3: Preprocessing the data to make the data visualizable</h5>
+            <pre><code># Scaling the Data
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Normalizing the Data
+X_normalized = normalize(X_scaled)
+
+# Converting the numpy array into a pandas DataFrame
+X_normalized = pd.DataFrame(X_normalized)
+
+# Reducing the dimensions of the data
+pca = PCA(n_components = 2)
+X_principal = pca.fit_transform(X_normalized)
+X_principal = pd.DataFrame(X_principal)
+X_principal.columns = ['P1', 'P2']
+X_principal.head()</code></pre>
+            <div class="output-plot">
+                <div class="diagram-placeholder">Table showing head of PCA transformed data with 2 columns P1 and P2.
+                </div>
+            </div>
+
+            <h5>Step 4: Building the Clustering models and Visualizing the Clustering</h5>
+            <p>In the below steps, two different Spectral Clustering models with different values for the parameter
+                'affinity'. You can read about the documentation of the Spectral Clustering class here. a) affinity =
+                'rbf'</p>
+            <pre><code># Building the clustering model
+spectral_model_rbf = SpectralClustering(n_clusters = 2, affinity ='rbf', random_state=42) # Added random_state
+
+# Training the model and Storing the predicted cluster labels
+labels_rbf = spectral_model_rbf.fit_predict(X_principal)
+
+# Building the label to colour mapping
+colours = {}
+colours[0] = 'b'
+colours[1] = 'y'
+# Building the colour vector for each data point
+cvec = [colours[label] for label in labels_rbf]
+
+# Plotting the clustered scatter plot
+# b = plt.scatter(X_principal['P1'], X_principal['P2'], color ='b'); # Not needed for this plot
+# y = plt.scatter(X_principal['P1'], X_principal['P2'], color ='y'); # Not needed for this plot
+plt.figure(figsize =(9, 9))
+plt.scatter(X_principal['P1'], X_principal['P2'], c = cvec)
+# plt.legend((b, y), ('Label 0', 'Label 1')) # Simpler legend below
+# Create dummy scatters for legend
+plt.scatter([], [], color='b', label='Label 0')
+plt.scatter([], [], color='y', label='Label 1')
+plt.legend()
+plt.show()</code></pre>
+            <div class="output-plot">
+                <div class="diagram-placeholder">Scatter plot of PCA components, colored by Spectral Clustering labels
+                    (blue and yellow) using 'rbf' affinity. Two distinct semi-circular clusters are visible.</div>
+            </div>
+
+            <p>b) affinity = 'nearest_neighbors'</p>
+            <pre><code># Building the clustering model
+spectral_model_nn = SpectralClustering(n_clusters = 2, affinity ='nearest_neighbors', random_state=42) # Added random_state
+
+# Training the model and Storing the predicted cluster labels
+labels_nn = spectral_model_nn.fit_predict(X_principal)
+
+# Re-map labels if necessary to match colors for comparison, e.g. if 0 is red and 1 is green
+colours_nn = {}
+colours_nn[0] = 'g' # Assuming different colors for this plot example
+colours_nn[1] = 'r'
+cvec_nn = [colours_nn.get(label, 'k') for label in labels_nn] # Use .get for safety
+
+plt.figure(figsize =(9, 9))
+plt.scatter(X_principal['P1'], X_principal['P2'], c = cvec_nn)
+plt.scatter([], [], color='g', label='Label 0')
+plt.scatter([], [], color='r', label='Label 1')
+plt.legend()
+plt.show()
+</code></pre>
+            <div class="output-plot">
+                <div class="diagram-placeholder">Scatter plot similar to above, but using 'nearest_neighbors' affinity,
+                    possibly showing slightly different cluster shapes or assignments (e.g., red and green).</div>
+            </div>
+
+            <h5>Step 5: Evaluating the performances</h5>
+            <pre><code># List of different values of affinity
+affinity = ['rbf', 'nearest_neighbors'] # Corrected this
+s_scores = []
+
+# Evaluating the performance
+s_scores.append(silhouette_score(X_principal, labels_rbf)) # Use X_principal for consistency with plots
+s_scores.append(silhouette_score(X_principal, labels_nn))
+print(s_scores)</code></pre>
+            <p>Output:</p>
+            <pre><code>[0.05300611480757429, 0.05667039590382262]</code></pre>
+
+            <h5>Step 6: Comparing the performances</h5>
+            <pre><code># Plotting a Bar Graph to compare the models
+plt.bar(affinity, s_scores)
+plt.xlabel('Affinity')
+plt.ylabel('Silhouette Score')
+plt.title('Comparison of different Clustering Models')
+plt.show()</code></pre>
+            <div class="output-plot">
+                <div class="diagram-placeholder">Bar chart comparing Silhouette Scores for 'nearest_neighbors' and 'rbf'
+                    affinities. Both scores are low (around 0.05), with 'nearest_neighbors' slightly higher.</div>
+            </div>
+
+            <h4>Advantages of Spectral Clustering:</h4>
+            <ol>
+                <li><strong>Scalability:</strong> Spectral clustering can handle large datasets and high-dimensional
+                    data, as it reduces the dimensionality of the data before clustering.</li>
+                <li><strong>Flexibility:</strong> Spectral clustering can be applied to non-linearly separable data, as
+                    it does not rely on traditional distance-based clustering methods.</li>
+                <li><strong>Robustness:</strong> Spectral clustering can be more robust to noise and outliers in the
+                    data, as it considers the global structure of the data, rather than just local distances between
+                    data points.</li>
+            </ol>
+            <h4>Disadvantages of Spectral Clustering:</h4>
+            <ol>
+                <li><strong>Complexity:</strong> Spectral clustering can be computationally expensive, especially for
+                    large datasets, as it requires the calculation of eigenvectors and eigenvalues.</li>
+                <li><strong>Model selection:</strong> Choosing the right number of clusters and the right similarity
+                    matrix can be challenging and may require expert knowledge or trial and error.</li>
+            </ol>
+        </section>
+
+        <section id="association-rule-learning">
+            <h2>2. Association Rule Learning</h2>
+            <p>Association rule learning is also known as association rule mining is a common technique used to discover
+                associations in unsupervised machine learning. This technique is a rule-based ML technique that finds
+                out some very useful relations between parameters of a large data set. This technique is basically used
+                for market basket analysis that helps to better understand the relationship between different products.
+            </p>
+            <p>For e.g. shopping stores use algorithms based on this technique to find out the relationship between the
+                sale of one product w.r.t to another's sales based on customer behavior. <strong>Like if a customer buys
+                    milk, then he may also buy bread, eggs, or butter.</strong> Once trained well, such models can be
+                used to increase their sales by planning different offers.</p>
+            <h4>Some common Association Rule Learning algorithms:</h4>
+            <ul>
+                <li><a href="#apriori-algorithm">Apriori Algorithm</a>: Finds patterns by exploring frequent item
+                    combinations step-by-step.</li>
+                <li><a href="#fp-growth-algorithm">FP-Growth Algorithm</a>: An Efficient Alternative to Apriori. It
+                    quickly identifies frequent patterns without generating candidate sets.</li>
+                <li><a href="#eclat-algorithm">Eclat Algorithm</a>: Uses intersections of itemsets to efficiently find
+                    frequent patterns.</li>
+                <li>Efficient Tree-based Algorithms: Scales to handle large datasets by organizing data in tree
+                    structures. (FP-Growth is an example)</li>
+            </ul>
+
+            <h3 id="apriori-algorithm">Apriori Algorithm</h3>
+            <p>Apriori Algorithm is a foundational method in data mining used for discovering frequent itemsets and
+                generating association rules. Its significance lies in its ability to identify relationships between
+                items in large datasets which is particularly valuable in market basket analysis.</p>
+            <p>For example, if a grocery store finds that customers who buy <strong>bread</strong> often also buy
+                <strong>butter</strong>, it can use this information to optimise product placement or marketing
+                strategies.</p>
+            <h4>How the Apriori Algorithm Works?</h4>
+            <p>The Apriori Algorithm operates through a systematic process that involves several key steps:</p>
+            <ol>
+                <li><strong>Identifying Frequent Itemsets:</strong> The algorithm begins by scanning the dataset to
+                    identify individual items (1-item) and their frequencies. It then establishes a <strong>minimum
+                        support threshold</strong>, which determines whether an itemset is considered frequent.</li>
+                <li><strong>Creating Possible Item group:</strong> Once frequent 1-itemgroup(single items) are
+                    identified, the algorithm generates candidate 2-itemgroup by combining frequent items. This process
+                    continues iteratively, forming larger itemsets (k-itemgroup) until no more frequent itemgroup can be
+                    found.</li>
+                <li><strong>Removing Infrequent Item groups:</strong> The algorithm employs a pruning technique based on
+                    the <strong>Apriori Property</strong>, which states that if an itemset is infrequent, all its
+                    supersets must also be infrequent. This significantly reduces the number of combinations that need
+                    to be evaluated.</li>
+                <li><strong>Generating Association Rules:</strong> After identifying frequent itemsets, the algorithm
+                    generates association rules that illustrate how items relate to one another, using metrics like
+                    <strong>support, confidence,</strong> and <strong>lift</strong> to evaluate the strength of these
+                    relationships.</li>
+            </ol>
+
+            <h4>Key Metrics of Apriori Algorithm</h4>
+            <ul>
+                <li><strong>Support:</strong> This metric measures how frequently an item appears in the dataset
+                    relative to the total number of transactions. A higher support indicates a more significant presence
+                    of the itemset in the transactions. Support tells us how often a particular item or combination of
+                    items appears in all the transactions. ("Bread is bought in 20% of all transactions.")</li>
+                <li><strong>Confidence:</strong> Confidence assesses the likelihood that an item Y is purchased when
+                    item X is purchased. It provides insight into the strength of the association between two items.
+                    Confidence tells us how often items go together. ("If bread is bought, butter is bought 75% of the
+                    time.")</li>
+                <li><strong>Lift:</strong> Lift evaluates how much more likely two items are to be purchased together
+                    compared to being purchased independently. A lift greater than 1 suggests a strong positive
+                    association. Lift shows how strong the connection is between items. ("Bread and butter are much more
+                    likely to be bought together than by chance.")</li>
+            </ul>
+            <p>Lets understand the concept of apriori Algorithm with the help of an example. Consider the following
+                dataset and we will find frequent itemsets and generate association rules for them:</p>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Items Bought</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>T1</td>
+                            <td>Bread, Butter, Milk</td>
+                        </tr>
+                        <tr>
+                            <td>T2</td>
+                            <td>Bread, Butter</td>
+                        </tr>
+                        <tr>
+                            <td>T3</td>
+                            <td>Bread, Milk</td>
+                        </tr>
+                        <tr>
+                            <td>T4</td>
+                            <td>Butter, Milk</td>
+                        </tr>
+                        <tr>
+                            <td>T5</td>
+                            <td>Bread, Milk</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="text-align:center; font-size:0.9em;">Transactions of a Grocery Shop</p>
+            </div>
+
+            <h5>Step 1: Setting the parameters</h5>
+            <ul>
+                <li><strong>Minimum Support Threshold:</strong> 50% (item must appear in at least 3/5 transactions).
+                    This threshold is formulated from this formula:
+                    <p>Support(A) = (Number of transactions containing itemset A) / (Total number of transactions)</p>
+                </li>
+                <li><strong>Minimum Confidence Threshold:</strong> 70% (You can change the value of parameters as per
+                    the use case and problem statement ). This threshold is formulated from this formula:
+                    <p>Confidence(X → Y) = Support(X U Y) / Support(X)</p>
+                </li>
+            </ul>
+
+            <h5>Step 2: Find Frequent 1-Itemsets</h5>
+            <p>Lets count how many transactions include each item in the dataset (calculating the frequency of each
+                item).</p>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Support Count</th>
+                            <th>Support %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Bread</td>
+                            <td>4</td>
+                            <td>80%</td>
+                        </tr>
+                        <tr>
+                            <td>Butter</td>
+                            <td>3</td>
+                            <td>60%</td>
+                        </tr>
+                        <tr>
+                            <td>Milk</td>
+                            <td>4</td>
+                            <td>80%</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="text-align:center; font-size:0.9em;">Frequent 1-Itemsets</p>
+            </div>
+            <p>All items have support% ≥ 50%, so they qualify as frequent 1-itemsets. If any item has support% < 50%, it
+                    will be omitted out from the frequent 1- itemsets.</p>
+
+                    <h5>Step 3: Generate Candidate 2-Itemsets</h5>
+                    <p>Combine the frequent 1-itemsets into pairs and calculate their support. For this use case, we
+                        will get 3 item pairs (bread,butter) , (bread,milk) and (butter,milk) and will calculate the
+                        support similar to step 2</p>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Item Pair</th>
+                                    <th>Support Count</th>
+                                    <th>Support %</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Bread, Butter</td>
+                                    <td>2</td>
+                                    <td>40%</td>
+                                </tr>
+                                <tr>
+                                    <td>Bread, Milk</td>
+                                    <td>3</td>
+                                    <td>60%</td>
+                                </tr>
+                                <tr>
+                                    <td>Butter, Milk</td>
+                                    <td>2</td>
+                                    <td>40%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p style="text-align:center; font-size:0.9em;">Candidate 2-Itemsets</p>
+                    </div>
+                    <p>Frequent 2-itemsets:</p>
+                    <ul>
+                        <li>{Bread, Milk} meet the 50% threshold but {Butter, Milk} and {Bread ,Butter} doesn’t meet the
+                            threshold, so will be committed out.</li>
+                    </ul>
+
+                    <h5>Step 4: Generate Candidate 3-Itemsets</h5>
+                    <p>Combine the frequent 2-itemsets into groups of 3 and calculate their support. for the triplet, we
+                        have only got one case i.e (bread,butter,milk) and we will calculate the support.</p>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Item Triplet</th>
+                                    <th>Support Count</th>
+                                    <th>Support %</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Bread, Butter, Milk</td>
+                                    <td>1</td>
+                                    <td>40%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p style="text-align:center; font-size:0.9em;">Candidate 3-Itemsets</p>
+                    </div>
+                    <p>Since this does not meet the 50% threshold, there are no frequent 3-itemsets.</p>
+
+                    <h5>Step 5: Generate Association Rules</h5>
+                    <p>Now we generate rules from the frequent itemsets and calculate <strong>confidence</strong>.
+                        (Using frequent 2-itemset {Bread, Milk} as example for valid rules based on previous steps,
+                        though the image uses {Bread,Butter} which was not frequent. I will follow the text for
+                        consistency.)</p>
+                    <p>Based on frequent itemset {Bread, Milk} (Support 60%):</p>
+                    <ul>
+                        <li><strong>Rule: If Bread → Milk</strong>
+                            <ul>
+                                <li>Support of {Bread, Milk} = 3.</li>
+                                <li>Support of {Bread} = 4.</li>
+                                <li>Confidence = 3/4 = 75% (Passes 70% threshold).</li>
+                            </ul>
+                        </li>
+                        <li><strong>Rule: If Milk → Bread</strong>
+                            <ul>
+                                <li>Support of {Milk, Bread} = 3.</li>
+                                <li>Support of {Milk} = 4.</li>
+                                <li>Confidence = 3/4 = 75% (Passes 70% threshold).</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p>The Apriori Algorithm, as demonstrated in the bread-butter example, is widely used in modern
+                        startups like Zomato, Swiggy, and other food delivery platforms. These companies use it to
+                        perform <strong>market basket analysis</strong>, which helps them identify customer behaviour
+                        patterns and optimise recommendations.</p>
+
+                    <h4>Applications of Apriori Algorithm</h4>
+                    <p>Below are some applications of Apriori algorithm used in today's companies and startups</p>
+                    <ol>
+                        <li><strong>E-commerce:</strong> Used to recommend products that are often bought together, like
+                            <strong>laptop + laptop bag</strong>, increasing sales.</li>
+                        <li><strong>Food Delivery Services:</strong> Identifies popular combos, such as <strong>burger +
+                                fries</strong>, to offer <strong>combo deals</strong> to customers.</li>
+                        <li><strong>Streaming Services:</strong> Recommends related movies or shows based on what users
+                            often watch together, like <strong>action + superhero movies</strong>.</li>
+                        <li><strong>Financial Services:</strong> Analyzes spending habits to suggest personalised
+                            offers, such as <strong>credit card deals</strong> based on frequent purchases.</li>
+                        <li><strong>Travel & Hospitality:</strong> Creates travel packages (e.g., <strong>flight +
+                                hotel</strong>) by finding commonly purchased services together.</li>
+                        <li><strong>Health & Fitness:</strong> Suggests workout plans or supplements based on users'
+                            past activities, like <strong>protein shakes + workouts</strong>.</li>
+                    </ol>
+
+                    <h3 id="fp-growth-algorithm">Frequent Pattern Growth Algorithm</h3>
+                    <p>Apriori algorithm is a famous <strong>association technique</strong> which is widely used but it
+                        has <strong>drawbacks</strong> about which we will discuss in the this article. To overcome
+                        these challenges, the Frequent Pattern Growth (FP-Growth) algorithm was developed and in this
+                        article we will learn more about it and understand how it works with real life data.</p>
+                    <h4>Understanding The Frequent Patter Growth</h4>
+                    <p>The two primary drawbacks of the Apriori Algorithm are:</p>
+                    <ol>
+                        <li>At each step, candidate sets have to be built.</li>
+                        <li>To build the candidate sets, the algorithm has to repeatedly scan the database.</li>
+                    </ol>
+                    <p>These two properties inevitably make the algorithm slower. To overcome these redundant steps a
+                        new association-rule mining algorithm was developed named Frequent Pattern Growth Algorithm. It
+                        overcomes the disadvantages of the Apriori algorithm by storing all the transactions in a
+                        <strong>Tree Data Structure</strong>.</p>
+                    <p>The FP-Growth algorithm is a method used to find frequent patterns in large datasets. It is
+                        faster and more efficient than the Apriori algorithm because it avoids repeatedly scanning the
+                        entire database.</p>
+                    <p>Here's how it works in simple terms:</p>
+                    <ol>
+                        <li><strong>Data Compression:</strong> First, FP-Growth compresses the dataset into a smaller
+                            structure called the <strong>Frequent Pattern Tree (FP-Tree)</strong>. This tree stores
+                            information about item sets (collections of items) and their frequencies, without needing to
+                            generate candidate sets like Apriori does.</li>
+                        <li><strong>Mining the Tree:</strong> The algorithm then examines this tree to identify patterns
+                            that appear frequently, based on a minimum support threshold. It does this by breaking the
+                            tree down into smaller "conditional" trees for each item, making the process more efficient.
+                        </li>
+                        <li><strong>Generating Patterns:</strong> Once the tree is built and analyzed, the algorithm
+                            generates the frequent patterns (itemsets) and the rules that describe relationships between
+                            items.</li>
+                    </ol>
+
+                    <h4>Lets understand this with the help of a real life analogy:</h4>
+                    <p>Imagine you're organizing a large family reunion, and you want to know which food items are most
+                        popular among the guests. Instead of asking everyone individually and writing down their answers
+                        one by one, you decide to use a more efficient method.</p>
+                    <h5>Step 1: Create a List of Items People Bring</h5>
+                    <p>Instead of asking every person what they like to eat, you ask them to write down what foods they
+                        brought. You then create a list of all the food items brought to the party. This is like
+                        scanning the entire database once to get an overview and insights of the data.</p>
+                    <h5>Step 2: Group Similar Items Together</h5>
+                    <p>Now, you group the food items that were brought most frequently. You might end up with groups
+                        like "Pizza" (which was brought by 10 people), "Cake" (by 4 people), "Pasta" (by 3 people), and
+                        others. This is similar to creating the <strong>Frequent Pattern Tree (FP-Tree)</strong> in
+                        FP-Growth, where you only keep track of the items that are common enough.</p>
+                    <h5>Step 3: Look for Hidden Patterns</h5>
+                    <p>Next, instead of going back to every person to ask again about their preferences, you simply look
+                        at your list of items and patterns. You notice that people who brought pizza also often brought
+                        pasta, and those who brought cake also brought pasta. These hidden relationships (e.g., pizza +
+                        pasta, cake + pasta) are like the "frequent patterns" you find in FP-Growth.</p>
+                    <h5>Step 4: Simplify the Process</h5>
+                    <p>With FP-Growth, instead of scanning the entire party list multiple times to look for combinations
+                        of items, you've condensed all the information into a smaller, more manageable tree structure.
+                        You can now quickly see the most common combinations, like "Pizza and pasta" or "Cake and
+                        pasta," without the need to revisit every single detail.</p>
+
+                    <h4>Working of FP- Growth Algorithm</h4>
+                    <p>Lets jump to the usage of FP- Growth Algorithm and how it works with reallife data.</p>
+                    <p>Consider the following data:-</p>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Transaction ID</th>
+                                    <th>Items</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>T1</td>
+                                    <td>{E,K,M,N,O,Y}</td>
+                                </tr>
+                                <tr>
+                                    <td>T2</td>
+                                    <td>{D,E,K,N,O,Y}</td>
+                                </tr>
+                                <tr>
+                                    <td>T3</td>
+                                    <td>{A,E,K,M}</td>
+                                </tr>
+                                <tr>
+                                    <td>T4</td>
+                                    <td>{K,M,Y}</td>
+                                </tr>
+                                <tr>
+                                    <td>T5</td>
+                                    <td>{C,E,I,K,O,O}</td>
+                                </tr> <!-- Note: O,O implies O appears twice in T5, or just O once -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <p>The above-given data is a hypothetical dataset of transactions with each letter representing an
+                        item. The frequency of each individual item is computed:-</p>
+                    <div class="table-container" style="max-width: 300px; margin-left:auto; margin-right:auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Frequency</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>A</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>C</td>
+                                    <td>1</td>
+                                </tr> <!-- Assuming C from T5, if items are unique -->
+                                <tr>
+                                    <td>D</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>E</td>
+                                    <td>4</td>
+                                </tr>
+                                <tr>
+                                    <td>I</td>
+                                    <td>1</td>
+                                </tr> <!-- Assuming I from T5 -->
+                                <tr>
+                                    <td>K</td>
+                                    <td>5</td>
+                                </tr>
+                                <tr>
+                                    <td>M</td>
+                                    <td>3</td>
+                                </tr>
+                                <tr>
+                                    <td>N</td>
+                                    <td>2</td>
+                                </tr>
+                                <tr>
+                                    <td>O</td>
+                                    <td>3</td>
+                                </tr> <!-- O in T1, T2, T5 (count T5's O as 1 for unique items) -->
+                                <tr>
+                                    <td>U</td>
+                                    <td>0</td>
+                                </tr> <!-- U is not in data, image had C,M,U,Y for T4 -->
+                                <tr>
+                                    <td>Y</td>
+                                    <td>3</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p>Let the minimum support be 3. A <strong>Frequent Pattern set</strong> is built which will contain
+                        all the elements whose frequency is greater than or equal to the minimum support. These elements
+                        are stored in descending order of their respective frequencies. After insertion of the relevant
+                        items, the set L looks like this:-</p>
+                    <p>L = {K : 5, E : 4, M : 3, O : 3, Y : 3}</p> <!-- N has freq 2, so excluded -->
+                    <p>Now, for each transaction, the respective <strong>Ordered-Item set</strong> is built. It is done
+                        by iterating the Frequent Pattern set and checking if the current item is contained in the
+                        transaction in question. If the current item is contained, the item is inserted in the
+                        Ordered-Item set for the current transaction. The following table is built for all the
+                        transactions:</p>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Transaction ID</th>
+                                    <th>Items</th>
+                                    <th>Ordered-Item-Set</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>T1</td>
+                                    <td>{E,K,M,N,O,Y}</td>
+                                    <td>{K,E,M,O,Y}</td>
+                                </tr>
+                                <tr>
+                                    <td>T2</td>
+                                    <td>{D,E,K,N,O,Y}</td>
+                                    <td>{K,E,O,Y}</td>
+                                </tr>
+                                <tr>
+                                    <td>T3</td>
+                                    <td>{A,E,K,M}</td>
+                                    <td>{K,E,M}</td>
+                                </tr>
+                                <tr>
+                                    <td>T4</td>
+                                    <td>{K,M,Y}</td>
+                                    <td>{K,M,Y}</td>
+                                </tr>
+                                <tr>
+                                    <td>T5</td>
+                                    <td>{C,E,I,K,O,O}</td>
+                                    <td>{K,E,O}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p>Now, all the Ordered-Item sets are inserted into a Tree Data Structure (FP-Tree).</p>
+                    <h5>a) Inserting the set {K, E, M, O, Y}:</h5>
+                    <p>Here, all the items are simply linked one after the other in the order of occurrence in the set
+                        and initialise the support count for each item as 1. For inserting {K, E, M, O, Y}, we traverse
+                        the tree from the root. If a node already exists for an item, we increase its support count. If
+                        it doesn't exist, we create a new node for that item and link it to the previous item.</p>
+                    <div class="algorithm-diagram">
+                        <div class="diagram-placeholder">Tree: NULL -> K:1 -> E:1 -> M:1 -> O:1 -> Y:1</div>
+                    </div>
+                    <h5>b) Inserting the set {K, E, O, Y}:</h5>
+                    <p>Till the insertion of the elements K and E, simply the support count is increased by 1. On
+                        inserting O we can see that there is no direct link between E and O, therefore a new node for
+                        the item O is initialized with support count as 1 and item E is linked to this new node. On
+                        inserting Y, we first initialize a new node for the item Y with support count as 1 and link the
+                        new node of O with the new node of Y.</p>
+                    <div class="algorithm-diagram">
+                        <div class="diagram-placeholder">Tree: NULL -> K:2 -> E:2 --(branch1)--> M:1 -> O:1 -> Y:1 <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--(branch2)-->
+                            O:1 -> Y:1</div>
+                    </div>
+                    <h5>c) Inserting the set {K, E, M}:</h5>
+                    <p>Here simply the support count of each element is increased by 1.</p>
+                    <div class="algorithm-diagram">
+                        <div class="diagram-placeholder">Tree: NULL -> K:3 -> E:3 --(branch1)--> M:2 -> O:1 -> Y:1 <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--(branch2)-->
+                            O:1 -> Y:1</div>
+                    </div>
+                    <h5>d) Inserting the set {K, M, Y}: (Image shows (K,M,Y), text from screenshot says (K,M,Y))</h5>
+                    <p>Similar to step b), first the support count of K is increased, then new nodes for M and Y are
+                        initialized and linked accordingly.</p>
+                    <div class="algorithm-diagram">
+                        <div class="diagram-placeholder">Tree: NULL -> K:4 --(branch from K)--> M:1 -> Y:1 <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--(branch
+                            from K)--> E:3 --(branch1 from E)--> M:2 -> O:1 -> Y:1 <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--(branch2
+                            from E)--> O:1 -> Y:1</div>
+                    </div>
+                    <h5>e) Inserting the set {K, E, O}:</h5>
+                    <p>Here simply the support counts of the respective elements are increased. Note that the support
+                        count of the new node of item O is increased.</p>
+                    <div class="algorithm-diagram">
+                        <div class="diagram-placeholder">Final FP-Tree reflecting all insertions. (K:5, E from K has
+                            E:4, M from K has M:1, Y from M:1, etc. Branching structure as implied by previous steps).
+                        </div>
+                    </div>
+
+                    <p>The Conditional Pattern Base for each item consists of the set of prefixes of all paths in the
+                        FP-tree that lead to that item. Note that the items in the below table are arranged in the
+                        ascending order of their frequencies.</p>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Items</th>
+                                    <th>Conditional Pattern Base</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Y</td>
+                                    <td>{{K,E,M,O : 1}, {K,E,O : 1}, {K,M : 1}}</td>
+                                </tr>
+                                <tr>
+                                    <td>O</td>
+                                    <td>{{K,E,M : 1}, {K,E : 2}}</td>
+                                </tr>
+                                <tr>
+                                    <td>M</td>
+                                    <td>{{K,E : 2}, {K : 1}}</td>
+                                </tr>
+                                <tr>
+                                    <td>E</td>
+                                    <td>{{K : 4}}</td>
+                                </tr>
+                                <tr>
+                                    <td>K</td>
+                                    <td>{}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p>Now for each item, the Conditional Frequent Pattern Tree is built. It is done by taking the set
+                        of elements that is common in all the paths in the Conditional Pattern Base of that item and
+                        calculating its support count by summing the support counts of all the paths in the Conditional
+                        Pattern Base.</p>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Items</th>
+                                    <th>Conditional Pattern Base</th>
+                                    <th>Conditional Frequent Pattern Tree</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Y</td>
+                                    <td>{{K,E,M,O : 1}, {K,E,O : 1}, {K,M : 1}}</td>
+                                    <td>{K : 3}</td>
+                                </tr>
+                                <tr>
+                                    <td>O</td>
+                                    <td>{{K,E,M : 1}, {K,E : 2}}</td>
+                                    <td>{K,E : 3}</td>
+                                </tr>
+                                <tr>
+                                    <td>M</td>
+                                    <td>{{K,E : 2}, {K : 1}}</td>
+                                    <td>{K : 3}</td>
+                                </tr>
+                                <tr>
+                                    <td>E</td>
+                                    <td>{{K : 4}}</td>
+                                    <td>{K : 4}</td>
+                                </tr>
+                                <tr>
+                                    <td>K</td>
+                                    <td>{}</td>
+                                    <td>{}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p>From the Conditional Frequent Pattern tree, the Frequent Patterns are generated by pairing the
+                        items of the Conditional Frequent Pattern Tree set to the corresponding to the item as given in
+                        the below table.</p>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Items</th>
+                                    <th>Frequent Pattern Generated</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Y</td>
+                                    <td>{&lt;K,Y : 3&gt;}</td>
+                                </tr>
+                                <tr>
+                                    <td>O</td>
+                                    <td>{&lt;K,O : 3&gt;, &lt;E,O : 3&gt;, &lt;K,E,O : 3&gt;}</td>
+                                </tr>
+                                <tr>
+                                    <td>M</td>
+                                    <td>{&lt;K,M : 3&gt;}</td>
+                                </tr>
+                                <tr>
+                                    <td>E</td>
+                                    <td>{&lt;K,E : 4&gt;}</td>
+                                </tr>
+                                <tr>
+                                    <td>K</td>
+                                    <td>{}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p>For each row, two types of association rules can be inferred for example for the first row which
+                        contains the element, the rules K -&gt; Y and Y -&gt; K can be inferred. To determine the valid
+                        rule, the confidence of both the rules is calculated and the one with confidence greater than or
+                        equal to the minimum confidence value is retained.</p>
+                    <p>Frequent Pattern Growth (FP-Growth) algorithm improves upon the Apriori algorithm by eliminating
+                        the need for multiple database scans and reducing computational overhead. By using a Tree data
+                        structure and focusing on ordered-item sets it efficiently mines frequent item sets making it a
+                        faster and more scalable solution for large datasets for data mining.</p>
+
+                    <h3 id="eclat-algorithm">ML | ECLAT Algorithm</h3>
+                    <p>ECLAT (Equivalence Class Clustering and bottom-up Lattice Traversal) algorithm is a popular and
+                        efficient technique used for association rule mining. It is an improved alternative to the
+                        Apriori algorithm, offering better scalability and computational efficiency. Unlike Apriori,
+                        which follows a horizontal database layout and employs a breadth-first search (BFS) approach,
+                        ECLAT adopts a vertical database representation and uses depth-first search (DFS).</p>
+                    <p>This vertical approach significantly reduces the number of database scans, making ECLAT faster
+                        and more memory-efficient, especially for large datasets.</p>
+                    <h4>Key Differences between ECLAT and Apriori</h4>
+                    <ul>
+                        <li><strong>Apriori Algorithm:</strong> Uses a horizontal database layout and follows BFS,
+                            requiring multiple database scans.</li>
+                        <li><strong>ECLAT Algorithm:</strong> Uses a vertical database layout and follows DFS, reducing
+                            the number of database scans.</li>
+                    </ul>
+                    <p>For example, in Apriori, frequent single-item sets are identified first, followed by expansion to
+                        larger itemsets, requiring multiple database scans. ECLAT solves this by storing transactions in
+                        a vertical format (TID sets), which allows efficient intersection operations.</p>
+
+                    <h4>How ECLAT Algorithm Works</h4>
+                    <p>Let's walk through an example to better understand how the ECLAT algorithm works. Consider the
+                        following transaction dataset represented in a Boolean matrix:</p>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Transaction ID</th>
+                                    <th>Bread</th>
+                                    <th>Butter</th>
+                                    <th>Milk</th>
+                                    <th>Coke</th>
+                                    <th>Jam</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>T1</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>T2</td>
+                                    <td>0</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                </tr>
+                                <tr>
+                                    <td>T3</td>
+                                    <td>0</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                </tr>
+                                <tr>
+                                    <td>T4</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                </tr>
+                                <tr>
+                                    <td>T5</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                </tr>
+                                <tr>
+                                    <td>T6</td>
+                                    <td>0</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                </tr>
+                                <tr>
+                                    <td>T7</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                </tr>
+                                <tr>
+                                    <td>T8</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>T9</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p>The core idea of the ECLAT algorithm is based on the <strong>intersection of datasets</strong> to
+                        calculate the support of itemsets, avoiding the generation of subsets that are not likely to
+                        exist in the dataset. Here's a breakdown of the steps:</p>
+
+                    <h5>Step 1: Create the Tidset</h5>
+                    <p>The first step is to generate the tidset for each individual item. A tidset is simply a list of
+                        transaction IDs where the item appears. For example: k = 1, minimum support = 2</p>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Tidset</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Bread</td>
+                                    <td>{T1, T4, T5, T7, T8, T9}</td>
+                                </tr>
+                                <tr>
+                                    <td>Butter</td>
+                                    <td>{T1, T2, T3, T4, T6, T8, T9}</td>
+                                </tr>
+                                <tr>
+                                    <td>Milk</td>
+                                    <td>{T3, T5, T6, T7, T8, T9}</td>
+                                </tr>
+                                <tr>
+                                    <td>Coke</td>
+                                    <td>{T2, T4}</td>
+                                </tr>
+                                <tr>
+                                    <td>Jam</td>
+                                    <td>{T1, T8}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h5>Step 2: Calculate the Support of Itemsets by Intersecting Tidsets</h5>
+                    <p>ECLAT then proceeds by recursively combining the tidsets. The support of an itemset is determined
+                        by the intersection of tidsets. For example: k = 2</p>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Tidset</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{Bread, Butter}</td>
+                                    <td>{T1, T4, T8, T9}</td>
+                                </tr>
+                                <tr>
+                                    <td>{Bread, Milk}</td>
+                                    <td>{T5, T7, T8, T9}</td>
+                                </tr>
+                                <tr>
+                                    <td>{Bread, Coke}</td>
+                                    <td>{T4}</td>
+                                </tr>
+                                <tr>
+                                    <td>{Bread, Jam}</td>
+                                    <td>{T1, T8}</td>
+                                </tr>
+                                <tr>
+                                    <td>{Butter, Milk}</td>
+                                    <td>{T3, T6, T8, T9}</td>
+                                </tr>
+                                <tr>
+                                    <td>{Butter, Coke}</td>
+                                    <td>{T2, T4}</td>
+                                </tr>
+                                <tr>
+                                    <td>{Butter, Jam}</td>
+                                    <td>{T1, T8}</td>
+                                </tr>
+                                <tr>
+                                    <td>{Milk, Jam}</td>
+                                    <td>{T8}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h5>Step 3: Recursive Call and Generation of Larger Itemsets</h5>
+                    <p>The algorithm continues recursively by combining pairs of itemsets (k-itemsets) checking the
+                        support by intersecting the tidsets. The recursion continues until no further frequent itemsets
+                        can be generated. k = 3</p>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Tidset</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{Bread, Butter, Milk}</td>
+                                    <td>{T8, T9}</td>
+                                </tr>
+                                <tr>
+                                    <td>{Bread, Butter, Jam}</td>
+                                    <td>{T1, T8}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h5>Step 4: Stop When No More Frequent Itemsets Can Be Found</h5>
+                    <p>The algorithm stops once no more itemset combinations meet the minimum support threshold. k = 4
+                    </p>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Tidset</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{Bread, Butter, Milk, Jam}</td>
+                                    <td>{T8}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p>We stop at k = 4 because there are no more item-tidset pairs to combine. Since minimum support =
+                        2, we conclude the following rules from the given dataset:-</p>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Items Bought</th>
+                                    <th>Recommended Products</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Bread</td>
+                                    <td>Butter</td>
+                                </tr>
+                                <tr>
+                                    <td>Bread</td>
+                                    <td>Milk</td>
+                                </tr>
+                                <tr>
+                                    <td>Bread</td>
+                                    <td>Jam</td>
+                                </tr>
+                                <tr>
+                                    <td>Butter</td>
+                                    <td>Milk</td>
+                                </tr>
+                                <tr>
+                                    <td>Butter</td>
+                                    <td>Coke</td>
+                                </tr>
+                                <tr>
+                                    <td>Butter</td>
+                                    <td>Jam</td>
+                                </tr>
+                                <tr>
+                                    <td>Bread and Butter</td>
+                                    <td>Milk</td>
+                                </tr>
+                                <tr>
+                                    <td>Bread and Butter</td>
+                                    <td>Jam</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Note: Some recommended products like {Milk, Jam} -> {T8} had support 1, so would not form rules if min_support=2. The table seems illustrative. -->
+
+                    <h4>Advantages of the ECLAT Algorithm</h4>
+                    <ul>
+                        <li><strong>Efficient in Dense Datasets:</strong> Performs better than Apriori in datasets with
+                            frequent co-occurrences.</li>
+                        <li><strong>Memory Efficient:</strong> Uses vertical representation, reducing redundant scans.
+                        </li>
+                        <li><strong>Fast Itemset Intersection:</strong> Computing itemset support via TID-set
+                            intersections is faster than scanning transactions repeatedly.</li>
+                        <li><strong>Better Scalability:</strong> Can handle larger datasets due to its depth-first
+                            search mechanism.</li>
+                    </ul>
+                    <h4>Disadvantages of the ECLAT Algorithm</h4>
+                    <ul>
+                        <li><strong>High Memory Requirement:</strong> Large TID sets can consume significant memory.
+                        </li>
+                        <li><strong>Not Suitable for Sparse Data:</strong> Works better in dense datasets, but
+                            performance drops for sparse datasets where intersections result in small itemsets.</li>
+                        <li><strong>Sensitive to Large Transactions:</strong> If a transaction has too many items, its
+                            corresponding TID-set intersections can be expensive.</li>
+                    </ul>
+                    <h4>Applications of ECLAT Algorithm</h4>
+                    <ul>
+                        <li><strong>Market Basket Analysis:</strong> Identifying frequently purchased items together.
+                        </li>
+                        <li><strong>Recommendation Systems:</strong> Suggesting products based on past purchase
+                            patterns.</li>
+                        <li><strong>Medical Diagnosis:</strong> Finding co-occurring symptoms in medical records.</li>
+                        <li><strong>Web Usage Mining:</strong> Analyzing web logs to understand user behavior.</li>
+                        <li><strong>Fraud Detection:</strong> Discovering frequent patterns in fraudulent activities.
+                        </li>
+                    </ul>
+        </section>
+
+        <section id="dimensionality-reduction">
+            <h2>3. Dimensionality Reduction</h2>
+            <p>Dimensionality reduction is the process of reducing the number of features in a dataset while preserving
+                as much information as possible. This technique is useful for improving the performance of machine
+                learning algorithms and for data visualization.</p>
+            <p>Imagine a dataset of 100 features about students (height, weight, grades, etc.). To focus on key traits,
+                you reduce it to just 2 features: height and grades, making it easier to visualize or analyze the data.
+            </p>
+            <h4>Here are some popular Dimensionality Reduction algorithms:</h4>
+            <ul>
+                <li><a href="#pca">Principal Component Analysis (PCA)</a>: Reduces dimensions by transforming data into
+                    uncorrelated principal components.</li>
+                <li><a href="#tsne">t-distributed Stochastic Neighbor Embedding (t-SNE)</a>: Excellent for visualizing
+                    high-dimensional data in low dimensions.</li>
+                <li><strong>Linear Discriminant Analysis (LDA)</strong>: Reduces dimensions while maximizing class
+                    separability for classification tasks. (Often considered supervised or semi-supervised but sometimes
+                    listed under DR).</li>
+                <li><strong>Non-negative Matrix Factorization (NMF)</strong>: Breaks data into non-negative parts to
+                    simplify representation.</li>
+                <li><strong>Locally Linear Embedding (LLE)</strong>: Reduces dimensions while preserving the
+                    relationships between nearby points.</li>
+                <li><strong>Isomap</strong>: Captures global data structure by preserving distances along a manifold.
+                </li>
+            </ul>
+
+            <h3 id="pca">Principal Component Analysis (PCA)</h3>
+            <p>Having too many features in data can cause problems like overfitting (good on training data but poor on
+                new data), slower computation, and lower accuracy. This is called the <strong>curse of
+                    dimensionality</strong>, where more features exponentially increase the data needed for reliable
+                results.</p>
+            <p>The explosion of feature combinations makes sampling harder In high-dimensional data and tasks like
+                <strong>clustering or classification</strong> more complex and slow.</p>
+            <p>To tackle this problem, we use Feature engineering Techniques, such as <strong>feature selection</strong>
+                (choosing the most important features) and <strong>feature extraction</strong> (creating new features
+                from the original ones). One popular feature extraction method is <strong>dimensionality
+                    reduction</strong>, which reduces the number of features while keeping as much important information
+                as possible.</p>
+            <p>One of the most widely used dimensionality reduction techniques is Principal Component Analysis (PCA).
+            </p>
+            <h4>How PCA Works for Dimensionality Reduction?</h4>
+            <p>PCA is a statistical technique introduced by mathematician Karl Pearson in 1901. It works by transforming
+                high-dimensional data into a lower-dimensional space while <strong>maximizing the variance</strong> (or
+                spread) of the data in the new space. This helps preserve the most important patterns and relationships
+                in the data.</p>
+            <div class="callout info">
+                <strong>Note:</strong> It prioritizes the directions where the data varies the most (because more
+                variation = more useful information).
+            </div>
+            <p>Let's understand its working in simple terms:</p>
+            <p>Imagine you're looking at a messy cloud of data points (like stars in the sky) and want to simplify it.
+                PCA helps you find the "most important angles" to view this cloud so you don't miss the big patterns.
+                Here's how it works, step by step:</p>
+
+            <h5>Step 1: Standardize the Data</h5>
+            <p>Make sure all features (e.g., height, weight, age) are on the <strong>same scale</strong>. Why? A feature
+                like "salary" (ranging 0-100,000) could dominate "age" (0-100) otherwise. Standardizing our dataset
+                ensures that each variable has a mean of 0 and a standard deviation of 1.</p>
+            <p style="text-align:center;">Z = (x - &mu;) / &sigma;</p>
+            <p>Here,</p>
+            <ul>
+                <li>&mu; is the mean of independent features &mu; = {&mu;<sub>1</sub>, &mu;<sub>2</sub>, ...,
+                    &mu;<sub>m</sub>}</li>
+                <li>&sigma; is the standard deviation of independent features &sigma; = {&sigma;<sub>1</sub>,
+                    &sigma;<sub>2</sub>, ..., &sigma;<sub>m</sub>}</li>
+            </ul>
+
+            <h5>Step 2: Find Relationships</h5>
+            <p>Calculate how features <strong>move together</strong> using a <strong>covariance matrix</strong>.
+                Covariance measures the strength of joint variability between two or more variables, indicating how much
+                they change in relation to each other. To find the covariance we can use the formula:</p>
+            <p style="text-align:center;">cov(x1, x2) = &Sigma;<sup>n</sup><sub>i=1</sub> ( (x1<sub>i</sub> -
+                x&#772;1)(x2<sub>i</sub> - x&#772;2) ) / (n-1)</p>
+            <p>The value of covariance can be positive, negative, or zeros.</p>
+            <ul>
+                <li><strong>Positive:</strong> As the x1 increases x2 also increases.</li>
+                <li><strong>Negative:</strong> As the x1 increases x2 also decreases.</li>
+                <li><strong>Zeros:</strong> No direct relation.</li>
+            </ul>
+
+            <h5>Step 3: Find the "Magic Directions" (Principal Components)</h5>
+            <ul>
+                <li>PCA identifies <strong>new axes</strong> (like rotating a camera) where the data spreads out the
+                    most:
+                    <ul>
+                        <li><strong>1st Principal Component (PC1):</strong> The direction of maximum variance (most
+                            spread).</li>
+                        <li><strong>2nd Principal Component (PC2):</strong> The next best direction, perpendicular to
+                            PC1, and so on.</li>
+                    </ul>
+                </li>
+                <li>These directions are calculated using <strong>Eigenvalues and Eigenvectors</strong> (math tools that
+                    find these axes), and their importance is ranked by <strong>eigenvalues</strong> (how much variance
+                    each captures).</li>
+            </ul>
+            <p>For a square matrix A, an <strong>eigenvector</strong> X (a non-zero vector) and its corresponding
+                <strong>eigenvalue</strong> &lambda; (a scalar) satisfy:</p>
+            <p style="text-align:center;">AX = &lambda;X</p>
+            <p>This means:</p>
+            <ul>
+                <li>When A acts on X, it only stretches or shrinks X by the scalar &lambda;.</li>
+                <li>The direction of X remains unchanged (hence, eigenvectors define "stable directions" of A).</li>
+            </ul>
+            <p>It can also be written as :</p>
+            <p style="text-align:center;">AX - &lambda;X = 0<br>(A - &lambda;I)X = 0</p>
+            <p>where I is the identity matrix of the same shape as matrix A. And the above conditions will be true only
+                if (A-&lambda;I) will be non-invertible (i.e. singular matrix). That means,</p>
+            <p style="text-align:center;">|A - &lambda;I| = 0</p>
+            <p>This determinant equation is called the <strong>characteristic equation</strong>.</p>
+            <ul>
+                <li>Solving it gives the eigenvalues &lambda;lambda,</li>
+                <li>and therefore corresponding eigenvector can be found using the equation AX = &lambda;X.</li>
+            </ul>
+
+            <h5>How This Connects to PCA?</h5>
+            <ul>
+                <li>In PCA, the covariance matrix C (from Step 2) acts as matrix A.</li>
+                <li>Eigenvectors of C are the <strong>principal components</strong> (PCs).</li>
+                <li>Eigenvalues represent the <strong>variance captured</strong> by each PC.</li>
+            </ul>
+
+            <h5>Step 4: Pick the Top Directions & Transform Data</h5>
+            <ul>
+                <li>Keep only the top 2-3 directions (or enough to capture ~95% of the variance).</li>
+                <li>Project the data onto these directions to get a simplified, lower-dimensional version.</li>
+            </ul>
+            <p>PCA is an <strong>unsupervised learning algorithm</strong>, meaning it doesn't require prior knowledge of
+                target variables. It's commonly used in exploratory data analysis and machine learning to
+                <strong>simplify datasets without losing critical information</strong>.</p>
+            <p>We know everything sound complicated, let's understand again with help of visual image where, x-axis
+                (Radius) and y-axis (Area) represent two original features in the dataset.</p>
+            <div class="algorithm-diagram">
+                <div class="diagram-placeholder">Diagram showing 2D data (Area vs Radius) with PC1 (diagonal line with
+                    most variance) and PC2 (perpendicular to PC1). Data points are projected onto PC1, effectively
+                    reducing to 1D. Arrows show "Transformation 2D -> 1D" and "PC1 > PC2".</div>
+                <p>Transform this 2D dataset into a 1D representation while preserving as much variance as possible.</p>
+            </div>
+            <h5>Principal Components (PCs):</h5>
+            <ul>
+                <li><strong>PC<sub>1</sub> (First Principal Component):</strong> The direction along which the data has
+                    the maximum variance. It captures the most important information.</li>
+                <li><strong>PC<sub>2</sub> (Second Principal Component):</strong> The direction orthogonal
+                    (perpendicular) to PC<sub>1</sub>. It captures the remaining variance but is less significant.</li>
+            </ul>
+            <p>Now, The <strong>red dashed lines</strong> indicate the spread (variance) of data along different
+                directions . The variance along PC<sub>1</sub> is <strong>greater than PC<sub>2</sub></strong>, which
+                means that PC<sub>1</sub> carries more useful information about the dataset.</p>
+            <ul>
+                <li>The data points (blue dots) are projected onto PC<sub>1</sub>, effectively reducing the dataset from
+                    two dimensions (Radius, Area) to one dimension (PC<sub>1</sub>).</li>
+                <li>This transformation simplifies the dataset while retaining most of the original variability.</li>
+            </ul>
+            <div class="callout info">
+                The image visually explains why PCA selects the direction with the highest variance (PC<sub>1</sub>). By
+                removing PC<sub>2</sub>, we reduce redundancy while keeping essential information. The transformation
+                helps in <strong>data compression, visualization, and improved model performance.</strong>
+            </div>
+
+            <h4>Principal Component Analysis Implementation in Python</h4>
+            <p>Hence, PCA employs a linear transformation that is based on preserving the most variance in the data
+                using the least number of dimensions. It involves the following steps:</p>
+            <pre><code>import pandas as pd
+import numpy as np
+# Here we are using inbuilt dataset of scikit learn
+from sklearn.datasets import load_breast_cancer
+import matplotlib.pyplot as plt # For plotting later
+import seaborn as sns # For heatmap
+
+# instantiating
+cancer = load_breast_cancer(as_frame=True)
+# creating dataframe
+df = cancer.frame
+
+# checking shape
+print('Original Dataframe shape :',df.shape)
+
+# Input features
+X = df[cancer['feature_names']]
+print('Inputs Dataframe shape :', X.shape)</code></pre>
+            <p>Output:</p>
+            <pre><code>Original Dataframe shape : (569, 31)
+Inputs Dataframe shape : (569, 30)</code></pre>
+            <p>Now we will apply the first most step which is to standardize the data and for that, we will have to
+                first calculate the mean and standard deviation of each feature in the feature space.</p>
+            <pre><code># Mean
+X_mean = X.mean()
+# Standard deviation
+X_std = X.std()
+# Standardization
+Z = (X - X_mean) / X_std</code></pre>
+            <p>The <strong>covariance matrix</strong> helps us visualize how strong the dependency of two features is
+                with each other in the feature space.</p>
+            <pre><code># covariance matrix
+c = Z.cov() # Use standardized data for covariance matrix in PCA
+
+# Plot the covariance matrix
+# import matplotlib.pyplot as plt (already imported)
+# import seaborn as sns (already imported)
+plt.figure(figsize=(10,8))
+sns.heatmap(c)
+plt.show()</code></pre>
+            <div class="output-plot">
+                <div class="diagram-placeholder">Heatmap of the covariance matrix for breast cancer features.</div>
+            </div>
+            <p>Now we will compute the <strong>eigenvectors</strong> and <strong>eigenvalues</strong> for our feature
+                space which serve a great purpose in identifying the principal components for our feature space.</p>
+            <pre><code>eigenvalues, eigenvectors = np.linalg.eig(c)
+print('Eigen values:\n', eigenvalues)
+print('Eigen values Shape:', eigenvalues.shape)
+print('Eigen Vector Shape:', eigenvectors.shape)</code></pre>
+            <p>Output (example values):</p>
+            <pre><code>Eigen values:
+[1.32816077e+01 5.69135461e+00 2.81794898e+00 ... 3.11594025e-02 2.99728939e-02]
+Eigen values Shape: (30,)
+Eigen Vector Shape: (30, 30)</code></pre>
+            <p>Sort the eigenvalues in descending order and sort the corresponding eigenvectors accordingly.</p>
+            <pre><code># Index the eigenvalues in descending order
+idx = eigenvalues.argsort()[::-1]
+# Sort the eigenvalues in descending order
+eigenvalues = eigenvalues[idx]
+# sort the eigenvectors accordingly
+eigenvectors = eigenvectors[:,idx]</code></pre>
+            <p><strong>Explained variance</strong> is the term that gives us an idea of the amount of the total variance
+                which has been retained by selecting the principal components instead of the original feature space.</p>
+            <pre><code>explained_var = np.cumsum(eigenvalues) / np.sum(eigenvalues)
+print(explained_var)</code></pre>
+
+            <h4>PCA using Using Sklearn</h4>
+            <p>There are different libraries in which the whole process of the principal component analysis has been
+                automated by implementing it in a package as a function and we just have to pass the number of principal
+                components which we would like to have. Sklearn is one such library that can be used for the PCA as
+                shown below.</p>
+            <pre><code>from sklearn.decomposition import PCA
+# Let's say, components = 2
+pca = PCA(n_components=2)
+pca.fit(Z) # Use standardized data Z
+X_pca = pca.transform(Z)
+
+# Create the dataframe
+df_pca1 = pd.DataFrame(X_pca, columns=[f'PC{i+1}' for i in range(pca.n_components_)])
+print(df_pca1.head())</code></pre>
+            <p>Output:</p>
+            <div class="diagram-placeholder">Table showing head of PCA transformed data with PC1 and PC2 columns.</div>
+            <p>We can match from the above Z_pca result from it is exactly the same values. (This sentence might be
+                comparing to a manual PCA calculation not shown here).</p>
+            <pre><code># giving a Larger plot
+plt.figure(figsize=(8,6))
+plt.scatter(X_pca[:,0], X_pca[:,1], c=cancer['target'], cmap='plasma') # Color by target for visualization
+# Labeling x and y axes
+plt.xlabel('First Principal Component')
+plt.ylabel('Second Principal Component')
+plt.show()</code></pre>
+            <div class="output-plot">
+                <div class="diagram-placeholder">Scatter plot of the first two principal components, colored by the
+                    target variable (e.g., malignant/benign), showing some separation.</div>
+            </div>
+            <pre><code># components
+print(pca.components_)</code></pre>
+            <div class="output-plot">
+                <div class="diagram-placeholder">Numpy array output showing the principal axes in feature space
+                    (pca.components_).</div>
+            </div>
+
+            <h4>Advantages and Disadvantages of Principal Component Analysis</h4>
+            <h5>Advantages of Principal Component Analysis</h5>
+            <ol>
+                <li><strong>Multicollinearity Handling:</strong> Creates new, uncorrelated variables to address issues
+                    when original features are highly correlated.</li>
+                <li><strong>Noise Reduction:</strong> Eliminates components with low variance (assumed to be noise),
+                    enhancing data clarity.</li>
+                <li><strong>Data Compression:</strong> Represents data with fewer components, reducing storage needs and
+                    speeding up processing.</li>
+                <li><strong>Outlier Detection:</strong> Identifies unusual data points by showing which ones deviate
+                    significantly in the reduced space.</li>
+            </ol>
+            <h5>Disadvantages of Principal Component Analysis</h5>
+            <ol>
+                <li><strong>Interpretation Challenges:</strong> The new components are combinations of original
+                    variables, which can be hard to explain.</li>
+                <li><strong>Data Scaling Sensitivity:</strong> Requires proper scaling of data before application, or
+                    results may be misleading.</li>
+                <li><strong>Information Loss:</strong> Reducing dimensions may lose some important information if too
+                    few components are kept.</li>
+                <li><strong>Assumption of Linearity:</strong> Works best when relationships between variables are
+                    linear, and may struggle with non-linear data.</li>
+                <li><strong>Computational Complexity:</strong> Can be slow and resource-intensive on very large
+                    datasets.</li>
+                <li><strong>Risk of Overfitting:</strong> Using too many components or working with a small dataset
+                    might lead to models that don't generalize well.</li>
+            </ol>
+
+            <h3 id="tsne">t-distributed Stochastic Neighbor Embedding (t-SNE)</h3>
+            <p>t-SNE is another powerful technique for dimensionality reduction, particularly well-suited for
+                visualizing high-dimensional datasets in low-dimensional spaces (typically 2D or 3D). It was developed
+                by Laurens van der Maaten and Geoffrey Hinton.</p>
+            <h4>Key Idea of t-SNE</h4>
+            <p>t-SNE works by converting high-dimensional Euclidean distances between data points into conditional
+                probabilities that represent similarities. Specifically, it models the probability that point
+                <em>x<sub>i</sub></em> would pick <em>x<sub>j</sub></em> as its neighbor if neighbors were picked in
+                proportion to their probability density under a Gaussian centered at <em>x<sub>i</sub></em>. It then
+                tries to find a low-dimensional embedding of the points that minimizes the divergence between these two
+                distributions of probabilities (one in high-dim space, one in low-dim space).</p>
+            <p>It uses a Student's t-distribution to compute the similarity of points in the low-dimensional space to
+                allow dissimilar objects to be modeled far apart in the map.</p>
+            <h4>Use Cases</h4>
+            <ul>
+                <li><strong>Visualizing high-dimensional data:</strong> Its primary use is to create compelling 2D or 3D
+                    maps of data with many features.</li>
+                <li><strong>Understanding data clusters:</strong> Helps in visually inspecting potential cluster
+                    structures.</li>
+                <li><strong>Anomaly detection:</strong> Outliers may appear isolated in the t-SNE plot.</li>
+            </ul>
+            <h4>Pros of t-SNE</h4>
+            <ul>
+                <li>Excellent at revealing local structure and clusters in data.</li>
+                <li>Can capture non-linear structures effectively.</li>
+                <li>Widely used for visualization due to its ability to create well-separated clusters in the
+                    low-dimensional map.</li>
+            </ul>
+            <h4>Cons of t-SNE</h4>
+            <ul>
+                <li><strong>Computationally expensive:</strong> Can be very slow on large datasets (O(N log N) or
+                    O(N<sup>2</sup>) depending on implementation).</li>
+                <li><strong>Output is sensitive to parameters:</strong> The choice of perplexity and other parameters
+                    can significantly affect the resulting visualization.</li>
+                <li><strong>Global structure preservation:</strong> While good at local structure, t-SNE may not always
+                    preserve the global geometry of the data. Distances between clusters in the t-SNE plot might not be
+                    meaningful.</li>
+                <li><strong>Primarily for visualization:</strong> It's generally not recommended as a pre-processing
+                    step for other ML algorithms because the new "features" are hard to interpret and the optimization
+                    is non-convex.</li>
+                <li>The resulting plot can be misinterpreted if one is not careful; cluster sizes and distances between
+                    clusters in the t-SNE map are not always reliable indicators of actual cluster sizes or separations
+                    in the original high-dimensional space.</li>
+            </ul>
+            <p>Despite its limitations for tasks other than visualization, t-SNE is a very popular and powerful tool for
+                exploring high-dimensional data.</p>
+            <div class="callout info">
+                <strong>Note on other DR methods:</strong>
+                <ul>
+                    <li><strong>Linear Discriminant Analysis (LDA):</strong> While often used for dimensionality
+                        reduction, LDA is a supervised algorithm as it uses class labels to find an optimal projection
+                        that maximizes separability between classes.</li>
+                    <li><strong>Non-negative Matrix Factorization (NMF):</strong> Useful when data features are
+                        inherently non-negative (e.g., pixel intensities, word counts). It decomposes the data matrix
+                        into two non-negative matrices, often leading to parts-based representations.</li>
+                    <li><strong>Locally Linear Embedding (LLE):</strong> A non-linear dimensionality reduction technique
+                        that aims to preserve local neighborhood structures. It assumes data lies on a smooth,
+                        lower-dimensional manifold.</li>
+                    <li><strong>Isomap (Isometric Mapping):</strong> Another non-linear technique that estimates the
+                        geodesic distances between points on a manifold (approximated by shortest paths on a
+                        neighborhood graph) and then uses Multidimensional Scaling (MDS) to find a low-dimensional
+                        embedding that preserves these distances.</li>
+                </ul>
+            </div>
+
+        </section>
+
+
+        <section id="interactive-quiz-unsupervised">
+            <h2>Mini Quiz: Test Your Unsupervised Learning Knowledge!</h2>
+            <div class="quiz-container">
+                <div id="quiz">
+                    <div class="quiz-question" data-question="1">
+                        <p><strong>1. Which clustering algorithm requires you to pre-specify the number of clusters
+                                (K)?</strong></p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q1" value="a"> DBSCAN</label>
+                            <label><input type="radio" name="q1" value="b"> K-Means</label>
+                            <label><input type="radio" name="q1" value="c"> Hierarchical Clustering
+                                (Agglomerative)</label>
+                        </div>
+                        <p class="quiz-feedback" id="feedback-q1"></p>
+                    </div>
+                    <div class="quiz-question" data-question="2">
+                        <p><strong>2. What is the primary goal of Principal Component Analysis (PCA)?</strong></p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q2" value="a"> To group similar data points into
+                                clusters.</label>
+                            <label><input type="radio" name="q2" value="b"> To find hidden relationships between items
+                                in transactions.</label>
+                            <label><input type="radio" name="q2" value="c"> To reduce the number of features while
+                                preserving variance.</label>
+                        </div>
+                        <p class="quiz-feedback" id="feedback-q2"></p>
+                    </div>
+                    <div class="quiz-question" data-question="3">
+                        <p><strong>3. The Apriori algorithm uses which metric to determine the frequency of an itemset
+                                in a dataset?</strong></p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q3" value="a"> Lift</label>
+                            <label><input type="radio" name="q3" value="b"> Confidence</label>
+                            <label><input type="radio" name="q3" value="c"> Support</label>
+                        </div>
+                        <p class="quiz-feedback" id="feedback-q3"></p>
+                    </div>
+                    <button id="submitQuiz">Submit Answers</button>
+                    <p id="quizScore" style="margin-top:15px; font-weight:bold;"></p>
+                </div>
+            </div>
+        </section>
+
+
+        <footer class="new-footer-container">
+            <div class="new-footer-buttons-wrapper">
+                <a href="topic-7.html" class="new-footer-button">
+                    ← Previous Topic: Supervised Learning Algorithms
+                </a>
+                <a href="topic-9.html" class="new-footer-button">
+                    Next Topic: Reinforcement Learning →
+                </a>
+            </div>
+            <a href="#" onclick="window.print(); return false;" class="new-footer-print-link">Print this page</a>
+            <p style="font-size: 0.9rem; color: var(--text-color); margin-top: 0.5rem;">© <span id="currentYear"></span>
+                Unsupervised Learning Algorithms. All rights reserved.</p>
+        </footer>
+
+    </main>
+
+    <script>
+        // JavaScript from topic-1.html (Theme toggle, Throttled TOC highlighting, Footer year)
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+        function setTheme(theme) { if (theme === 'dark') { body.classList.add('dark-mode'); themeToggle.innerHTML = '<i class="fas fa-sun"></i>'; localStorage.setItem('theme', 'dark'); } else { body.classList.remove('dark-mode'); themeToggle.innerHTML = '<i class="fas fa-moon"></i>'; localStorage.setItem('theme', 'light'); } }
+        const localTheme = localStorage.getItem('theme'); if (localTheme) { setTheme(localTheme); } else { setTheme(prefersDarkScheme.matches ? 'dark' : 'light'); }
+        themeToggle.addEventListener('click', () => { setTheme(body.classList.contains('dark-mode') ? 'light' : 'dark'); });
+        prefersDarkScheme.addEventListener('change', (e) => { if (!localStorage.getItem('theme')) { setTheme(e.matches ? 'dark' : 'light'); } });
+
+        // Table of Contents Generation & Active Scrolling
+        const tocContainer = document.getElementById('toc');
+        const mainContent = document.querySelector('.main-content'); // Target main content for sections
+        const mainSections = Array.from(mainContent.querySelectorAll('section[id]')); // Get sections from main content
+        let tocLinkElements = [];
+
+        function throttle(func, limit) { let inThrottle; return function () { const args = arguments; const context = this; if (!inThrottle) { func.apply(context, args); inThrottle = true; setTimeout(() => inThrottle = false, limit); } } }
+
+        function updateTocAndSectionData() {
+            const navbar = document.querySelector('.navbar');
+            const navbarHeight = navbar ? navbar.offsetHeight : 0;
+            tocContainer.innerHTML = ''; // Clear existing TOC
+            tocLinkElements = [];
+
+            mainSections.forEach(section => {
+                const sectionTitleElement = section.querySelector('h2'); // Main sections are h2
+                if (sectionTitleElement) {
+                    const listItem = document.createElement('li');
+                    const link = document.createElement('a');
+                    link.textContent = sectionTitleElement.textContent;
+                    link.href = `#${section.id}`;
+                    link.dataset.sectionId = section.id;
+                    listItem.appendChild(link);
+                    tocContainer.appendChild(listItem);
+                    tocLinkElements.push(link);
+
+                    // Add H3 sub-items to TOC
+                    const subSections = Array.from(section.querySelectorAll('h3[id]'));
+                    if (subSections.length > 0) {
+                        const subList = document.createElement('ul');
+                        subSections.forEach(subSection => {
+                            const subListItem = document.createElement('li');
+                            const subLink = document.createElement('a');
+                            subLink.textContent = subSection.textContent;
+                            subLink.href = `#${subSection.id}`;
+                            subLink.dataset.sectionId = subSection.id;
+                            subLink.classList.add('sub-item');
+                            subListItem.appendChild(subLink);
+                            subList.appendChild(subListItem);
+                            tocLinkElements.push(subLink); // Add sub-links to the array for highlighting
+                        });
+                        listItem.appendChild(subList);
+                    }
+                }
+                // Calculate effective offset for all elements that can be linked (h2, h3)
+                section.dataset.effectiveOffsetTop = section.offsetTop - navbarHeight - 30;
+                const allNavigableElements = Array.from(section.querySelectorAll('h2[id], h3[id]'));
+                allNavigableElements.forEach(el => {
+                    el.dataset.effectiveOffsetTop = el.getBoundingClientRect().top + window.scrollY - navbarHeight - 30;
+                });
+
+            });
+        }
+
+
+        function highlightActiveTocLink() {
+            const scrollPosition = window.scrollY;
+            let currentlyActiveSectionId = null;
+
+            // Iterate backwards through all linkable elements (h2s and h3s by their IDs stored in tocLinkElements)
+            const allLinkableElements = tocLinkElements.map(link => document.getElementById(link.dataset.sectionId)).filter(el => el);
+
+            for (let i = allLinkableElements.length - 1; i >= 0; i--) {
+                const element = allLinkableElements[i];
+                if (element && scrollPosition >= parseFloat(element.dataset.effectiveOffsetTop || '0')) {
+                    currentlyActiveSectionId = element.id;
+                    break;
+                }
+            }
+
+            tocLinkElements.forEach(link => {
+                if (link.dataset.sectionId === currentlyActiveSectionId) {
+                    link.classList.add('active');
+                    // If it's a sub-item, also activate its parent H2 link
+                    if (link.classList.contains('sub-item')) {
+                        const parentLi = link.closest('ul').closest('li');
+                        if (parentLi) {
+                            const parentLink = parentLi.querySelector('a:not(.sub-item)');
+                            if (parentLink) parentLink.classList.add('active');
+                        }
+                    }
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+
+
+        if (mainSections.length > 0) { updateTocAndSectionData(); highlightActiveTocLink(); window.addEventListener('scroll', throttle(highlightActiveTocLink, 100)); window.addEventListener('resize', throttle(() => { updateTocAndSectionData(); highlightActiveTocLink(); }, 150)); }
+
+
+        // Mini Quiz Logic
+        const submitQuizButton = document.getElementById('submitQuiz');
+        const quizQuestionElements = document.querySelectorAll('#interactive-quiz-unsupervised .quiz-question');
+        const quizCorrectAnswers = {
+            q1: { value: 'b', text: 'K-Means' },
+            q2: { value: 'c', text: 'To reduce the number of features while preserving variance.' },
+            q3: { value: 'c', text: 'Support' }
+        };
+
+        if (submitQuizButton) {
+            submitQuizButton.addEventListener('click', () => {
+                let score = 0;
+                quizQuestionElements.forEach(questionElement => {
+                    const questionId = 'q' + questionElement.dataset.question;
+                    const selectedOption = document.querySelector(`#interactive-quiz-unsupervised input[name="${questionId}"]:checked`);
+                    const feedbackElement = document.getElementById(`feedback-${questionId}`);
+                    const correctAnswerInfo = quizCorrectAnswers[questionId];
+
+                    if (selectedOption) {
+                        if (selectedOption.value === correctAnswerInfo.value) {
+                            score++;
+                            feedbackElement.textContent = "Correct!";
+                            feedbackElement.style.color = "var(--secondary-color)";
+                        } else {
+                            feedbackElement.textContent = `Incorrect. The correct answer is: ${correctAnswerInfo.text}.`;
+                            feedbackElement.style.color = "var(--accent-color)";
+                        }
+                    } else {
+                        feedbackElement.textContent = "Please select an answer.";
+                        feedbackElement.style.color = "var(--accent-color)";
+                    }
+                });
+                const quizScoreEl = document.getElementById('quizScore');
+                if (quizScoreEl) {
+                    quizScoreEl.textContent = `You scored ${score} out of ${quizQuestionElements.length}.`;
+                }
+            });
+        }
+
+        // Footer current year
+        const currentYearSpan = document.getElementById('currentYear');
+        if (currentYearSpan) {
+            currentYearSpan.textContent = new Date().getFullYear();
+        }
+    </script>
+</body>
+
+</html>

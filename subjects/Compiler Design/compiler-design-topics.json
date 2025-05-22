@@ -4,43 +4,43 @@
     "topics": [
       {
         "title": "Introduction to Compilers",
-        "description": "Overview of compiler structure, phases, and differences from interpreters.",
-        "resources": ["Notes", "Video"]
+        "description": "What is a Compiler?,Compiler vs Interpreter,Phases of a Compiler,Compiler Structure",
+        "resources": []
       },
       {
         "title": "Lexical Analysis",
-        "description": "Role of lexical analyzer, regular expressions, and finite automata.",
-        "resources": ["Diagram", "Examples"]
+        "description": "Role of Lexical Analyzer,Tokens, Lexemes, and Patterns,Regular Expressions,Finite Automata (NFA & DFA),Lexical Errors and Recovery",
+        "resources": []
       },
       {
         "title": "Syntax Analysis",
-        "description": "Parsing techniques including LL(1), LR(0), SLR, and parsing tables.",
-        "resources": ["Practice", "Code"]
+        "description": "Context-Free Grammars (CFG),Parse Trees and Derivations,Top-Down Parsing (LL(1)),Bottom-Up Parsing (LR(0), SLR, Canonical LR, LALR),FIRST and FOLLOW Sets,Parser Error Handling",
+        "resources": []
       },
       {
         "title": "Semantic Analysis",
-        "description": "Syntax-directed translation, type checking, and symbol table management.",
-        "resources": ["Notes", "Examples"]
+        "description": "Syntax-Directed Translation,Attributes (Synthesized & Inherited),Type Checking and Type Systems,Symbol Table Management,Static and Dynamic Scoping",
+        "resources": []
       },
       {
         "title": "Intermediate Code Generation",
-        "description": "Three-address code, syntax trees, and postfix notation.",
-        "resources": ["Code", "Video"]
+        "description": "Three-Address Code (TAC),Quadruples and Triples,Syntax Trees and DAGs,Postfix Notation,Backpatching",
+        "resources": []
       },
       {
         "title": "Code Optimization",
-        "description": "Peephole optimization, DAGs, loops optimization techniques.",
-        "resources": ["Notes", "Diagram"]
+        "description": "Need for Optimization,Peephole Optimization,Control Flow Graph (CFG),DAGs for Basic Blocks,Loop Optimization (Unrolling, Invariant Code Motion),Data Flow Analysis",
+        "resources": []
       },
       {
         "title": "Target Code Generation",
-        "description": "Translation of intermediate code to machine code with register allocation.",
-        "resources": ["Code", "Examples"]
+        "description": "Target Machine Architecture,Instruction Selection,Register Allocation and Assignment,Evaluation Order,Code Emission Techniques",
+        "resources": []
       },
       {
-        "title": "Compiler Tools",
-        "description": "Overview of LEX and YACC for automating compiler components.",
-        "resources": ["Practice", "Video"]
+        "title": "Compiler Tools and Automation",
+        "description": "Overview of Lex and YACC,Lexical Analyzer Generation with LEX,Parser Generation with YACC,Integration of LEX & YACC",
+        "resources": []
       }
     ]
   }

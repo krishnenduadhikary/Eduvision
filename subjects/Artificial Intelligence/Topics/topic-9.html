@@ -1,0 +1,1982 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reinforcement Learning</title>
+    <meta name="description"
+        content="Explore Reinforcement Learning concepts: MDPs, Value/Policy Iteration, Q-learning, SARSA, and Deep Q-Networks (DQN).">
+    <meta name="keywords"
+        content="Reinforcement Learning, MDP, Markov Decision Process, Value Iteration, Policy Iteration, Q-learning, SARSA, Deep Q-Networks, DQN, AI Algorithms">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* CSS from topic-1.html - For brevity, imagine all the CSS from the previous example is here */
+        /* Key structural CSS will be included, specific element styles might be summarized */
+        :root {
+            --primary-color-light: #3498db;
+            /* Blue */
+            --secondary-color-light: #2ecc71;
+            /* Green */
+            --accent-color-light: #e67e22;
+            /* Orange */
+            --background-color-light: #f4f7f6;
+            --text-color-light: #333;
+            --card-bg-light: #ffffff;
+            --border-color-light: #e0e0e0;
+            --code-bg-light: #eef;
+
+            --primary-color-dark: #5dade2;
+            /* Lighter Blue */
+            --secondary-color-dark: #58d68d;
+            /* Lighter Green */
+            --accent-color-dark: #f5b041;
+            /* Lighter Orange */
+            --background-color-dark: #1e272e;
+            --text-color-dark: #f0f0f0;
+            --card-bg-dark: #2c3a47;
+            --border-color-dark: #444;
+            --code-bg-dark: #2a2a40;
+
+            --primary-color: var(--primary-color-light);
+            --secondary-color: var(--secondary-color-light);
+            --accent-color: var(--accent-color-light);
+            --background-color: var(--background-color-light);
+            --text-color: var(--text-color-light);
+            --card-bg: var(--card-bg-light);
+            --border-color: var(--border-color-light);
+            --code-bg: var(--code-bg-light);
+
+            --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --font-mono: 'Courier New', Courier, monospace;
+            --font-logo: 'Nunito', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            --primary-color: var(--primary-color-dark);
+            --secondary-color: var(--secondary-color-dark);
+            --accent-color: var(--accent-color-dark);
+            --background-color: var(--background-color-dark);
+            --text-color: var(--text-color-dark);
+            --card-bg: var(--card-bg-dark);
+            --border-color: var(--border-color-dark);
+            --code-bg: var(--code-bg-dark);
+        }
+
+        /* Eduvision Logo (Same as topic-1) */
+        .eduvishion-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1050;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvishion-logo .text-2xl {
+            font-family: var(--font-logo);
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvishion-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvishion-logo .text-yellow-300 {
+            color: #fde047 !important;
+        }
+
+        .eduvishion-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+        }
+
+        .eduvishion-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvishion-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Navbar (Same as topic-1) */
+        .navbar {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-left-spacer {
+            flex-basis: 50px;
+            flex-shrink: 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .navbar-brand i {
+            margin-right: 0.5rem;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            flex-basis: 50px;
+            flex-shrink: 0;
+            text-align: right;
+        }
+
+        /* Sidebar (Same as topic-1) */
+        .sidebar {
+            position: fixed;
+            top: 77px;
+            left: 0;
+            width: 280px;
+            height: calc(100vh - 77px);
+            background-color: var(--card-bg);
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 1px solid var(--border-color);
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li a {
+            display: block;
+            padding: 8px 0;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s, padding-left 0.2s, background-color 0.2s;
+            border-radius: 4px;
+        }
+
+        .sidebar ul li a.sub-item {
+            padding-left: 15px;
+            font-size: 0.9rem;
+        }
+
+        .sidebar ul li a.sub-item:hover {
+            padding-left: 25px;
+        }
+
+        .sidebar ul li a.sub-item.active {
+            padding-left: 25px;
+        }
+
+        .sidebar ul li a:hover {
+            color: var(--accent-color);
+            padding-left: 10px;
+        }
+
+        .sidebar ul li a.active {
+            color: var(--accent-color);
+            padding-left: 10px;
+            font-weight: bold;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-mode .sidebar ul li a.active {
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Main Content Area (Same as topic-1) */
+        .main-content {
+            margin-left: 300px;
+            padding: 2rem 3rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 4rem 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-section p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+
+        /* Syllabus Bar */
+        .syllabus-bar-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 0.75rem;
+            background-color: var(--card-bg);
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.07);
+            border: 1px solid var(--border-color);
+        }
+
+        .syllabus-bar-back-link {
+            display: flex;
+            align-items: center;
+            font-size: 0.875rem;
+            color: #2563eb;
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            text-decoration: none;
+            transition: background-color 0.15s, color 0.15s;
+            margin-bottom: 0.5rem;
+        }
+
+        .dark-mode .syllabus-bar-back-link {
+            color: #5dade2;
+        }
+
+        .dark-mode .syllabus-bar-back-link:hover {
+            color: #8ecae6;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .syllabus-bar-back-link:hover {
+            color: #1d4ed8;
+            background-color: #eff6ff;
+        }
+
+        .syllabus-bar-back-link svg {
+            height: 1.25rem;
+            width: 1.25rem;
+            margin-right: 0.375rem;
+            fill: currentColor;
+        }
+
+        .syllabus-bar-topic-badge {
+            background-color: #2563eb;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.375rem 1rem;
+            border-radius: 9999px;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        @media (min-width: 640px) {
+            .syllabus-bar-container {
+                flex-direction: row;
+            }
+
+            .syllabus-bar-back-link {
+                margin-bottom: 0;
+            }
+
+            .syllabus-bar-topic-badge {
+                font-size: 0.875rem;
+            }
+        }
+
+        /* General Content Styles (Same as topic-1) */
+        section {
+            margin-bottom: 3rem;
+            padding-top: 70px;
+            margin-top: -70px;
+        }
+
+        h2 {
+            /* Main sections: Clustering, Association, Dimensionality */
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            /* Algorithm names: K-Means, Apriori, PCA */
+            font-size: 1.8rem;
+            /* Slightly larger for main algorithm names */
+            color: var(--secondary-color);
+            /* Using secondary for algorithm names */
+            margin-top: 2.5rem;
+            /* More space before a new algorithm */
+            margin-bottom: 1.2rem;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 0.4rem;
+        }
+
+        h4 {
+            /* Sub-headings within an algorithm: How it works, Python Implementation */
+            font-size: 1.4rem;
+            color: var(--accent-color);
+            margin-top: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        h5 {
+            /* Further sub-headings: Step 1, Pros/Cons */
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            opacity: 0.9;
+            margin-top: 1.2rem;
+            margin-bottom: 0.7rem;
+        }
+
+        .formula {
+            font-family: var(--font-mono);
+            background-color: var(--code-bg);
+            padding: 0.8rem 1rem;
+            border-radius: 4px;
+            margin: 1rem auto;
+            display: block;
+            text-align: center;
+            font-size: 1em;
+            overflow-x: auto;
+        }
+
+
+        p,
+        li {
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        ul,
+        ol {
+            padding-left: 25px;
+            margin-bottom: 1rem;
+        }
+
+        ul li,
+        ol li {
+            margin-bottom: 0.5rem;
+        }
+
+        .callout {
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 5px solid var(--accent-color);
+            background-color: var(--card-bg);
+            border-radius: 0 5px 5px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .callout.info {
+            border-left-color: var(--primary-color);
+        }
+
+        .callout.success {
+            border-left-color: var(--secondary-color);
+        }
+
+        .callout.warning {
+            border-left-color: #f39c12;
+        }
+
+        details {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+        }
+
+        summary {
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--primary-color);
+            padding: 0.5rem 0;
+        }
+
+        summary::marker {
+            color: var(--accent-color);
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            color: var(--text-color);
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+            /* Slightly smaller for better fit */
+            border: 1px solid var(--border-color);
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        code {
+            /* Inline code */
+            font-family: var(--font-mono);
+            background-color: var(--code-bg);
+            padding: 0.1em 0.3em;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+
+        /* Diagram Styles (similar to agent-diagram) */
+        .algorithm-diagram,
+        .output-plot {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 1.5rem auto;
+            max-width: 600px;
+            /* Can adjust per diagram */
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+        }
+
+        .algorithm-diagram img,
+        .output-plot img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-top: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .algorithm-diagram p,
+        .output-plot p {
+            font-size: 0.9em;
+            margin-top: 0.5em;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .diagram-placeholder {
+            border: 2px dashed var(--border-color);
+            padding: 20px;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            opacity: 0.7;
+            font-style: italic;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            font-size: 0.95em;
+        }
+
+        th,
+        td {
+            border: 1px solid var(--border-color);
+            padding: 8px 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--code-bg);
+            /* Light background for headers */
+            font-weight: bold;
+        }
+
+        /* Responsive table */
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+
+        /* New Footer Styles (Same as topic-1, with link updates) */
+        .new-footer-container {
+            margin-top: 4rem;
+            padding-top: 2.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .new-footer-buttons-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            align-items: center;
+        }
+
+        .new-footer-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            background-color: #2563eb;
+            color: white !important;
+            border-radius: 9999px;
+            text-decoration: none;
+            transition: background-color 0.15s, box-shadow 0.15s;
+            font-weight: 500;
+            font-size: 0.875rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            min-width: 280px;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .new-footer-button:hover {
+            background-color: #1d4ed8;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .new-footer-button:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+
+        .new-footer-print-link {
+            margin-top: 1rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .new-footer-print-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (min-width: 640px) {
+            .new-footer-buttons-wrapper {
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 1rem;
+            }
+
+            .new-footer-button {
+                margin-bottom: 0;
+            }
+        }
+
+        /* Quiz Styles (Same as topic-1) */
+        .quiz-container {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-question {
+            margin-bottom: 15px;
+        }
+
+        .quiz-question p strong {
+            color: var(--text-color);
+        }
+
+
+        .quiz-options label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .quiz-options input {
+            margin-right: 8px;
+        }
+
+        .quiz-feedback {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Responsive Adjustments (Same as topic-1) */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                box-shadow: none;
+                top: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+
+            .navbar {
+                padding: 0.8rem 1rem;
+            }
+
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+
+            .nav-left-spacer,
+            .theme-toggle {
+                flex-basis: 40px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .eduvishion-logo {
+                top: 12px;
+                left: 12px;
+            }
+
+            .eduvishion-logo .text-2xl {
+                font-size: 1.3rem;
+            }
+
+            .eduvishion-logo svg {
+                height: 1.2em;
+                width: 1.2em;
+            }
+
+            .navbar {
+                padding: 1rem;
+                justify-content: center;
+                position: relative;
+            }
+
+            .nav-left-spacer {
+                display: none;
+            }
+
+            .navbar-brand {
+                flex-grow: 0;
+                margin-right: auto;
+                margin-left: 50px;
+                /* Adjusted for Eduvision logo space */
+                font-size: 1.3rem;
+            }
+
+            .theme-toggle {
+                position: absolute;
+                right: 1rem;
+                top: 50%;
+                transform: translateY(-50%);
+                flex-basis: auto;
+                font-size: 1.2rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-section p {
+                font-size: 1.1rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            h3 {
+                font-size: 1.5rem;
+            }
+
+            h4 {
+                font-size: 1.2rem;
+            }
+
+            h5 {
+                font-size: 1.1rem;
+            }
+
+
+            .syllabus-bar-container {
+                padding: 0.5rem;
+            }
+
+            .syllabus-bar-back-link {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.6rem;
+            }
+
+            .syllabus-bar-topic-badge {
+                font-size: 0.7rem;
+                padding: 0.3rem 0.8rem;
+            }
+
+            .new-footer-button {
+                font-size: 0.8rem;
+                padding: 0.6rem 1.2rem;
+                min-width: auto;
+                width: 90%;
+            }
+
+            .new-footer-buttons-wrapper {
+                flex-direction: column;
+            }
+
+            .new-footer-buttons-wrapper .new-footer-button:first-child {
+                margin-bottom: 0.5rem;
+            }
+
+            .algorithm-diagram,
+            .output-plot {
+                max-width: 100%;
+                padding: 10px;
+            }
+        }
+
+        /* Print Styles (Same as topic-1) */
+        @media print {
+            body {
+                font-size: 10pt;
+                color: #000 !important;
+                background-color: #fff !important;
+            }
+
+            .navbar,
+            .sidebar,
+            .theme-toggle,
+            .hero-section .btn,
+            .quiz-container,
+            .new-footer-container,
+            details summary::marker,
+            .eduvishion-logo,
+            .syllabus-bar-container,
+            .new-footer-print-link {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 0;
+            }
+
+            section {
+                padding-top: 0;
+                margin-top: 0;
+                margin-bottom: 1.5rem;
+                page-break-after: auto;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5 {
+                color: #000 !important;
+                border: none !important;
+                page-break-after: avoid;
+            }
+
+            .callout {
+                border-left: 3px solid #ccc !important;
+                background-color: #f9f9f9 !important;
+            }
+
+            a {
+                text-decoration: none;
+                color: #000 !important;
+            }
+
+            a[href^="http"]:after {
+                content: " (" attr(href) ")";
+            }
+
+            pre,
+            .formula {
+                background-color: #f0f0f0 !important;
+                border: 1px solid #ccc !important;
+                color: #000 !important;
+                page-break-inside: avoid;
+                white-space: pre-wrap;
+                /* Ensure code wraps in print */
+                word-wrap: break-word;
+            }
+
+            table,
+            .algorithm-diagram,
+            .output-plot {
+                page-break-inside: avoid;
+            }
+
+            .algorithm-diagram img,
+            .output-plot img {
+                max-width: 80% !important;
+                /* Control image size in print */
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvishion-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../../index.html" class="flex items-center group">
+                <span class="text-white">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+                    fill="none">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-white">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-left-spacer"></div>
+        <a href="#" class="navbar-brand"><i class="fas fa-robot"></i> Reinforcement Learning</a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+        </button>
+    </nav>
+
+    <aside class="sidebar" id="sidebar">
+        <h3>Table of Contents</h3>
+        <ul id="toc"></ul>
+    </aside>
+
+    <main class="main-content">
+        <header class="hero-section">
+            <h1>Reinforcement Learning</h1>
+            <p>Learn how agents make optimal decisions through trial and error to maximize rewards.</p>
+        </header>
+
+        <div class="syllabus-bar-container">
+            <a href="../ai.html" class="syllabus-bar-back-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                        clip-rule="evenodd" />
+                </svg>
+                Back to Syllabus
+            </a>
+            <div class="syllabus-bar-topic-badge">
+                Topic 9
+            </div>
+        </div>
+
+        <section id="intro-rl">
+            <h2>Introduction to Reinforcement Learning</h2>
+            <p>Reinforcement Learning is a type of Machine Learning. It allows machines and software agents to
+                automatically determine the ideal behavior within a specific context, in order to maximize its
+                performance. Simple reward feedback is required for the agent to learn its behavior; this is known as
+                the reinforcement signal.</p>
+            <p>There are many different algorithms that tackle this issue. As a matter of fact, Reinforcement Learning
+                is defined by a specific type of problem and all its solutions are classed as Reinforcement Learning
+                algorithms. In the problem, an agent is supposed to decide the best action to select based on his
+                current state. When this step is repeated, the problem is known as a <strong>Markov Decision
+                    Process</strong>.</p>
+        </section>
+
+        <section id="mdp">
+            <h2>Markov Decision Process (MDP)</h2>
+            <p>A Markov Decision Process (MDP) model contains:</p>
+            <ul>
+                <li>A set of possible world states <strong>S</strong>.</li>
+                <li>A set of Models.</li>
+                <li>A set of possible actions <strong>A</strong>.</li>
+                <li>A real-valued reward function <strong>R(s,a)</strong>.</li>
+                <li>A policy is a solution to Markov Decision Process.</li>
+            </ul>
+            <div class="algorithm-diagram">
+                <div class="diagram-placeholder">Table summarizing MDP components: States (S), Model (T(S, a, S') ~ P(S'
+                    | S, a)), Actions (A(S), A), Reward (R(S), R(S, a), R(S, a, S')), Policy (π(S)→a, π*).</div>
+                <p>Markov Decision Process</p>
+            </div>
+
+            <h4>What is a State?</h4>
+            <p>A <strong>State</strong> is a set of tokens that represent every state that the agent can be in.</p>
+
+            <h4>What is a Model?</h4>
+            <p>A <strong>Model</strong> (sometimes called Transition Model) gives an action's effect in a state. In
+                particular, T(S, a, S') defines a transition T where being in state S and taking an action 'a' takes us
+                to state S' (S and S' may be the same). For stochastic actions (noisy, non-deterministic) we also define
+                a probability P(S'|S,a) which represents the probability of reaching a state S' if action 'a' is taken
+                in state S. Note Markov property states that the effects of an action taken in a state depend only on
+                that state and not on the prior history.</p>
+
+            <h4>What are Actions?</h4>
+            <p>Action <strong>A</strong> is a set of all possible actions. A(S) defines the set of actions that can be
+                taken being in state S.</p>
+
+            <h4>What is a Reward?</h4>
+            <p>A <strong>Reward</strong> is a real-valued reward function. R(s) indicates the reward for simply being in
+                the state S. R(S,a) indicates the reward for being in a state S and taking an action 'a'. R(S,a,S')
+                indicates the reward for being in a state S, taking an action 'a' and ending up in a state S'.</p>
+
+            <h4>What is a Policy?</h4>
+            <p>A <strong>Policy</strong> is a solution to the Markov Decision Process. A policy is a mapping from S to
+                a. It indicates the action 'a' to be taken while in state S.</p>
+            <p>Let us take the example of a grid world:</p>
+            <div class="algorithm-diagram">
+                <div class="diagram-placeholder">3x4 grid world: Start (1,1), Blocked (2,2), Diamond/Goal (+1 at 4,3),
+                    Fire/Pit (-1 at 4,2). Agent (king piece) at (3,1) with arrows showing possible moves.</div>
+            </div>
+            <p>An agent lives in the grid. The above example is a 3*4 grid. The grid has a START state (grid no 1,1).
+                The purpose of the agent is to wander around the grid to finally reach the Blue Diamond (grid no 4,3).
+                Under all circumstances, the agent should avoid the Fire grid (orange color, grid no 4,2). Also, the
+                grid no 2,2 is a blocked grid, it acts as a wall hence the agent cannot enter it.</p>
+            <p>The agent can take any one of these actions: <strong>UP, DOWN, LEFT, RIGHT</strong></p>
+            <p>Walls block the agent's path, i.e., if there is a wall in the direction the agent would have taken, the
+                agent stays in the same place. So for example, if the agent says LEFT in the START grid he would stay
+                put in the START grid.</p>
+
+            <h5>First Aim: To find the shortest sequence getting from START to the Diamond. Two such sequences can be
+                found:</h5>
+            <ul>
+                <li>RIGHT RIGHT UP UPRIGHT</li>
+                <li>UP UP RIGHT RIGHT RIGHT</li>
+            </ul>
+            <p>Let us take the second one (UP UP RIGHT RIGHT RIGHT) for the subsequent discussion.</p>
+            <p>The move is now noisy. 80% of the time the intended action works correctly. 20% of the time the action
+                agent takes causes it to move at right angles. For example, if the agent says UP the probability of
+                going UP is 0.8 whereas the probability of going LEFT is 0.1, and the probability of going RIGHT is 0.1
+                (since LEFT and RIGHT are right angles to UP).</p>
+            <h5>The agent receives rewards for each time step:-</h5>
+            <ul>
+                <li>Small reward for each step (can be negative when can also be term as punishment, in the above
+                    example entering the Fire can have a reward of -1).</li>
+                <li>Big rewards come at the end (good or bad).</li>
+                <li>The goal is to Maximize the sum of rewards.</li>
+            </ul>
+        </section>
+
+        <section id="q-learning">
+            <h2>Q-Learning in Reinforcement Learning</h2>
+            <p>Q-learning is a <strong>model-free reinforcement learning algorithm</strong> used to train agents
+                (computer programs) to make optimal decisions by interacting with an environment. It helps the agent
+                explore different actions and learn which ones lead to better outcomes. The agent uses trial and error
+                to determine which actions result in rewards (good outcomes) or penalties (bad outcomes).</p>
+            <p>Over time, it improves its decision-making by updating a <strong>Q-table</strong>, which stores
+                <strong>Q-values</strong> representing the expected rewards for taking particular actions in given
+                states.</p>
+
+            <h4>Key Components of Q-learning</h4>
+            <h5>1. Q-Values or Action-Values</h5>
+            <p>Q-values represent the expected rewards for taking an action in a specific state. These values are
+                updated over time using the Temporal Difference (TD) update rule.</p>
+            <h5>2. Rewards and Episodes</h5>
+            <p>The agent moves through different states by taking actions and receiving rewards. The process continues
+                until the agent reaches a terminal state, which ends the episode.</p>
+            <h5>3. Temporal Difference or TD-Update</h5>
+            <p>The agent updates Q-values using the formula:</p>
+            <div class="formula">Q(S, A) ← Q(S, A) + α(R + γ max<sub>A'</sub>Q(S', A') - Q(S, A))</div>
+            <p>Where,</p>
+            <ul>
+                <li><strong>S</strong> is the current state.</li>
+                <li><strong>A</strong> is the action taken by the agent.</li>
+                <li><strong>S'</strong> is the next state the agent moves to.</li>
+                <li><strong>A'</strong> is the best next action in state S'.</li>
+                <li><strong>R</strong> is the reward received for taking action A in state S.</li>
+                <li><strong>γ (Gamma)</strong> is the discount factor, which balances immediate rewards with future
+                    rewards.</li>
+                <li><strong>α (Alpha)</strong> is the learning rate, determining how much new information affects the
+                    old Q-values.</li>
+            </ul>
+            <h5>4. ε-greedy Policy (Exploration vs. Exploitation)</h5>
+            <p>The ε-greedy policy helps the agent decide which action to take based on the current Q-value estimates:
+            </p>
+            <ul>
+                <li><strong>Exploitation:</strong> The agent picks the action with the highest Q-value with probability
+                    1 - ε. This means the agent uses its current knowledge to maximize rewards.</li>
+                <li><strong>Exploration:</strong> With probability ε, the agent picks a random action, exploring new
+                    possibilities to learn if there are better ways to get rewards. This allows the agent to discover
+                    new strategies and improve its decision-making over time.</li>
+            </ul>
+
+            <h4>How does Q-Learning Works?</h4>
+            <p>Q-learning models follow an <strong>iterative process</strong>, where different components work together
+                to train the agent:</p>
+            <ol>
+                <li><strong>Agent:</strong> The entity that makes decisions and takes actions within the environment.
+                </li>
+                <li><strong>States:</strong> The variables that define the agent's current position in the environment.
+                </li>
+                <li><strong>Actions:</strong> The operations the agent performs when in a specific state.</li>
+                <li><strong>Rewards:</strong> The feedback the agent receives after taking an action.</li>
+                <li><strong>Episodes:</strong> A sequence of actions that ends when the agent reaches a terminal state.
+                </li>
+                <li><strong>Q-values:</strong> The estimated rewards for each state-action pair.</li>
+            </ol>
+
+            <h4>Steps of Q-learning:</h4>
+            <ol>
+                <li><strong>Initialization:</strong> The agent starts with an initial Q-table, where Q-values are
+                    typically initialized to zero.</li>
+                <li><strong>Exploration:</strong> The agent chooses an action based on the ε-greedy policy (either
+                    exploring or exploiting).</li>
+                <li><strong>Action and Update:</strong> The agent takes the action, observes the next state, and
+                    receives a reward. The Q-value for the state-action pair is updated using the TD update rule.</li>
+                <li><strong>Iteration:</strong> The process repeats for multiple episodes until the agent learns the
+                    optimal policy.</li>
+            </ol>
+
+            <h4>Methods for Determining Q-values</h4>
+            <h5>1. Temporal Difference (TD):</h5>
+            <p>Temporal Difference is calculated by comparing the current state and action values with the previous
+                ones. It provides a way to learn directly from experience, without needing a model of the environment.
+            </p>
+            <h5>2. Bellman's Equation:</h5>
+            <p>Bellman's Equation is a recursive formula used to calculate the value of a given state and determine the
+                optimal action. It is fundamental in the context of Q-learning and is expressed as:</p>
+            <div class="formula">Q(s, a) = R(s, a) + γ max<sub>a'</sub> Q(s', a')</div>
+            <p>Where:</p>
+            <ul>
+                <li><strong>Q(s, a)</strong> is the Q-value for a given state-action pair.</li>
+                <li><strong>R(s, a)</strong> is the immediate reward for taking action <strong>a</strong> in state
+                    <strong>s</strong>.</li>
+                <li><strong>γ</strong> is the discount factor, representing the importance of future rewards.</li>
+                <li><strong>max<sub>a'</sub> Q(s', a')</strong> is the maximum Q-value for the next state
+                    <strong>s'</strong> and all possible actions.</li>
+            </ul>
+
+            <h4>What is a Q-table?</h4>
+            <p>The Q-table is essentially a memory structure where the agent stores information about which actions
+                yield the best rewards in each state. It is a table of Q-values representing the agent's understanding
+                of the environment. As the agent explores and learns from its interactions with the environment, it
+                updates the Q-table. The Q-table helps the agent make informed decisions by showing which actions are
+                likely to lead to better rewards.</p>
+            <h5>Structure of a Q-table:</h5>
+            <ul>
+                <li>Rows represent the states.</li>
+                <li>Columns represent the possible actions.</li>
+                <li>Each entry in the table corresponds to the Q-value for a state-action pair.</li>
+            </ul>
+            <p>Over time, as the agent learns and refines its Q-values through exploration and exploitation, the Q-table
+                evolves to reflect the best actions for each state, leading to optimal decision-making.</p>
+
+            <h4>Implementation of Q-Learning</h4>
+            <p>Here, we implement basic Q-learning algorithm where agent learns the optimal action-selection strategy to
+                reach a goal state in a grid-like environment.</p>
+            <h5>Step 1: Define the Environment</h5>
+            <p>Set up the environment parameters including the number of states and actions and initialize the Q-table.
+                In this each state represents a position and actions move the agent within this environment.</p>
+            <pre><code>import numpy as np
+
+n_states = 16
+n_actions = 4
+goal_state = 15
+
+Q_table = np.zeros((n_states, n_actions))</code></pre>
+
+            <h5>Step 2: Set Hyperparameters</h5>
+            <p>Define the parameters for the Q-learning algorithm which include the learning rate, discount factor,
+                exploration probability and the number of training epochs.</p>
+            <pre><code>learning_rate = 0.8
+discount_factor = 0.95
+exploration_prob = 0.2
+epochs = 1000</code></pre>
+
+            <h5>Step 3: Implement the Q-Learning Algorithm</h5>
+            <p>Perform the Q-learning algorithm over multiple epochs. Each epoch involves selecting actions based on an
+                epsilon-greedy strategy updating Q-values based on rewards received and transitioning to the next state.
+            </p>
+            <pre><code>for epoch in range(epochs):
+    current_state = np.random.randint(0, n_states)
+    while current_state != goal_state:
+        if np.random.rand() < exploration_prob:
+            action = np.random.randint(0, n_actions)  # Explore
+        else:
+            action = np.argmax(Q_table[current_state]) # Exploit
+        
+        # Simplified transition: action 0->up, 1->down, 2->left, 3->right in a 4x4 grid
+        # This is a very simplified environment for example purposes
+        if action == 0: # Up
+            next_state = max(0, current_state - 4)
+        elif action == 1: # Down
+            next_state = min(n_states - 1, current_state + 4)
+        elif action == 2: # Left
+            next_state = current_state - 1 if current_state % 4 != 0 else current_state
+        else: # Right
+            next_state = current_state + 1 if current_state % 4 != 3 else current_state
+            
+        # Ensure next_state is within bounds (already handled by min/max for up/down, needs care for left/right if not wrapped)
+        if next_state < 0 or next_state >= n_states: # Basic boundary check
+             next_state = current_state
+
+
+        reward = 1 if next_state == goal_state else 0
+        
+        Q_table[current_state, action] = Q_table[current_state, action] + learning_rate * \
+                                      (reward + discount_factor * \
+                                       np.max(Q_table[next_state]) - Q_table[current_state, action])
+        
+        current_state = next_state</code></pre>
+
+            <h5>Step 4: Output the Learned Q-Table</h5>
+            <p>After training, print the Q-table to examine the learned Q-values which represent the expected rewards
+                for taking specific actions in each state.</p>
+            <pre><code>print("Learned Q-table:")
+print(Q_table)</code></pre>
+            <div class="output-plot">
+                <pre><code>Learned Q-table:
+[[0.48764377 0.39013998 0.48377033 0.48767498]
+ [0.51334208 0.51317781 0.51333517 0.51333551]
+ [0.54036003 0.54035981 0.54035317 0.54036009]
+ ...
+ [0.95       0.95       0.95       0.95      ]
+ [1.         1.         1.         1.        ]
+ [0.         0.         0.         0.        ]]</code></pre>
+                <p>(Output is truncated for brevity)</p>
+            </div>
+
+            <h5>Complete Implementation of Q-Algorithm</h5>
+            <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+# Parameters
+n_states = 16
+n_actions = 4
+goal_state = 15
+
+Q_table = np.zeros((n_states, n_actions))
+
+learning_rate = 0.8
+discount_factor = 0.95
+exploration_prob = 0.2
+epochs = 1000
+
+# Q-learning process
+for epoch in range(epochs):
+    current_state = np.random.randint(0, n_states)
+    while current_state != goal_state:
+        # Exploration vs. Exploitation (epsilon-greedy policy)
+        if np.random.rand() < exploration_prob:
+            action = np.random.randint(0, n_actions)  # Explore action
+        else:
+            action = np.argmax(Q_table[current_state]) # Exploit learned values
+        
+        # Transition to the next state (circular movement for simplicity, needs proper grid logic)
+        # This is a placeholder for a real environment's step function
+        if action == 0: # Up
+            next_state = (current_state - 4 + n_states) % n_states if current_state // 4 > 0 else current_state
+        elif action == 1: # Down
+            next_state = (current_state + 4) % n_states if current_state // 4 < 3 else current_state
+        elif action == 2: # Left
+            next_state = (current_state - 1 + n_states) % n_states if current_state % 4 > 0 else current_state
+        else: # Right
+            next_state = (current_state + 1) % n_states if current_state % 4 < 3 else current_state
+
+        # Reward function (1 if goal state is reached, 0 otherwise)
+        reward = 1 if next_state == goal_state else 0
+        
+        # Q-value update rule (TD update)
+        Q_table[current_state, action] = Q_table[current_state, action] + learning_rate * \
+                                      (reward + discount_factor * \
+                                       np.max(Q_table[next_state]) - Q_table[current_state, action])
+        
+        current_state = next_state
+
+# Visualization of the Q-table in a grid format
+Q_values_grid = np.max(Q_table, axis=1).reshape((4, 4))
+
+plt.figure(figsize=(6, 6))
+plt.imshow(Q_values_grid, cmap='coolwarm', interpolation='nearest')
+plt.colorbar(label='Max Q-value')
+plt.title("Learned Q-values for each state")
+plt.xticks(np.arange(4), ['0', '1', '2', '3']) # Column indices
+plt.yticks(np.arange(4), ['0', '1', '2', '3']) # Row indices
+plt.gca().invert_yaxis() # To match grid layout
+
+# Annotate the Q-values on the grid
+for i in range(4):
+    for j in range(4):
+        plt.text(j, i, f'{Q_values_grid[i, j]:.2f}', ha="center", va="center", color="black")
+
+plt.show()
+
+print("Learned Q-table:")
+print(Q_table)</code></pre>
+            <div class="output-plot">
+                <div class="diagram-placeholder">Heatmap (4x4 grid) showing learned Q-values for each state. Colors
+                    represent Q-value magnitudes. Values are annotated on cells.</div>
+                <p>Q-Table contains the learned Q-Values for Each State.</p>
+            </div>
+
+
+            <h4>Advantages of Q-learning</h4>
+            <ul>
+                <li><strong>Trial and Error Learning:</strong> Q-learning improves over time by trying different actions
+                    and learning from experience.</li>
+                <li><strong>Self-Improvement:</strong> Mistakes lead to learning, helping the agent avoid repeating
+                    them.</li>
+                <li><strong>Better Decision-Making:</strong> Stores successful actions to avoid bad choices in future
+                    situations.</li>
+                <li><strong>Autonomous Learning:</strong> It learns without external supervision, purely through
+                    exploration.</li>
+            </ul>
+            <h4>Disadvantages of Q-learning</h4>
+            <ul>
+                <li><strong>Slow Learning:</strong> Requires many examples, making it time-consuming for complex
+                    problems.</li>
+                <li><strong>Expensive in Some Environments:</strong> In robotics, testing actions can be costly due to
+                    physical limitations.</li>
+                <li><strong>Curse of Dimensionality:</strong> Large state and action spaces make the Q-table too large
+                    to handle efficiently.</li>
+                <li><strong>Limited to Discrete Actions:</strong> It struggles with continuous actions like adjusting
+                    speed, making it less suitable for real-world applications involving continuous decisions.</li>
+            </ul>
+            <h4>Applications of Q-learning</h4>
+            <p>Applications for Q-learning, a reinforcement learning algorithm, can be found in many different fields.
+                Here are a few noteworthy instances:</p>
+            <ol>
+                <li><strong>Atari Games:</strong> Classic Atari 2600 games can now be played with Q-learning. In games
+                    like Space Invaders and Breakout, Deep Q Networks (DQN), an extension of Q-learning that makes use
+                    of deep neural networks, has demonstrated superhuman performance.</li>
+                <li><strong>Robot Control:</strong> Q-learning is used in robotics to perform tasks like navigation and
+                    robot control. With Q-learning algorithms, robots can learn to navigate through environments, avoid
+                    obstacles, and maximise their movements.</li>
+                <li><strong>Traffic Management:</strong> Autonomous vehicle traffic management systems use Q-learning.
+                    It lessens congestion and enhances traffic flow overall by optimising route planning and traffic
+                    signal timings.</li>
+                <li><strong>Algorithmic Trading:</strong> The use of Q-learning to make trading decisions has been
+                    investigated in algorithmic trading. It makes it possible for automated agents to pick up the best
+                    strategies from past market data and adjust to shifting market conditions.</li>
+                <li><strong>Personalized Treatment Plans:</strong> To make treatment plans more unique, Q-learning is
+                    used in the medical field. Through the use of patient data, agents are able to recommend
+                    personalized interventions that account for individual responses to various treatments.</li>
+            </ol>
+        </section>
+
+        <section id="sarsa">
+            <h2>SARSA (State-Action-Reward-State-Action) in Reinforcement Learning</h2>
+            <p>SARSA (State-Action-Reward-State-Action) is an <strong>on-policy learning algorithm</strong> used for
+                this purpose. It helps an agent learn an optimal policy based on experience, where the agent improves
+                its policy while continuously interacting with the environment.</p>
+            <p>SARSA outlines the key components of the RL process:</p>
+            <ol>
+                <li><strong>State (S):</strong> The current state of the environment.</li>
+                <li><strong>Action (A):</strong> The action taken by the agent in a given state.</li>
+                <li><strong>Reward (R):</strong> The immediate reward received after taking action A in state S.</li>
+                <li><strong>Next State (S'):</strong> The state resulting from the action A in state S.</li>
+                <li><strong>Next Action (A'):</strong> The action chosen in the next state S' according to the current
+                    policy.</li>
+            </ol>
+            <p>The SARSA algorithm updates the Q-value for a given state-action pair based on the reward and the next
+                state-action pair, leading to an updated policy.</p>
+            <div class="callout info">
+                SARSA is <strong>on-policy</strong>, meaning it learns from the current policy's actions rather than
+                optimizing actions through a model of the environment (like Q-learning, which is off-policy as it
+                considers the max Q-value for the next state, irrespective of the policy taken).
+            </div>
+
+            <h4>SARSA Update Rule</h4>
+            <p>The core idea of SARSA is to update the Q-value for each state-action pair based on the actual experience
+                (i.e., what the agent does while following its policy). The Q-value is updated using the following
+                Bellman Equation for SARSA:</p>
+            <div class="formula">Q(s<sub>t</sub>, a<sub>t</sub>) ← Q(s<sub>t</sub>, a<sub>t</sub>) + α [r<sub>t+1</sub>
+                + γQ(s<sub>t+1</sub>, a<sub>t+1</sub>) - Q(s<sub>t</sub>, a<sub>t</sub>)]</div>
+            <p>Where:</p>
+            <ul>
+                <li><strong>Q(s<sub>t</sub>, a<sub>t</sub>)</strong> is the current Q-value for the state-action pair at
+                    time step t.</li>
+                <li><strong>α</strong> is the learning rate (a value between 0 and 1), which determines how much the
+                    Q-values are updated.</li>
+                <li><strong>r<sub>t+1</sub></strong> is the reward received after taking action a<sub>t</sub> in state
+                    s<sub>t</sub>.</li>
+                <li><strong>γ</strong> is the discount factor (between 0 and 1), which determines the importance of
+                    future rewards.</li>
+                <li><strong>Q(s<sub>t+1</sub>, a<sub>t+1</sub>)</strong> is the Q-value for the next state-action pair.
+                </li>
+            </ul>
+            <p>In this update rule:</p>
+            <ul>
+                <li>The agent updates its Q-value using both the immediate reward and the expected future reward.</li>
+                <li>The difference between the predicted Q-value and the actual reward is used to correct the current
+                    estimate.</li>
+            </ul>
+
+            <h4>SARSA Algorithm</h4>
+            <p>Here's a high-level view of the SARSA algorithm:</p>
+            <ol>
+                <li><strong>Initialize:</strong>
+                    <ul>
+                        <li>Initialize Q-values arbitrarily for each state-action pair.</li>
+                        <li>Choose an initial state s<sub>0</sub>.</li>
+                    </ul>
+                </li>
+                <li><strong>Loop for each episode:</strong>
+                    <ul>
+                        <li>Set the initial state s<sub>t</sub> and choose an action a<sub>t</sub> based on a policy
+                            (e.g., ε-greedy).</li>
+                        <li><strong>Repeat for each step in the episode:</strong>
+                            <ul>
+                                <li>Take action a<sub>t</sub>, observe reward R<sub>t+1</sub>, and transition to state
+                                    s<sub>t+1</sub>.</li>
+                                <li>Choose the next action a<sub>t+1</sub> from state s<sub>t+1</sub> based on the
+                                    policy.</li>
+                                <li>Update the Q-value for the state-action pair (s<sub>t</sub>, a<sub>t</sub>) using
+                                    the SARSA update rule.</li>
+                                <li>Set s<sub>t</sub> = s<sub>t+1</sub> and a<sub>t</sub> = a<sub>t+1</sub>.</li>
+                            </ul>
+                        </li>
+                        <li>Continue until the episode ends (when the agent reaches a terminal state or after a fixed
+                            number of steps).</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h4>SARSA Implementation in Grid World</h4>
+            <h5>Step 1: Define the Environment (GridWorld)</h5>
+            <p>The environment is a grid world where the agent can move up, down, left, or right. The environment
+                includes:</p>
+            <ul>
+                <li>A start position.</li>
+                <li>A goal position.</li>
+                <li>Obstacles that the agent should avoid.</li>
+                <li>A reward structure (e.g., negative reward for hitting obstacles, positive reward for reaching the
+                    goal).</li>
+            </ul>
+            <p>The GridWorld class handles the environment dynamics, including resetting the state and taking actions.
+            </p>
+            <pre><code>import numpy as np # Assuming numpy is imported
+
+class GridWorld:
+    def __init__(self, width, height, start, goal, obstacles):
+        self.width = width
+        self.height = height
+        self.start = start
+        self.goal = goal
+        self.obstacles = obstacles
+        self.state = start
+
+    def reset(self):
+        self.state = self.start
+        return self.state
+
+    def step(self, action):
+        x, y = self.state
+        if action == 0:  # Up
+            x = max(x - 1, 0)
+        elif action == 1:  # Down
+            x = min(x + 1, self.height - 1)
+        elif action == 2:  # Left
+            y = max(y - 1, 0)
+        elif action == 3:  # Right
+            y = min(y + 1, self.width - 1)
+
+        next_state = (x, y)
+
+        if next_state in self.obstacles:
+            reward = -10
+            done = True # Or False depending on if obstacle ends episode
+        elif next_state == self.goal:
+            reward = 10
+            done = True
+        else:
+            reward = -1 # Small negative reward for each step
+            done = False
+        
+        self.state = next_state
+        return next_state, reward, done</code></pre>
+
+            <h5>Step 2: Define the SARSA Algorithm</h5>
+            <p>SARSA algorithm iterates over episodes, updating Q-values based on the agent's experience.</p>
+            <pre><code>def sarsa(env, episodes, alpha, gamma, epsilon):
+    # Initialize Q-table with zeros
+    Q = np.zeros((env.height, env.width, 4)) # 4 actions
+
+    for episode in range(episodes):
+        state = env.reset()
+        action = epsilon_greedy_policy(Q, state, epsilon)
+        done = False
+
+        while not done:
+            next_state, reward, done = env.step(action)
+            next_action = epsilon_greedy_policy(Q, next_state, epsilon)
+            
+            # SARSA update rule
+            Q[state[0], state[1], action] += alpha * \
+                (reward + gamma * Q[next_state[0], next_state[1], next_action] \
+                 - Q[state[0], state[1], action])
+            
+            state = next_state
+            action = next_action
+            
+    return Q</code></pre>
+
+            <h5>Step 3: Define the Epsilon-Greedy Policy</h5>
+            <p>The epsilon-greedy policy balances exploration and exploitation:</p>
+            <ul>
+                <li>With probability ε, the agent chooses a random action (exploration).</li>
+                <li>With probability 1-ε, the agent chooses the action with the highest Q-value for the current state
+                    (exploitation).</li>
+            </ul>
+            <pre><code>import random # For random.uniform and random.randint
+
+def epsilon_greedy_policy(Q, state, epsilon):
+    if random.uniform(0, 1) < epsilon:
+        return random.randint(0, 3)  # Random action (0:Up, 1:Down, 2:Left, 3:Right)
+    else:
+        return np.argmax(Q[state[0], state[1]])  # Greedy action</code></pre>
+
+            <h5>Step 4: Set Up the Environment and Run SARSA</h5>
+            <p>This step involves:</p>
+            <ul>
+                <li>Defining the grid world parameters (width, height, start, goal, obstacles).</li>
+                <li>Setting the SARSA hyperparameters (episodes, learning rate, discount factor, exploration rate).</li>
+                <li>Running the SARSA algorithm and printing the learned Q-values.</li>
+            </ul>
+            <pre><code>if __name__ == "__main__":
+    # Define the grid world environment
+    width = 5
+    height = 5
+    start = (0, 0)
+    goal = (4, 4)
+    obstacles = [(2, 2), (3, 2)]
+    env = GridWorld(width, height, start, goal, obstacles)
+
+    # SARSA parameters
+    episodes = 1000
+    alpha = 0.1  # Learning rate
+    gamma = 0.99 # Discount factor
+    epsilon = 0.1 # Exploration rate
+
+    # Run SARSA
+    Q = sarsa(env, episodes, alpha, gamma, epsilon)
+
+    # Print the learned Q-values
+    print("Learned Q-values:")
+    print(Q)</code></pre>
+            <p>Output:</p>
+            <div class="output-plot">
+                <pre><code>Learned Q-values:
+[[[-1.80779324 -1.7855317  -1.72443164 -1.27441164]
+  [-2.84807096 -2.6458966  -2.0676734  -0.45023773]
+  ...
+  [ 0.          0.          0.          0.        ]
+  [ 6.80009265  0.          4.93654122  6.32327761]]]</code></pre>
+                <p>(Output is truncated and formatted for display, showing a multi-dimensional array representing
+                    Q-values for each state-action pair.)</p>
+            </div>
+            <p>After running the SARSA algorithm, the Q-values represent the expected cumulative reward for each
+                state-action pair. The agent uses these Q-values to make decisions in the environment. Higher Q-values
+                indicate better actions for a given state.</p>
+
+            <h4>Exploration Strategies in SARSA</h4>
+            <p>SARSA typically uses an <strong>exploration-exploitation strategy</strong> to choose actions. The most
+                common strategy is <strong>ε-greedy</strong>, where:</p>
+            <ul>
+                <li><strong>Exploitation:</strong> With probability 1 - ε, the agent chooses the action with the highest
+                    Q-value.</li>
+                <li><strong>Exploration:</strong> With probability ε, the agent chooses a random action to explore new
+                    possibilities.</li>
+            </ul>
+            <p>Over time, ε is often decayed (reduced) to shift from exploration to exploitation as the agent gains more
+                experience in the environment.</p>
+
+            <h4>Strengths of SARSA</h4>
+            <ol>
+                <li><strong>Stability with Exploration:</strong> SARSA is more stable in environments where the agent
+                    needs to balance exploration and exploitation.</li>
+                <li><strong>On-Policy Learning:</strong> Since SARSA learns from the policy the agent is actually
+                    following, it is better suited for situations where the agent must learn from its exploration.</li>
+            </ol>
+            <h4>Weaknesses of SARSA</h4>
+            <ol>
+                <li><strong>Slower Convergence:</strong> Because SARSA is on-policy, it might take longer to converge
+                    compared to off-policy methods like Q-learning, especially when there is a lot of exploration.</li>
+                <li><strong>Sensitive to the Exploration Strategy:</strong> The agent's performance depends on how
+                    exploration is managed (e.g., how ε is decayed in the ε-greedy strategy).</li>
+            </ol>
+        </section>
+
+        <section id="value-policy-iteration">
+            <h2>Value Iteration vs. Policy Iteration</h2>
+            <p>Value Iteration and Policy Iteration are dynamic programming techniques. Both methods aim to solve Markov
+                Decision Processes (MDPs) and compute the optimal policy, but they follow different approaches.
+                Understanding the differences, strengths, and weaknesses of these two methods is key to choosing the
+                right approach for specific RL problems.</p>
+
+            <h4>What is Value Iteration?</h4>
+            <p>Value Iteration is an iterative algorithm used to compute the optimal value function V<sup>*</sup>(s) for
+                each state s in an MDP. The value function is a measure of the expected return (reward) from a given
+                state under the optimal policy.</p>
+            <p>In Value Iteration, the Bellman Optimality Equation is used to iteratively update the value of each state
+                until it converges to the optimal value function:</p>
+            <div class="formula">V<sup>*</sup>(s) = max<sub>a</sub> [R(s, a) + γ Σ<sub>s'</sub> P(s'|s,
+                a)V<sup>*</sup>(s')]</div>
+            <p>Where:</p>
+            <ul>
+                <li>R(s, a) is the immediate reward,</li>
+                <li>P(s'|s, a) is the transition probability,</li>
+                <li>γ is the discount factor, and</li>
+                <li>s' represents the next state.</li>
+            </ul>
+            <p>Once the value function converges, the optimal policy can be derived by selecting the action
+                <strong>a</strong> that maximizes the value function:</p>
+            <div class="formula">π<sup>*</sup>(s) = arg max<sub>a</sub> [R(s, a) + γ Σ<sub>s'</sub> P(s'|s,
+                a)V<sup>*</sup>(s')]</div>
+
+            <h4>What is Policy Iteration?</h4>
+            <p>Policy Iteration is another dynamic programming algorithm used to compute the optimal policy. It
+                alternates between two steps:</p>
+            <ol>
+                <li><strong>Policy Evaluation:</strong> For a given policy π, the value function V<sup>π</sup>(s) is
+                    computed using the Bellman Expectation Equation:
+                    <div class="formula">V<sup>π</sup>(s) = R(s, π(s)) + γ Σ<sub>s'</sub> P(s'|s, π(s))V<sup>π</sup>(s')
+                    </div>
+                </li>
+                <li><strong>Policy Improvement:</strong> Once the value function for the current policy is calculated,
+                    the policy is updated to improve it by selecting the action that maximizes the expected return from
+                    each state:
+                    <div class="formula">π'(s) = arg max<sub>a</sub> [R(s, a) + γ Σ<sub>s'</sub> P(s'|s,
+                        a)V<sup>π</sup>(s')]</div>
+                </li>
+            </ol>
+            <p>This process repeats until the policy converges, meaning it no longer changes between iterations.</p>
+
+            <h4>Comparison Between Value Iteration and Policy Iteration</h4>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Value Iteration</th>
+                            <th>Policy Iteration</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Approach</strong></td>
+                            <td>Updates the value function iteratively until convergence.</td>
+                            <td>Alternates between policy evaluation and policy improvement.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Convergence</strong></td>
+                            <td>Converges when the value function converges.</td>
+                            <td>Converges when the policy stops changing.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Computational Cost</strong></td>
+                            <td>More computationally expensive per iteration due to full evaluation of all states
+                                (maximization over actions).</td>
+                            <td>Requires more iterations (policy evaluation itself is iterative) but may converge faster
+                                in terms of fewer policy improvement steps.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Policy Output</strong></td>
+                            <td>The policy is derived after the value function has converged.</td>
+                            <td>The policy is updated during each iteration.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Speed of Convergence</strong></td>
+                            <td>May require many iterations for convergence, especially in large state spaces.</td>
+                            <td>Tends to converge faster in practice, especially when the policy improves significantly
+                                at each iteration.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>State Space</strong></td>
+                            <td>Typically suited for smaller state spaces due to computational complexity.</td>
+                            <td>Can handle larger state spaces more efficiently (in terms of policy improvement steps).
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4>When to Use Value Iteration and Policy Iteration</h4>
+            <h5>Use Value Iteration:</h5>
+            <ul>
+                <li>When you have a small state space and can afford the computational cost of updating the value
+                    function for each state.</li>
+                <li>When you want to compute the value function first and derive the policy later.</li>
+            </ul>
+            <h5>Use Policy Iteration:</h5>
+            <ul>
+                <li>When you have a larger state space and want to reduce the number of iterations for convergence.</li>
+                <li>When you can afford the computational cost of policy evaluation but want faster policy improvement.
+                </li>
+            </ul>
+            <p>Both Value Iteration and Policy Iteration are powerful techniques used in Reinforcement Learning to find
+                the optimal policy in an MDP. While Value Iteration is simpler and more direct in its approach, Policy
+                Iteration often converges faster in practice by improving the policy iteratively. The choice between the
+                two methods depends largely on the problem's scale and the computational resources available. In many
+                real-world applications, Policy Iteration may be preferred for its faster convergence, especially in
+                problems with large state spaces.</p>
+        </section>
+
+        <section id="dqn">
+            <h2>Deep Q-Networks (DQN)</h2>
+            <p>Deep Q-Learning integrates deep neural networks into the decision-making process. This combination allows
+                agents to handle high-dimensional state spaces, making it possible to solve complex tasks such as
+                playing video games or controlling robots.</p>
+            <p>Before diving into Deep Q-Learning, it's important to understand the foundational concept of Q-Learning.
+                Q-Learning is a model-free method that learns an optimal policy by estimating the Q-value function,
+                which represents the expected cumulative reward for taking a specific action in a given state and
+                following the optimal policy thereafter.</p>
+            <div class="algorithm-diagram">
+                <div class="diagram-placeholder">Diagram: "State" and "Action" pointing to a "Q Matrix" (grid). An entry
+                    in the grid is a "Q Value".</div>
+                <p>Q Matrix</p>
+            </div>
+            <p>While Q-Learning works well for small state-action spaces, it struggles with scalability when dealing
+                with high-dimensional environments like images or continuous states. This limitation led to the
+                development of Deep Q-Learning, which leverages deep neural networks to approximate the Q-value
+                function.</p>
+
+            <h4>Role of Deep Learning in Q-Learning</h4>
+            <p>To address the limitations of traditional Q-Learning, researchers introduced Deep Q-Networks (DQNs),
+                which combine Q-Learning with deep neural networks. Instead of maintaining a table of Q-values for each
+                state-action pair, DQNs approximate the Q-value function using a neural network parameterized by weights
+                θ. The network takes a state as input and outputs Q-values for all possible actions.</p>
+
+            <h4>Key Challenges Addressed by Deep Q-Learning</h4>
+            <ol>
+                <li><strong>High-Dimensional State Spaces:</strong> Traditional Q-Learning requires storing a Q-table,
+                    which becomes infeasible for large state spaces. Neural networks can generalize across states,
+                    making them suitable for complex environments.</li>
+                <li><strong>Continuous Input Data:</strong> Many real-world problems involve continuous inputs, such as
+                    pixel data from video frames. Neural networks excel at processing such data.</li>
+                <li><strong>Scalability:</strong> By leveraging the representational power of deep learning, DQNs can
+                    scale to solve tasks that were previously unsolvable with tabular methods.</li>
+            </ol>
+            <div class="algorithm-diagram">
+                <div class="diagram-placeholder">Diagram: "State" input to a "Deep Neural Network" (multi-layer
+                    perceptron). Outputs are "Q Value Action 1", "Q Value Action 2", ..., "Q Value Action n".</div>
+            </div>
+
+            <h4>Architecture of Deep Q-Networks</h4>
+            <p>A typical DQN consists of the following components:</p>
+            <h5>1. Neural Network</h5>
+            <p>The network approximates the Q-value function Q(s, a; θ), where θ represents the trainable parameters.
+                For example, in Atari games, the input might be raw pixels from the game screen, and the output is a
+                vector of Q-values corresponding to each possible action.</p>
+            <h5>2. Experience Replay</h5>
+            <p>To stabilize training, DQNs store past experiences (s, a, r, s') in a replay buffer. During training,
+                mini-batches of experiences are sampled randomly from the buffer, breaking the correlation between
+                consecutive experiences and improving generalization.</p>
+            <h5>3. Target Network</h5>
+            <p>A separate target network with parameters θ<sup>-</sup> is used to compute the target Q-values during
+                updates. The target network is periodically updated with the weights of the main network to ensure
+                stability.</p>
+            <h5>Loss Function:</h5>
+            <p>The loss function measures the difference between the predicted Q-values and the target Q-values:</p>
+            <div class="formula">L(θ) = E [ (r + γ max<sub>a'</sub> Q(s', a'; θ<sup>-</sup>) - Q(s, a; θ))<sup>2</sup> ]
+            </div>
+
+            <h4>Training Process of Deep Q-Learning</h4>
+            <p>The training process of a DQN involves the following steps:</p>
+            <ol>
+                <li><strong>Initialization:</strong>
+                    <ul>
+                        <li>Initialize the replay buffer, main network (θ), and target network (θ<sup>-</sup>).</li>
+                        <li>Set hyperparameters such as learning rate (α), discount factor (γ), and exploration rate
+                            (ε).</li>
+                    </ul>
+                </li>
+                <li><strong>Exploration vs. Exploitation:</strong> Use an ε-greedy policy to balance exploration and
+                    exploitation:
+                    <ul>
+                        <li>With probability ε, select a random action to explore.</li>
+                        <li>Otherwise, choose the action with the highest Q-value according to the current network.</li>
+                    </ul>
+                </li>
+                <li><strong>Experience Collection:</strong> Interact with the environment, collect experiences (s, a, r,
+                    s'), and store them in the replay buffer.</li>
+                <li><strong>Training Updates:</strong>
+                    <ul>
+                        <li>Sample a mini-batch of experiences from the replay buffer.</li>
+                        <li>Compute the target Q-values using the target network.</li>
+                        <li>Update the main network by minimizing the loss function using gradient descent.</li>
+                    </ul>
+                </li>
+                <li><strong>Target Network Update:</strong> Periodically copy the weights of the main network to the
+                    target network to ensure stability.</li>
+                <li><strong>Decay Exploration Rate:</strong> Gradually decrease ε over time to shift from exploration to
+                    exploitation.</li>
+            </ol>
+
+            <h4>Applications of Deep Q-Learning</h4>
+            <p>Deep Q-Learning has been successfully applied to a wide range of domains, including:</p>
+            <ol>
+                <li><strong>Atari Games:</strong> In 2013, DeepMind demonstrated that DQNs could achieve superhuman
+                    performance on classic Atari games by learning directly from raw pixel inputs.</li>
+                <li><strong>Robotics:</strong> DQNs have been used to train robots for tasks such as grasping objects,
+                    navigating environments, and performing manipulation tasks.</li>
+                <li><strong>Autonomous Driving:</strong> Reinforcement learning with DQNs can optimize decision-making
+                    for self-driving cars, such as lane-changing and obstacle avoidance.</li>
+                <li><strong>Finance:</strong> DQNs are applied to portfolio optimization, algorithmic trading, and risk
+                    management by learning optimal trading strategies.</li>
+                <li><strong>Healthcare:</strong> In medical applications, DQNs assist in treatment planning, drug
+                    discovery, and personalized medicine.</li>
+            </ol>
+            <p>As advancements in reinforcement learning continue, we can expect even more powerful algorithms that
+                build upon the foundation laid by Deep Q-Learning. These developments will further expand the
+                capabilities of AI systems, paving the way for intelligent agents to solve increasingly intricate
+                real-world problems.</p>
+        </section>
+
+        <section id="interactive-quiz-rl">
+            <h2>Mini Quiz: Test Your Reinforcement Learning Knowledge!</h2>
+            <div class="quiz-container">
+                <div id="quiz">
+                    <div class="quiz-question" data-question="1">
+                        <p><strong>1. What is the primary goal of an agent in Reinforcement Learning?</strong></p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q1" value="a"> To classify data into predefined
+                                categories.</label>
+                            <label><input type="radio" name="q1" value="b"> To learn a mapping from inputs to outputs
+                                based on labeled data.</label>
+                            <label><input type="radio" name="q1" value="c"> To learn a policy that maximizes cumulative
+                                rewards over time.</label>
+                        </div>
+                        <p class="quiz-feedback" id="feedback-q1"></p>
+                    </div>
+                    <div class="quiz-question" data-question="2">
+                        <p><strong>2. Which of these is a core component of a Markov Decision Process (MDP)?</strong>
+                        </p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q2" value="a"> Labeled training data.</label>
+                            <label><input type="radio" name="q2" value="b"> A set of possible states (S).</label>
+                            <label><input type="radio" name="q2" value="c"> A fixed number of clusters.</label>
+                        </div>
+                        <p class="quiz-feedback" id="feedback-q2"></p>
+                    </div>
+                    <div class="quiz-question" data-question="3">
+                        <p><strong>3. Q-learning is considered an _______ algorithm, while SARSA is an _______
+                                algorithm.</strong></p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q3" value="a"> on-policy, off-policy</label>
+                            <label><input type="radio" name="q3" value="b"> off-policy, on-policy</label>
+                            <label><input type="radio" name="q3" value="c"> model-based, model-free</label>
+                        </div>
+                        <p class="quiz-feedback" id="feedback-q3"></p>
+                    </div>
+                    <div class="quiz-question" data-question="4">
+                        <p><strong>4. What is the main purpose of Experience Replay in Deep Q-Networks (DQNs)?</strong>
+                        </p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q4" value="a"> To speed up the exploration process.</label>
+                            <label><input type="radio" name="q4" value="b"> To reduce the dimensionality of the state
+                                space.</label>
+                            <label><input type="radio" name="q4" value="c"> To break correlations between consecutive
+                                experiences and improve training stability.</label>
+                        </div>
+                        <p class="quiz-feedback" id="feedback-q4"></p>
+                    </div>
+                    <button id="submitQuiz">Submit Answers</button>
+                    <p id="quizScore" style="margin-top:15px; font-weight:bold;"></p>
+                </div>
+            </div>
+        </section>
+
+
+        <footer class="new-footer-container">
+            <div class="new-footer-buttons-wrapper">
+                <a href="topic-8.html" class="new-footer-button">
+                    ← Previous Topic: Unsupervised Learning Algorithms
+                </a>
+                <a href="topic-10.html" class="new-footer-button">
+                    Next Topic: Neural Networks & Deep Learning →
+                </a>
+            </div>
+            <a href="#" onclick="window.print(); return false;" class="new-footer-print-link">Print this page</a>
+            <p style="font-size: 0.9rem; color: var(--text-color); margin-top: 0.5rem;">© <span id="currentYear"></span>
+                Reinforcement Learning. All rights reserved.</p>
+        </footer>
+
+    </main>
+
+    <script>
+        // JavaScript from topic-1.html (Theme toggle, Throttled TOC highlighting, Footer year)
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+        function setTheme(theme) { if (theme === 'dark') { body.classList.add('dark-mode'); themeToggle.innerHTML = '<i class="fas fa-sun"></i>'; localStorage.setItem('theme', 'dark'); } else { body.classList.remove('dark-mode'); themeToggle.innerHTML = '<i class="fas fa-moon"></i>'; localStorage.setItem('theme', 'light'); } }
+        const localTheme = localStorage.getItem('theme'); if (localTheme) { setTheme(localTheme); } else { setTheme(prefersDarkScheme.matches ? 'dark' : 'light'); }
+        themeToggle.addEventListener('click', () => { setTheme(body.classList.contains('dark-mode') ? 'light' : 'dark'); });
+        prefersDarkScheme.addEventListener('change', (e) => { if (!localStorage.getItem('theme')) { setTheme(e.matches ? 'dark' : 'light'); } });
+
+        // Table of Contents Generation & Active Scrolling
+        const tocContainer = document.getElementById('toc');
+        const mainContent = document.querySelector('.main-content');
+        const mainSections = Array.from(mainContent.querySelectorAll('section[id]'));
+        let tocLinkElements = [];
+
+        function throttle(func, limit) { let inThrottle; return function () { const args = arguments; const context = this; if (!inThrottle) { func.apply(context, args); inThrottle = true; setTimeout(() => inThrottle = false, limit); } } }
+
+        function updateTocAndSectionData() {
+            const navbar = document.querySelector('.navbar');
+            const navbarHeight = navbar ? navbar.offsetHeight : 0;
+            tocContainer.innerHTML = '';
+            tocLinkElements = [];
+
+            mainSections.forEach(section => {
+                const sectionTitleElement = section.querySelector('h2');
+                if (sectionTitleElement) {
+                    const listItem = document.createElement('li');
+                    const link = document.createElement('a');
+                    link.textContent = sectionTitleElement.textContent;
+                    link.href = `#${section.id}`;
+                    link.dataset.sectionId = section.id;
+                    listItem.appendChild(link);
+                    tocContainer.appendChild(listItem);
+                    tocLinkElements.push(link);
+
+                    const subSections = Array.from(section.querySelectorAll('h3[id]'));
+                    if (subSections.length > 0) {
+                        const subList = document.createElement('ul');
+                        subSections.forEach(subSection => {
+                            const subListItem = document.createElement('li');
+                            const subLink = document.createElement('a');
+                            subLink.textContent = subSection.textContent;
+                            subLink.href = `#${subSection.id}`;
+                            subLink.dataset.sectionId = subSection.id;
+                            subLink.classList.add('sub-item');
+                            subListItem.appendChild(subLink);
+                            subList.appendChild(subListItem);
+                            tocLinkElements.push(subLink);
+                        });
+                        listItem.appendChild(subList);
+                    }
+                }
+                const allNavigableElements = Array.from(section.querySelectorAll('h2[id], h3[id]'));
+                allNavigableElements.forEach(el => {
+                    el.dataset.effectiveOffsetTop = el.getBoundingClientRect().top + window.scrollY - navbarHeight - 30;
+                });
+            });
+        }
+
+        function highlightActiveTocLink() {
+            const scrollPosition = window.scrollY;
+            let currentlyActiveSectionId = null;
+            const allLinkableElements = tocLinkElements.map(link => document.getElementById(link.dataset.sectionId)).filter(el => el);
+
+            for (let i = allLinkableElements.length - 1; i >= 0; i--) {
+                const element = allLinkableElements[i];
+                if (element && scrollPosition >= parseFloat(element.dataset.effectiveOffsetTop || '0')) {
+                    currentlyActiveSectionId = element.id;
+                    break;
+                }
+            }
+
+            tocLinkElements.forEach(link => {
+                if (link.dataset.sectionId === currentlyActiveSectionId) {
+                    link.classList.add('active');
+                    if (link.classList.contains('sub-item')) {
+                        const parentLi = link.closest('ul').closest('li');
+                        if (parentLi) {
+                            const parentLink = parentLi.querySelector('a:not(.sub-item)');
+                            if (parentLink) parentLink.classList.add('active');
+                        }
+                    }
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+
+        if (mainSections.length > 0) { updateTocAndSectionData(); highlightActiveTocLink(); window.addEventListener('scroll', throttle(highlightActiveTocLink, 100)); window.addEventListener('resize', throttle(() => { updateTocAndSectionData(); highlightActiveTocLink(); }, 150)); }
+
+        // Mini Quiz Logic
+        const submitQuizButton = document.getElementById('submitQuiz');
+        const quizQuestionElements = document.querySelectorAll('#interactive-quiz-rl .quiz-question');
+        const quizCorrectAnswers = {
+            q1: { value: 'c', text: 'To learn a policy that maximizes cumulative rewards over time.' },
+            q2: { value: 'b', text: 'A set of possible states (S).' },
+            q3: { value: 'b', text: 'off-policy, on-policy' },
+            q4: { value: 'c', text: 'To break correlations between consecutive experiences and improve training stability.' }
+        };
+
+        if (submitQuizButton) {
+            submitQuizButton.addEventListener('click', () => {
+                let score = 0;
+                quizQuestionElements.forEach(questionElement => {
+                    const questionId = 'q' + questionElement.dataset.question;
+                    const selectedOption = document.querySelector(`#interactive-quiz-rl input[name="${questionId}"]:checked`);
+                    const feedbackElement = document.getElementById(`feedback-${questionId}`);
+                    const correctAnswerInfo = quizCorrectAnswers[questionId];
+
+                    if (selectedOption) {
+                        if (selectedOption.value === correctAnswerInfo.value) {
+                            score++;
+                            feedbackElement.textContent = "Correct!";
+                            feedbackElement.style.color = "var(--secondary-color)";
+                        } else {
+                            feedbackElement.textContent = `Incorrect. The correct answer is: ${correctAnswerInfo.text}.`;
+                            feedbackElement.style.color = "var(--accent-color)";
+                        }
+                    } else {
+                        feedbackElement.textContent = "Please select an answer.";
+                        feedbackElement.style.color = "var(--accent-color)";
+                    }
+                });
+                const quizScoreEl = document.getElementById('quizScore');
+                if (quizScoreEl) {
+                    quizScoreEl.textContent = `You scored ${score} out of ${quizQuestionElements.length}.`;
+                }
+            });
+        }
+
+        // Footer current year
+        const currentYearSpan = document.getElementById('currentYear');
+        if (currentYearSpan) {
+            currentYearSpan.textContent = new Date().getFullYear();
+        }
+    </script>
+</body>
+
+</html>

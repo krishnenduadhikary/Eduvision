@@ -119,10 +119,14 @@ body {
 
 .site-logo h1 {
   margin: 0;
-  font-size: 1.8em; /* Adjusted for better balance */
+  font-size: 2.2em; /* Increased font size */
   color: var(--text-color-header-logo);
   font-weight: var(--font-weight-bold);
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+.header-content-top .site-logo svg {
+  height: 2em; /* Increased SVG height */
+  width: 2em;  /* Increased SVG width */
 }
 
 .header-actions {
@@ -468,6 +472,29 @@ footer p {
 /* Styles for Uiverse Search Bar - #poda */
 /* These are mostly from your original CSS to preserve its unique look */
 /* The search bar is inherently dark-themed, so its colors are mostly fixed */
+.search-widget-container {
+  position: relative; /* For positioning context of #poda if needed */
+}
+#poda {
+display: flex;
+align-items: center;
+justify-content: center;
+position: relative; /* Important for its ::before/::after effects */
+}
+#poda .input { /* This is the Uiverse input, not a generic one */
+background-color: var(--search-input-bg);
+border: none;
+width: 301px; /* Original width */
+height: 56px; /* Original height */
+border-radius: 10px;
+color: var(--search-input-text);
+padding-inline: 59px;
+font-size: 18px;
+outline: none;
+}
+#poda .input::placeholder {
+color: var(--search-input-placeholder);
+}
 .search-widget-container {
   position: relative; /* For positioning context of #poda if needed */
 }

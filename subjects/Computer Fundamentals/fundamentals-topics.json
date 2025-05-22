@@ -5,67 +5,146 @@
     {
       "title": "Introduction to Computers",
       "description": "Definition, characteristics, history, and applications of computers.",
-      "resources": ["Notes", "Video", "Quiz"]
+      "resources": ["Notes", "Video", "Quiz"],
+      "subtopics": [
+        "Definition of a Computer",
+        "Characteristics of Computers (Speed, Accuracy, Automation, etc.)",
+        "History of Computers (Mechanical Age to Present)",
+        "Applications in various fields: Education, Health, Banking, Industry, etc."
+      ]
     },
     {
       "title": "Classification of Computers",
       "description": "Types of computers (Supercomputers, Mainframes, PCs, etc.) and generations.",
-      "resources": ["Diagram", "Notes", "Examples"]
+      "resources": ["Diagram", "Notes", "Examples"],
+      "subtopics": [
+        "Types of Computers: Supercomputers, Mainframe Computers, Mini Computers, Microcomputers (Desktops, Laptops), Embedded Systems",
+        "Generations of Computers: First to Fifth Generation – Characteristics & Technology Used"
+      ]
     },
     {
       "title": "Computer Components & Architecture",
       "description": "Hardware vs. Software, CPU, Memory (RAM/ROM), Storage Devices.",
-      "resources": ["Diagram", "Video", "Interactive Demo"]
+      "resources": ["Diagram", "Video", "Interactive Demo"],
+      "subtopics": [
+        "Basic Architecture (Von Neumann Architecture)",
+        "Hardware vs Software",
+        "Central Processing Unit (CPU) – ALU, CU, Registers",
+        "Memory Types: Primary Memory (RAM, ROM), Cache Memory",
+        "Storage Devices: Magnetic (HDD), Optical (CD/DVD), Solid-State (SSD, USB)"
+      ]
     },
     {
       "title": "Input and Output Devices",
       "description": "Keyboard, mouse, scanners, monitors, printers, etc.",
-      "resources": ["Images", "Notes", "Examples"]
+      "resources": ["Images", "Notes", "Examples"],
+      "subtopics": [
+        "Input Devices: Keyboard, Mouse, Scanner, Webcam, Microphone, etc.",
+        "Output Devices: Monitor (LCD, LED), Printers (Laser, Inkjet), Speakers, Projectors"
+      ]
     },
     {
       "title": "Memory and Storage",
       "description": "Primary (RAM, ROM) & Secondary (HDD, SSD, USB) memory.",
-      "resources": ["Diagram", "Video", "Comparison Chart"]
+      "resources": ["Diagram", "Video", "Comparison Chart"],
+      "subtopics": [
+        "Primary Memory: RAM (Volatile), ROM (Non-volatile)",
+        "Secondary Memory: HDD, SSD, USB, Memory Cards",
+        "Comparison Chart: Speed, Cost, Capacity, Volatility"
+      ]
     },
     {
       "title": "Number Systems & Data Representation",
       "description": "Binary, Decimal, Octal, Hexadecimal conversions. ASCII & Unicode.",
-      "resources": ["Practice Problems", "Examples", "Converter Tool"]
+      "resources": ["Practice Problems", "Examples", "Converter Tool"],
+      "subtopics": [
+        "Number Systems: Binary, Decimal, Octal, Hexadecimal",
+        "Conversions between number systems",
+        "Character Encoding Standards: ASCII, Unicode",
+        "Data Representation: Integers, Floating Point, Text"
+      ]
     },
     {
       "title": "Software and Hardware",
       "description": "System vs Application Software, Open Source vs Proprietary.",
-      "resources": ["Notes", "Examples", "Case Study"]
+      "resources": ["Notes", "Examples", "Case Study"],
+      "subtopics": [
+        "Hardware: Physical components of a computer",
+        "Software: System Software (Operating Systems, Drivers), Application Software (Word Processors, Browsers), Utility Software",
+        "Open Source vs Proprietary Software",
+        "Firmware basics"
+      ]
     },
     {
       "title": "Operating Systems Basics",
       "description": "Functions of OS, types (Windows, Linux, macOS), file systems.",
-      "resources": ["Code", "Notes", "Terminal Commands Guide"]
+      "resources": ["Code", "Notes", "Terminal Commands Guide"],
+      "subtopics": [
+        "Definition & Functions of an OS",
+        "Types of OS: Single-user, Multi-user, GUI vs CLI",
+        "Popular OS Examples: Windows, Linux, macOS, Android",
+        "File Systems: FAT, NTFS, ext3/ext4"
+      ]
     },
     {
       "title": "Computer Networks & Internet",
       "description": "LAN/WAN, IP Addresses, DNS, Cloud Computing basics.",
-      "resources": ["Diagram", "Video", "Simulation"]
+      "resources": ["Diagram", "Video", "Simulation"],
+      "subtopics": [
+        "Network Types: LAN, MAN, WAN",
+        "Network Devices: Router, Switch, Modem, Hub",
+        "IP Addressing & DNS",
+        "Internet Basics: WWW, Browsers, Search Engines",
+        "Cloud Computing Basics"
+      ]
     },
     {
       "title": "Data Security & Privacy",
       "description": "Viruses, Encryption, Firewalls, Cybersecurity best practices.",
-      "resources": ["Case Study", "Notes", "Quiz"]
+      "resources": ["Case Study", "Notes", "Quiz"],
+      "subtopics": [
+        "Cyber Threats: Viruses, Worms, Trojans, Ransomware",
+        "Cybersecurity Measures: Antivirus, Firewalls, Encryption",
+        "Safe Internet Practices",
+        "Privacy Concerns and Digital Footprint"
+      ]
     },
     {
       "title": "Database Fundamentals",
       "description": "What is a Database? Types (SQL/NoSQL), Basic SQL commands.",
-      "resources": ["Examples", "Notes", "Online DB Sandbox"]
+      "resources": ["Examples", "Notes", "Online DB Sandbox"],
+      "subtopics": [
+        "What is a Database?",
+        "Types of Databases: Relational (SQL), Non-relational (NoSQL)",
+        "Basic SQL Commands: SELECT, INSERT, UPDATE, DELETE",
+        "DBMS vs RDBMS"
+      ]
     },
     {
       "title": "Emerging Technologies",
       "description": "AI, ML, IoT, Blockchain - Basic concepts and applications.",
-      "resources": ["Video", "Infographic", "Research Paper"]
+      "resources": ["Video", "Infographic", "Research Paper"],
+      "subtopics": [
+        "Artificial Intelligence (AI)",
+        "Machine Learning (ML)",
+        "Internet of Things (IoT)",
+        "Blockchain Technology",
+        "Applications and Real-world Use Cases"
+      ]
     },
     {
       "title": "Ethical & Social Aspects",
       "description": "Digital Ethics, Cyber Laws, Societal Impact of Computers.",
-      "resources": ["Case Study", "Debate Topics", "Notes"]
+      "resources": ["Case Study", "Debate Topics", "Notes"],
+      "subtopics": [
+        "Digital Ethics",
+        "Cyber Laws & IT Act",
+        "Plagiarism, Piracy, Data Misuse",
+        "Impact of Technology on Society",
+        "Digital Divide",
+        "Social Media Influence",
+        "Environmental Impact (E-waste)"
+      ]
     }
   ]
 }
