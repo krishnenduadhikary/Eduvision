@@ -430,56 +430,6 @@
             color: var(--accent-color);
         }
 
-        /* Soft Computing Diagram (Stylized) */
-        .sc-diagram {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            margin: 20px 0;
-            background: rgba(0, 0, 0, 0.1);
-            /* Subtle background */
-            border-radius: 10px;
-        }
-
-        body.dark-mode .sc-diagram {
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .sc-center {
-            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
-            color: white;
-            padding: 15px 25px;
-            border-radius: 50px;
-            font-weight: bold;
-            margin-bottom: 30px;
-            box-shadow: 0 0 15px var(--secondary-color);
-            position: relative;
-            z-index: 2;
-        }
-
-        .sc-components-ring {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px 40px;
-            position: relative;
-            width: 100%;
-            max-width: 500px;
-        }
-
-        .sc-component-node {
-            background-color: var(--card-bg);
-            /* Uses themed card background */
-            color: var(--text-color);
-            padding: 10px 15px;
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid var(--primary-color);
-            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
-            /* Adjusted shadow */
-            transition: transform 0.2s ease, border-color 0.2s, box-shadow 0.2s, background-color 0.3s, color 0.3s;
-        }
-
         body.dark-mode .sc-component-node {
             box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
         }
@@ -492,56 +442,6 @@
 
         body.dark-mode .sc-component-node:hover {
             box-shadow: 0 0 15px rgba(16, 185, 129, 0.7);
-        }
-
-
-        /* Venn Diagram for Hybrid Computing */
-        .venn-diagram {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 2rem 0;
-            height: 180px;
-        }
-
-        .venn-circle {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            color: white;
-            /* Text on venn circles kept white for contrast on transparent bg */
-            font-size: 0.9em;
-            text-align: center;
-            padding: 5px;
-        }
-
-        .hard-comp {
-            background-color: rgba(59, 130, 246, 0.7);
-            position: relative;
-            left: 20px;
-            z-index: 1;
-        }
-
-        .soft-comp {
-            background-color: rgba(139, 92, 246, 0.7);
-            position: relative;
-            right: 20px;
-            z-index: 1;
-        }
-
-        .hybrid-comp-text {
-            position: absolute;
-            z-index: 2;
-            color: white;
-            font-weight: bold;
-            font-size: 0.9em;
-            background: rgba(16, 185, 129, 0.8);
-            padding: 10px;
-            border-radius: 5px;
         }
 
         /* Comparison Tables */
@@ -714,7 +614,7 @@
 
     <div class="eduvision-logo">
         <div class="text-2xl font-bold">
-            <a href="../../index.html" class="flex items-center group">
+            <a href="../../../index.html" class="flex items-center group">
                 <span class="text-white">Edu</span>
                 <svg xmlns="http://www.w3.org/2000/svg"
                     class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
@@ -749,7 +649,7 @@
                 Back to Syllabus
             </a>
             <div class="syllabus-bar-topic-badge">
-                Unit I: Topic 1
+                Unit I
             </div>
         </div>
 
@@ -782,25 +682,9 @@
             <p>The main components of soft computing are fuzzy logic, neural networks, evolutionary computation, and
                 probabilistic reasoning. These techniques can be used individually or combined to create powerful
                 systems that mimic human reasoning. Here's a more detailed explanation of each component:</p>
+            <img src="../Assets/components of sc.svg" alt="Components of SC" class="sc-diagram"
+                style="display: block; margin: 20px auto; width: 100%; max-width: 600px;">
 
-            <div class="sc-diagram">
-                <div class="sc-center">Soft Computing (SC)</div>
-                <div class="sc-components-ring">
-                    <div class="sc-component-node"
-                        title="Inspired by the human brain, for pattern recognition and learning.">Neural Networks (NN)
-                    </div>
-                    <div class="sc-component-node" title="Uses evolutionary principles for optimization problems.">
-                        Evolutionary Computation (EC)</div>
-                    <div class="sc-component-node" title="Deals with uncertainty using probabilities.">Probabilistic
-                        Reasoning (PR)</div>
-                    <div class="sc-component-node" title="Handles imprecision with partial truths.">Fuzzy Logic (FL)
-                    </div>
-                </div>
-                <p style="font-size:0.8em; margin-top:20px; text-align:center; opacity:0.7;">
-                    (These components can also be combined, e.g., EC-NN, EC-FL, PR-NN, PR-FL, to form hybrid intelligent
-                    systems.)
-                </p>
-            </div>
 
             <div class="component-grid">
                 <div class="component-card">
@@ -822,7 +706,16 @@
                         processing (e.g., translation), and financial modeling (e.g., stock market prediction).</p>
                 </div>
                 <div class="component-card">
-                    <h4>3. Evolutionary Computation (EC)</h4>
+                    <h4>3. Genetic Algorithm (GA)</h4>
+                    <p><strong>Purpose:</strong> Solves optimization and search problems by mimicking the process of
+                        natural selection.</p>
+                    <p><strong>How it works:</strong> Uses techniques such as selection, crossover, and mutation to
+                        evolve a population of candidate solutions toward an optimal solution.</p>
+                    <p><strong>Examples:</strong> Applied in scheduling (e.g., job-shop scheduling), engineering design
+                        (e.g., structural optimization), and machine learning (e.g., feature selection).</p>
+                </div>
+                <div class="component-card">
+                    <h4>4. Evolutionary Computation (EC)</h4>
                     <p><strong>Purpose:</strong> Uses evolutionary principles (like natural selection, mutation, and
                         crossover) to solve complex optimization problems.</p>
                     <p><strong>How it works:</strong> Employs algorithms like genetic algorithms, evolutionary
@@ -833,7 +726,7 @@
                         architectures).</p>
                 </div>
                 <div class="component-card">
-                    <h4>4. Probabilistic Reasoning (PR)</h4>
+                    <h4>5. Probabilistic Reasoning (PR)</h4>
                     <p><strong>Purpose:</strong> Deals with uncertainty by representing knowledge and relationships
                         using probabilities.</p>
                     <p><strong>How it works:</strong> Uses techniques like Bayesian networks and Hidden Markov Models to
@@ -850,11 +743,8 @@
                     computing</span> techniques with emerging <span class="highlight">soft computing</span>
                 methodologies.</p>
 
-            <div class="venn-diagram">
-                <div class="venn-circle hard-comp">Hard Computing</div>
-                <div class="hybrid-comp-text">Hybrid Computing</div>
-                <div class="venn-circle soft-comp">Soft Computing</div>
-            </div>
+            <img src="../Assets/Hybrid Computing.svg" alt="Hybrid Computing" class="sc-diagram"
+                style="display: block; margin: 20px auto; width: 100%; max-width: 600px;">
 
             <ul>
                 <li>A part of a complex real-world problem will be solved using hard computing and the remaining part
