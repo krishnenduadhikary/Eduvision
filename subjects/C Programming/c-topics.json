@@ -3,49 +3,54 @@
   "subtitle": "Build strong programming foundations using the C language",
   "topics": [
     {
-      "title": "Introduction to C",
-      "description": "History, structure of a C program, compiling, and execution.",
-      "resources": ["Notes", "Video"]
+      "title": "Module 1: Introduction to C",
+      "description": "History and importance of C, structure of a C program, compilation and execution process, keywords and identifiers, constants, variables, and data types, input and output (using scanf, printf), comments in C, escape sequences.",
+      "resources": ["Notes", "Examples"]
     },
     {
-      "title": "Data Types and Variables",
-      "description": "Basic data types, variable declaration, and constants.",
-      "resources": ["Code", "Examples"]
-    },
-    {
-      "title": "Operators and Expressions",
-      "description": "Arithmetic, relational, logical, and bitwise operators.",
+      "title": "Module 2: Operators and Expressions",
+      "description": "Arithmetic operators, relational and logical operators, assignment operators, increment and decrement operators, conditional operator, bitwise operators, operator precedence and associativity, type conversions.",
       "resources": ["Practice", "Notes"]
     },
     {
-      "title": "Control Statements",
-      "description": "if-else, switch-case, loops (for, while, do-while).",
-      "resources": ["Examples", "Diagram"]
+      "title": "Module 3: Control Structures",
+      "description": "Decision making (if, if-else, nested if-else, switch statement), loops (while, do-while, for loops), nested loops, jump statements (break, continue, goto, return).",
+      "resources": ["Examples", "Diagrams"]
     },
     {
-      "title": "Functions in C",
-      "description": "Creating and calling functions, arguments, and return values.",
+      "title": "Module 4: Functions in C",
+      "description": "Defining and declaring functions, function arguments and return values, call by value vs call by reference, recursion, storage classes (auto, extern, static, register), scope and lifetime of variables.",
       "resources": ["Code", "Video"]
     },
     {
-      "title": "Arrays and Strings",
-      "description": "1D & 2D arrays, string manipulation using standard functions.",
+      "title": "Module 5: Arrays and Strings",
+      "description": "One-dimensional arrays, two-dimensional arrays, multidimensional arrays, string handling (using <string.h>), strlen, strcpy, strcmp, strcat, array of strings.",
       "resources": ["Practice", "Notes"]
     },
     {
-      "title": "Pointers",
-      "description": "Pointer basics, arithmetic, and relationship with arrays.",
+      "title": "Module 6: Pointers",
+      "description": "Introduction to pointers, pointer arithmetic, pointers and arrays, pointers and strings, pointers to functions, pointers to pointers, dynamic memory allocation (malloc, calloc, realloc, free).",
       "resources": ["Code", "Examples"]
     },
     {
-      "title": "Structures and Unions",
-      "description": "User-defined data types, structures, and unions in C.",
+      "title": "Module 7: Structures and Unions",
+      "description": "Defining and declaring structures, accessing structure members, nested structures, array of structures, pointers to structures, unions, enumerated data types (enum).",
       "resources": ["Notes", "Practice"]
     },
     {
-      "title": "File Handling",
-      "description": "Reading/writing files using fopen, fclose, fprintf, fscanf.",
+      "title": "Module 8: File Handling",
+      "description": "File operations (opening, reading, writing, closing), file modes (r, w, a, rb, wb, etc.), file functions (fopen, fclose, fscanf, fprintf, fgets, fputs, etc.), binary files, file pointers and error handling.",
       "resources": ["Code", "Examples"]
+    },
+    {
+      "title": "Module 9: Preprocessor Directives",
+      "description": "Macro substitution, file inclusion (#include), conditional compilation (#ifdef, #ifndef, #endif), defining constants (#define), undefining macros (#undef).",
+      "resources": ["Notes", "Examples"]
+    },
+    {
+      "title": "Module 10: Advanced Topics (Optional/Project-Oriented)",
+      "description": "Command-line arguments, linked lists (basic introduction), debugging techniques, memory leaks and management, modular programming in C, building small projects (e.g., calculator, file encryptor, simple database).",
+      "resources": ["Projects", "Practice"]
     }
   ]
 }

@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit IV: Genetic Algorithms (GA) - Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Light Mode Defaults */
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --primary-color: #3b82f6;
+            --secondary-color: #8b5cf6;
+            --accent-color: #10b981;
+            --text-color: #334155;
+            --heading-color: #1e293b;
+            --border-color: #e2e8f0;
+            --gradient-start: var(--primary-color);
+            --gradient-end: var(--secondary-color);
+            --font-main: 'Poppins', sans-serif;
+            --font-logo: 'Nunito', sans-serif;
+
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --card-shadow-color: rgba(0, 0, 0, 0.05);
+            --link-color: var(--primary-color);
+            --link-hover-color: #1d4ed8;
+            --link-hover-bg: #eff6ff;
+            --syllabus-bar-bg: var(--card-bg);
+            --collapsible-content-bg: rgba(0, 0, 0, 0.02);
+            --component-card-bg: #f9fafb;
+            --definition-bg: rgba(59, 130, 246, 0.05);
+            --table-header-bg: var(--primary-color);
+            --table-header-text: white;
+            --table-row-even-bg: rgba(0, 0, 0, 0.015);
+            --theme-toggle-bg: var(--card-bg);
+            --theme-toggle-icon: var(--primary-color);
+            --theme-toggle-hover-bg: var(--primary-color);
+            --theme-toggle-hover-icon: white;
+            --code-bg: #e2e8f0;
+            --code-text: #0f172a;
+            --img-border-color: var(--border-color);
+        }
+
+        body.dark-mode {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #e2e8f0;
+            --heading-color: #f8fafc;
+            --border-color: #334155;
+
+            --shadow-color: rgba(0, 0, 0, 0.25);
+            --card-shadow-color: rgba(0, 0, 0, 0.2);
+            --link-color: #5dade2;
+            --link-hover-color: #8ecae6;
+            --link-hover-bg: rgba(255, 255, 255, 0.1);
+            --syllabus-bar-bg: var(--card-bg);
+            --collapsible-content-bg: rgba(255, 255, 255, 0.03);
+            --component-card-bg: #2a3a50;
+            --definition-bg: rgba(59, 130, 246, 0.1);
+            --table-header-bg: var(--primary-color);
+            --table-header-text: white;
+            --table-row-even-bg: rgba(255, 255, 255, 0.03);
+            --theme-toggle-bg: var(--card-bg);
+            --theme-toggle-icon: var(--primary-color);
+            --theme-toggle-hover-bg: var(--primary-color);
+            --theme-toggle-hover-icon: white;
+            --code-bg: #2a3a50;
+            --code-text: #e2e8f0;
+            --img-border-color: var(--border-color);
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Eduvision Logo */
+        .eduvision-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: var(--font-logo);
+        }
+
+        .eduvision-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvision-logo .text-yellow-300 {
+            color: #fde047 !important;
+        }
+
+        .eduvision-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Theme Toggle Button */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            /* Adjusted size */
+            box-shadow: 0 2px 5px var(--shadow-color);
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+            color: var(--theme-toggle-hover-icon);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+
+        /* Page Header (Moved above Syllabus Bar) */
+        .page-header {
+            text-align: center;
+            margin-top: 70px;
+            /* Space for logo */
+            margin-bottom: 1.5rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--heading-color);
+            background: linear-gradient(90deg, var(--gradient-start), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            opacity: 0.9;
+        }
+
+        /* Syllabus Bar */
+        .syllabus-bar-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 0.75rem;
+            background-color: var(--syllabus-bar-bg);
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 15px var(--card-shadow-color);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .syllabus-bar-back-link {
+            display: flex;
+            align-items: center;
+            font-size: 0.875rem;
+            color: var(--link-color);
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            text-decoration: none;
+            transition: background-color 0.2s, color 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .syllabus-bar-back-link:hover {
+            color: var(--link-hover-color);
+            background-color: var(--link-hover-bg);
+        }
+
+        .syllabus-bar-back-link svg {
+            height: 1.25rem;
+            width: 1.25rem;
+            margin-right: 0.375rem;
+            fill: currentColor;
+        }
+
+        .syllabus-bar-topic-badge {
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.375rem 1rem;
+            border-radius: 9999px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            /* This shadow is fine */
+        }
+
+        @media (min-width: 640px) {
+            .syllabus-bar-container {
+                flex-direction: row;
+            }
+
+            .syllabus-bar-back-link {
+                margin-bottom: 0;
+            }
+
+            .syllabus-bar-topic-badge {
+                font-size: 0.875rem;
+            }
+        }
+
+        /* Section Styling */
+        .content-section {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px var(--card-shadow-color);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s, border-color 0.3s;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px var(--shadow-color);
+        }
+
+        .content-section h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--heading-color);
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .content-section h2 i {
+            margin-right: 0.75rem;
+            color: var(--primary-color);
+        }
+
+        .content-section h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-top: 1.2rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section .definition,
+        .content-section li {
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .content-section ul {
+            padding-left: 20px;
+            list-style: none;
+        }
+
+        .content-section ul li::before {
+            content: "\f105";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--primary-color);
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+        .content-section ul.sub-list li::before {
+            /* For nested lists if needed */
+            content: "\f0da";
+            /* fa-chevron-right, slightly smaller */
+        }
+
+
+        /* Collapsible Sections */
+        .collapsible {
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: white;
+            cursor: pointer;
+            padding: 15px 20px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: filter 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .collapsible:hover {
+            filter: brightness(1.1);
+        }
+
+        .collapsible.active {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .collapsible-content {
+            padding: 0 18px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out, background-color 0.3s;
+            background-color: var(--collapsible-content-bg);
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .collapsible-content>div {
+            padding: 15px 0;
+        }
+
+        .collapsible .icon::before {
+            content: '\f078';
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible.active .icon::before {
+            transform: rotate(-180deg);
+        }
+
+        /* Diagram/Image Styling */
+        .diagram-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 1rem auto;
+            /* Centering block images */
+            display: block;
+            /* For auto margin centering */
+            border: 1px solid var(--img-border-color);
+            box-shadow: 0 4px 8px var(--card-shadow-color);
+        }
+
+        .image-caption {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-top: -0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .flex-diagrams {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: space-around;
+            align-items: flex-start;
+            /* Align items to the top if they have different heights */
+        }
+
+        .flex-diagrams>div {
+            flex: 1;
+            min-width: 250px;
+            /* Minimum width for items in flex container */
+            text-align: center;
+            /* Center content within each flex item */
+        }
+
+        /* Formula / Code-like text */
+        .formula {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+            margin: 0.5rem 0;
+            display: block;
+            white-space: pre-wrap;
+            /* Allows wrapping */
+            word-break: break-all;
+            /* Ensures long unbroken strings break */
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Definition Block */
+        .definition {
+            background-color: var(--definition-bg);
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            font-style: italic;
+            transition: background-color 0.3s, border-left-color 0.3s;
+        }
+
+        .definition strong {
+            font-style: normal;
+            color: var(--primary-color);
+        }
+
+        /* Comparison Tables (Reused from Topic 1) */
+        .comparison-tables-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .comparison-table {
+            flex: 1;
+            min-width: 300px;
+            border-collapse: collapse;
+            width: 100%;
+            box-shadow: 0 4px 10px var(--card-shadow-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+        }
+
+        .comparison-table th {
+            background-color: var(--table-header-bg);
+            color: var(--table-header-text);
+            font-weight: 600;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background-color: var(--table-row-even-bg);
+            transition: background-color 0.3s;
+        }
+
+        .comparison-table ul {
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+
+        .comparison-table ul li::before {
+            content: "";
+            margin-right: 0;
+        }
+
+
+        /* Next/Prev Topic Links */
+        .topic-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            /* Allow wrapping on small screens */
+            gap: 1rem;
+            /* Space between buttons if they wrap */
+        }
+
+        .topic-nav-link {
+            padding: 12px 25px;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            text-align: center;
+            flex-grow: 1;
+            /* Allow buttons to grow */
+            max-width: calc(50% - 0.5rem);
+            /* Max width for two buttons */
+        }
+
+        .prev-topic-link {
+            background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+        }
+
+        .next-topic-link {
+            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+        }
+
+        .topic-nav-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+            filter: brightness(1.1);
+        }
+
+        @media (max-width: 600px) {
+            .topic-nav-link {
+                max-width: 100%;
+                /* Full width on small screens */
+            }
+        }
+
+        /* Footer */
+        .page-footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: #94a3b8;
+            transition: border-top-color 0.3s;
+        }
+
+        body.dark-mode .page-footer {
+            color: #64748b;
+        }
+
+        /* Utility classes */
+        .highlight {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .content-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .comparison-tables-container {
+                flex-direction: column;
+            }
+
+            #theme-toggle {
+                top: 15px;
+                right: 15px;
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+
+            .eduvision-logo {
+                top: 15px;
+                left: 15px;
+            }
+
+            .eduvision-logo .text-2xl {
+                font-size: 1.5rem;
+            }
+
+            .page-header {
+                margin-top: 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../index.html" class="flex items-center group">
+                <span class="text-white">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-white">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>Unit IV: Genetic Algorithms (GA)</h1>
+            <p>Understanding principles of evolutionary computation, GA components, and their application in
+                optimization.</p>
+        </header>
+
+        <div class="syllabus-bar-container">
+            <a href="../soft-computing.html" class="syllabus-bar-back-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                        clip-rule="evenodd" />
+                </svg>
+                Back to Syllabus
+            </a>
+            <div class="syllabus-bar-topic-badge">
+                Unit IV: Topic 4
+            </div>
+        </div>
+
+        <section class="content-section" id="intro-ga">
+            <h2><i class="fas fa-dna"></i>1. Introduction to Genetic Algorithms & Optimization</h2>
+            <button type="button" class="collapsible">What is a Genetic Algorithm (GA)? <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>A Genetic Algorithm (GA) is a search-based optimization technique based on the principles of
+                        <span class="highlight">Genetics and Natural Selection</span>. It is frequently used to find
+                        optimal or near-optimal solutions to difficult problems which otherwise would take a lifetime to
+                        solve. GAs are a subset of a much larger branch of computation known as <span
+                            class="highlight">Evolutionary Computation</span>.</p>
+                    <p>Developed by John Holland and his colleagues (notably David E. Goldberg), GAs have been
+                        successfully applied to various optimization problems in research and machine learning.</p>
+                    <h4>Core Idea:</h4>
+                    <p>In GAs, we maintain a <span class="highlight">pool or population of possible solutions</span>
+                        (individuals or chromosomes) to the given problem. These solutions then undergo recombination
+                        (crossover) and mutation (like in natural genetics), producing new children. Each individual
+                        (candidate solution) is assigned a <span class="highlight">fitness value</span> (based on its
+                        objective function value). Fitter individuals are given a higher chance to mate and yield more
+                        "fitter" individuals. This is in line with the Darwinian Theory of "Survival of the Fittest."
+                    </p>
+                    <p>This process of "evolving" better individuals continues over generations until a stopping
+                        criterion is met (e.g., a certain number of generations, or a satisfactory solution found).</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Introduction to Optimization <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Optimization is the process of <span class="highlight">making something better</span>. In any
+                        process, we have a set of inputs and a set of outputs.</p>
+                    <img src="https://i.imgur.com/YyLzP8C.png" alt="Optimization Process" class="diagram-image"
+                        style="max-width: 400px;">
+                    <p class="image-caption">Basic Input-Process-Output model for optimization.</p>
+                    <p>Optimization refers to finding the values of inputs in such a way that we get the "best" output
+                        values. The definition of "best" varies from problem to problem, but in mathematical terms, it
+                        refers to <span class="highlight">maximizing or minimizing one or more objective
+                            functions</span> by varying the input parameters.</p>
+                    <p>The set of all possible solutions or values which the inputs can take make up the <span
+                            class="highlight">search space</span>. The aim of optimization is to find that point or set
+                        of points in the search space which gives the optimal solution.</p>
+                    <h4>Classification of Optimization Techniques:</h4>
+                    <p>Optimization can be classified broadly as:</p>
+                    <ul>
+                        <li><strong>Deterministic:</strong> Uses derivative or gradient to reach the final solution. Can
+                            be further divided into infinite dimension, finite dimension (non-discrete, discrete;
+                            multi-stage, single-stage; linear, non-linear).</li>
+                        <li><strong>Stochastic:</strong> Derivative-free optimization, a type of random search suitable
+                            for non-linearity, discontinuity, and non-convex regions. GAs fall under this category.</li>
+                    </ul>
+                    <div class="flex-diagrams">
+                        <div>
+                            <img src="https://i.imgur.com/S0K4C8F.png" alt="Classification of Optimization Techniques"
+                                class="diagram-image" style="max-width: 500px;">
+                            <p class="image-caption">Fig. 8.1 Classification of optimization techniques.</p>
+                        </div>
+                        <div>
+                            <img src="https://i.imgur.com/3A5C2xJ.png" alt="Classes of Search Techniques"
+                                class="diagram-image" style="max-width: 600px;">
+                            <p class="image-caption">Fig. 8.2 Classes of search techniques, showing GAs under
+                                Evolutionary Algorithms.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Advantages and Limitations of GAs <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>Advantages of GAs:</h4>
+                    <ul>
+                        <li>Does not require any derivative information (which may not be available for many real-world
+                            problems).</li>
+                        <li>Is faster and more efficient as compared to some traditional methods.</li>
+                        <li>Has very good parallel capabilities.</li>
+                        <li>Optimizes both continuous and discrete functions and also multi-objective problems.</li>
+                        <li>Provides a list of "good" solutions and not just a single solution.</li>
+                        <li>Always gets an answer to the problem, which gets better over time.</li>
+                        <li>Useful when the search space is very large and there are a large number of parameters
+                            involved.</li>
+                        <li>Exploits historical information well.</li>
+                    </ul>
+                    <h4>Limitations of GAs:</h4>
+                    <ul>
+                        <li>GAs are not suited for all problems, especially problems which are simple and for which
+                            derivative information is available.</li>
+                        <li>Fitness value is calculated repeatedly which might be computationally expensive for some
+                            problems.</li>
+                        <li>Being stochastic, there are no guarantees on the optimality or the quality of the solution.
+                        </li>
+                        <li>If not implemented properly (e.g., choice of parameters, operators), the GA may not converge
+                            to the optimal solution or may converge prematurely to a local optimum.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="ga-basics">
+            <h2><i class="fas fa-cogs"></i>2. Genetic Algorithm Basics and Concepts</h2>
+            <button type="button" class="collapsible">Fundamental Concepts & Terminology <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>GAs are good at tackling large, potentially huge, search spaces and navigating them looking for
+                        optimal combinations of things and solutions we might not find in a lifetime.</p>
+                    <ul>
+                        <li>GAs need the design space to be converted into a <span class="highlight">genetic
+                                space</span> (coding of variables).</li>
+                        <li>A key difference from traditional methods is that GAs use a <span
+                                class="highlight">population of points</span> (solutions) at one time, not a single
+                            point. This allows GAs to process a number of designs at the same time.</li>
+                        <li>While traditional methods often use deterministic transition rules, GAs use <span
+                                class="highlight">randomized operators</span> (like crossover and mutation) to improve
+                            the search space in an adaptive manner.</li>
+                    </ul>
+                    <h4>Three Most Important Aspects of Using GA:</h4>
+                    <ol>
+                        <li>Definition of the objective function (fitness function).</li>
+                        <li>Definition and implementation of genetic representation (encoding).</li>
+                        <li>Definition and implementation of genetic operators (selection, crossover, mutation).</li>
+                    </ol>
+                    <h4>Important Common Aspects of Evolutionary/Swarm Optimization Algorithms:</h4>
+                    <ol>
+                        <li><strong>Search Space:</strong> Space for all feasible solutions.</li>
+                        <li><strong>Solution:</strong> The point with maximum or minimum value of fitness function.</li>
+                        <li><strong>Fitness Function:</strong> A function derived from the objective function, used to
+                            evaluate solutions.</li>
+                        <li><strong>Population Size:</strong> Number of points in a search space used in parallel for
+                            computing, generally ranging from 30 to 200.</li>
+                        <li><strong>Constraints:</strong> Lower and upper bounds for variables or conditions.</li>
+                        <li><strong>Stopping Criteria:</strong> Number of iterations, minimum value of error in fitness,
+                            or minimum improvement from previous iteration.</li>
+                    </ol>
+                    <h4>Creation of Offspring & Search Space:</h4>
+                    <p>During creation of offspring, recombination (crossover) and mutation occur. Mutation means an
+                        element of DNA is modified. These changes are mainly caused by errors in copying genes. The
+                        fitness of an organism is measured by its success in life.</p>
+                    <img src="https://i.imgur.com/g5M4N2F.png" alt="Search Space Example" class="diagram-image"
+                        style="max-width: 400px;">
+                    <p class="image-caption">Fig. 8.4 Examples of a search space.</p>
+                    <p>The search space for all possible feasible solutions is where GAs look for extrema (maximum or
+                        minimum). GAs are inspired by Darwinian "survival of the fittest." An algorithm starts with a
+                        set of solutions (population). Solutions are selected based on fitness to form a new population
+                        (offspring), hoping the new population is better. This is repeated until improvement conditions
+                        are satisfied.</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Biological Terminology and GA Equivalents <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Biological terms are used to describe parts of a GA:</p>
+                    <div class="flex-diagrams">
+                        <div>
+                            <img src="https://i.imgur.com/R5m4y7L.png" alt="Animal Cell and Nucleus"
+                                class="diagram-image" style="max-width: 600px;">
+                            <p class="image-caption">Anatomy of an Animal Cell and The Cell Nucleus (Illustrative).</p>
+                        </div>
+                        <div>
+                            <img src="https://i.imgur.com/Q7jYp3K.png" alt="Chromosome, DNA, Gene" class="diagram-image"
+                                style="max-width: 300px;">
+                            <p class="image-caption">Relationship between Chromosome, DNA, and Gene (Illustrative).</p>
+                        </div>
+                    </div>
+                    <ul>
+                        <li><strong>Cell:</strong> Basic unit. Genetic information is in the cell nucleus.</li>
+                        <li><strong>Chromosomes:</strong> Stores all genetic information, built of DNA. In GAs, a
+                            chromosome represents a <span class="highlight">potential solution</span> to a problem.</li>
+                        <li><strong>Genes:</strong> A chromosome is divided into genes, each encoding a particular trait
+                            or parameter. In GAs, a gene represents a part of the solution (e.g., a specific variable or
+                            bit).</li>
+                        <li><strong>Allele:</strong> Possible values a gene can take (e.g., for eye color: blue, brown).
+                            In GAs, the value at a certain gene position.</li>
+                        <li><strong>Locus:</strong> The position of a gene on the chromosome.</li>
+                        <li><strong>Genome:</strong> The set of all genes of a specific species. In GAs, the collection
+                            of all chromosomes for an individual.</li>
+                        <li><strong>Genotype:</strong> The entire combination of genes for an individual (the coded
+                            representation).</li>
+                        <li><strong>Phenotype:</strong> The physical aspect or characteristics resulting from the
+                            genotype (the decoded solution).</li>
+                        <li><strong>Diploid/Haploid:</strong> Organisms with paired (diploid) or unpaired (haploid)
+                            chromosomes. Most GAs concentrate on haploid chromosomes for simplicity.</li>
+                        <li><strong>Gene Pool:</strong> The set of all possible alleles present in a particular
+                            population.</li>
+                    </ul>
+                    <h4>Common Terms Used in GA (Mapping):</h4>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Natural Evolution Term</th>
+                                <th>Genetic Algorithm Term</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Genotype</td>
+                                <td>Coded string / Encoded point</td>
+                            </tr>
+                            <tr>
+                                <td>Phenotype</td>
+                                <td>Uncoded point / Decoded solution</td>
+                            </tr>
+                            <tr>
+                                <td>Chromosome</td>
+                                <td>String / Individual / Solution</td>
+                            </tr>
+                            <tr>
+                                <td>Gene</td>
+                                <td>String position / Parameter</td>
+                            </tr>
+                            <tr>
+                                <td>Allele</td>
+                                <td>Value at a certain position / Value of a parameter</td>
+                            </tr>
+                            <tr>
+                                <td>Fitness</td>
+                                <td>Objective function value</td>
+                            </tr>
+                            <tr>
+                                <td>Population</td>
+                                <td>Group of all individuals / Set of solutions</td>
+                            </tr>
+                            <tr>
+                                <td>Search Space</td>
+                                <td>All possible solutions to the problem</td>
+                            </tr>
+                            <tr>
+                                <td>Trait</td>
+                                <td>Possible aspect (features) of an individual</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="ga-working">
+            <h2><i class="fas fa-sync-alt"></i>3. Working Principle of Genetic Algorithms</h2>
+            <button type="button" class="collapsible">Overall GA Process <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>To illustrate the working principle, we typically consider an unconstrained optimization problem.
+                        If f(x) needs to be minimized, and f(x) > 0, the objective function for maximization can be
+                        written as: maximize 1 / (1 + f(x)). If f(x) < 0, maximize {-f(x)}.</p>
+                            <h4>Components of Genetic Algorithm:</h4>
+                            <ul>
+                                <li>Encoding schemes</li>
+                                <li>Fitness evaluations</li>
+                                <li>Parent selection</li>
+                                <li>Crossover operators</li>
+                                <li>Mutation operators</li>
+                            </ul>
+                            <p>After an initial population is randomly generated, the algorithm evolves through three
+                                main operators:</p>
+                            <ol>
+                                <li><strong>Selection:</strong> Equates to "survival of the fittest."</li>
+                                <li><strong>Crossover:</strong> Represents mating between individuals.</li>
+                                <li><strong>Mutation:</strong> Introduces random modifications.</li>
+                            </ol>
+                            <div class="flex-diagrams">
+                                <div>
+                                    <img src="https://i.imgur.com/2gO3r8P.png" alt="One Generation of GA Process"
+                                        class="diagram-image" style="max-width: 500px;">
+                                    <p class="image-caption">Fig. 3.1.1: One generation of GA process.</p>
+                                </div>
+                                <div>
+                                    <img src="https://i.imgur.com/sL3pY2f.png" alt="GA Process Flow"
+                                        class="diagram-image" style="max-width: 500px;">
+                                    <p class="image-caption">Fig. 3.1.2: More detailed GA process flow.</p>
+                                </div>
+                            </div>
+                            <h4>Pseudocode of Genetics Algorithm:</h4>
+                            <ol>
+                                <li>Choose the initial population of individuals.</li>
+                                <li>Evaluate the fitness of each individual in that population.</li>
+                                <li>Repeat until termination condition satisfied:
+                                    <ol type="a">
+                                        <li>Selection: Select the individuals with greater fitness for reproduction.
+                                        </li>
+                                        <li>Crossover: Breed new individuals through crossover.</li>
+                                        <li>Mutation: Apply probabilistic mutation on new individuals.</li>
+                                        <li>Form a new population with these offsprings.</li>
+                                    </ol>
+                                </li>
+                                <li>Terminate.</li>
+                            </ol>
+                            <h4>General GA Steps (Outline):</h4>
+                            <ol>
+                                <li><strong>[Start]</strong> Generate random population of n chromosomes.</li>
+                                <li><strong>[Fitness]</strong> Evaluate the fitness f(x) of each chromosome x in the
+                                    population.</li>
+                                <li><strong>[New population]</strong> Create a new population by repeating the following
+                                    steps until the new population is complete:
+                                    <ol type="a">
+                                        <li><strong>[Selection]</strong> Select two parent chromosomes from a population
+                                            according to their fitness.</li>
+                                        <li><strong>[Crossover]</strong> With a crossover probability, cross over the
+                                            parents to form new offspring. If no crossover, offspring is an exact copy.
+                                        </li>
+                                        <li><strong>[Mutation]</strong> With a mutation probability, mutate new
+                                            offspring at each locus.</li>
+                                        <li><strong>[Accepting]</strong> Place new offspring in a new population.</li>
+                                    </ol>
+                                </li>
+                                <li><strong>[Replace]</strong> Use new generated population for a further run of
+                                    algorithm.</li>
+                                <li><strong>[Test]</strong> If the end condition is satisfied, stop and return the best
+                                    solution.</li>
+                                <li><strong>[Loop]</strong> Go to step 2.</li>
+                            </ol>
+                            <img src="https://i.imgur.com/A7kP2wD.png" alt="Flow Diagram of GA Process"
+                                class="diagram-image" style="max-width: 500px;">
+                            <p class="image-caption">Fig. 3.1.3: Flow diagram of the genetic algorithm process
+                                (simplified).</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Differences between GAs and Traditional Methods <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <ol>
+                        <li>GAs work with a <span class="highlight">coded form of the function values</span> (parameter
+                            set, e.g., binary strings) rather than the actual values themselves.</li>
+                        <li>GAs use a <span class="highlight">set or population of points</span> to conduct a search,
+                            not just a single point. This allows searching noisy spaces with local optima.</li>
+                        <li>GAs use only <span class="highlight">payoff (fitness) information</span> to guide
+                            themselves, not derivatives or other auxiliary knowledge.</li>
+                        <li>GAs are <span class="highlight">probabilistic</span> in nature, not deterministic, due to
+                            randomized operators.</li>
+                        <li>GAs are <span class="highlight">inherently parallel</span>, dealing with many points
+                            simultaneously.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="ga-components-details">
+            <h2><i class="fas fa-puzzle-piece"></i>4. GA Components in Detail</h2>
+            <button type="button" class="collapsible">Encoding (Chromosome Representation) <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>The way candidate solutions are encoded is a central factor in the success of a GA. Most GAs use
+                        fixed-length, fixed-order bit strings, but other encodings exist.</p>
+                    <ul>
+                        <li><strong>Binary Encoding:</strong> Each chromosome is a string of 0s and 1s. Often used for
+                            problems where parameters can be discretized or are naturally binary (e.g., knapsack problem
+                            - item selected or not).</li>
+                        <li><strong>Permutation Encoding:</strong> Each chromosome is a string of numbers that represent
+                            a sequence or order. Used in ordering problems like the Traveling Salesman Problem (TSP),
+                            where the chromosome represents the order of cities to visit.
+                            <br>Example: Chromosome A: 1 5 3 2 6 4 7 9 8
+                        </li>
+                        <li><strong>Tree Encoding (Genetic Programming):</strong> Each chromosome is a tree of objects,
+                            such as functions or commands in a programming language. Used for evolving programs or
+                            expressions.
+                            <img src="https://i.imgur.com/rJ7bL9E.png" alt="Tree Encoding Example" class="diagram-image"
+                                style="max-width: 500px;">
+                            <p class="image-caption">Fig. Example of Chromosomes with tree encoding.</p>
+                        </li>
+                        <li><strong>Value Encoding (Real-coded GA):</strong> Each chromosome is a sequence of some
+                            values (real numbers, characters, objects). Direct value encoding can be used where binary
+                            encoding is difficult.
+                            <br>Example: Chromosome A: 1.2324 5.3243 0.4556 ... (for real-valued parameters)
+                            <br>Example: Chromosome C: (back), (right), (forward), (left) (for a sequence of moves)
+                            <br>Example (Problem: Finding weights for neural network): Real values in chromosomes
+                            represent connection weights.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Selection (Reproduction) Methods <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Selection is usually the first operator applied to a population. It chooses chromosomes from the
+                        population to be parents for crossover, based on their fitness. The idea is that better (fitter)
+                        solutions should have a higher chance to reproduce.</p>
+                    <ul>
+                        <li><strong>Roulette Wheel Selection:</strong>
+                            <ul>
+                                <li>Parents are selected according to their fitness. Better chromosomes have a higher
+                                    chance of being selected.</li>
+                                <li>Imagine a roulette wheel where each chromosome occupies a segment proportional to
+                                    its fitness value. A marble is thrown, and the chromosome whose segment it lands on
+                                    is selected.</li>
+                                <li>Probability of selecting individual i: p(i) = f(i) / Σ f(j) for all j in population.
+                                </li>
+                                <li>Risk of premature convergence if one individual is significantly fitter than others.
+                                </li>
+                                <img src="https://i.imgur.com/gQ8tL4S.png" alt="Roulette Wheel Selection"
+                                    class="diagram-image" style="max-width: 350px;">
+                                <p class="image-caption">Roulette Wheel based on fitness values.</p>
+                            </ul>
+                        </li>
+                        <li><strong>Boltzmann Selection:</strong>
+                            <ul>
+                                <li>A method of functional minimization or maximization that simulates slow cooling of
+                                    molten metal (simulated annealing concept).</li>
+                                <li>The probability of a state E at temperature T is given by P(E) = exp(-E/kT).</li>
+                                <li>By controlling temperature T, convergence can be controlled. High T allows more
+                                    diverse selection; low T favors fitter individuals.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Tournament Selection:</strong>
+                            <ul>
+                                <li>A strategy to select individuals and insert them into a mating pool.</li>
+                                <li>A number (N<sub>u</sub>, tournament size, often 2) of individuals are chosen
+                                    randomly from the population.</li>
+                                <li>These N<sub>u</sub> individuals "compete," and the one with the highest fitness is
+                                    selected as a parent.</li>
+                                <li>This process is repeated to fill the mating pool.</li>
+                                <li>Helps manage selective pressure and population diversity. Higher selective pressure
+                                    (larger N<sub>u</sub>) can lead to faster convergence but also increased risk of
+                                    premature convergence.</li>
+                                <img src="https://i.imgur.com/dJ3rP7E.png" alt="Tournament Selection Example"
+                                    class="diagram-image" style="max-width: 500px;">
+                                <p class="image-caption">Example steps of Tournament Selection.</p>
+                            </ul>
+                        </li>
+                        <li><strong>Rank Selection:</strong>
+                            <ul>
+                                <li>Ranks individuals based on fitness (best has rank 1, second best rank 2, etc.).</li>
+                                <li>Selection probability is based on rank, not absolute fitness values. This can
+                                    prevent very fit individuals from dominating too early and helps maintain diversity
+                                    if fitness values differ greatly.</li>
+                                <li>Roulette wheel selection can then be applied to these ranks.</li>
+                                <img src="https://i.imgur.com/iK6vX3N.png" alt="Roulette Wheel by Rank"
+                                    class="diagram-image" style="max-width: 350px;">
+                                <p class="image-caption">Fig. 8.16 Roulette-wheel according to rank.</p>
+                            </ul>
+                        </li>
+                        <li><strong>Steady-State Selection:</strong>
+                            <ul>
+                                <li>Not a particular method of selecting parents, but a replacement strategy.</li>
+                                <li>A few (good) individuals with high fitness are selected for creating new offspring.
+                                    Then, some (bad, low fitness) chromosomes are removed, and new offspring are placed
+                                    in their place. The rest of the population survives to the next generation.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Elitism:</strong>
+                            <ul>
+                                <li>The best chromosome (or a few best chromosomes) from the current population are
+                                    directly copied to the new population, ensuring that the best solution found so far
+                                    is not lost.</li>
+                                <li>Can rapidly increase GA performance but should be used judiciously to avoid
+                                    premature convergence.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Generation Gap and Steady-State Replacement:</strong>
+                            <ul>
+                                <li>The generation gap (G<sub>p</sub> = p / N<sub>p</sub>) is the proportion of
+                                    individuals replaced in each generation (p replaced out of N<sub>p</sub> total
+                                    population).</li>
+                                <li>Steady-state replacement often has a small generation gap (e.g., only a few
+                                    individuals replaced).</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Crossover (Recombination) Operator <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Crossover is a binary variation operator that mimics biological recombination. It combines
+                        information from two parent chromosomes to produce one or more offspring, aiming to generate
+                        better solutions from good ones.</p>
+                    <img src="https://i.imgur.com/oF4rR5T.png" alt="GA Operators" class="diagram-image"
+                        style="max-width: 400px;">
+                    <p class="image-caption">Fig. 8.2.1 Basic Genetic Algorithm Operators.</p>
+                    <ul>
+                        <li>Involves choosing a random position(s) in the parent strings (crossover point(s)).</li>
+                        <li>Segments are exchanged between parents to produce new offspring.</li>
+                        <li>Primary objective is to emphasize good solutions and eliminate bad ones, while keeping
+                            population size constant.</li>
+                        <li>"Selects The Best, Discards The Rest" principle is more related to selection; crossover
+                            combines.</li>
+                        <li>The method depends on the encoding scheme.</li>
+                    </ul>
+                    <h4>Crossover Types:</h4>
+                    <ul>
+                        <li><strong>1. One-Point Crossover:</strong>
+                            <ul>
+                                <li>A single crossover point is selected randomly along the string length.</li>
+                                <li>The parts of the two parent chromosomes beyond this point are swapped to create two
+                                    offspring.</li>
+                                <img src="https://i.imgur.com/zK3vY5W.png" alt="One-Point Crossover"
+                                    class="diagram-image" style="max-width: 500px;">
+                                <p class="image-caption">Example of One-Point Crossover.</p>
+                            </ul>
+                        </li>
+                        <li><strong>2. Two-Point Crossover:</strong>
+                            <ul>
+                                <li>Two crossover points are selected randomly.</li>
+                                <li>The segment between these two points is swapped between the parents to generate two
+                                    children.</li>
+                                <li>More suitable for longer strings than one-point crossover.</li>
+                                <img src="https://i.imgur.com/E0X4W9M.png" alt="Two-Point Crossover"
+                                    class="diagram-image" style="max-width: 500px;">
+                                <p class="image-caption">Example of Two-Point Crossover.</p>
+                            </ul>
+                        </li>
+                        <li><strong>3. Uniform Crossover:</strong>
+                            <ul>
+                                <li>Each gene (bit) in the offspring is created by selecting the corresponding gene from
+                                    one of the parents with a certain probability (e.g., 0.5). A crossover mask (a
+                                    binary string) can be used to determine which parent contributes which gene.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Matrix Crossover (for 2D representations):</strong>
+                            <ul>
+                                <li>Substrings (horizontal or vertical) are chosen and swapped. Can be modified to
+                                    generate multiple offspring.</li>
+                                <img src="https://i.imgur.com/9P6pL3R.png" alt="Matrix Crossover" class="diagram-image"
+                                    style="max-width: 500px;">
+                                <p class="image-caption">Fig. 3.2.2 & 3.2.3: Horizontal and Vertical substring
+                                    crossover.</p>
+                            </ul>
+                        </li>
+                    </ul>
+                    <h4>Effects of Genetic Operators:</h4>
+                    <ul>
+                        <li>Selection alone: Fills population with copies of the best individual.</li>
+                        <li>Selection + Crossover: Tends to converge to good but possibly sub-optimal solutions.</li>
+                        <li>Mutation alone: Induces a random walk through the search space.</li>
+                        <li>Selection + Mutation: Creates a parallel, noise-tolerant, hill-climbing algorithm.</li>
+                        <li>Only crossover can combine information from two parents.</li>
+                        <li>Only mutation can introduce new information (alleles).</li>
+                        <li>Crossover does not change allele frequencies of the population (in expectation).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Mutation Operator <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Mutation introduces new genetic structures (alleles) in the population by randomly changing some
+                        of its building blocks (genes). It helps the algorithm escape local optima and maintain
+                        diversity.</p>
+                    <ul>
+                        <li>Randomly flips some bits in a chromosome (for binary encoding) or changes gene values.</li>
+                        <li>Helps increase searching power. Each element in an individual is changed with a small
+                            probability (P<sub>m</sub>, mutation rate).</li>
+                        <li>Main purpose is to maintain diversity and inhibit premature convergence.</li>
+                        <li>Mutation rate is usually kept low so good chromosomes obtained from crossover are not lost.
+                        </li>
+                        <li>The type of mutation depends on the encoding. For permutations, it might involve swapping
+                            two genes.</li>
+                    </ul>
+                    <h4>Examples of Mutation:</h4>
+                    <ul>
+                        <li><strong>Bit Flip Mutation (Binary Encoding):</strong> Randomly selected bits are inverted (0
+                            to 1, 1 to 0).
+                            <br>Example: Offspring: 110<span class="highlight">1</span> 00100 <span
+                                class="highlight">1</span> 0110 -> Mutated Offspring: 110<span
+                                class="highlight">0</span> 00100 <span class="highlight">0</span> 0110
+                        </li>
+                        <li><strong>Exchange Mutation (Permutation Encoding):</strong> Two randomly chosen elements
+                            (genes) are swapped.</li>
+                        <li><strong>Shift Mutation:</strong> Movement of a randomly chosen element a random number of
+                            places.</li>
+                        <li><strong>Scramble Sublist Mutation:</strong> Choose two points on the string and randomly
+                            permute the elements between these two positions.</li>
+                        <li><strong>Flipping based on Mutation Chromosome:</strong> A mutation chromosome (binary
+                            string) is generated. If a bit in the mutation chromosome is 1, the corresponding bit in the
+                            parent is flipped.</li>
+                    </ul>
+                    <img src="https://i.imgur.com/jN4mP6F.png" alt="Mutation Example with Fitness Calc"
+                        class="diagram-image" style="max-width: 600px;">
+                    <p class="image-caption">Example of Mutation for chromosomes with value encoding and subsequent
+                        fitness calculation, showing improvement in average fitness.</p>
+                    <h4>Mutation Rate (P<sub>m</sub>):</h4>
+                    <p>Small P<sub>m</sub> values are commonly adopted. It's the probability that a gene will be
+                        mutated. It leads to additional genetic diversity to help escape local optima.</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Other Operators: Inversion and Deletion/Duplication <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>Inversion</h4>
+                    <p>A string is selected, and the bits between two random sites are inverted (reversed in order).</p>
+                    <img src="https://i.imgur.com/B4rP0tW.png" alt="Inversion Operator" class="diagram-image"
+                        style="max-width: 400px;">
+                    <p class="image-caption">Fig. 3.3.1: Inversion.</p>
+                    <p>Linear+End inversion operator aims to minimize disruption near the center of the string.</p>
+                    <h4>Deletion and Duplication</h4>
+                    <p>Low-level operator pair. Two or more bits at random are selected; previous bits might be
+                        duplicated or some deleted.</p>
+                    <p>Example:
+                        <br>Before duplication: 0 0 1 0 0 1 0
+                        <br>Deletion (e.g., 3rd bit): 0 0 _ 0 0 1 0
+                        <br>Duplication (e.g., 2nd bit): 0 0 0 1 0 0 1 0 (if 2nd '0' is duplicated)
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="fitness-function-ga">
+            <h2><i class="fas fa-bullseye"></i>5. Fitness Function</h2>
+            <button type="button" class="collapsible">Role and Design <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>The fitness function is a crucial component of a GA. It evaluates how "good" each individual
+                        (chromosome/solution) in the population is in terms of solving the problem.</p>
+                    <ul>
+                        <li>The fitness of a chromosome determines how likely it is that it will reproduce.</li>
+                        <li>It quantifies the optimality of a solution so that it can be ranked against others.</li>
+                        <li>An ideal fitness function correlates closely to the goal and is computationally quick.</li>
+                        <li>It is always <span class="highlight">problem-dependent</span>.</li>
+                    </ul>
+                    <h4>Examples:</h4>
+                    <ul>
+                        <li><strong>TSP (Traveling Salesman Problem):</strong> Fitness(x) is related to the sum of
+                            distances between cities in the solution sequence. Lower sum = fitter solution (for
+                            minimization).</li>
+                        <li><strong>Knapsack Problem:</strong> Maximize total value of objects in a knapsack of fixed
+                            capacity. Fitness could be the sum of values of objects if the representation is valid
+                            (total weight ≤ capacity), or 0 otherwise (or a penalty).</li>
+                        <li><strong>Sorting Numbers:</strong> Fitness could be determined by how close to a correctly
+                            sorted sequence a chromosome is.</li>
+                    </ul>
+                    <p>The performance of individual strings is measured by the fitness function. After each iteration,
+                        members are given a performance measure, and the "fittest" members propagate to the next
+                        iteration.</p>
+                    <p class="formula">Fitness = F<sub>i</sub>, Hit = λ<sub>i</sub>, Survival = φ<sub>i</sub>, Death =
+                        δ<sub>i</sub>
+                        <br>F<sub>i</sub> = 2 λ<sub>i</sub> - δ<sub>i</sub> + Σ φ<sub>i</sub> (This specific formula
+                        might be context-dependent from a source).
+                    </p>
+                    <p>In some problems, it's hard or impossible to define an explicit fitness expression; in these
+                        cases, <span class="highlight">interactive genetic algorithms</span> (where a human provides
+                        fitness scores) might be used.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="ga-applications">
+            <h2><i class="fas fa-rocket"></i>6. Applications of Genetic Algorithms</h2>
+            <button type="button" class="collapsible">Overview of Application Areas <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>GAs are primarily used in optimization problems but are also frequently used in other application
+                        areas:</p>
+                    <ul>
+                        <li><strong>Optimization:</strong> Most common use, to maximize or minimize an objective
+                            function under given constraints.</li>
+                        <li><strong>Economics:</strong> Characterizing economic models like cobweb model, game theory
+                            equilibrium, asset pricing.</li>
+                        <li><strong>Neural Networks:</strong> Training ANNs, particularly recurrent neural networks, or
+                            for architecture search.</li>
+                        <li><strong>Parallelization:</strong> GAs have good parallel capabilities, effective for certain
+                            complex problems.</li>
+                        <li><strong>Image Processing:</strong> Various Digital Image Processing (DIP) tasks like dense
+                            pixel matching.</li>
+                        <li><strong>Vehicle Routing Problems:</strong> With multiple soft time windows, multiple depots,
+                            and heterogeneous fleets.</li>
+                        <li><strong>Scheduling Applications:</strong> Solving various scheduling problems, particularly
+                            time-tabling.</li>
+                        <li><strong>Machine Learning:</strong> Genetics-based machine learning (GBML) is a niche area.
+                        </li>
+                        <li><strong>Robot Trajectory Generation:</strong> Planning paths for robots.</li>
+                        <li><strong>Parametric Design of Aircraft:</strong> Designing aircraft by varying parameters and
+                            evolving better solutions.</li>
+                        <li><strong>DNA Analysis:</strong> Determining the structure of DNA using spectrometric data.
+                        </li>
+                        <li><strong>Multimodal Optimization:</strong> Finding multiple optimum solutions.</li>
+                        <li><strong>Traveling Salesman Problem (TSP) and its applications:</strong> A well-known
+                            combinatorial problem.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <div class="topic-navigation">
+            <a href="topic-3.html" class="topic-nav-link prev-topic-link"><i class="fas fa-arrow-left"></i> Prev: Unit
+                III: Artificial Neural Networks</a>
+            <a href="topic-5.html" class="topic-nav-link next-topic-link">Next: Unit V: Hybrid Systems & Adv. Topics <i
+                    class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <footer class="page-footer">
+            © 2024 Eduvision. All rights reserved. Revolutionizing interactive learning.
+        </footer>
+    </div>
+
+    <script>
+        // Collapsible sections
+        var coll = document.getElementsByClassName("collapsible");
+        for (var i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    content.style.padding = "0 18px";
+                } else {
+                    content.style.padding = "0 18px";
+                    setTimeout(() => {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                        let innerDiv = content.querySelector('div');
+                        if (innerDiv && this.classList.contains('active')) { // Check if 'this' (the button) is active
+                            innerDiv.style.padding = "15px 0";
+                        } else if (innerDiv) {
+                            innerDiv.style.padding = "0";
+                        }
+                    }, 50);
+                }
+            });
+        }
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+            } else {
+                body.classList.remove('dark-mode');
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (body.classList.contains('dark-mode')) {
+                applyTheme('light');
+            } else {
+                applyTheme('dark');
+            }
+        });
+
+        // Load saved theme or system preference
+        const savedTheme = localStorage.getItem('theme') ||
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        applyTheme(savedTheme);
+    </script>
+</body>
+
+</html>

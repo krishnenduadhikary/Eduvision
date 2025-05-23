@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit III: Artificial Neural Networks (ANN) - Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Re-using the same CSS from topic-1.html & topic-2.html for consistency */
+        /* (The CSS from the previous response would be pasted here) */
+        :root {
+            /* Light Mode Defaults */
+            --bg-color: #f8fafc;
+            /* Almost white */
+            --card-bg: #ffffff;
+            /* White */
+            --primary-color: #3b82f6;
+            /* Blue */
+            --secondary-color: #8b5cf6;
+            /* Purple */
+            --accent-color: #10b981;
+            /* Emerald */
+            --text-color: #334155;
+            /* Dark Slate Gray for text */
+            --heading-color: #1e293b;
+            /* Very Dark Slate for headings */
+            --border-color: #e2e8f0;
+            /* Light Gray for borders */
+            --gradient-start: var(--primary-color);
+            --gradient-end: var(--secondary-color);
+            --font-main: 'Poppins', sans-serif;
+            --font-logo: 'Nunito', sans-serif;
+
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --card-shadow-color: rgba(0, 0, 0, 0.05);
+            --link-color: var(--primary-color);
+            /* #2563eb */
+            --link-hover-color: #1d4ed8;
+            /* Darker blue */
+            --link-hover-bg: #eff6ff;
+            /* Very light blue */
+            --syllabus-bar-bg: var(--card-bg);
+            --collapsible-content-bg: rgba(0, 0, 0, 0.02);
+            --component-card-bg: #f9fafb;
+            --definition-bg: rgba(59, 130, 246, 0.05);
+            --table-header-bg: var(--primary-color);
+            --table-header-text: white;
+            --table-row-even-bg: rgba(0, 0, 0, 0.015);
+            --theme-toggle-bg: var(--card-bg);
+            --theme-toggle-icon: var(--primary-color);
+            --theme-toggle-hover-bg: var(--primary-color);
+            --theme-toggle-hover-icon: white;
+            --code-bg: #e2e8f0;
+            --code-text: #0f172a;
+            --img-border-color: var(--border-color);
+        }
+
+        body.dark-mode {
+            --bg-color: #0f172a;
+            /* Dark blue-slate */
+            --card-bg: #1e293b;
+            /* Slightly lighter slate */
+            --text-color: #e2e8f0;
+            /* Light gray */
+            --heading-color: #f8fafc;
+            /* White */
+            --border-color: #334155;
+            /* Slate border */
+
+            --shadow-color: rgba(0, 0, 0, 0.25);
+            --card-shadow-color: rgba(0, 0, 0, 0.2);
+            --link-color: #5dade2;
+            /* Lighter blue for dark mode */
+            --link-hover-color: #8ecae6;
+            /* Even lighter blue */
+            --link-hover-bg: rgba(255, 255, 255, 0.1);
+            --syllabus-bar-bg: var(--card-bg);
+            --collapsible-content-bg: rgba(255, 255, 255, 0.03);
+            --component-card-bg: #2a3a50;
+            /* Darker card for components */
+            --definition-bg: rgba(59, 130, 246, 0.1);
+            --table-header-bg: var(--primary-color);
+            /* Can stay same or adjust */
+            --table-header-text: white;
+            --table-row-even-bg: rgba(255, 255, 255, 0.03);
+            --theme-toggle-bg: var(--card-bg);
+            --theme-toggle-icon: var(--primary-color);
+            --theme-toggle-hover-bg: var(--primary-color);
+            --theme-toggle-hover-icon: white;
+            --code-bg: #2a3a50;
+            --code-text: #e2e8f0;
+            --img-border-color: var(--border-color);
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Eduvision Logo */
+        .eduvision-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: var(--font-logo);
+        }
+
+        .eduvision-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvision-logo .text-yellow-300 {
+            color: #fde047 !important;
+        }
+
+        .eduvision-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Theme Toggle Button */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            /* Adjusted size */
+            box-shadow: 0 2px 5px var(--shadow-color);
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+            color: var(--theme-toggle-hover-icon);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+
+        /* Page Header (Moved above Syllabus Bar) */
+        .page-header {
+            text-align: center;
+            margin-top: 70px;
+            /* Space for logo */
+            margin-bottom: 1.5rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--heading-color);
+            background: linear-gradient(90deg, var(--gradient-start), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            opacity: 0.9;
+        }
+
+        /* Syllabus Bar */
+        .syllabus-bar-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 0.75rem;
+            background-color: var(--syllabus-bar-bg);
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 15px var(--card-shadow-color);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .syllabus-bar-back-link {
+            display: flex;
+            align-items: center;
+            font-size: 0.875rem;
+            color: var(--link-color);
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            text-decoration: none;
+            transition: background-color 0.2s, color 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .syllabus-bar-back-link:hover {
+            color: var(--link-hover-color);
+            background-color: var(--link-hover-bg);
+        }
+
+        .syllabus-bar-back-link svg {
+            height: 1.25rem;
+            width: 1.25rem;
+            margin-right: 0.375rem;
+            fill: currentColor;
+        }
+
+        .syllabus-bar-topic-badge {
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.375rem 1rem;
+            border-radius: 9999px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            /* This shadow is fine */
+        }
+
+        @media (min-width: 640px) {
+            .syllabus-bar-container {
+                flex-direction: row;
+            }
+
+            .syllabus-bar-back-link {
+                margin-bottom: 0;
+            }
+
+            .syllabus-bar-topic-badge {
+                font-size: 0.875rem;
+            }
+        }
+
+        /* Section Styling */
+        .content-section {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px var(--card-shadow-color);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s, border-color 0.3s;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px var(--shadow-color);
+        }
+
+        .content-section h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--heading-color);
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .content-section h2 i {
+            margin-right: 0.75rem;
+            color: var(--primary-color);
+        }
+
+        .content-section h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-top: 1.2rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section .definition,
+        .content-section li {
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .content-section ul {
+            padding-left: 20px;
+            list-style: none;
+        }
+
+        .content-section ul li::before {
+            content: "\f105";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--primary-color);
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+        .content-section ul.sub-list li::before {
+            /* For nested lists if needed */
+            content: "\f0da";
+            /* fa-chevron-right, slightly smaller */
+        }
+
+
+        /* Collapsible Sections */
+        .collapsible {
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: white;
+            cursor: pointer;
+            padding: 15px 20px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: filter 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .collapsible:hover {
+            filter: brightness(1.1);
+        }
+
+        .collapsible.active {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .collapsible-content {
+            padding: 0 18px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out, background-color 0.3s;
+            background-color: var(--collapsible-content-bg);
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .collapsible-content>div {
+            padding: 15px 0;
+        }
+
+        .collapsible .icon::before {
+            content: '\f078';
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible.active .icon::before {
+            transform: rotate(-180deg);
+        }
+
+        /* Diagram/Image Styling */
+        .diagram-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 1rem auto;
+            /* Centering block images */
+            display: block;
+            /* For auto margin centering */
+            border: 1px solid var(--img-border-color);
+            box-shadow: 0 4px 8px var(--card-shadow-color);
+        }
+
+        .image-caption {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-top: -0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .flex-diagrams {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: space-around;
+            align-items: flex-start;
+            /* Align items to the top if they have different heights */
+        }
+
+        .flex-diagrams>div {
+            flex: 1;
+            min-width: 250px;
+            /* Minimum width for items in flex container */
+            text-align: center;
+            /* Center content within each flex item */
+        }
+
+        /* Formula / Code-like text */
+        .formula {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+            margin: 0.5rem 0;
+            display: block;
+            white-space: pre-wrap;
+            /* Allows wrapping */
+            word-break: break-all;
+            /* Ensures long unbroken strings break */
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Definition Block */
+        .definition {
+            background-color: var(--definition-bg);
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            font-style: italic;
+            transition: background-color 0.3s, border-left-color 0.3s;
+        }
+
+        .definition strong {
+            font-style: normal;
+            color: var(--primary-color);
+        }
+
+        /* Comparison Tables (Reused from Topic 1) */
+        .comparison-tables-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .comparison-table {
+            flex: 1;
+            min-width: 300px;
+            border-collapse: collapse;
+            width: 100%;
+            box-shadow: 0 4px 10px var(--card-shadow-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+        }
+
+        .comparison-table th {
+            background-color: var(--table-header-bg);
+            color: var(--table-header-text);
+            font-weight: 600;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background-color: var(--table-row-even-bg);
+            transition: background-color 0.3s;
+        }
+
+        .comparison-table ul {
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+
+        .comparison-table ul li::before {
+            content: "";
+            margin-right: 0;
+        }
+
+
+        /* Next/Prev Topic Links */
+        .topic-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            /* Allow wrapping on small screens */
+            gap: 1rem;
+            /* Space between buttons if they wrap */
+        }
+
+        .topic-nav-link {
+            padding: 12px 25px;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            text-align: center;
+            flex-grow: 1;
+            /* Allow buttons to grow */
+            max-width: calc(50% - 0.5rem);
+            /* Max width for two buttons */
+        }
+
+        .prev-topic-link {
+            background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+        }
+
+        .next-topic-link {
+            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+        }
+
+        .topic-nav-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+            filter: brightness(1.1);
+        }
+
+        @media (max-width: 600px) {
+            .topic-nav-link {
+                max-width: 100%;
+                /* Full width on small screens */
+            }
+        }
+
+        /* Footer */
+        .page-footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: #94a3b8;
+            transition: border-top-color 0.3s;
+        }
+
+        body.dark-mode .page-footer {
+            color: #64748b;
+        }
+
+        /* Utility classes */
+        .highlight {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .content-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .comparison-tables-container {
+                flex-direction: column;
+            }
+
+            #theme-toggle {
+                top: 15px;
+                right: 15px;
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+
+            .eduvision-logo {
+                top: 15px;
+                left: 15px;
+            }
+
+            .eduvision-logo .text-2xl {
+                font-size: 1.5rem;
+            }
+
+            .page-header {
+                margin-top: 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../index.html" class="flex items-center group">
+                <span class="text-white">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-white">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>Unit III: Artificial Neural Networks (ANN)</h1>
+            <p>Delving into biological vs. artificial neurons, activation functions, network architectures, learning
+                algorithms, and applications.</p>
+        </header>
+
+        <div class="syllabus-bar-container">
+            <a href="../soft-computing.html" class="syllabus-bar-back-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                        clip-rule="evenodd" />
+                </svg>
+                Back to Syllabus
+            </a>
+            <div class="syllabus-bar-topic-badge">
+                Unit III: Topic 3
+            </div>
+        </div>
+
+        <section class="content-section" id="intro-ann">
+            <h2><i class="fas fa-brain"></i>1. Introduction to Artificial Neural Networks (ANN)</h2>
+            <button type="button" class="collapsible">What is an ANN? <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>An Artificial Neural Network (ANN) is a mathematical model or computational model that is
+                        inspired by the structure and functionalities of biological neural networks. The basic building
+                        block of every artificial neural network is an <span class="highlight">artificial neuron</span>,
+                        which is a simple mathematical model (function).</p>
+                    <p>A neuron model has three simple sets of rules: <span class="highlight">multiplication, summation,
+                            and activation</span>.</p>
+                    <ul>
+                        <li>At the entrance of an artificial neuron, the inputs are weighted, meaning that every input
+                            value is multiplied with an individual weight.</li>
+                        <li>In the middle section of the neuron, the sum of all weighted inputs and a bias is
+                            calculated.</li>
+                        <li>At the exit, the sum of previously weighted inputs and bias passes through an <span
+                                class="highlight">activation function</span> (also called transfer function) to produce
+                            the output.</li>
+                    </ul>
+                    <img src="https://i.imgur.com/6cK0C0s.png" alt="ANN Neuron Model and Basic Network"
+                        class="diagram-image" style="max-width: 600px;">
+                    <p class="image-caption">Top: Information flow in a single artificial neuron. Bottom: A simple ANN
+                        with Input, Hidden, and Output layers.</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Biological Neuron Structure and Functions <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>A neuron, or nerve cell, is an electrically excitable cell that communicates with other cells via
+                        specialized connections called synapses. It is the main component of nervous tissue.</p>
+                    <h4>Key Components:</h4>
+                    <ul>
+                        <li><strong>Soma (Cell Body):</strong> Contains the nucleus and is where most protein synthesis
+                            occurs. It integrates signals.</li>
+                        <li><strong>Dendrites:</strong> Branch-like extensions that receive signals (inputs) from other
+                            neurons. Form a "dendritic tree".</li>
+                        <li><strong>Axon:</strong> A long, cable-like projection that carries nerve signals away from
+                            the soma. Can be very long and may branch (axon terminals).</li>
+                        <li><strong>Axon Hillock:</strong> A specialized part of the soma (or axon initial segment) that
+                            connects to the axon. It's where the action potential is typically initiated if the sum of
+                            incoming signals reaches a threshold.</li>
+                        <li><strong>Myelin Sheath (in some neurons):</strong> An insulating layer that speeds up signal
+                            transmission along the axon. Nodes of Ranvier are gaps in the myelin.</li>
+                        <li><strong>Synaptic Terminals (Axon Terminals/Boutons):</strong> Specialized structures at the
+                            end of the axon that transmit signals to other neurons (or muscles/glands) across a synapse,
+                            often by releasing neurotransmitters.</li>
+                    </ul>
+                    <div class="flex-diagrams">
+                        <div>
+                            <img src="https://i.imgur.com/C57N12W.png" alt="Biological Neuron Structure 1"
+                                class="diagram-image" style="max-width: 450px;">
+                            <p class="image-caption">Diagram of a biological neuron showing key components.</p>
+                        </div>
+                        <div>
+                            <img src="https://i.imgur.com/Hn8Y23o.png" alt="Biological Neuron Structure 2"
+                                class="diagram-image" style="max-width: 450px;">
+                            <p class="image-caption">Another illustration of a myelinated biological neuron.</p>
+                        </div>
+                    </div>
+                    <h4>Functioning:</h4>
+                    <p>Neurons receive signals (excitatory or inhibitory) via synapses, mostly on dendrites and the
+                        soma. These signals cause changes in the neuron's membrane potential. If the net sum of these
+                        potentials at the axon hillock reaches a certain threshold, the neuron "fires," generating an
+                        all-or-nothing electrochemical pulse called an <span class="highlight">action potential</span>.
+                        This action potential travels rapidly along the axon and activates synaptic connections with
+                        other neurons.</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Structure and Functions of an Artificial Neuron <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>An artificial neuron is a mathematical function conceived as a model of biological neurons. It
+                        receives one or more inputs (representing excitatory or inhibitory postsynaptic potentials) and
+                        sums them to produce an output (or activation), representing a neuron's action potential which
+                        is transmitted along its axon.</p>
+                    <ul>
+                        <li>Each input is separately weighted.</li>
+                        <li>The sum of weighted inputs and a bias is passed through a non-linear function known as an
+                            <span class="highlight">activation function</span> or transfer function.</li>
+                        <li>Transfer functions usually have a sigmoid shape but can also be piecewise linear, step
+                            functions, or other non-linear, continuous, differentiable, and bounded functions.</li>
+                    </ul>
+                    <img src="https://i.imgur.com/WvD3K2f.png" alt="Artificial Neuron Model and Activation Functions"
+                        class="diagram-image" style="max-width: 500px;">
+                    <p class="image-caption">Top: Model of an artificial neuron. Bottom: (a) Step function, (b) Sigmoid
+                        function as activation functions.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="bio-vs-art-neurons">
+            <h2><i class="fas fa-balance-scale-right"></i>2. Biological vs. Artificial Neurons</h2>
+            <button type="button" class="collapsible">Key Differences and Similarities <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>While ANNs are inspired by biological neural networks (BNNs), there are significant differences:
+                    </p>
+                    <ol>
+                        <li><strong>Size and Complexity:</strong>
+                            <ul>
+                                <li>BNNs: The human brain has ~86 billion neurons and >100 trillion synapses. Extremely
+                                    complex.</li>
+                                <li>ANNs: Typically have far fewer "neurons" and connections, though modern deep
+                                    learning models can be very large.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Signal Transport and Processing:</strong>
+                            <ul>
+                                <li>BNNs: Electrochemical signals, complex chemical processes at synapses. Asynchronous.
+                                </li>
+                                <li>ANNs: Numerical values, mathematical operations. Typically synchronous (signals
+                                    propagate layer by layer).</li>
+                            </ul>
+                        </li>
+                        <li><strong>Processing Speed:</strong>
+                            <ul>
+                                <li>BNNs: Single biological neurons are slow (milliseconds).</li>
+                                <li>ANNs: Operations are fast (nanoseconds on modern hardware), allowing for many
+                                    computations.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Topology:</strong>
+                            <ul>
+                                <li>BNNs: Highly intricate and varied topologies, often with recurrent connections and
+                                    specialized structures.</li>
+                                <li>ANNs: Often structured in layers (e.g., feedforward), though recurrent ANNs exist.
+                                    Topologies are generally more regular.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Speed of Signals:</strong>
+                            <ul>
+                                <li>BNNs: Nerve impulse speeds vary (0.61 m/s to 119 m/s). No refractory periods in
+                                    ANNs.</li>
+                                <li>ANNs: "Signal" propagation is essentially instantaneous calculation. ANNs don't
+                                    experience "fatigue" like biological neurons.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Fault Tolerance:</strong>
+                            <ul>
+                                <li>BNNs: Highly fault-tolerant due to redundancy and distributed processing. Can
+                                    exhibit neuroplasticity.</li>
+                                <li>ANNs: Can be fault-tolerant to some extent, especially larger networks. Recovery
+                                    from damage is usually by retraining or saving/reloading weights.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Power Consumption:</strong>
+                            <ul>
+                                <li>BNNs: Human brain consumes ~20 watts, extremely efficient.</li>
+                                <li>ANNs: Can be power-hungry, especially large models on GPUs (e.g., a single GPU can
+                                    use 250 watts). Generate more heat.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Learning:</strong>
+                            <ul>
+                                <li>BNNs: Complex learning mechanisms, memory consolidation, lifelong learning. Still
+                                    not fully understood.</li>
+                                <li>ANNs: Typically learn through predefined algorithms (e.g., backpropagation) by
+                                    adjusting weights based on data. Have distinct training and evaluation phases.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Field of Application:</strong>
+                            <ul>
+                                <li>BNNs: General-purpose intelligence, adaptation to novel tasks.</li>
+                                <li>ANNs: Often specialized for specific tasks (e.g., image recognition, NLP).</li>
+                            </ul>
+                        </li>
+                        <li><strong>Training Algorithm:</strong>
+                            <ul>
+                                <li>BNNs: Uses complex, largely unknown biological mechanisms.</li>
+                                <li>ANNs: Primarily use algorithms like Gradient Descent.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="ann-terminologies">
+            <h2><i class="fas fa-tags"></i>3. Terminologies of ANN</h2>
+            <button type="button" class="collapsible">Core Components <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>3.3.1 Weights (W<sub>ij</sub>)</h4>
+                    <p>A weight is a parameter that contains information about the input signal. This information is
+                        used by the network to solve a problem. In an ANN architecture, every neuron is connected to
+                        other neurons by means of a directed communication link, and every link is associated with a
+                        weight. W<sub>ij</sub> is the weight from processing element 'i' (source node) to processing
+                        element 'j' (destination node).</p>
+
+                    <h4>3.3.2 Bias (b)</h4>
+                    <p>The bias is a constant value included in the network. Its impact is seen in calculating the net
+                        input. The bias is included by adding a component x<sub>0</sub> = 1 to the input vector X. Bias
+                        can be positive or negative. A positive bias helps in increasing the net input; a negative bias
+                        helps in decreasing it. It allows the activation function to be shifted to the left or right,
+                        which can be critical for successful learning.</p>
+
+                    <h4>3.3.3 Threshold (θ)</h4>
+                    <p>A threshold is a set value used in the activation function. In an ANN, based on the threshold
+                        value, the activation functions are defined, and the output is calculated. For example, in a
+                        step function, the neuron fires if the net input exceeds the threshold.</p>
+
+                    <h4>3.3.4 Learning Rate (α or η)</h4>
+                    <p>The learning rate is used to control the amount of weight adjustment at each step of training. It
+                        typically ranges from 0 to 1 (but can sometimes be outside this range). It determines the rate
+                        of learning at each time step. A small learning rate means slower but potentially more stable
+                        learning; a large learning rate can speed up learning but may lead to overshooting or
+                        instability.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="activation-functions">
+            <h2><i class="fas fa-bolt"></i>4. Activation Functions</h2>
+            <button type="button" class="collapsible">Role and Common Types <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>An activation function is a mathematical equation that determines the output of each element
+                        (perceptron or neuron) in the neural network. It takes in the net input from each neuron (sum of
+                        weighted inputs + bias) and transforms it into an output, typically between 0 and 1 or -1 and 1.
+                    </p>
+                    <p>Neural networks rely on <span class="highlight">non-linear activation functions</span> to learn
+                        complex patterns. If only linear activation functions were used, a multi-layer network would
+                        behave like a single-layer network. The derivative of the activation function is important for
+                        the backpropagation process.</p>
+                    <img src="https://i.imgur.com/05Z0vFv.png" alt="Activation Function Diagram" class="diagram-image"
+                        style="max-width: 400px;">
+                    <p class="image-caption">Input, Activation Function, Output flow in a neuron.</p>
+
+                    <h4>Common Activation Functions:</h4>
+                    <ol>
+                        <li><strong>Linear (Identity) Activation Function:</strong> F(x) = x.
+                            <ul>
+                                <li>Performs no input editing. Output is the same as input. Not typically used in hidden
+                                    layers of deep networks due to linearity.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Sigmoid (Logistic) Activation Function:</strong> F(x) = 1 / (1 + e<sup>-x</sup>).
+                            <ul>
+                                <li>Smooth gradient, outputs values between 0 and 1. Good for binary classification
+                                    output layers.</li>
+                                <li>Can suffer from the <span class="highlight">vanishing gradient</span> problem for
+                                    very high or low input values.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Binary Sigmoidal Function:</strong> (Same as Sigmoid, output 0 to 1)</li>
+                        <li><strong>Bipolar Sigmoidal Function (Tanh - Hyperbolic Tangent):</strong> F(x) = tanh(x) =
+                            (e<sup>x</sup> - e<sup>-x</sup>) / (e<sup>x</sup> + e<sup>-x</sup>).
+                            <ul>
+                                <li>Outputs values between -1 and 1. Often preferred over sigmoid in hidden layers as
+                                    it's zero-centered, which can help learning.</li>
+                                <li>Also suffers from vanishing gradients.</li>
+                            </ul>
+                        </li>
+                        <div class="flex-diagrams">
+                            <div>
+                                <img src="https://i.imgur.com/3QJg3h0.png" alt="Sigmoid and Tanh Functions"
+                                    class="diagram-image" style="max-width: 400px;">
+                                <p class="image-caption">Sigmoid and Tanh activation functions.</p>
+                            </div>
+                        </div>
+                        <li><strong>ReLU (Rectified Linear Unit):</strong> F(x) = max(0, x).
+                            <ul>
+                                <li>Highly computationally efficient. Does not saturate for positive inputs, which helps
+                                    with vanishing gradients.</li>
+                                <li>Can suffer from the "dying ReLU" problem (neurons can become inactive if inputs are
+                                    always negative).</li>
+                            </ul>
+                        </li>
+                        <li><strong>Leaky ReLU:</strong> F(x) = x if x > 0, else αx (where α is a small constant, e.g.,
+                            0.01).
+                            <ul>
+                                <li>Addresses the dying ReLU problem by allowing a small, non-zero gradient when the
+                                    unit is not active.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Parametric ReLU (PReLU):</strong> Similar to Leaky ReLU, but α is a learnable
+                            parameter.</li>
+                        <li><strong>Softmax:</strong> Normalizes outputs for each class between 0 and 1, and the sum of
+                            outputs is 1. Used for multi-class classification output layers to represent probabilities.
+                        </li>
+                        <li><strong>Swish:</strong> F(x) = x * sigmoid(βx). A newer function discovered by Google
+                            researchers, often performs better than ReLU.</li>
+                        <li><strong>Step Function (Binary Step):</strong> F(x) = 1 if x ≥ threshold, else 0.
+                            <ul>
+                                <li>Not differentiable, so not suitable for backpropagation-based training. Used in
+                                    early models like Perceptron.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="network-architecture">
+            <h2><i class="fas fa-project-diagram"></i>5. Network Architecture (Topology)</h2>
+            <button type="button" class="collapsible">Building Blocks and Classification <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Processing of an ANN depends upon the following three building blocks:</p>
+                    <ol>
+                        <li>Network Topology</li>
+                        <li>Adjustments of Weights or Learning</li>
+                        <li>Activation Functions (covered previously)</li>
+                    </ol>
+                    <p>A network topology is the arrangement of a network along with its nodes and connecting lines.
+                        According to the topology, ANNs can be classified as:</p>
+                    <h4>A. Feedforward Network</h4>
+                    <p>It is a non-recurrent network having processing units/nodes in layers. All the nodes in a layer
+                        are connected with the nodes of the previous layer. The connection has different weights upon
+                        them. There is no feedback loop, meaning the signal can only flow in one direction, from input
+                        to output.</p>
+                    <ul>
+                        <li><strong>Single-layer feedforward network:</strong> Concept of feedforward ANN having only
+                            one weighted layer. The input layer is fully connected to the output layer.
+                            <img src="https://i.imgur.com/wQ1b5Xg.png" alt="Single Layer Feedforward ANN"
+                                class="diagram-image" style="max-width: 400px;">
+                            <p class="image-caption">Single-layer feedforward network.</p>
+                        </li>
+                        <li><strong>Multilayer feedforward network (Multilayer Perceptron - MLP):</strong> Concept of
+                            feedforward ANN having more than one weighted layer. As this network has one or more layers
+                            between the input and the output layer, it is called hidden layers.
+                            <img src="https://i.imgur.com/nJ3gL0W.png" alt="Multilayer Feedforward ANN"
+                                class="diagram-image" style="max-width: 400px;">
+                            <p class="image-caption">Multilayer feedforward network (MLP).</p>
+                        </li>
+                    </ul>
+
+                    <h4>B. Feedback Network (Recurrent Network)</h4>
+                    <p>As the name suggests, a feedback network has feedback paths, which means the signal can flow in
+                        both directions using loops. This makes it a non-linear dynamic system, which changes
+                        continuously until it reaches a state of equilibrium. It may be divided into the following
+                        types:</p>
+                    <ul>
+                        <li><strong>Recurrent networks:</strong> They are feedback networks with closed loops.
+                            <img src="https://i.imgur.com/wE3gT6D.png" alt="Recurrent Network" class="diagram-image"
+                                style="max-width: 350px;">
+                            <p class="image-caption">General Recurrent Network.</p>
+                        </li>
+                        <li><strong>Fully recurrent network:</strong> It is the simplest neural network architecture
+                            because all nodes are connected to all other nodes and each node works as both input and
+                            output.</li>
+                        <li><strong>Jordan network:</strong> It is a closed loop network in which the output will go to
+                            the input again as feedback.
+                            <img src="https://i.imgur.com/eZ2sW2X.png" alt="Jordan Network" class="diagram-image"
+                                style="max-width: 450px;">
+                            <p class="image-caption">Jordan Network.</p>
+                        </li>
+                        <!-- Other recurrent architectures like Elman networks, Hopfield networks, LSTMs, GRUs exist but might be beyond scope here -->
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="learning-paradigms">
+            <h2><i class="fas fa-graduation-cap"></i>6. Learning Paradigms and Rules</h2>
+            <button type="button" class="collapsible">Adjustments of Weights or Learning <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Learning in an artificial neural network is the method of modifying the weights of connections
+                        between the neurons of a specified network. Learning in ANN can be classified into three
+                        categories: <span class="highlight">supervised learning, unsupervised learning, and
+                            reinforcement learning</span>.</p>
+                    <img src="https://i.imgur.com/hA4uK1K.png" alt="Error Signal Generation" class="diagram-image"
+                        style="max-width: 400px;">
+                    <p class="image-caption">Error signal generation in learning.</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Supervised vs. Unsupervised Learning <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>Supervised Learning</h4>
+                    <p>In supervised learning, the network is trained using data that is well "labeled," meaning some
+                        data is already tagged with the correct answer. It can be compared to learning which takes place
+                        in the presence of a supervisor or a teacher.</p>
+                    <ul>
+                        <li>The learning process is dependent. During training, the input vector is presented to the
+                            network, which will give an output vector. This output vector is compared with the desired
+                            output vector.</li>
+                        <li>An error signal is generated if there is a difference between the actual output and the
+                            desired output vector.</li>
+                        <li>On the basis of this error signal, the weights are adjusted until the actual output is
+                            matched with the desired output.</li>
+                    </ul>
+                    <img src="https://i.imgur.com/k0iJ8M9.png" alt="Supervised Learning Diagram" class="diagram-image"
+                        style="max-width: 400px;">
+                    <p class="image-caption">Block diagram for Supervised Learning.</p>
+                    <p><strong>Why Supervised Learning?</strong> Allows data collection or output production from
+                        previous experience, helps optimize performance criteria, and solves various real-world problems
+                        like classification and regression.</p>
+                    <p><strong>Example:</strong> Sorting fruits (apples, bananas, cherries, grapes) in a basket where
+                        you already know the types and features of each fruit (train data).</p>
+
+                    <h4>Unsupervised Learning</h4>
+                    <p>This type of learning is done without the supervision of a teacher. The learning process is
+                        independent. During training, the input vectors of similar type are combined to form clusters.
+                        When a new input pattern is applied, the neural network gives an output response indicating the
+                        class to which the input pattern belongs.</p>
+                    <ul>
+                        <li>There is no feedback from the environment as to what should be the desired output or if it
+                            is correct or incorrect.</li>
+                        <li>The network itself must discover the patterns and features from the input data, and the
+                            relation for the input data over the output.</li>
+                    </ul>
+                    <p><strong>Why Unsupervised Learning?</strong> Finds unknown patterns, helps find features for
+                        categorization, and easier to get unlabeled data.</p>
+                    <p><strong>Example:</strong> Sorting unknown fruits in a basket for the first time by selecting
+                        physical characteristics (e.g., color) to form groups.</p>
+
+                    <h4>Reinforcement Learning</h4>
+                    <p>This type of learning is used to reinforce or strengthen the network over some critic
+                        information. It's similar to supervised learning but might have very less information. The
+                        network receives some feedback from the environment, which helps it to learn. This feedback is
+                        evaluative, not instructive. After receiving feedback, the network performs adjustments of the
+                        weights to get better critic information in the future.</p>
+                    <img src="https://i.imgur.com/fN4rL2Z.png" alt="Reinforcement Learning Diagram"
+                        class="diagram-image" style="max-width: 500px;">
+                    <p class="image-caption">Block diagram for Reinforcement Learning.</p>
+
+                    <h4>Hierarchical Classification of Learning Algorithms:</h4>
+                    <img src="https://i.imgur.com/0J2Y8V9.png" alt="Classification of Learning Algorithms"
+                        class="diagram-image" style="max-width: 500px;">
+                    <p class="image-caption">Fig. Classification of learning algorithms.</p>
+                    <p>Supervised learning includes Stochastic, Error Correction Gradient Descent (Least Mean Square,
+                        Backpropagation). Unsupervised includes Hebbian, Competitive.</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Common Learning Rules <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Learning rule is a method or a mathematical logic. It helps a neural network to learn from the
+                        existing conditions and improve its performance. Thus learning rules updates the weights and
+                        bias levels of a network when a network simulates in a specific data environment.</p>
+                    <ol>
+                        <li><strong>Hebbian Learning Rule:</strong> (Donald Hebb, 1949)
+                            <ul>
+                                <li>"Neurons that fire together, wire together." If two neighbor neurons are activated
+                                    and deactivated at the same time, then the weight connecting these neurons should
+                                    increase.</li>
+                                <li>Unsupervised. Can be used for both soft and hard activation functions.</li>
+                                <li>Formula: ΔW<sub>ij</sub> = η * x<sub>i</sub> * x<sub>j</sub> (or often just
+                                    W<sub>ij</sub> = x<sub>i</sub> * x<sub>j</sub> in simpler forms)</li>
+                                <span class="formula">W<sub>ij</sub> = x<sub>i</sub> * x<sub>j</sub></span>
+                            </ul>
+                        </li>
+                        <li><strong>Perceptron Learning Rule:</strong>
+                            <ul>
+                                <li>For a single-layer perceptron. Supervised learning.</li>
+                                <li>Adjusts weights based on the error between the perceptron's output and the target
+                                    output.</li>
+                                <li>Formula: ΔW<sub>ij</sub> = η * (t<sub>j</sub> - o<sub>j</sub>) * x<sub>i</sub>
+                                    <br>Where η is learning rate, t<sub>j</sub> is target output, o<sub>j</sub> is
+                                    actual output, x<sub>i</sub> is input.
+                                    <span class="formula">ΣΣ (E<sub>ij</sub> - O<sub>ij</sub>)<sup>2</sup> (This is
+                                        error function, not the rule itself)</span>
+                                    Update rule is more like: w(new) = w(old) + η * (target - output) * input
+                                </li>
+                            </ul>
+                        </li>
+                        <li><strong>Delta Learning Rule (Widrow-Hoff Rule):</strong>
+                            <ul>
+                                <li>Supervised learning. Used in ADALINE. Aims to minimize the Mean Squared Error (MSE).
+                                </li>
+                                <li>Weights are adjusted based on the error and the input.</li>
+                                <li>Formula: Δw<sub>i</sub> = η * (t - y) * x<sub>i</sub>
+                                    <br>Where t is target, y is actual output (net input for ADALINE before step
+                                    function), x<sub>i</sub> is input.
+                                    <span class="formula">Δw = η (t-y) x<sub>i</sub></span>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><strong>Correlation Learning Rule:</strong>
+                            <ul>
+                                <li>Supervised. Assumes that weights between responding neurons should be more positive,
+                                    and weights with opposite reaction should be more negative.</li>
+                                <li>Formula: ΔW<sub>ij</sub> = η * x<sub>i</sub> * d<sub>j</sub>
+                                    <br>Where d<sub>j</sub> is the desired output of neuron j.
+                                    <span class="formula">ΔW<sub>ij</sub> = ηx<sub>i</sub>d<sub>j</sub></span>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><strong>Outstar Learning Rule:</strong>
+                            <ul>
+                                <li>Used when nodes or neurons in a network are arranged in a layer. The weights
+                                    connected to a certain node should be equal to the desired outputs for the neurons
+                                    connected through those weights.</li>
+                                <li>Supervised. Typically for competitive layers or specific architectures.</li>
+                                <li>Formula: W<sub>jk</sub> = { η * (d<sub>k</sub> - W<sub>jk</sub>) if node j wins the
+                                    competition, 0 otherwise }
+                                    (Simplified form often shown as W<sub>jk</sub> = d<sub>k</sub> for the winning
+                                    output node's connections)
+                                    <span class="formula">W<sub>jk</sub> = { d<sub>k</sub> if node j wins competition, 0
+                                        if node j loses } (simplified from image) </span>
+                                </li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="ann-models">
+            <h2><i class="fas fa-microchip"></i>7. Specific ANN Models</h2>
+            <button type="button" class="collapsible">McCulloch-Pitts Model (1943) <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Warren McCulloch and Walter Pitts published the first paper describing a simple formal model of a
+                        neuron.</p>
+                    <ul>
+                        <li>Inputs x<sub>1</sub>, x<sub>2</sub>, ..., x<sub>n</sub> are binary (0 or 1).</li>
+                        <li>Output y is also binary (0 or 1).</li>
+                        <li>The neuron has two parts:
+                            <ol>
+                                <li>g(x) performs an aggregation (typically sum) of inputs: g(x) = Σ x<sub>i</sub>.</li>
+                                <li>f makes a decision based on the aggregated value: y = 1 if g(x) ≥ θ (threshold),
+                                    else y = 0.</li>
+                            </ol>
+                        </li>
+                        <li>Inputs can be excitatory or inhibitory. Inhibitory inputs can veto firing.</li>
+                    </ul>
+                    <img src="https://i.imgur.com/D3GqO1U.png" alt="McCulloch-Pitts Model" class="diagram-image"
+                        style="max-width: 350px;">
+                    <p class="image-caption">McCulloch-Pitts Neuron Model.</p>
+                    <h4>Linear Threshold Gate:</h4>
+                    <p>The McCulloch-Pitts model is also known as a linear threshold gate.
+                        <br>Sum = Σ W<sub>i</sub>x<sub>i</sub>; Output y = f(Sum) = 1 if Sum ≥ T, else 0.
+                        <br>Weights W<sub>i</sub> are often normalized to {1, -1} or {0, 1}.
+                    </p>
+                    <img src="https://i.imgur.com/yK2t7Q9.png" alt="Linear Threshold Gate" class="diagram-image"
+                        style="max-width: 450px;">
+                    <p class="image-caption">Symbolic Illustration of Linear Threshold Gate and its function.</p>
+                    <h4>Boolean Functions using McCulloch-Pitts Neuron:</h4>
+                    <p>Can implement basic Boolean functions like AND, OR, NOR by setting appropriate thresholds and
+                        interpreting inputs as excitatory/inhibitory.</p>
+                    <img src="https://i.imgur.com/R8P5t2X.png" alt="MP Neuron for Boolean Functions"
+                        class="diagram-image" style="max-width: 350px;">
+                    <p class="image-caption">McCulloch-Pitts neurons for AND, OR, NOR functions.</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Perceptron Model <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>A Perceptron is a binary classification algorithm modeled after the functioning of the human
+                        brain. It was developed by Frank Rosenblatt in 1957. It's a type of linear classifier, i.e., a
+                        classification algorithm that makes its predictions based on a linear predictor function
+                        combining a set of weights with the feature vector.</p>
+                    <ul>
+                        <li>Takes inputs, multiplies them by weights, and computes the sum.</li>
+                        <li>If the sum exceeds a threshold (or if net input + bias > 0), it outputs 1; otherwise, it
+                            outputs 0 (or -1 depending on convention).</li>
+                        <li>Uses a step function as its activation function.</li>
+                        <li>Learns using the Perceptron learning rule.</li>
+                    </ul>
+                    <img src="https://i.imgur.com/5qF0h2Y.png" alt="Perceptron Input and Output" class="diagram-image"
+                        style="max-width: 400px;">
+                    <p class="image-caption">Perceptron Input And Output.</p>
+                    <h4>Limitations of Single Perceptron:</h4>
+                    <p>A single perceptron can only learn linearly separable patterns. It cannot solve problems like
+                        XOR.</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Multilayer Perceptron (MLP) <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>A Multilayer Perceptron (MLP) is a class of feedforward artificial neural network. An MLP
+                        consists of at least three layers of nodes: an input layer, one or more hidden layers, and an
+                        output layer. Except for the input nodes, each node is a neuron that uses a nonlinear activation
+                        function (typically sigmoid or ReLU in modern MLPs).</p>
+                    <img src="https://i.imgur.com/7cK0L2P.png" alt="Multilayer Perceptron Diagram" class="diagram-image"
+                        style="max-width: 400px;">
+                    <p class="image-caption">Multilayer Perceptron (MLP) with Input, Hidden, and Output layers.</p>
+                    <h4>Key Features:</h4>
+                    <ul>
+                        <li>Can learn non-linearly separable patterns, making them universal function approximators.
+                        </li>
+                        <li>Uses differentiable non-linear activation functions (e.g., sigmoid, tanh, ReLU).</li>
+                        <li>Trained using the backpropagation algorithm.</li>
+                    </ul>
+                    <h4>Training an MLP:</h4>
+                    <ol>
+                        <li><strong>Forward Pass:</strong> Inputs are fed into the network. Each neuron computes its
+                            output (weighted sum + bias, then activation function). This propagates layer by layer to
+                            the output.</li>
+                        <li><strong>Calculate Error/Loss:</strong> The network's output is compared to the desired
+                            output, and an error (loss) is calculated (e.g., Mean Squared Error for regression,
+                            Cross-Entropy for classification).</li>
+                        <li><strong>Backward Pass (Backpropagation):</strong> The error is propagated backward through
+                            the network. Gradients of the loss function with respect to each weight and bias are
+                            calculated using the chain rule.</li>
+                        <li><strong>Weight Update:</strong> Weights and biases are updated in the direction that
+                            minimizes the error (e.g., using Gradient Descent).</li>
+                    </ol>
+                    <img src="https://i.imgur.com/T7O5k2X.png" alt="MLP Training Diagram" class="diagram-image"
+                        style="max-width: 600px;">
+                    <p class="image-caption">Training process of an MLP including forward and backward pass.</p>
+                    <h4>Applications of MLP:</h4>
+                    <ul>
+                        <li>Problem solving stochastically, fitness approximation.</li>
+                        <li>Universal function approximators, regression analysis.</li>
+                        <li>Speech recognition, image recognition, machine translation.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">ADALINE and MADALINE <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>ADALINE (Adaptive Linear Neuron or Adaptive Linear Element)</h4>
+                    <p>An early single-layer artificial neural network developed by Bernard Widrow and Ted Hoff at
+                        Stanford in 1960. It is based on the McCulloch-Pitts neuron.</p>
+                    <ul>
+                        <li>Consists of a weight, a bias, and a summation function.</li>
+                        <li>Difference from standard perceptron: Uses the Delta rule (LMS algorithm) for learning.
+                            Weights are adjusted <span class="highlight">before</span> the activation (transfer)
+                            function is applied (based on the net input, Y<sub>in</sub>). The activation function
+                            (typically a step function) is used only for the final output.</li>
+                        <li>Uses bipolar activation function for output (e.g., +1, -1).</li>
+                        <li>Weights and bias are adjustable.</li>
+                    </ul>
+                    <img src="https://i.imgur.com/vG7yK3Q.png" alt="ADALINE Architecture" class="diagram-image"
+                        style="max-width: 500px;">
+                    <p class="image-caption">Architecture of ADALINE model.</p>
+                    <h4>Training Algorithm of ADALINE:</h4>
+                    <ol>
+                        <li>Initialize weights, bias, learning rate α.</li>
+                        <li>Repeat until stopping condition:
+                            <ol type="a">
+                                <li>For each bipolar training pair (s:t): Activate each input unit x<sub>i</sub> =
+                                    s<sub>i</sub>.</li>
+                                <li>Obtain net input: Y<sub>in</sub> = b + Σ w<sub>i</sub>x<sub>i</sub>.</li>
+                                <li>Apply activation: f(Y<sub>in</sub>) = 1 if Y<sub>in</sub> ≥ 0, else -1. (This is for
+                                    final output, not weight update).</li>
+                                <li>Adjust weights and bias if y ≠ t (where y is the net input Y<sub>in</sub> for weight
+                                    update, or f(Y<sub>in</sub>) for perceptron-like update):
+                                    <br>w<sub>i</sub>(new) = w<sub>i</sub>(old) + α(t - Y<sub>in</sub>)x<sub>i</sub>
+                                    <br>b(new) = b(old) + α(t - Y<sub>in</sub>)
+                                </li>
+                            </ol>
+                        </li>
+                        <li>Test stopping condition (no change in weight or error below threshold).</li>
+                    </ol>
+
+                    <h4>MADALINE (Multiple Adaptive Linear Neurons)</h4>
+                    <p>A network which consists of many ADALINEs in parallel. It will have a single output unit.</p>
+                    <ul>
+                        <li>A three-layer (input, hidden ADALINE units, output) fully connected, feed-forward network.
+                        </li>
+                        <li>The hidden layer uses ADALINE units. Its activation function is the sign function.</li>
+                        <li>The output layer neuron (Madaline layer) can be considered as a single neuron.</li>
+                        <li>Different training algorithms (Rule I, II, III) have been suggested. Rule I and II are older
+                            and don't adapt hidden layer weights. Rule III (modified in 1988) is similar to
+                            backpropagation but uses sigmoid activations instead of signum, and was found to be
+                            equivalent to backpropagation.</li>
+                        <li>Input and Madaline layers have fixed weights and bias of 1. Weights and bias between input
+                            and Adaline layers are adjustable.</li>
+                    </ul>
+                    <img src="https://i.imgur.com/W3mG4vT.png" alt="MADALINE Architecture" class="diagram-image"
+                        style="max-width: 500px;">
+                    <p class="image-caption">Architecture of MADALINE.</p>
+                    <p>Training involves adjusting weights of the ADALINE layer based on errors and then determining the
+                        final output from the Madaline layer.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="backpropagation">
+            <h2><i class="fas fa-history"></i>8. Backpropagation Algorithm</h2>
+            <button type="button" class="collapsible">Concept and Importance <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Backpropagation (backward propagation of errors) is the cornerstone algorithm for training
+                        multilayer perceptrons (MLPs) and many other types of ANNs. It is a supervised learning
+                        algorithm.</p>
+                    <h4>Why is it important?</h4>
+                    <ul>
+                        <li>It provides an efficient way to calculate the gradient of the loss function with respect to
+                            all the weights in the network.</li>
+                        <li>This gradient information is then used by an optimization algorithm (like Gradient Descent)
+                            to adjust the weights to minimize the loss.</li>
+                        <li>It enables the training of deep neural networks with many layers.</li>
+                    </ul>
+                    <h4>How Backpropagation Works:</h4>
+                    <ol>
+                        <li><strong>Forward Pass:</strong>
+                            <ul>
+                                <li>Weights are initialized (often randomly).</li>
+                                <li>Inputs from the training set are fed into the network.</li>
+                                <li>The network computes its output layer by layer, propagating activations forward.
+                                    This generates an initial prediction.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Error Function (Loss Calculation):</strong>
+                            <ul>
+                                <li>The error function (or loss function) computes how far away the model's prediction
+                                    is from the true (desired) value. Examples: Mean Squared Error, Cross-Entropy.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Backward Pass (Gradient Descent):</strong>
+                            <ul>
+                                <li>The algorithm calculates how much the output values are affected by each of the
+                                    weights in the model.</li>
+                                <li>It calculates partial derivatives of the loss function with respect to each weight
+                                    (and bias) using the chain rule of calculus. This proceeds backward from the output
+                                    layer to the input layer.</li>
+                                <li>This provides the gradient, indicating the direction of steepest ascent of the loss
+                                    function.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Weight Update:</strong>
+                            <ul>
+                                <li>Weights are updated in the direction opposite to the gradient (to descend the loss
+                                    surface). This is typically done iteratively after each sample (stochastic gradient
+                                    descent), a batch of samples (mini-batch gradient descent), or the entire training
+                                    set (batch gradient descent).</li>
+                                <li>The learning rate controls the step size of the update.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <img src="https://i.imgur.com/rY5fV3C.png" alt="Backpropagation Overview" class="diagram-image"
+                        style="max-width: 500px;">
+                    <p class="image-caption">How Backpropagation Works - Forward pass, error calculation, backward pass,
+                        weight update.</p>
+                    <h4>Training Algorithm of BPNN (Backpropagation Neural Network):</h4>
+                    <ol>
+                        <li>Inputs X arrive through the preconnected path.</li>
+                        <li>Input is modeled using real weights W (usually randomly selected).</li>
+                        <li>Calculate the output for every neuron from the input layer, to the hidden layers, to the
+                            output layer (Forward Pass).</li>
+                        <li>Calculate the error in the outputs: Error = Actual Output - Desired Output.</li>
+                        <li>Travel back from the output layer to the hidden layer to adjust the weights such that the
+                            error is decreased (Backward Pass).</li>
+                    </ol>
+                    <p>Repeat the process until the desired output is achieved or the error is sufficiently small.</p>
+                    <img src="https://i.imgur.com/kM4fN3A.png" alt="Backpropagation Architecture" class="diagram-image"
+                        style="max-width: 600px;">
+                    <p class="image-caption">Architecture of a Backpropagation Network.</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Worked Example of Backpropagation <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p> Rojas [2005] claimed that BP algorithm could be broken down to four main steps:</p>
+                    <ol type="i">
+                        <li>Feed-forward computation</li>
+                        <li>Back propagation to the output layer</li>
+                        <li>Back propagation to the hidden layer</li>
+                        <li>Weight updates</li>
+                    </ol>
+                    <p>A detailed worked example typically involves:</p>
+                    <ul>
+                        <li>A small network architecture (e.g., 2 input, 2 hidden, 1 output neuron).</li>
+                        <li>Initial random weights and biases.</li>
+                        <li>A specific training sample (input and desired output).</li>
+                        <li>A learning rate and possibly momentum term.</li>
+                        <li>Step-by-step calculation of:
+                            <ul>
+                                <li>Net inputs and outputs for hidden layer neurons (Feed-forward).</li>
+                                <li>Net input and output for the output layer neuron (Feed-forward).</li>
+                                <li>Error at the output neuron.</li>
+                                <li>Gradients (delta values) for output layer weights.</li>
+                                <li>Propagation of error to hidden layer neurons (calculate their deltas).</li>
+                                <li>Gradients for hidden layer weights.</li>
+                                <li>Updating all weights and biases.</li>
+                            </ul>
+                        </li>
+                        <li>This process is repeated for many epochs or until convergence.</li>
+                    </ul>
+                    <div class="flex-diagrams">
+                        <div>
+                            <img src="https://i.imgur.com/d0E3k4P.png" alt="BP Example Network" class="diagram-image"
+                                style="max-width: 350px;">
+                            <p class="image-caption">Figure 4: Example Network for Backpropagation.</p>
+                        </div>
+                        <div>
+                            <img src="https://i.imgur.com/vJ4wQ2T.png" alt="BP Example Calculations 1"
+                                class="diagram-image" style="max-width: 500px;">
+                            <p class="image-caption">BP Example: Feed-forward and initial error calculation.</p>
+                        </div>
+                    </div>
+                    <div class="flex-diagrams">
+                        <div>
+                            <img src="https://i.imgur.com/jR5oF3U.png" alt="BP Example Calculations 2"
+                                class="diagram-image" style="max-width: 500px;">
+                            <p class="image-caption">BP Example: Backpropagation to hidden layer and weight updates.</p>
+                        </div>
+                        <div>
+                            <img src="https://i.imgur.com/oU6fS4H.png" alt="BP Example Calculations 3"
+                                class="diagram-image" style="max-width: 500px;">
+                            <p class="image-caption">BP Example: Continued weight updates and re-calculation.</p>
+                        </div>
+                    </div>
+                    <p>The example illustrates how, after an initial iteration, the error is calculated and used to
+                        update weights, leading to a (hopefully) better prediction in subsequent iterations.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="ann-applications">
+            <h2><i class="fas fa-cogs"></i>9. Applications, Advantages, and Limitations of ANN</h2>
+            <button type="button" class="collapsible">Applications of ANN <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Artificial Neural Networks have a wide range of applications across various fields:</p>
+                    <ol>
+                        <li><strong>Data Mining:</strong> Discovery of meaningful patterns (knowledge) from large
+                            volumes of data.</li>
+                        <li><strong>Expert Systems:</strong> Computer programs that simulate the thought process of a
+                            human expert.</li>
+                        <li><strong>Fuzzy Logic:</strong> Theory of approximate reasoning (often combined with ANNs in
+                            neuro-fuzzy systems).</li>
+                        <li><strong>Artificial Life:</strong> Evolutionary computation, Swarm Intelligence.</li>
+                        <li><strong>Artificial Immune System:</strong> Computer programs based on the biological immune
+                            system.</li>
+                        <li><strong>Medical:</strong> Modelling parts of the human body, recognizing diseases from
+                            various scans (cardiograms, CAT scans, ultrasonic scans, etc.), identifying diseases by
+                            example.</li>
+                        <li><strong>Computer Science:</strong> Dynamic programming, object-oriented programming,
+                            symbolic programming, intelligent storage management.</li>
+                        <li><strong>Aviation:</strong> Airlines use expert systems for atmospheric conditions and system
+                            status monitoring, autopilot.</li>
+                        <li><strong>Weather Forecast:</strong> Predicting weather conditions using historical data.</li>
+                        <li><strong>Neural Networks in Business:</strong> Specialization areas like accounting or
+                            financial analysis.</li>
+                        <li><strong>Business Purposes:</strong> Resource allocation and scheduling, database mining.
+                        </li>
+                        <li><strong>Marketing:</strong> The Airline Marketing Tactician (AMT) integrates ANNs with
+                            expert systems for marketing control and seat allocations.</li>
+                        <li><strong>Credit Evaluation:</strong> Systems like HNC's Credit Scoring system for mortgage
+                            screening, credit risk assessment.</li>
+                        <li><strong>Pattern Recognition:</strong> (Covered in more detail separately) Automated
+                            recognition of patterns and regularities in data. Used in image recognition, speech
+                            recognition, etc.
+                            <div class="flex-diagrams">
+                                <div>
+                                    <img src="https://i.imgur.com/7G3fP4U.png" alt="Pattern Recognition Example"
+                                        class="diagram-image" style="max-width: 500px;">
+                                    <p class="image-caption">ANN for Pattern Recognition (Character Recognition).</p>
+                                </div>
+                            </div>
+                            <p>Pattern recognition can be implemented using a feed-forward network trained to associate
+                                output patterns with input patterns. It involves supervised and unsupervised learning,
+                                generative and discriminative models.</p>
+                            <p>Classification of pattern recognition algorithms:</p>
+                            <ul>
+                                <li>Parametric (Linear discriminant analysis, Quadratic discriminant analysis, Maximum
+                                    entropy classifier)</li>
+                                <li>Nonparametric (Decision trees, Kernel estimation, K-nearest-neighbor, Naive Bayes,
+                                    Perceptrons, SVMs, Gene expression programming)</li>
+                                <li>Clustering algorithms (Categorical mixture models, Hierarchical clustering, K-means,
+                                    Correlation clustering, Kernel PCA)</li>
+                                <li>Ensemble learning (Boosting, Bagging, Ensemble averaging, Mixture of experts)</li>
+                                <li>And many more for specific data types like sequences, structured data, etc.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Advantages of ANN <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <ul>
+                        <li><strong>Adaptive Learning:</strong> Ability to learn how to do tasks based on the data given
+                            for training or initial experience.</li>
+                        <li><strong>Self-Organisation:</strong> An ANN can create its own organisation or representation
+                            of the information it receives during learning time.</li>
+                        <li><strong>Real-Time Operation:</strong> ANN computations may be carried out in parallel, and
+                            special hardware devices are being designed and manufactured which take advantage of this
+                            capability.</li>
+                        <li><strong>Pattern Recognition:</strong> Powerful technique for harnessing the information in
+                            the data and generalizing about it. Neural nets learn to recognize patterns which exist in
+                            the data set.</li>
+                        <li><strong>Fault Tolerance:</strong> System is developed through learning rather than
+                            programming. Neural nets teach themselves the patterns in the data freeing the analyst for
+                            more interesting work. (Also, distributed nature means damage to some neurons might not
+                            cripple the entire network).</li>
+                        <li><strong>Flexibility in Changing Environments:</strong> Neural networks can adapt to
+                            constantly changing information.</li>
+                        <li><strong>Handling Complexity:</strong> Can model complex interactions and data that are too
+                            difficult for traditional statistical or programming logic.</li>
+                        <li><strong>Performance:</strong> Often as good as or better than classical statistical
+                            modelling on many problems, building models more reflective of data structure in less time.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Limitations of ANN <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>ANNs also have certain limitations:</p>
+                    <ol>
+                        <li><strong>Not a Daily Life General Purpose Problem Solver:</strong> ANNs are typically
+                            specialized.</li>
+                        <li><strong>No Structured Methodology:</strong> Design often relies on experience and
+                            trial-and-error.</li>
+                        <li><strong>No Single Standardized Paradigm for Development.</strong></li>
+                        <li><strong>Unpredictable Output Quality:</strong> Performance can vary and may be hard to
+                            predict.</li>
+                        <li><strong>Lack of Explainability (Black Box Nature):</strong> Many ANN systems do not describe
+                            how they solve problems, making it hard to interpret their decisions.</li>
+                        <li><strong>Greater Computational Burden:</strong> Training large ANNs can be computationally
+                            intensive.</li>
+                        <li><strong>Proneness to Overfitting:</strong> ANNs can memorize training data instead of
+                            generalizing, especially with insufficient data or overly complex models.</li>
+                        <li><strong>Empirical Nature of Model Development:</strong> Choosing architectures,
+                            hyperparameters often requires experimentation.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <div class="topic-navigation">
+            <a href="topic-2.html" class="topic-nav-link prev-topic-link"><i class="fas fa-arrow-left"></i> Prev: Unit
+                II: Fuzzy Logic & Systems</a>
+            <a href="topic-4.html" class="topic-nav-link next-topic-link">Next: Unit IV: Genetic Algorithms (GA) <i
+                    class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <footer class="page-footer">
+            © 2024 Eduvision. All rights reserved. Revolutionizing interactive learning.
+        </footer>
+    </div>
+
+    <script>
+        // Collapsible sections
+        var coll = document.getElementsByClassName("collapsible");
+        for (var i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    content.style.padding = "0 18px";
+                } else {
+                    content.style.padding = "0 18px";
+                    setTimeout(() => {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                        let innerDiv = content.querySelector('div');
+                        if (innerDiv && this.classList.contains('active')) { // Check if 'this' (the button) is active
+                            innerDiv.style.padding = "15px 0";
+                        } else if (innerDiv) {
+                            innerDiv.style.padding = "0";
+                        }
+                    }, 50);
+                }
+            });
+        }
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+            } else {
+                body.classList.remove('dark-mode');
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (body.classList.contains('dark-mode')) {
+                applyTheme('light');
+            } else {
+                applyTheme('dark');
+            }
+        });
+
+        // Load saved theme or system preference
+        const savedTheme = localStorage.getItem('theme') ||
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        applyTheme(savedTheme);
+    </script>
+</body>
+
+</html>

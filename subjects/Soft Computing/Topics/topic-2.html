@@ -1,0 +1,2409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit II: Fuzzy Logic and Fuzzy Systems - Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Re-using the same CSS from topic-1.html for consistency */
+        /* (The CSS from the previous response would be pasted here) */
+        :root {
+            /* Light Mode Defaults */
+            --bg-color: #f8fafc;
+            /* Almost white */
+            --card-bg: #ffffff;
+            /* White */
+            --primary-color: #3b82f6;
+            /* Blue */
+            --secondary-color: #8b5cf6;
+            /* Purple */
+            --accent-color: #10b981;
+            /* Emerald */
+            --text-color: #334155;
+            /* Dark Slate Gray for text */
+            --heading-color: #1e293b;
+            /* Very Dark Slate for headings */
+            --border-color: #e2e8f0;
+            /* Light Gray for borders */
+            --gradient-start: var(--primary-color);
+            --gradient-end: var(--secondary-color);
+            --font-main: 'Poppins', sans-serif;
+            --font-logo: 'Nunito', sans-serif;
+
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --card-shadow-color: rgba(0, 0, 0, 0.05);
+            --link-color: var(--primary-color);
+            /* #2563eb */
+            --link-hover-color: #1d4ed8;
+            /* Darker blue */
+            --link-hover-bg: #eff6ff;
+            /* Very light blue */
+            --syllabus-bar-bg: var(--card-bg);
+            --collapsible-content-bg: rgba(0, 0, 0, 0.02);
+            --component-card-bg: #f9fafb;
+            --definition-bg: rgba(59, 130, 246, 0.05);
+            --table-header-bg: var(--primary-color);
+            --table-header-text: white;
+            --table-row-even-bg: rgba(0, 0, 0, 0.015);
+            --theme-toggle-bg: var(--card-bg);
+            --theme-toggle-icon: var(--primary-color);
+            --theme-toggle-hover-bg: var(--primary-color);
+            --theme-toggle-hover-icon: white;
+            --code-bg: #e2e8f0;
+            --code-text: #0f172a;
+            --img-border-color: var(--border-color);
+        }
+
+        body.dark-mode {
+            --bg-color: #0f172a;
+            /* Dark blue-slate */
+            --card-bg: #1e293b;
+            /* Slightly lighter slate */
+            --text-color: #e2e8f0;
+            /* Light gray */
+            --heading-color: #f8fafc;
+            /* White */
+            --border-color: #334155;
+            /* Slate border */
+
+            --shadow-color: rgba(0, 0, 0, 0.25);
+            --card-shadow-color: rgba(0, 0, 0, 0.2);
+            --link-color: #5dade2;
+            /* Lighter blue for dark mode */
+            --link-hover-color: #8ecae6;
+            /* Even lighter blue */
+            --link-hover-bg: rgba(255, 255, 255, 0.1);
+            --syllabus-bar-bg: var(--card-bg);
+            --collapsible-content-bg: rgba(255, 255, 255, 0.03);
+            --component-card-bg: #2a3a50;
+            /* Darker card for components */
+            --definition-bg: rgba(59, 130, 246, 0.1);
+            --table-header-bg: var(--primary-color);
+            /* Can stay same or adjust */
+            --table-header-text: white;
+            --table-row-even-bg: rgba(255, 255, 255, 0.03);
+            --theme-toggle-bg: var(--card-bg);
+            --theme-toggle-icon: var(--primary-color);
+            --theme-toggle-hover-bg: var(--primary-color);
+            --theme-toggle-hover-icon: white;
+            --code-bg: #2a3a50;
+            --code-text: #e2e8f0;
+            --img-border-color: var(--border-color);
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Eduvision Logo */
+        .eduvision-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: var(--font-logo);
+        }
+
+        .eduvision-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvision-logo .text-yellow-300 {
+            color: #fde047 !important;
+        }
+
+        .eduvision-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Theme Toggle Button */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            /* Adjusted size */
+            box-shadow: 0 2px 5px var(--shadow-color);
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+            color: var(--theme-toggle-hover-icon);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+
+        /* Page Header (Moved above Syllabus Bar) */
+        .page-header {
+            text-align: center;
+            margin-top: 70px;
+            /* Space for logo */
+            margin-bottom: 1.5rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--heading-color);
+            background: linear-gradient(90deg, var(--gradient-start), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            opacity: 0.9;
+        }
+
+        /* Syllabus Bar */
+        .syllabus-bar-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 0.75rem;
+            background-color: var(--syllabus-bar-bg);
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 15px var(--card-shadow-color);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .syllabus-bar-back-link {
+            display: flex;
+            align-items: center;
+            font-size: 0.875rem;
+            color: var(--link-color);
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            text-decoration: none;
+            transition: background-color 0.2s, color 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .syllabus-bar-back-link:hover {
+            color: var(--link-hover-color);
+            background-color: var(--link-hover-bg);
+        }
+
+        .syllabus-bar-back-link svg {
+            height: 1.25rem;
+            width: 1.25rem;
+            margin-right: 0.375rem;
+            fill: currentColor;
+        }
+
+        .syllabus-bar-topic-badge {
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.375rem 1rem;
+            border-radius: 9999px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            /* This shadow is fine */
+        }
+
+        @media (min-width: 640px) {
+            .syllabus-bar-container {
+                flex-direction: row;
+            }
+
+            .syllabus-bar-back-link {
+                margin-bottom: 0;
+            }
+
+            .syllabus-bar-topic-badge {
+                font-size: 0.875rem;
+            }
+        }
+
+        /* Section Styling */
+        .content-section {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px var(--card-shadow-color);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s, border-color 0.3s;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px var(--shadow-color);
+        }
+
+        .content-section h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--heading-color);
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .content-section h2 i {
+            margin-right: 0.75rem;
+            color: var(--primary-color);
+        }
+
+        .content-section h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-top: 1.2rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section .definition,
+        .content-section li {
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .content-section ul {
+            padding-left: 20px;
+            list-style: none;
+        }
+
+        .content-section ul li::before {
+            content: "\f105";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--primary-color);
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+        .content-section ul.sub-list li::before {
+            /* For nested lists if needed */
+            content: "\f0da";
+            /* fa-chevron-right, slightly smaller */
+        }
+
+
+        /* Collapsible Sections */
+        .collapsible {
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: white;
+            cursor: pointer;
+            padding: 15px 20px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: filter 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .collapsible:hover {
+            filter: brightness(1.1);
+        }
+
+        .collapsible.active {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .collapsible-content {
+            padding: 0 18px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out, background-color 0.3s;
+            background-color: var(--collapsible-content-bg);
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .collapsible-content>div {
+            padding: 15px 0;
+        }
+
+        .collapsible .icon::before {
+            content: '\f078';
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible.active .icon::before {
+            transform: rotate(-180deg);
+        }
+
+        /* Diagram/Image Styling */
+        .diagram-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border: 1px solid var(--img-border-color);
+            box-shadow: 0 4px 8px var(--card-shadow-color);
+        }
+
+        .image-caption {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-top: -0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .flex-diagrams {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: space-around;
+            align-items: flex-start;
+        }
+
+        .flex-diagrams>div {
+            flex: 1;
+            min-width: 250px;
+            text-align: center;
+        }
+
+        /* Formula / Code-like text */
+        .formula {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+            margin: 0.5rem 0;
+            display: block;
+            white-space: pre-wrap;
+            /* Allows wrapping */
+            word-break: break-all;
+            /* Ensures long unbroken strings break */
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Definition Block */
+        .definition {
+            background-color: var(--definition-bg);
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            font-style: italic;
+            transition: background-color 0.3s, border-left-color 0.3s;
+        }
+
+        .definition strong {
+            font-style: normal;
+            color: var(--primary-color);
+        }
+
+        /* Comparison Tables (Reused from Topic 1) */
+        .comparison-tables-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .comparison-table {
+            flex: 1;
+            min-width: 300px;
+            border-collapse: collapse;
+            width: 100%;
+            box-shadow: 0 4px 10px var(--card-shadow-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+        }
+
+        .comparison-table th {
+            background-color: var(--table-header-bg);
+            color: var(--table-header-text);
+            font-weight: 600;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background-color: var(--table-row-even-bg);
+            transition: background-color 0.3s;
+        }
+
+        .comparison-table ul {
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+
+        .comparison-table ul li::before {
+            content: "";
+            margin-right: 0;
+        }
+
+
+        /* Next/Prev Topic Links */
+        .topic-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            /* Allow wrapping on small screens */
+            gap: 1rem;
+            /* Space between buttons if they wrap */
+        }
+
+        .topic-nav-link {
+            padding: 12px 25px;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            text-align: center;
+            flex-grow: 1;
+            /* Allow buttons to grow */
+            max-width: calc(50% - 0.5rem);
+            /* Max width for two buttons */
+        }
+
+        .prev-topic-link {
+            background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+        }
+
+        .next-topic-link {
+            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+        }
+
+        .topic-nav-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+            filter: brightness(1.1);
+        }
+
+        @media (max-width: 600px) {
+            .topic-nav-link {
+                max-width: 100%;
+                /* Full width on small screens */
+            }
+        }
+
+        /* Footer */
+        .page-footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: #94a3b8;
+            transition: border-top-color 0.3s;
+        }
+
+        body.dark-mode .page-footer {
+            color: #64748b;
+        }
+
+        /* Utility classes */
+        .highlight {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .content-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .comparison-tables-container {
+                flex-direction: column;
+            }
+
+            #theme-toggle {
+                top: 15px;
+                right: 15px;
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+
+            .eduvision-logo {
+                top: 15px;
+                left: 15px;
+            }
+
+            .eduvision-logo .text-2xl {
+                font-size: 1.5rem;
+            }
+
+            .page-header {
+                margin-top: 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../index.html" class="flex items-center group">
+                <span class="text-white">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-white">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>Unit II: Fuzzy Logic and Fuzzy Systems</h1>
+            <p>Exploring fuzzy sets, membership functions, operations, inference systems, and real-world applications.
+            </p>
+        </header>
+
+        <div class="syllabus-bar-container">
+            <a href="../soft-computing.html" class="syllabus-bar-back-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                        clip-rule="evenodd" />
+                </svg>
+                Back to Syllabus
+            </a>
+            <div class="syllabus-bar-topic-badge">
+                Unit II: Topic 2
+            </div>
+        </div>
+
+        <section class="content-section" id="intro-fuzzy-logic">
+            <h2><i class="fas fa-wave-square"></i>1. Introduction to Fuzzy Logic</h2>
+
+            <button type="button" class="collapsible">What is Fuzzy Logic? <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Fuzzy logic, introduced by Lotfi A. Zadeh in the 1960s, is an approach to computing based on
+                        "degrees of truth" rather than the usual "true or false" (1 or 0) Boolean logic on which the
+                        modern computer is based.</p>
+                    <ul>
+                        <li>It is a <span class="highlight">superset of Boolean (conventional) logic</span> that handles
+                            the concept of partial truth – truth values between "completely true" and "completely
+                            false".</li>
+                        <li>Fuzzy logic is <span class="highlight">multivalued</span>. It deals with degrees of
+                            membership and degrees of truth.</li>
+                        <li>It uses the <span class="highlight">continuum of logical values between 0 (completely false)
+                                and 1 (completely true)</span>.</li>
+                    </ul>
+                    <p><strong>Example:</strong> Consider a 100 ml glass containing 30 ml of water.</p>
+                    <ul>
+                        <li>In Boolean logic, we might say the glass is "not full" (true) and "not empty" (true), or
+                            perhaps "half empty" (false) if we only have strict categories.</li>
+                        <li>In fuzzy logic, one might define the glass as being <span class="highlight">0.7 empty and
+                                0.3 full</span>, assigning degrees of membership to these linguistic concepts.</li>
+                    </ul>
+                    <div class="flex-diagrams">
+                        <div>
+                            <img src="https://i.imgur.com/eF2z42L.png" alt="Boolean vs Fuzzy Logic for Glass of Water"
+                                class="diagram-image">
+                            <p class="image-caption">Illustrative difference between Boolean (crisp) and Fuzzy
+                                interpretation for a glass of water.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Need for Fuzzy Logic <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Fuzzy logic is particularly useful for systems that are difficult to model precisely or involve
+                        human-like reasoning and ambiguity. Its key advantages include:</p>
+                    <ul>
+                        <li>Based on <span class="highlight">intuition and judgment</span>, allowing for the
+                            incorporation of expert knowledge in a more natural way.</li>
+                        <li>Often, there is <span class="highlight">no need for a complex mathematical model</span> of
+                            the system.</li>
+                        <li>Provides a <span class="highlight">smooth transition</span> between members and non-members
+                            of a set, avoiding abrupt changes.</li>
+                        <li>Systems can be relatively <span class="highlight">simple, fast, and adaptive</span>.</li>
+                        <li>Fuzzy systems are generally <span class="highlight">less sensitive to system
+                                fluctuations</span> and noise in input data.</li>
+                        <li>Can implement design objectives that are <span class="highlight">difficult to express
+                                mathematically</span>, using linguistic or descriptive rules (e.g., "if temperature is
+                            very high and humidity is slightly high, then increase fan speed moderately").</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="fuzzy-vs-crisp">
+            <h2><i class="fas fa-adjust"></i>2. Fuzzy Sets vs. Crisp Sets</h2>
+
+            <button type="button" class="collapsible">Crisp Logic vs. Fuzzy Logic <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>Crisp Logic (Boolean Logic)</h4>
+                    <ul>
+                        <li>A proposition can be <span class="highlight">True or False only</span>. There are no
+                            intermediate values.</li>
+                        <li>Examples:
+                            <ul>
+                                <li>Bob is a student (True / False).</li>
+                                <li>Smoking is healthy (False).</li>
+                            </ul>
+                        </li>
+                        <li>The degree of truth is either <span class="highlight">0 or 1</span>.</li>
+                    </ul>
+
+                    <h4>Fuzzy Logic</h4>
+                    <ul>
+                        <li>The degree of truth is a value <span class="highlight">between 0 and 1 (inclusive)</span>.
+                        </li>
+                        <li>Examples:
+                            <ul>
+                                <li>William is young (Truth value = 0.3, meaning "somewhat young").</li>
+                                <li>Ariel is smart (Truth value = 0.9, meaning "very smart").</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Crisp Sets and Non-Crisp (Fuzzy) Sets <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>Crisp Sets</h4>
+                    <p>Classical sets are also called 'crisp' sets. In a crisp set, an element <span
+                            class="highlight">x</span> from the universe <span class="highlight">X</span> is either a
+                        member of set <span class="highlight">A</span> or it is not. There is a sharp, unambiguous
+                        boundary.</p>
+                    <p>Example: The set of "Tall People" defined as anyone 1.8m or taller. A person 1.79m is NOT tall; a
+                        person 1.80m IS tall.</p>
+
+                    <h4>Non-Crisp Sets (Fuzzy Sets)</h4>
+                    <p>In fuzzy set theory, this clear-cut membership is generalized. It is not necessary that an
+                        element <span class="highlight">x</span> is a full member of the set or not a member at all. It
+                        can be a <span class="highlight">partial member</span> of the set, described by a degree of
+                        membership.</p>
+                    <p>Example: For the fuzzy set "Tall People," a person 1.79m might have a membership degree of 0.8
+                        (quite tall), while a person 1.80m has a degree of 0.9 (very tall), and someone 1.70m might have
+                        0.2 (slightly tall).</p>
+
+                    <div class="flex-diagrams">
+                        <div>
+                            <img src="https://i.imgur.com/0rP3yJ4.png" alt="Crisp vs Fuzzy Logic Graph for Tallness"
+                                class="diagram-image">
+                            <p class="image-caption">Representation of "Tall" using Crisp vs. Non-Crisp (Fuzzy) Logic.
+                            </p>
+                        </div>
+                    </div>
+                    <p>If students with 1.8m height are qualified for a basketball team:</p>
+                    <ul>
+                        <li>In crisp set theory, only students with height ≥ 1.8m are considered tall. A student 1.79m
+                            tall is not qualified.</li>
+                        <li>In non-crisp (fuzzy) set theory, a student with height 1.78m might belong to both "tall" and
+                            "not tall" sets with particular degrees of membership (e.g., 0.7 tall, 0.3 not tall).</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="crisp-set-theory">
+            <h2><i class="fas fa-border-all"></i>3. Crisp Set Theory (Foundation)</h2>
+            <p>Understanding classical (crisp) set theory is fundamental before diving deeper into fuzzy sets, as fuzzy
+                set theory generalizes many concepts from crisp sets.</p>
+
+            <button type="button" class="collapsible">Basic Definitions <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>Universe of Discourse (E or U)</h4>
+                    <p>The universe of discourse, or universal set, is the set which, with reference to a particular
+                        context, contains all possible elements having the same characteristics and from which sets can
+                        be formed. Denoted by E or U.</p>
+                    <p>Examples:</p>
+                    <ul>
+                        <li>The universal set of all numbers in Euclidean space.</li>
+                        <li>The universal set of all students in a university.</li>
+                    </ul>
+
+                    <h4>Set</h4>
+                    <p>A set is a well-defined collection of distinct objects. "Well-defined" means that an object
+                        either belongs to the set or does not belong to the set (crispness).</p>
+                    <p>Examples:</p>
+                    <ul class="sub-list">
+                        <li>A = {Gandhi, Bose, Nehru}</li>
+                        <li>B = {Swan, Peacock, Dove}</li>
+                        <li>A = {x | x is an odd number}</li>
+                        <li>B = {y | y > 0 and y mod 5 = 0}</li>
+                    </ul>
+
+                    <h4>Membership</h4>
+                    <p>An element x is said to be a member of a set A if x belongs to the set A. This is indicated by
+                        '∈' (belongs to) and '∉' (does not belong to).</p>
+                    <p>Example: Given A = {4, 5, 6, 7, 8, 10}, for x = 3 and y = 4, we have x ∉ A and y ∈ A.</p>
+
+                    <h4>Cardinality</h4>
+                    <p>The number of elements in a set is called its cardinality, denoted as n(A) or |A|.</p>
+                    <p>Example: If A = {4, 5, 6, 7}, then |A| = 4.</p>
+
+                    <h4>Other Definitions</h4>
+                    <ul>
+                        <li><strong>Family of sets:</strong> A set whose members are sets themselves. E.g., A = {{1, 3,
+                            5}, {2, 4, 6}, {5, 10}}.</li>
+                        <li><strong>Null Set/Empty Set (∅ or {}):</strong> A set that has no members. |∅| = 0. E.g., The
+                            set of all prime ministers who are below 15 years of age.</li>
+                        <li><strong>Singleton Set:</strong> A set with a single element. It has cardinality of 1. E.g.,
+                            If A = {a}, then |A| = 1.</li>
+                        <li><strong>Subset (A ⊆ B):</strong> Set A is a subset of B if every element of A is also in B.
+                            (A ⊂ B for proper subset).</li>
+                        <li><strong>Superset (A ⊇ B):</strong> Set A is a superset of B if every element of B is also in
+                            A. (A ⊃ B for proper superset).</li>
+                        <li><strong>Power Set (P(A)):</strong> The set of all possible subsets of set A, including the
+                            null set and A itself. Cardinality |P(A)| = 2<sup>|A|</sup>.
+                            <br>Example: If A = {3, 4}, P(A) = {∅, {3}, {4}, {3, 4}}. |P(A)| = 2<sup>2</sup> = 4.
+                        </li>
+                    </ul>
+                    <div class="flex-diagrams">
+                        <div>
+                            <img src="https://i.imgur.com/g37q9nF.png" alt="Venn Diagram of a Set A"
+                                class="diagram-image" style="max-width:250px;">
+                            <p class="image-caption">Fig. 6.3: Venn diagram of a set A within universal set E.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Operations on Crisp Sets <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>Union (A ∪ B)</h4>
+                    <p>The set of all elements that belong to A or to B or to both. <span class="formula">A ∪ B = {x | x
+                            ∈ A or x ∈ B}</span></p>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/qDk1YwW.png" alt="Venn Diagram of Union"
+                                class="diagram-image" style="max-width:300px;">
+                            <p class="image-caption">Fig. 6.4: Venn Diagram for A ∪ B</p>
+                        </div>
+                    </div>
+
+                    <h4>Intersection (A ∩ B)</h4>
+                    <p>The set of all elements that belong to both A and B. <span class="formula">A ∩ B = {x | x ∈ A and
+                            x ∈ B}</span></p>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/nQ38k58.png" alt="Venn Diagram of Intersection"
+                                class="diagram-image" style="max-width:300px;">
+                            <p class="image-caption">Fig. 6.5: Venn Diagram for A ∩ B</p>
+                        </div>
+                    </div>
+
+                    <h4>Complement (A<sup>c</sup> or A')</h4>
+                    <p>The set of all elements in the universal set E that are not in A. <span
+                            class="formula">A<sup>c</sup> = {x | x ∈ E and x ∉ A}</span></p>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/tS01Y97.png" alt="Venn Diagram of Complement"
+                                class="diagram-image" style="max-width:300px;">
+                            <p class="image-caption">Fig. 6.6: Venn Diagram for A<sup>c</sup></p>
+                        </div>
+                    </div>
+
+                    <h4>Difference (A - B)</h4>
+                    <p>The set of all elements that are in A but not in B. <span class="formula">A - B = {x | x ∈ A and
+                            x ∉ B}</span> (Also A ∩ B<sup>c</sup>)</p>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/q3n8p5V.png" alt="Venn Diagram of Difference"
+                                class="diagram-image" style="max-width:300px;">
+                            <p class="image-caption">Fig. 6.7: Venn Diagram for A - B</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Properties of Crisp Sets <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <ul>
+                        <li><strong>Commutativity:</strong>
+                            <ul class="sub-list">
+                                <li>A ∪ B = B ∪ A</li>
+                                <li>A ∩ B = B ∩ A</li>
+                            </ul>
+                        </li>
+                        <li><strong>Associativity:</strong>
+                            <ul class="sub-list">
+                                <li>(A ∪ B) ∪ C = A ∪ (B ∪ C)</li>
+                                <li>(A ∩ B) ∩ C = A ∩ (B ∩ C)</li>
+                            </ul>
+                        </li>
+                        <li><strong>Distributivity:</strong>
+                            <ul class="sub-list">
+                                <li>A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C)</li>
+                                <li>A ∪ (B ∩ C) = (A ∪ B) ∩ (A ∪ C)</li>
+                            </ul>
+                        </li>
+                        <li><strong>Idempotence:</strong>
+                            <ul class="sub-list">
+                                <li>A ∪ A = A</li>
+                                <li>A ∩ A = A</li>
+                            </ul>
+                        </li>
+                        <li><strong>Identity:</strong>
+                            <ul class="sub-list">
+                                <li>A ∪ ∅ = A</li>
+                                <li>A ∩ E = A</li>
+                                <li>A ∩ ∅ = ∅</li>
+                                <li>A ∪ E = E</li>
+                            </ul>
+                        </li>
+                        <li><strong>Law of Absorption:</strong>
+                            <ul class="sub-list">
+                                <li>A ∪ (A ∩ B) = A</li>
+                                <li>A ∩ (A ∪ B) = A</li>
+                            </ul>
+                        </li>
+                        <li><strong>Transitivity:</strong> If A ⊆ B and B ⊆ C, then A ⊆ C</li>
+                        <li><strong>Involution:</strong> (A<sup>c</sup>)<sup>c</sup> = A</li>
+                        <li><strong>Law of the Excluded Middle:</strong> A ∪ A<sup>c</sup> = E</li>
+                        <li><strong>Law of Contradiction:</strong> A ∩ A<sup>c</sup> = ∅</li>
+                        <li><strong>De Morgan's Laws:</strong>
+                            <ul class="sub-list">
+                                <li>(A ∪ B)<sup>c</sup> = A<sup>c</sup> ∩ B<sup>c</sup></li>
+                                <li>(A ∩ B)<sup>c</sup> = A<sup>c</sup> ∪ B<sup>c</sup></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="crisp-relations">
+            <h2><i class="fas fa-link"></i>4. Crisp Relations and Operations</h2>
+            <button type="button" class="collapsible">Basic Definitions and Terminology <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>A crisp relation represents the presence or absence of association, interaction, or
+                        interconnectedness between two or more elements or sets.</p>
+                    <h4>Cartesian Product (X × Y)</h4>
+                    <p>Let X and Y be two crisp sets. The Cartesian product of X and Y is a set of all ordered pairs (x,
+                        y) such that x ∈ X and y ∈ Y. It is represented by X × Y.</p>
+                    <span class="formula">X × Y = {(x, y) | x ∈ X, y ∈ Y}</span>
+                    <p>Example: Let X = {8, 5}, Y = {2, 4, 7}.<br>
+                        X × Y = {(8, 2), (8, 4), (8, 7), (5, 2), (5, 4), (5, 7)}</p>
+
+                    <h4>Binary Relation (R)</h4>
+                    <p>A binary relation R among crisp sets X and Y is a subset of the Cartesian product X × Y (i.e., R
+                        ⊆ X × Y). It represents the strength of association between elements of the two sets.</p>
+                    <p>Example 1: Let M be the set of males {Mike, Charles, James} and F be the set of female {Gauri,
+                        Rita, Mira}. The relation C "couple on M × F" could be:<br>
+                        C = {(Charles, Gauri), (Mike, Mira), (James, Rita)}</p>
+                    <p>Example 2: Relation 'Less than' (<) from set of natural numbers N to N: { (0,1),
+                            (0,2)...(1,2)...}</p>
+
+                            <h4>Characteristic Function for a Binary Relation</h4>
+                            <p>A binary relation R can be defined by a characteristic function that assigns a value 1 to
+                                every pair (x,y) that belongs to the relation and 0 to every pair that does not belong
+                                to the relation.</p>
+                            <p>Example: Let X = {India, UK, USA, Germany}, Y = {dollar, rupee, mark, pound, Euro}. Let R
+                                be a crisp relation "associates a country with a currency".<br>
+                                R(India, rupee) = 1, R(UK, pound) = 1, etc. Other relations like R(India, euro) = 0.</p>
+                            <p>This can be represented as a matrix:</p>
+                            <div class="flex-diagrams">
+                                <div>
+                                    <img src="https://i.imgur.com/bN0q0zN.png" alt="Relation Matrix"
+                                        class="diagram-image" style="max-width:400px;">
+                                    <p class="image-caption">Two-dimensional membership matrix for country-currency
+                                        relation.</p>
+                                </div>
+                            </div>
+                            <h4>Representations of Binary Relations</h4>
+                            <p>Binary relations can be represented by:
+                            <ul>
+                                <li>Coordinate diagrams (for relations like x² + y² = 4)</li>
+                                <li>Directed graphs (binary relation from A to B)</li>
+                                <li>Relation matrices</li>
+                            </ul>
+                    </p>
+                    <div class="flex-diagrams">
+                        <div>
+                            <img src="https://i.imgur.com/v2l4T9l.png" alt="Examples of Binary Relations"
+                                class="diagram-image" style="max-width:500px;">
+                            <p class="image-caption">Examples of binary relation representations.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Operations on Crisp Relations <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Function-theoretic operations for two crisp relations (R, S) are defined as follows (using
+                        characteristic functions χ):</p>
+                    <ol>
+                        <li><strong>Union (R ∪ S):</strong> χ<sub>R∪S</sub>(x, y) = max[χ<sub>R</sub>(x, y),
+                            χ<sub>S</sub>(x, y)]</li>
+                        <li><strong>Intersection (R ∩ S):</strong> χ<sub>R∩S</sub>(x, y) = min[χ<sub>R</sub>(x, y),
+                            χ<sub>S</sub>(x, y)]</li>
+                        <li><strong>Complement (R̄):</strong> χ<sub>R̄</sub>(x, y) = 1 - χ<sub>R</sub>(x, y)</li>
+                        <li><strong>Containment (R ⊂ S):</strong> χ<sub>R</sub>(x, y) ≤ χ<sub>S</sub>(x, y)</li>
+                        <li><strong>Identity (∅ → ∅<sub>R</sub> and X → E<sub>R</sub>)</strong></li>
+                    </ol>
+                </div>
+            </div>
+            <button type="button" class="collapsible">Composition of Two Crisp Relations <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Given R is a relation on X, Y and S is another relation on Y, Z. Then R ∘ S is called a
+                        composition of relation on X and Z.</p>
+                    <span class="formula">R ∘ S = {(x, z) | (x, y) ∈ R and (y, z) ∈ S for ∀y ∈ Y}</span>
+                    <h4>Max-Min Composition</h4>
+                    <p>Given two relation matrices R and S, the max-min composition is defined as T = R ∘ S;</p>
+                    <span class="formula">T(x, z) = max<sub>y</sub>{min{R(x, y), S(y, z)}} for ∀y ∈ Y</span>
+                    <p>Example: Given X = {1,3,5}; Y = {1,3,5}; R = {(x,y)|y = x+2}; S = {(x,y)|x < y}</p>
+                            <div class="flex-diagrams">
+                                <div>
+                                    <img src="https://i.imgur.com/xQ4lXh5.png"
+                                        alt="Composition of Crisp Relations Example" class="diagram-image"
+                                        style="max-width:500px;">
+                                    <p class="image-caption">Example of Max-Min Composition of Crisp Relations.</p>
+                                </div>
+                            </div>
+                            <h4>Properties of Crisp Relations</h4>
+                            <p>The properties of crisp sets (Commutativity, Associativity, Distributivity, Involution,
+                                Idempotency, DeMorgan’s Law, Excluded Middle Laws) hold good for crisp relations as
+                                well.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="fuzzy-set-theory">
+            <h2><i class="fas fa-stream"></i>5. Fuzzy Set Theory</h2>
+            <p>L. Zadeh introduced fuzzy sets in the mid-60s to mathematically represent uncertainty and vagueness. It
+                provides formalized tools for dealing with inherent imprecision in many problems.</p>
+
+            <button type="button" class="collapsible">Definitions and Terminology <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>Universe of Discourse (U)</h4>
+                    <p>A collection of all items that can come into consideration in a particular context.</p>
+
+                    <h4>Fuzzy Set (A)</h4>
+                    <p>Let U be a non-empty set called a universe of discourse. A fuzzy set A in U is defined as a set
+                        of ordered pairs:</p>
+                    <span class="formula">A = {(x, μ<sub>A</sub>(x)) | x ∈ U}</span>
+                    <p>where μ<sub>A</sub>(x) is the <span class="highlight">membership function</span> (MF) and
+                        μ<sub>A</sub>(x) is the <span class="highlight">degree of membership</span> of element x in the
+                        fuzzy set A, for x ∈ U. The value μ<sub>A</sub>(x) is in the range [0, 1].</p>
+
+                    <h4>Membership Function (μ)</h4>
+                    <p>A membership function μ defines the degree of belongingness to a fuzzy set between 0 and 1. Fuzzy
+                        set members are taken from a universe U.</p>
+                    <p><strong>Note:</strong> μ<sub>A</sub>(x) maps each element of X onto a membership grade (or
+                        membership value) between 0 and 1 (both inclusive).</p>
+
+                    <h4>Examples of Fuzzy Sets</h4>
+                    <ul>
+                        <li><strong>Ages of People:</strong> U = {1, 10, 20, ..., 100}. Fuzzy sets like Young,
+                            Middle_aged, Old.
+                            <ul class="sub-list">
+                                <li>Young = {(1, 1), (10, 0.9), (20, 0.8), (30, 0.6), (40, 0.4), (50, 0.2), (60, 0)}
+                                </li>
+                                <li>Middle_aged = {(20, 0.2), (30, 0.4), (40, 0.7), (50, 0.9)}</li>
+                                <li>Old = {(30, 0.1), (40, 0.3), (50, 0.5), (60, 0.8), (70, 1), (80, 1), (90, 1)}</li>
+                            </ul>
+                        </li>
+                        <li><strong>Discrete Non-ordered Universe:</strong> U = {Delhi, Bombay, Bangalore} (cities).
+                            <br>Fuzzy set A = "desirable city to live in": A = {(Delhi, 0.9), (Bombay, 0.8), (Bangalore,
+                            0.6)}
+                        </li>
+                        <li><strong>Discrete Ordered Universe:</strong> U = {0, 2, 3, 4, 5, 6} (number of children).
+                            <br>Fuzzy set A = "sensible number of children": A = {(0, 0.1), (1, 0.5), (2, 1), (3, 0.8),
+                            (4, 0.3), (5, 0.1)}
+                        </li>
+                        <li><strong>Continuous Universe:</strong> Let X be a set of possible ages for human.
+                            <br>Fuzzy set A = "about 50-years old" may be expressed as:
+                            <span class="formula">μ<sub>A</sub>(x) = 1 / (1 + ((x - 50) / 10)<sup>4</sup>)</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="membership-functions">
+            <h2><i class="fas fa-chart-area"></i>6. Membership Functions (MFs)</h2>
+            <p>Membership functions are crucial in fuzzy logic as they define how each point in the input space is
+                mapped to a membership value (or degree of membership) between 0 and 1.</p>
+
+            <button type="button" class="collapsible">Types of Membership Functions <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>Triangular MFs</h4>
+                    <p>Specified by three parameters {a, b, c}.</p>
+                    <span class="formula">triangle(x; a, b, c) =
+                        0, if x ≤ a
+                        (x-a)/(b-a), if a < x ≤ b (c-x)/(c-b), if b < x < c 0, if x ≥ c</span>
+                            <div class="flex-diagrams">
+                                <div><img src="https://i.imgur.com/XN017xQ.png" alt="Triangular MF"
+                                        class="diagram-image" style="max-width:300px;">
+                                    <p class="image-caption">Triangular Membership Function</p>
+                                </div>
+                            </div>
+
+                            <h4>Trapezoidal MFs</h4>
+                            <p>Specified by four parameters {a, b, c, d}.</p>
+                            <span class="formula">trapezoid(x; a, b, c, d) =
+                                0, if x ≤ a
+                                (x-a)/(b-a), if a < x ≤ b 1, if b < x ≤ c (d-x)/(d-c), if c < x < d 0, if x ≥ d</span>
+                                    <div class="flex-diagrams">
+                                        <div><img src="https://i.imgur.com/nLq63xX.png" alt="Trapezoidal MF"
+                                                class="diagram-image" style="max-width:300px;">
+                                            <p class="image-caption">Trapezoidal Membership Function</p>
+                                        </div>
+                                    </div>
+
+                                    <h4>Gaussian MFs</h4>
+                                    <p>Specified by two parameters {c, σ} (center and width).</p>
+                                    <span class="formula">gaussian(x; c, σ) = e<sup>-((x-c)² / (2σ²))</sup></span>
+                                    <div class="flex-diagrams">
+                                        <div><img src="https://i.imgur.com/qK8H4c3.png" alt="Gaussian MF"
+                                                class="diagram-image" style="max-width:300px;">
+                                            <p class="image-caption">Gaussian Membership Function</p>
+                                        </div>
+                                    </div>
+
+                                    <h4>Generalized Bell MFs (Cauchy MF)</h4>
+                                    <p>Specified by three parameters {a, b, c}.</p>
+                                    <span class="formula">bell(x; a, b, c) = 1 / (1 + |(x-c)/a|<sup>2b</sup>)</span>
+                                    <div class="flex-diagrams">
+                                        <div><img src="https://i.imgur.com/pX7l09L.png" alt="Generalized Bell MF"
+                                                class="diagram-image" style="max-width:300px;">
+                                            <p class="image-caption">Generalized Bell Membership Function</p>
+                                        </div>
+                                        <div><img src="https://i.imgur.com/V73D97i.png"
+                                                alt="Different Shapes of Bell MF" class="diagram-image"
+                                                style="max-width:400px;">
+                                            <p class="image-caption">Different shapes of Bell MF by varying parameters.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <h4>Sigmoidal MFs</h4>
+                                    <p>Parameters {a, c} (slope at c, crossover point c).</p>
+                                    <span class="formula">sigmoid(x; a, c) = 1 / (1 + e<sup>-a(x-c)</sup>)</span>
+                                    <div class="flex-diagrams">
+                                        <div><img src="https://i.imgur.com/qFk3m9p.png" alt="Sigmoidal MF"
+                                                class="diagram-image" style="max-width:300px;">
+                                            <p class="image-caption">Sigmoidal Membership Function</p>
+                                        </div>
+                                    </div>
+                                    <p>Example: Grading system for a course.</p>
+                                    <div class="flex-diagrams">
+                                        <div><img src="https://i.imgur.com/0A4oYnO.png" alt="Fuzzy Grading System"
+                                                class="diagram-image" style="max-width:500px;">
+                                            <p class="image-caption">Fuzzy implementation of a grading system using
+                                                sigmoidal MFs.</p>
+                                        </div>
+                                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Features of Membership Functions <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <ul>
+                        <li><strong>Support:</strong> The set of all points x ∈ X such that μ<sub>A</sub>(x) > 0.
+                            <div class="flex-diagrams">
+                                <div><img src="https://i.imgur.com/gJ2sKxG.png" alt="Support of MF"
+                                        class="diagram-image" style="max-width:300px;">
+                                    <p class="image-caption">Support of a Membership Function</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li><strong>Core:</strong> The set of all points x ∈ X such that μ<sub>A</sub>(x) = 1.
+                            <div class="flex-diagrams">
+                                <div><img src="https://i.imgur.com/4S1nZ1p.png" alt="Core of MF" class="diagram-image"
+                                        style="max-width:300px;">
+                                    <p class="image-caption">Core of a Membership Function</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li><strong>Normality:</strong> A fuzzy set A is normal if its core is non-empty (i.e., there is
+                            at least one point x where μ<sub>A</sub>(x) = 1).
+                            <div class="flex-diagrams">
+                                <div><img src="https://i.imgur.com/rX9Q8uH.png" alt="Normality of MF"
+                                        class="diagram-image" style="max-width:300px;">
+                                    <p class="image-caption">Example of a non-normal fuzzy set (Normality = FALSE)</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li><strong>Crossover Point:</strong> A point x ∈ X at which μ<sub>A</sub>(x) = 0.5.
+                            <div class="flex-diagrams">
+                                <div><img src="https://i.imgur.com/uP1vR3Y.png" alt="Crossover Point of MF"
+                                        class="diagram-image" style="max-width:300px;">
+                                    <p class="image-caption">Crossover Point of a Membership Function</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li><strong>Fuzzy Singleton:</strong> A fuzzy set whose support is a single point in X with
+                            μ<sub>A</sub>(x) = 1.
+                            <div class="flex-diagrams">
+                                <div><img src="https://i.imgur.com/2H6mN7d.png" alt="Fuzzy Singleton"
+                                        class="diagram-image" style="max-width:300px;">
+                                    <p class="image-caption">Fuzzy Singleton</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li><strong>α-cut (Alpha-cut):</strong> The α-cut of a fuzzy set A (denoted A<sub>α</sub>) is a
+                            crisp set defined by A<sub>α</sub> = {x | μ<sub>A</sub>(x) ≥ α}.
+                            <br><strong>Strong α-cut:</strong> A<sub>α</sub>' = {x | μ<sub>A</sub>(x) > α}.
+                        </li>
+                        <li><strong>Convexity:</strong> A fuzzy set A is convex if and only if for any x<sub>1</sub>,
+                            x<sub>2</sub> ∈ X and any λ ∈ [0, 1], μ<sub>A</sub>(λx<sub>1</sub> + (1-λ)x<sub>2</sub>) ≥
+                            min(μ<sub>A</sub>(x<sub>1</sub>), μ<sub>A</sub>(x<sub>2</sub>)). Visually, the MF has no
+                            "dips".
+                            <div class="flex-diagrams">
+                                <div><img src="https://i.imgur.com/uB0S4mJ.png" alt="Convex vs Non-convex MF"
+                                        class="diagram-image" style="max-width:400px;">
+                                    <p class="image-caption">Convex and Non-convex Membership Functions</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li><strong>Bandwidth:</strong> For a normal and convex fuzzy set, the bandwidth is the distance
+                            between the two unique crossover points.</li>
+                        <li><strong>Symmetry:</strong> A fuzzy set A is symmetric if its MF around a certain point x = c
+                            is μ<sub>A</sub>(x + c) = μ<sub>A</sub>(x - c) for all x ∈ X.
+                            <div class="flex-diagrams">
+                                <div><img src="https://i.imgur.com/vJ2oR5b.png" alt="Symmetric MF" class="diagram-image"
+                                        style="max-width:300px;">
+                                    <p class="image-caption">Symmetric Membership Function</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li><strong>Open Left, Open Right, Closed:</strong> Describes the behavior of the MF as x
+                            approaches -∞ and +∞.
+                            <div class="flex-diagrams">
+                                <div><img src="https://i.imgur.com/8m3X5D1.png" alt="Open/Closed MFs"
+                                        class="diagram-image" style="max-width:400px;">
+                                    <p class="image-caption">Open Left, Closed, and Open Right Membership Functions</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="fuzzy-set-operations">
+            <h2><i class="fas fa-calculator"></i>7. Operations on Fuzzy Sets</h2>
+            <p>Similar to crisp sets, operations like union, intersection, and complement are defined for fuzzy sets,
+                but they use the membership values.</p>
+
+            <button type="button" class="collapsible">Standard Fuzzy Set Operations <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>Union (A ∪ B) or (A OR B)</h4>
+                    <p>The membership function of the union is typically defined using the maximum operator:</p>
+                    <span class="formula">μ<sub>A∪B</sub>(x) = max(μ<sub>A</sub>(x), μ<sub>B</sub>(x))</span>
+                    <p>Sometimes denoted as μ<sub>A</sub>(x) ∨ μ<sub>B</sub>(x).</p>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/p1b8i3S.png" alt="Fuzzy Union Example" class="diagram-image"
+                                style="max-width:450px;">
+                            <p class="image-caption">Example of Fuzzy Union (max operator)</p>
+                        </div>
+                    </div>
+
+                    <h4>Intersection (A ∩ B) or (A AND B)</h4>
+                    <p>The membership function of the intersection is typically defined using the minimum operator:</p>
+                    <span class="formula">μ<sub>A∩B</sub>(x) = min(μ<sub>A</sub>(x), μ<sub>B</sub>(x))</span>
+                    <p>Sometimes denoted as μ<sub>A</sub>(x) ∧ μ<sub>B</sub>(x).</p>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/8t0Zk9T.png" alt="Fuzzy Intersection Example"
+                                class="diagram-image" style="max-width:450px;">
+                            <p class="image-caption">Example of Fuzzy Intersection (min operator)</p>
+                        </div>
+                    </div>
+
+                    <h4>Complement (A<sup>c</sup> or NOT A)</h4>
+                    <p>The membership function of the complement is typically defined as:</p>
+                    <span class="formula">μ<sub>A<sup>c</sup></sub>(x) = 1 - μ<sub>A</sub>(x)</span>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/tU0K5yA.png" alt="Fuzzy Complement Example"
+                                class="diagram-image" style="max-width:450px;">
+                            <p class="image-caption">Example of Fuzzy Complement</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Other Algebraic Operations <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <ul>
+                        <li><strong>Algebraic Product (A ⋅ B):</strong> μ<sub>A⋅B</sub>(x) = μ<sub>A</sub>(x) ⋅
+                            μ<sub>B</sub>(x)</li>
+                        <li><strong>Scalar Product (α × A):</strong> μ<sub>αA</sub>(x) = α ⋅ μ<sub>A</sub>(x) (where α
+                            is a scalar, 0 ≤ α ≤ 1)</li>
+                        <li><strong>Sum (A + B):</strong> μ<sub>A+B</sub>(x) = μ<sub>A</sub>(x) + μ<sub>B</sub>(x) -
+                            μ<sub>A</sub>(x) ⋅ μ<sub>B</sub>(x) (Probabilistic Sum)</li>
+                        <li><strong>Difference (A - B):</strong> Typically μ<sub>A-B</sub>(x) =
+                            μ<sub>A∩B<sup>c</sup></sub>(x) = min(μ<sub>A</sub>(x), 1 - μ<sub>B</sub>(x))</li>
+                        <li><strong>Disjunctive Sum (A ⊕ B):</strong> μ<sub>A⊕B</sub>(x) = (A<sup>c</sup> ∩ B) ∪ (A ∩
+                            B<sup>c</sup>)</li>
+                        <li><strong>Bounded Sum (|A(+)B|):</strong> μ<sub>A(+)B</sub>(x) = min(1, μ<sub>A</sub>(x) +
+                            μ<sub>B</sub>(x))</li>
+                        <li><strong>Bounded Difference (|A(-)B|):</strong> μ<sub>A(-)B</sub>(x) = max(0,
+                            μ<sub>A</sub>(x) + μ<sub>B</sub>(x) - 1)</li>
+                        <li><strong>Equality (A = B):</strong> Two fuzzy sets A and B are equal if μ<sub>A</sub>(x) =
+                            μ<sub>B</sub>(x) for all x ∈ U.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Power of a Fuzzy Set & Cartesian Product <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>Power of a Fuzzy Set (A<sup>α</sup>)</h4>
+                    <p>The membership function is given by: <span class="formula">μ<sub>A<sup>α</sup></sub>(x) =
+                            (μ<sub>A</sub>(x))<sup>α</sup></span></p>
+                    <ul>
+                        <li>If α > 1, it is called <span class="highlight">Concentration</span> (e.g., "very"). This
+                            operation reduces membership values, making the fuzzy set more specific.</li>
+                        <li>If α < 1 (and α> 0), it is called <span class="highlight">Dilation</span> (e.g., "somewhat"
+                                or "more or less"). This operation increases membership values, making the fuzzy set
+                                broader.</li>
+                    </ul>
+
+                    <h4>Cartesian Product (A × B)</h4>
+                    <p>The Cartesian product of two fuzzy sets A and B is denoted by A × B. Its membership function is
+                        typically defined as:</p>
+                    <span class="formula">μ<sub>A×B</sub>(x, y) = min(μ<sub>A</sub>(x), μ<sub>B</sub>(y))</span>
+                    <p>Example:
+                        <br>A(x) = {(x<sub>1</sub>, 0.2), (x<sub>2</sub>, 0.3), (x<sub>3</sub>, 0.5), (x<sub>4</sub>,
+                        0.6)}
+                        <br>B(y) = {(y<sub>1</sub>, 0.8), (y<sub>2</sub>, 0.6), (y<sub>3</sub>, 0.3)}
+                        <br>The resulting matrix for A × B would have μ<sub>A×B</sub>(x<sub>1</sub>, y<sub>1</sub>) =
+                        min(0.2, 0.8) = 0.2, etc.
+                    </p>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/k4F0C7k.png" alt="Fuzzy Cartesian Product Example"
+                                class="diagram-image" style="max-width:400px;">
+                            <p class="image-caption">Example of Fuzzy Cartesian Product Matrix.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Properties of Fuzzy Operations <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Many properties from classical set theory also hold for fuzzy set theory (using standard min/max
+                        operators):</p>
+                    <ul>
+                        <li><strong>Commutativity:</strong> A ∪ B = B ∪ A; A ∩ B = B ∩ A</li>
+                        <li><strong>Associativity:</strong> (A ∪ B) ∪ C = A ∪ (B ∪ C); (A ∩ B) ∩ C = A ∩ (B ∩ C)</li>
+                        <li><strong>Distributive Laws:</strong>
+                            <ul class="sub-list">
+                                <li>A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C)</li>
+                                <li>A ∪ (B ∩ C) = (A ∪ B) ∩ (A ∪ C)</li>
+                            </ul>
+                        </li>
+                        <li><strong>De Morgan's Laws:</strong> (A ∪ B)<sup>c</sup> = A<sup>c</sup> ∩ B<sup>c</sup>; (A ∩
+                            B)<sup>c</sup> = A<sup>c</sup> ∪ B<sup>c</sup></li>
+                        <li><strong>Absorption:</strong> A ∩ (A ∪ B) = A; A ∪ (A ∩ B) = A</li>
+                        <li><strong>Idempotency:</strong> A ∪ A = A; A ∩ A = A</li>
+                    </ul>
+                    <p>However, the <span class="highlight">Law of the Excluded Middle</span> and the <span
+                            class="highlight">Law of Contradiction</span> do <span class="highlight">not generally
+                            hold</span> for fuzzy sets:</p>
+                    <ul>
+                        <li>A ∪ A<sup>c</sup> ≠ U (Universal set, where all memberships are 1)
+                            <br>Example: If μ<sub>A</sub>(x) = 0.6, then μ<sub>A<sup>c</sup></sub>(x) = 0.4. max(0.6,
+                            0.4) = 0.6 ≠ 1.
+                        </li>
+                        <li>A ∩ A<sup>c</sup> ≠ ∅ (Empty set, where all memberships are 0)
+                            <br>Example: If μ<sub>A</sub>(x) = 0.6, then μ<sub>A<sup>c</sup></sub>(x) = 0.4. min(0.6,
+                            0.4) = 0.4 ≠ 0.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Placeholder for remaining sections -->
+        <section class="content-section" id="fuzzy-relations-section">
+            <h2><i class="fas fa-project-diagram"></i>8. Fuzzy Relations</h2>
+            <p>Fuzzy relations extend crisp relations by allowing degrees of relationship between elements of sets.</p>
+            <button type="button" class="collapsible">Basic Definitions and Terminologies <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>Fuzzy Cartesian Product (A × B)</h4>
+                    <p>Suppose A and B are two fuzzy sets defined on universal sets U and V, respectively. The Cartesian
+                        product A × B is a fuzzy set in U × V with the membership function typically defined as:</p>
+                    <span class="formula">μ<sub>A×B</sub>(x, y) = min(μ<sub>A</sub>(x), μ<sub>B</sub>(y)) for x ∈ U, y ∈
+                        V</span>
+                    <p>Example: A = {(3, 0.5), (5, 1), (7, 0.6)}, B = {(3, 1), (5, 0.6)} in universal set N.
+                        <br>The fuzzy Cartesian product includes pairs like ((3,3), min(0.5,1)=0.5), ((3,5),
+                        min(0.5,0.6)=0.5), etc.
+                    </p>
+
+                    <h4>Fuzzy Relation (R)</h4>
+                    <p>A fuzzy relation R is a fuzzy subset of A × B. The elements of the relation are defined as
+                        ordered pairs of two items of fuzzy sets grouped with its membership grade in the range [0, 1].
+                    </p>
+                    <span class="formula">μ<sub>R</sub>(x, y) = min(μ<sub>A</sub>(x), μ<sub>B</sub>(y)) (Often, a fuzzy
+                        relation is directly defined by its MF μ<sub>R</sub>(x,y) over U × V)</span>
+                    <p>Fuzzy relation represents the strength of association between elements of the two sets. It can be
+                        defined on both crisp and fuzzy sets.</p>
+                    <p>Example: Fuzzy relation R on A × B can be represented as a matrix.
+                        Let A = {(x<sub>1</sub>, 0.2), (x<sub>2</sub>, 0.4), (x<sub>3</sub>, 0.8)}; B = {(y<sub>1</sub>,
+                        0.3), (y<sub>2</sub>, 0.7)}
+                        If μ<sub>R</sub>(x,y) = min(μ<sub>A</sub>(x),μ<sub>B</sub>(y)), then:
+                    </p>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/3F2Nf8u.png" alt="Fuzzy Relation Matrix"
+                                class="diagram-image" style="max-width:300px;">
+                            <p class="image-caption">Fuzzy Relation Matrix Example</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Operations on Fuzzy Relations <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Since fuzzy relations from A to B are fuzzy sets in A × B, the operations on fuzzy sets can be
+                        extended to fuzzy relations. Let R and S be fuzzy relations.</p>
+                    <ul>
+                        <li><strong>Union (R ∪ S):</strong> μ<sub>R∪S</sub>(x, y) = max(μ<sub>R</sub>(x, y),
+                            μ<sub>S</sub>(x, y))</li>
+                        <li><strong>Intersection (R ∩ S):</strong> μ<sub>R∩S</sub>(x, y) = min(μ<sub>R</sub>(x, y),
+                            μ<sub>S</sub>(x, y))</li>
+                        <li><strong>Complement (R̄):</strong> μ<sub>R̄</sub>(x, y) = 1 - μ<sub>R</sub>(x, y)</li>
+                        <li><strong>Containment (R ⊂ S):</strong> μ<sub>R</sub>(x, y) ≤ μ<sub>S</sub>(x, y) for all
+                            (x,y)</li>
+                        <li><strong>Identity Relation (I):</strong> μ<sub>I</sub>(x, y) = 1 if x = y, and 0 if x ≠ y (on
+                            a single set U)</li>
+                        <li><strong>Null Relation (Z):</strong> μ<sub>Z</sub>(x, y) = 0 for all x, y</li>
+                        <li><strong>Universal Relation (U):</strong> μ<sub>U</sub>(x, y) = 1 for all x, y</li>
+                    </ul>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/2h0yXzY.png" alt="Fuzzy Relation Operations"
+                                class="diagram-image" style="max-width:500px;">
+                            <p class="image-caption">Example of Intersection and Union of Fuzzy Relation Matrices</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Composition of Fuzzy Relations <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Consider two binary fuzzy relations R(A, B) and S(B, C). The composition of R and S, denoted R ∘
+                        S, is a fuzzy relation on A × C.</p>
+                    <h4>Max-Min Composition</h4>
+                    <p>This is the most common type. The membership function is:</p>
+                    <span class="formula">μ<sub>R∘S</sub>(x, z) = max<sub>y∈B</sub> {min(μ<sub>R</sub>(x, y),
+                        μ<sub>S</sub>(y, z))}</span>
+                    <h4>Max-Product Composition</h4>
+                    <p>The membership function is:</p>
+                    <span class="formula">μ<sub>R∘S</sub>(x, z) = max<sub>y∈B</sub> {μ<sub>R</sub>(x, y) ⋅
+                        μ<sub>S</sub>(y, z)}</span>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/0i0R8u6.png" alt="Max-Min Composition Example"
+                                class="diagram-image" style="max-width:500px;">
+                            <p class="image-caption">Example of Max-Min Composition of Fuzzy Relations.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="collapsible">Properties and Reshaping <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>Properties of Fuzzy Sets (often discussed with relations)</h4>
+                    <ul>
+                        <li><strong>Cardinality (Scalar Cardinality):</strong> The sum of the membership values of all
+                            elements in the fuzzy set A.
+                            <span class="formula">|A| = Σ<sub>x∈U</sub> μ<sub>A</sub>(x)</span>
+                        </li>
+                        <li><strong>Height (h(A)):</strong> The highest membership degree in a fuzzy set A.
+                            <span class="formula">h(A) = max<sub>x∈U</sub> μ<sub>A</sub>(x)</span>
+                        </li>
+                        <li><strong>Normalization (NORM):</strong> A fuzzy set is normalized if its height is 1. If not,
+                            it can be normalized by dividing each membership degree by its height:
+                            <span class="formula">μ<sub>Normalized A</sub>(x) = μ<sub>A</sub>(x) / h(A)</span>
+                        </li>
+                    </ul>
+                    <h4>Reshaping of Fuzzy Operators (Linguistic Hedges)</h4>
+                    <p>These operators modify existing fuzzy sets.</p>
+                    <ul>
+                        <li><strong>Dilation (DIL):</strong> Increases the degree of membership. E.g., "more or less
+                            OLD".
+                            <span class="formula">(μ<sub>OLD</sub>(x))<sup>0.5</sup></span> (typically power < 1) </li>
+                        <li><strong>Concentration (CON):</strong> Decreases the degree of membership. E.g., "very OLD".
+                            <span class="formula">(μ<sub>OLD</sub>(x))<sup>2</sup></span> (typically power > 1)
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="fuzzy-propositions-section">
+            <h2><i class="fas fa-comment-dots"></i>9. Fuzzy Propositions</h2>
+            <p>A fuzzy proposition is a statement that can have a degree of truth between 0 and 1.</p>
+            <button type="button" class="collapsible">Introduction to Fuzzy Propositions <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>The main difference between classical (crisp) proposition and fuzzy proposition is in the range
+                        of their truth values. A classical proposition is either true or false. In fuzzy logic, the
+                        truth value of a fuzzy proposition is a matter of degree, expressed by a value T(p) in the
+                        interval [0, 1].</p>
+                    <p>Example: "Speed is Slow"</p>
+                    <ul>
+                        <li>T(p) = 0.8, if p is partly true</li>
+                        <li>T(p) = 1, if p is absolutely true</li>
+                        <li>T(p) = 0, if p is totally false</li>
+                    </ul>
+                </div>
+            </div>
+            <button type="button" class="collapsible">Types of Fuzzy Propositions <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <ol>
+                        <li><strong>Unconditional and Unqualified:</strong>
+                            <p>Canonical form: <span class="highlight">p: V is F</span></p>
+                            <p>Where V is a variable, F is a fuzzy set on U. Represents an inaccurate predicate.</p>
+                            <p>Example: p: Speed (V) is high (F). T(p) = μ<sub>F</sub>(v) where v is the value of V.</p>
+                        </li>
+                        <li><strong>Unconditional and Qualified:</strong>
+                            <p>Canonical form: <span class="highlight">p: (V is F) is S</span></p>
+                            <p>Where S is a fuzzy truth qualifier (e.g., "very true", "fairly false").</p>
+                            <p>Example: Speed is high is very true.</p>
+                        </li>
+                        <li><strong>Conditional and Unqualified:</strong>
+                            <p>Canonical form: <span class="highlight">p: if X is A, then Y is B</span></p>
+                            <p>Where X, Y are variables; A, B are fuzzy sets.</p>
+                            <p>Example: p: if speed is High, then risk is Low.</p>
+                        </li>
+                        <li><strong>Conditional and Qualified Propositions:</strong>
+                            <p>Canonical form: <span class="highlight">p: (if X is A, then Y is B) is S</span></p>
+                            <p>Example: p: if speed is high than risk is low is true.</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <button type="button" class="collapsible">Multi-valued Logic and Fuzzy Connectives <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Classical two-valued logic (True/False) can be extended to multi-valued logic. For example, a
+                        three-valued logic might denote true (1), false (0), and indeterminacy (1/2).</p>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/qR2W4lW.png" alt="Three-valued logic truth table"
+                                class="diagram-image" style="max-width:400px;">
+                            <p class="image-caption">Truth table for three-valued logic operations.</p>
+                        </div>
+                    </div>
+                    <p>Fuzzy connectives for such logic (generalized to [0,1]):</p>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/s8L6Tj9.png" alt="Fuzzy Connectives Table"
+                                class="diagram-image" style="max-width:500px;">
+                            <p class="image-caption">Fuzzy Connectives definitions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="linguistic-variable-section">
+            <h2><i class="fas fa-language"></i>10. The Linguistic Variable</h2>
+            <p>Linguistic variables are variables whose values are words or sentences in a natural language, rather than
+                numbers.</p>
+            <button type="button" class="collapsible">Definition and Examples <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>In mathematics, variables usually take numerical values. In fuzzy logic, non-numeric linguistic
+                        variables are often used to define linguistic concepts.</p>
+                    <p>Examples:</p>
+                    <ul>
+                        <li>TEMP can be defined as a linguistic variable with values like {Cold, Warm, Hot}.</li>
+                        <li>AGE can have values {Young, Middle-aged, Old}.</li>
+                        <li>STATUS can have values {Rich, Middleclass, Poor Hot}.</li>
+                    </ul>
+                    <p>The values of linguistic variables are called linguistic concepts/terms, and these terms are
+                        fuzzy sets.
+                        <br>Following membership functions for Cold, Warm, and Hot defined using trapezoidal functions
+                        (alternatively Z-shape, Gaussian, S-shaped):
+                    </p>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/3t9S0iU.png" alt="Linguistic Variable TEMP MFs"
+                                class="diagram-image" style="max-width:400px;">
+                            <p class="image-caption">Graphs for Linguistic Variable TEMP (Cold, Warm, Hot).</p>
+                        </div>
+                        <div><img src="https://i.imgur.com/T4vU9oZ.png" alt="Linguistic Variable AGE MFs"
+                                class="diagram-image" style="max-width:400px;">
+                            <p class="image-caption">Graphs for Fuzzy Sets Young, Fairly Young, Very Young.</p>
+                        </div>
+                    </div>
+                    <h4>Formal Definition of Linguistic Variable</h4>
+                    <p>Formally, a linguistic variable is characterized by a quintuple (X, T(X), U, G, M) where:</p>
+                    <ul>
+                        <li>X: Name of the variable (e.g., AGE, TEMP).</li>
+                        <li>T(X): Set of linguistic terms of X (e.g., {Cold, Warm, Hot} for TEMP).</li>
+                        <li>U: Universe of discourse.</li>
+                        <li>G: Syntactic rules, which generate terms of T(X).</li>
+                        <li>M: Semantic rules associated with each linguistic term of X with its meaning (defines the
+                            fuzzy set).</li>
+                    </ul>
+                </div>
+            </div>
+            <button type="button" class="collapsible">Linguistic Hedges and Modifiers <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>Linguistic Hedges</h4>
+                    <p>By modifying linguistic terms using hedges like <span class="highlight">very, quite, extremely,
+                            almost, more or less</span>, etc., we can enhance the utility of linguistic variables.
+                        Hedges modify their operands and are valuable in specific situations.</p>
+                    <p>Example: "very Cold", "fairly Warm", "not very Hot and not Cold".</p>
+                    <p>Syntactic rules (G) can generate various valid fuzzy linguistic terms.
+                        <br>Semantic rules (M) give meaning to these terms, e.g., M for "Hot" defines its membership
+                        function.
+                    </p>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/eF5dY5J.png" alt="Production Rules for Hedges"
+                                class="diagram-image" style="max-width:500px;">
+                            <p class="image-caption">Example Production Rules for Generating Linguistic Terms.</p>
+                        </div>
+                    </div>
+
+                    <h4>Fuzzy Modifiers</h4>
+                    <p>Also called Fuzzy hedges, these modify the value of fuzzy sets. Dilation and concentration are
+                        predefined modifiers.</p>
+                    <ul>
+                        <li>Fairly Hot: μ<sub>fairly_Hot</sub>(x) = (μ<sub>Hot</sub>(x))<sup>0.5</sup> (Dilation)</li>
+                        <li>Very Hot: μ<sub>very_Hot</sub>(x) = (μ<sub>Hot</sub>(x))<sup>2</sup> (Concentration)</li>
+                        <li>Not Very Hot: μ<sub>not_very_Hot</sub>(x) = 1 - (μ<sub>Hot</sub>(x))<sup>2</sup></li>
+                    </ul>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/D5sO3zU.png" alt="Graph for Hot and Modified Terms"
+                                class="diagram-image" style="max-width:400px;">
+                            <p class="image-caption">Graph for Linguistic Term Hot with modifiers.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="fuzzy-quantifiers-section">
+            <h2><i class="fas fa-sort-numeric-down"></i>11. Fuzzy Quantifiers</h2>
+            <button type="button" class="collapsible">Definition and Types <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Fuzzy quantifiers are fuzzy numbers that take part in fuzzy propositions. They are of two types:
+                    </p>
+                    <ol>
+                        <li><strong>Type 1:</strong> Defined on real numbers and quantified by linguistic terms such as
+                            <span class="highlight">"much more than 5", "at least about 10", "little as 1"</span>, etc.
+                        </li>
+                        <li><strong>Type 2:</strong> Defined on [0, 1] and characterize linguistic terms such as <span
+                                class="highlight">"almost all", "about half", "many"</span>, and so on.</li>
+                    </ol>
+                    <h4>Examples:</h4>
+                    <ul>
+                        <li>There are <span class="highlight">about 10</span> students in the class who are Bright.</li>
+                        <li>There are <span class="highlight">about half</span> people in the state whose income is Low.
+                        </li>
+                        <li><span class="highlight">Almost all</span> people in Europe are having good health.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="fuzzy-inference-section">
+            <h2><i class="fas fa-brain"></i>12. Fuzzy Inference (Reasoning)</h2>
+            <p>Fuzzy inference is the process of deriving conclusions from fuzzy inputs and fuzzy rules.</p>
+            <button type="button" class="collapsible">Classical vs. Fuzzy Inference Rules <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>Inference Rules in Classical Logic (Review)</h4>
+                    <ul>
+                        <li><strong>Modus Ponens:</strong> Rule: P → Q. Fact: P. Conclusion: Q.</li>
+                        <li><strong>Modus Tollens:</strong> Rule: P → Q. Fact: ¬Q. Conclusion: ¬P.</li>
+                        <li><strong>Chain Rule (Hypothetical Syllogism):</strong> Rule1: P → Q. Rule2: Q → R.
+                            Conclusion: P → R.</li>
+                    </ul>
+                    <h4>Generalized Inference Rules in Fuzzy Logic</h4>
+                    <ul>
+                        <li><strong>Generalized Modus Ponens (GMP):</strong>
+                            <br>Rule: If X is P Then Y is Q
+                            <br>Fact (Premise): X is P'
+                            <br>Inference (Conclusion): Y is Q'
+                            <br>(P, Q, P', Q' are fuzzy sets. Q' is derived from P, Q, P' and the implication relation.)
+                            <div class="flex-diagrams">
+                                <div><img src="https://i.imgur.com/lX8g2lM.png" alt="GMP Example" class="diagram-image"
+                                        style="max-width:500px;">
+                                    <p class="image-caption">Example: Generalized Modus Ponens.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li><strong>Generalized Modus Tollens (GMT):</strong>
+                            <br>Rule: If X is P Then Y is Q
+                            <br>Fact (Premise): Y is Q'
+                            <br>Inference (Conclusion): X is P'
+                            <div class="flex-diagrams">
+                                <div><img src="https://i.imgur.com/cK1wS7V.png" alt="GMT Example" class="diagram-image"
+                                        style="max-width:500px;">
+                                    <p class="image-caption">Example: Generalized Modus Tollens.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li><strong>Chain Rule in Fuzzy Logic:</strong>
+                            <br>Rule1: If X is P Then Y is Q
+                            <br>Rule2: If Y is Q Then Z is R
+                            <br>Inference: If X is P Then Z is R
+                        </li>
+                    </ul>
+                    <p>Examples:</p>
+                    <ol>
+                        <li>Rule: If a papaya is yellow then the papaya is ripe. Fact: This papaya is very yellow.
+                            Inference: This papaya is very ripe.</li>
+                        <li>Rule: If people are old then they are weak. Fact: Shyam is more or less old. Inference:
+                            Shyam is more or less weak.</li>
+                    </ol>
+                </div>
+            </div>
+            <button type="button" class="collapsible">Fuzzy Implications (If-Then Rules) <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>A fuzzy implication (also known as fuzzy If-Then rule, fuzzy rule, or fuzzy conditional
+                        statement) assumes the form:</p>
+                    <p class="highlight" style="text-align:center;">If x is A then y is B</p>
+                    <p>Where A and B are fuzzy sets defined on the universes of discourses X and Y, respectively.
+                        <br>Often, "x is A" is called the <span class="highlight">antecedent</span> or premise, while "y
+                        is B" is called the <span class="highlight">consequent</span> or conclusion.
+                    </p>
+                    <p>Example: Suppose P and T are universes for pressure and temperature.
+                        <br>Linguistic variables: High temperature (T<sub>HIGH</sub>), Low pressure (P<sub>LOW</sub>).
+                        <br>T<sub>HIGH</sub> = {(20,0.2), (25,0.4), (30,0.6), (35,0.6), (40,0.7), (45,0.8), (50,0.8)}
+                        <br>P<sub>LOW</sub> = {(1,0.8), (2,0.8), (3,0.6), (4,0.4)}
+                        <br>Fuzzy implication: If temperature is High then pressure is Low. (R: T<sub>HIGH</sub> →
+                        P<sub>LOW</sub>)
+                    </p>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/tV3pXpG.png" alt="Fuzzy Implication Matrix Example"
+                                class="diagram-image" style="max-width:400px;">
+                            <p class="image-caption">Matrix R for "If temperature is High then pressure is Low".</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="collapsible">Interpretation of Fuzzy Rules <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>There are generally two ways to interpret the fuzzy rule "If x is A then y is B":</p>
+                    <ol>
+                        <li><strong>A coupled with B:</strong> This involves T-norm operators. The fuzzy relation R: A →
+                            B is defined based on μ<sub>A</sub>(x) and μ<sub>B</sub>(y).
+                            <p>Common T-norm operators:</p>
+                            <ul>
+                                <li><strong>Minimum (Mamdani rule):</strong> T<sub>min</sub>(a, b) = min(a, b) = a ∧ b
+                                    <br>μ<sub>R</sub>(x,y) = min(μ<sub>A</sub>(x), μ<sub>B</sub>(y))
+                                </li>
+                                <li><strong>Algebraic product (Larsen rule):</strong> T<sub>ap</sub>(a, b) = a ⋅ b
+                                    <br>μ<sub>R</sub>(x,y) = μ<sub>A</sub>(x) ⋅ μ<sub>B</sub>(y)
+                                </li>
+                                <li><strong>Bounded product:</strong> T<sub>bp</sub>(a, b) = max(0, a + b - 1)</li>
+                                <li><strong>Drastic product:</strong> T<sub>dp</sub>(a, b) = a if b=1, b if a=1, 0 if
+                                    a,b < 1</li>
+                            </ul>
+                            <div class="flex-diagrams">
+                                <div><img src="https://i.imgur.com/aWp8QnO.png" alt="T-norm interpretation"
+                                        class="diagram-image" style="max-width:500px;">
+                                    <p class="image-caption">Interpretation as "A coupled with B" using T-norms.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li><strong>A entails B:</strong> This involves implication functions.
+                            <ul>
+                                <li><strong>Material implication:</strong> R: A → B = A<sup>c</sup> ∪ B</li>
+                                <li><strong>Propositional calculus:</strong> R: A → B = A<sup>c</sup> ∪ (A ∩ B)</li>
+                                <li><strong>Extended propositional calculus:</strong> R: A → B = (A<sup>c</sup> ∩
+                                    B<sup>c</sup>) ∪ B (This seems incorrect, typically it's (A<sup>c</sup> ∩
+                                    B<sup>c</sup>) ∪ (A ∩ B) or simply A<sup>c</sup> ∪ B)
+                                    <br>More common form is Zadeh's Max-Min Rule for "If X is A THEN Y is B":
+                                    R<sub>mm</sub> = (A × B) ∪ (A<sup>c</sup> × Y)
+                                    <br>μ<sub>Rmm</sub>(x,y) = max(min(μ<sub>A</sub>(x), μ<sub>B</sub>(y)), 1 -
+                                    μ<sub>A</sub>(x))
+                                </li>
+                                <li><strong>Zadeh's arithmetic rule:</strong> R<sub>za</sub> = A<sup>c</sup> ∪ B,
+                                    interpreted as 1 ∧ (1 - μ<sub>A</sub>(x) + μ<sub>B</sub>(y))</li>
+                                <li><strong>Boolean fuzzy rule:</strong> R<sub>bf</sub> = A<sup>c</sup> ∪ B, interpreted
+                                    as (1 - μ<sub>A</sub>(x)) ∨ μ<sub>B</sub>(x)</li>
+                                <li><strong>Goguen's fuzzy rule:</strong> R<sub>gf</sub>, where μ<sub>R</sub>(x,y) = 1
+                                    if μ<sub>A</sub>(x) ≤ μ<sub>B</sub>(y), else μ<sub>B</sub>(y) / μ<sub>A</sub>(x).
+                                </li>
+                            </ul>
+                            <div class="flex-diagrams">
+                                <div><img src="https://i.imgur.com/fF2k3wU.png" alt="A entails B interpretation"
+                                        class="diagram-image" style="max-width:500px;">
+                                    <p class="image-caption">Interpretation as "A entails B" using various implication
+                                        functions.</p>
+                                </div>
+                            </div>
+                            <p>Example for Zadeh's Max-Min Rule: "If x is A THEN y is B" and "If x is A THEN y is B ELSE
+                                y is C"</p>
+                            <div class="flex-diagrams">
+                                <div><img src="https://i.imgur.com/kY5eP7J.png" alt="Zadeh's Max-Min Rule Example 1"
+                                        class="diagram-image" style="max-width:400px;"></div>
+                                <div><img src="https://i.imgur.com/n7Q7Y3C.png" alt="Zadeh's Max-Min Rule Example 2"
+                                        class="diagram-image" style="max-width:400px;"></div>
+                                <p class="image-caption">Zadeh's Max-Min Rule and its application to IF-THEN and
+                                    IF-THEN-ELSE statements.</p>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="fuzz-defuzz-section">
+            <h2><i class="fas fa-exchange-alt"></i>13. Fuzzification and Defuzzification</h2>
+            <button type="button" class="collapsible">Fuzzification Process <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Fuzzification is the process of converting crisp (numerical) input values into fuzzy sets. This
+                        involves assigning degrees of membership to these crisp inputs based on predefined membership
+                        functions for linguistic terms.</p>
+                    <ul>
+                        <li>It's a method of making crisp values fuzzy, especially when variables are not deterministic
+                            and carry uncertainty, imprecision, vagueness, or ambiguity.</li>
+                        <li>If data are vague or contain noise, they should be converted into a fuzzy number/set.</li>
+                        <li>A fuzzy rule is of the form "If A then B", where A and B are fuzzy propositions. The premise
+                            (antecedent) A and consequent B can have multiple parts.</li>
+                        <li>The fuzzification module converts the antecedent of a fuzzy rule into a degree of membership
+                            between 0 and 1.</li>
+                    </ul>
+                    <h4>Examples:</h4>
+                    <ul>
+                        <li>Multiple parts in antecedent: "If sky is <span class="highlight">dark</span> AND wind is
+                            <span class="highlight">heavy</span> then weather is <span class="highlight">chilly</span>."
+                        </li>
+                        <li>"If driving is <span class="highlight">haphazard</span> then accidents are <span
+                                class="highlight">more</span> AND commuters are <span class="highlight">not
+                                happy</span>."</li>
+                    </ul>
+                    <p><strong>Example: Fuzzification of Systolic Blood Pressure (BP)</strong></p>
+                    <p>Consider BP = 135 mmHg. Let's use MFs for Low, Normal, and High BP.</p>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/Q5d3tK7.png" alt="BP Fuzzification MFs" class="diagram-image"
+                                style="max-width:500px;">
+                            <p class="image-caption">Graphs for BP Fuzzy Sets (Low, Normal, High).</p>
+                        </div>
+                    </div>
+                    <p>From the graph and table: For BP = 135 mmHg:</p>
+                    <ul>
+                        <li>μ<sub>Low</sub>(135) = 0</li>
+                        <li>μ<sub>Normal</sub>(135) = 0.35 (approx)</li>
+                        <li>μ<sub>High</sub>(135) = 0.68 (approx)</li>
+                    </ul>
+                    <p>Thus, the crisp value BP=135 has been fuzzified into degrees of membership to the fuzzy sets Low,
+                        Normal, and High.</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Defuzzification Methods <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Defuzzification is the process of converting a fuzzy output (an aggregated fuzzy set resulting
+                        from the inference process) into a single crisp numerical value. This crisp value can then be
+                        used for control actions or decisions.</p>
+                    <p>Known defuzzification methods include:</p>
+                    <ul>
+                        <li><strong>Center of Sums (COS) Method:</strong>
+                            <p>The overlapping area in the aggregated output fuzzy set is counted twice.
+                                <br><span class="formula">X* = (Σ (x̄<sub>i</sub> ⋅ Area<sub>i</sub>)) / (Σ
+                                    Area<sub>i</sub>)</span> where x̄<sub>i</sub> is the center of area for the i-th
+                                contributing fuzzy set.
+                            </p>
+                            <div class="flex-diagrams">
+                                <div><img src="https://i.imgur.com/y0fJ9V8.png" alt="COS Method Example"
+                                        class="diagram-image" style="max-width:400px;">
+                                    <p class="image-caption">Center of Sums (COS) Method Example.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li><strong>Center of Gravity (COG) / Centroid of Area (COA) Method:</strong>
+                            <p>Calculates the center of the area under the aggregated output fuzzy set.
+                                <br>For discrete MFs: <span class="formula">X* = (Σ (x<sub>i</sub> ⋅
+                                    μ<sub>A</sub>(x<sub>i</sub>))) / (Σ μ<sub>A</sub>(x<sub>i</sub>))</span>
+                                <br>For continuous MFs: <span class="formula">X* = (∫ x ⋅ μ<sub>A</sub>(x) dx) / (∫
+                                    μ<sub>A</sub>(x) dx)</span>
+                            </p>
+                            <div class="flex-diagrams">
+                                <div><img src="https://i.imgur.com/qR2mN5F.png" alt="COG/COA Method Example"
+                                        class="diagram-image" style="max-width:400px;">
+                                    <p class="image-caption">Center of Gravity (COG) / Centroid of Area (COA) Method
+                                        Example.</p>
+                                </div>
+                            </div>
+                            <div class="flex-diagrams">
+                                <div><img src="https://i.imgur.com/d9QkP7J.png" alt="COG Example Calculation"
+                                        class="diagram-image" style="max-width:500px;">
+                                    <p class="image-caption">COG example calculation table.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li><strong>Center of Area / Bisector of Area (BOA) Method:</strong>
+                            <p>Calculates the position under the curve where the areas on both sides are equal.
+                                <br><span class="formula">∫<sub>α</sub><sup>X*</sup> μ<sub>A</sub>(x) dx =
+                                    ∫<sub>X*</sub><sup>β</sup> μ<sub>A</sub>(x) dx</span> (where α and β are the limits
+                                of the support).
+                            </p>
+                        </li>
+                        <li><strong>Weighted Average Method:</strong>
+                            <p>Used for fuzzy sets with symmetrical output MFs; less computationally intensive.
+                                <br><span class="formula">X* = (Σ (μ(x) ⋅ x)) / (Σ μ(x))</span> (Here, x is often the
+                                peak/center of individual output MFs, and μ(x) is their firing strength/height after
+                                aggregation and clipping/scaling).
+                            </p>
+                            <div class="flex-diagrams">
+                                <div><img src="https://i.imgur.com/9K3l5U4.png" alt="Weighted Average Method Example"
+                                        class="diagram-image" style="max-width:400px;">
+                                    <p class="image-caption">Weighted Average Method Example.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li><strong>Maxima Methods:</strong> Considers values with maximum membership.
+                            <ul>
+                                <li><strong>First of Maxima (FOM):</strong> Smallest value of the domain with maximum
+                                    membership.</li>
+                                <li><strong>Last of Maxima (LOM):</strong> Largest value of the domain with maximum
+                                    membership.</li>
+                                <li><strong>Mean of Maxima (MOM):</strong> Average of values with maximum membership.
+                                    <span class="formula">X* = (Σ x<sub>i∈M</sub> x<sub>i</sub>) / |M|</span> (where M
+                                    is the set of x<sub>i</sub> with max membership)
+                                </li>
+                            </ul>
+                            <div class="flex-diagrams">
+                                <div><img src="https://i.imgur.com/d9QkP7J.png" alt="Maxima Methods Example"
+                                        class="diagram-image" style="max-width:400px;">
+                                    <p class="image-caption">Example for Maxima Methods (FOM, LOM, MOM).</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <button type="button" class="collapsible">Lambda-cut (α-cut) Method <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Lambda-cut (or Alpha-cut) method is applicable to derive a crisp value of a fuzzy set or
+                        relation. It converts a fuzzy set/relation into a crisp set/relation for a given value of λ (or
+                        α) where 0 ≤ λ ≤ 1.</p>
+                    <p>The λ-cut of a fuzzy set A is A<sub>λ</sub> = {x | μ<sub>A</sub>(x) ≥ λ}.</p>
+                    <h4>Examples:</h4>
+                    <p>A<sub>1</sub> = {(x<sub>1</sub>,0.9), (x<sub>2</sub>,0.5), (x<sub>3</sub>,0.2),
+                        (x<sub>4</sub>,0.3)}</p>
+                    <ul>
+                        <li>λ = 0.6: A<sub>0.6</sub> = {(x<sub>1</sub>,1), (x<sub>2</sub>,0), (x<sub>3</sub>,0),
+                            (x<sub>4</sub>,0)} which is crisp set {x<sub>1</sub>}</li>
+                        <li>λ = 0.2: A<sub>0.2</sub> = {(x<sub>1</sub>,1), (x<sub>2</sub>,1), (x<sub>3</sub>,1),
+                            (x<sub>4</sub>,1)} which is crisp set
+                            {x<sub>1</sub>,x<sub>2</sub>,x<sub>3</sub>,x<sub>4</sub>}</li>
+                    </ul>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/tF8sC4V.png" alt="Lambda-cut examples" class="diagram-image"
+                                style="max-width:500px;">
+                            <p class="image-caption">Lambda-cut examples for sets and relations.</p>
+                        </div>
+                    </div>
+                    <h4>Properties of Lambda-cuts:</h4>
+                    <ul>
+                        <li>(A ∪ B)<sub>λ</sub> = A<sub>λ</sub> ∪ B<sub>λ</sub></li>
+                        <li>(A ∩ B)<sub>λ</sub> = A<sub>λ</sub> ∩ B<sub>λ</sub></li>
+                        <li>(Ā)<sub>λ</sub> ≠ Ā<sub>λ</sub> (complement first then cut, vs cut first then complement
+                            of crisp set) - This needs careful interpretation. Typically, (A<sup>c</sup>)<sub>λ</sub> =
+                            {x | 1-μ<sub>A</sub>(x) ≥ λ}.</li>
+                    </ul>
+                    <h4>Output of a Fuzzy System (Illustration)</h4>
+                    <p>The output of a fuzzy system can be a single fuzzy set or a union of two or more fuzzy sets.
+                        <br>Example: Rules R<sub>1</sub>: if x is A<sub>1</sub> then y is C<sub>1</sub>; R<sub>2</sub>:
+                        if x is A<sub>2</sub> then y is C<sub>2</sub>.
+                        <br>Output fuzzy set C = C<sub>1</sub> ∪ C<sub>2</sub>.
+                    </p>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/kL2U1P7.png" alt="Output Fuzzy Set Illustration"
+                                class="diagram-image" style="max-width:600px;">
+                            <p class="image-caption">Illustration of output fuzzy set for different inputs.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="fis-section">
+            <h2><i class="fas fa-cogs"></i>14. Fuzzy Inference Systems (FIS)</h2>
+            <button type="button" class="collapsible">Overview and Block Diagram <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Fuzzy Inference Systems (FIS), also known as fuzzy rule-based systems, fuzzy models, or fuzzy
+                        expert systems, are computational frameworks based on fuzzy set theory, fuzzy if-then rules, and
+                        fuzzy reasoning.</p>
+                    <ul>
+                        <li>The key unit of a fuzzy logic system is the FIS.</li>
+                        <li>The primary work of this system is decision-making.</li>
+                        <li>FIS uses "IF...THEN..." rules along with connectors "OR" or "AND" for making necessary
+                            decision rules.</li>
+                        <li>The input to FIS may be fuzzy or crisp, but the output from FIS is always a fuzzy set.</li>
+                        <li>When FIS is used as a controller, it is necessary to have a defuzzification unit for
+                            converting fuzzy variables into crisp variables.</li>
+                    </ul>
+                    <h4>Block Diagram of FIS:</h4>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/6rX3g8W.png" alt="Block Diagram of FIS" class="diagram-image"
+                                style="max-width:500px;">
+                            <p class="image-caption">Block Diagram of a Fuzzy Inference System.</p>
+                        </div>
+                    </div>
+                    <p>Components:</p>
+                    <ol>
+                        <li><strong>Fuzzification Interface Unit:</strong> Converts crisp inputs into fuzzy sets.</li>
+                        <li><strong>Knowledge Base:</strong>
+                            <ul>
+                                <li><strong>Data Base:</strong> Defines the membership functions of the fuzzy sets used
+                                    in the fuzzy rules.</li>
+                                <li><strong>Rule Base:</strong> Contains a set of fuzzy IF-THEN rules.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Decision Making Unit (Inference Engine):</strong> Performs inference operations on
+                            the fuzzy rules to derive fuzzy outputs.</li>
+                        <li><strong>Defuzzification Interface Unit:</strong> Converts the fuzzy outputs from the
+                            inference engine into crisp values.</li>
+                    </ol>
+                </div>
+            </div>
+            <button type="button" class="collapsible">Types of FIS <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>There are two main types of Fuzzy Inference Systems:</p>
+                    <ol>
+                        <li><strong>Mamdani FIS (1975):</strong>
+                            <ul>
+                                <li>Uses linguistic fuzzy modeling. The antecedent and consequent of rules are fuzzy
+                                    sets.</li>
+                                <li>Characterized by its <span class="highlight">high interpretability</span> (rules are
+                                    easy to understand).</li>
+                                <li>Often has <span class="highlight">lower accuracy</span> compared to Sugeno.</li>
+                                <li>Requires defuzzification of the output fuzzy set.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Sugeno FIS (Takagi-Sugeno-Kang or TSK model) (1985):</strong>
+                            <ul>
+                                <li>The antecedent of rules is fuzzy, but the consequent is a <span
+                                        class="highlight">crisp function</span> (usually linear) of the input variables.
+                                    <br>Rule form: IF x is A AND y is B THEN z = f(x, y) = ax + by + c.
+                                </li>
+                                <li>Follows precise fuzzy modeling (numerical).</li>
+                                <li>Obtains <span class="highlight">high accuracy</span> but at the cost of <span
+                                        class="highlight">low interpretability</span>.</li>
+                                <li>The output is already a crisp value (weighted average of individual rule outputs),
+                                    so defuzzification is simpler or integrated.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <button type="button" class="collapsible">Mamdani Approach Example: Mobile Robot <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Consider controlling a mobile robot to avoid obstacles.</p>
+                    <ul>
+                        <li>Inputs: Distance (D) to an object, Angle of motion (θ) of an object with respect to the
+                            robot.</li>
+                        <li>Output: Deviation (δ) for the robot's steering.</li>
+                    </ul>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/jZ6qF0Z.png" alt="Mobile Robot Scenario"
+                                class="diagram-image" style="max-width:400px;">
+                            <p class="image-caption">Figure 2: Mobile Robot Scenario.</p>
+                        </div>
+                    </div>
+                    <h4>Linguistic States & MFs:</h4>
+                    <p>Distance (D): {VN (Very Near), NR (Near), VF (Very Far), FR (Far)}</p>
+                    <p>Angle (θ, δ): {LT (Left), AL (Ahead Left), AA (Ahead), AR (Ahead Right), RT (Right)}</p>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/yG4wV5B.png" alt="MFs for Robot Control"
+                                class="diagram-image" style="max-width:600px;">
+                            <p class="image-caption">Membership Functions for Distance, Angle, and Deviation.</p>
+                        </div>
+                    </div>
+                    <h4>Fuzzy Rule Base (example):</h4>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/Wn7t3uS.png" alt="Robot Rule Base Table"
+                                class="diagram-image" style="max-width:300px;">
+                            <p class="image-caption">Fuzzy Rule Base Table (partial).</p>
+                        </div>
+                    </div>
+                    <p>Example Rule 1: IF (distance is VN) AND (angle is LT) THEN (deviation is AA).</p>
+                    <h4>Fuzzification of Inputs:</h4>
+                    <p>Let D=1.04m and θ=30°.</p>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/jA0L4zS.png" alt="Fuzzification for Robot"
+                                class="diagram-image" style="max-width:500px;">
+                            <p class="image-caption">Fuzzification of D=1.04m and θ=30°.</p>
+                        </div>
+                    </div>
+                    <p>μ<sub>NR</sub>(1.04) = 0.6571, μ<sub>FR</sub>(1.04) = 0.3429
+                        <br>μ<sub>AA</sub>(30°) = 0.3333, μ<sub>AR</sub>(30°) = 0.6667
+                    </p>
+                    <h4>Rule Strength Computation (Aggregation - AND typically min):</h4>
+                    <p>Consider 4 fireable rules:</p>
+                    <ul>
+                        <li>R1: IF (D is NR) AND (Angle is AA) THEN (Dev is RT). α(R1)=min(0.6571,0.3333)=0.3333</li>
+                        <li>R2: IF (D is NR) AND (Angle is AR) THEN (Dev is AA). α(R2)=min(0.6571,0.6667)=0.6571</li>
+                        <li>...and so on.</li>
+                    </ul>
+                    <h4>Fuzzy Output (Implication & Aggregation):</h4>
+                    <p>For each fired rule, the consequent fuzzy set is "clipped" or "scaled" by its rule strength (α).
+                        Then, these modified fuzzy sets are aggregated (typically using max operator for OR-like
+                        combination of rules) to form the final output fuzzy set.</p>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/7XnC1vX.png" alt="Fuzzy Output Computation"
+                                class="diagram-image" style="max-width:500px;">
+                            <p class="image-caption">Graphical representation of fuzzy output computation (implication
+                                and aggregation).</p>
+                        </div>
+                        <div><img src="https://i.imgur.com/XG3n2cQ.png" alt="Robot Aggregation Result"
+                                class="diagram-image" style="max-width:400px;">
+                            <p class="image-caption">Aggregation of all results for the mobile robot example.</p>
+                        </div>
+                    </div>
+                    <p>This aggregated fuzzy set is then defuzzified to get a crisp steering command.</p>
+                </div>
+            </div>
+            <button type="button" class="collapsible">Takagi-Sugeno Approach <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>In this approach, a rule is composed of fuzzy antecedent and functional consequent parts.</p>
+                    <p>Rule i: IF x<sub>1</sub> is A<sub>1</sub><sup>i</sup> AND x<sub>2</sub> is
+                        A<sub>2</sub><sup>i</sup> ... AND x<sub>n</sub> is A<sub>n</sub><sup>i</sup> THEN y<sup>i</sup>
+                        = a<sub>0</sub><sup>i</sup> + a<sub>1</sub><sup>i</sup>x<sub>1</sub> + ... +
+                        a<sub>n</sub><sup>i</sup>x<sub>n</sub></p>
+                    <p>Where a<sub>j</sub><sup>i</sup> are coefficients.</p>
+                    <p>The weight of the i-th rule (firing strength) is determined:
+                        <br><span class="formula">w<sup>i</sup> = μ<sub>A1<sup>i</sup></sub>(x<sub>1</sub>) ×
+                            μ<sub>A2<sup>i</sup></sub>(x<sub>2</sub>) × ... ×
+                            μ<sub>An<sup>i</sup></sub>(x<sub>n</sub>)</span> (using product T-norm for AND)
+                    </p>
+                    <p>The combined (crisp) output is obtained as a weighted average:</p>
+                    <span class="formula">y = (Σ (w<sup>i</sup> ⋅ y<sup>i</sup>)) / (Σ w<sup>i</sup>)</span>
+                    <h4>Illustration:</h4>
+                    <p>Inputs I<sub>1</sub>, I<sub>2</sub>. Linguistic states: L, M, H for I<sub>1</sub>; NR, FR, VF for
+                        I<sub>2</sub>.</p>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/7gN3t5D.png" alt="Sugeno Input MFs" class="diagram-image"
+                                style="max-width:500px;">
+                            <p class="image-caption">Input MFs for Sugeno example.</p>
+                        </div>
+                    </div>
+                    <p>Suppose rules have consequents: y<sup>i</sup> = a<sub>j</sub><sup>i</sup>I<sub>1</sub> +
+                        b<sub>k</sub><sup>i</sup>I<sub>2</sub>.
+                        <br>For inputs I<sub>1</sub>=6.0 and I<sub>2</sub>=2.2, calculate membership values, firing
+                        strengths (w<sup>i</sup>) for rules, individual rule outputs (y<sup>i</sup>), and then the final
+                        weighted average output y.
+                    </p>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/hV4t8xL.png" alt="Sugeno Example Calculation"
+                                class="diagram-image" style="max-width:500px;">
+                            <p class="image-caption">Calculation steps for Sugeno FIS example.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="fuzzy-applications-section">
+            <h2><i class="fas fa-industry"></i>15. Applications of Fuzzy Logic</h2>
+            <button type="button" class="collapsible">Fuzzy Logic Control Systems (FLC) <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>Introduction</h4>
+                    <p>Fuzzy Logic Control (FLC) is a prominent application of fuzzy set theory. It's used in systems
+                        that are complex, ill-defined, non-linear, or involve human expertise that is hard to formalize
+                        with traditional control methods.</p>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/uD4x5uK.png" alt="Closed-loop Control System"
+                                class="diagram-image" style="max-width:500px;">
+                            <p class="image-caption">Fig 1: Block Diagram of Closed-loop Control System Design.</p>
+                        </div>
+                    </div>
+                    <h4>Control System Design Steps (General)</h4>
+                    <ol>
+                        <li>Decomposing the large-scale system.</li>
+                        <li>Varying plant dynamics slowly and linearizing.</li>
+                        <li>Organizing state variables, control variables, or output features.</li>
+                        <li>Designing controllers (P, PD, PID, optimal).</li>
+                    </ol>
+                    <p>In designing a fuzzy logic controller, fuzzy rules play a vital role. The four structures of the
+                        fuzzy production rule system (Weiss and Donnel, 1979) are:</p>
+                    <ol>
+                        <li>A set of rules representing policies and heuristic strategies.</li>
+                        <li>A set of input data assessed prior to the actual decision.</li>
+                        <li>A method for evaluating any proposed action.</li>
+                        <li>A method for generating promising actions and determining when to stop searching.</li>
+                    </ol>
+                    <h4>Architecture and Operations of FLC System</h4>
+                    <p>The basic architecture is similar to a general FIS, often including normalization/scaling factors
+                        for inputs and outputs.</p>
+                    <div class="flex-diagrams">
+                        <div><img src="https://i.imgur.com/7qO1t9X.png" alt="FLC Architecture" class="diagram-image"
+                                style="max-width:600px;">
+                            <p class="image-caption">Fig 2: Basic architecture of a FLC System.</p>
+                        </div>
+                    </div>
+                    <h4>Steps in Designing an FLC:</h4>
+                    <ol>
+                        <li>Locate input, output, and state variables.</li>
+                        <li>Split the complete universe of discourse into fuzzy subsets.</li>
+                        <li>Obtain membership functions for each fuzzy subset.</li>
+                        <li>Assign fuzzy relationships (rule base).</li>
+                        <li>Choose appropriate scaling factors.</li>
+                        <li>Carry out fuzzification.</li>
+                        <li>Identify output contributed from each rule using fuzzy approximate reasoning.</li>
+                        <li>Combine fuzzy outputs obtained from each rule (aggregation).</li>
+                        <li>Finally, apply defuzzification to form a crisp output.</li>
+                    </ol>
+                    <h4>Design Elements for a General FLC System:</h4>
+                    <ol>
+                        <li>Fuzzification strategies and interpretation.</li>
+                        <li>Fuzzy knowledge base: Normalization, partitioning, selection of MFs.</li>
+                        <li>Fuzzy rule base: Selection of inputs/outputs, types of rules, completeness.</li>
+                        <li>Decision-making logic: Fuzzy implication, connective interpretation, inference engine.</li>
+                        <li>Defuzzification materials and interpretation.</li>
+                    </ol>
+                </div>
+            </div>
+            <button type="button" class="collapsible">List of FLC Applications <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>FLC systems find a wide range of applications in various industrial and commercial products and
+                        systems. They are particularly effective for non-linear, time-varying, ill-defined, and complex
+                        systems.</p>
+                    <ul>
+                        <li>Traffic Control</li>
+                        <li>Steam Engine Control</li>
+                        <li>Aircraft Flight Control</li>
+                        <li>Missile Control</li>
+                        <li>Adaptive Control</li>
+                        <li>Liquid Level Control</li>
+                        <li>Helicopter Model Control</li>
+                        <li>Automobile Speed Controller / Cruise Control</li>
+                        <li>Braking System Controller (ABS)</li>
+                        <li>Process Control (e.g., cement kiln, chemical processes)</li>
+                        <li>Robotic Control (navigation, manipulation)</li>
+                        <li>Elevator (Automatic Lift) Control</li>
+                        <li>Automatic Running Control (e.g., trains)</li>
+                        <li>Cooling Plant Control</li>
+                        <li>Water Treatment Plant Control</li>
+                        <li>Boiler Control</li>
+                        <li>Nuclear Reactor Control</li>
+                        <li>Power Systems Control (e.g., load balancing, fault detection)</li>
+                        <li>Air Conditioner Control (Temperature Controller)</li>
+                        <li>Control of Biological Processes</li>
+                        <li>Knowledge-Based Systems</li>
+                        <li>Fault Detection Control Units</li>
+                        <li>Consumer Electronics (washing machines, cameras, rice cookers)</li>
+                        <li>Fuzzy Hardware implementation and Fuzzy Computers</li>
+                        <li>Decision Making (e.g., financial forecasting, medical diagnosis)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <div class="topic-navigation">
+            <a href="topic-1.html" class="topic-nav-link prev-topic-link"><i class="fas fa-arrow-left"></i> Prev: Unit
+                I: Intro to Soft Computing</a>
+            <a href="topic-3.html" class="topic-nav-link next-topic-link">Next: Unit III: Artificial Neural Networks <i
+                    class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <footer class="page-footer">
+            &copy; 2024 Eduvision. All rights reserved. Revolutionizing interactive learning.
+        </footer>
+    </div>
+
+    <script>
+        // Collapsible sections
+        var coll = document.getElementsByClassName("collapsible");
+        for (var i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    content.style.padding = "0 18px";
+                } else {
+                    content.style.padding = "0 18px";
+                    setTimeout(() => {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                        let innerDiv = content.querySelector('div');
+                        if (innerDiv && content.classList.contains('active')) innerDiv.style.padding = "15px 0"; // only pad if active
+                        else if (innerDiv) innerDiv.style.padding = "0";
+
+                    }, 50);
+                }
+            });
+        }
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+            } else {
+                body.classList.remove('dark-mode');
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (body.classList.contains('dark-mode')) {
+                applyTheme('light');
+            } else {
+                applyTheme('dark');
+            }
+        });
+
+        // Load saved theme or system preference
+        const savedTheme = localStorage.getItem('theme') ||
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        applyTheme(savedTheme);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit V: Hybrid Systems and Advanced Topics - Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Re-using the same CSS from previous topics for consistency */
+        :root {
+            /* Light Mode Defaults */
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --primary-color: #3b82f6;
+            --secondary-color: #8b5cf6;
+            --accent-color: #10b981;
+            --text-color: #334155;
+            --heading-color: #1e293b;
+            --border-color: #e2e8f0;
+            --gradient-start: var(--primary-color);
+            --gradient-end: var(--secondary-color);
+            --font-main: 'Poppins', sans-serif;
+            --font-logo: 'Nunito', sans-serif;
+
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --card-shadow-color: rgba(0, 0, 0, 0.05);
+            --link-color: var(--primary-color);
+            --link-hover-color: #1d4ed8;
+            --link-hover-bg: #eff6ff;
+            --syllabus-bar-bg: var(--card-bg);
+            --collapsible-content-bg: rgba(0, 0, 0, 0.02);
+            --component-card-bg: #f9fafb;
+            --definition-bg: rgba(59, 130, 246, 0.05);
+            --table-header-bg: var(--primary-color);
+            --table-header-text: white;
+            --table-row-even-bg: rgba(0, 0, 0, 0.015);
+            --theme-toggle-bg: var(--card-bg);
+            --theme-toggle-icon: var(--primary-color);
+            --theme-toggle-hover-bg: var(--primary-color);
+            --theme-toggle-hover-icon: white;
+            --code-bg: #e2e8f0;
+            --code-text: #0f172a;
+            --img-border-color: var(--border-color);
+        }
+
+        body.dark-mode {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #e2e8f0;
+            --heading-color: #f8fafc;
+            --border-color: #334155;
+
+            --shadow-color: rgba(0, 0, 0, 0.25);
+            --card-shadow-color: rgba(0, 0, 0, 0.2);
+            --link-color: #5dade2;
+            --link-hover-color: #8ecae6;
+            --link-hover-bg: rgba(255, 255, 255, 0.1);
+            --syllabus-bar-bg: var(--card-bg);
+            --collapsible-content-bg: rgba(255, 255, 255, 0.03);
+            --component-card-bg: #2a3a50;
+            --definition-bg: rgba(59, 130, 246, 0.1);
+            --table-header-bg: var(--primary-color);
+            --table-header-text: white;
+            --table-row-even-bg: rgba(255, 255, 255, 0.03);
+            --theme-toggle-bg: var(--card-bg);
+            --theme-toggle-icon: var(--primary-color);
+            --theme-toggle-hover-bg: var(--primary-color);
+            --theme-toggle-hover-icon: white;
+            --code-bg: #2a3a50;
+            --code-text: #e2e8f0;
+            --img-border-color: var(--border-color);
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Eduvision Logo */
+        .eduvision-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: var(--font-logo);
+        }
+
+        .eduvision-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvision-logo .text-yellow-300 {
+            color: #fde047 !important;
+        }
+
+        .eduvision-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Theme Toggle Button */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            /* Adjusted size */
+            box-shadow: 0 2px 5px var(--shadow-color);
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+            color: var(--theme-toggle-hover-icon);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+
+        /* Page Header (Moved above Syllabus Bar) */
+        .page-header {
+            text-align: center;
+            margin-top: 70px;
+            /* Space for logo */
+            margin-bottom: 1.5rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--heading-color);
+            background: linear-gradient(90deg, var(--gradient-start), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            opacity: 0.9;
+        }
+
+        /* Syllabus Bar */
+        .syllabus-bar-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 0.75rem;
+            background-color: var(--syllabus-bar-bg);
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 15px var(--card-shadow-color);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .syllabus-bar-back-link {
+            display: flex;
+            align-items: center;
+            font-size: 0.875rem;
+            color: var(--link-color);
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            text-decoration: none;
+            transition: background-color 0.2s, color 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .syllabus-bar-back-link:hover {
+            color: var(--link-hover-color);
+            background-color: var(--link-hover-bg);
+        }
+
+        .syllabus-bar-back-link svg {
+            height: 1.25rem;
+            width: 1.25rem;
+            margin-right: 0.375rem;
+            fill: currentColor;
+        }
+
+        .syllabus-bar-topic-badge {
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.375rem 1rem;
+            border-radius: 9999px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            /* This shadow is fine */
+        }
+
+        @media (min-width: 640px) {
+            .syllabus-bar-container {
+                flex-direction: row;
+            }
+
+            .syllabus-bar-back-link {
+                margin-bottom: 0;
+            }
+
+            .syllabus-bar-topic-badge {
+                font-size: 0.875rem;
+            }
+        }
+
+        /* Section Styling */
+        .content-section {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px var(--card-shadow-color);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s, border-color 0.3s;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px var(--shadow-color);
+        }
+
+        .content-section h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--heading-color);
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .content-section h2 i {
+            margin-right: 0.75rem;
+            color: var(--primary-color);
+        }
+
+        .content-section h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-top: 1.2rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section .definition,
+        .content-section li {
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .content-section ul {
+            padding-left: 20px;
+            list-style: none;
+        }
+
+        .content-section ul li::before {
+            content: "\f105";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--primary-color);
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+        .content-section ul.sub-list li::before {
+            /* For nested lists if needed */
+            content: "\f0da";
+            /* fa-chevron-right, slightly smaller */
+        }
+
+
+        /* Collapsible Sections */
+        .collapsible {
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: white;
+            cursor: pointer;
+            padding: 15px 20px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: filter 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .collapsible:hover {
+            filter: brightness(1.1);
+        }
+
+        .collapsible.active {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .collapsible-content {
+            padding: 0 18px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out, background-color 0.3s;
+            background-color: var(--collapsible-content-bg);
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .collapsible-content>div {
+            padding: 15px 0;
+        }
+
+        .collapsible .icon::before {
+            content: '\f078';
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible.active .icon::before {
+            transform: rotate(-180deg);
+        }
+
+        /* Diagram/Image Styling */
+        .diagram-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 1rem auto;
+            /* Centering block images */
+            display: block;
+            /* For auto margin centering */
+            border: 1px solid var(--img-border-color);
+            box-shadow: 0 4px 8px var(--card-shadow-color);
+        }
+
+        .image-caption {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-top: -0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .flex-diagrams {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: space-around;
+            align-items: flex-start;
+            /* Align items to the top if they have different heights */
+        }
+
+        .flex-diagrams>div {
+            flex: 1;
+            min-width: 250px;
+            /* Minimum width for items in flex container */
+            text-align: center;
+            /* Center content within each flex item */
+        }
+
+        /* Formula / Code-like text */
+        .formula {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+            margin: 0.5rem 0;
+            display: block;
+            white-space: pre-wrap;
+            /* Allows wrapping */
+            word-break: break-all;
+            /* Ensures long unbroken strings break */
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Definition Block */
+        .definition {
+            background-color: var(--definition-bg);
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            font-style: italic;
+            transition: background-color 0.3s, border-left-color 0.3s;
+        }
+
+        .definition strong {
+            font-style: normal;
+            color: var(--primary-color);
+        }
+
+        /* Comparison Tables (Reused from Topic 1) */
+        .comparison-tables-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .comparison-table {
+            flex: 1;
+            min-width: 300px;
+            border-collapse: collapse;
+            width: 100%;
+            box-shadow: 0 4px 10px var(--card-shadow-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+        }
+
+        .comparison-table th {
+            background-color: var(--table-header-bg);
+            color: var(--table-header-text);
+            font-weight: 600;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background-color: var(--table-row-even-bg);
+            transition: background-color 0.3s;
+        }
+
+        .comparison-table ul {
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+
+        .comparison-table ul li::before {
+            content: "";
+            margin-right: 0;
+        }
+
+
+        /* Next/Prev Topic Links */
+        .topic-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            /* Allow wrapping on small screens */
+            gap: 1rem;
+            /* Space between buttons if they wrap */
+        }
+
+        .topic-nav-link {
+            padding: 12px 25px;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            text-align: center;
+            flex-grow: 1;
+            /* Allow buttons to grow */
+            max-width: calc(50% - 0.5rem);
+            /* Max width for two buttons */
+        }
+
+        .prev-topic-link {
+            background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+        }
+
+        .next-topic-link {
+            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+        }
+
+        .topic-nav-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+            filter: brightness(1.1);
+        }
+
+        @media (max-width: 600px) {
+            .topic-nav-link {
+                max-width: 100%;
+                /* Full width on small screens */
+            }
+        }
+
+        /* Footer */
+        .page-footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: #94a3b8;
+            transition: border-top-color 0.3s;
+        }
+
+        body.dark-mode .page-footer {
+            color: #64748b;
+        }
+
+        /* Utility classes */
+        .highlight {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .content-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .comparison-tables-container {
+                flex-direction: column;
+            }
+
+            #theme-toggle {
+                top: 15px;
+                right: 15px;
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+
+            .eduvision-logo {
+                top: 15px;
+                left: 15px;
+            }
+
+            .eduvision-logo .text-2xl {
+                font-size: 1.5rem;
+            }
+
+            .page-header {
+                margin-top: 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../index.html" class="flex items-center group">
+                <span class="text-white">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-white">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>Unit V: Hybrid Systems and Advanced Topics</h1>
+            <p>Exploring combinations of soft computing methods, swarm intelligence, ANFIS, deep learning, and recent
+                trends.</p>
+        </header>
+
+        <div class="syllabus-bar-container">
+            <a href="../soft-computing.html" class="syllabus-bar-back-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                        clip-rule="evenodd" />
+                </svg>
+                Back to Syllabus
+            </a>
+            <div class="syllabus-bar-topic-badge">
+                Unit V: Topic 5
+            </div>
+        </div>
+
+        <section class="content-section" id="intro-hybrid">
+            <h2><i class="fas fa-link"></i>1. Introduction to Hybridization & Hybrid Systems</h2>
+            <button type="button" class="collapsible">What is Hybridization? <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Hybrid systems employ <span class="highlight">more than one technology</span> to solve a problem.
+                        The goal of hybridization is to leverage the strengths of different techniques to overcome the
+                        weaknesses of individual methods, leading to a more robust and effective solution.</p>
+                    <ul>
+                        <li>Hybridization of technologies can have pitfalls and therefore needs to be done with care.
+                        </li>
+                        <li>If one technology can solve a problem effectively, a hybrid technology should only be used
+                            if its application results in a demonstrably <span class="highlight">better solution</span>
+                            (e.g., more accurate, faster, more robust).</li>
+                        <li>The hybridization of fuzzy logic, neural networks, and genetic algorithms has been a
+                            significant trend in soft computing, allowing these techniques to complement each other.
+                            <ul>
+                                <li>Neural networks mimic our ability to adapt and learn from experience.</li>
+                                <li>Fuzzy logic addresses imprecision and vagueness in inputs and outputs.</li>
+                                <li>Genetic algorithms, inspired by biological evolution, systematize random search to
+                                    reach optimum characteristics.</li>
+                            </ul>
+                        </li>
+                        <li>Each of these technologies has provided efficient solutions to a wide range of problems.
+                            However, each also has advantages and disadvantages. Hybridization aims to overcome the
+                            weakness of one with the strength of another.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Types of Hybrid Systems <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Hybrid systems can be classified based on how the different technologies are integrated:</p>
+                    <ul>
+                        <li><strong>Sequential Hybrid System:</strong> The technologies are used in a <span
+                                class="highlight">pipelining fashion</span>. The output of one technology becomes the
+                            input for the next. This is often considered the weakest form of hybrid system.
+                            <br><em>Example:</em> A GA preprocessor to select features or initial parameters for a
+                            neural network.
+                            <img src="https://i.imgur.com/9u7fL8j.png" alt="Sequential Hybrid System"
+                                class="diagram-image" style="max-width: 300px;">
+                            <p class="image-caption">Sequential Hybrid System Flow.</p>
+                            <p><strong>Advantages:</strong> Systematic, adaptable, problem-specific.
+                                <br><strong>Disadvantages:</strong> Dependency, limited parallelism, order sensitivity.
+                            </p>
+                        </li>
+                        <li><strong>Auxiliary Hybrid System:</strong> One technology <span class="highlight">calls the
+                                other technology as a subroutine</span>. The "helper" technology processes information
+                            that will be used further in the overall system by the main technology.
+                            <br><em>Example:</em> Using a GA to optimize the learning rate or network topology (input
+                            parameters) for an ANN.
+                            <img src="https://i.imgur.com/E2jR4oK.png" alt="Auxiliary Hybrid System"
+                                class="diagram-image" style="max-width: 400px;">
+                            <p class="image-caption">Auxiliary Hybrid System Flow.</p>
+                            <p><strong>Advantages:</strong> Helping hand, fixing problems, stronger together.
+                                <br><strong>Disadvantages:</strong> Tricky integration, potential for increased power
+                                needs, dependency on helper performance.
+                            </p>
+                        </li>
+                        <li><strong>Embedded Hybrid System:</strong> The technologies participating appear to be <span
+                                class="highlight">fused totally</span>. The components are intertwined, and often one
+                            technology cannot be used without the involvement of the other hybrid technologies.
+                            <br><em>Example:</em> Neuro-fuzzy systems where fuzzy logic is embedded within the structure
+                            of a neural network.
+                            <img src="https://i.imgur.com/pW4tS8D.png" alt="Embedded Hybrid System"
+                                class="diagram-image" style="max-width: 400px;">
+                            <p class="image-caption">Embedded Hybrid System Flow.</p>
+                            <p><strong>Advantages:</strong> Teamwork (synergy), all-in-one powerful solution, adaptable.
+                                <br><strong>Disadvantages:</strong> Hard to build, might get confused (complex
+                                interactions), more complicated to understand and manage.
+                            </p>
+                        </li>
+                    </ul>
+                    <h4>General Definition of Hybrid Systems:</h4>
+                    <p>A hybrid system can be a dynamical system that exhibits both continuous and discrete dynamic
+                        behavior (e.g., described by differential equations and state machines). More broadly in AI, a
+                        hybrid system is an intelligent system framed by combining at least two intelligent technologies
+                        like Fuzzy Logic, Neural Networks, Genetic Algorithms, Reinforcement Learning, etc.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="specific-hybrid-systems">
+            <h2><i class="fas fa-atom"></i>2. Specific Hybrid Soft Computing Techniques</h2>
+            <button type="button" class="collapsible">Neuro-Fuzzy Hybrid Systems <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>A Neuro-Fuzzy Hybrid System is a clever combination of a neural network (the "brainy" part for
+                        learning and adaptation) and fuzzy logic (the "fuzzy" part to handle uncertainty and think in a
+                        soft, adaptable way). It creates a system that's both smart and flexible in solving problems.
+                    </p>
+                    <p>A neuro-fuzzy system can often be seen as a <span class="highlight">3-layer feedforward neural
+                            network</span>:</p>
+                    <ul>
+                        <li><strong>Layer 1 (Input Layer):</strong> Contains input variables, used for fuzzification.
+                        </li>
+                        <li><strong>Layer 2 (Hidden Layer):</strong> Contains the fuzzy rules. Represents fuzzy sets and
+                            their combinations.</li>
+                        <li><strong>Layer 3 (Output Layer):</strong> Contains output variables, used for
+                            defuzzification.</li>
+                    </ul>
+                    <p>The fuzzy sets are often encoded as connection weights within the neural network layers for
+                        providing functionality in processing and training the model. Learning processes may operate
+                        only on local information and cause changes only in the underlying fuzzy systems.</p>
+                    <img src="https://i.imgur.com/gK4bW2P.png" alt="Neuro-Fuzzy System Diagram" class="diagram-image"
+                        style="max-width: 500px;">
+                    <p class="image-caption">General structure of a Neuro-Fuzzy System.</p>
+                    <h4>Working Flow:</h4>
+                    <ul>
+                        <li>In the input layer, each neuron transmits external crisp signals directly to the next layer.
+                        </li>
+                        <li>Each fuzzification neuron receives a crisp input and determines the degree to which the
+                            input belongs to the input fuzzy set(s).</li>
+                        <li>The fuzzy rule layer receives inputs that represent fuzzy sets.</li>
+                        <li>An output neuron combines all inputs using fuzzy operations (e.g., UNION for rule
+                            aggregation).</li>
+                        <li>Each defuzzification neuron represents the single output of the neuro-fuzzy system.</li>
+                    </ul>
+                    <h4>Advantages:</h4>
+                    <ul>
+                        <li>Can handle numeric, linguistic, logic, etc., kinds of information.</li>
+                        <li>Can manage imprecise, partial, vague, or imperfect information.</li>
+                        <li>Can resolve conflicts by collaboration and aggregation.</li>
+                        <li>Has self-learning, self-organizing, and self-tuning capabilities.</li>
+                        <li>Can mimic the human decision-making process.</li>
+                    </ul>
+                    <h4>Disadvantages:</h4>
+                    <ul>
+                        <li>Hard to develop a model from a fuzzy system (i.e., extract interpretable rules if trained as
+                            a black box).</li>
+                        <li>Problems of finding suitable membership values for fuzzy systems.</li>
+                        <li>Neural networks cannot be used if training data is not available.</li>
+                    </ul>
+                    <h4>Applications:</h4>
+                    <ul>
+                        <li>Student Modelling</li>
+                        <li>Medical systems (diagnosis, analysis)</li>
+                        <li>Traffic control systems</li>
+                        <li>Forecasting and predictions</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Neuro-Genetic Hybrid Systems <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>In a Neuro-Genetic Hybrid System, a neural network collaborates with genetic algorithms. The
+                        "brain" (neural network) learns and adapts, mimicking the way genes evolve and optimize. This
+                        hybrid system combines the power of learning with evolutionary strategies found in nature.</p>
+                    <img src="https://i.imgur.com/iW2rP3K.png" alt="Neuro-Genetic System Diagram" class="diagram-image"
+                        style="max-width: 500px;">
+                    <p class="image-caption">Conceptual flow of a Neuro-Genetic System.</p>
+                    <h4>Working Flow:</h4>
+                    <ul>
+                        <li>GA repeatedly modifies a population of individual solutions (e.g., network architectures,
+                            weights).</li>
+                        <li>GA uses three main types of rules (operators) at each step to create the next generation
+                            from the current population:
+                            <ol>
+                                <li><strong>Selection:</strong> To select individuals (parents) that contribute to the
+                                    population of the next generation.</li>
+                                <li><strong>Crossover:</strong> To combine two parents to form children for the next
+                                    generation.</li>
+                                <li><strong>Mutation:</strong> To apply random changes to individual parents to form
+                                    children.</li>
+                            </ol>
+                        </li>
+                        <li>GA then sends the new child generation (e.g., new set of network parameters) to an ANN model
+                            as new input parameters.</li>
+                        <li>Finally, calculating the fitness by the developed ANN model is performed (e.g., ANN's
+                            performance on a task).</li>
+                    </ul>
+                    <h4>Advantages:</h4>
+                    <ul>
+                        <li>GA is used for <span class="highlight">topology optimization</span> (e.g., selecting the
+                            number of hidden layers, number of hidden nodes, and interconnection pattern for an ANN).
+                        </li>
+                        <li>Control parameters of an ANN (such as learning rate, momentum rate, tolerance level, etc.)
+                            can also be optimized using GA.</li>
+                        <li>It can mimic the human decision-making process.</li>
+                    </ul>
+                    <h4>Disadvantages:</h4>
+                    <ul>
+                        <li>Highly complex system.</li>
+                        <li>The accuracy of the system is dependent on the initial population and GA parameters.</li>
+                        <li>Maintenance costs can be very high.</li>
+                    </ul>
+                    <h4>Applications:</h4>
+                    <ul>
+                        <li>Face recognition</li>
+                        <li>DNA matching</li>
+                        <li>Animal and human research</li>
+                        <li>Behavioral systems</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Fuzzy-Genetic Hybrid Systems <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>A Fuzzy-Genetic Hybrid System is developed to use fuzzy logic-based techniques for improving and
+                        modeling genetic algorithms, and vice-versa. Genetic algorithms have proven to be a robust and
+                        efficient tool to perform tasks like generation of the fuzzy rule base, generation of membership
+                        functions, etc.</p>
+                    <img src="https://i.imgur.com/4oE7P8C.png" alt="Fuzzy-Genetic System Diagram" class="diagram-image"
+                        style="max-width: 450px;">
+                    <p class="image-caption">Conceptual flow of a Fuzzy-Genetic System (GA tuning fuzzy system).</p>
+                    <h4>Three approaches that can be used to develop such a system:</h4>
+                    <ul>
+                        <li><strong>Michigan Approach:</strong> Each individual in the GA population represents a single
+                            fuzzy rule. The entire rule base is formed by the collection of individuals.</li>
+                        <li><strong>Pittsburgh Approach:</strong> Each individual in the GA population represents an
+                            entire fuzzy rule base.</li>
+                        <li><strong>IRL (Iterative Rule Learning) Approach:</strong> Rules are learned one by one
+                            iteratively.</li>
+                    </ul>
+                    <h4>Working Flow (GA optimizing a Fuzzy Logic Controller):</h4>
+                    <ul>
+                        <li>Start with an initial population of solutions that represent parameters of the fuzzy system
+                            (e.g., rule antecedents, consequents, MF parameters).</li>
+                        <li>Feed each chromosome (set of fuzzy system parameters) from the population into the Fuzzy
+                            Logic Controller and compute its performance index (fitness).</li>
+                        <li>Create a new generation using evolution operators (selection, crossover, mutation) till some
+                            condition is met.</li>
+                    </ul>
+                    <h4>Advantages:</h4>
+                    <ul>
+                        <li>GAs are used to develop the best set of rules to be used by a fuzzy inference engine.</li>
+                        <li>GAs are used to optimize the choice of membership functions.</li>
+                        <li>A Fuzzy GA is a directed random search over all discrete fuzzy subsets.</li>
+                        <li>It can mimic the human decision-making process.</li>
+                    </ul>
+                    <h4>Disadvantages:</h4>
+                    <ul>
+                        <li>Interpretation of results can be difficult.</li>
+                        <li>Difficult to build membership values and rules manually if GA is only tuning.</li>
+                        <li>Takes a long time to converge.</li>
+                    </ul>
+                    <h4>Applications:</h4>
+                    <ul>
+                        <li>Mechanical Engineering</li>
+                        <li>Electrical Engineering (control systems)</li>
+                    </ul>
+                </div>
+            </div>
+            <button type="button" class="collapsible">General Applications of Hybrid Systems <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Hybrid Systems are frequently used for various complex problems:</p>
+                    <ul>
+                        <li>Medical Image classification and Process control.</li>
+                        <li>Solving various real-life problems and predictive outcomes.</li>
+                        <li>Areas such as aviation, business development, etc.</li>
+                        <li>Solving real-world problems that require human intelligence for decision making.</li>
+                        <li>Process Control for various industries.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="swarm-intelligence">
+            <h2><i class="fas fa-users"></i>3. Introduction to Swarm Intelligence (SI)</h2>
+            <button type="button" class="collapsible">Concept and Inspiration <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Nature provides inspiration to computer scientists in many ways. One source of such inspiration
+                        is the way in which natural organisms behave when they are in groups (swarms of ants, bees,
+                        flocks of birds, etc.). In these cases, the group itself exhibits behavior that the individual
+                        members do not, or cannot. The swarm, as an individual, seems to be more intelligent than any of
+                        its individual members.</p>
+                    <p>This observation is the seed for concepts and algorithms associated with <span
+                            class="highlight">Swarm Intelligence</span>. It's about useful behavior that emerges from
+                        the cooperative efforts of a group of individual agents, where:</p>
+                    <ul>
+                        <li>Individual agents are largely homogeneous.</li>
+                        <li>Agents act asynchronously in parallel.</li>
+                        <li>There is little or no centralized control.</li>
+                        <li>Communication between agents is often largely effected by <span
+                                class="highlight">stigmergy</span> (indirect communication through modification of the
+                            environment).</li>
+                        <li>The 'useful behavior' is relatively simple (e.g., finding a good place for food, building a
+                            nest).</li>
+                    </ul>
+                    <p>Swarm intelligence is about individuals cooperating (knowingly or not) to achieve a definite
+                        goal, such as ants finding the shortest path, or bees finding the best sources of nectar.</p>
+                    <h4>Examples from Nature:</h4>
+                    <div class="flex-diagrams">
+                        <div>
+                            <img src="https://i.imgur.com/y0t6U3L.png" alt="Flocks of Birds" class="diagram-image"
+                                style="max-width: 300px;">
+                            <p class="image-caption">Flocks of Birds.</p>
+                        </div>
+                        <div>
+                            <img src="https://i.imgur.com/aX4bN1M.png" alt="Ant Colony" class="diagram-image"
+                                style="max-width: 300px;">
+                            <p class="image-caption">Ant Colony.</p>
+                        </div>
+                        <div>
+                            <img src="https://i.imgur.com/nJ1uC5R.png" alt="Honey Bee Swarm" class="diagram-image"
+                                style="max-width: 300px;">
+                            <p class="image-caption">Honey Bee Swarm.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Principles of Swarm Intelligence <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <ul>
+                        <li><strong>Awareness:</strong> Each member must be aware of its surroundings and abilities.
+                        </li>
+                        <li><strong>Autonomy:</strong> To self-coordinate, each member must operate as an autonomous
+                            master.</li>
+                        <li><strong>Solidarity:</strong> When a task is completed, members should autonomously look for
+                            a new task.</li>
+                        <li><strong>Expandability:</strong> The system must permit dynamic expansion where members are
+                            seamlessly aggregated.</li>
+                        <li><strong>Resiliency:</strong> When members are removed, the system must be self-healing.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">SI Algorithms <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Two main development areas of swarm intelligence algorithms:</p>
+                    <ul>
+                        <li><strong>Ant Colony Optimization (ACO)</strong></li>
+                        <li><strong>Particle Swarm Optimization (PSO)</strong></li>
+                        <li><strong>Artificial Bee Colony (ABC)</strong></li>
+                    </ul>
+                    <h4>Ant Colony Optimization (ACO)</h4>
+                    <p>The study of artificial systems modeled after the behavior of real ant colonies, useful in
+                        solving discrete optimization problems. Introduced in 1992 by Marco Dorigo (originally called
+                        Ant System).</p>
+                    <ul>
+                        <li>Applied to Traveling Salesman Problem, other shortest path problems, and several NP-hard
+                            problems.</li>
+                        <li>A population-based <span class="highlight">metaheuristic</span> used to find approximate
+                            solutions to difficult optimization problems.
+                            <br><em>Metaheuristic:</em> A master strategy that guides and modifies other heuristics to
+                            produce solutions beyond those normally generated in a quest for local optimality.
+                        </li>
+                        <li><strong>Artificial Ant:</strong> A set of software agents, stochastic, based on the
+                            pheromone model (ants follow pheromone trails).</li>
+                        <li>Artificial ants incrementally build solutions by moving on a graph. Constraints are built
+                            into heuristics.</li>
+                    </ul>
+                    <h5>Using ACO:</h5>
+                    <ul>
+                        <li>Problem must be written as path finding on a weighted graph.</li>
+                        <li>Metaheuristic constructed using three procedures:
+                            <ol>
+                                <li><strong>ConstructAntsSolutions:</strong> Manages colony, ant movement based on
+                                    pheromones and heuristics, evaluates partial solutions to determine pheromone
+                                    deposit.</li>
+                                <li><strong>UpdatePheromones:</strong> Modifies pheromone trails (increase by deposit,
+                                    decrease by evaporation). Stronger pheromone increases path probability.</li>
+                                <li><strong>DaemonActions:</strong> Implements larger actions requiring more than one
+                                    ant (e.g., local search, global information collection).</li>
+                            </ol>
+                        </li>
+                    </ul>
+
+                    <h4>Particle Swarm Optimization (PSO)</h4>
+                    <p>Introduced in 1995 by Kennedy and Eberhart. Inspired by social behavior of bird flocking or fish
+                        schooling.</p>
+                    <ul>
+                        <li>Each 'particle' is a candidate solution, having a position and velocity in the search space.
+                        </li>
+                        <li>Velocity is updated based on:
+                            <ul>
+                                <li>Its current velocity (inertia).</li>
+                                <li>Its personal best (pbest) position found so far.</li>
+                                <li>The global best (gbest) position found by any particle in the swarm.</li>
+                            </ul>
+                        </li>
+                        <li>The particle then updates its position based on its new velocity.</li>
+                        <li>PSO is known for its ease of implementation and good performance on a wide range of
+                            problems.</li>
+                    </ul>
+                    <h5>Performance Parameters of PSO:</h5>
+                    <ul>
+                        <li>Constriction factor (controls convergence)</li>
+                        <li>Inertia weight (how much previous velocity is retained)</li>
+                        <li>Cognitive parameter (influence of pbest)</li>
+                        <li>Social parameter (influence of gbest)</li>
+                        <li>Vmax (maximum velocity)</li>
+                    </ul>
+
+                    <h4>Artificial Bee Colony (ABC) Algorithm</h4>
+                    <p>Developed in 2005, mimics food foraging behavior of honey bees.</p>
+                    <ul>
+                        <li>A colony deploys foragers (employed bees) to good food sources (flower patches). Patches
+                            with more nectar get more bees.</li>
+                        <li>Colony communication involves: direction, distance, and quality (fitness) of a food source.
+                        </li>
+                        <li>Types of bees: Employed bees (exploit known sources), Onlooker bees (choose sources based on
+                            info from employed bees), Scout bees (search randomly for new sources).</li>
+                    </ul>
+                    <h5>Pseudo Code for ABC:</h5>
+                    <ol>
+                        <li>Initialize population with random solutions (food sources).</li>
+                        <li>Evaluate fitness of the population.</li>
+                        <li>While (stopping criterion not met):
+                            <ol type="a">
+                                <li>(Employed Bees Phase) Select sites for neighborhood search. For each employed bee,
+                                    generate a new food source in the neighborhood of its current source and evaluate
+                                    its fitness. Apply greedy selection.</li>
+                                <li>(Onlooker Bees Phase) Recruit onlooker bees for selected sites (more bees for better
+                                    sites) based on waggle dance information. For each onlooker, select a food source
+                                    depending on its nectar amount, generate a new food source in its neighborhood, and
+                                    evaluate. Apply greedy selection.</li>
+                                <li>(Scout Bees Phase) Determine scout bees (if any employed bee's source is abandoned)
+                                    and send them to search randomly for new food sources.</li>
+                                <li>Memorize the best solution found so far.</li>
+                            </ol>
+                        </li>
+                        <li>End While.</li>
+                    </ol>
+                    <h4>Advantages of Swarm Intelligence:</h4>
+                    <ul>
+                        <li><strong>Scalable:</strong> Same control architecture can be applied to few or many agents.
+                        </li>
+                        <li><strong>Flexible:</strong> Agents can be easily added or removed without heavily influencing
+                            the structure.</li>
+                        <li><strong>Robust:</strong> Simple agent design, low reliance on individual agents, failure of
+                            a single agent has little impact.</li>
+                        <li><strong>Adaptable:</strong> Systems can adapt to new situations easily.</li>
+                    </ul>
+                    <h4>Recent Developments in SI Applications:</h4>
+                    <ul>
+                        <li>U.S. Military: Control of unmanned vehicles.</li>
+                        <li>NASA: Planetary mapping.</li>
+                        <li>Medical Research: Nanobots for cancer treatment.</li>
+                        <li>Telecommunications: Load balancing.</li>
+                        <li>Entertainment: Battle and crowd scenes.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="anfis-section">
+            <h2><i class="fas fa-project-diagram"></i>4. Adaptive Neuro-Fuzzy Inference Systems (ANFIS)</h2>
+            <button type="button" class="collapsible">Concept and Architecture <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>ANFIS is a class of Neuro-Fuzzy system that integrates the learning capabilities of neural
+                        networks with the reasoning abilities of fuzzy logic. It's a superset of neural network
+                        paradigms with supervised learning capability.</p>
+                    <ul>
+                        <li>Combines ANN with fuzzy systems, allowing an easy translation of the final system into a set
+                            of if-then rules.</li>
+                        <li>Can be viewed as a neural network structure with knowledge distributed throughout connection
+                            strengths.</li>
+                        <li>Typically uses a hybrid learning algorithm to identify parameters of Sugeno-type fuzzy
+                            inference systems. It combines least-squares estimation and backpropagation gradient
+                            descent.</li>
+                        <li>The network learns in two main phases:
+                            <ol>
+                                <li><strong>Forward pass:</strong> Consequent parameters are identified using least
+                                    squares estimation.</li>
+                                <li><strong>Backward pass:</strong> Error signals propagate backward, and premise
+                                    parameters (MF parameters) are updated by gradient descent.</li>
+                            </ol>
+                        </li>
+                        <li>The main benefit is its convergence speed, as it reduces the search space dimensions of the
+                            backpropagation method.</li>
+                    </ul>
+                    <h4>Architecture of ANFIS:</h4>
+                    <p>ANFIS is typically a multilayer feed-forward network. A common architecture consists of five
+                        layers for a first-order Sugeno fuzzy model with two inputs (V<sub>1</sub>, V<sub>2</sub>) and
+                        one output (f), and two rules:</p>
+                    <p>Rule 1: IF (V<sub>1</sub> is A<sub>1</sub>) and (V<sub>2</sub> is B<sub>1</sub>) THEN
+                        f<sub>1</sub> = p<sub>1</sub>V<sub>1</sub> + q<sub>1</sub>V<sub>2</sub> + r<sub>1</sub></p>
+                    <p>Rule 2: IF (V<sub>1</sub> is A<sub>2</sub>) and (V<sub>2</sub> is B<sub>2</sub>) THEN
+                        f<sub>2</sub> = p<sub>2</sub>V<sub>1</sub> + q<sub>2</sub>V<sub>2</sub> + r<sub>2</sub></p>
+                    <img src="https://i.imgur.com/jE4tK5F.png" alt="ANFIS Architecture" class="diagram-image"
+                        style="max-width: 500px;">
+                    <p class="image-caption">Fig 3: Basic Architecture of ANFIS (Illustrative based on description).</p>
+                    <ul>
+                        <li><strong>Layer 1 (Fuzzification Layer):</strong> Each node is an adaptive node with a node
+                            function representing a membership function (e.g., bell-shaped, triangular). Outputs are
+                            membership grades (μ<sub>Ai</sub>(V<sub>1</sub>), μ<sub>Bi</sub>(V<sub>2</sub>)). Parameters
+                            in this layer are premise parameters.</li>
+                        <li><strong>Layer 2 (Rule Layer / Product Layer):</strong> Each node is a fixed node (marked 'M'
+                            or 'Π'). It calculates the firing strength (w<sub>i</sub>) of each rule by multiplying the
+                            incoming signals (e.g., w<sub>i</sub> = μ<sub>Ai</sub>(V<sub>1</sub>) *
+                            μ<sub>Bi</sub>(V<sub>2</sub>)).</li>
+                        <li><strong>Layer 3 (Normalization Layer):</strong> Each node is a fixed node (marked 'N'). It
+                            calculates the normalized firing strength of each rule: w̄<sub>i</sub> = w<sub>i</sub> / (Σ
+                            w<sub>j</sub>).</li>
+                        <li><strong>Layer 4 (Defuzzification Layer / Consequent Layer):</strong> Each node is an
+                            adaptive node. It calculates the output of each rule: O<sub>4,i</sub> = w̄<sub>i</sub> *
+                            f<sub>i</sub> = w̄<sub>i</sub> * (p<sub>i</sub>V<sub>1</sub> + q<sub>i</sub>V<sub>2</sub> +
+                            r<sub>i</sub>). Parameters (p<sub>i</sub>, q<sub>i</sub>, r<sub>i</sub>) are consequent
+                            parameters.</li>
+                        <li><strong>Layer 5 (Output Layer / Summation Layer):</strong> Single fixed node (marked 'Σ').
+                            Computes the overall output as the sum of all incoming signals: Overall Output = Σ
+                            O<sub>4,i</sub> = Σ w̄<sub>i</sub>f<sub>i</sub>.</li>
+                    </ul>
+                    <h4>Learning Algorithm of ANFIS:</h4>
+                    <p>Uses a hybrid approach. In the forward pass, premise parameters are fixed, and consequent
+                        parameters are estimated by least-squares. In the backward pass, consequent parameters are
+                        fixed, and premise parameters are updated by gradient descent based on error signals.</p>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Passes of Hybrid Learning Algorithm</th>
+                                <th>Forward Pass</th>
+                                <th>Backward Pass</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Premise Parameters</td>
+                                <td>Fixed</td>
+                                <td>Gradient Descent</td>
+                            </tr>
+                            <tr>
+                                <td>Consequent Parameters</td>
+                                <td>Least Square</td>
+                                <td>Fixed</td>
+                            </tr>
+                            <tr>
+                                <td>Signals</td>
+                                <td>Node outputs</td>
+                                <td>Error signals</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>This hybrid learning has been shown to be highly efficient in training ANFIS.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="deep-learning-intro">
+            <h2><i class="fas fa-layer-group"></i>5. Introduction to Deep Learning</h2>
+            <button type="button" class="collapsible">What is Deep Learning? <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Deep Learning is a branch of Machine Learning which is based on artificial neural networks
+                        (ANNs). It is capable of learning complex patterns and relationships within data. In deep
+                        learning, we don't need to explicitly program everything; the networks learn from large amounts
+                        of data.</p>
+                    <ul>
+                        <li>It involves neural networks with multiple layers (deep neural networks - DNNs) to model and
+                            solve complex problems.</li>
+                        <li>The key characteristic is the use of deep neural networks which have multiple layers of
+                            interconnected nodes. These networks can learn complex representations of data by
+                            discovering hierarchical patterns.</li>
+                        <li>Deep Learning algorithms can automatically learn and improve from data without the need for
+                            manual feature engineering.</li>
+                        <li>Training deep neural networks typically requires a large amount of data and computational
+                            resources (like GPUs).</li>
+                    </ul>
+                    <div class="flex-diagrams">
+                        <div>
+                            <img src="https://i.imgur.com/vF7aC1E.png" alt="AI ML DL Venn Diagram" class="diagram-image"
+                                style="max-width: 400px;">
+                            <p class="image-caption">Relationship between AI, Machine Learning, and Deep Learning.</p>
+                        </div>
+                        <div>
+                            <img src="https://i.imgur.com/oH8rQ2P.png" alt="AI ML DL Data Science Venn Diagram"
+                                class="diagram-image" style="max-width: 400px;">
+                            <p class="image-caption">Few Insights about AI, ML, DL and Data Science.</p>
+                        </div>
+                    </div>
+                    <h4>Learning Paradigms in Deep Learning:</h4>
+                    <ul>
+                        <li><strong>Supervised Machine Learning:</strong> Learns from labeled data to make predictions
+                            or classify data (e.g., image classification, sentiment analysis). Backpropagation is key.
+                            Common architectures: CNNs, RNNs.</li>
+                        <li><strong>Unsupervised Machine Learning:</strong> Learns patterns or clusters from unlabeled
+                            data (e.g., autoencoders for dimensionality reduction, GANs for generative tasks).</li>
+                        <li><strong>Reinforcement Machine Learning:</strong> Learns to make decisions in an environment
+                            to maximize a reward signal (e.g., Deep Q Networks, DDPG for robotics, game playing).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Historical Trends in Deep Learning <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <ol>
+                        <li><strong>Early Developments (1960s):</strong> Roots in ANNs.</li>
+                        <li><strong>AI Winter (1970s-80s):</strong> Limited computational power and data hindered
+                            progress.</li>
+                        <li><strong>Backpropagation (1980s):</strong> Rediscovery allowed efficient training of
+                            multi-layer networks.</li>
+                        <li><strong>Rise of CNNs (Late 1990s-2000s):</strong> LeNet-5 (Yann LeCun) revolutionized image
+                            recognition.</li>
+                        <li><strong>Big Data and GPUs (Early 2010s):</strong> Enabled training of large-scale DNNs.</li>
+                        <li><strong>ImageNet Challenge (2012):</strong> AlexNet's victory brought deep learning into the
+                            spotlight, sparking a renaissance.</li>
+                        <li><strong>Advancements in NLP:</strong> RNNs (LSTMs) and Transformer models (BERT) achieved
+                            state-of-the-art results.</li>
+                        <li><strong>Generative Models:</strong> VAEs and GANs for generating realistic data.</li>
+                        <li><strong>Transfer Learning and Pretraining:</strong> Leveraging knowledge from large
+                            pre-trained models.</li>
+                        <li><strong>Explainability and Interpretability:</strong> Growing focus on understanding deep
+                            learning model decisions.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Applications of Deep Learning <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Main applications can be divided into computer vision, natural language processing (NLP), and
+                        reinforcement learning.</p>
+                    <img src="https://i.imgur.com/tW5fS8U.png" alt="Deep Learning Applications Overview"
+                        class="diagram-image" style="max-width: 600px;">
+                    <p class="image-caption">Deep Learning-based Applications.</p>
+                    <h4>Computer Vision:</h4>
+                    <ul>
+                        <li><strong>Object detection and recognition:</strong> Self-driving cars, surveillance.</li>
+                        <li><strong>Image classification:</strong> Medical imaging, quality control.</li>
+                        <li><strong>Image segmentation:</strong> Identifying different regions in an image.</li>
+                        <li><strong>Optical Character Recognition (OCR).</strong></li>
+                        <li><strong>Anomaly Detection.</strong></li>
+                    </ul>
+                    <h4>Natural Language Processing (NLP):</h4>
+                    <ul>
+                        <li><strong>Automatic Text Generation:</strong> Summaries, essays.</li>
+                        <li><strong>Language Translation.</strong></li>
+                        <li><strong>Sentiment Analysis:</strong> Customer service, social media monitoring.</li>
+                        <li><strong>Speech Recognition:</strong> Speech-to-text, voice assistants.</li>
+                    </ul>
+                    <h4>Reinforcement Learning:</h4>
+                    <ul>
+                        <li><strong>Game Playing:</strong> Beating human experts (Go, Chess, Atari).</li>
+                        <li><strong>Robotics:</strong> Grasping, navigation, manipulation.</li>
+                        <li><strong>Control Systems:</strong> Traffic management, supply chain optimization.</li>
+                    </ul>
+                    <img src="https://i.imgur.com/aC2kL5Y.png" alt="Common Deep Learning Vision Models"
+                        class="diagram-image" style="max-width: 600px;">
+                    <p class="image-caption">5 Most Common Types of Deep Learning Vision Models.</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Advantages and Disadvantages of Deep Learning <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>Advantages:</h4>
+                    <ul>
+                        <li><strong>High Accuracy:</strong> Can achieve state-of-the-art performance.</li>
+                        <li><strong>Automated Feature Engineering:</strong> Learns relevant features from data.</li>
+                        <li><strong>Scalability:</strong> Can handle large and complex datasets.</li>
+                        <li><strong>Flexibility:</strong> Applicable to a wide range of tasks (images, text, speech).
+                        </li>
+                        <li><strong>Continual Improvement:</strong> Performance improves with more data.</li>
+                    </ul>
+                    <h4>Disadvantages:</h4>
+                    <ul>
+                        <li><strong>High Computational Requirements:</strong> Needs large data and powerful hardware
+                            (GPUs/TPUs).</li>
+                        <li><strong>Requires Large Amounts of Labeled Data:</strong> Often expensive and time-consuming
+                            to acquire.</li>
+                        <li><strong>Interpretability Challenges (Black Box):</strong> Difficult to understand how
+                            decisions are made.</li>
+                        <li><strong>Overfitting:</strong> Can memorize training data, leading to poor performance on new
+                            data.</li>
+                        <li><strong>Time-consuming Training:</strong> Can take days or weeks for complex models.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="comparative-analysis">
+            <h2><i class="fas fa-balance-scale-left"></i>6. Comparative Analysis of Soft Computing Techniques</h2>
+            <div class="collapsible-content">
+                <div>
+                    <p>A full comparative analysis would involve evaluating Fuzzy Logic, Neural Networks, Genetic
+                        Algorithms, and their hybrids based on criteria like:</p>
+                    <ul>
+                        <li><strong>Problem Type Suitability:</strong> (e.g., uncertainty, pattern recognition,
+                            optimization)</li>
+                        <li><strong>Data Requirements:</strong> (e.g., labeled/unlabeled, amount of data)</li>
+                        <li><strong>Interpretability:</strong> (e.g., black-box vs. rule-based)</li>
+                        <li><strong>Computational Cost:</strong> (training time, inference time)</li>
+                        <li><strong>Ease of Implementation:</strong></li>
+                        <li><strong>Robustness to Noise:</strong></li>
+                        <li><strong>Ability to Handle Imprecision/Uncertainty:</strong></li>
+                        <li><strong>Learning Capability:</strong></li>
+                        <li><strong>Search Mechanism:</strong> (e.g., gradient-based, evolutionary, rule-based
+                            inference)</li>
+                    </ul>
+                    <p><em>(This section would ideally contain a table or detailed paragraphs comparing these aspects.
+                            For now, it's a placeholder for further content development.)</em></p>
+                </div>
+            </div>
+        </section>
+
+        <div class="topic-navigation">
+            <a href="topic-4.html" class="topic-nav-link prev-topic-link"><i class="fas fa-arrow-left"></i> Prev: Unit
+                IV: Genetic Algorithms (GA)</a>
+            <a href="../../mock-test/mock-test.html" class="topic-nav-link next-topic-link">Go to Mock Test <i
+                    class="fas fa-vial"></i></a>
+        </div>
+
+        <footer class="page-footer">
+            © 2024 Eduvision. All rights reserved. Revolutionizing interactive learning.
+        </footer>
+    </div>
+
+    <script>
+        // Collapsible sections
+        var coll = document.getElementsByClassName("collapsible");
+        for (var i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    content.style.padding = "0 18px";
+                } else {
+                    content.style.padding = "0 18px";
+                    setTimeout(() => {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                        let innerDiv = content.querySelector('div');
+                        if (innerDiv && this.classList.contains('active')) { // Check if 'this' (the button) is active
+                            innerDiv.style.padding = "15px 0";
+                        } else if (innerDiv) {
+                            innerDiv.style.padding = "0";
+                        }
+                    }, 50);
+                }
+            });
+        }
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+            } else {
+                body.classList.remove('dark-mode');
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (body.classList.contains('dark-mode')) {
+                applyTheme('light');
+            } else {
+                applyTheme('dark');
+            }
+        });
+
+        // Load saved theme or system preference
+        const savedTheme = localStorage.getItem('theme') ||
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        applyTheme(savedTheme);
+    </script>
+</body>
+
+</html>

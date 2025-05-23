@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit I: Introduction to Soft Computing - Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Light Mode Defaults */
+            --bg-color: #f8fafc;
+            /* Almost white */
+            --card-bg: #ffffff;
+            /* White */
+            --primary-color: #3b82f6;
+            /* Blue */
+            --secondary-color: #8b5cf6;
+            /* Purple */
+            --accent-color: #10b981;
+            /* Emerald */
+            --text-color: #334155;
+            /* Dark Slate Gray for text */
+            --heading-color: #1e293b;
+            /* Very Dark Slate for headings */
+            --border-color: #e2e8f0;
+            /* Light Gray for borders */
+            --gradient-start: var(--primary-color);
+            --gradient-end: var(--secondary-color);
+            --font-main: 'Poppins', sans-serif;
+            --font-logo: 'Nunito', sans-serif;
+
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --card-shadow-color: rgba(0, 0, 0, 0.05);
+            --link-color: var(--primary-color);
+            /* #2563eb */
+            --link-hover-color: #1d4ed8;
+            /* Darker blue */
+            --link-hover-bg: #eff6ff;
+            /* Very light blue */
+            --syllabus-bar-bg: var(--card-bg);
+            --collapsible-content-bg: rgba(0, 0, 0, 0.02);
+            --component-card-bg: #f9fafb;
+            --definition-bg: rgba(59, 130, 246, 0.05);
+            --table-header-bg: var(--primary-color);
+            --table-header-text: white;
+            --table-row-even-bg: rgba(0, 0, 0, 0.015);
+            --theme-toggle-bg: var(--card-bg);
+            --theme-toggle-icon: var(--primary-color);
+            --theme-toggle-hover-bg: var(--primary-color);
+            --theme-toggle-hover-icon: white;
+        }
+
+        body.dark-mode {
+            --bg-color: #0f172a;
+            /* Dark blue-slate */
+            --card-bg: #1e293b;
+            /* Slightly lighter slate */
+            --text-color: #e2e8f0;
+            /* Light gray */
+            --heading-color: #f8fafc;
+            /* White */
+            --border-color: #334155;
+            /* Slate border */
+
+            --shadow-color: rgba(0, 0, 0, 0.25);
+            --card-shadow-color: rgba(0, 0, 0, 0.2);
+            --link-color: #5dade2;
+            /* Lighter blue for dark mode */
+            --link-hover-color: #8ecae6;
+            /* Even lighter blue */
+            --link-hover-bg: rgba(255, 255, 255, 0.1);
+            --syllabus-bar-bg: var(--card-bg);
+            --collapsible-content-bg: rgba(255, 255, 255, 0.03);
+            --component-card-bg: #2a3a50;
+            /* Darker card for components */
+            --definition-bg: rgba(59, 130, 246, 0.1);
+            --table-header-bg: var(--primary-color);
+            /* Can stay same or adjust */
+            --table-header-text: white;
+            --table-row-even-bg: rgba(255, 255, 255, 0.03);
+            --theme-toggle-bg: var(--card-bg);
+            --theme-toggle-icon: var(--primary-color);
+            --theme-toggle-hover-bg: var(--primary-color);
+            --theme-toggle-hover-icon: white;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Eduvision Logo */
+        .eduvision-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: var(--font-logo);
+        }
+
+        .eduvision-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvision-logo .text-yellow-300 {
+            color: #fde047 !important;
+        }
+
+        .eduvision-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Theme Toggle Button */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            /* Adjusted size */
+            box-shadow: 0 2px 5px var(--shadow-color);
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+            color: var(--theme-toggle-hover-icon);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+
+        /* Page Header (Moved above Syllabus Bar) */
+        .page-header {
+            text-align: center;
+            margin-top: 70px;
+            /* Space for logo */
+            margin-bottom: 1.5rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--heading-color);
+            background: linear-gradient(90deg, var(--gradient-start), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            opacity: 0.9;
+        }
+
+        /* Syllabus Bar */
+        .syllabus-bar-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 0.75rem;
+            background-color: var(--syllabus-bar-bg);
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 15px var(--card-shadow-color);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .syllabus-bar-back-link {
+            display: flex;
+            align-items: center;
+            font-size: 0.875rem;
+            color: var(--link-color);
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            text-decoration: none;
+            transition: background-color 0.2s, color 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .syllabus-bar-back-link:hover {
+            color: var(--link-hover-color);
+            background-color: var(--link-hover-bg);
+        }
+
+        .syllabus-bar-back-link svg {
+            height: 1.25rem;
+            width: 1.25rem;
+            margin-right: 0.375rem;
+            fill: currentColor;
+        }
+
+        .syllabus-bar-topic-badge {
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.375rem 1rem;
+            border-radius: 9999px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            /* This shadow is fine */
+        }
+
+        @media (min-width: 640px) {
+            .syllabus-bar-container {
+                flex-direction: row;
+            }
+
+            .syllabus-bar-back-link {
+                margin-bottom: 0;
+            }
+
+            .syllabus-bar-topic-badge {
+                font-size: 0.875rem;
+            }
+        }
+
+        /* Section Styling */
+        .content-section {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px var(--card-shadow-color);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s, border-color 0.3s;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px var(--shadow-color);
+        }
+
+        .content-section h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--heading-color);
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .content-section h2 i {
+            margin-right: 0.75rem;
+            color: var(--primary-color);
+        }
+
+        .content-section h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section .definition {
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .content-section ul {
+            padding-left: 20px;
+            list-style: none;
+        }
+
+        .content-section ul li::before {
+            content: "\f105";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--primary-color);
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+        /* Collapsible Sections */
+        .collapsible {
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: white;
+            cursor: pointer;
+            padding: 15px 20px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: filter 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .collapsible:hover {
+            filter: brightness(1.1);
+        }
+
+        .collapsible.active {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .collapsible-content {
+            padding: 0 18px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out, background-color 0.3s;
+            background-color: var(--collapsible-content-bg);
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .collapsible-content>div {
+            padding: 15px 0;
+        }
+
+        .collapsible .icon::before {
+            content: '\f078';
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible.active .icon::before {
+            transform: rotate(-180deg);
+        }
+
+        /* Component Cards */
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .component-card {
+            background-color: var(--component-card-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s, border-color 0.3s;
+        }
+
+        .component-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+        }
+
+        .component-card h4 {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+        }
+
+        .component-card strong {
+            color: var(--accent-color);
+        }
+
+        /* Soft Computing Diagram (Stylized) */
+        .sc-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin: 20px 0;
+            background: rgba(0, 0, 0, 0.1);
+            /* Subtle background */
+            border-radius: 10px;
+        }
+
+        body.dark-mode .sc-diagram {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .sc-center {
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            box-shadow: 0 0 15px var(--secondary-color);
+            position: relative;
+            z-index: 2;
+        }
+
+        .sc-components-ring {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px 40px;
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .sc-component-node {
+            background-color: var(--card-bg);
+            /* Uses themed card background */
+            color: var(--text-color);
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--primary-color);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+            /* Adjusted shadow */
+            transition: transform 0.2s ease, border-color 0.2s, box-shadow 0.2s, background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode .sc-component-node {
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .sc-component-node:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
+        }
+
+        body.dark-mode .sc-component-node:hover {
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.7);
+        }
+
+
+        /* Venn Diagram for Hybrid Computing */
+        .venn-diagram {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 2rem 0;
+            height: 180px;
+        }
+
+        .venn-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+            /* Text on venn circles kept white for contrast on transparent bg */
+            font-size: 0.9em;
+            text-align: center;
+            padding: 5px;
+        }
+
+        .hard-comp {
+            background-color: rgba(59, 130, 246, 0.7);
+            position: relative;
+            left: 20px;
+            z-index: 1;
+        }
+
+        .soft-comp {
+            background-color: rgba(139, 92, 246, 0.7);
+            position: relative;
+            right: 20px;
+            z-index: 1;
+        }
+
+        .hybrid-comp-text {
+            position: absolute;
+            z-index: 2;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+            background: rgba(16, 185, 129, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        /* Comparison Tables */
+        .comparison-tables-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .comparison-table {
+            flex: 1;
+            min-width: 300px;
+            border-collapse: collapse;
+            width: 100%;
+            box-shadow: 0 4px 10px var(--card-shadow-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+        }
+
+        .comparison-table th {
+            background-color: var(--table-header-bg);
+            color: var(--table-header-text);
+            font-weight: 600;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background-color: var(--table-row-even-bg);
+            transition: background-color 0.3s;
+        }
+
+        .comparison-table ul {
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+
+        .comparison-table ul li::before {
+            content: "";
+            margin-right: 0;
+        }
+
+        /* Application List Item (Not used in provided text but kept for general purpose) */
+        .application-list-item {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .application-list-item::before {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            top: 5px;
+        }
+
+        .application-list-item strong {
+            color: var(--primary-color);
+        }
+
+        /* Definition Block */
+        .definition {
+            background-color: var(--definition-bg);
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            font-style: italic;
+            transition: background-color 0.3s, border-left-color 0.3s;
+        }
+
+        /* Next Topic Link */
+        .next-topic-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 12px 25px;
+            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px var(--shadow-color);
+        }
+
+        .next-topic-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+        }
+
+        /* Footer */
+        .page-footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: #94a3b8;
+            /* Fixed color, or use var(--text-color) with opacity */
+            transition: border-top-color 0.3s;
+        }
+
+        body.dark-mode .page-footer {
+            color: #64748b;
+        }
+
+        /* Slightly lighter for dark mode footer */
+
+        /* Utility classes */
+        .highlight {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .content-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .comparison-tables-container {
+                flex-direction: column;
+            }
+
+            .sc-components-ring {
+                grid-template-columns: 1fr;
+            }
+
+            #theme-toggle {
+                top: 15px;
+                right: 15px;
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+
+            .eduvision-logo {
+                top: 15px;
+                left: 15px;
+            }
+
+            .eduvision-logo .text-2xl {
+                font-size: 1.5rem;
+            }
+
+            .page-header {
+                margin-top: 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../index.html" class="flex items-center group">
+                <span class="text-white">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-white">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>Introduction to Soft Computing</h1>
+            <p>Understanding the fundamentals, components, and applications of Soft Computing.</p>
+        </header>
+
+        <div class="syllabus-bar-container">
+            <a href="../soft-computing.html" class="syllabus-bar-back-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                        clip-rule="evenodd" />
+                </svg>
+                Back to Syllabus
+            </a>
+            <div class="syllabus-bar-topic-badge">
+                Unit I: Topic 1
+            </div>
+        </div>
+
+        <section class="content-section" id="definition-scope-goal">
+            <h2><i class="fas fa-brain"></i>1. Definition, Scope, and Goal</h2>
+            <h3>Definition of Soft Computing (SC)</h3>
+            <div class="definition">
+                Lotfi A. Zadeh, 1992: "Soft Computing is an emerging approach to computing which parallel the remarkable
+                ability of the human mind to reason and learn in an environment of uncertainty and imprecision."
+            </div>
+
+            <h3>Scope</h3>
+            <p>Soft computing refers to principle components like <span class="highlight">fuzzy logic, neural networks,
+                    and genetic algorithms</span>, which have their roots in Artificial Intelligence. The healthy
+                integration of all these techniques has resulted in extending the capabilities of the technologies to
+                more effective and efficient problem solving methodologies.</p>
+
+            <h3>Goal</h3>
+            <ul>
+                <li>The main goal of Soft Computing is to develop intelligent machines to provide solutions to real
+                    world problems, which are not modeled, or too difficult to model mathematically.</li>
+                <li>Its aim is to exploit the tolerance for <span class="highlight">Approximation, Uncertainty,
+                        Imprecision, and Partial Truth</span> in order to achieve close resemblance with human like
+                    decision making.</li>
+            </ul>
+        </section>
+
+        <section class="content-section" id="components-sc">
+            <h2><i class="fas fa-cogs"></i>2. Components of Soft Computing</h2>
+            <p>The main components of soft computing are fuzzy logic, neural networks, evolutionary computation, and
+                probabilistic reasoning. These techniques can be used individually or combined to create powerful
+                systems that mimic human reasoning. Here's a more detailed explanation of each component:</p>
+
+            <div class="sc-diagram">
+                <div class="sc-center">Soft Computing (SC)</div>
+                <div class="sc-components-ring">
+                    <div class="sc-component-node"
+                        title="Inspired by the human brain, for pattern recognition and learning.">Neural Networks (NN)
+                    </div>
+                    <div class="sc-component-node" title="Uses evolutionary principles for optimization problems.">
+                        Evolutionary Computation (EC)</div>
+                    <div class="sc-component-node" title="Deals with uncertainty using probabilities.">Probabilistic
+                        Reasoning (PR)</div>
+                    <div class="sc-component-node" title="Handles imprecision with partial truths.">Fuzzy Logic (FL)
+                    </div>
+                </div>
+                <p style="font-size:0.8em; margin-top:20px; text-align:center; opacity:0.7;">
+                    (These components can also be combined, e.g., EC-NN, EC-FL, PR-NN, PR-FL, to form hybrid intelligent
+                    systems.)
+                </p>
+            </div>
+
+            <div class="component-grid">
+                <div class="component-card">
+                    <h4>1. Fuzzy Logic (FL)</h4>
+                    <p><strong>Purpose:</strong> Deals with uncertainty and imprecision by allowing for partial truths
+                        and approximate reasoning.</p>
+                    <p><strong>How it works:</strong> Introduces membership degrees to represent the truth value of a
+                        statement, rather than just true or false.</p>
+                    <p><strong>Examples:</strong> Used in control systems (e.g., washing machines, anti-lock braking
+                        systems), decision-making, and image processing.</p>
+                </div>
+                <div class="component-card">
+                    <h4>2. Neural Networks (NN)</h4>
+                    <p><strong>Purpose:</strong> Inspired by the structure and function of the human brain, used for
+                        pattern recognition and learning.</p>
+                    <p><strong>How it works:</strong> Mimics the way neurons in the brain process information, with
+                        interconnected nodes (neurons) that learn from data through processes like backpropagation.</p>
+                    <p><strong>Examples:</strong> Used in image recognition (e.g., facial recognition), natural language
+                        processing (e.g., translation), and financial modeling (e.g., stock market prediction).</p>
+                </div>
+                <div class="component-card">
+                    <h4>3. Evolutionary Computation (EC)</h4>
+                    <p><strong>Purpose:</strong> Uses evolutionary principles (like natural selection, mutation, and
+                        crossover) to solve complex optimization problems.</p>
+                    <p><strong>How it works:</strong> Employs algorithms like genetic algorithms, evolutionary
+                        programming, and genetic programming that simulate the evolution of a population of solutions to
+                        find the best one(s).</p>
+                    <p><strong>Examples:</strong> Used in design optimization (e.g., aerospace engineering), scheduling
+                        (e.g., job-shop scheduling), and machine learning (e.g., optimizing neural network
+                        architectures).</p>
+                </div>
+                <div class="component-card">
+                    <h4>4. Probabilistic Reasoning (PR)</h4>
+                    <p><strong>Purpose:</strong> Deals with uncertainty by representing knowledge and relationships
+                        using probabilities.</p>
+                    <p><strong>How it works:</strong> Uses techniques like Bayesian networks and Hidden Markov Models to
+                        model uncertain relationships between variables and make inferences.</p>
+                    <p><strong>Examples:</strong> Used in medical diagnosis (e.g., expert systems), risk assessment
+                        (e.g., financial risk), and data analysis (e.g., spam filtering).</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="hybrid-computing">
+            <h2><i class="fas fa-code-branch"></i>3. Hybrid Computing</h2>
+            <p>Hybrid computing represents a powerful synergy by combining conventional <span class="highlight">hard
+                    computing</span> techniques with emerging <span class="highlight">soft computing</span>
+                methodologies.</p>
+
+            <div class="venn-diagram">
+                <div class="venn-circle hard-comp">Hard Computing</div>
+                <div class="hybrid-comp-text">Hybrid Computing</div>
+                <div class="venn-circle soft-comp">Soft Computing</div>
+            </div>
+
+            <ul>
+                <li>A part of a complex real-world problem will be solved using hard computing and the remaining part
+                    can be tackled utilizing soft computing.</li>
+                <li>In this context, hard computing and soft computing are <span class="highlight">complementary</span>
+                    to each other, each bringing its strengths to solve multifaceted problems more effectively.</li>
+            </ul>
+        </section>
+
+        <section class="content-section" id="hard-vs-soft">
+            <h2><i class="fas fa-balance-scale"></i>4. Hard Computing vs. Soft Computing</h2>
+            <p>Understanding the distinctions between hard and soft computing is crucial for appreciating the unique
+                contributions of soft computing approaches.</p>
+            <div class="comparison-tables-container">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Hard Computing</th>
+                            <th>Soft Computing</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>It requires a precisely stated analytical model and often a lot of computation time.
+                            </td>
+                            <td>It is tolerant of imprecision, uncertainty, partial truth, and approximation.</td>
+                        </tr>
+                        <tr>
+                            <td>It is based on binary logic, crisp systems, numerical analysis and crisp software.</td>
+                            <td>It is based on fuzzy logic, neural nets and probabilistic reasoning.</td>
+                        </tr>
+                        <tr>
+                            <td>It has the characteristics of precision and categoricity.</td>
+                            <td>It has the characteristics of approximation and dispositionality.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Hard Computing</th>
+                            <th>Soft Computing</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>It is deterministic.</td>
+                            <td>It incorporates stochasticity.</td>
+                        </tr>
+                        <tr>
+                            <td>It requires exact input data.</td>
+                            <td>It can deal with ambiguous and noisy data.</td>
+                        </tr>
+                        <tr>
+                            <td>It is strictly sequential.</td>
+                            <td>It allows parallel computations.</td>
+                        </tr>
+                        <tr>
+                            <td>It produces precise answers.</td>
+                            <td>It can yield approximate answers.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="content-section" id="applications-sc">
+            <h2><i class="fas fa-lightbulb"></i>5. Applications of Soft Computing</h2>
+            <p>Soft computing techniques have found widespread applications across various domains due to their ability
+                to handle complex, real-world problems. Key advantages include:</p>
+            <ul>
+                <li>Solving problems that cannot be easily modelled mathematically.</li>
+                <li>Addressing non-linear problems effectively.</li>
+                <li>Incorporating human-like knowledge (cognition, learning, recognition) into computing.</li>
+            </ul>
+
+            <button type="button" class="collapsible">Handwritten Script Recognition <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>One of the demanding parts of computer science. It can translate multilingual documents and sort
+                        various scripts. Block-level techniques recognize scripts from documents. Uses Discrete Cosine
+                        Transform (DCT) and Discrete Wavelet Transform (DWT).</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Image Processing and Data Compression <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>High-level processing technique involving recognition and bifurcation of patterns, crucial in
+                        medical fields. Soft computing helps overcome computational complexity and improves
+                        classification efficiency using Genetic Algorithms, Genetic Programming, classifier systems, and
+                        evolutionary strategies. These provide fast solutions for pattern recognition in medical images
+                        (microscopes, X-rays).</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Automotive Systems and Manufacturing <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>The automobile industry uses soft computing for major problems. Fuzzy logic (using "If-Then"
+                        statements) is built into classic control methods. Logic controllers convert sensor inputs into
+                        fuzzy variables for rules. Applied in engine control, automatic transmissions, and antiskid
+                        steering.</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Soft Computing based Architecture <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Intelligent buildings use sensors for input and effectors for control. The construction industry
+                        uses Distributed Artificial Intelligence (DAI) and fuzzy genetic agents. Fuzzy logic creates
+                        behavior-based architecture in intelligent buildings to manage environmental unpredictability,
+                        with agents embedding sensory information.</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Decision Support Systems (DSS) <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Reduces the cost of DSS. Techniques are used to design, maintain, and maximize the value of the
+                        decision process. Fuzzy logic can create decision systems for risk prediction or use fuzzy
+                        information to select areas needing replacement.</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Power System Analysis <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Artificial Neural Networks (ANN) predict instability in power system voltage. Pending voltage
+                        instability can be predicted using low-cost soft computing methods.</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Bioinformatics <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Helps in modifying uncertainty and indifference in biometrics data. Provides distinct low-cost
+                        solutions using algorithms, databases, Fuzzy Sets (FSs), and ANNs for quality results in an
+                        efficient way.</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">Investment and Trading <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>The finance field has vast amounts of data that traditional computing struggles with. Soft
+                        computing approaches handle noisy data. Pattern recognition techniques analyze data patterns and
+                        time series to predict future trading points.</p>
+                </div>
+            </div>
+        </section>
+
+        <a href="topic-2.html" class="next-topic-link">Next Topic: Unit II: Fuzzy Logic and Fuzzy Systems <i
+                class="fas fa-arrow-right"></i></a>
+
+        <footer class="page-footer">
+            © 2024 Eduvision. All rights reserved. Revolutionizing interactive learning.
+        </footer>
+
+    </div>
+
+    <script>
+        // Collapsible sections
+        var coll = document.getElementsByClassName("collapsible");
+        for (var i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    content.style.padding = "0 18px";
+                } else {
+                    content.style.padding = "0 18px";
+                    setTimeout(() => {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                        let innerDiv = content.querySelector('div');
+                        if (innerDiv) innerDiv.style.padding = "15px 0";
+                    }, 50);
+                }
+            });
+        }
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+            } else {
+                body.classList.remove('dark-mode');
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (body.classList.contains('dark-mode')) {
+                applyTheme('light');
+            } else {
+                applyTheme('dark');
+            }
+        });
+
+        // Load saved theme or system preference
+        const savedTheme = localStorage.getItem('theme') ||
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        applyTheme(savedTheme);
+
+    </script>
+</body>
+
+</html>
