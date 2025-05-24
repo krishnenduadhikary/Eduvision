@@ -2,46 +2,122 @@
     "title": "Database Management Systems",
     "subtitle": "Understand data modeling, SQL, and transaction management",
     "topics": [
-      {
-        "title": "Introduction to DBMS",
-        "description": "Need, applications, and types of database management systems.",
-        "resources": ["Notes", "Video"]
-      },
-      {
-        "title": "Relational Model",
-        "description": "Concepts of relations, schema, keys, and constraints.",
-        "resources": ["Examples", "Practice"]
-      },
-      {
-        "title": "Entity-Relationship Model",
-        "description": "ER diagrams, entities, relationships, and attributes.",
-        "resources": ["Diagram", "Notes"]
-      },
-      {
-        "title": "SQL",
-        "description": "Data definition, manipulation, and query languages.",
-        "resources": ["Practice", "Code"]
-      },
-      {
-        "title": "Normalization",
-        "description": "1NF to 5NF, BCNF, and dependency theory.",
-        "resources": ["Examples", "Notes"]
-      },
-      {
-        "title": "Transactions and Concurrency",
-        "description": "ACID properties, concurrency control, and schedules.",
-        "resources": ["Diagram", "Practice"]
-      },
-      {
-        "title": "Indexing and File Organization",
-        "description": "Primary, secondary indexes and B+ trees.",
-        "resources": ["Diagram", "Notes"]
-      },
-      {
-        "title": "NoSQL and Modern Databases",
-        "description": "Document-based, key-value, and graph databases.",
-        "resources": ["Notes", "Video"]
-      }
+        {
+            "title": "Introduction to DBMS",
+            "description": "Need, applications, types of database management systems, DBMS vs File System, DBMS architecture, and database users and roles.",
+            "subtopics": [
+                "What is a DBMS?",
+                "Need for DBMS",
+                "Applications of DBMS",
+                "Types of DBMS (Hierarchical, Network, Relational, Object-oriented)",
+                "DBMS vs File System",
+                "DBMS Architecture (Three-level architecture)",
+                "Database Users and Roles"
+            ],
+            "resources": ["Notes", "Video"]
+        },
+        {
+            "title": "Relational Model",
+            "description": "Concepts of relations, schema, keys, integrity constraints, relational algebra, and relational calculus.",
+            "subtopics": [
+                "Basic Concepts: Relation, Tuple, Attribute",
+                "Schema and Instance",
+                "Keys: Super Key, Candidate Key, Primary Key, Foreign Key",
+                "Integrity Constraints: Entity, Referential, Domain",
+                "Relational Algebra (Selection, Projection, Union, Intersection, Difference, Join, Division)",
+                "Relational Calculus (Tuple and Domain)"
+            ],
+            "resources": ["Examples", "Practice"]
+        },
+        {
+            "title": "Entity-Relationship Model",
+            "description": "ER diagrams, entities, attributes, relationships, cardinality, weak entities, and enhanced ER model.",
+            "subtopics": [
+                "Entities and Entity Sets",
+                "Attributes (Simple, Composite, Derived, Multi-valued)",
+                "Relationships and Relationship Sets",
+                "ER Diagrams (Symbols and Notation)",
+                "Cardinality and Participation Constraints",
+                "Weak Entities and Identifying Relationships",
+                "Enhanced ER Model (Generalization, Specialization, Aggregation)"
+            ],
+            "resources": ["Diagram", "Notes"]
+        },
+        {
+            "title": "SQL",
+            "description": "SQL basics, DDL, DML, DCL, constraints, aggregate functions, joins, subqueries, views, indexes, triggers, and stored procedures.",
+            "subtopics": [
+                "SQL Basics (Syntax, Data Types)",
+                "Data Definition Language (DDL): CREATE, ALTER, DROP",
+                "Data Manipulation Language (DML): SELECT, INSERT, UPDATE, DELETE",
+                "Data Control Language (DCL): GRANT, REVOKE",
+                "Constraints in SQL (Primary Key, Foreign Key, Unique, Not Null, Check)",
+                "Aggregate Functions (COUNT, SUM, AVG, MIN, MAX)",
+                "Joins (Inner, Outer, Cross, Self)",
+                "Nested and Correlated Subqueries",
+                "Views, Indexes, Triggers, Stored Procedures"
+            ],
+            "resources": ["Practice", "Code"]
+        },
+        {
+            "title": "Normalization",
+            "description": "Introduction to normalization, functional dependencies, 1NF to 5NF, BCNF, and decomposition.",
+            "subtopics": [
+                "Introduction to Normalization",
+                "Functional Dependencies",
+                "1NF (First Normal Form)",
+                "2NF (Second Normal Form)",
+                "3NF (Third Normal Form)",
+                "BCNF (Boyce-Codd Normal Form)",
+                "4NF and 5NF (Overview)",
+                "Decomposition (Lossless Join, Dependency Preservation)"
+            ],
+            "resources": ["Examples", "Notes"]
+        },
+        {
+            "title": "Transactions and Concurrency",
+            "description": "Transaction concepts, ACID properties, transaction states, schedules, concurrency control, deadlock handling, and recovery techniques.",
+            "subtopics": [
+                "Transaction Concepts",
+                "ACID Properties (Atomicity, Consistency, Isolation, Durability)",
+                "Transaction States",
+                "Schedules (Serial, Serializability)",
+                "Concurrency Control (Lock-based, Timestamp-based, Optimistic)",
+                "Deadlock Handling",
+                "Recovery Techniques (Log-based, Checkpoints)"
+            ],
+            "resources": ["Diagram", "Practice"]
+        },
+        {
+            "title": "Indexing and File Organization",
+            "description": "File organization methods, indexing basics, primary and secondary indexes, dense and sparse indexes, B-trees, B+ trees, and query optimization.",
+            "subtopics": [
+                "File Organization (Heap, Sorted, Hashed)",
+                "Indexing Basics",
+                "Primary Index",
+                "Secondary Index",
+                "Dense and Sparse Indexes",
+                "B-Trees",
+                "B+ Trees",
+                "Index Usage in Query Optimization"
+            ],
+            "resources": ["Diagram", "Notes"]
+        },
+        {
+            "title": "NoSQL and Modern Databases",
+            "description": "Introduction to NoSQL, types of NoSQL databases, CAP theorem, BASE properties, NoSQL vs relational databases, and use cases.",
+            "subtopics": [
+                "Introduction to NoSQL",
+                "Types of NoSQL Databases",
+                "Document-based (e.g., MongoDB)",
+                "Key-Value Stores (e.g., Redis)",
+                "Column-family Stores (e.g., Cassandra)",
+                "Graph Databases (e.g., Neo4j)",
+                "CAP Theorem and BASE Properties",
+                "NoSQL vs Relational Databases",
+                "Use Cases and Applications"
+            ],
+            "resources": ["Notes", "Video"]
+        }
     ]
-  }
-  
+}

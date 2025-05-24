@@ -4,44 +4,43 @@
     "topics": [
       {
         "title": "Introduction to Computer Graphics",
-        "description": "Definition, applications, and history of graphics systems.",
+        "description": "Definition and scope of computer graphics, applications (gaming, CAD, simulation, UI design), history and evolution of graphics systems, overview of graphics pipeline and rendering process.",
         "resources": ["Notes", "Video"]
       },
       {
         "title": "Graphics Hardware and Software",
-        "description": "Input/output devices and graphics pipeline.",
+        "description": "Graphics system architecture, input devices (keyboard, mouse, light pen, digitizers, scanners), output devices (raster and random scan displays, printers), graphics software (libraries, APIs like OpenGL, DirectX), and graphics pipeline stages (modeling, transformation, lighting, projection, clipping, rasterization).",
         "resources": ["Examples", "Diagram"]
       },
       {
         "title": "2D Transformations",
-        "description": "Translation, scaling, rotation, and homogeneous coordinates.",
+        "description": "Basic transformations (translation, scaling, rotation), composite transformations, homogeneous coordinates and transformation matrices, coordinate systems, and transformations between them.",
         "resources": ["Practice", "Notes"]
       },
       {
         "title": "3D Transformations",
-        "description": "3D rotation, scaling, translation, and viewing pipeline.",
+        "description": "3D translation, scaling, rotation about axes (X, Y, Z), viewing coordinate system, viewing pipeline (modeling, viewing, projection), and introduction to viewing volume and clipping in 3D.",
         "resources": ["Examples", "Diagram"]
       },
       {
         "title": "Line and Circle Drawing Algorithms",
-        "description": "DDA and Bresenham’s algorithms for lines and circles.",
+        "description": "Line drawing algorithms (DDA, Bresenham’s line algorithm), circle drawing algorithms (Bresenham’s circle algorithm, Midpoint circle algorithm), implementation considerations, and optimizations.",
         "resources": ["Code", "Practice"]
       },
       {
         "title": "Clipping Algorithms",
-        "description": "Cohen-Sutherland and Liang-Barsky line clipping.",
+        "description": "Line clipping (Cohen-Sutherland algorithm, Liang-Barsky algorithm), polygon clipping (Sutherland-Hodgman algorithm), clipping window, and viewport.",
         "resources": ["Code", "Notes"]
       },
       {
         "title": "Projection",
-        "description": "Orthographic and perspective projection techniques.",
+        "description": "Orthographic projection (characteristics and uses), perspective projection (concept, vanishing point, perspective divide), and comparison between orthographic and perspective projections.",
         "resources": ["Diagram", "Video"]
       },
       {
         "title": "Shading and Rendering",
-        "description": "Flat, Gouraud, and Phong shading; basic rendering concepts.",
+        "description": "Basic rendering pipeline overview, illumination models (ambient, diffuse, specular reflections), shading techniques (flat shading, Gouraud shading, Phong shading), introduction to texture mapping, and basic rendering concepts.",
         "resources": ["Notes", "Examples"]
       }
     ]
   }
-  
