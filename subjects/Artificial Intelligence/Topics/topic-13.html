@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Computer Vision</title>
+    <title>Advanced AI Topics & Ethics</title>
     <meta name="description"
-        content="Explore Computer Vision: image processing, feature extraction (SIFT, SURF, HOG), image classification, object detection (YOLO, SSD), image segmentation, face recognition, and OCR.">
+        content="Explore advanced AI topics: Explainable AI (XAI), Ethical AI (bias, fairness, accountability, privacy), AI in autonomous systems, robotics, healthcare, finance, and education.">
     <meta name="keywords"
-        content="Computer Vision, Image Processing, Feature Extraction, SIFT, SURF, HOG, Image Classification, Object Detection, YOLO, SSD, Image Segmentation, Face Recognition, OCR, AI">
+        content="Advanced AI, XAI, Explainable AI, Ethical AI, Bias in AI, AI Fairness, AI Accountability, AI Privacy, Autonomous Systems, Self-Driving Cars, Robotics, AI in Healthcare, AI in Finance, AI in Education">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         /* CSS from topic-1.html - For brevity, imagine all the CSS from the previous example is here */
@@ -886,7 +886,7 @@
 
     <nav class="navbar">
         <div class="nav-left-spacer"></div>
-        <a href="#" class="navbar-brand"><i class="fas fa-eye"></i> Computer Vision</a>
+        <a href="#" class="navbar-brand"><i class="fas fa-cogs"></i> Advanced AI & Ethics</a>
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
             <i class="fas fa-moon"></i>
         </button>
@@ -899,8 +899,8 @@
 
     <main class="main-content">
         <header class="hero-section">
-            <h1>Computer Vision</h1>
-            <p>Enabling computers to "see" and interpret the visual world around them.</p>
+            <h1>Advanced AI Topics & Ethics</h1>
+            <p>Exploring the frontiers of AI, its societal impact, and the principles of responsible innovation.</p>
         </header>
 
         <div class="syllabus-bar-container">
@@ -913,503 +913,351 @@
                 Back to Syllabus
             </a>
             <div class="syllabus-bar-topic-badge">
-                Topic 12
+                Topic 13
             </div>
         </div>
 
-        <section id="intro-cv">
-            <h2>Introduction to Computer Vision</h2>
-            <p>Computer Vision is a field of artificial intelligence (AI) that enables computers and systems to derive
-                meaningful information from digital images, videos, and other visual inputs — and take actions or make
-                recommendations based on that information. If AI enables computers to think, computer vision enables
-                them to see, observe, and understand.</p>
-            <p>Image processing refers to the techniques used to enhance, transform, and analyze images. This can
-                involve a range of operations, from simple tasks like adjusting brightness to complex procedures like
-                object detection. The main aim is to prepare images for further analysis or improve their visual
-                quality, allowing computers to interpret them more effectively.</p>
-        </section>
-
-        <section id="image-processing-fundamentals">
-            <h2>Fundamentals of Image Processing</h2>
-            <h4>Types of Images</h4>
-            <p>It is important to understand the types of images for effective image processing. The main types includes
-                –</p>
-            <ul>
-                <li><strong>Grayscale Images:</strong> Contain shades of gray, ranging from black to white. Each pixel
-                    is represented by a single value that represents its intensity. They are simpler to process and
-                    often used in applications like edge detection and feature extraction.</li>
-                <li><strong>Color Images:</strong> Consist of three channels: red, green, and blue (RGB). Each pixel is
-                    represented by three values, one for each channel, which combine to create a wide range of colors.
-                    They provide more information but require more complex processing.</li>
-                <li><strong>Binary Images:</strong> A binary image has only two pixel values, generally 0 (black) and 1
-                    (white). These images are often used in image segmentation and object detection tasks, where it is
-                    important to differentiate between the foreground and background.</li>
-            </ul>
-            <h4>Basic Operations in Image Processing</h4>
-            <p>Image processing involves many basic operations that form the basis for more complex tasks. Here are some
-                key operations –</p>
-            <h5>Image Enhancement</h5>
-            <p>Image enhancement techniques focuses on improving the visual quality of an image, making it easier to
-                analyze. Some common methods are as follows –</p>
-            <ul>
-                <li><strong>Brightness Adjustment:</strong> This operation increases or decreases the overall brightness
-                    of an image, making details more visible.</li>
-                <li><strong>Contrast Enhancement:</strong> Adjusting the contrast makes differences between light and
-                    dark areas more pronounced. Higher contrast can reveal more details, making it easier to identify
-                    features in the image.</li>
-                <li><strong>Histogram Equalization:</strong> This method enhances the contrast of an image by
-                    redistributing pixel intensities. By spreading out the most frequent intensity values, histogram
-                    equalization helps to improve the visibility of features, particularly in poorly lit images.</li>
-            </ul>
-            <h5>Image Filtering</h5>
-            <p>Filtering techniques are used to remove noise or enhance specific features in an image. Two common types
-                of filters are: <strong>Low-Pass Filters</strong> and <strong>High-Pass Filters</strong>.</p>
-            <ul>
-                <li><strong>Low-Pass Filters:</strong> Reduce high-frequency noise while preserving low-frequency
-                    information, effectively smoothing out the image. This operation helps to eliminate graininess that
-                    may distract from the important features.</li>
-                <li><strong>High-Pass Filters:</strong> Enhance edges and fine details by increasing high-frequency
-                    components. They are useful for edge detection and feature extraction, helping to identify the
-                    boundaries of objects within an image.</li>
-            </ul>
-            <h5>Image Transformation</h5>
-            <p>Image transformation involves altering the geometry or structure of an image. Few common transformation
-                techniques are –</p>
-            <ul>
-                <li><strong>Scaling:</strong> Changes the size of an image while maintaining its aspect ratio. Resizing
-                    images is important for matching the requirements of various applications, such as machine learning
-                    models or display screens.</li>
-                <li><strong>Rotation:</strong> Rotating an image by a specific angle is necessary for image alignment or
-                    to correct orientation. This operation helps standardize images for analysis, especially in datasets
-                    where images may not be uniformly oriented.</li>
-                <li><strong>Translation:</strong> Shifting an image horizontally or vertically allows for alignment of
-                    images in a sequence. This operation is particularly useful when processing a series of images to
-                    track movement or changes over time.</li>
-            </ul>
-        </section>
-
-        <section id="feature-extraction">
-            <h2>Feature Extraction Techniques</h2>
-            <p>Feature extraction involves identifying and extracting distinctive characteristics or features from an
-                image that can be used for tasks like object recognition, image matching, and classification. Some
-                prominent techniques include:</p>
-
-            <h3 id="sift">Scale-Invariant Feature Transform (SIFT)</h3>
-            <p>The Scale-Invariant Feature Transform (SIFT) is a popular feature extraction algorithm that aims to
-                detect and describe robust and distinctive local features in an image. These features, known as SIFT
-                keypoints or interest points, are invariant to changes in scale, rotation, and illumination, making them
-                suitable for various computer vision tasks such as object recognition, image matching, and 3D
-                reconstruction.</p>
-            <h4>The SIFT algorithm consists of several key steps:</h4>
-            <ol>
-                <li><strong>Scale-Space Extrema Detection:</strong> Constructing a scale-space representation by
-                    convolving the image with Gaussian filters of different scales. Keypoints are identified as local
-                    extrema in the Difference-of-Gaussian (DoG) pyramid.</li>
-                <li><strong>Keypoint Localization:</strong> Refining potential keypoints to improve accuracy and
-                    eliminate low-contrast or poorly localized points (e.g., on edges).</li>
-                <li><strong>Orientation Assignment:</strong> Assigning a dominant orientation to each keypoint based on
-                    local image gradients. This ensures rotation invariance.</li>
-                <li><strong>Keypoint Descriptor Calculation:</strong> Computing a descriptor for each keypoint based on
-                    the local image gradients around it, normalized for illumination changes. SIFT descriptors are
-                    typically histograms of gradient orientations.</li>
-                <li><strong>Keypoint Matching:</strong> Comparing descriptors between images to find corresponding
-                    keypoints, often using nearest neighbor search and a ratio test to ensure uniqueness.</li>
-            </ol>
-
-            <h3 id="surf">Speeded Up Robust Features (SURF)</h3>
-            <p>The Speeded Up Robust Features (SURF) algorithm is a feature extraction method that shares similarities
-                with SIFT but is designed to be computationally efficient. SURF aims to detect and describe local image
-                features that are robust to changes in scale, rotation, and affine transformations.</p>
-            <h4>The key steps of the SURF algorithm are as follows:</h4>
-            <ol>
-                <li><strong>Scale-Space Construction:</strong> Builds a scale-space representation using box filters
-                    (approximations of Gaussian filters) and integral images for fast convolution.</li>
-                <li><strong>Keypoint Detection:</strong> Detects keypoints by identifying local maxima and minima in the
-                    Difference of Gaussians (DoG) pyramid (approximated using box filters).</li>
-                <li><strong>Orientation Assignment:</strong> Computes Haar wavelet responses in multiple orientations
-                    around each keypoint and selects the dominant orientation.</li>
-                <li><strong>Keypoint Description:</strong> Based on the distribution of gradient orientations (using
-                    Haar wavelets) within a local neighborhood.</li>
-                <li><strong>Keypoint Matching:</strong> Uses distance metrics like Euclidean distance or Hamming
-                    distance between descriptors. Robust matching techniques like RANSAC can be used to refine matches.
-                </li>
-            </ol>
-
-            <h3 id="hog">Histogram of Oriented Gradients (HOG)</h3>
-            <p>The Histogram of Oriented Gradients (HOG) is a feature extraction technique that focuses on capturing
-                local gradient information from an image. It is particularly effective in object detection and
-                pedestrian detection tasks.</p>
-            <h4>The main steps of the HOG algorithm are as follows:</h4>
-            <ol>
-                <li><strong>Gradient Computation:</strong> Computing the image’s gradient magnitude and orientation
-                    using gradient filters (e.g., Sobel, Scharr).</li>
-                <li><strong>Cell Formation:</strong> Dividing the image into small cells, and for each cell, a histogram
-                    of gradient orientations is computed.</li>
-                <li><strong>Block Normalization:</strong> Grouping neighboring cells into blocks and normalizing their
-                    histograms to improve robustness to illumination variations.</li>
-                <li><strong>Descriptor Formation:</strong> Concatenating the normalized histograms from all blocks to
-                    form the final HOG descriptor.</li>
-                <li><strong>Training and Classification:</strong> HOG descriptors can be used as input features for
-                    machine learning algorithms like SVMs or Neural Networks.</li>
-            </ol>
-
-            <h3 id="gloh">Gradient Location-Orientation Histograms (GLOH)</h3>
-            <p>Gradient Location-Orientation Histograms (GLOH) is an extension of the SIFT algorithm that aims to
-                improve the robustness and discriminative power of local image descriptors. GLOH captures additional
-                information about the spatial distribution of gradients and their orientations.</p>
-            <h4>The key steps of the GLOH algorithm are as follows:</h4>
-            <ol>
-                <li><strong>Interest Point Detection:</strong> Detected using methods similar to SIFT (e.g., DoG).</li>
-                <li><strong>Orientation Assignment:</strong> More complex than SIFT, involving computing local
-                    orientation histograms at different scales.</li>
-                <li><strong>GLOH Descriptor Calculation:</strong> Encodes the spatial distribution of gradients around
-                    each keypoint.</li>
-                <li><strong>Descriptor Normalization:</strong> Techniques like L2-Norm or contrast normalization are
-                    applied.</li>
-                <li><strong>Keypoint Matching and Applications:</strong> Similar to SIFT or SURF, for tasks like image
-                    alignment, object recognition, and image retrieval.</li>
-            </ol>
-            <p>In summary, SIFT, SURF, HOG, and GLOH are all feature extraction algorithms that aim to capture and
-                describe distinctive local features in images. While SIFT and SURF focus on scale-invariant keypoints,
-                HOG and GLOH emphasize gradient information.</p>
-        </section>
-
-        <section id="image-classification">
-            <h2>Image Classification</h2>
-            <p>Image classification is the task of assigning a label or category to an entire image based on its visual
-                content. For example, classifying an image as containing a "cat," "dog," or "car." It's a fundamental
-                problem in computer vision with numerous applications.</p>
-            <h4>Concept of Image Classification</h4>
-            <ul>
-                <li>Image classification involves assigning pixels in the image to categories or classes of interest.
-                    Examples: built-up areas, waterbody, green vegetation, bare soil, rocky areas, cloud, shadow.</li>
-                <li>It is a process of mapping numbers (pixel values) to symbols (class labels). Formally, f(x): x → Δ,
-                    where x ∈ R<sup>n</sup>, Δ = {c<sub>1</sub>, c<sub>2</sub>, ..., c<sub>L</sub>}.</li>
-                <li>To achieve this by computer, the computer must be trained. Training is key to the success of
-                    classification.</li>
-            </ul>
-            <h4>Types of Learning in Image Classification</h4>
-            <ul>
-                <li><strong>Supervised Learning:</strong> Learning process designed to form a mapping from one set of
-                    variables (data) to another set of variables (information classes). A "teacher" (labeled data) is
-                    involved.</li>
-                <li><strong>Unsupervised Learning:</strong> Learning happens without a teacher. Exploration of the data
-                    space to discover underlying patterns or structures.</li>
-            </ul>
-            <p>Supervised classification generally performs better than unsupervised classification IF good quality
-                training data is available. Unsupervised classifiers are often used for preliminary analysis.</p>
-            <h4>Role of Image Classifier</h4>
-            <p>The image classifier performs the role of a <strong>discriminant</strong> – discriminates one class
-                against others. A discriminant function g(c<sub>k</sub>, x) relates a feature vector x and class
-                c<sub>k</sub>.
-            <ul>
-                <li><strong>Multiclass Case:</strong> g<sub>k</sub>(x) > g<sub>l</sub>(x), for all l ≠ k, if x ∈
-                    c<sub>k</sub>.</li>
-                <li><strong>Two Class Case:</strong> g(x) > 0 if x ∈ c<sub>1</sub>; g(x) < 0 if x ∈ c<sub>2</sub>.</li>
-            </ul>
-            </p>
-            <h4>Supervised Classification Algorithms (Examples)</h4>
-            <ul>
-                <li>Minimum Distance from Mean (MDM)</li>
-                <li>Parallelepiped Classifier</li>
-                <li>Maximum Likelihood (ML) Classifier</li>
-                <li>Support Vector Machines (SVM)</li>
-                <li>Artificial Neural Networks (ANN), especially CNNs</li>
-            </ul>
-        </section>
-
-        <section id="object-detection">
-            <h2>Object Detection</h2>
-            <p>Object detection is a computer vision technique for identifying and locating objects within an image or
-                video. It involves not only classifying what objects are present but also determining their positions,
-                typically by drawing bounding boxes around them. Object detection is a key output of deep learning and
-                machine learning algorithms.</p>
+        <section id="xai">
+            <h2>Explainable AI (XAI)</h2>
+            <p>Explainable Artificial Intelligence (XAI) refers to a collection of procedures and techniques that enable
+                machine learning algorithms to produce output and results that are understandable and reliable for human
+                users. XAI is a key component of the fairness, accountability, and transparency (FAT) machine learning
+                paradigm and is frequently discussed in connection with deep learning. Organizations looking to
+                establish trust when deploying AI can benefit from XAI. XAI can assist them in comprehending the
+                behavior of an AI model and identifying possible problems like AI bias.</p>
             <div class="algorithm-diagram">
-                <div class="diagram-placeholder">Figure 5.4: Object recognition (left image with a palm tree) vs. object
-                    detection (right image with a person inside a bounding box).</div>
-                <p>Figure 5.4: Object recognition (left) and object detection (right).</p>
+                <div class="diagram-placeholder">Diagram comparing "Today" (Training Data -> ML Process -> Learned
+                    Function -> Decision -> User asks HOW?) with "XAI" (Training Data -> New ML Process -> Explainable
+                    Model -> Explanation Interface -> User says GOT IT.).</div>
             </div>
 
-            <h3 id="yolo">YOLO (You Only Look Once)</h3>
-            <p>YOLO (You Only Look Once) is a groundbreaking single-stage object detection algorithm that redefined the
-                field by processing images in a single pass, achieving unprecedented speed without sacrificing accuracy
-                significantly. Developed by Joseph Redmon and Ali Farhadi, YOLO's "look once" philosophy transformed
-                object detection from a multi-step puzzle into a unified, end-to-end process.</p>
-            <h4>Core Architecture: How YOLO Achieves Speed and Simplicity</h4>
+            <h4>Why XAI Matters?</h4>
+            <ol>
+                <li><strong>Trust and Transparency:</strong> Users and stakeholders need to trust the decisions made by
+                    AI systems, particularly when the outcomes impact people's lives (e.g., medical diagnosis, loan
+                    approval).</li>
+                <li><strong>Ethical Concerns:</strong> XAI helps identify and mitigate biases in models, ensuring that
+                    AI systems make fair and unbiased decisions.</li>
+                <li><strong>Regulatory Compliance:</strong> In many industries, regulations like GDPR demand that
+                    decisions made by automated systems be explainable, especially when personal data is involved.</li>
+                <li><strong>Debugging and Improvement:</strong> XAI allows data scientists and engineers to understand
+                    model behavior, enabling them to identify errors, improve performance, and ensure robustness.</li>
+            </ol>
+
+            <h4>Interpretability vs. Explainability</h4>
+            <p>While the terms “interpretability” and “explainability” are often used interchangeably, there are subtle
+                differences between them:</p>
             <ul>
-                <li><strong>Grid Division:</strong> The input image is divided into an S×S grid (e.g., 7×7 in YOLOv1).
-                    Each grid cell predicts B bounding boxes and their associated confidence scores.</li>
-                <li><strong>Unified Prediction:</strong> YOLO predicts bounding boxes and class probabilities
-                    simultaneously in a single forward pass.</li>
-                <li><strong>Loss Function:</strong> Combines localization loss (errors in box coordinates), confidence
-                    loss (object presence), and classification loss.</li>
-                <li><strong>Post-Processing:</strong> Non-Max Suppression (NMS) merges overlapping boxes, retaining only
-                    the most confident predictions.</li>
+                <li><strong>Interpretability:</strong> The ability to understand the model's mechanics, or how it makes
+                    predictions based on its inputs. This is typically associated with simpler models like linear
+                    regression or decision trees, where the internal workings are transparent.</li>
+                <li><strong>Explainability:</strong> The process of providing insights into the reasoning of more
+                    complex, often opaque models (e.g., deep learning and ensemble methods). Explainability focuses on
+                    creating methods to describe the decision-making process without necessarily exposing the full
+                    mechanics.</li>
             </ul>
-            <h4>Evolution of YOLO: From v1 to YOLOv8 and Beyond</h4>
-            <p>Since 2016, YOLO has undergone iterative improvements, balancing speed, accuracy, and versatility. Key
-                versions include YOLOv1 to YOLOv8, each introducing innovations like anchor boxes, multi-scale
-                prediction, self-training, and anchor-free detection.</p>
-            <p><strong>Strengths:</strong> Blazing speed, simplicity, scalability.
-                <br><strong>Limitations:</strong> Accuracy trade-offs with crowded/small objects, localization errors in
-                early versions.
+            <h5>Types of Interpretability:</h5>
+            <ol>
+                <li><strong>Global Interpretability:</strong> Understanding the overall behavior of the model and how it
+                    makes predictions across all inputs. Example: Identifying which features a model considers most
+                    important overall (e.g., age, income) in predicting loan approval.</li>
+                <li><strong>Local Interpretability:</strong> Understanding how a model arrives at a specific decision
+                    for a single instance or input. Example: Explaining why an AI system denied a specific individual’s
+                    loan application based on their unique features.</li>
+            </ol>
+
+            <h4>Benefits of Explainable AI</h4>
+            <p>The value of explainable AI lies in its ability to provide transparent and interpretable machine-learning
+                models that can be understood and trusted by humans. Some key values include:</p>
+            <ul>
+                <li><strong>Improved decision-making:</strong> Provides insights into factors most relevant in model
+                    predictions.</li>
+                <li><strong>Increased trust and acceptance:</strong> Helps overcome challenges and limitations of opaque
+                    traditional models.</li>
+                <li><strong>Reduced risks and liabilities:</strong> Provides a framework for addressing regulatory and
+                    ethical considerations.</li>
+            </ul>
+
+            <h4>Techniques for Explainable AI (XAI)</h4>
+            <p>Several methods have been developed to improve the interpretability of machine learning models. Popular
+                XAI techniques include:</p>
+            <h5>1. Feature Importance</h5>
+            <p>Feature importance methods identify which input features contribute the most to a model’s predictions.
+                These methods provide insights into which variables the model is prioritizing when making decisions. For
+                example, in a credit scoring model, feature importance could reveal that “income” and “credit history”
+                have the highest impact.</p>
+            <h5>2. SHAP (SHapley Additive exPlanations)</h5>
+            <p>SHAP values are based on game theory and provide a way to explain individual predictions by assigning
+                each feature an importance score. SHAP calculates the contribution of each feature by considering all
+                possible combinations of features, leading to highly reliable explanations.</p>
+            <div class="formula">φ<sub>i</sub> = Σ<sub>S ⊆ N \ {i}</sub> <sup>|S|!(|N|-|S|-1)!</sup>/<sub>|N|!</sub>
+                [f(S ∪ {i}) - f(S)]</div>
+            <p>Where 'N' is the set of all features, 'S' is a subset of features, and 'φ<sub>i</sub>' is the Shapley
+                value representing the contribution of feature ‘i’.</p>
+            <h5>3. LIME (Local Interpretable Model-agnostic Explanations)</h5>
+            <p>LIME explains the predictions of any classifier or regressor by approximating it locally with an
+                interpretable model (e.g., linear model, decision tree). It perturbs the input instance and observes the
+                changes in predictions to understand which features were most influential for that specific prediction.
             </p>
 
-            <h3 id="ssd">SSD (Single Shot MultiBox Detector)</h3>
-            <p>A Single Shot Detector (SSD) is an innovative object detection algorithm in computer vision. It stands
-                out for its ability to swiftly and accurately detect and locate objects within images or video frames.
-                What sets SSD apart is its capacity to accomplish this in a single pass of a deep neural network, making
-                it exceptionally efficient and ideal for real-time applications.</p>
-            <h4>Key Features of SSD:</h4>
+            <h4>Challenges in XAI</h4>
             <ul>
-                <li><strong>Single Shot:</strong> Performs object detection in a single pass, directly predicting
-                    bounding boxes and class scores.</li>
-                <li><strong>MultiBox:</strong> Uses a set of default bounding boxes (anchor boxes) of different scales
-                    and aspect ratios at multiple locations in the input image.</li>
-                <li><strong>Multi-Scale Detection:</strong> Operates on multiple feature maps with different
-                    resolutions, allowing it to detect objects of various sizes.</li>
-                <li><strong>Class Scores:</strong> Assigns class scores to each default box, indicating the likelihood
-                    of an object belonging to a specific category.</li>
-                <li><strong>Hard Negative Mining:</strong> Focuses on challenging negative examples during training to
-                    improve accuracy.</li>
+                <li><strong>Trade-Off Between Accuracy and Interpretability:</strong> Simpler models are easier to
+                    interpret but may not achieve the same performance as complex models.</li>
+                <li><strong>Quantifying Trust and Explanation Quality:</strong> Not all explanations are equally useful.
+                    Finding reliable ways to measure explanation quality is key.</li>
+                <li><strong>Fairness and Bias in XAI:</strong> Ensuring explanations themselves are not biased and
+                    explaining bias mitigation to non-technical users.</li>
+                <li><strong>Domain-Specific Explanations:</strong> Different domains require different types of
+                    explanations.</li>
             </ul>
-            <div class="algorithm-diagram">
-                <div class="diagram-placeholder">SSD Architecture Diagram: VGG-16 base network, followed by extra
-                    feature layers, with predictions made from multiple feature maps.</div>
-                <p>SSD Architecture</p>
-            </div>
-            <p>SSD achieves its efficiency by employing anchor boxes of various aspect ratios at multiple locations in
-                feature maps. These anchor boxes enable it to handle objects of different sizes and shapes effectively.
-            </p>
-            <h4>Applications of SSDs:</h4>
-            <ul>
-                <li>Autonomous Vehicles</li>
-                <li>Surveillance Systems</li>
-                <li>Retail Analytics</li>
-                <li>Industrial Automation</li>
-                <li>Drone Applications</li>
-            </ul>
-            <h4>Challenges and Limitations of SSDs:</h4>
-            <p>SSD's primary limitation is its difficulty in accurately detecting tiny objects, heavily occluded
-                objects, or objects with extreme aspect ratios. Other challenges include complex backgrounds and the
-                trade-off between speed and accuracy.</p>
         </section>
 
-        <section id="image-segmentation">
-            <h2>Image Segmentation</h2>
-            <p>Image segmentation is the process of dividing an digital image into multiple segments (sets of pixels,
-                also known as image objects). The goal of segmentation is to simplify and/or change the representation
-                of an image into something that is more meaningful and easier to analyze. This is essential for
-                separating objects within an image.</p>
+        <section id="ethical-ai">
+            <h2>Ethical Considerations in AI</h2>
+            <p>Artificial Intelligence (AI) is quickly changing many parts of our lives, from personalized movie
+                recommendations to self-driving cars. However, as AI grows more advanced, it raises many ethical issues
+                that need careful attention. Ethical considerations in AI development are paramount due to the profound
+                impact AI systems can have on individuals, communities, and societies as a whole.</p>
             <div class="algorithm-diagram">
-                <div class="diagram-placeholder">Image Segmentation Flow: Image -> Region of interest using segmentation
-                    -> Processed by ML model -> Output.</div>
+                <div class="diagram-placeholder">Image: "Ethical Considerations in AI Development" title with scales of
+                    justice and abstract tech background.</div>
             </div>
-            <h4>Types of Image Segmentation Approaches</h4>
+
+            <h4>Key Ethical Challenges</h4>
+            <ul>
+                <li><strong>Transparency and Accountability:</strong> AI systems must be transparent in their
+                    operations. Developers should provide clear documentation about how AI models work, including their
+                    data sources, algorithms, and decision-making processes. Accountability ensures that ethical
+                    breaches can be identified and addressed promptly.</li>
+                <li><strong>Bias and Fairness:</strong> AI systems can inherit biases present in the training data,
+                    leading to unfair outcomes. It is essential to identify and mitigate biases to ensure AI
+                    technologies are fair and impartial. Fairness involves making AI systems accessible and beneficial
+                    to all users, regardless of demographic factors.</li>
+                <li><strong>Privacy and Data Protection:</strong> AI systems often rely on vast amounts of personal
+                    data. Protecting this data is crucial to maintain user trust and comply with legal regulations.
+                    Users should have control over their data and be informed about its collection and usage.</li>
+                <li><strong>Security:</strong> AI systems can be targets for cyberattacks. Ensuring the security of AI
+                    systems involves implementing strong cybersecurity measures to protect against unauthorized access,
+                    data manipulation, and other malicious activities.</li>
+                <li><strong>Human-Centric Design:</strong> AI systems should be designed to augment human capabilities,
+                    not replace them entirely. Human oversight ensures that critical decisions are reviewed by humans.
+                    User experience should be intuitive, with clear explanations for AI actions.</li>
+            </ul>
+
+            <h4>Principles of Ethical AI</h4>
             <ol>
-                <li><strong>Similarity Detection (Region Approach):</strong> Relies on detecting similar pixels in an
-                    image – based on a threshold, region growing, region spreading, and region merging.</li>
-                <li><strong>Discontinuity Detection (Boundary Approach):</strong> Searches for discontinuity. Image
-                    Segmentation algorithms like Edge Detection, Point Detection, Line Detection follows this approach.
-                </li>
+                <li><strong>Fairness:</strong> AI systems should be designed and deployed in a manner that promotes
+                    fairness and avoids discrimination.</li>
+                <li><strong>Transparency:</strong> AI systems should be transparent and explainable, enabling users to
+                    understand how decisions are made and allowing for scrutiny and accountability.</li>
+                <li><strong>Privacy:</strong> AI developers should prioritize the protection of individuals’ privacy
+                    rights and adhere to data protection regulations.</li>
+                <li><strong>Accountability:</strong> Developers and organizations deploying AI systems should be
+                    accountable for the outcomes of their technologies.</li>
+                <li><strong>Human-Centered Design:</strong> AI systems should be designed with the well-being and
+                    interests of humans in mind.</li>
             </ol>
-            <h4>Image Segmentation Techniques</h4>
-            <ul>
-                <li><strong>Thresholding:</strong> A simple method that converts grayscale images into binary images by
-                    setting a specific intensity level as a threshold.
-                    <ul>
-                        <li><strong>Global Thresholding:</strong> Uses a single threshold value for the entire image.
-                        </li>
-                        <li><strong>Manual Thresholding:</strong> User chooses the threshold.</li>
-                        <li><strong>Adaptive Thresholding:</strong> Image is divided into subregions, and thresholding
-                            is applied to each.</li>
-                        <li><strong>Optimal Thresholding (e.g., Otsu's Method):</strong> Minimizes misclassification of
-                            pixels.</li>
-                    </ul>
-                </li>
-                <li><strong>Edge-Based Segmentation:</strong> Identifying boundaries (edges) within an image helps
-                    distinguish objects from the background. Algorithms like the Canny edge detector efficiently locate
-                    edges.</li>
-                <li><strong>Region-Based Segmentation:</strong> Grouping pixels based on their similarity in color or
-                    intensity allows for the identification of distinct regions.
-                    <ul>
-                        <li><strong>Region Growing:</strong> Starts with seed pixels and iteratively adds adjacent
-                            similar pixels.</li>
-                        <li><strong>Region Splitting and Merging:</strong> Divides the image into regions and then
-                            merges or splits them based on similarity criteria.</li>
-                    </ul>
-                </li>
-                <li><strong>Clustering-Based Segmentation:</strong> Grouping pixels based on their color or intensity
-                    values using clustering algorithms (e.g., K-means) allows for the identification of distinct
-                    regions.</li>
-                <li><strong>Watershed Based Method:</strong> Based on topological interpretation of image boundaries.
-                </li>
-                <li><strong>Artificial Neural Network Based Segmentation:</strong> Using deep learning algorithms,
-                    especially CNNs (e.g., U-Net, Mask R-CNN), for semantic or instance segmentation.</li>
-            </ul>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Technique</th>
-                            <th>Description</th>
-                            <th>Advantages</th>
-                            <th>Disadvantages</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Thresholding Method</td>
-                            <td>Focuses on finding peak values based on the histogram of the image to find similar
-                                pixels</td>
-                            <td>Doesn't require complicated pre-processing, simple</td>
-                            <td>Many details can get omitted, threshold errors are common</td>
-                        </tr>
-                        <tr>
-                            <td>Edge Based Method</td>
-                            <td>based on discontinuity detection unlike similarity detection</td>
-                            <td>Good for images having better contrast between objects.</td>
-                            <td>Not suitable for noisy images</td>
-                        </tr>
-                        <tr>
-                            <td>Region-Based Method</td>
-                            <td>based on partitioning an image into homogeneous regions</td>
-                            <td>Works really well for images with a considerate amount of noise, can take user markers
-                                for fasted evaluation</td>
-                            <td>Time and memory consuming</td>
-                        </tr>
-                        <tr>
-                            <td>Clustering (Traditional Segmentation Algorithms)</td>
-                            <td>Divides image into k number of homogenous, mutually exclusive clusters – hence obtaining
-                                objects</td>
-                            <td>Proven methods, reinforced with fuzzy logic and more useful for real-time application.
-                            </td>
-                            <td>Determining cost function for minimization can be difficult.</td>
-                        </tr>
-                        <tr>
-                            <td>Watershed Method</td>
-                            <td>based on topological interpretation of image boundaries</td>
-                            <td>segments obtained are more stable, detected boundaries are distinct</td>
-                            <td>Gradient calculation for ridges is complex.</td>
-                        </tr>
-                        <tr>
-                            <td>Neural Networks</td>
-                            <td>based on deep learning algorithms – Convolutional Neural Networks</td>
-                            <td>easy implementation, no need for following any complicated algorithms, ready-made
-                                libraries available in Python, more practical applications</td>
-                            <td>Training the model for custom and business images is time consuming and resource costly.
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+
+            <h4>10 Best Practices for Using AI Responsibly</h4>
+            <ol>
+                <li>Conducting ethical risk assessments.</li>
+                <li>Engaging diverse stakeholders.</li>
+                <li>Investing in AI literacy.</li>
+                <li>Monitoring AI systems continuously.</li>
+                <li>Transparent communication about AI operations.</li>
+                <li>Implementing robust data governance.</li>
+                <li>Ensuring model explainability.</li>
+                <li>Periodic retraining with updated data.</li>
+                <li>Establishing an ethical oversight board.</li>
+                <li>Creating channels for user feedback.</li>
+            </ol>
         </section>
 
-        <section id="cv-applications">
-            <h2>Key Applications of Computer Vision</h2>
-            <h3 id="face-recognition">Face Recognition</h3>
-            <p>Face recognition is a method of identifying or verifying the identity of an individual using their face.
-                Face recognition systems can be used to identify people in photos, video, or in real-time. Law
-                enforcement may also use mobile devices to identify people during police stops.</p>
+        <section id="ai-autonomous-systems">
+            <h2>AI in Autonomous Systems</h2>
+            <p>Autonomous systems are capable of operating and making decisions without direct human intervention. AI is
+                a core component of these systems, enabling them to perceive their environment, make decisions, and act
+                accordingly.</p>
+
+            <h3 id="self-driving-cars">Self-Driving Cars</h3>
+            <p>Self-driving technology, also known as autonomous driving, refers to the capability of a vehicle to
+                navigate and operate without human intervention. This technology leverages a combination of sensors,
+                cameras, artificial intelligence (AI), and machine learning algorithms to interpret data from the
+                vehicle’s surroundings and make real-time driving decisions.</p>
+            <h4>Key Components of Self-Driving Technology:</h4>
+            <ul>
+                <li><strong>Sensors:</strong> Lidar, radar, and cameras are used to detect obstacles, road conditions,
+                    and traffic signals.</li>
+                <li><strong>AI Algorithms:</strong> These algorithms process data from sensors to understand the
+                    environment and predict the behavior of other road users. (Often CNNs for perception, RNNs/LSTMs for
+                    prediction, and RL for decision-making).</li>
+                <li><strong>Connectivity:</strong> Vehicles are often equipped with V2X (Vehicle-to-Everything)
+                    communication systems to interact with other vehicles and infrastructure.</li>
+            </ul>
+            <h4>Levels of Automation (SAE Levels 0-5):</h4>
             <div class="algorithm-diagram">
-                <div class="diagram-placeholder">Figure 5.2: Face Recognition steps - 1. Image captured, 2. Eye
-                    locations determined, 3. Image converted to grayscale/cropped, 4. Image converted to template, 5.
-                    Image searched/matched, 6. Duplicate licenses investigated.</div>
-                <p>Figure 5.2: Face Recognition</p>
+                <div class="diagram-placeholder">Funnel diagram illustrating SAE Levels of Autonomy from Level 0 (No
+                    Automation) at the top to Level 5 (Full Automation) at the bottom.</div>
+                <p>Levels of Autonomy (SAE Levels 0-5)</p>
             </div>
-            <p>Face recognition systems use computer algorithms to pick out specific, distinctive details about a
-                person’s face. These details, such as distance between the eyes or shape of the chin, are then converted
-                into a mathematical representation and compared to data on other faces collected in a face recognition
-                database.</p>
-
-            <h3 id="ocr">Optical Character Recognition (OCR)</h3>
-            <p>Optical Character Recognition (OCR) is a technique to extract text from printed or scanned photos,
-                handwritten text images and convert them into a digital format that can be editable and searchable.</p>
-            <h4>Applications of OCR:</h4>
             <ul>
-                <li>Passport recognition in Airports</li>
-                <li>Automation of Data Entry</li>
-                <li>Number plates recognition</li>
-                <li>Text detection from business cards</li>
-                <li>Converting handwritten documents into electronic images</li>
-                <li>Creating Searchable PDFs</li>
+                <li><strong>Level 0:</strong> No automation; the human driver is in full control.</li>
+                <li><strong>Level 1:</strong> Driver assistance; features like adaptive cruise control.</li>
+                <li><strong>Level 2:</strong> Partial automation; the vehicle can control steering and acceleration but
+                    requires driver supervision.</li>
+                <li><strong>Level 3:</strong> Conditional automation; the vehicle can handle most driving tasks but may
+                    require human intervention.</li>
+                <li><strong>Level 4:</strong> High automation; the vehicle can operate independently in specific
+                    conditions.</li>
+                <li><strong>Level 5:</strong> Full automation; no human intervention is needed in any environment.</li>
             </ul>
-            <h4>OCR Technology & Innovations:</h4>
-            <p>Traditional OCR struggled with poor-quality images and complex fonts. Today, AI-powered OCR systems
-                leverage deep learning (CNNs, RNNs, Transformers) to improve recognition in various languages, fonts,
-                and even handwriting. OCR combined with Natural Language Processing (NLP) enables automatic
-                summarization, classification, and sentiment analysis of extracted text.</p>
-            <h5>Build sample OCR Script (using Tesseract and OpenCV):</h5>
-            <pre><code>import cv2
-import pytesseract
-
-# Set tesseract path (example for Windows, adjust for your system)
-# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-
-# Reading a sample Image
-img = cv2.imread("image.jpg") # Ensure image.jpg is in the same directory or provide full path
-
-# If needed, resize the image
-# img = cv2.resize(img, (400, 400))
-
-# Display the image
-cv2.imshow("Image", img)
-
-# Converting Image to String
-text = pytesseract.image_to_string(img)
-print("Extracted Text:")
-print(text)
-
-cv2.waitKey(0)
-cv2.destroyAllWindows()</code></pre>
-            <div class="output-plot">
-                <div class="diagram-placeholder">Output: Image window showing a sample image with text, and console
-                    output showing the extracted text.</div>
-                <p>Sample OCR output.</p>
+            <h4>Benefits and Challenges:</h4>
+            <p><strong>Benefits:</strong> Safety improvements, increased mobility, traffic efficiency.
+                <br><strong>Challenges:</strong> Regulatory hurdles, public acceptance, technical limitations (e.g.,
+                adverse weather).
+            </p>
+            <div class="algorithm-diagram">
+                <div class="diagram-placeholder">Flowchart: Self-Driving Technology components (Lidar, AI Algorithms,
+                    GNSS Vehicle, Connectivity) -> Levels of Automation -> Benefits/Challenges.</div>
+                <p>Self-Driving Technology Flowchart</p>
             </div>
         </section>
 
-        <section id="interactive-quiz-cv">
-            <h2>Mini Quiz: Test Your Computer Vision Knowledge!</h2>
+        <section id="ai-robotics">
+            <h2>AI in Robotics</h2>
+            <p>Robotics is the design, construction, and application of machines (robots) to perform tasks traditionally
+                performed by humans. Many aspects of robotics involve artificial intelligence; robots may be equipped
+                with human-like senses, such as vision, touch, and temperature sensing.</p>
+            <h4>Laws of Robotics (Asimov's Conceptual Framework):</h4>
+            <ol>
+                <li>A robot may not injure a human being or, through inaction, allow a human being to come to harm.</li>
+                <li>A robot must obey orders given to it by human beings except where such orders would conflict with
+                    the First Law.</li>
+                <li>A robot must protect its existence as long as such protection does not conflict with the First or
+                    Second Law.</li>
+            </ol>
+            <h4>Components of a Robot:</h4>
+            <ul>
+                <li><strong>Actuators:</strong> Convert energy into motion (muscles).</li>
+                <li><strong>Sensors:</strong> Provide information about the surroundings (eyes, ears).</li>
+                <li><strong>Power Supply:</strong> Batteries, electricity, etc.</li>
+                <li><strong>Controller:</strong> The robot's brain, processes sensor input and sends commands.</li>
+                <li><strong>Structure:</strong> Physical support and protection.</li>
+                <li><strong>Programming:</strong> Algorithms, AI for decision-making and interaction.</li>
+                <li><strong>End Effectors:</strong> Tools like grippers or welding arms for interaction.</li>
+            </ul>
+            <h4>Types of Robots:</h4>
+            <ul>
+                <li><strong>Autonomous Mobile Robots (AMRs):</strong> Navigate autonomously using sensors.</li>
+                <li><strong>Automated Guided Vehicles (AGVs):</strong> Rely on tracks or predefined paths.</li>
+                <li><strong>Articulated Robots:</strong> Perform functions similar to a human arm.</li>
+                <li><strong>Humanoid Robots:</strong> Resemble human-like features and mimic movements (e.g., Sophia).
+                </li>
+                <li><strong>Collaborative Robots (Cobots):</strong> Intended to work alongside or directly with humans
+                    (e.g., YuMi).</li>
+            </ul>
+            <div class="algorithm-diagram">
+                <div class="diagram-placeholder">Robotics pros (Automate manual tasks, work in hazardous environments,
+                    etc.) and cons (Restricted by programming, cannot truly empathize, security issues, etc.).</div>
+                <p>Robotics pros and cons</p>
+            </div>
+            <h4>Challenges Associated with Robotics:</h4>
+            <p>Safety concerns, ethical dilemmas (autonomous weapons, bias), cybersecurity risks, data and algorithm
+                bias, job displacement, cost, and lack of regulatory frameworks.</p>
+        </section>
+
+        <section id="ai-industry-applications">
+            <h2>AI Applications in Key Industries</h2>
+            <h3 id="ai-healthcare">AI in Healthcare</h3>
+            <p>Artificial Intelligence is widely used in the field of healthcare and medicine. Various algorithms of
+                Artificial Intelligence are used to build precise machines that are able to detect diseases inside the
+                human body. AI is also used to find the current vacant beds in the hospitals of a city that saves the
+                time of patients who are in emergency conditions.</p>
+            <ul>
+                <li><strong>Medical Imaging and Diagnostics:</strong> AI algorithms detect maladies like cancer, heart
+                    disease, and neurological problems from medical images such as X-rays, MRIs, and CT scans.</li>
+                <li><strong>Predictive Analytics:</strong> AI models predict the likelihood of future conditions such as
+                    diabetes, strokes, or heart attacks by analyzing patient data.</li>
+                <li><strong>Virtual Health Assistants:</strong> AI-powered chatbots and virtual assistants are used for
+                    patient support, answering medical questions, scheduling appointments and monitoring chronic
+                    conditions.</li>
+            </ul>
+
+            <h3 id="ai-finance">AI in Finance</h3>
+            <p>According to some recent surveys, 80% of banks accept that AI can provide them benefits according to
+                their decisions in finance. It is used to send automated tests and mail, predict risk in loans and
+                detect any unwanted transactional activities of the targeted customers. Spam and fraud filters,
+                uncharacterized actions, responding to threats, etc are the tools that help in the field.</p>
+            <ul>
+                <li><strong>Fraud Detection:</strong> AI algorithms can analyze large volumes of financial data to
+                    identify patterns and anomalies that can lead to any fraudulent activity.</li>
+                <li><strong>Risk Assessment:</strong> AI algorithms help in enabling safeguard risk assessment models by
+                    analyzing large datasets and identifying potential risks in real-time.</li>
+                <li><strong>Forecasting:</strong> AI-powered tools can assist in financial planning and forecasting that
+                    can create easy opportunities for businesses to make effective business decisions.</li>
+            </ul>
+
+            <h3 id="ai-education">AI in Education</h3>
+            <p>Educational sectors are also coming under the influence of Artificial Intelligence. It helps the faculty
+                as well as the students by making course recommendations, analyzing some data and some decisions about
+                the student, etc.</p>
+            <ul>
+                <li><strong>Voice Assistant:</strong> With the help of AI algorithms, this feature can be used in
+                    multiple and broad ways to save time and provide convenience, and can assist users as and when
+                    required.</li>
+                <li><strong>Enhanced Engagement and Accessibility:</strong> AI-driven tools facilitate the development
+                    of interactive learning environments, support engagement with features such as gamification, and
+                    provide accessible resources for students with disabilities for easier access.</li>
+                <li><strong>Smart Content Creation:</strong> AI uses algorithms to detect, predict and design content &
+                    provide valuable insights based on the user’s interest which can include videos, audio,
+                    infographics, etc.</li>
+            </ul>
+        </section>
+
+        <section id="interactive-quiz-advanced-ai">
+            <h2>Mini Quiz: Test Your Advanced AI & Ethics Knowledge!</h2>
             <div class="quiz-container">
                 <div id="quiz">
                     <div class="quiz-question" data-question="1">
-                        <p><strong>1. Which image processing operation is primarily used to remove high-frequency noise
-                                and smooth an image?</strong></p>
+                        <p><strong>1. What is the primary goal of Explainable AI (XAI)?</strong></p>
                         <div class="quiz-options">
-                            <label><input type="radio" name="q1" value="a"> High-Pass Filtering</label>
-                            <label><input type="radio" name="q1" value="b"> Low-Pass Filtering</label>
-                            <label><input type="radio" name="q1" value="c"> Histogram Equalization</label>
+                            <label><input type="radio" name="q1" value="a"> To make AI models more accurate.</label>
+                            <label><input type="radio" name="q1" value="b"> To make the decision-making process of AI
+                                models understandable to humans.</label>
+                            <label><input type="radio" name="q1" value="c"> To automate the training process of AI
+                                models.</label>
                         </div>
                         <p class="quiz-feedback" id="feedback-q1"></p>
                     </div>
                     <div class="quiz-question" data-question="2">
-                        <p><strong>2. SIFT and SURF are techniques primarily used for:</strong></p>
+                        <p><strong>2. Which of the following is NOT typically considered one of the core ethical
+                                principles in AI?</strong></p>
                         <div class="quiz-options">
-                            <label><input type="radio" name="q2" value="a"> Image Segmentation</label>
-                            <label><input type="radio" name="q2" value="b"> Feature Extraction</label>
-                            <label><input type="radio" name="q2" value="c"> Image Compression</label>
+                            <label><input type="radio" name="q2" value="a"> Profit Maximization</label>
+                            <label><input type="radio" name="q2" value="b"> Fairness</label>
+                            <label><input type="radio" name="q2" value="c"> Transparency</label>
                         </div>
                         <p class="quiz-feedback" id="feedback-q2"></p>
                     </div>
                     <div class="quiz-question" data-question="3">
-                        <p><strong>3. What is the main advantage of YOLO and SSD object detection algorithms over
-                                two-stage detectors like Faster R-CNN?</strong></p>
+                        <p><strong>3. SAE Level 5 automation in self-driving cars signifies:</strong></p>
                         <div class="quiz-options">
-                            <label><input type="radio" name="q3" value="a"> Higher accuracy on small objects.</label>
-                            <label><input type="radio" name="q3" value="b"> Simpler training process.</label>
-                            <label><input type="radio" name="q3" value="c"> Faster inference speed, suitable for
-                                real-time applications.</label>
+                            <label><input type="radio" name="q3" value="a"> Partial automation where the driver must
+                                always supervise.</label>
+                            <label><input type="radio" name="q3" value="b"> High automation where the car can drive
+                                itself in most conditions but may need human intervention.</label>
+                            <label><input type="radio" name="q3" value="c"> Full automation where no human intervention
+                                is needed in any environment.</label>
                         </div>
                         <p class="quiz-feedback" id="feedback-q3"></p>
                     </div>
                     <div class="quiz-question" data-question="4">
-                        <p><strong>4. Which image segmentation technique converts an image into binary (black and white)
-                                based on pixel intensity?</strong></p>
+                        <p><strong>4. LIME and SHAP are techniques primarily associated with:</strong></p>
                         <div class="quiz-options">
-                            <label><input type="radio" name="q4" value="a"> Region Growing</label>
-                            <label><input type="radio" name="q4" value="b"> Thresholding</label>
-                            <label><input type="radio" name="q4" value="c"> Edge Detection</label>
+                            <label><input type="radio" name="q4" value="a"> Reinforcement Learning</label>
+                            <label><input type="radio" name="q4" value="b"> Explainable AI (XAI)</label>
+                            <label><input type="radio" name="q4" value="c"> Unsupervised Clustering</label>
                         </div>
                         <p class="quiz-feedback" id="feedback-q4"></p>
                     </div>
@@ -1422,16 +1270,16 @@ cv2.destroyAllWindows()</code></pre>
 
         <footer class="new-footer-container">
             <div class="new-footer-buttons-wrapper">
-                <a href="topic-11.html" class="new-footer-button">
-                    ← Previous Topic: Natural Language Processing (NLP)
+                <a href="topic-12.html" class="new-footer-button">
+                    ← Previous Topic: Computer Vision
                 </a>
-                <a href="topic-13.html" class="new-footer-button">
-                    Next Topic: Advanced AI Topics & Ethics →
+                <a href="topic-14.html" class="new-footer-button">
+                    Next Topic: AI Tools & Frameworks →
                 </a>
             </div>
             <a href="#" onclick="window.print(); return false;" class="new-footer-print-link">Print this page</a>
             <p style="font-size: 0.9rem; color: var(--text-color); margin-top: 0.5rem;">© <span id="currentYear"></span>
-                Computer Vision. All rights reserved.</p>
+                Advanced AI Topics & Ethics. All rights reserved.</p>
         </footer>
 
     </main>
@@ -1529,12 +1377,12 @@ cv2.destroyAllWindows()</code></pre>
 
         // Mini Quiz Logic
         const submitQuizButton = document.getElementById('submitQuiz');
-        const quizQuestionElements = document.querySelectorAll('#interactive-quiz-cv .quiz-question');
+        const quizQuestionElements = document.querySelectorAll('#interactive-quiz-advanced-ai .quiz-question');
         const quizCorrectAnswers = {
-            q1: { value: 'b', text: 'Low-Pass Filtering' },
-            q2: { value: 'b', text: 'Feature Extraction' },
-            q3: { value: 'c', text: 'Faster inference speed, suitable for real-time applications.' },
-            q4: { value: 'b', text: 'Thresholding' },
+            q1: { value: 'b', text: 'To make the decision-making process of AI models understandable to humans.' },
+            q2: { value: 'a', text: 'Profit Maximization' },
+            q3: { value: 'c', text: 'Full automation where no human intervention is needed in any environment.' },
+            q4: { value: 'b', text: 'Explainable AI (XAI)' },
         };
 
         if (submitQuizButton) {
@@ -1542,7 +1390,7 @@ cv2.destroyAllWindows()</code></pre>
                 let score = 0;
                 quizQuestionElements.forEach(questionElement => {
                     const questionId = 'q' + questionElement.dataset.question;
-                    const selectedOption = document.querySelector(`#interactive-quiz-cv input[name="${questionId}"]:checked`);
+                    const selectedOption = document.querySelector(`#interactive-quiz-advanced-ai input[name="${questionId}"]:checked`);
                     const feedbackElement = document.getElementById(`feedback-${questionId}`);
                     const correctAnswerInfo = quizCorrectAnswers[questionId];
 

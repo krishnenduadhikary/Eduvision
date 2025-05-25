@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tools & Frameworks</title>
+    <meta name="description"
+        content="Explore essential AI tools and frameworks: Python for AI, libraries (NumPy, Pandas, Scikit-learn, OpenCV), Deep Learning frameworks (TensorFlow, PyTorch, Keras), deployment tools (Flask, Streamlit, Docker), and version control (Git, MLflow).">
+    <meta name="keywords"
+        content="AI Tools, AI Frameworks, Python for AI, NumPy, Pandas, Scikit-learn, OpenCV, TensorFlow, PyTorch, Keras, Flask, Streamlit, Docker, Git, MLflow, MLOps">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* CSS from topic-1.html - For brevity, imagine all the CSS from the previous example is here */
+        /* Key structural CSS will be included, specific element styles might be summarized */
+        :root {
+            --primary-color-light: #3498db;
+            /* Blue */
+            --secondary-color-light: #2ecc71;
+            /* Green */
+            --accent-color-light: #e67e22;
+            /* Orange */
+            --background-color-light: #f4f7f6;
+            --text-color-light: #333;
+            --card-bg-light: #ffffff;
+            --border-color-light: #e0e0e0;
+            --code-bg-light: #eef;
+
+            --primary-color-dark: #5dade2;
+            /* Lighter Blue */
+            --secondary-color-dark: #58d68d;
+            /* Lighter Green */
+            --accent-color-dark: #f5b041;
+            /* Lighter Orange */
+            --background-color-dark: #1e272e;
+            --text-color-dark: #f0f0f0;
+            --card-bg-dark: #2c3a47;
+            --border-color-dark: #444;
+            --code-bg-dark: #2a2a40;
+
+            --primary-color: var(--primary-color-light);
+            --secondary-color: var(--secondary-color-light);
+            --accent-color: var(--accent-color-light);
+            --background-color: var(--background-color-light);
+            --text-color: var(--text-color-light);
+            --card-bg: var(--card-bg-light);
+            --border-color: var(--border-color-light);
+            --code-bg: var(--code-bg-light);
+
+            --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --font-mono: 'Courier New', Courier, monospace;
+            --font-logo: 'Nunito', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            --primary-color: var(--primary-color-dark);
+            --secondary-color: var(--secondary-color-dark);
+            --accent-color: var(--accent-color-dark);
+            --background-color: var(--background-color-dark);
+            --text-color: var(--text-color-dark);
+            --card-bg: var(--card-bg-dark);
+            --border-color: var(--border-color-dark);
+            --code-bg: var(--code-bg-dark);
+        }
+
+        /* Eduvision Logo (Same as topic-1) */
+        .eduvishion-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1050;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvishion-logo .text-2xl {
+            font-family: var(--font-logo);
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvishion-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvishion-logo .text-yellow-300 {
+            color: #fde047 !important;
+        }
+
+        .eduvishion-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+        }
+
+        .eduvishion-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvishion-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Navbar (Same as topic-1) */
+        .navbar {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-left-spacer {
+            flex-basis: 50px;
+            flex-shrink: 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .navbar-brand i {
+            margin-right: 0.5rem;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            flex-basis: 50px;
+            flex-shrink: 0;
+            text-align: right;
+        }
+
+        /* Sidebar (Same as topic-1) */
+        .sidebar {
+            position: fixed;
+            top: 77px;
+            left: 0;
+            width: 280px;
+            height: calc(100vh - 77px);
+            background-color: var(--card-bg);
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 1px solid var(--border-color);
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li a {
+            display: block;
+            padding: 8px 0;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s, padding-left 0.2s, background-color 0.2s;
+            border-radius: 4px;
+        }
+
+        .sidebar ul li a.sub-item {
+            padding-left: 15px;
+            font-size: 0.9rem;
+        }
+
+        .sidebar ul li a.sub-item:hover {
+            padding-left: 25px;
+        }
+
+        .sidebar ul li a.sub-item.active {
+            padding-left: 25px;
+        }
+
+        .sidebar ul li a:hover {
+            color: var(--accent-color);
+            padding-left: 10px;
+        }
+
+        .sidebar ul li a.active {
+            color: var(--accent-color);
+            padding-left: 10px;
+            font-weight: bold;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-mode .sidebar ul li a.active {
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Main Content Area (Same as topic-1) */
+        .main-content {
+            margin-left: 300px;
+            padding: 2rem 3rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 4rem 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-section p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+
+        /* Syllabus Bar */
+        .syllabus-bar-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 0.75rem;
+            background-color: var(--card-bg);
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.07);
+            border: 1px solid var(--border-color);
+        }
+
+        .syllabus-bar-back-link {
+            display: flex;
+            align-items: center;
+            font-size: 0.875rem;
+            color: #2563eb;
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            text-decoration: none;
+            transition: background-color 0.15s, color 0.15s;
+            margin-bottom: 0.5rem;
+        }
+
+        .dark-mode .syllabus-bar-back-link {
+            color: #5dade2;
+        }
+
+        .dark-mode .syllabus-bar-back-link:hover {
+            color: #8ecae6;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .syllabus-bar-back-link:hover {
+            color: #1d4ed8;
+            background-color: #eff6ff;
+        }
+
+        .syllabus-bar-back-link svg {
+            height: 1.25rem;
+            width: 1.25rem;
+            margin-right: 0.375rem;
+            fill: currentColor;
+        }
+
+        .syllabus-bar-topic-badge {
+            background-color: #2563eb;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.375rem 1rem;
+            border-radius: 9999px;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        @media (min-width: 640px) {
+            .syllabus-bar-container {
+                flex-direction: row;
+            }
+
+            .syllabus-bar-back-link {
+                margin-bottom: 0;
+            }
+
+            .syllabus-bar-topic-badge {
+                font-size: 0.875rem;
+            }
+        }
+
+        /* General Content Styles (Same as topic-1) */
+        section {
+            margin-bottom: 3rem;
+            padding-top: 70px;
+            margin-top: -70px;
+        }
+
+        h2 {
+            /* Main sections: Clustering, Association, Dimensionality */
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            /* Algorithm names: K-Means, Apriori, PCA */
+            font-size: 1.8rem;
+            /* Slightly larger for main algorithm names */
+            color: var(--secondary-color);
+            /* Using secondary for algorithm names */
+            margin-top: 2.5rem;
+            /* More space before a new algorithm */
+            margin-bottom: 1.2rem;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 0.4rem;
+        }
+
+        h4 {
+            /* Sub-headings within an algorithm: How it works, Python Implementation */
+            font-size: 1.4rem;
+            color: var(--accent-color);
+            margin-top: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        h5 {
+            /* Further sub-headings: Step 1, Pros/Cons */
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            opacity: 0.9;
+            margin-top: 1.2rem;
+            margin-bottom: 0.7rem;
+        }
+
+        .formula {
+            font-family: var(--font-mono);
+            background-color: var(--code-bg);
+            padding: 0.8rem 1rem;
+            border-radius: 4px;
+            margin: 1rem auto;
+            display: block;
+            text-align: center;
+            font-size: 1em;
+            overflow-x: auto;
+        }
+
+
+        p,
+        li {
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        ul,
+        ol {
+            padding-left: 25px;
+            margin-bottom: 1rem;
+        }
+
+        ul li,
+        ol li {
+            margin-bottom: 0.5rem;
+        }
+
+        .callout {
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 5px solid var(--accent-color);
+            background-color: var(--card-bg);
+            border-radius: 0 5px 5px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .callout.info {
+            border-left-color: var(--primary-color);
+        }
+
+        .callout.success {
+            border-left-color: var(--secondary-color);
+        }
+
+        .callout.warning {
+            border-left-color: #f39c12;
+        }
+
+        details {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+        }
+
+        summary {
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--primary-color);
+            padding: 0.5rem 0;
+        }
+
+        summary::marker {
+            color: var(--accent-color);
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            color: var(--text-color);
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+            /* Slightly smaller for better fit */
+            border: 1px solid var(--border-color);
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        code {
+            /* Inline code */
+            font-family: var(--font-mono);
+            background-color: var(--code-bg);
+            padding: 0.1em 0.3em;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+
+        /* Diagram Styles (similar to agent-diagram) */
+        .algorithm-diagram,
+        .output-plot {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 1.5rem auto;
+            max-width: 600px;
+            /* Can adjust per diagram */
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+        }
+
+        .algorithm-diagram img,
+        .output-plot img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-top: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .algorithm-diagram p,
+        .output-plot p {
+            font-size: 0.9em;
+            margin-top: 0.5em;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .diagram-placeholder {
+            border: 2px dashed var(--border-color);
+            padding: 20px;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            opacity: 0.7;
+            font-style: italic;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            font-size: 0.95em;
+        }
+
+        th,
+        td {
+            border: 1px solid var(--border-color);
+            padding: 8px 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--code-bg);
+            /* Light background for headers */
+            font-weight: bold;
+        }
+
+        /* Responsive table */
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+
+        /* New Footer Styles (Same as topic-1, with link updates) */
+        .new-footer-container {
+            margin-top: 4rem;
+            padding-top: 2.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .new-footer-buttons-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            align-items: center;
+        }
+
+        .new-footer-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            background-color: #2563eb;
+            color: white !important;
+            border-radius: 9999px;
+            text-decoration: none;
+            transition: background-color 0.15s, box-shadow 0.15s;
+            font-weight: 500;
+            font-size: 0.875rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            min-width: 280px;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .new-footer-button:hover {
+            background-color: #1d4ed8;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .new-footer-button:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+
+        .new-footer-print-link {
+            margin-top: 1rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .new-footer-print-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (min-width: 640px) {
+            .new-footer-buttons-wrapper {
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 1rem;
+            }
+
+            .new-footer-button {
+                margin-bottom: 0;
+            }
+        }
+
+        /* Quiz Styles (Same as topic-1) */
+        .quiz-container {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-question {
+            margin-bottom: 15px;
+        }
+
+        .quiz-question p strong {
+            color: var(--text-color);
+        }
+
+
+        .quiz-options label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .quiz-options input {
+            margin-right: 8px;
+        }
+
+        .quiz-feedback {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Responsive Adjustments (Same as topic-1) */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                box-shadow: none;
+                top: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+
+            .navbar {
+                padding: 0.8rem 1rem;
+            }
+
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+
+            .nav-left-spacer,
+            .theme-toggle {
+                flex-basis: 40px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .eduvishion-logo {
+                top: 12px;
+                left: 12px;
+            }
+
+            .eduvishion-logo .text-2xl {
+                font-size: 1.3rem;
+            }
+
+            .eduvishion-logo svg {
+                height: 1.2em;
+                width: 1.2em;
+            }
+
+            .navbar {
+                padding: 1rem;
+                justify-content: center;
+                position: relative;
+            }
+
+            .nav-left-spacer {
+                display: none;
+            }
+
+            .navbar-brand {
+                flex-grow: 0;
+                margin-right: auto;
+                margin-left: 50px;
+                /* Adjusted for Eduvision logo space */
+                font-size: 1.3rem;
+            }
+
+            .theme-toggle {
+                position: absolute;
+                right: 1rem;
+                top: 50%;
+                transform: translateY(-50%);
+                flex-basis: auto;
+                font-size: 1.2rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-section p {
+                font-size: 1.1rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            h3 {
+                font-size: 1.5rem;
+            }
+
+            h4 {
+                font-size: 1.2rem;
+            }
+
+            h5 {
+                font-size: 1.1rem;
+            }
+
+
+            .syllabus-bar-container {
+                padding: 0.5rem;
+            }
+
+            .syllabus-bar-back-link {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.6rem;
+            }
+
+            .syllabus-bar-topic-badge {
+                font-size: 0.7rem;
+                padding: 0.3rem 0.8rem;
+            }
+
+            .new-footer-button {
+                font-size: 0.8rem;
+                padding: 0.6rem 1.2rem;
+                min-width: auto;
+                width: 90%;
+            }
+
+            .new-footer-buttons-wrapper {
+                flex-direction: column;
+            }
+
+            .new-footer-buttons-wrapper .new-footer-button:first-child {
+                margin-bottom: 0.5rem;
+            }
+
+            .algorithm-diagram,
+            .output-plot {
+                max-width: 100%;
+                padding: 10px;
+            }
+        }
+
+        /* Print Styles (Same as topic-1) */
+        @media print {
+            body {
+                font-size: 10pt;
+                color: #000 !important;
+                background-color: #fff !important;
+            }
+
+            .navbar,
+            .sidebar,
+            .theme-toggle,
+            .hero-section .btn,
+            .quiz-container,
+            .new-footer-container,
+            details summary::marker,
+            .eduvishion-logo,
+            .syllabus-bar-container,
+            .new-footer-print-link {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 0;
+            }
+
+            section {
+                padding-top: 0;
+                margin-top: 0;
+                margin-bottom: 1.5rem;
+                page-break-after: auto;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5 {
+                color: #000 !important;
+                border: none !important;
+                page-break-after: avoid;
+            }
+
+            .callout {
+                border-left: 3px solid #ccc !important;
+                background-color: #f9f9f9 !important;
+            }
+
+            a {
+                text-decoration: none;
+                color: #000 !important;
+            }
+
+            a[href^="http"]:after {
+                content: " (" attr(href) ")";
+            }
+
+            pre,
+            .formula {
+                background-color: #f0f0f0 !important;
+                border: 1px solid #ccc !important;
+                color: #000 !important;
+                page-break-inside: avoid;
+                white-space: pre-wrap;
+                /* Ensure code wraps in print */
+                word-wrap: break-word;
+            }
+
+            table,
+            .algorithm-diagram,
+            .output-plot {
+                page-break-inside: avoid;
+            }
+
+            .algorithm-diagram img,
+            .output-plot img {
+                max-width: 80% !important;
+                /* Control image size in print */
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvishion-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../../index.html" class="flex items-center group">
+                <span class="text-white">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+                    fill="none">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-white">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-left-spacer"></div>
+        <a href="#" class="navbar-brand"><i class="fas fa-tools"></i> AI Tools & Frameworks</a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+        </button>
+    </nav>
+
+    <aside class="sidebar" id="sidebar">
+        <h3>Table of Contents</h3>
+        <ul id="toc"></ul>
+    </aside>
+
+    <main class="main-content">
+        <header class="hero-section">
+            <h1>AI Tools & Frameworks</h1>
+            <p>Equipping developers with the essential instruments for building intelligent systems.</p>
+        </header>
+
+        <div class="syllabus-bar-container">
+            <a href="../ai.html" class="syllabus-bar-back-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                        clip-rule="evenodd" />
+                </svg>
+                Back to Syllabus
+            </a>
+            <div class="syllabus-bar-topic-badge">
+                Topic 14
+            </div>
+        </div>
+
+        <section id="python-for-ai">
+            <h2>Programming with Python for AI</h2>
+            <p>Python has become the go-to programming language for artificial intelligence (AI) development due to its
+                simplicity and the powerful suite of libraries it offers. Its syntax is straightforward and closely
+                resembles human language, which reduces the learning curve for developers and enables them to focus on
+                solving AI problems rather than wrestling with complex coding issues.</p>
+            <h4>Why Python is Preferred for AI</h4>
+            <ul>
+                <li><strong>Extensive Libraries and Frameworks:</strong> Python boasts a wide range of libraries and
+                    frameworks, such as Scikit-learn for machine learning algorithms, TensorFlow, PyTorch, and Keras for
+                    deep learning, as well as NumPy, Pandas, and Seaborn for data manipulation and visualization.</li>
+                <li><strong>Ease of Learning and Syntax Simplicity:</strong> Python's syntax is straightforward,
+                    resembling everyday English, which significantly lowers the learning curve.</li>
+                <li><strong>No Need to Recompile Source Code:</strong> Python allows for dynamic modification and
+                    execution of code without the need for recompilation, offering flexibility and speeding up the
+                    development process.</li>
+                <li><strong>Platform Independence:</strong> Python code can run on various operating systems, including
+                    Windows, Mac, UNIX, and Linux.</li>
+                <li><strong>Strong Community Support:</strong> Python's large and active community contributes to a
+                    wealth of resources, including tutorials, forums, and documentation.</li>
+            </ul>
+            <h4>Getting Started with Python Programming</h4>
+            <p>Key Python concepts relevant to AI include:</p>
+            <ul>
+                <li><strong>Python Basics:</strong> Understanding fundamental syntax, variables, and control flow.</li>
+                <li><strong>Data Types:</strong> Working with strings, numbers, booleans, lists, tuples, sets,
+                    dictionaries, and arrays.</li>
+                <li><strong>Python Operators:</strong> Arithmetic, comparison, logical, bitwise, and assignment
+                    operators.</li>
+                <li><strong>Conditional Statements & Loops:</strong> Using <code>if/else</code>, <code>for</code> loops,
+                    and <code>while</code> loops for program control.</li>
+                <li><strong>Python OOPs Concepts:</strong> Understanding classes, objects, inheritance, polymorphism,
+                    abstraction, and encapsulation.</li>
+            </ul>
+        </section>
+
+        <section id="essential-libraries">
+            <h2>Essential Python Libraries for AI</h2>
+            <p>For anyone diving into Artificial Intelligence (AI) using Python, a handful of libraries make the
+                development process significantly smoother and more efficient. These libraries, equipped with pre-built
+                functions and tools, are essentials in the AI developer's toolkit.</p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Library</th>
+                            <th>Primary Use</th>
+                            <th>Best For</th>
+                            <th>Notable Feature</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><a href="#numpy">NumPy</a></td>
+                            <td>Numerical computing</td>
+                            <td>Array and matrix operations</td>
+                            <td>Vectorized performance</td>
+                        </tr>
+                        <tr>
+                            <td><a href="#pandas">Pandas</a></td>
+                            <td>Data manipulation</td>
+                            <td>Preprocessing structured data</td>
+                            <td>Intuitive DataFrames</td>
+                        </tr>
+                        <tr>
+                            <td><a href="#matplotlib">Matplotlib</a></td>
+                            <td>Data visualization</td>
+                            <td>Static plots</td>
+                            <td>Customizable plots</td>
+                        </tr>
+                        <tr>
+                            <td><a href="#scikit-learn">Scikit-learn</a></td>
+                            <td>Classical ML models</td>
+                            <td>Regression, classification</td>
+                            <td>Easy-to-use APIs</td>
+                        </tr>
+                        <tr>
+                            <td><a href="#opencv">OpenCV</a></td>
+                            <td>Real-time computer vision</td>
+                            <td>Image and video processing</td>
+                            <td>Wide range of CV algorithms</td>
+                        </tr>
+                        <tr>
+                            <td>Seaborn</td>
+                            <td>Statistical visualization</td>
+                            <td>Heatmaps, pair plots</td>
+                            <td>Built on Matplotlib</td>
+                        </tr>
+                        <tr>
+                            <td>Requests</td>
+                            <td>HTTP requests</td>
+                            <td>Accessing web APIs</td>
+                            <td>Simple syntax for API calls</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 id="numpy">NumPy</h3>
+            <p>NumPy is a Python library used for scientific computing. This is Python's scientific computing core
+                library, providing high-performance multidimensional array objects, tools for manipulating those arrays,
+                and various mathematical functions. It also contains useful linear algebra, Fourier transform, and
+                random number capabilities.</p>
+            <div class="algorithm-diagram">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/NumPy_logo_2020.svg/1200px-NumPy_logo_2020.svg.png"
+                    alt="NumPy Logo" style="max-width:150px; margin: 10px auto; display:block;">
+                <h4>The Backbone of Numerical Computing</h4>
+                <p><strong>Use Case:</strong> Efficient manipulation of multi-dimensional arrays in AI and ML workflows.
+                </p>
+                <pre><code>import numpy as np
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+print(a + b) # Output: [5 7 9]</code></pre>
+                <p><a href="https://numpy.org/" target="_blank" rel="noopener noreferrer">Visit NumPy Official Site
+                        →</a></p>
+            </div>
+            <p>NumPy provides fast, vectorized operations on arrays and matrices. It supports a wide range of
+                mathematical and statistical functions. Widely used in preprocessing data for AI models. Essential for
+                simulations and scientific computing workflows.</p>
+
+            <h3 id="pandas">Pandas</h3>
+            <p>Pandas is a library offering high-level data structures and tools designed to make data analysis fast and
+                easy in Python. Pandas are ideal for data munging and preparation and can be used in conjunction with
+                other data analysis workflows in Python.</p>
+            <div class="algorithm-diagram">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Pandas_logo.svg/1200px-Pandas_logo.svg.png"
+                    alt="Pandas Logo" style="max-width:150px; margin: 10px auto; display:block;">
+                <h4>Data Wrangling Made Easy</h4>
+                <p><strong>Use Case:</strong> Cleaning, transforming, and analyzing tabular datasets.</p>
+                <pre><code>import pandas as pd
+# Assuming 'data.csv' exists
+# df = pd.read_csv("data.csv") 
+# print(df.head())
+
+# Example without external file:
+data = {'col1': [1, 2], 'col2': [3, 4]}
+df = pd.DataFrame(data)
+print(df.head())</code></pre>
+                <p><a href="https://pandas.pydata.org/" target="_blank" rel="noopener noreferrer">Visit Pandas Official
+                        Site →</a></p>
+            </div>
+            <p>Pandas is a powerful Python library used for data manipulation and analysis. It offers two main data
+                structures: Series (1D) and DataFrame (2D) for handling labeled and structured data efficiently. With
+                Pandas, users can clean, transform, and analyze data with ease. It's widely used in data science and
+                machine learning workflows.</p>
+
+            <h3 id="scikit-learn">Scikit-learn</h3>
+            <p>Built on NumPy, SciPy, and Matplotlib, Scikit-learn is one of the most popular libraries for machine
+                learning in Python. It includes a range of supervised and unsupervised learning algorithms and is known
+                for its simplicity and ease of use.</p>
+            <div class="algorithm-diagram">
+                <img src="https://scikit-learn.org/stable/_static/scikit-learn-logo-small.png" alt="Scikit-learn Logo"
+                    style="max-width:200px; margin: 10px auto; display:block;">
+                <h4>Classical Machine Learning Simplified</h4>
+                <p><strong>Use Case:</strong> Training and evaluating traditional ML models like regression and
+                    classification.</p>
+                <pre><code>from sklearn.linear_model import LinearRegression
+# Example: model = LinearRegression().fit(X_train, y_train)
+# For a runnable snippet:
+model = LinearRegression().fit([[0], [1]], [0, 1])
+print(model.coef_)</code></pre>
+                <p><a href="https://scikit-learn.org/" target="_blank" rel="noopener noreferrer">Visit Scikit-learn
+                        Official Site →</a></p>
+            </div>
+            <p>Scikit-learn provides simple tools for machine learning, model evaluation, and data preprocessing. Best
+                suited for structured datasets. Built on NumPy, SciPy, and Matplotlib.</p>
+
+            <h3 id="matplotlib">Matplotlib</h3>
+            <p>This plotting library allows for the creation of static, animated, and interactive visualizations in
+                Python. Visual data representation is crucial in AI for data exploration and the presentation of
+                results.</p>
+            <div class="algorithm-diagram">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Matplotlib_icon.svg/1200px-Matplotlib_icon.svg.png"
+                    alt="Matplotlib Logo" style="max-width:150px; margin: 10px auto; display:block;">
+                <h4>Visualize the Patterns</h4>
+                <p><strong>Use Case:</strong> Plotting graphs for model performance and data insights.</p>
+                <pre><code>import matplotlib.pyplot as plt
+plt.plot([1, 2, 3], [4, 5, 6])
+plt.show()</code></pre>
+                <p><a href="https://matplotlib.org/" target="_blank" rel="noopener noreferrer">Visit Matplotlib Official
+                        Site →</a></p>
+            </div>
+            <p>Matplotlib is Python's go-to library for creating static, animated, and interactive visualizations.
+                Commonly used to plot model performance and data trends. Highly customizable for publication-quality
+                graphs. Works well with NumPy and Pandas.</p>
+
+
+            <h3 id="opencv">OpenCV</h3>
+            <p>OpenCV (Open Source Computer Vision Library) is an open-source computer vision and machine learning
+                software library. OpenCV was built to provide a common infrastructure for computer vision applications
+                and to accelerate the use of machine perception in commercial products.</p>
+            <div class="algorithm-diagram">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/OpenCV_Logo_with_text_svg_version.svg/1200px-OpenCV_Logo_with_text_svg_version.svg.png"
+                    alt="OpenCV Logo" style="max-width:200px; margin: 10px auto; display:block;">
+                <h4>Real-Time Computer Vision</h4>
+                <p><strong>Use Case:</strong> Image and video processing in AI, robotics, and surveillance.</p>
+                <pre><code>import cv2
+# img = cv2.imread("image.jpg") # Assuming image.jpg exists
+# cv2.imshow("Image", img)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows() # Placeholder if no image is available for display
+print("OpenCV imported successfully.")</code></pre>
+                <p><a href="https://opencv.org/" target="_blank" rel="noopener noreferrer">Visit OpenCV Official Site
+                        →</a></p>
+            </div>
+            <p>OpenCV is a powerful library for real-time computer vision. It supports facial detection, object
+                tracking, and image transformations. Widely used in AI, drones, and AR systems.</p>
+        </section>
+
+        <section id="deep-learning-frameworks">
+            <h2>Deep Learning Frameworks</h2>
+            <p>DL frameworks provide the building blocks for developing, training, and evaluating deep neural networks
+                through a high-level programming interface. Some of these frameworks include Keras, TensorFlow, PyTorch,
+                Caffe, etc.</p>
+            <p>Choosing the correct deep learning framework to study is the first step to achieving any DL learning
+                objectives, whether it is to be applied to business, building a project, or developing valuable
+                capabilities. This choice depends on several parameters. There can be no straightforward answer to which
+                the best framework is; it rests on the preference and abilities of a particular developer.</p>
+
+            <h3 id="tensorflow">TensorFlow</h3>
+            <p>An open-source library developed by the Google Brain team, TensorFlow is used for numerical computation
+                using data flow graphs. It's particularly known for its applications in deep learning and neural
+                networks.</p>
+            <div class="algorithm-diagram">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Tensorflow_logo.svg/1200px-Tensorflow_logo.svg.png"
+                    alt="TensorFlow Logo" style="max-width:200px; margin: 10px auto; display:block;">
+                <h4>Scalable Deep Learning Framework</h4>
+                <p><strong>Use Case:</strong> Designing, training, and deploying deep learning models in production
+                    environments.</p>
+                <pre><code>import tensorflow as tf
+# Example: print(tf.reduce_sum(tf.random.normal([1000, 1000])))
+# Simpler example for brevity:
+a = tf.constant(2)
+b = tf.constant(3)
+print(tf.add(a, b))</code></pre>
+                <p><a href="https://www.tensorflow.org/" target="_blank" rel="noopener noreferrer">Visit TensorFlow
+                        Official Site →</a></p>
+            </div>
+            <p>TensorFlow is an open-source machine learning framework developed by Google. It's designed for building
+                and deploying ML models at scale, supporting both deep learning and traditional ML workflows.</p>
+            <h5>Key Features of TensorFlow:</h5>
+            <ul>
+                <li>Comprehensive ecosystem with tools like TensorBoard for visualization.</li>
+                <li>Supports distributed training across multiple GPUs and TPUs.</li>
+                <li>Flexible deployment options (servers, mobile, web, edge devices) via TensorFlow Lite and
+                    TensorFlow.js.</li>
+                <li>Keras API integrated as the high-level API.</li>
+            </ul>
+
+            <h3 id="pytorch">PyTorch</h3>
+            <p>Developed by Facebook's AI Research lab, PyTorch is a library for machine learning that provides great
+                flexibility and speed while working with deep learning projects. It's known for its ease of use and
+                efficiency in creating complex AI models, particularly favored in research for its dynamic computation
+                graphs.</p>
+            <div class="algorithm-diagram">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/PyTorch_logo_icon.svg/1200px-PyTorch_logo_icon.svg.png"
+                    alt="PyTorch Logo" style="max-width:150px; margin: 10px auto; display:block;">
+                <h4>Flexible Deep Learning Framework</h4>
+                <p><strong>Use Case:</strong> Creating and training neural networks using dynamic computation graphs.
+                </p>
+                <pre><code>import torch
+import torch.nn as nn
+model = nn.Sequential(nn.Linear(10, 1))
+print(model)</code></pre>
+                <p><a href="https://pytorch.org/" target="_blank" rel="noopener noreferrer">Visit PyTorch Official Site
+                        →</a></p>
+            </div>
+            <p>PyTorch is a flexible deep learning framework known for its dynamic computation graphs and intuitive
+                syntax. It simplifies model building and debugging, making it ideal for developers and researchers.
+                Widely adopted in both academia and industry, PyTorch excels in rapid experimentation and production
+                deployment.</p>
+            <h5>Key Features of PyTorch:</h5>
+            <ul>
+                <li><strong>Dynamic Computation Graphs (Define-by-Run):</strong> Allows for more flexible model
+                    architectures and easier debugging.</li>
+                <li><strong>Pythonic Interface:</strong> Feels natural for Python developers.</li>
+                <li>Strong GPU acceleration.</li>
+                <li>Extensive community support and a rich ecosystem of tools (e.g., TorchVision, TorchText,
+                    TorchAudio).</li>
+            </ul>
+
+            <h3 id="keras">Keras</h3>
+            <p>Keras is a Python-based API for high-level neural networks. This open-source toolkit is built on top of
+                CNTK, TensorFlow, and Theano and can be used to experiment with deep neural networks quickly. Keras
+                emphasizes modularity, usability, and extensibility. It does not handle low-level computations; instead,
+                it passes them to the backend, which is a separate library.</p>
+            <div class="algorithm-diagram">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Keras_logo.svg/1200px-Keras_logo.svg.png"
+                    alt="Keras Logo" style="max-width:120px; margin: 10px auto; display:block;">
+                <h4>High-Level Neural Networks API</h4>
+                <p><strong>Use Case:</strong> Building deep learning models quickly with minimal code.</p>
+                <pre><code>from tensorflow import keras # Keras is now part of TensorFlow
+from keras.models import Sequential
+from keras.layers import Dense
+model = Sequential([Dense(1, input_shape=(10,))])
+model.summary()</code></pre>
+                <p><a href="https://keras.io/" target="_blank" rel="noopener noreferrer">Visit Keras Official Site →</a>
+                </p>
+            </div>
+            <p>Keras provides a high-level interface for creating neural networks. It runs on top of TensorFlow
+                (primarily) and supports fast experimentation. Ideal for beginners and rapid prototyping. Offers
+                built-in utilities for layers, optimizers, and metrics.</p>
+            <h5>Key Features of Keras:</h5>
+            <ul>
+                <li>User-friendly API designed for ease of use and rapid prototyping.</li>
+                <li>Supports multiple backends (TensorFlow, JAX, PyTorch - Keras Core).</li>
+                <li>Extensive documentation and community support.</li>
+            </ul>
+
+            <h4>Comparison: Keras, TensorFlow, and PyTorch</h4>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Keras</th>
+                            <th>TensorFlow</th>
+                            <th>PyTorch</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>API level</td>
+                            <td>High</td>
+                            <td>High and low</td>
+                            <td>Low</td>
+                        </tr>
+                        <tr>
+                            <td>Architecture</td>
+                            <td>Simple, concise, readable</td>
+                            <td>Complex, less readable</td>
+                            <td>Not easy to use (flexible)</td>
+                        </tr>
+                        <tr>
+                            <td>Datasets</td>
+                            <td>Smaller datasets</td>
+                            <td>Large datasets, high performance</td>
+                            <td>Large datasets, high performance</td>
+                        </tr>
+                        <tr>
+                            <td>Debugging</td>
+                            <td>Simple network, so debugging is not often needed</td>
+                            <td>Difficult to conduct debugging</td>
+                            <td>Good debugging capabilities</td>
+                        </tr>
+                        <tr>
+                            <td>Does it have trained models?</td>
+                            <td>Yes</td>
+                            <td>Yes</td>
+                            <td>Yes</td>
+                        </tr>
+                        <tr>
+                            <td>Popularity</td>
+                            <td>Most popular (as high-level API)</td>
+                            <td>Second most popular</td>
+                            <td>Third most popular (growing fast)</td>
+                        </tr>
+                        <tr>
+                            <td>Speed</td>
+                            <td>Slow, low performance (depends on backend)</td>
+                            <td>Fast, high performance</td>
+                            <td>Fast, high performance</td>
+                        </tr>
+                        <tr>
+                            <td>Language</td>
+                            <td>Python</td>
+                            <td>C++, CUDA, Python</td>
+                            <td>Lua (originally), Python</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="model-deployment">
+            <h2>Model Deployment Tools</h2>
+            <p>Deploying machine learning models involves making them available for use in production environments. This
+                typically means exposing them via APIs or integrating them into applications. Several tools facilitate
+                this process:</p>
+
+            <h3 id="flask">Flask</h3>
+            <p>Flask is a microframework that provides the essential components for building web applications and APIs.
+                It's lightweight, simple, and highly customizable, making it a popular choice for deploying ML models.
+            </p>
+            <h4>Strengths:</h4>
+            <ul>
+                <li>Minimalistic and easy to set up.</li>
+                <li>Highly flexible and customizable.</li>
+                <li>Perfect for REST API development.</li>
+                <li>Works seamlessly with Python ML libraries.</li>
+            </ul>
+            <h4>Limitations:</h4>
+            <ul>
+                <li>Requires additional setup for advanced features like authentication or database management.</li>
+                <li>Limited performance for extremely high-concurrency use cases.</li>
+            </ul>
+            <h5>Example: Deploying a Predictive Maintenance Model with Flask</h5>
+            <p><strong>Step 1: Train the Predictive Maintenance Model (Example)</strong></p>
+            <pre><code>import pickle
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+
+# Load some sample data (simulated maintenance data)
+# data = pd.read_csv("machine_data.csv") # Assume this CSV exists
+# Example features: sensor readings (e.g., temperature, vibration, pressure)
+# X = data[['temperature', 'vibration', 'pressure']]
+# y = data['failure'] # Binary: 1 = failure, 0 = no failure
+
+# For a runnable example without CSV:
+X_sample = [[70, 0.5, 20], [80, 0.8, 22], [60, 0.3, 18], [90, 1.0, 25]]
+y_sample = [0, 1, 0, 1]
+X_train, X_test, y_train, y_test = train_test_split(X_sample, y_sample, test_size=0.2, random_state=42)
+
+# Train the model
+model = RandomForestClassifier()
+model.fit(X_train, y_train)
+
+# Save the trained model
+with open("predictive_maintenance_model.pkl", "wb") as f:
+    pickle.dump(model, f)</code></pre>
+            <p><strong>Step 2: Deploy with Flask</strong></p>
+            <p>Install Flask: <code>pip install flask</code></p>
+            <p>Create <code>app.py</code>:</p>
+            <pre><code>from flask import Flask, request, jsonify
+import pickle
+import numpy as np
+
+# Load the model
+with open("predictive_maintenance_model.pkl", "rb") as f:
+    model = pickle.load(f)
+
+# Initialize Flask app
+app = Flask(__name__)
+
+@app.route("/predict", methods=["POST"])
+def predict():
+    try:
+        # Parse the input data (sensor readings)
+        data = request.get_json()
+        features = np.array(data['features']).reshape(1, -1)
+        
+        # Make predictions
+        prediction = model.predict(features)
+        result = "Failure predicted" if prediction[0] == 1 else "No failure predicted"
+        return jsonify({"prediction": result})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
+if __name__ == "__main__":
+    app.run(debug=True)</code></pre>
+            <p><strong>Testing the Flask API:</strong> Save as <code>app.py</code> and run: <code>python app.py</code>.
+                Send a POST request (e.g., using curl):</p>
+            <pre><code>curl -X POST -H "Content-Type: application/json" \
+-d '{"features": [75.5, 0.7, 25.4]}' \
+http://127.0.0.1:5000/predict</code></pre>
+            <p>This might output: <code>{"prediction": "No failure predicted"}</code></p>
+
+            <h3 id="streamlit">Streamlit</h3>
+            <p>Streamlit is a specialized tool for creating interactive dashboards and data-driven web applications. It
+                is tailored for data science and machine learning projects, allowing for rapid creation of UIs.</p>
+            <h4>Strengths:</h4>
+            <ul>
+                <li>Extremely simple to use; no web development knowledge required.</li>
+                <li>Focused on building dashboards and visualizations.</li>
+                <li>Great for quick prototyping of ML models.</li>
+            </ul>
+            <h4>Limitations:</h4>
+            <ul>
+                <li>Limited customization compared to Flask or Django.</li>
+                <li>Not designed for building APIs or handling complex backend logic.</li>
+            </ul>
+            <h5>Example: Deploying with Streamlit</h5>
+            <p>Install Streamlit: <code>pip install streamlit</code></p>
+            <p>Create <code>app_streamlit.py</code>:</p>
+            <pre><code>import streamlit as st
+import pickle
+import numpy as np
+
+# Load the model
+with open("predictive_maintenance_model.pkl", "rb") as f:
+    model = pickle.load(f)
+
+# Streamlit app
+st.title("Predictive Maintenance Dashboard")
+st.write("Enter the machine sensor readings to predict failures:")
+
+# Input fields for sensor data
+temperature = st.number_input("Temperature", value=75.5)
+vibration = st.number_input("Vibration", value=0.7)
+pressure = st.number_input("Pressure", value=25.4)
+
+# Make prediction when button is clicked
+if st.button("Predict"):
+    features = np.array([temperature, vibration, pressure]).reshape(1, -1)
+    prediction = model.predict(features)
+    result = "Failure predicted" if prediction[0] == 1 else "No failure predicted"
+    st.write(result)</code></pre>
+            <p>Running the Streamlit App: Save as <code>app_streamlit.py</code> and run:
+                <code>streamlit run app_streamlit.py</code>. This will launch an interactive web app.</p>
+
+            <h3 id="docker">Docker</h3>
+            <p>Docker is a platform for developing, shipping, and running applications in containers. Containers package
+                an application and its dependencies together, ensuring consistency across different environments. This
+                is crucial for deploying ML models, as it isolates the model and its environment from the underlying
+                infrastructure.</p>
+            <h4>Benefits for ML Deployment:</h4>
+            <ul>
+                <li><strong>Reproducibility:</strong> Ensures the model runs the same way regardless of the environment.
+                </li>
+                <li><strong>Portability:</strong> Containers can run on any system that supports Docker.</li>
+                <li><strong>Scalability:</strong> Easy to scale applications by running multiple instances of a
+                    container.</li>
+                <li><strong>Dependency Management:</strong> Simplifies managing complex dependencies required by ML
+                    models.</li>
+            </ul>
+        </section>
+
+        <section id="version-control-experiment-tracking">
+            <h2>Version Control & Experiment Tracking</h2>
+
+            <h3 id="git">Version Control with Git</h3>
+            <p>Version control is a system that tracks changes made to files over time. It allows developers to save and
+                track changes, revert to previous versions, collaborate, and manage different features through branching
+                and merging.</p>
+            <p><strong>Git</strong> is a distributed version control system that enables software development teams to
+                have multiple local copies of the project’s codebase independent of each other. These copies, or
+                branches, can be created, merged, and deleted quickly. Git is known for its speed, workflow
+                compatibility, and open source foundation.</p>
+            <h4>Key Features of Git:</h4>
+            <ul>
+                <li><strong>Version Tracking:</strong> Allows reverting to old releases without trouble.</li>
+                <li><strong>Branching:</strong> Create distinct branches for new attributes, bug repairs or tests.</li>
+                <li><strong>Distributed System:</strong> Every programmer has an entire version of the project.</li>
+                <li><strong>Log of Commits:</strong> Maintains an account of all commit actions (changes).</li>
+            </ul>
+            <h4>Approaches To Use Git For Version Control:</h4>
+            <ol>
+                <li><strong>Git via Command Line:</strong> The most common method, using terminal commands (e.g.,
+                    <code>git init</code>, <code>git add</code>, <code>git commit</code>, <code>git push</code>).</li>
+                <li><strong>Git with GUI Clients:</strong> Visual interfaces like GitHub Desktop, Sourcetree, and
+                    GitKraken.</li>
+                <li><strong>Git in Integrated Development Environments (IDEs):</strong> IDEs like VS Code, IntelliJ
+                    IDEA, and PyCharm have built-in Git support.</li>
+            </ol>
+
+            <h3 id="mlflow">Experiment Tracking with MLflow</h3>
+            <p>MLflow is an open-source platform for managing the end-to-end machine learning lifecycle. It includes
+                tools for experiment tracking, model packaging, model deployment, and model registry.</p>
+            <h4>Key Components of MLflow:</h4>
+            <ul>
+                <li><strong>MLflow Tracking:</strong> Allows logging of parameters, code versions, metrics, and output
+                    files when running machine learning code to later visualize and compare them.</li>
+                <li><strong>MLflow Projects:</strong> A standard format for packaging reusable data science code.</li>
+                <li><strong>MLflow Models:</strong> A convention for packaging machine learning models in multiple
+                    "flavors," allowing them to be used in a variety of downstream tools.</li>
+                <li><strong>MLflow Model Registry:</strong> A centralized model store, set of APIs, and UI, to
+                    collaboratively manage the full lifecycle of an MLflow Model.</li>
+            </ul>
+            <p>Using tools like MLflow helps in organizing experiments, reproducing results, and managing the deployment
+                of ML models effectively, forming a core part of MLOps (Machine Learning Operations).</p>
+        </section>
+
+        <section id="interactive-quiz-ai-tools">
+            <h2>Mini Quiz: Test Your AI Tools & Frameworks Knowledge!</h2>
+            <div class="quiz-container">
+                <div id="quiz">
+                    <div class="quiz-question" data-question="1">
+                        <p><strong>1. Which Python library is fundamental for numerical computing and provides support
+                                for large, multi-dimensional arrays and matrices?</strong></p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q1" value="a"> Pandas</label>
+                            <label><input type="radio" name="q1" value="b"> NumPy</label>
+                            <label><input type="radio" name="q1" value="c"> Matplotlib</label>
+                        </div>
+                        <p class="quiz-feedback" id="feedback-q1"></p>
+                    </div>
+                    <div class="quiz-question" data-question="2">
+                        <p><strong>2. TensorFlow and PyTorch are primarily known as:</strong></p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q2" value="a"> Data visualization libraries.</label>
+                            <label><input type="radio" name="q2" value="b"> Classical machine learning
+                                libraries.</label>
+                            <label><input type="radio" name="q2" value="c"> Deep learning frameworks.</label>
+                        </div>
+                        <p class="quiz-feedback" id="feedback-q2"></p>
+                    </div>
+                    <div class="quiz-question" data-question="3">
+                        <p><strong>3. Which tool is commonly used for creating interactive web applications and
+                                dashboards for machine learning models, often with minimal web development
+                                knowledge?</strong></p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q3" value="a"> Flask</label>
+                            <label><input type="radio" name="q3" value="b"> Docker</label>
+                            <label><input type="radio" name="q3" value="c"> Streamlit</label>
+                        </div>
+                        <p class="quiz-feedback" id="feedback-q3"></p>
+                    </div>
+                    <div class="quiz-question" data-question="4">
+                        <p><strong>4. What is the primary purpose of Git in AI development?</strong></p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q4" value="a"> To train deep learning models.</label>
+                            <label><input type="radio" name="q4" value="b"> To track changes in code and manage
+                                different versions of a project.</label>
+                            <label><input type="radio" name="q4" value="c"> To deploy models as web services.</label>
+                        </div>
+                        <p class="quiz-feedback" id="feedback-q4"></p>
+                    </div>
+                    <button id="submitQuiz">Submit Answers</button>
+                    <p id="quizScore" style="margin-top:15px; font-weight:bold;"></p>
+                </div>
+            </div>
+        </section>
+
+
+        <footer class="new-footer-container">
+            <div class="new-footer-buttons-wrapper">
+                <a href="topic-13.html" class="new-footer-button">
+                    ← Previous Topic: Advanced AI Topics & Ethics
+                </a>
+                <a href="topic-15.html" class="new-footer-button">
+                    Next Topic: Future of AI & Emerging Trends →
+                </a>
+            </div>
+            <a href="#" onclick="window.print(); return false;" class="new-footer-print-link">Print this page</a>
+            <p style="font-size: 0.9rem; color: var(--text-color); margin-top: 0.5rem;">© <span id="currentYear"></span>
+                AI Tools & Frameworks. All rights reserved.</p>
+        </footer>
+
+    </main>
+
+    <script>
+        // JavaScript from topic-1.html (Theme toggle, Throttled TOC highlighting, Footer year)
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+        function setTheme(theme) { if (theme === 'dark') { body.classList.add('dark-mode'); themeToggle.innerHTML = '<i class="fas fa-sun"></i>'; localStorage.setItem('theme', 'dark'); } else { body.classList.remove('dark-mode'); themeToggle.innerHTML = '<i class="fas fa-moon"></i>'; localStorage.setItem('theme', 'light'); } }
+        const localTheme = localStorage.getItem('theme'); if (localTheme) { setTheme(localTheme); } else { setTheme(prefersDarkScheme.matches ? 'dark' : 'light'); }
+        themeToggle.addEventListener('click', () => { setTheme(body.classList.contains('dark-mode') ? 'light' : 'dark'); });
+        prefersDarkScheme.addEventListener('change', (e) => { if (!localStorage.getItem('theme')) { setTheme(e.matches ? 'dark' : 'light'); } });
+
+        // Table of Contents Generation & Active Scrolling
+        const tocContainer = document.getElementById('toc');
+        const mainContent = document.querySelector('.main-content');
+        const mainSections = Array.from(mainContent.querySelectorAll('section[id]'));
+        let tocLinkElements = [];
+
+        function throttle(func, limit) { let inThrottle; return function () { const args = arguments; const context = this; if (!inThrottle) { func.apply(context, args); inThrottle = true; setTimeout(() => inThrottle = false, limit); } } }
+
+        function updateTocAndSectionData() {
+            const navbar = document.querySelector('.navbar');
+            const navbarHeight = navbar ? navbar.offsetHeight : 0;
+            tocContainer.innerHTML = '';
+            tocLinkElements = [];
+
+            mainSections.forEach(section => {
+                const sectionTitleElement = section.querySelector('h2');
+                if (sectionTitleElement) {
+                    const listItem = document.createElement('li');
+                    const link = document.createElement('a');
+                    link.textContent = sectionTitleElement.textContent;
+                    link.href = `#${section.id}`;
+                    link.dataset.sectionId = section.id;
+                    listItem.appendChild(link);
+                    tocContainer.appendChild(listItem);
+                    tocLinkElements.push(link);
+
+                    const subSectionsH3 = Array.from(section.querySelectorAll('h3[id]'));
+                    if (subSectionsH3.length > 0) {
+                        const subListH3 = document.createElement('ul');
+                        subSectionsH3.forEach(subSectionH3 => {
+                            const subListItemH3 = document.createElement('li');
+                            const subLinkH3 = document.createElement('a');
+                            subLinkH3.textContent = subSectionH3.textContent;
+                            subLinkH3.href = `#${subSectionH3.id}`;
+                            subLinkH3.dataset.sectionId = subSectionH3.id;
+                            subLinkH3.classList.add('sub-item');
+                            subListItemH3.appendChild(subLinkH3);
+                            subListH3.appendChild(subListItemH3);
+                            tocLinkElements.push(subLinkH3);
+                        });
+                        listItem.appendChild(subListH3);
+                    }
+                }
+                const allNavigableElements = Array.from(section.querySelectorAll('h2[id], h3[id]'));
+                allNavigableElements.forEach(el => {
+                    el.dataset.effectiveOffsetTop = el.getBoundingClientRect().top + window.scrollY - navbarHeight - 30;
+                });
+            });
+        }
+
+        function highlightActiveTocLink() {
+            const scrollPosition = window.scrollY;
+            let currentlyActiveSectionId = null;
+            const allLinkableElements = tocLinkElements.map(link => document.getElementById(link.dataset.sectionId)).filter(el => el);
+
+            for (let i = allLinkableElements.length - 1; i >= 0; i--) {
+                const element = allLinkableElements[i];
+                if (element && scrollPosition >= parseFloat(element.dataset.effectiveOffsetTop || '0')) {
+                    currentlyActiveSectionId = element.id;
+                    break;
+                }
+            }
+
+            tocLinkElements.forEach(link => {
+                if (link.dataset.sectionId === currentlyActiveSectionId) {
+                    link.classList.add('active');
+                    if (link.classList.contains('sub-item')) {
+                        const parentLi = link.closest('ul').closest('li');
+                        if (parentLi) {
+                            const parentLink = parentLi.querySelector('a:not(.sub-item)');
+                            if (parentLink) parentLink.classList.add('active');
+                        }
+                    }
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+
+        if (mainSections.length > 0) { updateTocAndSectionData(); highlightActiveTocLink(); window.addEventListener('scroll', throttle(highlightActiveTocLink, 100)); window.addEventListener('resize', throttle(() => { updateTocAndSectionData(); highlightActiveTocLink(); }, 150)); }
+
+        // Mini Quiz Logic
+        const submitQuizButton = document.getElementById('submitQuiz');
+        const quizQuestionElements = document.querySelectorAll('#interactive-quiz-ai-tools .quiz-question');
+        const quizCorrectAnswers = {
+            q1: { value: 'b', text: 'NumPy' },
+            q2: { value: 'c', text: 'Deep learning frameworks.' },
+            q3: { value: 'c', text: 'Streamlit' },
+            q4: { value: 'b', text: 'To track changes in code and manage different versions of a project.' },
+        };
+
+        if (submitQuizButton) {
+            submitQuizButton.addEventListener('click', () => {
+                let score = 0;
+                quizQuestionElements.forEach(questionElement => {
+                    const questionId = 'q' + questionElement.dataset.question;
+                    const selectedOption = document.querySelector(`#interactive-quiz-ai-tools input[name="${questionId}"]:checked`);
+                    const feedbackElement = document.getElementById(`feedback-${questionId}`);
+                    const correctAnswerInfo = quizCorrectAnswers[questionId];
+
+                    if (selectedOption) {
+                        if (selectedOption.value === correctAnswerInfo.value) {
+                            score++;
+                            feedbackElement.textContent = "Correct!";
+                            feedbackElement.style.color = "var(--secondary-color)";
+                        } else {
+                            feedbackElement.textContent = `Incorrect. The correct answer is: ${correctAnswerInfo.text}.`;
+                            feedbackElement.style.color = "var(--accent-color)";
+                        }
+                    } else {
+                        feedbackElement.textContent = "Please select an answer.";
+                        feedbackElement.style.color = "var(--accent-color)";
+                    }
+                });
+                const quizScoreEl = document.getElementById('quizScore');
+                if (quizScoreEl) {
+                    quizScoreEl.textContent = `You scored ${score} out of ${quizQuestionElements.length}.`;
+                }
+            });
+        }
+
+        // Footer current year
+        const currentYearSpan = document.getElementById('currentYear');
+        if (currentYearSpan) {
+            currentYearSpan.textContent = new Date().getFullYear();
+        }
+    </script>
+</body>
+
+</html>
