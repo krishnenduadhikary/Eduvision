@@ -1,23 +1,360 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>C Programming - EduVision</title>
-  <link rel="stylesheet" href="c-style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-light: #3b82f6;
+      --primary-dark: #1d4ed8;
+      --secondary: #f59e0b;
+      --dark: #1e293b;
+      --light: #f8fafc;
+      --gray: #64748b;
+      --gray-light: #e2e8f0;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8fafc;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    .eduvision-logo .text-2xl {
+      font-size: 1.7rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      letter-spacing: 0.01em;
+    }
+
+    .eduvision-logo .text-white {
+      color: #fff !important;
+    }
+
+    .eduvision-logo .text-yellow-300 {
+      color: #fde047 !important;
+    }
+
+    .eduvision-logo .group:hover .text-yellow-300 {
+      color: #fef08a !important;
+    }
+
+    .eduvision-logo a {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .eduvision-logo svg {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 5rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.05)" d="M0,0 L100,0 L100,100 L0,100 Z" /><text x="50" y="50" font-family="monospace" font-size="14" fill="rgba(255,255,255,0.1)" text-anchor="middle" dominant-baseline="middle">{ }</text></svg>');
+      opacity: 0.3;
+    }
+
+    #main-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      position: relative;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    #subtitle {
+      font-size: 1.25rem;
+      font-weight: 300;
+      max-width: 700px;
+      margin: 0 auto;
+      opacity: 0.9;
+    }
+
+    .overview {
+      padding: 3rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .overview h2 {
+      font-size: 1.75rem;
+      margin-bottom: 2rem;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .overview h2::after {
+      content: "";
+      flex: 1;
+      height: 2px;
+      background: linear-gradient(to right, var(--primary), var(--gray-light));
+      margin-left: 1rem;
+    }
+
+    .topics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .topic-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.75rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      border: 1px solid var(--gray-light);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .topic-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--primary);
+      transition: all 0.3s ease;
+    }
+
+    .topic-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .topic-card:hover::before {
+      width: 6px;
+      background: var(--secondary);
+    }
+
+    .topic-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .topic-title i {
+      color: var(--secondary);
+    }
+
+    .topic-desc {
+      font-size: 0.95rem;
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+    }
+
+    .explore-card-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: white;
+      background: linear-gradient(to right, var(--primary), var(--primary-light));
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 10px rgba(37, 99, 235, 0.2);
+    }
+
+    .explore-card-button:hover {
+      background: linear-gradient(to right, var(--primary-dark), var(--primary));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+    }
+
+    .explore-card-button i {
+      font-size: 0.9rem;
+    }
+
+    .module-number {
+      display: inline-block;
+      background-color: var(--primary-light);
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 28px;
+      font-size: 0.8rem;
+      margin-right: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+      #main-title {
+        font-size: 2.5rem;
+      }
+
+      #subtitle {
+        font-size: 1.1rem;
+      }
+
+      .overview {
+        padding: 2rem 1rem;
+      }
+
+      .topics-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
+
 <body>
+  <div class="eduvision-logo"
+    style="position: absolute; top: 18px; left: 18px; z-index: 100; text-shadow: 0 2px 12px #6a82fb33;">
+    <div class="text-2xl font-bold" style="font-family: 'Nunito', sans-serif;">
+      <a href="../../index.html" class="flex items-center group" style="text-decoration: none;">
+        <span class="text-white">Edu</span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300" fill="none"
+          viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+          style="height: 1.5em; width: 1.5em; margin: 0 2px; vertical-align: middle;">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+        </svg>
+        <span class="text-white">ision</span>
+      </a>
+    </div>
+  </div>
   <header class="header">
     <h1 id="main-title">C Programming</h1>
     <p id="subtitle">Build strong programming foundations using the C language</p>
   </header>
 
   <section class="overview">
-    <h2>📌 Syllabus Overview</h2>
+    <h2><i class="fas fa-list-alt"></i> Syllabus Overview</h2>
     <div class="topics-grid" id="topics-container">
       <!-- Cards will be loaded here -->
     </div>
   </section>
 
-  <script src="c-script.js"></script>
+  <script>
+    const topicsData = {
+      "title": "C Programming",
+      "subtitle": "Build strong programming foundations using the C language",
+      "topics": [
+        {
+          "title": "Introduction to C",
+          "description": "History and importance of C, structure of a C program, compilation and execution process, keywords and identifiers, constants, variables, and data types, input and output (using scanf, printf), comments in C, escape sequences.",
+          "icon": "fas fa-code"
+        },
+        {
+          "title": "Operators and Expressions",
+          "description": "Arithmetic operators, relational and logical operators, assignment operators, increment and decrement operators, conditional operator, bitwise operators, operator precedence and associativity, type conversions.",
+          "icon": "fas fa-calculator"
+        },
+        {
+          "title": "Control Structures",
+          "description": "Decision making (if, if-else, nested if-else, switch statement), loops (while, do-while, for loops), nested loops, jump statements (break, continue, goto, return).",
+          "icon": "fas fa-project-diagram"
+        },
+        {
+          "title": "Functions in C",
+          "description": "Defining and declaring functions, function arguments and return values, call by value vs call by reference, recursion, storage classes (auto, extern, static, register), scope and lifetime of variables.",
+          "icon": "fas fa-cogs"
+        },
+        {
+          "title": "Arrays and Strings",
+          "description": "One-dimensional arrays, two-dimensional arrays, multidimensional arrays, string handling (using <string.h>), strlen, strcpy, strcmp, strcat, array of strings.",
+          "icon": "fas fa-layer-group"
+        },
+        {
+          "title": "Pointers",
+          "description": "Introduction to pointers, pointer arithmetic, pointers and arrays, pointers and strings, pointers to functions, pointers to pointers, dynamic memory allocation (malloc, calloc, realloc, free).",
+          "icon": "fas fa-bullseye"
+        },
+        {
+          "title": "Structures and Unions",
+          "description": "Defining and declaring structures, accessing structure members, nested structures, array of structures, pointers to structures, unions, enumerated data types (enum).",
+          "icon": "fas fa-cubes"
+        },
+        {
+          "title": "File Handling",
+          "description": "File operations (opening, reading, writing, closing), file modes (r, w, a, rb, wb, etc.), file functions (fopen, fclose, fscanf, fprintf, fgets, fputs, etc.), binary files, file pointers and error handling.",
+          "icon": "fas fa-file-alt"
+        },
+        {
+          "title": "Preprocessor Directives",
+          "description": "Macro substitution, file inclusion (#include), conditional compilation (#ifdef, #ifndef, #endif), defining constants (#define), undefining macros (#undef).",
+          "icon": "fas fa-magic"
+        },
+        {
+          "title": "Advanced Topics",
+          "description": "Command-line arguments, linked lists (basic introduction), debugging techniques, memory leaks and management, modular programming in C, building small projects (e.g., calculator, file encryptor, simple database).",
+          "icon": "fas fa-rocket"
+        }
+      ]
+    };
+
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById("main-title").textContent = topicsData.title;
+      document.getElementById("subtitle").textContent = topicsData.subtitle;
+
+      const container = document.getElementById("topics-container");
+
+      topicsData.topics.forEach((topic, index) => {
+        const card = document.createElement("div");
+        card.className = "topic-card";
+
+        card.innerHTML = `
+          <div class="topic-title">
+            <span class="module-number">${index + 1}</span>
+            <i class="${topic.icon}"></i>
+            ${topic.title}
+          </div>
+          <div class="topic-desc">${topic.description}</div>
+          <button class="explore-card-button" onclick="location.href='Topics/topic-${index + 1}.html'">
+            <i class="fas fa-arrow-right"></i> Explore Module
+          </button>
+        `;
+
+        container.appendChild(card);
+      });
+    });
+  </script>
 </body>
+
 </html>

@@ -2,46 +2,50 @@
     "title": "Microprocessor",
     "subtitle": "Understand the architecture, instruction sets, and programming of microprocessors",
     "topics": [
-      {
-        "title": "Introduction to Microprocessors",
-        "description": "Definition, evolution, and applications of microprocessors.",
-        "resources": ["Notes", "Video"]
-      },
-      {
-        "title": "8085 Architecture",
-        "description": "Architecture, functional units, and operations of 8085.",
-        "resources": ["Diagram", "Notes"]
-      },
-      {
-        "title": "Instruction Set of 8085",
-        "description": "Classification and examples of instructions.",
-        "resources": ["Examples", "Practice"]
-      },
-      {
-        "title": "Addressing Modes",
-        "description": "Types of addressing modes used in 8085.",
-        "resources": ["Notes", "Examples"]
-      },
-      {
-        "title": "Timing Diagrams",
-        "description": "Machine cycles, instruction cycles, and timing diagrams.",
-        "resources": ["Diagram", "Notes"]
-      },
-      {
-        "title": "Assembly Language Programming",
-        "description": "Writing and executing 8085 programs.",
-        "resources": ["Code", "Practice"]
-      },
-      {
-        "title": "Interrupts in 8085",
-        "description": "Types of interrupts and their handling.",
-        "resources": ["Diagram", "Notes"]
-      },
-      {
-        "title": "Interfacing and Applications",
-        "description": "Interfacing peripherals like keyboard, display, ADC/DAC.",
-        "resources": ["Examples", "Video"]
-      }
+        {
+            "title": "Introduction to Microprocessors",
+            "description": "Evolution, architecture, and comparison of microprocessors, microcontrollers, and DSPs.",
+            "resources": ["Notes", "Video"]
+        },
+        {
+            "title": "8085 Microprocessor Architecture",
+            "description": "Internal architecture, registers, ALU, control unit, system bus, pin configuration, and timing diagrams.",
+            "resources": ["Diagram", "Notes"]
+        },
+        {
+            "title": "8085 Instruction Set and Programming",
+            "description": "Addressing modes, instruction classification, assembly language programming, stack, subroutines, counters, and debugging.",
+            "resources": ["Examples", "Practice"]
+        },
+        {
+            "title": "8085 Interrupts and DMA",
+            "description": "Hardware and software interrupts, vectored and non-vectored interrupts, priorities, masking, and DMA basics.",
+            "resources": ["Notes", "Diagram"]
+        },
+        {
+            "title": "Memory and I/O Interfacing",
+            "description": "Memory organization, address decoding, interfacing ROM, RAM, and I/O devices.",
+            "resources": ["Examples", "Practice"]
+        },
+        {
+            "title": "8255 Programmable Peripheral Interface (PPI)",
+            "description": "Architecture, modes of operation, interfacing with 8085, and practical applications.",
+            "resources": ["Diagram", "Examples"]
+        },
+        {
+            "title": "8086 Microprocessor Architecture",
+            "description": "Features, architecture, segmented memory, minimum and maximum mode, and instruction set.",
+            "resources": ["Notes", "Examples"]
+        },
+        {
+            "title": "Interfacing and Applications",
+            "description": "Interfacing peripherals like keyboard, display, ADC/DAC, stepper motor, and real-time applications.",
+            "resources": ["Examples", "Video"]
+        },
+        {
+            "title": "Introduction to Microcontrollers",
+            "description": "Overview of 8051 microcontroller, comparison with microprocessors, basic programming, and applications.",
+            "resources": ["Notes", "Examples"]
+        }
     ]
-  }
-  
+}
