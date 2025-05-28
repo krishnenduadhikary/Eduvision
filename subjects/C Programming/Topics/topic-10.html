@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Topics in C - Eduvision</title>
+    <meta name="description"
+        content="Explore advanced C programming topics: command-line arguments, linked lists, debugging, memory management, modular programming, and project ideas.">
+    <meta name="keywords"
+        content="C advanced topics, command-line arguments C, linked lists C, debugging C, memory leaks C, modular programming C, C projects, C programming tutorial">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        :root {
+            /* Light Mode Defaults */
+            --bg-color: #f0f4f8;
+            --card-bg: #ffffff;
+            --primary-color: #2563eb;
+            --secondary-color: #4f46e5;
+            --accent-color: #10b981;
+            --text-color: #374151;
+            --heading-color: #111827;
+            --border-color: #d1d5db;
+            --gradient-start: var(--primary-color);
+            --gradient-end: var(--secondary-color);
+            --font-main: 'Poppins', sans-serif;
+            --font-logo: 'Nunito', sans-serif;
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --card-shadow-color: rgba(0, 0, 0, 0.05);
+            --link-color: var(--primary-color);
+            --link-hover-color: #1d4ed8;
+            --link-hover-bg: #eff6ff;
+            --collapsible-content-bg: rgba(0, 0, 0, 0.02);
+            --definition-bg: rgba(37, 99, 235, 0.05);
+            --table-header-bg: var(--primary-color);
+            --table-header-text: white;
+            --table-row-even-bg: rgba(0, 0, 0, 0.015);
+            --theme-toggle-bg: var(--card-bg);
+            --theme-toggle-icon: var(--primary-color);
+            --theme-toggle-hover-bg: var(--primary-color);
+            --theme-toggle-hover-icon: white;
+            --tooltip-bg: #333;
+            --tooltip-text: #fff;
+            --diagram-bg: var(--collapsible-content-bg);
+            --diagram-border: var(--border-color);
+            --wishing-note-bg: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            --wishing-note-text: white;
+        }
+
+        body.dark-mode {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-color: #c9d1d9;
+            --heading-color: #f0f6fc;
+            --border-color: #30363d;
+            --shadow-color: rgba(0, 0, 0, 0.25);
+            --card-shadow-color: rgba(0, 0, 0, 0.2);
+            --link-color: #58a6ff;
+            --link-hover-color: #80baff;
+            --link-hover-bg: rgba(88, 166, 255, 0.1);
+            --collapsible-content-bg: rgba(255, 255, 255, 0.03);
+            --definition-bg: rgba(88, 166, 255, 0.1);
+            --table-header-bg: var(--primary-color);
+            --table-row-even-bg: rgba(255, 255, 255, 0.03);
+            --theme-toggle-bg: var(--card-bg);
+            --tooltip-bg: #c9d1d9;
+            --tooltip-text: #0d1117;
+            --diagram-bg: rgba(255, 255, 255, 0.05);
+            --diagram-border: #444c56;
+            --wishing-note-bg: linear-gradient(135deg, #1f2937, #374151);
+            /* Darker gradient */
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .eduvision-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: var(--font-logo);
+        }
+
+        .eduvision-logo .logo-text {
+            color: var(--heading-color);
+        }
+
+        body.dark-mode .eduvision-logo .logo-text {
+            color: #f0f6fc;
+        }
+
+        .eduvision-logo .text-yellow-300 {
+            color: #f59e0b !important;
+        }
+
+        .eduvision-logo .group:hover .text-yellow-300 {
+            color: #fcd34d !important;
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+            color: var(--theme-toggle-hover-icon);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-top: 80px;
+            margin-bottom: 2rem;
+            padding: 2rem 1rem;
+            border-radius: 12px;
+            background: var(--card-bg);
+            box-shadow: 0 10px 30px var(--card-shadow-color);
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--heading-color);
+            background: linear-gradient(90deg, var(--gradient-start), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 1.15rem;
+            color: var(--text-color);
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .content-section {
+            background-color: var(--card-bg);
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px var(--card-shadow-color);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s, border-color 0.3s;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px var(--shadow-color);
+        }
+
+        .content-section h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--heading-color);
+            margin-top: 0;
+            margin-bottom: 1.8rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .content-section h2 i {
+            margin-right: 1rem;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section .definition {
+            margin-bottom: 1.2rem;
+            font-size: 1rem;
+        }
+
+        .content-section ul {
+            padding-left: 25px;
+            list-style: none;
+        }
+
+        .content-section ul li::before {
+            content: "\f138";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--primary-color);
+            margin-right: 12px;
+            display: inline-block;
+            font-size: 0.9em;
+        }
+
+        pre[class*="language-"] {
+            padding: 1.5em;
+            margin: 1.5em 0;
+            overflow: auto;
+            border-radius: 8px;
+            background: #2d2d2d;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode pre[class*="language-"] {
+            background: #1e1e1e;
+        }
+
+        code[class*="language-"],
+        pre[class*="language-"] {
+            font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+            font-size: 0.95em;
+        }
+
+        .collapsible {
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: white;
+            cursor: pointer;
+            padding: 15px 25px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            transition: filter 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .collapsible:hover {
+            filter: brightness(1.15);
+        }
+
+        .collapsible.active {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .collapsible-content {
+            padding: 0 22px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out, background-color 0.3s;
+            background-color: var(--collapsible-content-bg);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            margin-bottom: 1.2rem;
+            border: 1px solid var(--border-color);
+            border-top: none;
+        }
+
+        .collapsible-content>div {
+            padding: 20px 0;
+        }
+
+        .collapsible .icon::before {
+            content: '\f078';
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible.active .icon::before {
+            transform: rotate(-180deg);
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 10px var(--card-shadow-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .custom-table th,
+        .custom-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        .custom-table th {
+            background-color: var(--table-header-bg);
+            color: var(--table-header-text);
+            font-weight: 600;
+        }
+
+        .custom-table tr:nth-child(even) {
+            background-color: var(--table-row-even-bg);
+        }
+
+        .custom-table tr:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark-mode .custom-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .custom-table .code-cell {
+            font-family: 'Fira Code', monospace;
+            color: var(--accent-color);
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted var(--accent-color);
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: max-content;
+            max-width: 250px;
+            background-color: var(--tooltip-bg);
+            color: var(--tooltip-text);
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .definition {
+            background-color: var(--definition-bg);
+            border-left: 5px solid var(--primary-color);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+            font-style: normal;
+        }
+
+        .definition strong {
+            color: var(--primary-color);
+        }
+
+        .page-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            margin-bottom: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s, color 0.2s;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            font-size: 1rem;
+        }
+
+        .nav-button i.fa-arrow-left {
+            margin-right: 0.5em;
+        }
+
+        .nav-button i.fa-arrow-right {
+            margin-left: 0.5em;
+        }
+
+        .back-button {
+            background-color: var(--card-bg);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .back-button:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+        }
+
+        .next-button {
+            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+            color: white;
+        }
+
+        .next-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+            filter: brightness(1.1);
+        }
+
+        .page-footer {
+            text-align: center;
+            padding: 2.5rem 0;
+            margin-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: #6b7280;
+            transition: border-top-color 0.3s;
+        }
+
+        body.dark-mode .page-footer {
+            color: #9ca3af;
+        }
+
+        .diagram-container {
+            background-color: var(--diagram-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem auto;
+            text-align: center;
+            border: 1px solid var(--diagram-border);
+            max-width: 700px;
+        }
+
+        .diagram-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+        }
+
+        .diagram-container h4 {
+            margin-top: 0;
+            color: var(--accent-color);
+        }
+
+        .syntax-box {
+            background-color: var(--collapsible-content-bg);
+            padding: 1em;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            margin: 1em 0;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            font-size: 0.9em;
+            color: var(--text-color);
+        }
+
+        body.dark-mode .syntax-box {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .project-ideas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .project-card {
+            background-color: var(--collapsible-content-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px var(--shadow-color);
+        }
+
+        .project-card h4 {
+            color: var(--accent-color);
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-card p {
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .project-card ul {
+            padding-left: 20px;
+            font-size: 0.85rem;
+        }
+
+        .project-card ul li::before {
+            content: "\f00c";
+            font-size: 0.8em;
+        }
+
+
+        .wishing-note {
+            background: var(--wishing-note-bg);
+            color: var(--wishing-note-text);
+            padding: 2.5rem;
+            margin-top: 3rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 10px 30px var(--shadow-color);
+        }
+
+        .wishing-note h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--wishing-note-text);
+            /* Explicitly set for gradient text if needed */
+            border-bottom: none;
+            /* Override section h2 style */
+        }
+
+        .wishing-note p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 700px;
+            margin: 0 auto 1.5rem auto;
+        }
+
+        .wishing-note .fa-rocket,
+        .wishing-note .fa-code,
+        .wishing-note .fa-graduation-cap {
+            font-size: 2.5rem;
+            margin: 0 0.5rem;
+            opacity: 0.8;
+        }
+
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.4rem;
+            }
+
+            .content-section h2 {
+                font-size: 1.7rem;
+            }
+
+            .content-section h2 i {
+                font-size: 1.5rem;
+            }
+
+            #theme-toggle {
+                top: 15px;
+                right: 15px;
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+
+            .eduvision-logo {
+                top: 15px;
+                left: 15px;
+            }
+
+            .eduvision-logo .text-2xl {
+                font-size: 1.5rem;
+            }
+
+            .page-header {
+                margin-top: 70px;
+                padding: 1.5rem 0.5rem;
+            }
+
+            .content-section {
+                padding: 1.5rem;
+            }
+
+            .wishing-note h2 {
+                font-size: 1.8rem;
+            }
+
+            .wishing-note p {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .page-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-button {
+                width: 100%;
+                justify-content: center;
+                padding: 15px 20px;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../../index.html" class="flex items-center group">
+                <span class="logo-text">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="logo-text">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>Advanced Topics in C</h1>
+            <p>Expanding your C programming skills with more complex concepts and practical applications.</p>
+        </header>
+
+        <section class="content-section" id="command-line-arguments">
+            <h2><i class="fas fa-terminal"></i>1. Command-Line Arguments</h2>
+            <p>It's possible to pass values from the command line to your C programs when they are executed. These
+                values are called command-line arguments and are important for controlling program behavior externally
+                without hardcoding values.</p>
+            <h4>Syntax of `main()` for Command-Line Arguments:</h4>
+            <div class="syntax-box">
+                int main(int argc, char *argv[]) {
+                // argc: argument count (number of strings pointed to by argv)
+                // argv: argument vector (array of character pointers/strings)
+                // ... code ...
+                return 0;
+                }
+            </div>
+            <ul>
+                <li>`argc` (argument count): An integer that holds the number of arguments passed, including the program
+                    name itself (which is always the first argument).</li>
+                <li>`argv` (argument vector): An array of character pointers (strings).
+                    <ul>
+                        <li>`argv[0]` is the name of the program.</li>
+                        <li>`argv[1]` is the first actual command-line argument.</li>
+                        <li>...</li>
+                        <li>`argv[argc-1]` is the last argument.</li>
+                        <li>`argv[argc]` is a NULL pointer.</li>
+                    </ul>
+                </li>
+            </ul>
+            <h4>Example:</h4>
+            <pre><code class="language-c">
+#include <stdio.h>
+
+int main(int argc, char *argv[]) {
+    printf("Program name: %s\n", argv[0]);
+    printf("Number of arguments passed: %d\n", argc);
+
+    if (argc > 1) {
+        printf("Arguments are:\n");
+        for (int i = 1; i < argc; i++) { // Start from 1 to skip program name
+            printf("  argv[%d]: %s\n", i, argv[i]);
+        }
+    } else {
+        printf("No additional arguments were passed.\n");
+    }
+    // Example from image: Note about passing multiple words as one argument
+    // ./program "hello c how r u" -> argc would be 2, argv[1] is "hello c how r u"
+    return 0;
+}
+            </code></pre>
+            <p>To run and pass arguments (after compiling to `myprogram`):
+                <br><code>./myprogram first_arg "second argument with spaces" 123</code>
+            </p>
+        </section>
+
+        <section class="content-section" id="linked-lists">
+            <h2><i class="fas fa-link"></i>2. Linked Lists (Basic Introduction)</h2>
+            <p>A <strong class="tooltip">linked list<span class="tooltiptext">A linear data structure where elements are
+                        not stored at contiguous memory locations.</span></strong> is a dynamic data structure
+                consisting of a sequence of <strong class="tooltip">nodes<span class="tooltiptext">Each node contains
+                        data and a pointer to the next node.</span></strong>. Each node is composed of two fields: a
+                <strong class="highlight">data field</strong> and a <strong class="highlight">reference field
+                    (pointer)</strong> to the next node in the sequence.</p>
+            <div class="diagram-container">
+                <h4>Linked List Node Structure and Visual:</h4>
+                <img src="https://i.imgur.com/T3Qz4hE.png" alt="Linked List Node and Structure">
+            </div>
+            <ul>
+                <li>The reference field is also called the <strong class="highlight">next pointer</strong> or <strong
+                        class="highlight">next link</strong>.</li>
+                <li>A <strong class="highlight">head pointer</strong> is used to track the first element (node) in the
+                    linked list.</li>
+                <li>The last node in the list typically has its next pointer set to `NULL`.</li>
+            </ul>
+            <p>Linked lists are designed to be efficient for inserting or removing elements from any position. However,
+                operations like accessing a specific element by index require traversing the list from the head.</p>
+            <button type="button" class="collapsible">C Linked List Implementation Basics <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>Node Structure:</h4>
+                    <pre><code class="language-c">
+#include <stdio.h>
+#include <stdlib.h> // For malloc, free
+
+// Define the structure for a node
+typedef struct Node { // Using typedef for convenience
+    int data;          // Data stored in the node
+    struct Node *next; // Pointer to the next node
+} Node;
+                    </code></pre>
+                    <h4>Basic Operations (Conceptual - full implementation is extensive):</h4>
+                    <ul>
+                        <li><strong>Creating a new node:</strong>
+                            <pre><code class="language-c">
+Node* createNode(int data_val) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    if (newNode == NULL) {
+        perror("Error creating a new node");
+        exit(EXIT_FAILURE);
+    }
+    newNode->data = data_val;
+    newNode->next = NULL;
+    return newNode;
+}
+                        </code></pre>
+                        </li>
+                        <li><strong>Adding a node at the beginning (prepend):</strong>
+                            <pre><code class="language-c">
+Node* prependNode(Node* head, int data_val) {
+    Node* newNode = createNode(data_val);
+    newNode->next = head; // New node points to the old head
+    head = newNode;       // Head now points to the new node
+    return head;
+}
+                        </code></pre>
+                            <div class="diagram-container">
+                                <img src="https://i.imgur.com/07o4j0t.png"
+                                    alt="Adding node to empty and non-empty list">
+                            </div>
+                        </li>
+                        <li><strong>Traversing the linked list:</strong>
+                            <pre><code class="language-c">
+void traverseList(Node* head) {
+    Node* current = head;
+    printf("List: ");
+    while (current != NULL) {
+        printf("%d -> ", current->data);
+        current = current->next;
+    }
+    printf("NULL\n");
+}
+                        </code></pre>
+                        </li>
+                        <li>Other operations include: adding at the end (append), inserting after/before a node,
+                            deleting nodes, searching, sorting, reversing. (Your provided images cover many of these in
+                            detail).</li>
+                    </ul>
+                    <p>The provided image data contains a full C linked list program with a menu for various operations.
+                        That code serves as a comprehensive example of implementing these operations.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="debugging-techniques">
+            <h2><i class="fas fa-bug"></i>3. Debugging Techniques</h2>
+            <p>Debugging is a crucial skill for any programmer. It's the process of identifying, isolating, and fixing
+                errors or "bugs" in your code.</p>
+            <h4>Common C Programming Bugs:</h4>
+            <ul>
+                <li><strong>Null Pointer Exceptions:</strong> Attempting to access or modify data through a pointer that
+                    is `NULL`.</li>
+                <li><strong>Memory Leaks:</strong> Allocating memory dynamically but failing to free it when no longer
+                    needed.</li>
+                <li><strong>Buffer Overflows:</strong> Writing data beyond the allocated bounds of an array or buffer,
+                    leading to data corruption or security vulnerabilities.</li>
+                <li><strong>Logic Errors:</strong> The code compiles and runs but produces incorrect results due to
+                    flaws in the program's logic.</li>
+                <li><strong>Syntax Errors:</strong> Grammatical errors in the code that prevent compilation.</li>
+                <li><strong>Runtime Errors:</strong> Errors that occur during program execution, such as division by
+                    zero or accessing invalid memory.</li>
+                <li><strong>Segmentation Faults (Segfaults):</strong> A common runtime error caused by accessing memory
+                    that the program is not allowed to access.</li>
+                <li><strong>Uninitialized Variables:</strong> Using variables before they have been assigned a
+                    meaningful value, leading to unpredictable behavior.</li>
+            </ul>
+            <button type="button" class="collapsible">Debugging Approaches <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>A. Using `printf` for Simple Debugging (Non-Interactive):</h4>
+                    <p>One of the simplest techniques involves inserting `printf` statements at various points in your
+                        code to print the values of variables, messages, or indicate program flow. This can help track
+                        down where things go wrong.</p>
+                    <pre><code class="language-c">
+#include <stdio.h>
+// #define DEBUG_ENABLED // Uncomment to enable debug prints
+
+int main() {
+    int i = 42;
+    float f_val = 3.14;
+    char str[] = "Hello, World!";
+    float *pf = &f_val;
+
+    #ifdef DEBUG_ENABLED
+        printf("DEBUG: Variables Currently Contain: i=%d, f_val=%f, *pf=%f, str=%s\n", i, f_val, *pf, str);
+    #endif
+
+    // Rest of your program logic
+    printf("Program continues...\n");
+    return 0;
+}
+                    </code></pre>
+
+                    <h4>B. The Art of Commenting Out Code:</h4>
+                    <p>Temporarily "commenting out" sections of your code can help isolate the problematic part. If the
+                        bug disappears when a section is commented out, that section likely contains or contributes to
+                        the error.</p>
+
+                    <h4>C. Assert Statements (`assert.h`):</h4>
+                    <p>Assertions are used to verify that specific conditions hold true during program execution. If an
+                        assertion fails (the condition is false), the program terminates and prints an error message
+                        indicating the failed assertion, file name, and line number. This helps catch bugs early by an
+                        `assert(expression);` statement.</p>
+                    <pre><code class="language-c">
+#include <stdio.h>
+#include <assert.h> // For assert()
+
+float calculate_density(const char *word, char target_char) {
+    assert(word != NULL); // Assert that word is not a NULL pointer
+    int len = 0;
+    while(word[len] != '\0') len++;
+    assert(len > 0);      // Assert that word is not an empty string for density calculation
+
+    int count = 0;
+    for (int i = 0; i < len; i++) {
+        if (word[i] == target_char) {
+            count++;
+        }
+    }
+    return (float)count / len; // Assertion against division by zero handled by assert(len > 0)
+}
+
+int main() {
+    const char *sample_word = "example";
+    float density = calculate_density(sample_word, 'e');
+    printf("The '%c' density in '%s' is: %.2f\n", 'e', sample_word, density);
+    
+    // const char *null_word = NULL;
+    // calculate_density(null_word, 'e'); // This would trigger the first assert
+    return 0;
+}
+                    </code></pre>
+
+                    <h4>D. Using a Debugger (e.g., GDB - GNU Debugger):</h4>
+                    <p>A debugger is a powerful tool that allows you to step through your code line by line, inspect
+                        variable values, set breakpoints (pause execution at specific points), and analyze the call
+                        stack.
+                        <br>To use GDB, you typically compile your code with debugging symbols (`-g` flag with GCC):
+                        <br>`gcc -g -o myprogram myprogram.c`
+                        <br>Then run GDB:
+                        <br>`gdb ./myprogram`
+                        <br>Inside GDB, you can use commands like `break <line_number_or_function>`, `run`, `next`,
+                            `step`, `print <variable>`, `bt` (backtrace).
+                    </p>
+
+                    <h4>E. Profiling and Performance Optimization:</h4>
+                    <p>Profiling tools help identify performance bottlenecks in your code (parts that consume the most
+                        time or resources). Optimization can then be focused on these areas.</p>
+
+                    <h4>F. Memory Debugging (e.g., Valgrind, AddressSanitizer):</h4>
+                    <p>Tools like Valgrind (on Linux/macOS) and AddressSanitizer (ASan, often a compiler option) are
+                        excellent for detecting memory-related errors such as leaks, use-after-free, buffer overflows,
+                        and use of uninitialized memory.</p>
+                    <p>Example Valgrind usage:
+                        <br>`valgrind --leak-check=full ./my_memory_program`
+                    </p>
+                    <p>Example ASan compilation (GCC/Clang):
+                        <br>`gcc -fsanitize=address -g -o my_memory_program my_memory_program.c`
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="memory-leaks-management">
+            <h2><i class="fas fa-sd-card"></i>4. Memory Leaks and Management</h2>
+            <p>Effective memory management is crucial in C due to its manual nature.</p>
+            <h4>What is a Memory Leak?</h4>
+            <p>A memory leak occurs when a program allocates memory dynamically (e.g., using `malloc`) but fails to
+                release it properly using `free()` when it's no longer needed. This causes unnecessary memory
+                consumption that can accumulate over time, potentially leading to performance degradation or program
+                crashes.</p>
+            <div class="diagram-container">
+                <h4>Memory Leak Basic Flow:</h4>
+                <img src="https://i.imgur.com/qfHjN7N.png" alt="Memory Leak Flowchart">
+            </div>
+            <h4>Common Causes:</h4>
+            <ul>
+                <li>Forgetting to call `free()` for every `malloc`/`calloc`/`realloc`.</li>
+                <li>Losing all pointers to a dynamically allocated memory block before freeing it.</li>
+                <li>Improper memory management in complex data structures.</li>
+            </ul>
+            <h4>Best Practices & Prevention:</h4>
+            <ul>
+                <li>Always pair `malloc()`/`calloc()`/`realloc()` with a corresponding `free()`.</li>
+                <li>Set pointers to `NULL` after freeing the memory they pointed to, to prevent dangling pointers.</li>
+                <li>Implement systematic memory management strategies, especially for complex data structures.</li>
+                <li>Use memory debugging tools (Valgrind, ASan) to detect leaks.</li>
+                <li>Always validate memory allocation (check if `malloc` etc. return `NULL`).</li>
+            </ul>
+            <div class="diagram-container">
+                <h4>Memory Management Patterns:</h4>
+                <img src="https://i.imgur.com/QYw02Uu.png" alt="Memory Management Patterns Flowchart">
+            </div>
+        </section>
+
+        <section class="content-section" id="modular-programming">
+            <h2><i class="fas fa-puzzle-piece"></i>5. Modular Programming in C</h2>
+            <p><strong class="tooltip">Modular programming<span class="tooltiptext">A software design technique that
+                        emphasizes separating program functionality into independent, interchangeable
+                        modules.</span></strong> is a concept in software design where a program is subdivided into
+                independent, interchangeable modules. Each module handles a specific part of the application's overall
+                functionality.</p>
+            <h4>Key Features & Benefits:</h4>
+            <ul>
+                <li><strong>Separation of Concerns:</strong> Each module focuses on a specific task, allowing isolated
+                    development, testing, and debugging.</li>
+                <li><strong>Reusability:</strong> Well-designed modules can be reused across different projects.</li>
+                <li><strong>Maintainability:</strong> Changes to one module typically have minimal impact on others,
+                    simplifying updates and bug fixing.</li>
+                <li><strong>Interchangeability:</strong> Modules can be upgraded or replaced with minimal system-wide
+                    impact.</li>
+                <li><strong>Improved Collaboration:</strong> Developers can work concurrently on different modules.</li>
+            </ul>
+            <h4>Implementing Modularity in C:</h4>
+            <p>This is typically achieved by organizing code into multiple source files (`.c`) and header files (`.h`).
+            </p>
+            <ul>
+                <li><strong>Header Files (`.h`):</strong> Contain function declarations (prototypes),
+                    structure/union/enum definitions, typedefs, and macro definitions that need to be shared across
+                    multiple source files. They define the "interface" of a module. Use <strong
+                        class="highlight">include guards</strong> (`#ifndef`, `#define`, `#endif`) to prevent multiple
+                    inclusion issues.</li>
+                <li><strong>Source Files (`.c`):</strong> Contain the actual implementation (definitions) of functions
+                    declared in header files, and functions/variables local to that module (often declared `static`).
+                </li>
+                <li><strong>Compilation & Linking:</strong> Each `.c` file is compiled separately into an object file
+                    (`.o`). The linker then combines these object files and any necessary library files to create the
+                    final executable. Tools like `make` are used to automate this build process.</li>
+            </ul>
+            <h4>Example: Simple Calculator (Conceptual Steps from your image)</h4>
+            <ol>
+                <li><strong>Organization:</strong>
+                    <ul>
+                        <li>`calc.c`: Main file, handles command-line arguments and calls operation functions.</li>
+                        <li>`operations.c`: Contains implementations of arithmetic functions (add, subtract, etc.).</li>
+                        <li>`operations.h`: Contains function prototypes for `operations.c` and is included by both
+                            `calc.c` and `operations.c`. Includes guards are essential here.</li>
+                    </ul>
+                </li>
+                <li><strong>Include Guards in `operations.h`:</strong>
+                    <pre><code class="language-c">
+#ifndef OPERATIONS_H
+#define OPERATIONS_H
+
+// Function prototypes
+int add(int x, int y);
+int subtract(int x, int y);
+// ... other prototypes ...
+
+#endif // OPERATIONS_H
+                </code></pre>
+                </li>
+                <li><strong>Automating the Build (Makefile - Simplified Concept):</strong>
+                    <pre><code class="language-makefile">
+CC = gcc
+CFLAGS = -Wall -Wextra -pedantic # Example flags
+SRCS = calc.c operations.c
+OBJS = $(SRCS:.c=.o)
+EXE = calculator
+
+all: $(EXE)
+
+$(EXE): $(OBJS)
+    $(CC) $(CFLAGS) -o $@ $(OBJS)
+
+%.o: %.c operations.h
+    $(CC) $(CFLAGS) -c -o $@ $<
+
+clean:
+    rm -f $(EXE) $(OBJS)
+                </code></pre>
+                </li>
+                <li><strong>Implementation:</strong> Write function definitions in `operations.c` and the main logic in
+                    `calc.c` using command-line arguments and a `switch` statement to call the appropriate operation.
+                </li>
+            </ol>
+        </section>
+
+        <section class="content-section" id="project-ideas">
+            <h2><i class="fas fa-lightbulb"></i>6. Building Small Projects</h2>
+            <p>Applying your C knowledge to small projects is the best way to solidify your understanding and gain
+                practical experience. Here are some ideas:</p>
+            <div class="project-ideas-grid">
+                <div class="project-card">
+                    <h4>Simple Calculator</h4>
+                    <p>Takes command-line arguments or user input for numbers and an operator, then performs the
+                        calculation.</p>
+                    <ul>
+                        <li>Concepts: Functions, command-line args, switch/if-else.</li>
+                    </ul>
+                </div>
+                <div class="project-card">
+                    <h4>Basic File Encryptor/Decryptor</h4>
+                    <p>Reads a file, applies a simple encryption (e.g., Caesar cipher, XOR encryption) and writes to a
+                        new file. A corresponding decryption function.</p>
+                    <ul>
+                        <li>Concepts: File handling, character manipulation, possibly bitwise ops.</li>
+                    </ul>
+                </div>
+                <div class="project-card">
+                    <h4>Simple Contact Book / Database</h4>
+                    <p>Allows adding, viewing, searching, and deleting contacts (name, phone, email) stored in a file or
+                        using structures and arrays/linked lists.</p>
+                    <ul>
+                        <li>Concepts: Structures, arrays/linked lists, file handling, string manipulation.</li>
+                    </ul>
+                </div>
+                <div class="project-card">
+                    <h4>Text File Analyzer</h4>
+                    <p>Reads a text file and counts words, lines, characters, or frequency of specific words.</p>
+                    <ul>
+                        <li>Concepts: File handling, string manipulation, arrays (for frequency).</li>
+                    </ul>
+                </div>
+                <div class="project-card">
+                    <h4>Number Guessing Game</h4>
+                    <p>The computer generates a random number, and the user tries to guess it with hints (higher/lower).
+                    </p>
+                    <ul>
+                        <li>Concepts: Loops, conditional statements, random number generation (`rand()`, `srand()`).
+                        </li>
+                    </ul>
+                </div>
+                <div class="project-card">
+                    <h4>Simple Snake Game (Console)</h4>
+                    <p>A classic console-based snake game using character graphics.</p>
+                    <ul>
+                        <li>Concepts: Arrays (for game board/snake), loops, keyboard input, basic game logic.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="wishing-note">
+            <h2><i class="fas fa-graduation-cap"></i> Congratulations on Completing Your C Journey! <i
+                    class="fas fa-rocket"></i></h2>
+            <p>You've delved into the fundamentals and advanced concepts of C, a language that has shaped the world of
+                computing. This knowledge is a powerful foundation for countless opportunities in software development,
+                system programming, embedded systems, and beyond.</p>
+            <p>Remember, learning is a continuous adventure. Keep practicing, building projects, and exploring. The
+                skills you've gained here will serve you well as you grow in your career. May your code always compile,
+                your logic be sound, and your bugs be few! <i class="fas fa-code"></i></p>
+            <p><strong>Best of luck with all your future endeavors!</strong></p>
+        </section>
+
+
+        <div class="page-navigation">
+            <a href="topic-9.html" class="nav-button back-button">
+                <i class="fas fa-arrow-left"></i> Prev: Preprocessor Directives
+            </a>
+            <a href="../c-programming.html" class="nav-button back-button" style="margin: auto;">
+                <!-- Centered with auto margins -->
+                <i class="fas fa-list"></i> Back to Syllabus
+            </a>
+            <!-- No "Next" button as this is the last main topic -->
+        </div>
+
+        <footer class="page-footer">
+            © 2024 Eduvision. All rights reserved. Advancing with C.
+        </footer>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script>
+        Prism.plugins.autoloader.languages_path = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/';
+
+        var coll = document.getElementsByClassName("collapsible");
+        for (var i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            });
+        }
+
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+            } else {
+                body.classList.remove('dark-mode');
+            }
+            localStorage.setItem('theme', theme);
+            Prism.highlightAll();
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (body.classList.contains('dark-mode')) {
+                applyTheme('light');
+            } else {
+                applyTheme('dark');
+            }
+        });
+
+        const savedTheme = localStorage.getItem('theme') ||
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        applyTheme(savedTheme);
+    </script>
+</body>
+
+</html>

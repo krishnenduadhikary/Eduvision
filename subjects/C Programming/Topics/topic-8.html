@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Handling in C - Eduvision</title>
+    <meta name="description"
+        content="Learn about file handling in C: file operations (opening, reading, writing, closing), file modes, standard file I/O functions (fopen, fclose, fscanf, fprintf, fgets, fputs), binary files, file pointers, and error handling.">
+    <meta name="keywords"
+        content="C file handling, file operations C, fopen, fclose, fscanf, fprintf, binary files C, file pointers, C programming tutorial">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        :root {
+            /* Light Mode Defaults */
+            --bg-color: #f0f4f8;
+            --card-bg: #ffffff;
+            --primary-color: #2563eb;
+            --secondary-color: #4f46e5;
+            --accent-color: #10b981;
+            --text-color: #374151;
+            --heading-color: #111827;
+            --border-color: #d1d5db;
+            --gradient-start: var(--primary-color);
+            --gradient-end: var(--secondary-color);
+            --font-main: 'Poppins', sans-serif;
+            --font-logo: 'Nunito', sans-serif;
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --card-shadow-color: rgba(0, 0, 0, 0.05);
+            --link-color: var(--primary-color);
+            --link-hover-color: #1d4ed8;
+            --link-hover-bg: #eff6ff;
+            --collapsible-content-bg: rgba(0, 0, 0, 0.02);
+            --definition-bg: rgba(37, 99, 235, 0.05);
+            --table-header-bg: var(--primary-color);
+            --table-header-text: white;
+            --table-row-even-bg: rgba(0, 0, 0, 0.015);
+            --theme-toggle-bg: var(--card-bg);
+            --theme-toggle-icon: var(--primary-color);
+            --theme-toggle-hover-bg: var(--primary-color);
+            --theme-toggle-hover-icon: white;
+            --tooltip-bg: #333;
+            --tooltip-text: #fff;
+            --diagram-bg: var(--collapsible-content-bg);
+            --diagram-border: var(--border-color);
+        }
+
+        body.dark-mode {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-color: #c9d1d9;
+            --heading-color: #f0f6fc;
+            --border-color: #30363d;
+            --shadow-color: rgba(0, 0, 0, 0.25);
+            --card-shadow-color: rgba(0, 0, 0, 0.2);
+            --link-color: #58a6ff;
+            --link-hover-color: #80baff;
+            --link-hover-bg: rgba(88, 166, 255, 0.1);
+            --collapsible-content-bg: rgba(255, 255, 255, 0.03);
+            --definition-bg: rgba(88, 166, 255, 0.1);
+            --table-header-bg: var(--primary-color);
+            --table-row-even-bg: rgba(255, 255, 255, 0.03);
+            --theme-toggle-bg: var(--card-bg);
+            --tooltip-bg: #c9d1d9;
+            --tooltip-text: #0d1117;
+            --diagram-bg: rgba(255, 255, 255, 0.05);
+            --diagram-border: #444c56;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .eduvision-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: var(--font-logo);
+        }
+
+        .eduvision-logo .logo-text {
+            color: var(--heading-color);
+        }
+
+        body.dark-mode .eduvision-logo .logo-text {
+            color: #f0f6fc;
+        }
+
+        .eduvision-logo .text-yellow-300 {
+            color: #f59e0b !important;
+        }
+
+        .eduvision-logo .group:hover .text-yellow-300 {
+            color: #fcd34d !important;
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+            color: var(--theme-toggle-hover-icon);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-top: 80px;
+            margin-bottom: 2rem;
+            padding: 2rem 1rem;
+            border-radius: 12px;
+            background: var(--card-bg);
+            box-shadow: 0 10px 30px var(--card-shadow-color);
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--heading-color);
+            background: linear-gradient(90deg, var(--gradient-start), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 1.15rem;
+            color: var(--text-color);
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .content-section {
+            background-color: var(--card-bg);
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px var(--card-shadow-color);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s, border-color 0.3s;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px var(--shadow-color);
+        }
+
+        .content-section h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--heading-color);
+            margin-top: 0;
+            margin-bottom: 1.8rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .content-section h2 i {
+            margin-right: 1rem;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section .definition {
+            margin-bottom: 1.2rem;
+            font-size: 1rem;
+        }
+
+        .content-section ul {
+            padding-left: 25px;
+            list-style: none;
+        }
+
+        .content-section ul li::before {
+            content: "\f138";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--primary-color);
+            margin-right: 12px;
+            display: inline-block;
+            font-size: 0.9em;
+        }
+
+        pre[class*="language-"] {
+            padding: 1.5em;
+            margin: 1.5em 0;
+            overflow: auto;
+            border-radius: 8px;
+            background: #2d2d2d;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode pre[class*="language-"] {
+            background: #1e1e1e;
+        }
+
+        code[class*="language-"],
+        pre[class*="language-"] {
+            font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+            font-size: 0.95em;
+        }
+
+        .collapsible {
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: white;
+            cursor: pointer;
+            padding: 15px 25px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            transition: filter 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .collapsible:hover {
+            filter: brightness(1.15);
+        }
+
+        .collapsible.active {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .collapsible-content {
+            padding: 0 22px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out, background-color 0.3s;
+            background-color: var(--collapsible-content-bg);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            margin-bottom: 1.2rem;
+            border: 1px solid var(--border-color);
+            border-top: none;
+        }
+
+        .collapsible-content>div {
+            padding: 20px 0;
+        }
+
+        .collapsible .icon::before {
+            content: '\f078';
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible.active .icon::before {
+            transform: rotate(-180deg);
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 10px var(--card-shadow-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .custom-table th,
+        .custom-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        .custom-table th {
+            background-color: var(--table-header-bg);
+            color: var(--table-header-text);
+            font-weight: 600;
+        }
+
+        .custom-table tr:nth-child(even) {
+            background-color: var(--table-row-even-bg);
+        }
+
+        .custom-table tr:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark-mode .custom-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .custom-table .code-cell {
+            font-family: 'Fira Code', monospace;
+            color: var(--accent-color);
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted var(--accent-color);
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: max-content;
+            max-width: 250px;
+            background-color: var(--tooltip-bg);
+            color: var(--tooltip-text);
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .definition {
+            background-color: var(--definition-bg);
+            border-left: 5px solid var(--primary-color);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+            font-style: normal;
+        }
+
+        .definition strong {
+            color: var(--primary-color);
+        }
+
+        .page-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            margin-bottom: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s, color 0.2s;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            font-size: 1rem;
+        }
+
+        .nav-button i.fa-arrow-left {
+            margin-right: 0.5em;
+        }
+
+        .nav-button i.fa-arrow-right {
+            margin-left: 0.5em;
+        }
+
+        .back-button {
+            background-color: var(--card-bg);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .back-button:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+        }
+
+        .next-button {
+            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+            color: white;
+        }
+
+        .next-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+            filter: brightness(1.1);
+        }
+
+        .page-footer {
+            text-align: center;
+            padding: 2.5rem 0;
+            margin-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: #6b7280;
+            transition: border-top-color 0.3s;
+        }
+
+        body.dark-mode .page-footer {
+            color: #9ca3af;
+        }
+
+        .diagram-container {
+            background-color: var(--diagram-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem auto;
+            text-align: center;
+            border: 1px solid var(--diagram-border);
+            max-width: 600px;
+        }
+
+        .diagram-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+        }
+
+        .diagram-container h4 {
+            margin-top: 0;
+            color: var(--accent-color);
+        }
+
+        .syntax-box {
+            background-color: var(--collapsible-content-bg);
+            padding: 1em;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            margin: 1em 0;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            font-size: 0.9em;
+            color: var(--text-color);
+        }
+
+        body.dark-mode .syntax-box {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .file-modes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .file-mode-card {
+            background-color: var(--collapsible-content-bg);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-color);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+        }
+
+        .file-mode-card .mode {
+            font-family: 'Fira Code', monospace;
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.1em;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .file-mode-card .description {
+            font-size: 0.95rem;
+        }
+
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.4rem;
+            }
+
+            .content-section h2 {
+                font-size: 1.7rem;
+            }
+
+            .content-section h2 i {
+                font-size: 1.5rem;
+            }
+
+            #theme-toggle {
+                top: 15px;
+                right: 15px;
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+
+            .eduvision-logo {
+                top: 15px;
+                left: 15px;
+            }
+
+            .eduvision-logo .text-2xl {
+                font-size: 1.5rem;
+            }
+
+            .page-header {
+                margin-top: 70px;
+                padding: 1.5rem 0.5rem;
+            }
+
+            .content-section {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .page-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-button {
+                width: 100%;
+                justify-content: center;
+                padding: 15px 20px;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../../index.html" class="flex items-center group">
+                <span class="logo-text">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="logo-text">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>File Handling in C</h1>
+            <p>Managing data persistence by reading from and writing to files.</p>
+        </header>
+
+        <section class="content-section" id="intro-file-handling">
+            <h2><i class="fas fa-folder-open"></i>1. Introduction to File Handling</h2>
+            <div class="definition">
+                A <strong class="tooltip">file<span class="tooltiptext">Stored on secondary storage like a hard
+                        disk.</span></strong> is a collection of bytes stored on a secondary storage device. It
+                represents a sequence of bytes on the disk where a group of related data is stored for <strong
+                    class="highlight">permanent storage</strong>. All file-related functions are available in the `
+                <stdio.h>` header file.
+            </div>
+            <h4>Why are files needed?</h4>
+            <ul>
+                <li><strong>Data Persistence:</strong> When a program terminates, any data stored in variables (in RAM)
+                    is lost. Storing data in a file preserves it even after the program ends.</li>
+                <li><strong>Handling Large Data:</strong> If you need to enter or process a large amount of data, it's
+                    impractical to do it manually each time. Data can be stored in a file and accessed efficiently.</li>
+                <li><strong>Data Portability:</strong> You can easily move data stored in files from one computer to
+                    another without changes.</li>
+            </ul>
+            <h4>File Streams:</h4>
+            <p>A <strong class="tooltip">stream<span class="tooltiptext">An abstraction representing a flow of data to
+                        or from a physical device.</span></strong> is a sequence of bytes either being read or written.
+                Streams are designed to allow efficient access to files or other devices (like keyboard, printer,
+                monitor). When a C program starts, the operating system is responsible for opening three standard
+                streams:</p>
+            <ul>
+                <li>`stdin` (Standard Input Stream): Usually connected to the keyboard.</li>
+                <li>`stdout` (Standard Output Stream): Usually connected to the monitor/console.</li>
+                <li>`stderr` (Standard Error Stream): Usually connected to the monitor/console, for error messages.</li>
+            </ul>
+        </section>
+
+        <section class="content-section" id="types-of-files">
+            <h2><i class="fas fa-file-alt"></i>2. Types of Files</h2>
+            <p>When dealing with files in C, there are two primary types you should know about:</p>
+            <div class="file-modes-grid"> <!-- Reusing grid style for consistency -->
+                <div class="file-mode-card">
+                    <span class="mode">Text Files</span>
+                    <p class="description">
+                        Normal `.txt` files that you can create with simple text editors. They store data as
+                        human-readable characters. When opened, contents are plain text. They are easy to maintain but
+                        offer less security and can take up more storage space for certain types of data compared to
+                        binary files. Line endings (like `\n`) are handled specially (e.g., converted to CR-LF on
+                        Windows).
+                    </p>
+                </div>
+                <div class="file-mode-card">
+                    <span class="mode">Binary Files</span>
+                    <p class="description">
+                        Store data in the binary form (0s and 1s), exactly as it is represented in memory. They are not
+                        easily human-readable. Binary files can hold larger amounts of data more efficiently (e.g., for
+                        images, audio, or numeric data structures) and can offer better security as they are not plain
+                        text. No special processing of characters like newline is done.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="file-operations">
+            <h2><i class="fas fa-cogs"></i>3. Basic File Operations</h2>
+            <p>In C, you can perform several major operations on files, whether text or binary:</p>
+            <ul>
+                <li>Naming a file / Creation of a new file</li>
+                <li>Opening an existing file</li>
+                <li>Reading data from a file</li>
+                <li>Writing data into a file</li>
+                <li>Closing a file</li>
+            </ul>
+            <h4>Steps for Processing a File:</h4>
+            <ol>
+                <li><strong>Declare a file pointer:</strong> A pointer of type `FILE`.</li>
+                <li><strong>Open a file:</strong> Using the `fopen()` function, specifying the filename and mode.</li>
+                <li><strong>Process the file:</strong> Perform read/write operations using suitable file functions.</li>
+                <li><strong>Close the file:</strong> Using the `fclose()` function to save changes and release
+                    resources.</li>
+            </ol>
+
+            <button type="button" class="collapsible">A. Declaring a File Pointer (`FILE *`) <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>When working with files, you need to declare a pointer of type `FILE`. `FILE` is a structure
+                        (defined in `<stdio.h>`) that holds information about the file being accessed, such as its
+                            current position, error status, etc. This declaration is needed for communication between
+                            the file and the program.</p>
+                    <h4>Syntax:</h4>
+                    <div class="syntax-box">FILE *fp; // fp is a file pointer variable</div>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">B. Opening a File (`fopen()`) <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>The `fopen()` function is used to create a new file or open an existing file.</p>
+                    <h4>Syntax:</h4>
+                    <div class="syntax-box">
+                        FILE *fopen(const char *filename, const char *mode);
+                        // Example usage:
+                        // fp = fopen("filename.txt", "mode");
+                    </div>
+                    <ul>
+                        <li>`filename`: A string containing the name of the file to be opened (can include path).</li>
+                        <li>`mode`: A string specifying the purpose for which the file is opened (read, write, append,
+                            etc.).</li>
+                        <li>**Return Value:** If the file is opened successfully, `fopen()` returns a pointer to the
+                            `FILE` object associated with the stream. If an error occurs (e.g., file not found in read
+                            mode, no permission), it returns `NULL`. <strong class="highlight">Always check the return
+                                value of `fopen()` for `NULL` to handle errors.</strong></li>
+                    </ul>
+                    <h4>Examples:</h4>
+                    <div class="syntax-box">
+                        fp = fopen("E:\\cprogram\\newprogram.txt", "w"); // Opens/creates newprogram.txt for writing
+                        fp = fopen("E:\\cprogram\\oldprogram.bin", "rb"); // Opens oldprogram.bin for reading in binary
+                        mode
+                    </div>
+                    <p>Note: Use double backslashes `\\` or a single forward slash `/` for path separators in C strings
+                        on Windows to avoid issues with escape sequences.</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">C. File Opening Modes <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>The `mode` string in `fopen()` determines how the file will be accessed. Common modes include:
+                    </p>
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Mode</th>
+                                <th>Description (Text Files)</th>
+                                <th>Action if File Exists</th>
+                                <th>Action if File Doesn't Exist</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="code-cell">"r"</td>
+                                <td>Opens a text file for reading.</td>
+                                <td>File pointer at beginning.</td>
+                                <td>Error (`NULL` returned).</td>
+                            </tr>
+                            <tr>
+                                <td class="code-cell">"w"</td>
+                                <td>Opens a text file for writing.</td>
+                                <td>Overwrites existing file (truncates to zero length).</td>
+                                <td>Creates a new file.</td>
+                            </tr>
+                            <tr>
+                                <td class="code-cell">"a"</td>
+                                <td>Opens a text file for appending (writing at the end).</td>
+                                <td>File pointer at end.</td>
+                                <td>Creates a new file.</td>
+                            </tr>
+                            <tr>
+                                <td class="code-cell">"r+"</td>
+                                <td>Opens a text file for both reading and writing.</td>
+                                <td>File pointer at beginning.</td>
+                                <td>Error (`NULL` returned).</td>
+                            </tr>
+                            <tr>
+                                <td class="code-cell">"w+"</td>
+                                <td>Opens a text file for both reading and writing.</td>
+                                <td>Overwrites existing file.</td>
+                                <td>Creates a new file.</td>
+                            </tr>
+                            <tr>
+                                <td class="code-cell">"a+"</td>
+                                <td>Opens a text file for both reading and appending.</td>
+                                <td>Reads from beginning, appends at end.</td>
+                                <td>Creates a new file.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>For <strong class="highlight">binary files</strong>, append `b` to the mode string (e.g., `"rb"`,
+                        `"wb"`, `"ab"`, `"rb+"`, `"wb+"`, `"ab+"`).</p>
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Mode</th>
+                                <th>Description (Binary Files)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="code-cell">"rb"</td>
+                                <td>Opens a binary file for reading.</td>
+                            </tr>
+                            <tr>
+                                <td class="code-cell">"wb"</td>
+                                <td>Opens a binary file for writing.</td>
+                            </tr>
+                            <tr>
+                                <td class="code-cell">"ab"</td>
+                                <td>Opens a binary file for appending.</td>
+                            </tr>
+                            <tr>
+                                <td class="code-cell">"rb+"</td>
+                                <td>Opens a binary file for reading and writing.</td>
+                            </tr>
+                            <tr>
+                                <td class="code-cell">"wb+"</td>
+                                <td>Opens a binary file for reading and writing (overwrites).</td>
+                            </tr>
+                            <tr>
+                                <td class="code-cell">"ab+"</td>
+                                <td>Opens a binary file for reading and appending.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h4>Difference between Append (`"a"`) and Write (`"w"`) Mode:</h4>
+                    <p>Both are used to write to a file. If the file doesn't exist, both create it.
+                    <ul>
+                        <li><strong>Write Mode (`"w"`, `"wb"`, `"w+"`, `"wb+"`):</strong> If the file exists, its
+                            contents are <strong class="highlight">discarded (truncated)</strong>. Writing starts from
+                            the beginning of the (now empty) file.</li>
+                        <li><strong>Append Mode (`"a"`, `"ab"`, `"a+"`, `"ab+"`):</strong> If the file exists, new data
+                            is <strong class="highlight">added to the end</strong> of the existing data. The original
+                            content is preserved. The file pointer is positioned at the end of the file.</li>
+                    </ul>
+                    </p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">D. Closing a File (`fclose()`) <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>After all operations on a file are complete, it should be closed using the `fclose()` function.
+                        Closing a file:</p>
+                    <ul>
+                        <li>Flushes any buffered data to the disk, ensuring all writes are saved.</li>
+                        <li>Releases the resources associated with the file pointer by the operating system.</li>
+                        <li>Prevents accidental further access or data corruption.</li>
+                    </ul>
+                    <h4>Syntax:</h4>
+                    <div class="syntax-box">
+                        int fclose(FILE *fp);
+                        // Example:
+                        // fclose(fptr);
+                    </div>
+                    <ul>
+                        <li>`fp`: The file pointer associated with the file to be closed.</li>
+                        <li>**Return Value:** Returns `0` if the file is closed successfully, and `EOF` (End Of File, a
+                            macro usually defined as -1) if an error occurs.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="file-io-functions">
+            <h2><i class="fas fa-exchange-alt"></i>4. File I/O Functions</h2>
+            <p>C provides various functions for reading from and writing to files. These can be broadly categorized into
+                formatted and unformatted I/O.</p>
+
+            <button type="button" class="collapsible">A. Formatted File I/O (`fprintf()`, `fscanf()`) <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>These functions work similarly to `printf()` and `scanf()` but operate on files instead of the
+                        console.</p>
+                    <h4>`fprintf()` - Writing Formatted Data to a File:</h4>
+                    <div class="syntax-box">int fprintf(FILE *stream, const char *format_string, ...);</div>
+                    <ul>
+                        <li>`stream`: The file pointer (e.g., `fp` returned by `fopen()`).</li>
+                        <li>`format_string`: Same as in `printf()`, specifies how the data should be formatted.</li>
+                        <li>`...`: The list of variables/values to write.</li>
+                        <li>Returns the number of characters written, or a negative value on error.</li>
+                    </ul>
+                    <h4>`fscanf()` - Reading Formatted Data from a File:</h4>
+                    <div class="syntax-box">int fscanf(FILE *stream, const char *format_string, ...);</div>
+                    <ul>
+                        <li>`stream`: The file pointer.</li>
+                        <li>`format_string`: Same as in `scanf()`.</li>
+                        <li>`...`: Pointers to variables where the read data will be stored (use `&` for basic types).
+                        </li>
+                        <li>Returns the number of items successfully read and assigned, or `EOF` if an input failure
+                            occurs before any data could be successfully read, or if the end of the file is reached.
+                        </li>
+                    </ul>
+                    <p><strong>Note on EOF:</strong> `EOF` (End Of File) is a macro defined in `<stdio.h>` (usually as
+                            -1). It's returned by many file reading functions when the end of the file is reached or an
+                            error occurs.</p>
+                    <h4>Example:</h4>
+                    <pre><code class="language-c">
+#include <stdio.h>
+#include <stdlib.h> // For exit()
+
+int main() {
+    FILE *fptr;
+    int num_write = 123;
+    char name_write[] = "Alice";
+    int num_read;
+    char name_read[50];
+
+    // Writing to a file
+    fptr = fopen("data.txt", "w");
+    if (fptr == NULL) {
+        printf("Error opening file for writing!\n");
+        exit(1);
+    }
+    fprintf(fptr, "Name: %s Age: %d\n", name_write, 25); // Example data
+    fprintf(fptr, "Number: %d\n", num_write);
+    fclose(fptr);
+    printf("Data written to data.txt\n");
+
+    // Reading from the file
+    fptr = fopen("data.txt", "r");
+    if (fptr == NULL) {
+        printf("Error opening file for reading!\n");
+        exit(1);
+    }
+    // Reading first line (assuming specific format)
+    // This fscanf will read "Name:" into name_read if not careful with format string.
+    // Better to be more specific:
+    if (fscanf(fptr, "Name: %49s Age: %d\n", name_read, &num_read) == 2) {
+         printf("Read from file: Name = %s, Age = %d\n", name_read, num_read);
+    } else {
+        printf("Error reading first line or EOF.\n");
+    }
+
+    // Reading second line
+    if (fscanf(fptr, "Number: %d\n", &num_read) == 1) {
+        printf("Read from file: Number = %d\n", num_read);
+    } else {
+        printf("Error reading second line or EOF.\n");
+    }
+    fclose(fptr);
+
+    return 0;
+}
+                    </code></pre>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">B. Unformatted File I/O (Character and String based) <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>Character I/O:</h4>
+                    <ul>
+                        <li><strong>`fgetc(FILE *stream)` / `getc(FILE *stream)`:</strong> Reads the next character from
+                            the specified input `stream` and returns it as an `int`. Returns `EOF` on end-of-file or
+                            error. `getc` might be implemented as a macro for speed.
+                            <pre><code class="language-c">
+// Example using fgetc to read and print a file character by character
+#include <stdio.h>
+int main() {
+    FILE *fp;
+    int ch;
+    fp = fopen("example.txt", "r"); // Assume example.txt exists
+    if (fp == NULL) { printf("Cannot open file\n"); return 1; }
+    while ((ch = fgetc(fp)) != EOF) {
+        putchar(ch); // Print char to console
+    }
+    fclose(fp);
+    return 0;
+}
+                        </code></pre>
+                        </li>
+                        <li><strong>`fputc(int char, FILE *stream)` / `putc(int char, FILE *stream)`:</strong> Writes
+                            the character `char` (converted to `unsigned char`) to the specified output `stream`.
+                            Returns the character written on success, or `EOF` on error.
+                            <pre><code class="language-c">
+// Example using fputc
+#include <stdio.h>
+int main() {
+    FILE *fp;
+    fp = fopen("output.txt", "w");
+    if (fp == NULL) { return 1; }
+    fputc('H', fp);
+    fputc('i', fp);
+    fputc('\n', fp);
+    fclose(fp);
+    return 0;
+}
+                        </code></pre>
+                        </li>
+                    </ul>
+                    <h4>String I/O:</h4>
+                    <ul>
+                        <li><strong>`fgets(char *str, int n, FILE *stream)`:</strong> Reads at most `n-1` characters
+                            from `stream` into the buffer `str`, stopping if a newline is encountered or end-of-file is
+                            reached. A null terminator (`\0`) is always appended. Includes the newline if read. Returns
+                            `str` on success, `NULL` on error or EOF if no characters were read.</li>
+                        <li><strong>`fputs(const char *str, FILE *stream)`:</strong> Writes the string `str` (up to but
+                            not including the null terminator) to the specified `stream`. Does NOT automatically append
+                            a newline. Returns a non-negative value on success, or `EOF` on error.</li>
+                    </ul>
+                    <pre><code class="language-c">
+#include <stdio.h>
+#define MAX_LINE_LEN 100
+
+int main() {
+    FILE *fp_write, *fp_read;
+    char buffer[MAX_LINE_LEN];
+
+    // Writing using fputs
+    fp_write = fopen("lines.txt", "w");
+    if (fp_write == NULL) return 1;
+    fputs("Hello C Programming\n", fp_write);
+    fputs("This is the second line.\n", fp_write);
+    fclose(fp_write);
+
+    // Reading using fgets
+    fp_read = fopen("lines.txt", "r");
+    if (fp_read == NULL) return 1;
+    printf("Contents of lines.txt:\n");
+    while (fgets(buffer, MAX_LINE_LEN, fp_read) != NULL) {
+        printf("%s", buffer); // buffer already contains \n if read by fgets
+    }
+    fclose(fp_read);
+    return 0;
+}
+                    </code></pre>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">C. Unformatted File I/O (Integer and Binary based) <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>Integer I/O (Less Common, often non-portable for binary data):</h4>
+                    <ul>
+                        <li><strong>`getw(FILE *stream)`:</strong> Reads an integer from the specified `stream`. Returns
+                            the integer read, or `EOF` on end-of-file or error.
+                            <p><em>Note: `getw` and `putw` are generally considered obsolete and less portable than
+                                    using `fread` and `fwrite` for binary integer data, or `fscanf`/`fprintf` for
+                                    text-based integers. They might not handle `EOF` correctly if `EOF` is a valid
+                                    integer value.</em></p>
+                        </li>
+                        <li><strong>`putw(int w, FILE *stream)`:</strong> Writes the integer `w` to the specified
+                            `stream`. Returns the integer written on success, or `EOF` on error.</li>
+                    </ul>
+                    <h4>Binary I/O (`fread()`, `fwrite()`):</h4>
+                    <p>These functions are used for reading and writing blocks of binary data (e.g., structures, arrays
+                        of numbers directly from/to memory representation).</p>
+                    <ul>
+                        <li>
+                            <strong>`size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream);`</strong>
+                            <ul>
+                                <li>`ptr`: Pointer to the block of memory where data read will be stored.</li>
+                                <li>`size`: Size in bytes of each element to be read.</li>
+                                <li>`nmemb`: Number of elements, each one with `size` bytes.</li>
+                                <li>`stream`: The input file pointer.</li>
+                                <li>Returns the number of items successfully read (which might be less than `nmemb` if
+                                    an error or EOF occurs).</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>`size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);`</strong>
+                            <ul>
+                                <li>`ptr`: Pointer to the block of memory containing data to be written.</li>
+                                <li>`size`: Size in bytes of each element to be written.</li>
+                                <li>`nmemb`: Number of elements, each one with `size` bytes.</li>
+                                <li>`stream`: The output file pointer.</li>
+                                <li>Returns the number of items successfully written.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <pre><code class="language-c">
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Record {
+    int id;
+    char name[50];
+    float score;
+};
+
+int main() {
+    FILE *outfile, *infile;
+    struct Record rec_write = {101, "John Doe", 88.5f};
+    struct Record rec_read;
+
+    // Writing a structure to a binary file
+    outfile = fopen("records.bin", "wb"); // Open in binary write mode
+    if (outfile == NULL) { perror("Error opening for write"); return 1; }
+    
+    size_t written = fwrite(&rec_write, sizeof(struct Record), 1, outfile);
+    if (written != 1) { printf("Write error\n"); }
+    fclose(outfile);
+    printf("Record written to records.bin\n");
+
+    // Reading a structure from a binary file
+    infile = fopen("records.bin", "rb"); // Open in binary read mode
+    if (infile == NULL) { perror("Error opening for read"); return 1; }
+
+    size_t read_items = fread(&rec_read, sizeof(struct Record), 1, infile);
+    if (read_items == 1) {
+        printf("\nRecord read from records.bin:\n");
+        printf("ID: %d\nName: %s\nScore: %.2f\n", rec_read.id, rec_read.name, rec_read.score);
+    } else {
+        if (feof(infile)) printf("End of file reached before reading item.\n");
+        if (ferror(infile)) perror("Read error");
+    }
+    fclose(infile);
+
+    return 0;
+}
+                    </code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="file-positioning">
+            <h2><i class="fas fa-map-signs"></i>5. File Positioning Functions</h2>
+            <p>These functions allow you to control the current read/write position within a file.</p>
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Function</th>
+                        <th>Description</th>
+                        <th>Syntax</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="code-cell">`fseek()`</td>
+                        <td>Sets the file position indicator for the stream pointed to by `stream` to a new position.
+                        </td>
+                        <td class="code-cell">`int fseek(FILE *stream, long int offset, int whence);`</td>
+                    </tr>
+                    <tr>
+                        <td class="code-cell">`ftell()`</td>
+                        <td>Returns the current value of the file position indicator for the stream. For binary streams,
+                            this is the number of bytes from the beginning. For text streams, its value might not be
+                            directly usable for `fseek` other than to return to a previously obtained position.</td>
+                        <td class="code-cell">`long int ftell(FILE *stream);`</td>
+                    </tr>
+                    <tr>
+                        <td class="code-cell">`rewind()`</td>
+                        <td>Sets the file position indicator to the beginning of the file. Equivalent to `fseek(stream,
+                            0L, SEEK_SET)` but also clears the error indicator for the stream.</td>
+                        <td class="code-cell">`void rewind(FILE *stream);`</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>`fseek()` Details:</h4>
+            <ul>
+                <li>`stream`: The file pointer.</li>
+                <li>`offset`: Number of bytes to offset from `whence`. Can be positive (move forward) or negative (move
+                    backward).</li>
+                <li>`whence`: Specifies the reference point for the offset. It can be one of the following macros:
+                    <ul>
+                        <li>`SEEK_SET`: Beginning of the file.</li>
+                        <li>`SEEK_CUR`: Current file position.</li>
+                        <li>`SEEK_END`: End of the file.</li>
+                    </ul>
+                    (Note: Your image also shows `0` for beginning, `1` for current, `2` for end, which are common
+                    integer equivalents but using the macros is more portable and readable).
+                </li>
+            </ul>
+            <h4>Example (`fseek` and `fputs`):</h4>
+            <pre><code class="language-c">
+#include <stdio.h>
+
+int main() {
+    FILE *fp;
+    fp = fopen("myseekfile.txt", "w+"); // Open for read/write, create if not exist, truncate
+
+    if (fp == NULL) {
+        perror("Error opening file");
+        return 1;
+    }
+
+    fputs("This is javatpoint", fp);
+
+    // Move to 7th byte from the beginning
+    fseek(fp, 7, SEEK_SET); 
+    fputs("sonoo jaiswal", fp); // Overwrites from that position
+
+    rewind(fp); // Go back to the beginning to read
+
+    char buffer[100];
+    printf("File content after fseek and fputs:\n");
+    while (fgets(buffer, sizeof(buffer), fp) != NULL) {
+        printf("%s", buffer);
+    }
+    // Expected output in file: This is sonoo jaiswal
+
+    fclose(fp);
+    return 0;
+}
+            </code></pre>
+            <h4>Example (`ftell` to get file size):</h4>
+            <pre><code class="language-c">
+#include <stdio.h>
+// #include <conio.h>
+
+int main() {
+    FILE *fp;
+    long length;
+
+    fp = fopen("myseekfile.txt", "r"); // Open the file written by previous example
+    if (fp == NULL) {
+        perror("Error opening file");
+        return 1;
+    }
+
+    fseek(fp, 0, SEEK_END); // Go to the end of the file
+    length = ftell(fp);     // Get current position (which is the size)
+    fclose(fp);
+
+    printf("Size of file: %ld bytes\n", length);
+    // getch();
+    return 0;
+}
+            </code></pre>
+        </section>
+
+        <section class="content-section" id="error-handling">
+            <h2><i class="fas fa-exclamation-triangle"></i>6. File Error Handling</h2>
+            <p>It's crucial to check for errors during file operations.</p>
+            <ul>
+                <li><strong>`fopen()` return value:</strong> Always check if `fopen()` returns `NULL`, which indicates
+                    an error (e.g., file not found, permissions issue).
+                    <pre><code class="language-c">
+FILE *fp = fopen("myfile.txt", "r");
+if (fp == NULL) {
+    perror("Error opening myfile.txt"); // perror prints a system error message
+    // exit(EXIT_FAILURE); or return 1;
+}
+                    </code></pre>
+                </li>
+                <li>
+                    <strong>`feof(FILE *stream)`:</strong> Returns a non-zero value if the end-of-file indicator for the
+                    given stream is set (i.e., an attempt was made to read past the end of the file). Otherwise, it
+                    returns zero.
+                </li>
+                <li>
+                    <strong>`ferror(FILE *stream)`:</strong> Returns a non-zero value if the error indicator for the
+                    given stream is set (i.e., a read or write error occurred). Otherwise, it returns zero.
+                </li>
+                <li>
+                    <strong>`perror(const char *s)`:</strong> (from `<stdio.h>` or `<errno.h>`) Prints the string `s`
+                            followed by a colon, a space, and then an implementation-defined error message corresponding
+                            to the current value of the global error number `errno`.
+                </li>
+                <li>
+                    <strong>`clearerr(FILE *stream)`:</strong> Clears the end-of-file and error indicators for the given
+                    stream.
+                </li>
+            </ul>
+            <p>When reading from a file in a loop, it's important to distinguish between reaching the end of the file
+                and encountering an actual read error. Check `feof()` after the loop or after a read function returns an
+                error/EOF indication, and check `ferror()` for specific read/write errors.</p>
+        </section>
+
+        <div class="page-navigation">
+            <a href="topic-7.html" class="nav-button back-button">
+                <i class="fas fa-arrow-left"></i> Prev: Structures and Unions
+            </a>
+            <a href="../c-programming.html" class="nav-button back-button"
+                style="margin-left: auto; margin-right: auto;">
+                <i class="fas fa-list"></i> Back to Syllabus
+            </a>
+            <a href="topic-9.html" class="nav-button next-button">
+                Next: Preprocessor Directives <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <footer class="page-footer">
+            © 2024 Eduvision. All rights reserved. Persisting data with C files.
+        </footer>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script>
+        Prism.plugins.autoloader.languages_path = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/';
+
+        var coll = document.getElementsByClassName("collapsible");
+        for (var i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            });
+        }
+
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+            } else {
+                body.classList.remove('dark-mode');
+            }
+            localStorage.setItem('theme', theme);
+            Prism.highlightAll();
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (body.classList.contains('dark-mode')) {
+                applyTheme('light');
+            } else {
+                applyTheme('dark');
+            }
+        });
+
+        const savedTheme = localStorage.getItem('theme') ||
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        applyTheme(savedTheme);
+    </script>
+</body>
+
+</html>

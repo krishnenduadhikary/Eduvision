@@ -1,0 +1,1875 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operators and Expressions in C - Eduvision</title>
+    <meta name="description"
+        content="Learn about operators and expressions in C programming, including arithmetic, relational, logical, bitwise, assignment, and other operators, along with operator precedence and type conversions.">
+    <meta name="keywords"
+        content="C operators, C expressions, arithmetic operators, relational operators, logical operators, bitwise operators, C programming, operator precedence, type casting, C tutorial">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        :root {
+            /* Light Mode Defaults */
+            --bg-color: #f0f4f8;
+            /* Lighter, softer blue-gray */
+            --card-bg: #ffffff;
+            --primary-color: #2563eb;
+            /* A vibrant blue */
+            --secondary-color: #4f46e5;
+            /* Indigo */
+            --accent-color: #10b981;
+            /* Emerald */
+            --text-color: #374151;
+            /* Darker Gray */
+            --heading-color: #111827;
+            /* Almost Black */
+            --border-color: #d1d5db;
+            /* Lighter Gray for borders */
+            --gradient-start: var(--primary-color);
+            --gradient-end: var(--secondary-color);
+            --font-main: 'Poppins', sans-serif;
+            --font-logo: 'Nunito', sans-serif;
+
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --card-shadow-color: rgba(0, 0, 0, 0.05);
+            --link-color: var(--primary-color);
+            --link-hover-color: #1d4ed8;
+            --link-hover-bg: #eff6ff;
+            --collapsible-content-bg: rgba(0, 0, 0, 0.02);
+            --definition-bg: rgba(37, 99, 235, 0.05);
+            --table-header-bg: var(--primary-color);
+            --table-header-text: white;
+            --table-row-even-bg: rgba(0, 0, 0, 0.015);
+            --theme-toggle-bg: var(--card-bg);
+            --theme-toggle-icon: var(--primary-color);
+            --theme-toggle-hover-bg: var(--primary-color);
+            --theme-toggle-hover-icon: white;
+            --tooltip-bg: #333;
+            --tooltip-text: #fff;
+        }
+
+        body.dark-mode {
+            --bg-color: #0d1117;
+            /* GitHub Dark Dimmed */
+            --card-bg: #161b22;
+            /* GitHub Dark Dimmed Card */
+            --text-color: #c9d1d9;
+            /* GitHub Dark Dimmed Text */
+            --heading-color: #f0f6fc;
+            /* GitHub Dark Dimmed Heading */
+            --border-color: #30363d;
+            /* GitHub Dark Dimmed Border */
+            --shadow-color: rgba(0, 0, 0, 0.25);
+            --card-shadow-color: rgba(0, 0, 0, 0.2);
+            --link-color: #58a6ff;
+            /* GitHub Dark Link */
+            --link-hover-color: #80baff;
+            --link-hover-bg: rgba(88, 166, 255, 0.1);
+            --collapsible-content-bg: rgba(255, 255, 255, 0.03);
+            --definition-bg: rgba(88, 166, 255, 0.1);
+            --table-header-bg: var(--primary-color);
+            --table-row-even-bg: rgba(255, 255, 255, 0.03);
+            --theme-toggle-bg: var(--card-bg);
+            --tooltip-bg: #c9d1d9;
+            --tooltip-text: #0d1117;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Eduvision Logo */
+        .eduvision-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: var(--font-logo);
+        }
+
+        .eduvision-logo .logo-text {
+            color: var(--heading-color);
+        }
+
+        body.dark-mode .eduvision-logo .logo-text {
+            color: #f0f6fc;
+        }
+
+        .eduvision-logo .text-yellow-300 {
+            color: #f59e0b !important;
+        }
+
+        .eduvision-logo .group:hover .text-yellow-300 {
+            color: #fcd34d !important;
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Theme Toggle Button */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+            color: var(--theme-toggle-hover-icon);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-top: 80px;
+            margin-bottom: 2rem;
+            padding: 2rem 1rem;
+            border-radius: 12px;
+            background: var(--card-bg);
+            box-shadow: 0 10px 30px var(--card-shadow-color);
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--heading-color);
+            background: linear-gradient(90deg, var(--gradient-start), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 1.15rem;
+            color: var(--text-color);
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Section Styling */
+        .content-section {
+            background-color: var(--card-bg);
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px var(--card-shadow-color);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s, border-color 0.3s;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px var(--shadow-color);
+        }
+
+        .content-section h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--heading-color);
+            margin-top: 0;
+            margin-bottom: 1.8rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .content-section h2 i {
+            margin-right: 1rem;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section .definition {
+            margin-bottom: 1.2rem;
+            font-size: 1rem;
+        }
+
+        .content-section ul {
+            padding-left: 25px;
+            list-style: none;
+        }
+
+        .content-section ul li::before {
+            content: "\f138";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--primary-color);
+            margin-right: 12px;
+            display: inline-block;
+            font-size: 0.9em;
+        }
+
+        /* Code Blocks */
+        pre[class*="language-"] {
+            padding: 1.5em;
+            margin: 1.5em 0;
+            overflow: auto;
+            border-radius: 8px;
+            background: #2d2d2d;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode pre[class*="language-"] {
+            background: #1e1e1e;
+        }
+
+        code[class*="language-"],
+        pre[class*="language-"] {
+            font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+            font-size: 0.95em;
+        }
+
+        /* Collapsible Sections */
+        .collapsible {
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: white;
+            cursor: pointer;
+            padding: 15px 25px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            transition: filter 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .collapsible:hover {
+            filter: brightness(1.15);
+        }
+
+        .collapsible.active {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .collapsible-content {
+            padding: 0 22px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out, background-color 0.3s;
+            background-color: var(--collapsible-content-bg);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            margin-bottom: 1.2rem;
+            border: 1px solid var(--border-color);
+            border-top: none;
+        }
+
+        .collapsible-content>div {
+            padding: 20px 0;
+        }
+
+        .collapsible .icon::before {
+            content: '\f078';
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible.active .icon::before {
+            transform: rotate(-180deg);
+        }
+
+        /* Tables */
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 10px var(--card-shadow-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .custom-table th,
+        .custom-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        .custom-table th {
+            background-color: var(--table-header-bg);
+            color: var(--table-header-text);
+            font-weight: 600;
+        }
+
+        .custom-table tr:nth-child(even) {
+            background-color: var(--table-row-even-bg);
+        }
+
+        .custom-table tr:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark-mode .custom-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .custom-table .operator-col {
+            font-family: 'Fira Code', monospace;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .custom-table .example-col {
+            font-style: italic;
+        }
+
+        /* Tooltips */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted var(--accent-color);
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: max-content;
+            max-width: 250px;
+            background-color: var(--tooltip-bg);
+            color: var(--tooltip-text);
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Definition Block */
+        .definition {
+            background-color: var(--definition-bg);
+            border-left: 5px solid var(--primary-color);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+            font-style: normal;
+        }
+
+        .definition strong {
+            color: var(--primary-color);
+        }
+
+        /* Page Navigation Links */
+        .page-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            margin-bottom: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s, color 0.2s;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            font-size: 1rem;
+        }
+
+        .nav-button i.fa-arrow-left {
+            margin-right: 0.5em;
+        }
+
+        .nav-button i.fa-arrow-right {
+            margin-left: 0.5em;
+        }
+
+        .back-button {
+            background-color: var(--card-bg);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .back-button:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+        }
+
+        .next-button {
+            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+            color: white;
+        }
+
+        .next-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+            filter: brightness(1.1);
+        }
+
+        /* Footer */
+        .page-footer {
+            text-align: center;
+            padding: 2.5rem 0;
+            margin-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: #6b7280;
+            transition: border-top-color 0.3s;
+        }
+
+        body.dark-mode .page-footer {
+            color: #9ca3af;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.4rem;
+            }
+
+            .content-section h2 {
+                font-size: 1.7rem;
+            }
+
+            .content-section h2 i {
+                font-size: 1.5rem;
+            }
+
+            #theme-toggle {
+                top: 15px;
+                right: 15px;
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+
+            .eduvision-logo {
+                top: 15px;
+                left: 15px;
+            }
+
+            .eduvision-logo .text-2xl {
+                font-size: 1.5rem;
+            }
+
+            .page-header {
+                margin-top: 70px;
+                padding: 1.5rem 0.5rem;
+            }
+
+            .content-section {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            /* Responsive for navigation buttons */
+            .page-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-button {
+                width: 100%;
+                justify-content: center;
+                padding: 15px 20px;
+                box-sizing: border-box;
+            }
+        }
+
+        .operator-category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .operator-category-card {
+            background-color: var(--collapsible-content-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .operator-category-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 15px var(--shadow-color);
+        }
+
+        .operator-category-card h4 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .operator-category-card ul {
+            padding-left: 0;
+            list-style-type: none;
+            margin-bottom: 0;
+        }
+
+        .operator-category-card ul li {
+            padding: 0.25rem 0;
+            font-size: 0.9rem;
+        }
+
+        .operator-category-card ul li::before {
+            content: "\2022";
+            /* Bullet character */
+            color: var(--accent-color);
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+            /* Negative margin to align */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../../index.html" class="flex items-center group">
+                <span class="logo-text">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="logo-text">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>Operators and Expressions in C</h1>
+            <p>Understanding how C manipulates data and performs calculations.</p>
+        </header>
+
+        <section class="content-section" id="intro-operators-expressions">
+            <h2><i class="fas fa-calculator"></i>1. Introduction to Operators and Expressions</h2>
+            <div class="definition">
+                An <strong class="tooltip">Operator<span class="tooltiptext">A symbol that tells the compiler to perform
+                        specific mathematical or logical manipulations.</span></strong> is a symbol that performs an
+                operation on one or more <strong class="tooltip">operands<span class="tooltiptext">The data items
+                        (constants or variables) on which an operator acts.</span></strong>.
+                For example, in `a + b`, `a` and `b` are operands, and `+` is the operator.
+            </div>
+            <div class="definition">
+                An <strong class="tooltip">Expression<span class="tooltiptext">A sequence of operands and operators that
+                        reduces to a single value.</span></strong> is a combination of operators and operands that, when
+                evaluated, produces a single value.
+                <ul>
+                    <li>A simple expression contains only one operator (e.g., `3 + 5`, `-a`).</li>
+                    <li>A complex expression contains more than one operator (e.g., `6 + 8 * 7`).</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section" id="types-of-operators">
+            <h2><i class="fas fa-cogs"></i>2. Types of Operators in C</h2>
+            <p>C provides a rich set of operators. They can be broadly classified based on the number of operands they
+                take or their functionality:</p>
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Category by Operands</th>
+                        <th>Operators</th>
+                        <th>Example Category by Functionality</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Unary Operators</strong><br>(Operate on one operand)</td>
+                        <td class="operator-col">++, --, +, -, !, ~, sizeof, & (address-of), * (dereference)</td>
+                        <td>Increment/Decrement, Unary Plus/Minus, Logical NOT, Bitwise Complement, Sizeof</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Binary Operators</strong><br>(Operate on two operands)</td>
+                        <td class="operator-col">+, -, *, /, %, <, <=,>, >=, ==, !=, &&, ||, &, |, ^, <<,>>, =, +=, -=,
+                                    *=, /=, %=, , (comma)</td>
+                        <td>Arithmetic, Relational, Logical, Bitwise, Assignment, Comma</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ternary Operator</strong><br>(Operates on three operands)</td>
+                        <td class="operator-col">? :</td>
+                        <td>Conditional Operator</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Functional Classification:</h4>
+            <div class="operator-category-grid">
+                <div class="operator-category-card">
+                    <h4>1. Arithmetic Operators</h4>
+                    <ul>
+                        <li>Perform mathematical calculations.</li>
+                    </ul>
+                </div>
+                <div class="operator-category-card">
+                    <h4>2. Relational Operators</h4>
+                    <ul>
+                        <li>Compare two operands.</li>
+                    </ul>
+                </div>
+                <div class="operator-category-card">
+                    <h4>3. Logical Operators</h4>
+                    <ul>
+                        <li>Combine or negate logical expressions.</li>
+                    </ul>
+                </div>
+                <div class="operator-category-card">
+                    <h4>4. Assignment Operators</h4>
+                    <ul>
+                        <li>Assign values to variables.</li>
+                    </ul>
+                </div>
+                <div class="operator-category-card">
+                    <h4>5. Increment & Decrement Operators</h4>
+                    <ul>
+                        <li>Increase or decrease value by one. (Type of Unary)</li>
+                    </ul>
+                </div>
+                <div class="operator-category-card">
+                    <h4>6. Conditional Operator</h4>
+                    <ul>
+                        <li>A shorthand for if-else. (Ternary)</li>
+                    </ul>
+                </div>
+                <div class="operator-category-card">
+                    <h4>7. Bitwise Operators</h4>
+                    <ul>
+                        <li>Perform operations on individual bits.</li>
+                    </ul>
+                </div>
+                <div class="operator-category-card">
+                    <h4>8. Special Operators</h4>
+                    <ul>
+                        <li>Include `sizeof` and comma operator.</li>
+                    </ul>
+                </div>
+                <!-- Shift operators are typically part of Bitwise -->
+            </div>
+        </section>
+
+        <!-- Detailed sections for each operator type -->
+        <button type="button" class="collapsible">3. Arithmetic Operators <span class="icon"></span></button>
+        <div class="collapsible-content">
+            <div>
+                <p>Arithmetic operators perform mathematical operations such as addition, subtraction, multiplication,
+                    division, and modulus (remainder) on numerical values (constants and variables).</p>
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Operator</th>
+                            <th>Meaning</th>
+                            <th>Example (a=9, b=4)</th>
+                            <th>Result</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="operator-col">+</td>
+                            <td>Addition</td>
+                            <td class="example-col">a + b</td>
+                            <td>13</td>
+                        </tr>
+                        <tr>
+                            <td class="operator-col">-</td>
+                            <td>Subtraction</td>
+                            <td class="example-col">a - b</td>
+                            <td>5</td>
+                        </tr>
+                        <tr>
+                            <td class="operator-col">*</td>
+                            <td>Multiplication</td>
+                            <td class="example-col">a * b</td>
+                            <td>36</td>
+                        </tr>
+                        <tr>
+                            <td class="operator-col">/</td>
+                            <td>Division</td>
+                            <td class="example-col">a / b</td>
+                            <td>2 (integer division)</td>
+                        </tr>
+                        <tr>
+                            <td class="operator-col">%</td>
+                            <td>Modulus (Remainder)</td>
+                            <td class="example-col">a % b</td>
+                            <td>1</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <pre><code class="language-c">
+#include <stdio.h>
+
+int main() { // Standard C uses int main()
+    int a = 9, b = 4, c;
+
+    c = a + b;
+    printf("a + b = %d\n", c); // Output: a + b = 13
+
+    c = a - b;
+    printf("a - b = %d\n", c); // Output: a - b = 5
+
+    c = a * b;
+    printf("a * b = %d\n", c); // Output: a * b = 36
+
+    c = a / b; // Integer division, fractional part is truncated
+    printf("a / b = %d\n", c); // Output: a / b = 2
+
+    c = a % b;
+    printf("Remainder when a divided by b = %d\n", c); // Output: Remainder when a divided by b = 1
+
+    // For floating point division
+    float x = 9.0, y = 4.0, z;
+    z = x / y;
+    printf("x / y (float) = %f\n", z); // Output: x / y (float) = 2.250000
+
+    return 0;
+}
+                </code></pre>
+                <p><strong>Note on Division (`/`):</strong> If both operands are integers, integer division is performed
+                    (the fractional part is discarded). To get a floating-point result, at least one operand must be a
+                    float or double, or type casting must be used.</p>
+            </div>
+        </div>
+
+        <button type="button" class="collapsible">4. Relational Operators <span class="icon"></span></button>
+        <div class="collapsible-content">
+            <div>
+                <p>Relational operators check the relationship between two operands. If the relation is true, it returns
+                    `1`; if the relation is false, it returns `0`. They are commonly used in <span
+                        class="tooltip">decision-making<span class="tooltiptext">e.g., in `if` statements</span></span>
+                    and <span class="tooltip">loops<span class="tooltiptext">e.g., in `while` or `for` loop
+                            conditions</span></span>.</p>
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Operator</th>
+                            <th>Meaning</th>
+                            <th>Example</th>
+                            <th>Return Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="operator-col">
+                                << /td>
+                            <td>is less than</td>
+                            <td class="example-col">2 < 9</td>
+                            <td>1 (true)</td>
+                        </tr>
+                        <tr>
+                            <td class="operator-col">
+                                <=< /td>
+                            <td>is less than or equal to</td>
+                            <td class="example-col">2 <= 2</td>
+                            <td>1 (true)</td>
+                        </tr>
+                        <tr>
+                            <td class="operator-col">></td>
+                            <td>is greater than</td>
+                            <td class="example-col">2 > 9</td>
+                            <td>0 (false)</td>
+                        </tr>
+                        <tr>
+                            <td class="operator-col">>=</td>
+                            <td>is greater than or equal to</td>
+                            <td class="example-col">3 >= 2</td>
+                            <td>1 (true)</td>
+                        </tr>
+                        <tr>
+                            <td class="operator-col">==</td>
+                            <td>is equal to</td>
+                            <td class="example-col">2 == 3</td>
+                            <td>0 (false)</td>
+                        </tr>
+                        <tr>
+                            <td class="operator-col">!=</td>
+                            <td>is not equal to</td>
+                            <td class="example-col">2 != 2</td>
+                            <td>0 (false)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <pre><code class="language-c">
+#include <stdio.h>
+
+int main() {
+    int a = 5, b = 5, c_val = 10; // Renamed c to c_val to avoid conflict
+
+    printf("%d == %d is %d\n", a, b, a == b);     // 5 == 5 is 1 (true)
+    printf("%d == %d is %d\n", a, c_val, a == c_val); // 5 == 10 is 0 (false)
+
+    printf("%d > %d is %d\n", a, b, a > b);      // 5 > 5 is 0 (false)
+    printf("%d > %d is %d\n", a, c_val, a > c_val);   // 5 > 10 is 0 (false)
+
+    printf("%d < %d is %d\n", a, b, a < b);      // 5 < 5 is 0 (false)
+    printf("%d < %d is %d\n", a, c_val, a < c_val);   // 5 < 10 is 1 (true)
+
+    printf("%d != %d is %d\n", a, b, a != b);     // 5 != 5 is 0 (false)
+    printf("%d != %d is %d\n", a, c_val, a != c_val); // 5 != 10 is 1 (true)
+
+    printf("%d >= %d is %d\n", a, b, a >= b);     // 5 >= 5 is 1 (true)
+    printf("%d >= %d is %d\n", a, c_val, a >= c_val); // 5 >= 10 is 0 (false)
+
+    printf("%d <= %d is %d\n", a, b, a <= b);     // 5 <= 5 is 1 (true)
+    printf("%d <= %d is %d\n", a, c_val, a <= c_val); // 5 <= 10 is 1 (true)
+
+    return 0;
+}
+                </code></pre>
+            </div>
+        </div>
+
+        <button type="button" class="collapsible">5. Logical Operators <span class="icon"></span></button>
+        <div class="collapsible-content">
+            <div>
+                <p>Logical operators are used to combine or invert the results of two or more conditions (expressions
+                    evaluating to true/1 or false/0). An expression containing logical operators returns either `0`
+                    (false) or `1` (true).</p>
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Operator</th>
+                            <th>Meaning</th>
+                            <th>Example</th>
+                            <th>Return Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="operator-col">&&</td>
+                            <td>Logical AND</td>
+                            <td class="example-col">(9 > 2) && (17 > 2)</td>
+                            <td>1 (true)</td>
+                        </tr>
+                        <tr>
+                            <td class="operator-col">||</td>
+                            <td>Logical OR</td>
+                            <td class="example-col">(9 > 2) || (17 == 7)</td>
+                            <td>1 (true)</td>
+                        </tr>
+                        <tr>
+                            <td class="operator-col">!</td>
+                            <td>Logical NOT</td>
+                            <td class="example-col">!(29 != 29)</td>
+                            <td>1 (true, because 29!=29 is false)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h4>Truth Tables:</h4>
+                <strong>Logical AND (&&):</strong> Returns true (1) only if all conditions are true.
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Operand1</th>
+                            <th>Operand2</th>
+                            <th>Operand1 && Operand2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>true (1)</td>
+                            <td>true (1)</td>
+                            <td>true (1)</td>
+                        </tr>
+                        <tr>
+                            <td>true (1)</td>
+                            <td>false (0)</td>
+                            <td>false (0)</td>
+                        </tr>
+                        <tr>
+                            <td>false (0)</td>
+                            <td>true (1)</td>
+                            <td>false (0)</td>
+                        </tr>
+                        <tr>
+                            <td>false (0)</td>
+                            <td>false (0)</td>
+                            <td>false (0)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <strong>Logical OR (||):</strong> Returns true (1) if at least one condition is true.
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Operand1</th>
+                            <th>Operand2</th>
+                            <th>Operand1 || Operand2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>true (1)</td>
+                            <td>true (1)</td>
+                            <td>true (1)</td>
+                        </tr>
+                        <tr>
+                            <td>true (1)</td>
+                            <td>false (0)</td>
+                            <td>true (1)</td>
+                        </tr>
+                        <tr>
+                            <td>false (0)</td>
+                            <td>true (1)</td>
+                            <td>true (1)</td>
+                        </tr>
+                        <tr>
+                            <td>false (0)</td>
+                            <td>false (0)</td>
+                            <td>false (0)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <strong>Logical NOT (!):</strong> Reverses the logical state of its operand.
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Operand1</th>
+                            <th>!Operand1</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>true (1)</td>
+                            <td>false (0)</td>
+                        </tr>
+                        <tr>
+                            <td>false (0)</td>
+                            <td>true (1)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <pre><code class="language-c">
+#include <stdio.h>
+
+int main() {
+    int a = 5, b = 5, c_val = 10;
+    int result;
+
+    // Logical AND
+    result = (a == b) && (c_val > b); // (true) && (true) -> true
+    printf("(a == b) && (c_val > b) is %d\n", result); // Output: 1
+
+    result = (a == b) && (c_val < b); // (true) && (false) -> false
+    printf("(a == b) && (c_val < b) is %d\n", result); // Output: 0
+
+    // Logical OR
+    result = (a == b) || (c_val < b); // (true) || (false) -> true
+    printf("(a == b) || (c_val < b) is %d\n", result); // Output: 1
+
+    result = (a != b) || (c_val < b); // (false) || (false) -> false
+    printf("(a != b) || (c_val < b) is %d\n", result); // Output: 0
+
+    // Logical NOT
+    result = !(a == b); // !(true) -> false
+    printf("!(a == b) is %d\n", result); // Output: 0
+
+    result = !(a != b); // !(false) -> true
+    printf("!(a != b) is %d\n", result); // Output: 1
+
+    return 0;
+}
+                </code></pre>
+                <p><span class="tooltip">Short-circuit evaluation<span class="tooltiptext">For `&&`, if the first
+                            operand is false, the second is not evaluated. For `||`, if the first is true, the second is
+                            not evaluated.</span></span> is an important feature of logical AND and OR operators.</p>
+            </div>
+        </div>
+
+        <button type="button" class="collapsible">6. Assignment Operators <span class="icon"></span></button>
+        <div class="collapsible-content">
+            <div>
+                <p>Assignment operators are used to assign a value (or the result of an expression) to a variable.</p>
+                <p><strong>Simple Assignment Operator (`=`):</strong> Assigns the value from the right-hand side to the
+                    left-hand side variable.
+                    <br>Syntax: `variable_name = expression_or_value;`
+                    <br>Examples: `x = 10;`, `y = a + b;`, `z = p;`
+                </p>
+
+                <h4>Compound Assignment Operators:</h4>
+                <p>C provides compound assignment operators as a shorthand for common operations.</p>
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Operator</th>
+                            <th>Example</th>
+                            <th>Meaning (Equivalent to)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="operator-col">+=</td>
+                            <td class="example-col">x += y</td>
+                            <td>x = x + y</td>
+                        </tr>
+                        <tr>
+                            <td class="operator-col">-=</td>
+                            <td class="example-col">x -= y</td>
+                            <td>x = x - y</td>
+                        </tr>
+                        <tr>
+                            <td class="operator-col">*=</td>
+                            <td class="example-col">x *= y</td>
+                            <td>x = x * y</td>
+                        </tr>
+                        <tr>
+                            <td class="operator-col">/=</td>
+                            <td class="example-col">x /= y</td>
+                            <td>x = x / y</td>
+                        </tr>
+                        <tr>
+                            <td class="operator-col">%=</td>
+                            <td class="example-col">x %= y</td>
+                            <td>x = x % y</td>
+                        </tr>
+                        <!-- Bitwise compound operators also exist: &=, |=, ^=, <<=, >>= -->
+                    </tbody>
+                </table>
+                <pre><code class="language-c">
+#include <stdio.h>
+
+int main() {
+    int a = 5, c_var;
+
+    c_var = a;      // Simple assignment
+    printf("c_var (after c_var = a) = %d\n", c_var);         // Output: 5
+
+    c_var += a;     // c_var = c_var + a  => c_var = 5 + 5
+    printf("c_var (after c_var += a) = %d\n", c_var);        // Output: 10
+
+    c_var -= a;     // c_var = c_var - a  => c_var = 10 - 5
+    printf("c_var (after c_var -= a) = %d\n", c_var);        // Output: 5
+
+    c_var *= a;     // c_var = c_var * a  => c_var = 5 * 5
+    printf("c_var (after c_var *= a) = %d\n", c_var);        // Output: 25
+
+    c_var /= a;     // c_var = c_var / a  => c_var = 25 / 5
+    printf("c_var (after c_var /= a) = %d\n", c_var);        // Output: 5
+
+    c_var %= a;     // c_var = c_var % a  => c_var = 5 % 5
+    printf("c_var (after c_var %%= a) = %d\n", c_var);       // Output: 0 (Note: %% to print % sign)
+
+    return 0;
+}
+                </code></pre>
+            </div>
+        </div>
+
+        <button type="button" class="collapsible">7. Increment (++) and Decrement (--) Operators <span
+                class="icon"></span></button>
+        <div class="collapsible-content">
+            <div>
+                <p>These are <span class="tooltip">unary operators<span class="tooltiptext">They operate on a single
+                            operand.</span></span> that add or subtract 1 from their operand, respectively. They can
+                    only be applied to variables, not constants or expressions. They have high precedence.</p>
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Operator</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="operator-col">++x</td>
+                            <td>Pre-increment</td>
+                            <td>Increments x, then uses the new value of x in the expression.</td>
+                        </tr>
+                        <tr>
+                            <td class="operator-col">x++</td>
+                            <td>Post-increment</td>
+                            <td>Uses the current value of x in the expression, then increments x.</td>
+                        </tr>
+                        <tr>
+                            <td class="operator-col">--x</td>
+                            <td>Pre-decrement</td>
+                            <td>Decrements x, then uses the new value of x in the expression.</td>
+                        </tr>
+                        <tr>
+                            <td class="operator-col">x--</td>
+                            <td>Post-decrement</td>
+                            <td>Uses the current value of x in the expression, then decrements x.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <pre><code class="language-c">
+#include <stdio.h>
+
+int main() {
+    int a = 10, b = 100;
+    float c_val = 10.5, d_val = 10.5;
+    int pre_inc, post_inc, pre_dec, post_dec;
+
+    // Pre-increment
+    pre_inc = ++a; // a becomes 11, pre_inc becomes 11
+    printf("Pre-increment: ++a = %d, a = %d\n", pre_inc, a);
+
+    // Post-increment
+    // Reset a for clarity
+    a = 10;
+    post_inc = a++; // post_inc becomes 10, a becomes 11
+    printf("Post-increment: a++ = %d, a = %d\n", post_inc, a);
+
+    // Pre-decrement
+    pre_dec = --b; // b becomes 99, pre_dec becomes 99
+    printf("Pre-decrement: --b = %d, b = %d\n", pre_dec, b);
+
+    // Post-decrement
+    // Reset b for clarity
+    b = 100;
+    post_dec = b--; // post_dec becomes 100, b becomes 99
+    printf("Post-decrement: b-- = %d, b = %d\n", post_dec, b);
+
+
+    // With floats
+    printf("Original c_val = %f\n", c_val);
+    printf("++c_val = %f\n", ++c_val); // c_val becomes 11.5
+
+    printf("Original d_val = %f\n", d_val);
+    printf("d_val++ = %f\n", d_val++); // uses 10.5, then d_val becomes 11.5
+    printf("d_val after post-increment = %f\n", d_val);
+
+    return 0;
+}
+                </code></pre>
+                <h4>Behavior in Complex Expressions (e.g., `printf` arguments):</h4>
+                <p>The order of evaluation of arguments to a function like `printf` is <strong
+                        class="tooltip">unspecified by the C standard<span class="tooltiptext">Compilers can evaluate
+                            arguments in any order, typically right-to-left for many common compilers on x86
+                            architecture. Relying on a specific order is non-portable.</span></span>. This can lead to
+                        confusing results when multiple increment/decrement operators are used on the same variable
+                        within such arguments.</p>
+                <p>Example from your data: `printf("%d %d %d", i, ++i, i++);` with `i=1` might give `3 3 1` on some
+                    compilers.</p>
+                <ul>
+                    <li>If arguments are evaluated right-to-left:
+                        <ol>
+                            <li>`i++`: `i` (1) is used for `printf`, then `i` becomes 2.</li>
+                            <li>`++i`: `i` (2) becomes 3, then `i` (3) is used for `printf`.</li>
+                            <li>`i`: `i` (3) is used for `printf`.</li>
+                        </ol>
+                        So, `printf` receives `3, 3, 1` to print.
+                    </li>
+                </ul>
+                <p>Similarly, `j = i++ + ++i;` involves <strong class="tooltip">undefined behavior<span
+                            class="tooltiptext">Modifying a variable more than once between two sequence points without
+                            a defined order.</span></span> before C++17 (and still tricky in C). It's best to avoid such
+                        complex expressions where the order of side effects is critical and unclear.</p>
+            </div>
+        </div>
+
+        <button type="button" class="collapsible">8. Conditional (Ternary) Operator (?:) <span
+                class="icon"></span></button>
+        <div class="collapsible-content">
+            <div>
+                <p>The conditional operator is a <span class="tooltip">ternary operator<span class="tooltiptext">It
+                            takes three operands.</span></span> and is a shorthand way of writing an `if-else`
+                    statement.
+                    <br>Syntax: `condition ? expression_if_true : expression_if_false;`
+                </p>
+                <p>It first evaluates the `condition`.
+                <ul>
+                    <li>If `condition` is true (non-zero), `expression_if_true` is evaluated, and its value becomes the
+                        result of the overall conditional expression.</li>
+                    <li>If `condition` is false (zero), `expression_if_false` is evaluated, and its value becomes the
+                        result.</li>
+                </ul>
+                </p>
+                <pre><code class="language-c">
+#include <stdio.h>
+
+int main() {
+    int a = 10, b = 20;
+    int max;
+
+    max = (a > b) ? a : b; // If a > b, max is a, else max is b
+    printf("The maximum of %d and %d is %d\n", a, b, max); // Output: 20
+
+    char february_status;
+    int days;
+    printf("Is this a leap year? (Enter 'L' for Leap, 'N' for Not Leap): ");
+    scanf(" %c", &february_status); // Space to consume potential newline
+
+    // Using char 'L' or 'N'
+    // days = (february_status == 'L' || february_status == 'l') ? 29 : 28;
+
+    // Example based on your image (using 1 for leap)
+    int is_leap_input;
+    printf("If this year is leap year, enter 1. If not enter any other integer: ");
+    scanf("%d", &is_leap_input);
+    days = (is_leap_input == 1) ? 29 : 28;
+    printf("Number of days in February = %d\n", days);
+
+
+    return 0;
+}
+                </code></pre>
+            </div>
+        </div>
+
+        <button type="button" class="collapsible">9. Bitwise Operators <span class="icon"></span></button>
+        <div class="collapsible-content">
+            <div>
+                <p>Bitwise operators are used to manipulate data at the bit level. They operate on <span
+                        class="tooltip">integer types only<span class="tooltiptext">`char`, `short`, `int`, `long`. Not
+                            applicable to `float` or `double`.</span></span>.</p>
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Operator</th>
+                            <th>Meaning</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="operator-col">&</td>
+                            <td>Bitwise AND</td>
+                        </tr>
+                        <tr>
+                            <td class="operator-col">|</td>
+                            <td>Bitwise OR</td>
+                        </tr>
+                        <tr>
+                            <td class="operator-col">^</td>
+                            <td>Bitwise XOR (Exclusive OR)</td>
+                        </tr>
+                        <tr>
+                            <td class="operator-col">~</td>
+                            <td>Bitwise Complement (One's Complement)</td>
+                        </tr>
+                        <tr>
+                            <td class="operator-col">
+                                <<< /td>
+                            <td>Shift Left</td>
+                        </tr>
+                        <tr>
+                            <td class="operator-col">>></td>
+                            <td>Shift Right</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Bitwise AND (&)</h4>
+                <p>The output bit is 1 if the corresponding bits of both operands are 1. Otherwise, it's 0.</p>
+                Example: `12 & 25`
+                <pre>
+  00001100  (12 in decimal)
+& 00011001  (25 in decimal)
+------------------
+  00001000  (8 in decimal)
+                </pre>
+                <pre><code class="language-c">
+#include <stdio.h>
+int main() {
+    int a = 12, b = 25;
+    printf("Output of 12 & 25 = %d\n", a & b); // Output: 8
+    return 0;
+}
+                </code></pre>
+
+                <h4>Bitwise OR (|)</h4>
+                <p>The output bit is 1 if at least one of the corresponding bits of the operands is 1. Otherwise, it's
+                    0.</p>
+                Example: `12 | 25`
+                <pre>
+  00001100  (12)
+| 00011001  (25)
+------------------
+  00011101  (29 in decimal)
+                </pre>
+                <pre><code class="language-c">
+#include <stdio.h>
+int main() {
+    int a = 12, b = 25;
+    printf("Output of 12 | 25 = %d\n", a | b); // Output: 29
+    return 0;
+}
+                </code></pre>
+
+                <h4>Bitwise XOR (^)</h4>
+                <p>The output bit is 1 if the corresponding bits of the operands are opposite (one is 0 and the other is
+                    1). Otherwise, it's 0.</p>
+                Example: `12 ^ 25`
+                <pre>
+  00001100  (12)
+^ 00011001  (25)
+------------------
+  00010101  (21 in decimal)
+                </pre>
+                <pre><code class="language-c">
+#include <stdio.h>
+int main() {
+    int a = 12, b = 25;
+    printf("Output of 12 ^ 25 = %d\n", a ^ b); // Output: 21
+    return 0;
+}
+                </code></pre>
+
+                <h4>Bitwise Complement (~)</h4>
+                <p>This is a unary operator. It flips all the bits of its operand (0 becomes 1, and 1 becomes 0). For
+                    any integer `n`, the bitwise complement `~n` will be `-(n+1)` due to how negative numbers are
+                    represented using <span class="tooltip">Two's Complement<span class="tooltiptext">A method for
+                            representing signed integers where negative numbers are the bitwise complement of the
+                            positive number, plus one.</span></span>.</p>
+                <p>Two's complement of a number is (One's complement) + 1.
+                    <br>So, `~n` (One's complement) is equivalent to `(-n) - 1` in value for positive `n` when
+                    considering signed representation. More generally, `~n = -(n+1)`.
+                </p>
+                Example: `~35`
+                <pre>
+35 = 00100011 (assuming 8-bit for simplicity)
+~35 = 11011100 (One's complement)
+This value, if interpreted as a signed 8-bit number using two's complement, represents -36.
+Because: -(35+1) = -36.
+                </pre>
+                <pre><code class="language-c">
+#include <stdio.h>
+int main() {
+    int num1 = 35;
+    int num2 = -12;
+    printf("Complement of %d = %d\n", num1, ~num1); // Output: Complement of 35 = -36
+    printf("Complement of %d = %d\n", num2, ~num2); // Output: Complement of -12 = 11
+    return 0;
+}
+                </code></pre>
+
+                <h4>Shift Left (<<)< /h4>
+                        <p>Shifts all bits of the first operand to the left by the number of positions specified by the
+                            second operand. Vacated bits on the right are filled with zeros.</p>
+                        `x << n` is equivalent to multiplying `x` by 2<sup>n</sup>.
+                            <pre><code class="language-c">
+#include <stdio.h>
+int main() {
+    unsigned char a = 5; // 00000101
+    printf("%d << 1 = %d\n", a, a << 1); // 00001010 (10)
+    printf("%d << 2 = %d\n", a, a << 2); // 00010100 (20)
+    return 0;
+}
+                </code></pre>
+
+                            <h4>Shift Right (>>)</h4>
+                            <p>Shifts all bits of the first operand to the right by the number of positions specified by
+                                the second operand.
+                            <ul>
+                                <li>For <span class="tooltip">unsigned numbers<span class="tooltiptext">Always
+                                            positive.</span></span>, vacated bits on the left are filled with zeros
+                                    (logical right shift).</li>
+                                <li>For <span class="tooltip">signed numbers<span class="tooltiptext">Can be positive or
+                                            negative.</span></span>, the behavior can be implementation-defined:
+                                    <ul>
+                                        <li><strong>Arithmetic Right Shift:</strong> Vacated bits on the left are filled
+                                            with the sign bit (to preserve the sign). This is common.</li>
+                                        <li><strong>Logical Right Shift:</strong> Vacated bits on the left are filled
+                                            with zeros.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            `x >> n` is roughly equivalent to dividing `x` by 2<sup>n</sup> (for positive `x`).</p>
+                            <pre><code class="language-c">
+#include <stdio.h>
+int main() {
+    unsigned char a = 20; // 00010100
+    signed char b = -20;  // e.g., 11101100 in 8-bit 2's complement
+                          // (Exact bit pattern depends on system int size)
+
+    printf("%u >> 1 = %u\n", a, a >> 1); // 00001010 (10)
+    printf("%u >> 2 = %u\n", a, a >> 2); // 00000101 (5)
+
+    // For signed, assuming arithmetic shift (common)
+    // -20 >> 1 should be -10
+    printf("%d >> 1 = %d\n", b, b >> 1);
+    return 0;
+}
+                </code></pre>
+            </div>
+        </div>
+
+        <button type="button" class="collapsible">10. Special Operators <span class="icon"></span></button>
+        <div class="collapsible-content">
+            <div>
+                <h4>Comma Operator (,)</h4>
+                <p>The comma operator is used to link related expressions together. It evaluates expressions from left
+                    to right, and the value of the rightmost expression becomes the value of the combined
+                    comma-separated expression.</p>
+                Example: `val = (a=3, b=9, c=77, a+c);`
+                <ol>
+                    <li>`a` is assigned `3`.</li>
+                    <li>`b` is assigned `9`.</li>
+                    <li>`c` is assigned `77`.</li>
+                    <li>`a+c` (i.e., `3+77 = 80`) is evaluated.</li>
+                    <li>The value `80` is assigned to `val`.</li>
+                </ol>
+                <p>It's often used in `for` loops to include multiple initializations or updates in a single part of the
+                    loop syntax.</p>
+                <pre><code class="language-c">
+#include <stdio.h>
+int main() {
+    int x, y;
+    x = (y = 5, y + 10); // y becomes 5, then y+10 (15) is assigned to x
+    printf("x = %d, y = %d\n", x, y); // Output: x = 15, y = 5
+    return 0;
+}
+                </code></pre>
+
+                <h4>`sizeof` Operator</h4>
+                <p>The `sizeof` operator is a unary operator that returns the size, in bytes, of its operand (which can
+                    be a variable, a data type, or an expression). It's very useful for determining memory allocation
+                    and ensuring portability.</p>
+                Syntax: `sizeof(operand)` or `sizeof operand` (if operand is not a type name).
+                <pre><code class="language-c">
+#include <stdio.h>
+
+int main() {
+    int a;
+    int e[10]; // Array of 10 integers
+    float b_f; // Renamed to avoid conflict with int b in other examples
+    double c_d;
+    char d_ch;
+
+    // Use %zu for sizeof result as it returns size_t type
+    printf("Size of int = %zu bytes\n", sizeof(a));
+    printf("Size of int type = %zu bytes\n", sizeof(int));
+    printf("Size of float = %zu bytes\n", sizeof(b_f));
+    printf("Size of double = %zu bytes\n", sizeof(c_d));
+    printf("Size of char = %zu bytes\n", sizeof(d_ch));
+    printf("Size of integer type array having 10 elements = %zu bytes\n", sizeof(e));
+    // Output will vary based on system architecture, e.g.:
+    // Size of int = 4 bytes
+    // Size of int type = 4 bytes
+    // Size of float = 4 bytes
+    // Size of double = 8 bytes
+    // Size of char = 1 byte
+    // Size of integer type array having 10 elements = 40 bytes (if int is 4 bytes)
+
+    return 0;
+}
+                </code></pre>
+                <p>Note: The correct format specifier for the `size_t` type returned by `sizeof` is `%zu` (C99 and
+                    later). If using an older compiler, `%lu` (unsigned long) might be used, but `%zu` is preferred for
+                    portability.</p>
+            </div>
+        </div>
+
+        <section class="content-section" id="operator-precedence-associativity">
+            <h2><i class="fas fa-sort-amount-down"></i>11. Operator Precedence and Associativity</h2>
+            <p>When an expression contains multiple operators, C uses rules of <strong class="tooltip">precedence<span
+                        class="tooltiptext">Determines which operator is performed first in an expression. Higher
+                        precedence operators are evaluated before lower precedence ones.</span></strong> and <strong
+                    class="tooltip">associativity<span class="tooltiptext">Determines the order in which operators of
+                        the same precedence are evaluated (e.g., left-to-right or right-to-left).</span></strong> to
+                determine the order of evaluation.</p>
+            <h4>Rules for Evaluation of Expression:</h4>
+            <ol>
+                <li>Sub-expressions in parentheses `()` are evaluated first. Nested parentheses are evaluated from
+                    innermost to outermost.</li>
+                <li>Operators are then evaluated according to their precedence.</li>
+                <li>If operators have the same precedence, their associativity determines the order.
+                    <ul>
+                        <li><strong>Left-to-Right (L-R):</strong> Operators are evaluated from left to right. Most
+                            binary operators in C have L-R associativity.</li>
+                        <li><strong>Right-to-Left (R-L):</strong> Operators are evaluated from right to left. Unary
+                            operators, assignment operators, and the conditional operator typically have R-L
+                            associativity.</li>
+                    </ul>
+                </li>
+            </ol>
+            <h4>Operator Precedence and Associativity Table (Simplified Common Operators):</h4>
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Precedence</th>
+                        <th>Operator</th>
+                        <th>Description</th>
+                        <th>Associativity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1 (Highest)</td>
+                        <td class="operator-col">() [] . -> ++ -- (postfix)</td>
+                        <td>Parentheses, Array subscript, Member selection</td>
+                        <td>L-R</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td class="operator-col">++ -- (prefix) + - (unary) ! ~ * & (address) sizeof (type)</td>
+                        <td>Unary, Logical NOT, Bitwise NOT, Dereference, Address-of, Sizeof, Type cast</td>
+                        <td>R-L</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td class="operator-col">* / %</td>
+                        <td>Multiplication, Division, Modulus</td>
+                        <td>L-R</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td class="operator-col">+ - (binary)</td>
+                        <td>Addition, Subtraction</td>
+                        <td>L-R</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td class="operator-col">
+                            <<>>
+                        </td>
+                        <td>Bitwise Left Shift, Right Shift</td>
+                        <td>L-R</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td class="operator-col">
+                            < <=> >=
+                        </td>
+                        <td>Relational</td>
+                        <td>L-R</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td class="operator-col">== !=</td>
+                        <td>Equality</td>
+                        <td>L-R</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td class="operator-col">& (bitwise)</td>
+                        <td>Bitwise AND</td>
+                        <td>L-R</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td class="operator-col">^ (bitwise)</td>
+                        <td>Bitwise XOR</td>
+                        <td>L-R</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td class="operator-col">| (bitwise)</td>
+                        <td>Bitwise OR</td>
+                        <td>L-R</td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td class="operator-col">&&</td>
+                        <td>Logical AND</td>
+                        <td>L-R</td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td class="operator-col">||</td>
+                        <td>Logical OR</td>
+                        <td>L-R</td>
+                    </tr>
+                    <tr>
+                        <td>13</td>
+                        <td class="operator-col">? :</td>
+                        <td>Conditional (Ternary)</td>
+                        <td>R-L</td>
+                    </tr>
+                    <tr>
+                        <td>14</td>
+                        <td class="operator-col">= += -= *= /= %= &= ^= |= <<=>>=</td>
+                        <td>Assignment Operators</td>
+                        <td>R-L</td>
+                    </tr>
+                    <tr>
+                        <td>15 (Lowest)</td>
+                        <td class="operator-col">,</td>
+                        <td>Comma Operator</td>
+                        <td>L-R</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>Example: `a = x - y / 3 + z * 2 - p / 4;` with `x=7, y=9, z=11, p=8`.
+                <br>Evaluation according to precedence:
+            <ol>
+                <li>`y / 3` (9/3 = 3)</li>
+                <li>`z * 2` (11*2 = 22)</li>
+                <li>`p / 4` (8/4 = 2)</li>
+                <li>Expression becomes: `a = 7 - 3 + 22 - 2`</li>
+                <li>`7 - 3` (4) (L-R associativity for `-` and `+`)</li>
+                <li>`4 + 22` (26)</li>
+                <li>`26 - 2` (24)</li>
+                <li>`a = 24`</li>
+            </ol>
+            If parentheses were used: `(9 - 12 / (3 + 3)) * (2 - 1)`
+            <ol>
+                <li>Innermost `(3+3)` = 6</li>
+                <li>`12 / 6` = 2</li>
+                <li>`9 - 2` = 7 (Left parenthesis done)</li>
+                <li>`(2-1)` = 1 (Right parenthesis done)</li>
+                <li>`7 * 1` = 7</li>
+            </ol>
+            </p>
+        </section>
+
+        <section class="content-section" id="type-conversions">
+            <h2><i class="fas fa-exchange-alt"></i>12. Type Conversions (Type Casting)</h2>
+            <p>Type conversion is the process of converting a value from one data type to another. C allows both
+                implicit and explicit type conversions.</p>
+
+            <h4>Implicit Type Conversion (Automatic Conversion / Type Promotion)</h4>
+            <p>Performed automatically by the compiler when operands of different types are used in an expression, or
+                when a value of one type is assigned to a variable of another type, if the conversion is "safe" (e.g.,
+                from a smaller type to a larger type without loss of precision).</p>
+            <p><strong>Integer Promotion:</strong> Values of integral types "smaller" than `int` or `unsigned int` (like
+                `char`, `short int`) are promoted to `int` or `unsigned int` before any operation is performed on them.
+            </p>
+            <pre><code class="language-c">
+#include <stdio.h>
+int main() {
+    char a = 'A'; // ASCII value of 'A' is 65
+    int b = 10;
+    int sum = a + b; // 'a' is promoted to int (65)
+    printf("Sum = %d\n", sum); // Output: Sum = 75
+    return 0;
+}
+            </code></pre>
+            <p><strong>Usual Arithmetic Conversions:</strong> When an operation involves operands of different
+                arithmetic types, the "lower" type is promoted to the "higher" type according to a hierarchy to ensure
+                no loss of data.
+                The hierarchy (simplified) is generally:
+                `int` → `unsigned int` → `long int` → `unsigned long int` → `long long int` → `unsigned long long int` →
+                `float` → `double` → `long double`.
+            </p>
+            <img src="https://i.imgur.com/YwL0Z9Y.png" alt="Usual Arithmetic Conversion Hierarchy"
+                style="display:block; margin:1em auto; max-width:300px; width:100%; border-radius:8px;">
+
+
+            <h4>Explicit Type Conversion (Type Casting)</h4>
+            <p>Programmer-forced conversion using the <span class="tooltip">cast operator<span
+                        class="tooltiptext">`(type_name)`</span></span>.
+                <br>Syntax: `(target_type_name) expression;`
+            </p>
+            <pre><code class="language-c">
+#include <stdio.h>
+
+int main() {
+    int num1 = 9, num2 = 4;
+    float result;
+
+    // Without type casting (integer division)
+    result = num1 / num2;
+    printf("Without casting: %d / %d = %f (incorrect float representation of int 2)\n", num1, num2, result); // Output: 2.000000
+
+    // With type casting
+    result = (float)num1 / num2; // num1 is temporarily treated as float
+    printf("With casting: (float)%d / %d = %f\n", num1, num2, result); // Output: 2.250000
+
+    // Casting an integer to char
+    int ascii_val = 65;
+    char character = (char)ascii_val;
+    printf("Character for ASCII %d is %c\n", ascii_val, character); // Output: A
+
+    return 0;
+}
+            </code></pre>
+            <p>Common rules/considerations for explicit casting:
+            <ul>
+                <li>All integer types can be converted to float.</li>
+                <li>All float types can be converted to double.</li>
+                <li>All character types can be converted to integer.</li>
+                <li>Converting from a larger type to a smaller type (e.g., `double` to `int`) can lead to loss of data
+                    (truncation of fractional part, or overflow if the value is too large).</li>
+            </ul>
+            </p>
+        </section>
+
+
+        <div class="page-navigation">
+            <a href="topic-1.html" class="nav-button back-button">
+                <i class="fas fa-arrow-left"></i> Prev: Introduction to C
+            </a>
+            <a href="../c-programming.html" class="nav-button back-button"
+                style="margin-left: auto; margin-right: auto;">
+                <i class="fas fa-list"></i> Back to Syllabus
+            </a>
+            <a href="topic-3.html" class="nav-button next-button">
+                Next: Control Structures <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <footer class="page-footer">
+            © 2024 Eduvision. All rights reserved. Mastering C, one operator at a time.
+        </footer>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script>
+        Prism.plugins.autoloader.languages_path = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/';
+
+        // Collapsible sections
+        var coll = document.getElementsByClassName("collapsible");
+        for (var i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            });
+        }
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+            } else {
+                body.classList.remove('dark-mode');
+            }
+            localStorage.setItem('theme', theme);
+            Prism.highlightAll(); // Re-highlight for theme change
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (body.classList.contains('dark-mode')) {
+                applyTheme('light');
+            } else {
+                applyTheme('dark');
+            }
+        });
+
+        // Load saved theme or system preference
+        const savedTheme = localStorage.getItem('theme') ||
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        applyTheme(savedTheme);
+
+    </script>
+</body>
+
+</html>

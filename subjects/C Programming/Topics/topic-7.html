@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Structures and Unions in C - Eduvision</title>
+    <meta name="description"
+        content="Learn about structures, unions, and enumerated data types (enum) in C programming: defining, declaring, accessing members, nested structures, arrays of structures, pointers to structures, and typedef.">
+    <meta name="keywords"
+        content="C structures, C unions, enum, typedef, nested structures, array of structures, pointers to structures, C programming tutorial">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        :root {
+            /* Light Mode Defaults */
+            --bg-color: #f0f4f8;
+            --card-bg: #ffffff;
+            --primary-color: #2563eb;
+            --secondary-color: #4f46e5;
+            --accent-color: #10b981;
+            --text-color: #374151;
+            --heading-color: #111827;
+            --border-color: #d1d5db;
+            --gradient-start: var(--primary-color);
+            --gradient-end: var(--secondary-color);
+            --font-main: 'Poppins', sans-serif;
+            --font-logo: 'Nunito', sans-serif;
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --card-shadow-color: rgba(0, 0, 0, 0.05);
+            --link-color: var(--primary-color);
+            --link-hover-color: #1d4ed8;
+            --link-hover-bg: #eff6ff;
+            --collapsible-content-bg: rgba(0, 0, 0, 0.02);
+            --definition-bg: rgba(37, 99, 235, 0.05);
+            --table-header-bg: var(--primary-color);
+            --table-header-text: white;
+            --table-row-even-bg: rgba(0, 0, 0, 0.015);
+            --theme-toggle-bg: var(--card-bg);
+            --theme-toggle-icon: var(--primary-color);
+            --theme-toggle-hover-bg: var(--primary-color);
+            --theme-toggle-hover-icon: white;
+            --tooltip-bg: #333;
+            --tooltip-text: #fff;
+            --diagram-bg: var(--collapsible-content-bg);
+            --diagram-border: var(--border-color);
+        }
+
+        body.dark-mode {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-color: #c9d1d9;
+            --heading-color: #f0f6fc;
+            --border-color: #30363d;
+            --shadow-color: rgba(0, 0, 0, 0.25);
+            --card-shadow-color: rgba(0, 0, 0, 0.2);
+            --link-color: #58a6ff;
+            --link-hover-color: #80baff;
+            --link-hover-bg: rgba(88, 166, 255, 0.1);
+            --collapsible-content-bg: rgba(255, 255, 255, 0.03);
+            --definition-bg: rgba(88, 166, 255, 0.1);
+            --table-header-bg: var(--primary-color);
+            --table-row-even-bg: rgba(255, 255, 255, 0.03);
+            --theme-toggle-bg: var(--card-bg);
+            --tooltip-bg: #c9d1d9;
+            --tooltip-text: #0d1117;
+            --diagram-bg: rgba(255, 255, 255, 0.05);
+            --diagram-border: #444c56;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .eduvision-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: var(--font-logo);
+        }
+
+        .eduvision-logo .logo-text {
+            color: var(--heading-color);
+        }
+
+        body.dark-mode .eduvision-logo .logo-text {
+            color: #f0f6fc;
+        }
+
+        .eduvision-logo .text-yellow-300 {
+            color: #f59e0b !important;
+        }
+
+        .eduvision-logo .group:hover .text-yellow-300 {
+            color: #fcd34d !important;
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+            color: var(--theme-toggle-hover-icon);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-top: 80px;
+            margin-bottom: 2rem;
+            padding: 2rem 1rem;
+            border-radius: 12px;
+            background: var(--card-bg);
+            box-shadow: 0 10px 30px var(--card-shadow-color);
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--heading-color);
+            background: linear-gradient(90deg, var(--gradient-start), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 1.15rem;
+            color: var(--text-color);
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .content-section {
+            background-color: var(--card-bg);
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px var(--card-shadow-color);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s, border-color 0.3s;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px var(--shadow-color);
+        }
+
+        .content-section h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--heading-color);
+            margin-top: 0;
+            margin-bottom: 1.8rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .content-section h2 i {
+            margin-right: 1rem;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section .definition {
+            margin-bottom: 1.2rem;
+            font-size: 1rem;
+        }
+
+        .content-section ul {
+            padding-left: 25px;
+            list-style: none;
+        }
+
+        .content-section ul li::before {
+            content: "\f138";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--primary-color);
+            margin-right: 12px;
+            display: inline-block;
+            font-size: 0.9em;
+        }
+
+        pre[class*="language-"] {
+            padding: 1.5em;
+            margin: 1.5em 0;
+            overflow: auto;
+            border-radius: 8px;
+            background: #2d2d2d;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode pre[class*="language-"] {
+            background: #1e1e1e;
+        }
+
+        code[class*="language-"],
+        pre[class*="language-"] {
+            font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+            font-size: 0.95em;
+        }
+
+        .collapsible {
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: white;
+            cursor: pointer;
+            padding: 15px 25px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            transition: filter 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .collapsible:hover {
+            filter: brightness(1.15);
+        }
+
+        .collapsible.active {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .collapsible-content {
+            padding: 0 22px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out, background-color 0.3s;
+            background-color: var(--collapsible-content-bg);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            margin-bottom: 1.2rem;
+            border: 1px solid var(--border-color);
+            border-top: none;
+        }
+
+        .collapsible-content>div {
+            padding: 20px 0;
+        }
+
+        .collapsible .icon::before {
+            content: '\f078';
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible.active .icon::before {
+            transform: rotate(-180deg);
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 10px var(--card-shadow-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .custom-table th,
+        .custom-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        .custom-table th {
+            background-color: var(--table-header-bg);
+            color: var(--table-header-text);
+            font-weight: 600;
+        }
+
+        .custom-table tr:nth-child(even) {
+            background-color: var(--table-row-even-bg);
+        }
+
+        .custom-table tr:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark-mode .custom-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted var(--accent-color);
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: max-content;
+            max-width: 250px;
+            background-color: var(--tooltip-bg);
+            color: var(--tooltip-text);
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .definition {
+            background-color: var(--definition-bg);
+            border-left: 5px solid var(--primary-color);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+            font-style: normal;
+        }
+
+        .definition strong {
+            color: var(--primary-color);
+        }
+
+        .page-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            margin-bottom: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s, color 0.2s;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            font-size: 1rem;
+        }
+
+        .nav-button i.fa-arrow-left {
+            margin-right: 0.5em;
+        }
+
+        .nav-button i.fa-arrow-right {
+            margin-left: 0.5em;
+        }
+
+        .back-button {
+            background-color: var(--card-bg);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .back-button:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+        }
+
+        .next-button {
+            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+            color: white;
+        }
+
+        .next-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+            filter: brightness(1.1);
+        }
+
+        .page-footer {
+            text-align: center;
+            padding: 2.5rem 0;
+            margin-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: #6b7280;
+            transition: border-top-color 0.3s;
+        }
+
+        body.dark-mode .page-footer {
+            color: #9ca3af;
+        }
+
+        .diagram-container {
+            background-color: var(--diagram-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem auto;
+            text-align: center;
+            border: 1px solid var(--diagram-border);
+            max-width: 600px;
+        }
+
+        .diagram-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+        }
+
+        .diagram-container h4 {
+            margin-top: 0;
+            color: var(--accent-color);
+        }
+
+        .syntax-box {
+            background-color: var(--collapsible-content-bg);
+            padding: 1em;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            margin: 1em 0;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            font-size: 0.9em;
+            color: var(--text-color);
+        }
+
+        body.dark-mode .syntax-box {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.4rem;
+            }
+
+            .content-section h2 {
+                font-size: 1.7rem;
+            }
+
+            .content-section h2 i {
+                font-size: 1.5rem;
+            }
+
+            #theme-toggle {
+                top: 15px;
+                right: 15px;
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+
+            .eduvision-logo {
+                top: 15px;
+                left: 15px;
+            }
+
+            .eduvision-logo .text-2xl {
+                font-size: 1.5rem;
+            }
+
+            .page-header {
+                margin-top: 70px;
+                padding: 1.5rem 0.5rem;
+            }
+
+            .content-section {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .page-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-button {
+                width: 100%;
+                justify-content: center;
+                padding: 15px 20px;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../../index.html" class="flex items-center group">
+                <span class="logo-text">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="logo-text">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>Structures and Unions in C</h1>
+            <p>Creating custom data types to group related information.</p>
+        </header>
+
+        <section class="content-section" id="structures">
+            <h2><i class="fas fa-cubes"></i>1. Structures (struct)</h2>
+            <div class="definition">
+                A <strong class="tooltip">structure<span class="tooltiptext">A user-defined data type that groups
+                        together variables of different data types under a single name.</span></strong> is a
+                user-defined data type in C that allows you to combine data items of <strong class="highlight">different
+                    types</strong> (heterogeneous) into a single unit. It's a collection of one or more variables,
+                possibly of different types, grouped together under a single name for convenient handling. These
+                variables within a structure are called <strong class="tooltip">members<span class="tooltiptext">Also
+                        known as fields or elements of the structure.</span></strong>.
+            </div>
+            <p>The `struct` keyword is used to define or create a structure, which essentially defines a new data type.
+            </p>
+
+            <button type="button" class="collapsible">A. Defining a Structure <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>Syntax:</h4>
+                    <div class="syntax-box">
+                        struct structure_name { // structure_name is also called the tag name
+                        data_type member1;
+                        data_type member2;
+                        ...
+                        data_type memberN;
+                        }; // Don't forget the semicolon!
+                    </div>
+                    <h4>Example:</h4>
+                    <pre><code class="language-c">
+struct employee {
+    int id;
+    char name[50]; // Array to store name string
+    float salary;
+}; // This defines a new type called 'struct employee'
+                    </code></pre>
+                    <div class="diagram-container">
+                        <h4>Structure Definition Breakdown:</h4>
+                        <img src="https://i.imgur.com/V87jT29.png" alt="Structure definition parts">
+                        <p>Here, `struct` is the keyword, `employee` is the tag name. `id`, `name`, and `salary` are the
+                            members or fields of the structure.</p>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">B. Declaring Structure Variables <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Once a structure is defined, you can declare variables of that structure type. There are two main
+                        ways to declare structure variables:</p>
+                    <h4>1. By `struct` keyword within `main()` function (or any other function) - Separate Declaration:
+                    </h4>
+                    <p>This is the more common and flexible approach, allowing you to declare variables of the structure
+                        type wherever needed after the structure definition.</p>
+                    <pre><code class="language-c">
+// Structure definition (usually global or before use)
+struct employee {
+    int id;
+    char name[50];
+    float salary;
+};
+
+int main() {
+    // Declaring structure variables
+    struct employee e1, e2;
+    // ... use e1 and e2 ...
+    return 0;
+}
+                    </code></pre>
+
+                    <h4>2. By declaring variables at the time of defining the structure:</h4>
+                    <p>You can declare variables immediately after the closing brace of the structure definition.</p>
+                    <pre><code class="language-c">
+struct employee {
+    int id;
+    char name[50];
+    float salary;
+} e1, e2; // e1 and e2 are variables of type struct employee
+
+int main() {
+    // e1 and e2 are already declared (globally if struct is global)
+    // ... use e1 and e2 ...
+    return 0;
+}
+                    </code></pre>
+                    <h4>Which approach is good?</h4>
+                    <ul>
+                        <li>If the number of variables is not fixed or you need to declare them in different scopes, use
+                            the 1st approach (separate declaration). It provides flexibility.</li>
+                        <li>If the number of variables is fixed and they are primarily used globally or alongside the
+                            definition, the 2nd approach can save a line of code but is less flexible. The 1st approach
+                            is generally preferred for clarity and modularity.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">C. Initializing Structures <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Structure variables can be initialized at compile time when they are declared, or their members
+                        can be assigned values individually at runtime.</p>
+                    <h4>Compile-Time Initialization:</h4>
+                    <p>Provide values for members in the order they are defined, enclosed in curly braces `{}`.</p>
+                    <pre><code class="language-c">
+struct Patient {
+    float height; // cm
+    int weight;   // kg
+    int age;
+};
+
+int main() {
+    // Initialization using an initializer list
+    struct Patient p1 = {180.75, 73, 23};
+
+    printf("Patient 1 Details:\n");
+    printf("Height: %.2f cm\n", p1.height);
+    printf("Weight: %d kg\n", p1.weight);
+    printf("Age: %d years\n", p1.age);
+
+    // Initialization of each member separately (can be done after declaration)
+    struct Patient p2;
+    p2.height = 165.5;
+    p2.weight = 60;
+    p2.age = 30;
+
+    printf("\nPatient 2 Details:\n");
+    printf("Height: %.2f cm\n", p2.height);
+    printf("Weight: %d kg\n", p2.weight);
+    printf("Age: %d years\n", p2.age);
+
+    return 0;
+}
+                    </code></pre>
+                    <p>Using designated initializers (C99 and later) for more clarity, especially if not initializing
+                        all members or initializing out of order:</p>
+                    <pre><code class="language-c">
+struct Point { int x; int y; };
+struct Point pt1 = { .y = 20, .x = 10 }; // pt1.x is 10, pt1.y is 20
+                    </code></pre>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">D. Accessing Structure Members <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>There are two main ways to access the members (fields) of a structure:</p>
+                    <ol>
+                        <li><strong>Using the member operator (dot operator `.`)</strong>: Used when you have a direct
+                            structure variable.</li>
+                        <li><strong>Using the structure pointer operator (arrow operator `->`)</strong>: Used when you
+                            have a pointer to a structure.</li>
+                    </ol>
+                    <h4>Accessing with Dot Operator (`.`):</h4>
+                    <div class="syntax-box">structure_variable_name.member_name</div>
+                    <h4>Example:</h4>
+                    <pre><code class="language-c">
+#include <stdio.h>
+#include <string.h> // For strcpy
+
+struct book {
+    char name[50];
+    char author[50];
+    int pages;
+};
+
+int main() {
+    struct book b1;
+
+    // Assigning values to members
+    strcpy(b1.name, "The C Programming Language");
+    strcpy(b1.author, "Kernighan & Ritchie");
+    b1.pages = 272;
+
+    // Accessing and printing members
+    printf("Book Title: %s\n", b1.name);
+    printf("Author: %s\n", b1.author);
+    printf("Pages: %d\n", b1.pages);
+
+    return 0;
+}
+                    </code></pre>
+                    <div class="definition">
+                        <strong>Example from your data (inputting employee details):</strong>
+                        <pre><code class="language-c">
+#include <stdio.h>
+// #include <conio.h> // For clrscr, getch
+
+struct emp { // Using 'emp' as tag name as in image
+    int id;
+    char name[36]; // As per sizeof calculation in image
+    float sal;     // Changed to float as per image's output
+};
+
+int main() { // Standard int main()
+    struct emp e;
+    // clrscr(); // Non-standard
+
+    printf("Enter employee Id, Name, Salary: ");
+    // Example input: 5 Spidy 45000
+    scanf("%d %35s %f", &e.id, e.name, &e.sal); // %35s to prevent buffer overflow for name
+
+    printf("\nId: %d\n", e.id);
+    printf("Name: %s\n", e.name);
+    printf("Salary: %.2f\n", e.sal); // .2f for two decimal places
+    // getch(); // Non-standard
+    return 0;
+}
+/*
+Example Output:
+Enter employee Id, Name, Salary: 5 Spidy 45000
+Id: 5
+Name: Spidy
+Salary: 45000.00
+*/
+                        </code></pre>
+                        <p>Note: The `sizeof(struct emp)` being 40 bytes as mentioned in one image
+                            (`2byte+36byte+2byte`) implies `int` and `float` are 2 bytes each, which is common on older
+                            16-bit systems. On modern 32/64-bit systems, `int` and `float` are usually 4 bytes, so
+                            `sizeof(struct emp)` would be `4 + 36 + 4 = 44` bytes (plus potential padding).</p>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">E. Array of Structures <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>You can create an array where each element is a structure variable. This is useful for storing
+                        multiple records of the same type.</p>
+                    <h4>Example:</h4>
+                    <div class="syntax-box">struct employee emp_records[100]; // An array of 100 employee structures
+                    </div>
+                    <pre><code class="language-c">
+#include <stdio.h>
+#include <string.h>
+// #include <conio.h>
+
+struct student {
+    int rollno;
+    char name[20]; // Adjusted size for common names
+};
+
+int main() {
+    struct student st[5]; // Array of 5 student structures
+    int i;
+
+    // clrscr();
+    printf("Enter Records of 5 students:\n");
+    for (i = 0; i < 5; i++) {
+        printf("\nEnter Rollno for student %d: ", i + 1);
+        scanf("%d", &st[i].rollno);
+        printf("Enter Name for student %d: ", i + 1);
+        scanf("%19s", st[i].name); // Read string, %19s to prevent overflow
+    }
+
+    printf("\nStudent Information List:\n");
+    for (i = 0; i < 5; i++) {
+        printf("Rollno: %d, Name: %s\n", st[i].rollno, st[i].name);
+    }
+    // getch();
+    return 0;
+}
+                    </code></pre>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">F. Nested Structures <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>A structure can have another structure as one of its members. This is called a nested structure.
+                        There are two common ways to define nested structures:</p>
+                    <h4>1. By Separate Structure Definitions:</h4>
+                    <p>Define the inner structure first, then use it as a member type in the outer structure.</p>
+                    <pre><code class="language-c">
+#include <stdio.h>
+#include <string.h>
+
+// Inner structure definition
+struct Date {
+    int dd;
+    int mm;
+    int yyyy;
+};
+
+// Outer structure definition
+struct Employee {
+    int id;
+    char name[20];
+    struct Date doj; // Nested structure variable (date of joining)
+};
+
+int main() {
+    struct Employee emp1;
+
+    emp1.id = 101;
+    strcpy(emp1.name, "John Doe");
+    emp1.doj.dd = 15;   // Accessing member of nested structure
+    emp1.doj.mm = 6;
+    emp1.doj.yyyy = 2022;
+
+    printf("Employee ID: %d\n", emp1.id);
+    printf("Name: %s\n", emp1.name);
+    printf("Date of Joining: %02d/%02d/%d\n", emp1.doj.dd, emp1.doj.mm, emp1.doj.yyyy);
+
+    return 0;
+}
+                    </code></pre>
+
+                    <h4>2. By Embedded Structure Definition:</h4>
+                    <p>Define the inner structure directly within the outer structure's definition.</p>
+                    <pre><code class="language-c">
+#include <stdio.h>
+#include <string.h>
+
+struct Employee {
+    int id;
+    char name[20];
+    struct Date { // Embedded structure definition
+        int dd;
+        int mm;
+        int yyyy;
+    } doj; // Variable of the embedded struct Date type
+};
+// struct Employee emp1; // This would be how you declare after definition
+
+int main() {
+    struct Employee emp1;
+    emp1.id = 102;
+    strcpy(emp1.name, "Jane Smith");
+    emp1.doj.dd = 10;
+    emp1.doj.mm = 8;
+    emp1.doj.yyyy = 2023;
+
+    printf("Employee ID: %d\n", emp1.id);
+    printf("Name: %s\n", emp1.name);
+    printf("Date of Joining: %02d/%02d/%d\n", emp1.doj.dd, emp1.doj.mm, emp1.doj.yyyy);
+    return 0;
+}
+                    </code></pre>
+                    <h4>Accessing Nested Structure Members:</h4>
+                    <p>Use the dot operator sequentially:
+                        `Outer_Structure_Variable.Nested_Structure_Variable.member_name`
+                        <br>Example: `e1.doj.dd`
+                    </p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">G. Pointers to Structures <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>You can have pointers that point to structure variables. When using a pointer to a structure, its
+                        members are accessed using the <strong class="highlight">arrow operator (`->`)</strong> instead
+                        of the dot operator (`.`).</p>
+                    <div class="syntax-box">
+                        struct_pointer->member_name
+                        // This is equivalent to:
+                        (*struct_pointer).member_name
+                    </div>
+                    <p>The parentheses in `(*struct_pointer).member_name` are necessary because the dot operator (`.`)
+                        has higher precedence than the dereference operator (`*`).</p>
+                    <h4>Example:</h4>
+                    <pre><code class="language-c">
+#include <stdio.h>
+#include <string.h>
+
+struct student {
+    int id;
+    char name[30];
+    float percentage;
+};
+
+int main() {
+    struct student record1 = {1, "Raju", 90.5f};
+    struct student *ptr_record; // Pointer to struct student
+
+    ptr_record = &record1; // Assign address of record1 to the pointer
+
+    printf("Records of STUDENT1:\n");
+    printf("Id is: %d\n", ptr_record->id);         // Accessing member using arrow operator
+    printf("Name is: %s\n", ptr_record->name);
+    printf("Percentage is: %.2f\n\n", ptr_record->percentage);
+
+    // Equivalent access using dereference and dot operator
+    printf("Id (using (*ptr).id): %d\n", (*ptr_record).id);
+
+    return 0;
+}
+                    </code></pre>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">H. Structures and Functions <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Structures can be passed to functions and returned from functions, just like other data types.
+                    </p>
+                    <h4>Passing Structures to Functions:</h4>
+                    There are three main ways:
+                    <ol>
+                        <li><strong>Passing structure by value:</strong> A copy of the entire structure is passed to the
+                            function. Changes made to the structure members inside the function do not affect the
+                            original structure in the caller.</li>
+                        <li><strong>Passing structure by reference (address):</strong> The address of the structure
+                            variable is passed to the function. The function parameter is a pointer to the structure.
+                            Changes made to members via the pointer affect the original structure. This is generally
+                            more efficient for large structures as it avoids copying the entire structure.</li>
+                        <li>Using global structure variables (generally discouraged for good program design).</li>
+                    </ol>
+                    <h4>1. Passing Structure by Value:</h4>
+                    <pre><code class="language-c">
+#include <stdio.h>
+#include <string.h>
+
+struct student {
+    int id;
+    char name[20];
+    float percentage;
+};
+
+// Function that takes a structure by value
+void displayStudent(struct student record) {
+    printf("\n--- Student Details (Inside Function) ---\n");
+    printf("Id: %d\n", record.id);
+    printf("Name: %s\n", record.name);
+    printf("Percentage: %.2f\n", record.percentage);
+    // record.id = 100; // This would only change the local copy
+}
+
+int main() {
+    struct student record1;
+    record1.id = 1;
+    strcpy(record1.name, "Raju");
+    record1.percentage = 86.5f;
+
+    displayStudent(record1); // Passing structure by value
+
+    printf("\n--- Student Details (In Main After Call) ---\n");
+    printf("Id: %d\n", record1.id); // Original id remains 1
+    return 0;
+}
+                    </code></pre>
+                    <h4>2. Passing Structure by Reference (Address/Pointer):</h4>
+                    <pre><code class="language-c">
+#include <stdio.h>
+#include <string.h>
+
+struct student {
+    int id;
+    char name[20];
+    float percentage;
+};
+
+// Function that takes a pointer to a structure
+void modifyAndDisplayStudent(struct student *record_ptr) {
+    printf("\n--- Student Details (Inside Function - Before Modify) ---\n");
+    printf("Id: %d\n", record_ptr->id);
+    printf("Name: %s\n", record_ptr->name);
+    printf("Percentage: %.2f\n", record_ptr->percentage);
+
+    // Modify the original structure's data through the pointer
+    record_ptr->id = 101;
+    strcpy(record_ptr->name, "Raju Kumar");
+    record_ptr->percentage = 90.0f;
+
+    printf("\n--- Student Details (Inside Function - After Modify) ---\n");
+    printf("Id: %d\n", record_ptr->id);
+    printf("Name: %s\n", record_ptr->name);
+    printf("Percentage: %.2f\n", record_ptr->percentage);
+}
+
+int main() {
+    struct student record1;
+    record1.id = 1;
+    strcpy(record1.name, "Raju");
+    record1.percentage = 86.5f;
+
+    modifyAndDisplayStudent(&record1); // Passing address of the structure
+
+    printf("\n--- Student Details (In Main After Call) ---\n");
+    printf("Id: %d\n", record1.id); // Original id is now 101
+    printf("Name: %s\n", record1.name);
+    printf("Percentage: %.2f\n", record1.percentage);
+    return 0;
+}
+                    </code></pre>
+                </div>
+            </div>
+            <button type="button" class="collapsible">I. Self-Referential Structures <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>A self-referential structure is a structure that contains at least one member which is a <strong
+                            class="highlight">pointer to the structure of its own kind</strong>. These are fundamental
+                        for creating dynamic data structures like linked lists, trees, etc.</p>
+                    <h4>Syntax:</h4>
+                    <div class="syntax-box">
+                        struct tag_name {
+                        data_type member1;
+                        data_type member2;
+                        ...
+                        struct tag_name *pointer_to_self; // Pointer to another struct of the same type
+                        };
+                    </div>
+                    <h4>Example (Node for a linked list):</h4>
+                    <pre><code class="language-c">
+#include <stdio.h>
+#include <stdlib.h> // For malloc
+
+struct Node {
+    int data;
+    struct Node *next; // Pointer to the next node of the same type
+};
+
+int main() {
+    struct Node *head = NULL;
+    struct Node *second = NULL;
+    struct Node *third = NULL;
+
+    // Allocate 3 nodes in the heap
+    head = (struct Node*)malloc(sizeof(struct Node));
+    second = (struct Node*)malloc(sizeof(struct Node));
+    third = (struct Node*)malloc(sizeof(struct Node));
+
+    if(head == NULL || second == NULL || third == NULL){
+        printf("Memory allocation failed\n");
+        return 1;
+    }
+
+    head->data = 1;      // assign data in first node
+    head->next = second; // Link first node with the second node
+
+    second->data = 2;    // assign data to second node
+    second->next = third;
+
+    third->data = 3;     // assign data to third node
+    third->next = NULL;  // Mark end of the list
+
+    // Traversing the linked list
+    struct Node *current = head;
+    printf("Linked List: ");
+    while (current != NULL) {
+        printf("%d -> ", current->data);
+        current = current->next;
+    }
+    printf("NULL\n");
+
+    // Free allocated memory
+    free(head);
+    free(second);
+    free(third);
+
+    return 0;
+}
+                    </code></pre>
+                </div>
+            </div>
+            <button type="button" class="collapsible">J. Difference Between Array and Structure <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Array</th>
+                                <th>Structure</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Data Type of Elements</strong></td>
+                                <td>Collection of homogeneous (same type) data.</td>
+                                <td>Collection of heterogeneous (different types) data.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Accessing Elements</strong></td>
+                                <td>Elements are accessed using an integer index (e.g., `arr[i]`).</td>
+                                <td>Members are accessed using the dot (`.`) operator or arrow (`->`) operator (e.g.,
+                                    `s1.member`, `ptr->member`).</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Memory Allocation</strong></td>
+                                <td>Generally allocates static memory (size fixed at compile time, unless using dynamic
+                                    allocation with pointers).</td>
+                                <td>Can be allocated statically or dynamically. The structure itself defines a type;
+                                    variables of that type hold the memory.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Element Access Time</strong></td>
+                                <td>Generally faster due to direct indexing and contiguous memory.</td>
+                                <td>Can be slightly slower due to potential offsets and member lookups, though typically
+                                    very efficient.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p><em>Note: The point "Structures allocate dynamic memory" in your image is a bit misleading.
+                            Structure variables themselves can be allocated statically or dynamically. The structure
+                            *definition* creates a type. Dynamic allocation uses functions like `malloc` which return
+                            pointers that can point to structure instances.</em></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="unions">
+            <h2><i class="fas fa-layer-group"></i>2. Unions (union)</h2>
+            <p>A <strong class="tooltip">union<span class="tooltiptext">A user-defined data type that allows storing
+                        different data types in the same memory location.</span></strong> is a special user-defined data
+                type in C that allows storing different data types in the <strong class="highlight">same memory
+                    location</strong>. While conceptually similar to structures in syntax, unions differ significantly
+                in terms of storage.</p>
+            <ul>
+                <li>In a structure, each member has its own distinct memory location. The total size of a structure is
+                    the sum of the sizes of its members (plus any padding for alignment).</li>
+                <li>In a union, all members share the <strong class="highlight">same single memory location</strong>.
+                    The size of a union is the size of its largest member.</li>
+                <li>Because members share memory, <strong class="highlight">you can only access one member of a union at
+                        a time meaningfully</strong>. If you store a value in one member and then try to access another
+                    member, the result might be garbage or a misinterpretation of the stored bits, unless the types are
+                    compatible and you understand the bit representation.</li>
+            </ul>
+            <div class="diagram-container">
+                <h4>Structure vs. Union Memory Layout:</h4>
+                <img src="https://i.imgur.com/1G5w7jY.png" alt="Structure vs Union memory">
+                <img src="https://i.imgur.com/xW2g6Gq.png" alt="Structure vs Union memory size example"
+                    style="margin-top:1em;">
+            </div>
+
+            <button type="button" class="collapsible">A. Defining and Using Unions <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>Syntax:</h4>
+                    <div class="syntax-box">
+                        union union_name {
+                        data_type member1;
+                        data_type member2;
+                        ...
+                        data_type memberN;
+                        }; // Don't forget the semicolon!
+                    </div>
+                    <h4>Example:</h4>
+                    <pre><code class="language-c">
+#include <stdio.h>
+#include <string.h>
+
+union Data {
+    int i;
+    float f;
+    char str[20]; // Largest member will determine the size of the union
+};
+
+int main() {
+    union Data data_item;
+
+    printf("Size of union Data: %zu bytes\n\n", sizeof(data_item));
+
+    data_item.i = 10;
+    printf("data_item.i : %d\n", data_item.i);
+    // Accessing data_item.f or data_item.str now would be problematic
+    // as 'i' was the last member assigned.
+
+    data_item.f = 220.5;
+    printf("data_item.f : %f\n", data_item.f);
+    // Accessing data_item.i now might give garbage or misinterpretation
+    // printf("data_item.i after assigning f: %d\n", data_item.i);
+
+    strcpy(data_item.str, "C Programming");
+    printf("data_item.str : %s\n", data_item.str);
+    // Accessing data_item.i or data_item.f now would be problematic
+    // printf("data_item.f after assigning str: %f\n", data_item.f);
+
+    // Correct usage: Access the member that was last written to.
+    printf("\nAccessing last written member correctly:\n");
+    data_item.i = 99;
+    printf("Integer value: %d\n", data_item.i);
+
+    data_item.f = 77.7f;
+    printf("Float value: %f\n", data_item.f);
+    return 0;
+}
+                    </code></pre>
+                    <p>In the example from your data where `id` gets corrupted after `name` is assigned, it's because
+                        `name` (a char array) is likely larger and overwrites the memory used by `id` when the string is
+                        copied into `data_item.name`.</p>
+                </div>
+            </div>
+            <button type="button" class="collapsible">B. Difference Between Structure and Union <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Structure (`struct`)</th>
+                                <th>Union (`union`)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Keyword</strong></td>
+                                <td>Uses `struct` keyword.</td>
+                                <td>Uses `union` keyword.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Memory Allocation</strong></td>
+                                <td>Allocates separate memory space for each member. Total size is sum of member sizes
+                                    (plus padding).</td>
+                                <td>Allocates one common (shared) storage space for all its members. Size is determined
+                                    by the largest member.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Member Access</strong></td>
+                                <td>All members can be accessed and hold their values simultaneously.</td>
+                                <td>Only one member can be meaningfully accessed at a time (typically the last one
+                                    written to).</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Memory Usage</strong></td>
+                                <td>Occupies more memory space if members are diverse.</td>
+                                <td>Occupies less memory space, efficient when only one member is needed at any point.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Purpose</strong></td>
+                                <td>To group different related data items together.</td>
+                                <td>To use the same memory location for multiple purposes (for different types of data,
+                                    but not at the same time).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="bit-fields">
+            <h2><i class="fas fa-border-style"></i>3. Bit-Fields</h2>
+            <p>Bit-fields allow you to define structure members that occupy a specific number of bits, rather than a
+                full byte or word. This is useful for packing data tightly, especially when dealing with hardware
+                registers or data formats where individual bits have specific meanings.</p>
+            <h4>Syntax:</h4>
+            <div class="syntax-box">
+                struct {
+                type [member_name] : width;
+                type [member_name] : width;
+                ...
+                };
+            </div>
+            <ul>
+                <li><strong>`type`</strong>: An integer type (e.g., `int`, `unsigned int`, `signed int`).</li>
+                <li><strong>`member_name`</strong>: The name of the bit-field (optional for unnamed padding fields).
+                </li>
+                <li><strong>`width`</strong>: The number of bits the member will occupy. Must be less than or equal to
+                    the bit width of the specified `type`.</li>
+            </ul>
+            <h4>Example:</h4>
+            <pre><code class="language-c">
+#include <stdio.h>
+#include <string.h> // For sizeof on some systems (though not strictly needed for this ex)
+
+// Define a structure with bit-fields
+struct Status {
+    unsigned int isActive : 1;  // 1 bit for active status (0 or 1)
+    unsigned int userMode : 2;  // 2 bits for user mode (0 to 3)
+    unsigned int colorCode : 3; // 3 bits for color code (0 to 7)
+    // Potential padding by compiler to align to byte/word boundary
+};
+
+int main() {
+    struct Status current_status;
+
+    printf("Sizeof(struct Status): %zu bytes\n", sizeof(struct Status));
+    // The size can be larger than the sum of bits due to padding/alignment.
+    // E.g., on many systems, it might be 4 bytes (size of an int).
+
+    current_status.isActive = 1;
+    current_status.userMode = 2; // Binary 10
+    current_status.colorCode = 5; // Binary 101
+
+    printf("Is Active: %u\n", current_status.isActive);
+    printf("User Mode: %u\n", current_status.userMode);
+    printf("Color Code: %u\n", current_status.colorCode);
+
+    // Example of exceeding bit-field width (behavior depends on compiler/type)
+    // If 'age' is unsigned int : 3;
+    // Age.age = 4; // OK (binary 100)
+    // Age.age = 7; // OK (binary 111)
+    // Age.age = 8; // Overflow. Value stored might be 0 (8 is 1000 in binary, only lower 3 bits '000' stored)
+
+    return 0;
+}
+            </code></pre>
+            <p>Bit-fields are machine-dependent and their exact layout in memory can vary between compilers and
+                architectures.</p>
+        </section>
+
+        <section class="content-section" id="typedef">
+            <h2><i class="fas fa-signature"></i>4. `typedef` Keyword</h2>
+            <p>The `typedef` keyword in C allows you to create an <strong class="tooltip">alias<span
+                        class="tooltiptext">An alternative name.</span></strong> or a new name for an existing data
+                type. This can improve code readability and make complex type declarations simpler.</p>
+            <h4>Syntax:</h4>
+            <div class="syntax-box">typedef existing_data_type new_type_name;</div>
+            <h4>Advantages:</h4>
+            <ol>
+                <li>Provides a more meaningful way of declaring variables.</li>
+                <li>Increases the readability of the program.</li>
+                <li>Can simplify declarations of complex types like structures, unions, or function pointers.</li>
+            </ol>
+            <h4>Examples:</h4>
+            <pre><code class="language-c">
+#include <stdio.h>
+// #include <conio.h>
+
+// 1. Typedef for basic types
+typedef int Integer;
+typedef float RealNumber;
+
+// 2. Typedef for a structure
+struct Point {
+    int x;
+    int y;
+};
+typedef struct Point Point2D; // Point2D is now an alias for struct Point
+
+// 3. Typedef for a structure directly
+typedef struct {
+    char title[100];
+    char author[50];
+    int year;
+} Book; // Book is now a type name
+
+// 4. Typedef for a pointer
+typedef int* IntPtr;
+
+int main() {
+    Integer a = 10;        // Same as int a = 10;
+    Integer b = 20, s;
+    // clrscr();
+
+    printf("a = %d, b = %d\n", a, b);
+    s = a + b;
+    printf("Sum (using typedef Integer) = %d\n\n", s);
+
+    Point2D p1 = {5, 7}; // Same as struct Point p1 = {5, 7};
+    printf("Point p1: (%d, %d)\n\n", p1.x, p1.y);
+
+    Book myBook = {"The Hitchhiker's Guide", "Douglas Adams", 1979};
+    printf("Book: %s by %s (%d)\n\n", myBook.title, myBook.author, myBook.year);
+    
+    IntPtr ptr_a = &a; // Same as int *ptr_a = &a;
+    printf("Value pointed to by ptr_a: %d\n", *ptr_a);
+
+    // getch();
+    return 0;
+}
+            </code></pre>
+            <p><strong>`typedef` and Pointers:</strong> `typedef` can be particularly useful with pointers. For example,
+                `int* x, y;` declares `x` as a pointer to int (`int*`) but `y` as a plain `int`. Using `typedef int*
+                IntPtr; IntPtr x, y;` declares both `x` and `y` as pointers to int.</p>
+        </section>
+
+        <section class="content-section" id="enumerations">
+            <h2><i class="fas fa-list-ol"></i>5. Enumerated Data Types (`enum`)</h2>
+            <p>An <strong class="tooltip">enumeration (`enum`)<span class="tooltiptext">A user-defined data type
+                        consisting of a set of named integer constants.</span></strong> is a user-defined data type in C
+                that consists of a set of named integer constants, called <strong
+                    class="highlight">enumerators</strong>. It improves code readability and maintainability by using
+                meaningful names instead of arbitrary integer values.</p>
+            <h4>Syntax:</h4>
+            <div class="syntax-box">
+                enum tag_name {
+                enumerator1, // Default value 0
+                enumerator2, // Default value 1
+                enumerator3 = value, // Can assign specific integer values
+                enumerator4, // Will be 'value + 1'
+                ...
+                };
+            </div>
+            <ul>
+                <li>`enum` is the keyword.</li>
+                <li>`tag_name` is an optional name for the enumeration type.</li>
+                <li>`enumerator1, enumerator2, ...` are identifiers that represent integer constants.</li>
+                <li>By default, the first enumerator has the value `0`, the second `1`, and so on.</li>
+                <li>You can explicitly assign integer values to enumerators. Subsequent unassigned enumerators will take
+                    the value of the previous enumerator plus one.</li>
+            </ul>
+            <div class="diagram-container">
+                <h4>Enum Definition Visual:</h4>
+                <img src="https://i.imgur.com/E0uY2t0.png" alt="Enum definition week">
+            </div>
+            <h4>Example:</h4>
+            <pre><code class="language-c">
+#include <stdio.h>
+// #include <conio.h>
+
+enum Week { Sun, Mon, Tue, Wed, Thu, Fri, Sat };
+// Sun=0, Mon=1, Tue=2, Wed=3, Thu=4, Fri=5, Sat=6
+
+enum Colors { Red = 1, Green, Blue = 5, Yellow };
+// Red=1, Green=2, Blue=5, Yellow=6
+
+int main() {
+    enum Week today, tomorrow;
+    // clrscr();
+
+    today = Wed;
+    printf("Today is day number: %d\n", today); // Output: 3
+
+    tomorrow = today + 1; // Can perform arithmetic as they are ints
+    if (tomorrow == Thu) {
+        printf("Tomorrow is Thursday (day %d).\n", tomorrow); // Output: 4
+    }
+
+    // Example from your data
+    enum ABC { x, y, z }; // x=0, y=1, z=2
+    int a_val;
+    a_val = x + y + z; // 0 + 1 + 2
+    printf("Sum of x+y+z = %d\n", a_val); // Output: 3
+
+    printf("\nDays of the week (as integers):\n");
+    for (int i = Sun; i <= Sat; i++) {
+        printf("%d ", i);
+    }
+    printf("\n");
+    // getch();
+    return 0;
+}
+            </code></pre>
+            <p>Enumerations make the code more self-documenting and less prone to errors caused by using "magic
+                numbers." The size of an `enum` variable is typically the size of an `int`.</p>
+        </section>
+
+        <div class="page-navigation">
+            <a href="topic-6.html" class="nav-button back-button">
+                <i class="fas fa-arrow-left"></i> Prev: Pointers
+            </a>
+            <a href="../c-programming.html" class="nav-button back-button"
+                style="margin-left: auto; margin-right: auto;">
+                <i class="fas fa-list"></i> Back to Syllabus
+            </a>
+            <a href="topic-8.html" class="nav-button next-button">
+                Next: File Handling <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <footer class="page-footer">
+            © 2024 Eduvision. All rights reserved. Structuring data in C.
+        </footer>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script>
+        Prism.plugins.autoloader.languages_path = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/';
+
+        var coll = document.getElementsByClassName("collapsible");
+        for (var i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            });
+        }
+
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+            } else {
+                body.classList.remove('dark-mode');
+            }
+            localStorage.setItem('theme', theme);
+            Prism.highlightAll();
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (body.classList.contains('dark-mode')) {
+                applyTheme('light');
+            } else {
+                applyTheme('dark');
+            }
+        });
+
+        const savedTheme = localStorage.getItem('theme') ||
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        applyTheme(savedTheme);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pointers in C - Eduvision</title>
+    <meta name="description"
+        content="Learn about pointers in C programming: introduction, declaration, initialization, dereferencing, pointer arithmetic, pointers with arrays, strings, functions, pointers to pointers, and dynamic memory allocation (malloc, calloc, realloc, free).">
+    <meta name="keywords"
+        content="C pointers, pointer arithmetic, pointers and arrays, pointers and strings, function pointers, dynamic memory allocation, malloc, calloc, C programming tutorial">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        :root {
+            /* Light Mode Defaults */
+            --bg-color: #f0f4f8;
+            --card-bg: #ffffff;
+            --primary-color: #2563eb;
+            --secondary-color: #4f46e5;
+            --accent-color: #10b981;
+            --text-color: #374151;
+            --heading-color: #111827;
+            --border-color: #d1d5db;
+            --gradient-start: var(--primary-color);
+            --gradient-end: var(--secondary-color);
+            --font-main: 'Poppins', sans-serif;
+            --font-logo: 'Nunito', sans-serif;
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --card-shadow-color: rgba(0, 0, 0, 0.05);
+            --link-color: var(--primary-color);
+            --link-hover-color: #1d4ed8;
+            --link-hover-bg: #eff6ff;
+            --collapsible-content-bg: rgba(0, 0, 0, 0.02);
+            --definition-bg: rgba(37, 99, 235, 0.05);
+            --table-header-bg: var(--primary-color);
+            --table-header-text: white;
+            --table-row-even-bg: rgba(0, 0, 0, 0.015);
+            --theme-toggle-bg: var(--card-bg);
+            --theme-toggle-icon: var(--primary-color);
+            --theme-toggle-hover-bg: var(--primary-color);
+            --theme-toggle-hover-icon: white;
+            --tooltip-bg: #333;
+            --tooltip-text: #fff;
+            --diagram-bg: var(--collapsible-content-bg);
+            --diagram-border: var(--border-color);
+        }
+
+        body.dark-mode {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-color: #c9d1d9;
+            --heading-color: #f0f6fc;
+            --border-color: #30363d;
+            --shadow-color: rgba(0, 0, 0, 0.25);
+            --card-shadow-color: rgba(0, 0, 0, 0.2);
+            --link-color: #58a6ff;
+            --link-hover-color: #80baff;
+            --link-hover-bg: rgba(88, 166, 255, 0.1);
+            --collapsible-content-bg: rgba(255, 255, 255, 0.03);
+            --definition-bg: rgba(88, 166, 255, 0.1);
+            --table-header-bg: var(--primary-color);
+            --table-row-even-bg: rgba(255, 255, 255, 0.03);
+            --theme-toggle-bg: var(--card-bg);
+            --tooltip-bg: #c9d1d9;
+            --tooltip-text: #0d1117;
+            --diagram-bg: rgba(255, 255, 255, 0.05);
+            --diagram-border: #444c56;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .eduvision-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: var(--font-logo);
+        }
+
+        .eduvision-logo .logo-text {
+            color: var(--heading-color);
+        }
+
+        body.dark-mode .eduvision-logo .logo-text {
+            color: #f0f6fc;
+        }
+
+        .eduvision-logo .text-yellow-300 {
+            color: #f59e0b !important;
+        }
+
+        .eduvision-logo .group:hover .text-yellow-300 {
+            color: #fcd34d !important;
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+            color: var(--theme-toggle-hover-icon);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-top: 80px;
+            margin-bottom: 2rem;
+            padding: 2rem 1rem;
+            border-radius: 12px;
+            background: var(--card-bg);
+            box-shadow: 0 10px 30px var(--card-shadow-color);
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--heading-color);
+            background: linear-gradient(90deg, var(--gradient-start), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 1.15rem;
+            color: var(--text-color);
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .content-section {
+            background-color: var(--card-bg);
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px var(--card-shadow-color);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s, border-color 0.3s;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px var(--shadow-color);
+        }
+
+        .content-section h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--heading-color);
+            margin-top: 0;
+            margin-bottom: 1.8rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .content-section h2 i {
+            margin-right: 1rem;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section .definition {
+            margin-bottom: 1.2rem;
+            font-size: 1rem;
+        }
+
+        .content-section ul {
+            padding-left: 25px;
+            list-style: none;
+        }
+
+        .content-section ul li::before {
+            content: "\f138";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--primary-color);
+            margin-right: 12px;
+            display: inline-block;
+            font-size: 0.9em;
+        }
+
+        pre[class*="language-"] {
+            padding: 1.5em;
+            margin: 1.5em 0;
+            overflow: auto;
+            border-radius: 8px;
+            background: #2d2d2d;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode pre[class*="language-"] {
+            background: #1e1e1e;
+        }
+
+        code[class*="language-"],
+        pre[class*="language-"] {
+            font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+            font-size: 0.95em;
+        }
+
+        .collapsible {
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: white;
+            cursor: pointer;
+            padding: 15px 25px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            transition: filter 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .collapsible:hover {
+            filter: brightness(1.15);
+        }
+
+        .collapsible.active {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .collapsible-content {
+            padding: 0 22px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out, background-color 0.3s;
+            background-color: var(--collapsible-content-bg);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            margin-bottom: 1.2rem;
+            border: 1px solid var(--border-color);
+            border-top: none;
+        }
+
+        .collapsible-content>div {
+            padding: 20px 0;
+        }
+
+        .collapsible .icon::before {
+            content: '\f078';
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible.active .icon::before {
+            transform: rotate(-180deg);
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 10px var(--card-shadow-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .custom-table th,
+        .custom-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        .custom-table th {
+            background-color: var(--table-header-bg);
+            color: var(--table-header-text);
+            font-weight: 600;
+        }
+
+        .custom-table tr:nth-child(even) {
+            background-color: var(--table-row-even-bg);
+        }
+
+        .custom-table tr:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark-mode .custom-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted var(--accent-color);
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: max-content;
+            max-width: 250px;
+            background-color: var(--tooltip-bg);
+            color: var(--tooltip-text);
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .definition {
+            background-color: var(--definition-bg);
+            border-left: 5px solid var(--primary-color);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+            font-style: normal;
+        }
+
+        .definition strong {
+            color: var(--primary-color);
+        }
+
+        .page-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            margin-bottom: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s, color 0.2s;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            font-size: 1rem;
+        }
+
+        .nav-button i.fa-arrow-left {
+            margin-right: 0.5em;
+        }
+
+        .nav-button i.fa-arrow-right {
+            margin-left: 0.5em;
+        }
+
+        .back-button {
+            background-color: var(--card-bg);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .back-button:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+        }
+
+        .next-button {
+            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+            color: white;
+        }
+
+        .next-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+            filter: brightness(1.1);
+        }
+
+        .page-footer {
+            text-align: center;
+            padding: 2.5rem 0;
+            margin-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: #6b7280;
+            transition: border-top-color 0.3s;
+        }
+
+        body.dark-mode .page-footer {
+            color: #9ca3af;
+        }
+
+        .diagram-container {
+            background-color: var(--diagram-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem auto;
+            text-align: center;
+            border: 1px solid var(--diagram-border);
+            max-width: 600px;
+        }
+
+        .diagram-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+        }
+
+        .diagram-container h4 {
+            margin-top: 0;
+            color: var(--accent-color);
+        }
+
+        .syntax-box {
+            background-color: var(--collapsible-content-bg);
+            padding: 1em;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            margin: 1em 0;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            font-size: 0.9em;
+            color: var(--text-color);
+        }
+
+        body.dark-mode .syntax-box {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .advantages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .advantage-card {
+            background-color: var(--collapsible-content-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent-color);
+            box-shadow: 0 4px 8px var(--card-shadow-color);
+        }
+
+        .advantage-card h4 {
+            color: var(--accent-color);
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            font-size: 1.15rem;
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.4rem;
+            }
+
+            .content-section h2 {
+                font-size: 1.7rem;
+            }
+
+            .content-section h2 i {
+                font-size: 1.5rem;
+            }
+
+            #theme-toggle {
+                top: 15px;
+                right: 15px;
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+
+            .eduvision-logo {
+                top: 15px;
+                left: 15px;
+            }
+
+            .eduvision-logo .text-2xl {
+                font-size: 1.5rem;
+            }
+
+            .page-header {
+                margin-top: 70px;
+                padding: 1.5rem 0.5rem;
+            }
+
+            .content-section {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .page-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-button {
+                width: 100%;
+                justify-content: center;
+                padding: 15px 20px;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../../index.html" class="flex items-center group">
+                <span class="logo-text">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="logo-text">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>Pointers in C</h1>
+            <p>Unlocking direct memory manipulation and advanced programming techniques.</p>
+        </header>
+
+        <section class="content-section" id="intro-pointers">
+            <h2><i class="fas fa-map-marker-alt"></i>1. Introduction to Pointers</h2>
+            <div class="definition">
+                A <strong class="tooltip">pointer<span class="tooltiptext">A derived data type in C.</span></strong> is
+                a variable that stores/holds the <strong class="highlight">memory address</strong> of another variable
+                of the same data type. It is also known as a locator or indicator that points to an address of a value.
+            </div>
+            <div class="diagram-container">
+                <img src="https://i.imgur.com/C9Nn0gG.png" alt="Pointer pointing to a variable">
+                <p>Here, the 'pointer' variable stores the address where 'variable' (which holds the actual value) is
+                    located in memory.</p>
+            </div>
+
+            <h3>Benefits of Using Pointers:</h3>
+            <div class="advantages-grid">
+                <div class="advantage-card">
+                    <h4>Efficient Array & Structure Handling</h4>
+                    <p>Pointers provide an efficient way to access and manipulate elements of arrays and members of
+                        structures.</p>
+                </div>
+                <div class="advantage-card">
+                    <h4>Function Arguments</h4>
+                    <p>Pointers allow passing arguments to functions by reference, enabling functions to modify the
+                        original variables. They also allow passing functions as arguments to other functions.</p>
+                </div>
+                <div class="advantage-card">
+                    <h4>Reduced Program Length & Execution Time</h4>
+                    <p>Direct memory access can sometimes lead to more concise code and faster execution, especially in
+                        system-level programming.</p>
+                </div>
+                <div class="advantage-card">
+                    <h4>Dynamic Memory Management</h4>
+                    <p>Pointers are essential for dynamic memory allocation (e.g., using `malloc`, `calloc`), allowing
+                        programs to request memory at runtime.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="pointer-basics">
+            <h2><i class="fas fa-pencil-ruler"></i>2. Pointer Basics: Declaration, Initialization, and Operators</h2>
+
+            <button type="button" class="collapsible">A. Declaration of a Pointer <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>A pointer is declared by specifying the data type of the variable it will point to, followed by
+                        an asterisk (`*`) and the pointer variable name.</p>
+                    <h4>Syntax:</h4>
+                    <div class="syntax-box">data_type *pointer_variable_name;</div>
+                    <h4>Examples:</h4>
+                    <div class="syntax-box">
+                        int *p; // p is a pointer to an integer
+                        char *cptr; // cptr is a pointer to a character
+                        float *fptr; // fptr is a pointer to a float
+                    </div>
+                    <p><strong>Note:</strong> A `void` pointer (`void *ptr;`) is a generic pointer that can point to any
+                        data type. However, it cannot be dereferenced directly and must be cast to a specific pointer
+                        type before accessing the value it points to. It's often used in functions like `malloc` which
+                        return a generic memory block address.</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">B. Initialization of a Pointer <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Pointer initialization is the process of assigning the address of a variable to a pointer
+                        variable. A pointer variable must contain the address of a variable of the <strong
+                            class="highlight">same data type</strong> it is declared to point to.</p>
+                    <h4>Syntax:</h4>
+                    <div class="syntax-box">
+                        data_type variable_name;
+                        data_type *pointer_name;
+                        pointer_name = &variable_name; // Assigning address of 'variable_name' to 'pointer_name'
+                    </div>
+                    <h4>Example:</h4>
+                    <pre><code class="language-c">
+int a = 10;
+int *ptr;    // Pointer declaration
+ptr = &a;    // Pointer initialization (ptr now holds the address of a)
+
+// Declaration and initialization together
+int b = 20;
+int *ptr_b = &b;
+                    </code></pre>
+                    <p><strong>Important:</strong> A pointer variable always points to the same type of data.
+                    <pre><code class="language-c">
+float x;
+int *p_int;
+// p_int = &x; // ERROR: Type mismatch (int pointer cannot store address of float)
+                    </code></pre>
+                    </p>
+                    <div class="diagram-container">
+                        <h4>Pointer Example Visual:</h4>
+                        <img src="https://i.imgur.com/Y8ZqU2c.png" alt="Pointer storing address of a variable">
+                        <p>In the figure, pointer `p` (located at address `aaa3`) stores the address `fff4`, which is
+                            the location of the `number` variable. The value of `number` is 50.</p>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">C. Pointer Operators: `&` and `*` <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>C provides two fundamental pointer operators:</p>
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Symbol</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="operator-col">&</td>
+                                <td>Address-of Operator (Reference Operator)</td>
+                                <td>Returns the memory address of its operand (a variable).</td>
+                            </tr>
+                            <tr>
+                                <td class="operator-col">*</td>
+                                <td>Indirection Operator (Dereference Operator)</td>
+                                <td>Accesses the value stored at the memory address pointed to by its operand (a
+                                    pointer).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>Dereferencing a Pointer:</h4>
+                    <p>Once a pointer has been assigned the address of a variable, it can be <strong
+                            class="tooltip">dereferenced<span class="tooltiptext">Accessing the value stored at the
+                                memory location pointed to by the pointer.</span></strong> using the indirection
+                        operator (`*`) to access the value of that variable.</p>
+                    <pre><code class="language-c">
+#include <stdio.h>
+
+int main() {
+    int a = 10;
+    int *p;      // Declare an integer pointer
+
+    p = &a;      // Assign the address of 'a' to 'p'
+
+    printf("Value of a: %d\n", a);
+    printf("Value at address stored in p (*p): %d\n", *p); // Dereferencing p
+
+    printf("Address of a (&a): %p\n", (void *)&a); // Use %p for addresses, cast to void*
+    printf("Address stored in p (value of p): %p\n", (void *)p);
+    printf("Address of pointer p itself (&p): %p\n", (void *)&p);
+
+    *p = 25; // Modifying the value of 'a' through the pointer 'p'
+    printf("New value of a (after *p = 25): %d\n", a);
+
+    return 0;
+}
+/*
+Example Output (addresses will vary):
+Value of a: 10
+Value at address stored in p (*p): 10
+Address of a (&a): 0x7ffc12345678
+Address stored in p (value of p): 0x7ffc12345678
+Address of pointer p itself (&p): 0x7ffc1234567c
+New value of a (after *p = 25): 25
+*/
+                    </code></pre>
+                    <p>Note: `%p` is the correct format specifier for printing pointer addresses with `printf`. It's
+                        good practice to cast the pointer to `(void *)` when using `%p`.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="key-points-pointers">
+            <h2><i class="fas fa-key"></i>3. Key Points to Remember About Pointers</h2>
+            <ul>
+                <li>A normal variable stores a value, whereas a pointer variable stores the <strong
+                        class="highlight">address</strong> of another variable.</li>
+                <li>The content (value) of a C pointer is always a whole number representing a memory address.</li>
+                <li>It's good practice to initialize pointers, often to `NULL` if they don't point to a valid address
+                    immediately. Example: `int *p = NULL;`</li>
+                <li>The value of a <strong class="tooltip">NULL pointer<span class="tooltiptext">A pointer that does not
+                            point to any valid memory location. Often represented by the macro `NULL` (typically
+                            `(void*)0`).</span></strong> is conceptually zero. Dereferencing a NULL pointer leads to
+                    undefined behavior (often a crash).</li>
+                <li>The `&` symbol (address-of operator) is used to get the address of a variable.</li>
+                <li>The `*` symbol (indirection/dereference operator) is used to get the value stored at the address
+                    pointed to by a pointer.</li>
+                <li>If a pointer is assigned `NULL`, it means it is pointing to nothing.</li>
+                <li>Two pointers (of the same type, typically pointing within the same array) can be subtracted to find
+                    the number of elements between them.</li>
+                <li>Pointer addition (pointer + pointer), multiplication, and division are generally not allowed or
+                    meaningful. However, adding/subtracting an integer to/from a pointer (pointer arithmetic) is valid
+                    and common.</li>
+                <li>The size of any pointer variable is typically the same on a given system architecture (e.g., 4 bytes
+                    on a 32-bit system, 8 bytes on a 64-bit system), regardless of the data type it points to. (The
+                    slide saying "2 byte for 16 bit compiler" is historically relevant but modern systems are
+                    different).</li>
+            </ul>
+        </section>
+
+        <section class="content-section" id="pointer-arithmetic">
+            <h2><i class="fas fa-plus-square"></i>4. Pointer Arithmetic</h2>
+            <p>C allows certain arithmetic operations on pointers. These operations are scaled according to the size of
+                the data type the pointer points to.</p>
+            <p>Four arithmetic operations can be used on pointers:</p>
+            <ul>
+                <li>Increment (`++`)</li>
+                <li>Decrement (`--`)</li>
+                <li>Addition of an integer (`+`)</li>
+                <li>Subtraction of an integer (`-`)</li>
+                <li>Subtraction of two pointers (of the same type, yields an integer representing the number of elements
+                    between them)</li>
+            </ul>
+
+            <h4>Incrementing a Pointer:</h4>
+            <p>When a pointer is incremented, its value (the address it holds) increases by the size of the data type it
+                points to.
+                <br>Formula: `new_address = current_address + (1 * sizeof(data_type))`
+            </p>
+            <div class="diagram-container">
+                <h4>Pictorial Representation of Pointer Increment:</h4>
+                <img src="https://i.imgur.com/K2q8jVb.png" alt="Pointer Increment Diagram">
+            </div>
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Data Type of Pointer</th>
+                        <th>Older Address Stored</th>
+                        <th>Next Address after Increment (ptr++)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>`int` (assuming 4 bytes)</td>
+                        <td>1000</td>
+                        <td>1004</td>
+                    </tr>
+                    <tr>
+                        <td>`float` (assuming 4 bytes)</td>
+                        <td>1000</td>
+                        <td>1004</td>
+                    </tr>
+                    <tr>
+                        <td>`char` (assuming 1 byte)</td>
+                        <td>1000</td>
+                        <td>1001</td>
+                    </tr>
+                    <tr>
+                        <td>`int` (assuming 2 bytes - older systems)</td>
+                        <td>1000</td>
+                        <td>1002</td>
+                    </tr>
+                </tbody>
+            </table>
+            <pre><code class="language-c">
+#include <stdio.h>
+int main() {
+    int number = 50;
+    int *p = &number;
+    printf("Address of p variable is %p\n", (void *)p);
+    p++; // Increment pointer
+    printf("After increment: Address of p variable is %p\n", (void *)p);
+    // Output difference will be sizeof(int)
+    return 0;
+}
+            </code></pre>
+
+            <h4>Decrementing a Pointer:</h4>
+            <p>When a pointer is decremented, its value decreases by the size of the data type it points to.
+                <br>Formula: `new_address = current_address - (1 * sizeof(data_type))`
+            </p>
+            <pre><code class="language-c">
+#include <stdio.h>
+int main() {
+    int arr[] = {10, 20, 30};
+    int *p = &arr[1]; // p points to 20
+    printf("Address stored in p: %p\n", (void *)p);
+    p--; // Decrement pointer, now points to 10
+    printf("After decrement, address in p: %p, value *p: %d\n", (void *)p, *p);
+    return 0;
+}
+            </code></pre>
+
+            <h4>Adding an Integer to a Pointer:</h4>
+            <p>Adding an integer `n` to a pointer moves the pointer forward by `n * sizeof(data_type)` bytes.
+                <br>Formula: `new_address = current_address + (integer_value * sizeof(data_type))`
+            </p>
+            <pre><code class="language-c">
+#include <stdio.h>
+int main() {
+    int numbers[] = {10, 20, 30, 40, 50};
+    int *ptr = numbers; // ptr points to numbers[0]
+    printf("Initial address: %p, value: %d\n", (void *)ptr, *ptr);
+    ptr = ptr + 3; // Move pointer 3 elements forward
+    printf("After ptr = ptr + 3, address: %p, value: %d\n", (void *)ptr, *ptr); // Points to 40
+    return 0;
+}
+            </code></pre>
+
+            <h4>Subtracting an Integer from a Pointer:</h4>
+            <p>Subtracting an integer `n` from a pointer moves the pointer backward by `n * sizeof(data_type)` bytes.
+                <br>Formula: `new_address = current_address - (integer_value * sizeof(data_type))`
+            </p>
+        </section>
+
+        <section class="content-section" id="pointers-arrays-strings">
+            <h2><i class="fas fa-link"></i>5. Pointers and Arrays/Strings</h2>
+            <p>Pointers and arrays have a close relationship in C. The name of an array, when used in most expressions,
+                decays into a pointer to its first element.</p>
+
+            <button type="button" class="collapsible">A. Pointers and Arrays <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>When an array is declared, the compiler allocates a contiguous block of memory to hold all its
+                        elements. The base address (address of the first element) is associated with the array name.</p>
+                    <div class="diagram-container">
+                        <img src="https://i.imgur.com/714eG9x.png" alt="Array elements and addresses">
+                    </div>
+                    <p>The array name `arr` itself acts like a constant pointer to `arr[0]`.
+                        <br>Therefore, `arr` is equivalent to `&arr[0]`.
+                    </p>
+                    <p>We can declare a pointer of the array's element type and make it point to the array:</p>
+                    <pre><code class="language-c">
+int arr[5] = {1, 2, 3, 4, 5};
+int *p;
+p = arr;      // p now points to arr[0]. Same as p = &arr[0];
+                    </code></pre>
+                    <p>Now, we can access array elements using the pointer `p` and pointer arithmetic:</p>
+                    <ul>
+                        <li>`*p` is equivalent to `arr[0]`</li>
+                        <li>`*(p + 1)` is equivalent to `arr[1]`</li>
+                        <li>`*(p + i)` is equivalent to `arr[i]`</li>
+                    </ul>
+                    <p>Similarly:</p>
+                    <ul>
+                        <li>`p + i` is equivalent to `&arr[i]`</li>
+                    </ul>
+                    <pre><code class="language-c">
+#include <stdio.h>
+int main() {
+    int arr[5] = {10, 20, 30, 40, 50};
+    int *p = arr; // p points to arr[0]
+    int i;
+
+    printf("Accessing array elements using pointer:\n");
+    for (i = 0; i < 5; i++) {
+        printf("Value at *(p + %d): %d (or p[%d])\n", i, *(p + i), i);
+        // printf("Address (p + %d): %p\n", i, (void*)(p + i));
+    }
+
+    printf("\nAccessing array elements using array name as pointer:\n");
+     for (i = 0; i < 5; i++) {
+        printf("Value at *(arr + %d): %d\n", i, *(arr + i));
+    }
+    return 0;
+}
+                    </code></pre>
+                    <p><strong>Important Note:</strong> While an array name often decays to a pointer, it is a <strong
+                            class="highlight">constant pointer</strong>. You cannot change the address that the array
+                        name itself points to.
+                        <br><code>arr = some_other_address; // Compile-time error</code>
+                        <br><code>arr++; // Compile-time error</code>
+                        <br>However, a pointer variable like `p` that points to an array can be changed: `p++;` is
+                        valid.
+                    </p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">B. Pointers and Strings <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Since strings are character arrays, pointers can be used to manipulate strings effectively. A
+                        string literal itself (e.g., `"Hello"`) often evaluates to a pointer to its first character in
+                        memory (usually read-only memory).</p>
+                    <pre><code class="language-c">
+#include <stdio.h>
+#include <string.h> // For strlen
+
+int main() {
+    char str[] = "Hello World"; // str is a char array
+    char *ptr_str = "Welcome";  // ptr_str is a pointer to a string literal
+
+    printf("String using array: %s\n", str);
+    printf("String using pointer: %s\n", ptr_str);
+
+    // Traversing str using a pointer
+    char *p = str;
+    printf("Traversing '%s' with a pointer:\n", str);
+    while (*p != '\0') {
+        printf("%c", *p);
+        p++;
+    }
+    printf("\n");
+
+    // Modifying array-based string is okay
+    str[0] = 'J';
+    printf("Modified array string: %s\n", str); // Jello World
+
+    // Attempting to modify string literal via ptr_str leads to undefined behavior
+    // ptr_str[0] = 'B'; // DANGEROUS - DO NOT DO THIS for string literals
+
+    return 0;
+}
+                    </code></pre>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">C. Passing Arrays to Functions <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>When an array is passed to a function, what is actually passed is the <strong
+                            class="highlight">address of its first element</strong> (i.e., a pointer to the first
+                        element). This means the function operates on the original array, not a copy (similar to call by
+                        reference).</p>
+                    <p>You can declare the function parameter in three equivalent ways:</p>
+                    <ol>
+                        <li><strong>As a pointer:</strong> `void myFunction(int *param)`</li>
+                        <li><strong>As a sized array:</strong> `void myFunction(int param[10])` (The size `10` is often
+                            ignored by the compiler; it still just gets a pointer. It's more for documentation.)</li>
+                        <li><strong>As an unsized array:</strong> `void myFunction(int param[])`</li>
+                    </ol>
+                    <p>All three forms effectively treat `param` as `int *` within the function.</p>
+                    <h4>Example (Calculating average of array elements):</h4>
+                    <pre><code class="language-c">
+#include <stdio.h>
+
+// Function declaration (prototype)
+double getAverage(int arr[], int size); // Or int *arr
+
+int main() {
+    int balance[5] = {1000, 2, 3, 17, 50};
+    double avg;
+
+    avg = getAverage(balance, 5); // Pass array (its address) and its size
+    printf("Average value is: %f\n", avg); // Output: Average value is: 214.400000
+
+    return 0;
+}
+
+// Function definition
+double getAverage(int arr[], int size) { // arr is effectively a pointer here
+    int i;
+    double avg_val;
+    double sum = 0;
+
+    for (i = 0; i < size; ++i) {
+        sum += arr[i]; // Can use array notation arr[i]
+        // or pointer notation *(arr + i)
+    }
+    avg_val = sum / size;
+    return avg_val;
+}
+                    </code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="advanced-pointers">
+            <h2><i class="fas fa-project-diagram"></i>6. Advanced Pointer Concepts</h2>
+
+            <button type="button" class="collapsible">A. Pointers to Pointers (Double Pointers) <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>A pointer can point to another pointer. This is known as a pointer to a pointer, or a double
+                        pointer. It stores the address of another pointer variable.</p>
+                    <div class="diagram-container">
+                        <img src="https://i.imgur.com/b0Z4Xq1.png" alt="Pointer to Pointer Diagram">
+                        <p>Here, `p2` (at address `fff0`) stores the address of pointer `p` (which is `fff2`). Pointer
+                            `p` (at address `fff2`) stores the address of variable `number` (which is `fff4`). Variable
+                            `number` (at address `fff4`) holds the value `50`.</p>
+                    </div>
+                    <h4>Syntax:</h4>
+                    <div class="syntax-box">data_type **pointer_to_pointer_name;</div>
+                    <h4>Example:</h4>
+                    <pre><code class="language-c">
+#include <stdio.h>
+// #include <conio.h> // For clrscr, getch
+
+int main() {
+    int number = 50;
+    int *p;    // Pointer to int
+    int **p2;  // Pointer to pointer to int
+
+    // clrscr();
+    p = &number;  // p stores address of number
+    p2 = &p;      // p2 stores address of pointer p
+
+    printf("Address of number variable (&number): %p\n", (void *)&number);
+    printf("Address stored in p variable (value of p): %p\n", (void *)p);
+    printf("Value pointed to by *p: %d\n", *p);
+
+    printf("Address of p variable (&p): %p\n", (void *)&p);
+    printf("Address stored in p2 variable (value of p2): %p\n", (void *)p2);
+    printf("Value pointed to by *p2 (address stored in p): %p\n", (void *)*p2);
+    printf("Value pointed to by **p2 (value of number): %d\n", **p2);
+
+    // getch();
+    return 0;
+}
+/*
+Example Output (addresses will vary):
+Address of number variable (&number): 0x7ffee1c5a87c
+Address stored in p variable (value of p): 0x7ffee1c5a87c
+Value pointed to by *p: 50
+Address of p variable (&p): 0x7ffee1c5a870
+Address stored in p2 variable (value of p2): 0x7ffee1c5a870
+Value pointed to by *p2 (address stored in p): 0x7ffee1c5a87c
+Value pointed to by **p2 (value of number): 50
+*/
+                    </code></pre>
+                    <p>Double pointers are often used in functions that need to modify a pointer passed as an argument
+                        (e.g., in dynamic memory allocation scenarios or when working with arrays of strings where each
+                        string is a pointer).</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">B. Pointers to Functions (Function Pointers) <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Just as pointers can point to data variables, they can also point to functions. A function
+                        pointer stores the starting address (entry point) of the executable code of a function.</p>
+                    <h4>Key Points:</h4>
+                    <ul>
+                        <li>A pointer to a function points to the address of the executable code of the function.</li>
+                        <li>We can use function pointers to call functions and to pass functions as arguments to other
+                            functions (useful for callbacks or strategy patterns).</li>
+                        <li>Pointer arithmetic (like `++`, `--`, `+integer`) cannot be performed on function pointers.
+                        </li>
+                        <li>The type of a pointer to a function is based on both the function's return type and the
+                            types of its parameters.</li>
+                        <li>The declaration of a function pointer must have the pointer name in parentheses (e.g.,
+                            `(*ptr_name)`). Without them, it might be interpreted as a function returning a pointer.
+                        </li>
+                    </ul>
+                    <h4>Syntax for Declaration:</h4>
+                    <div class="syntax-box">return_type (*pointer_name)(parameter_type_list);</div>
+                    <h4>Example:</h4>
+                    <pre><code class="language-c">
+#include <stdio.h>
+
+// A sample function
+int sum(int num1, int num2) {
+    return num1 + num2;
+}
+
+int main() {
+    // Declare a function pointer 'f2p' that can point to a function
+    // which takes two integers as arguments and returns an integer.
+    int (*f2p)(int, int);
+
+    // Assign the address of the 'sum' function to the pointer.
+    // The function name itself (without parentheses) gives its address.
+    f2p = sum; // or f2p = ∑ (both are generally acceptable)
+
+    int op1, op2;
+
+    // Call the function 'sum' using the function pointer 'f2p'
+    op1 = f2p(10, 13);
+
+    // Call the function 'sum' directly
+    op2 = sum(10, 13);
+
+    printf("Output 1 - for function call via Pointer: %d\n", op1);
+    printf("Output 2 - for direct function call: %d\n", op2);
+
+    // You would have noticed that the output of both statements is same
+    // f2p(10, 13) == sum(10, 13)
+    // which means in generic sense you can write it out as:
+    // pointer_name(argument list) == function(same argument list)
+
+    return 0;
+}
+/*
+Output:
+Output 1 - for function call via Pointer: 23
+Output 2 - for direct function call: 23
+*/
+                    </code></pre>
+                    <p>Declaration example: `double (*p2f)(double, char);` declares `p2f` as a pointer to a function
+                        that takes a `double` and a `char` as arguments and returns a `double`.</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">C. `void` Pointers (Generic Pointers) <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>A `void` pointer is a special type of pointer that has no associated data type. It can hold the
+                        address of any type of variable. It's also known as a general-purpose pointer.</p>
+                    <h4>Syntax:</h4>
+                    <div class="syntax-box">void *pointer_name;</div>
+                    <h4>Key Points:</h4>
+                    <ul>
+                        <li>It can store the address of any type of variable.</li>
+                        <li>It does not have any data type associated with it.</li>
+                        <li>A `void` pointer <strong class="highlight">cannot be dereferenced directly</strong>. The
+                            compiler doesn't know the size or type of data it points to. You must explicitly cast it to
+                            an appropriate pointer type before dereferencing.</li>
+                        <li>Pointer arithmetic is not directly possible on `void` pointers (because the size of the
+                            pointed-to type is unknown). Some compilers might allow it by assuming `sizeof(void)` is 1,
+                            but this is non-standard and should be avoided.</li>
+                    </ul>
+                    <h4>Advantages:</h4>
+                    <ol>
+                        <li>Functions like `malloc()` and `calloc()` return `void *`, allowing them to allocate memory
+                            for any data type. The returned pointer is then cast to the desired type.</li>
+                        <li>`void` pointers are used to implement generic functions in C (functions that can operate on
+                            data of different types).</li>
+                    </ol>
+                    <h4>Example:</h4>
+                    <pre><code class="language-c">
+#include <stdio.h>
+
+int main() {
+    int inum = 10;
+    char cnum = 'A';
+    float fnum = 3.14f;
+
+    void *ptr; // ptr is declared as void pointer
+
+    ptr = &inum;
+    printf("Value of inum (via void pointer): %d\n", *( (int*)ptr ) ); // Cast to int* before dereferencing
+
+    ptr = &cnum;
+    printf("Value of cnum (via void pointer): %c\n", *( (char*)ptr ) );
+
+    ptr = &fnum;
+    printf("Value of fnum (via void pointer): %f\n", *( (float*)ptr ) );
+
+    // Direct dereferencing error:
+    // printf("%d", *ptr); // COMPILE ERROR: 'void*' is not a pointer-to-object type
+
+    return 0;
+}
+                    </code></pre>
+                </div>
+            </div>
+            <button type="button" class="collapsible">D. Array of Pointers <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>An array of pointers is an array where each element is a pointer variable. Each pointer in the
+                        array can point to a memory location of its declared base type.</p>
+                    <h4>Syntax:</h4>
+                    <div class="syntax-box">data_type *array_name[size];</div>
+                    <h4>Example:</h4>
+                    <pre><code class="language-c">
+#include <stdio.h>
+
+const int MAX = 3; // Using const int for array size
+
+int main () {
+   int  var[] = {10, 100, 200}; // An array of integers
+   int *ptr[MAX];               // An array of MAX integer pointers
+   int i;
+
+   for (i = 0; i < MAX; i++) {
+      ptr[i] = &var[i]; /* assign the address of integer. */
+   }
+   
+   for (i = 0; i < MAX; i++) {
+      printf("Value of var[%d] = %d (Address: %p, Stored in ptr[%d]: %p)\n", 
+             i, *ptr[i], (void*)&var[i], i, (void*)ptr[i]);
+   }
+   
+   return 0;
+}
+/*
+Output:
+Value of var[0] = 10 (Address: 0x..., Stored in ptr[0]: 0x...)
+Value of var[1] = 100 (Address: 0x..., Stored in ptr[1]: 0x...)
+Value of var[2] = 200 (Address: 0x..., Stored in ptr[2]: 0x...)
+(Addresses will vary)
+*/
+                    </code></pre>
+                    <p>Arrays of pointers are commonly used for storing an array of strings (where each string is itself
+                        a character array, and the array of pointers stores the base address of each string).</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="dynamic-memory-allocation">
+            <h2><i class="fas fa-memory"></i>7. Dynamic Memory Allocation</h2>
+            <p>Dynamic memory allocation is the process of allocating memory at <strong
+                    class="highlight">runtime</strong>, rather than at compile time. This allows programs to request
+                memory as needed and release it when no longer required. C provides several library functions for
+                dynamic memory allocation, primarily found in `<stdlib.h>`.</p>
+            <h4>Static vs. Dynamic Memory Allocation:</h4>
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Static Memory Allocation</th>
+                        <th>Dynamic Memory Allocation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Memory is allocated at compile time.</td>
+                        <td>Memory is allocated at runtime.</td>
+                    </tr>
+                    <tr>
+                        <td>Memory size cannot be changed while the program is executing.</td>
+                        <td>Memory size can be changed (e.g., using `realloc`) while the program is executing.</td>
+                    </tr>
+                    <tr>
+                        <td>Typically used for arrays with fixed sizes, global/static variables. Memory is allocated on
+                            the stack (for local variables) or data segment.</td>
+                        <td>Typically used for linked lists, trees, or when the amount of memory needed is unknown until
+                            runtime. Memory is allocated from the <strong class="tooltip">Heap<span
+                                    class="tooltiptext">A region of memory available for dynamic
+                                    allocation.</span></strong>.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h4>Dynamic Memory Allocation Functions:</h4>
+            <ul>
+                <li><strong>`malloc()` (memory allocation):</strong> Allocates a single block of requested memory. It
+                    does not initialize the memory (contains garbage values). Returns a `void*` pointer to the allocated
+                    block, or `NULL` if allocation fails.
+                    <div class="syntax-box">ptr = (cast_type*) malloc(byte_size);</div>
+                </li>
+                <li><strong>`calloc()` (contiguous allocation):</strong> Allocates memory for an array of elements,
+                    initializes all bytes in the allocated block to zero. Returns a `void*` pointer, or `NULL` on
+                    failure.
+                    <div class="syntax-box">ptr = (cast_type*) calloc(number_of_elements,
+                        size_of_each_element_in_bytes);</div>
+                </li>
+                <li><strong>`realloc()` (re-allocation):</strong> Changes the size of a previously allocated memory
+                    block (pointed to by `ptr`) to a new size. It may move the memory block to a new location. Returns
+                    `void*` to the (potentially new) block, or `NULL` on failure.
+                    <div class="syntax-box">ptr = (cast_type*) realloc(existing_ptr, new_byte_size);</div>
+                </li>
+                <li><strong>`free()`:</strong> Deallocates (releases) a previously allocated memory block, making it
+                    available for future use. It's crucial to free dynamically allocated memory to prevent <strong
+                        class="tooltip">memory leaks<span class="tooltiptext">When a program allocates memory but loses
+                            all references to it, making it unusable but still occupied.</span></strong>.
+                    <div class="syntax-box">free(ptr);</div>
+                </li>
+            </ul>
+
+            <button type="button" class="collapsible">A. `malloc()` Example <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <pre><code class="language-c">
+#include <stdio.h>
+#include <stdlib.h> // For malloc, free, exit
+
+int main() {
+    int n, i, *ptr, sum = 0;
+
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+
+    // Dynamically allocate memory using malloc()
+    ptr = (int*) malloc(n * sizeof(int));
+
+    // Check if the memory has been successfully allocated by malloc or not
+    if (ptr == NULL) {
+        printf("Error! Memory not allocated.\n");
+        exit(0); // Terminate program
+    }
+
+    printf("Enter elements of array:\n");
+    for (i = 0; i < n; ++i) {
+        printf("Enter element %d: ", i + 1);
+        scanf("%d", ptr + i); // or &ptr[i]
+        sum += *(ptr + i);    // or ptr[i]
+    }
+
+    printf("Sum = %d\n", sum);
+
+    // Deallocate the memory
+    free(ptr);
+    ptr = NULL; // Good practice to set pointer to NULL after freeing
+
+    return 0;
+}
+                    </code></pre>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">B. `calloc()` Example <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <pre><code class="language-c">
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int n, i, *ptr, sum = 0;
+
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+
+    // Dynamically allocate memory using calloc()
+    // It allocates 'n' blocks, each of size 'sizeof(int)'
+    // and initializes all to zero.
+    ptr = (int*) calloc(n, sizeof(int));
+
+    if (ptr == NULL) {
+        printf("Error! Memory not allocated.\n");
+        exit(0);
+    }
+
+    printf("Memory successfully allocated using calloc.\n");
+    // Since calloc initializes to 0, we can demonstrate that
+    printf("Initial elements (should be 0):\n");
+    for (i = 0; i < n; ++i) {
+        printf("%d ", *(ptr + i));
+    }
+    printf("\n");
+
+    printf("Enter elements of array:\n");
+    for (i = 0; i < n; ++i) {
+        printf("Enter element %d: ", i + 1);
+        scanf("%d", ptr + i);
+        sum += *(ptr + i);
+    }
+
+    printf("Sum = %d\n", sum);
+    free(ptr);
+    ptr = NULL;
+    return 0;
+}
+                    </code></pre>
+                    <h4>Difference between `malloc()` and `calloc()`:</h4>
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>`calloc()`</th>
+                                <th>`malloc()`</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Initializes the allocated memory with 0 value.</td>
+                                <td>Initializes the allocated memory with garbage values.</td>
+                            </tr>
+                            <tr>
+                                <td>Number of arguments is 2: `calloc(num_elements, element_size)`</td>
+                                <td>Number of arguments is 1: `malloc(total_byte_size)`</td>
+                            </tr>
+                            <tr>
+                                <td>Syntax: `(cast_type*)calloc(blocks, size_of_block);`</td>
+                                <td>Syntax: `(cast_type*)malloc(Size_in_bytes);`</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <button type="button" class="collapsible">C. `realloc()` Example <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <pre><code class="language-c">
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int *ptr, i, n1, n2;
+
+    printf("Enter initial size of array: ");
+    scanf("%d", &n1);
+
+    ptr = (int*) malloc(n1 * sizeof(int));
+    if (ptr == NULL) {
+        printf("Memory allocation failed!\n");
+        return 1;
+    }
+    printf("Address of previously allocated memory: %p\n", (void*)ptr);
+    for(i=0; i<n1; ++i) {
+        ptr[i] = i + 1; // Fill with some data
+    }
+
+    printf("Enter new size of array: ");
+    scanf("%d", &n2);
+
+    // Reallocating memory
+    int *new_ptr = (int*) realloc(ptr, n2 * sizeof(int));
+    if (new_ptr == NULL) {
+        printf("Memory reallocation failed! Original block still valid.\n");
+        // ptr still points to the old block, which should be freed if no longer needed
+        free(ptr);
+        return 1;
+    }
+    ptr = new_ptr; // Update ptr to point to the new (or possibly same) block
+
+    printf("Address after reallocation: %p\n", (void*)ptr);
+    printf("Elements after reallocation (old data preserved if block grew at same location or was copied):\n");
+    for (i = 0; i < (n1 < n2 ? n1 : n2) ; ++i) { // Print up to the smaller of old/new size
+        printf("%d ", ptr[i]);
+    }
+    if (n2 > n1) {
+        printf("\nInitializing new elements (if any):\n");
+        for (i = n1; i < n2; ++i) {
+            ptr[i] = i * 10; // Initialize new part
+            printf("%d ", ptr[i]);
+        }
+    }
+    printf("\n");
+
+    free(ptr);
+    ptr = NULL;
+    return 0;
+}
+                    </code></pre>
+                </div>
+            </div>
+            <p><strong>Memory Allocation Process (Heap):</strong> Global variables, static variables, and program
+                instructions get memory in permanent storage areas. Local variables are typically stored on the <strong
+                    class="highlight">Stack</strong>. The memory space between these two regions is known as the <strong
+                    class="highlight">Heap</strong> area. This region is used for dynamic memory allocation during
+                program execution. The size of the heap can change.</p>
+        </section>
+
+        <section class="content-section" id="command-line-arguments">
+            <h2><i class="fas fa-terminal"></i>8. Command-Line Arguments</h2>
+            <p>It's possible to pass values from the command line to your C programs when they are executed. These
+                values are called command-line arguments and are particularly useful for controlling program behavior
+                from outside, instead of hardcoding values.</p>
+            <p>To support command-line arguments, the structure of the `main()` function needs to be changed:</p>
+            <h4>Syntax:</h4>
+            <div class="syntax-box">
+                int main(int argc, char *argv[]) {
+                // ... code ...
+                return 0;
+                }
+            </div>
+            <ul>
+                <li><strong>`argc` (argument count):</strong> An integer that stores the number of command-line
+                    arguments passed to the program. It includes the program name itself as the first argument. So,
+                    `argc` is always at least 1.</li>
+                <li><strong>`argv` (argument vector):</strong> An array of character pointers (array of strings). Each
+                    element `argv[i]` points to a string representing an argument.
+                    <ul>
+                        <li>`argv[0]` is the name of the program.</li>
+                        <li>`argv[1]` is the first actual argument.</li>
+                        <li>...</li>
+                        <li>`argv[argc-1]` is the last argument.</li>
+                        <li>`argv[argc]` is a NULL pointer (by convention, marking the end of the argument list).</li>
+                    </ul>
+                </li>
+            </ul>
+            <h4>Example:</h4>
+            <pre><code class="language-c">
+#include <stdio.h>
+// #include <conio.h> // For clrscr, getch - not needed for standard command line args
+
+int main(int argc, char *argv[]) { // Use standard int main()
+    int i;
+    // clrscr(); // Non-standard, remove
+
+    printf("Total number of arguments: %d\n", argc);
+    printf("Program name: %s\n", argv[0]);
+
+    if (argc > 1) {
+        printf("Arguments passed:\n");
+        for (i = 1; i < argc; i++) { // Start from 1 to skip program name
+            printf("Argument %d: %s\n", i, argv[i]);
+        }
+    } else {
+        printf("No additional arguments passed.\n");
+    }
+    // getch(); // Not typically used in command-line programs
+    return 0;
+}
+            </code></pre>
+            <h4>How to Run with Command-Line Arguments:</h4>
+            <p>Compile the program (e.g., `gcc mycmd.c -o mycmd`). Then run it from the terminal:</p>
+            <div class="syntax-box">
+                ./mycmd arg1 "another argument" 123
+            </div>
+            <p>Example Output (for the command above):</p>
+            <pre>
+Total number of arguments: 4
+Program name: ./mycmd
+Arguments passed:
+Argument 1: arg1
+Argument 2: another argument
+Argument 3: 123
+            </pre>
+            <p><strong>Note:</strong>
+            <ul>
+                <li>Arguments are passed as strings. If you need to use them as numbers, you'll need to convert them
+                    (e.g., using `atoi()`, `atof()` from `<stdlib.h>`).</li>
+                <li>Arguments containing spaces should be enclosed in quotes (e.g., `"hello world"`).</li>
+                <li>Command-line argument programs are typically run from a terminal/command prompt, not directly from
+                    some IDEs' "run" button without specific configuration for arguments.</li>
+            </ul>
+            </p>
+        </section>
+
+
+        <div class="page-navigation">
+            <a href="topic-5.html" class="nav-button back-button">
+                <i class="fas fa-arrow-left"></i> Prev: Arrays and Strings
+            </a>
+            <a href="../c-programming.html" class="nav-button back-button"
+                style="margin-left: auto; margin-right: auto;">
+                <i class="fas fa-list"></i> Back to Syllabus
+            </a>
+            <a href="topic-7.html" class="nav-button next-button">
+                Next: Structures and Unions <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <footer class="page-footer">
+            © 2024 Eduvision. All rights reserved. Pointing you in the right direction with C.
+        </footer>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script>
+        Prism.plugins.autoloader.languages_path = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/';
+
+        var coll = document.getElementsByClassName("collapsible");
+        for (var i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            });
+        }
+
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+            } else {
+                body.classList.remove('dark-mode');
+            }
+            localStorage.setItem('theme', theme);
+            Prism.highlightAll();
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (body.classList.contains('dark-mode')) {
+                applyTheme('light');
+            } else {
+                applyTheme('dark');
+            }
+        });
+
+        const savedTheme = localStorage.getItem('theme') ||
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        applyTheme(savedTheme);
+    </script>
+</body>
+
+</html>

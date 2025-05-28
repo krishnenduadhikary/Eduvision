@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preprocessor Directives in C - Eduvision</title>
+    <meta name="description"
+        content="Learn about C preprocessor directives: macro substitution (#define, #undef), file inclusion (#include), conditional compilation (#ifdef, #ifndef, #if, #else, #elif, #endif), and other directives like #error and #pragma.">
+    <meta name="keywords"
+        content="C preprocessor, macros C, #define, #include, conditional compilation, #ifdef, #ifndef, C programming tutorial">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        :root {
+            /* Light Mode Defaults */
+            --bg-color: #f0f4f8;
+            --card-bg: #ffffff;
+            --primary-color: #2563eb;
+            --secondary-color: #4f46e5;
+            --accent-color: #10b981;
+            --text-color: #374151;
+            --heading-color: #111827;
+            --border-color: #d1d5db;
+            --gradient-start: var(--primary-color);
+            --gradient-end: var(--secondary-color);
+            --font-main: 'Poppins', sans-serif;
+            --font-logo: 'Nunito', sans-serif;
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --card-shadow-color: rgba(0, 0, 0, 0.05);
+            --link-color: var(--primary-color);
+            --link-hover-color: #1d4ed8;
+            --link-hover-bg: #eff6ff;
+            --collapsible-content-bg: rgba(0, 0, 0, 0.02);
+            --definition-bg: rgba(37, 99, 235, 0.05);
+            --table-header-bg: var(--primary-color);
+            --table-header-text: white;
+            --table-row-even-bg: rgba(0, 0, 0, 0.015);
+            --theme-toggle-bg: var(--card-bg);
+            --theme-toggle-icon: var(--primary-color);
+            --theme-toggle-hover-bg: var(--primary-color);
+            --theme-toggle-hover-icon: white;
+            --tooltip-bg: #333;
+            --tooltip-text: #fff;
+            --diagram-bg: var(--collapsible-content-bg);
+            --diagram-border: var(--border-color);
+        }
+
+        body.dark-mode {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-color: #c9d1d9;
+            --heading-color: #f0f6fc;
+            --border-color: #30363d;
+            --shadow-color: rgba(0, 0, 0, 0.25);
+            --card-shadow-color: rgba(0, 0, 0, 0.2);
+            --link-color: #58a6ff;
+            --link-hover-color: #80baff;
+            --link-hover-bg: rgba(88, 166, 255, 0.1);
+            --collapsible-content-bg: rgba(255, 255, 255, 0.03);
+            --definition-bg: rgba(88, 166, 255, 0.1);
+            --table-header-bg: var(--primary-color);
+            --table-row-even-bg: rgba(255, 255, 255, 0.03);
+            --theme-toggle-bg: var(--card-bg);
+            --tooltip-bg: #c9d1d9;
+            --tooltip-text: #0d1117;
+            --diagram-bg: rgba(255, 255, 255, 0.05);
+            --diagram-border: #444c56;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .eduvision-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: var(--font-logo);
+        }
+
+        .eduvision-logo .logo-text {
+            color: var(--heading-color);
+        }
+
+        body.dark-mode .eduvision-logo .logo-text {
+            color: #f0f6fc;
+        }
+
+        .eduvision-logo .text-yellow-300 {
+            color: #f59e0b !important;
+        }
+
+        .eduvision-logo .group:hover .text-yellow-300 {
+            color: #fcd34d !important;
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+            color: var(--theme-toggle-hover-icon);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-top: 80px;
+            margin-bottom: 2rem;
+            padding: 2rem 1rem;
+            border-radius: 12px;
+            background: var(--card-bg);
+            box-shadow: 0 10px 30px var(--card-shadow-color);
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--heading-color);
+            background: linear-gradient(90deg, var(--gradient-start), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 1.15rem;
+            color: var(--text-color);
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .content-section {
+            background-color: var(--card-bg);
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px var(--card-shadow-color);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s, border-color 0.3s;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px var(--shadow-color);
+        }
+
+        .content-section h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--heading-color);
+            margin-top: 0;
+            margin-bottom: 1.8rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .content-section h2 i {
+            margin-right: 1rem;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section .definition {
+            margin-bottom: 1.2rem;
+            font-size: 1rem;
+        }
+
+        .content-section ul {
+            padding-left: 25px;
+            list-style: none;
+        }
+
+        .content-section ul li::before {
+            content: "\f138";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--primary-color);
+            margin-right: 12px;
+            display: inline-block;
+            font-size: 0.9em;
+        }
+
+        pre[class*="language-"] {
+            padding: 1.5em;
+            margin: 1.5em 0;
+            overflow: auto;
+            border-radius: 8px;
+            background: #2d2d2d;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode pre[class*="language-"] {
+            background: #1e1e1e;
+        }
+
+        code[class*="language-"],
+        pre[class*="language-"] {
+            font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+            font-size: 0.95em;
+        }
+
+        .collapsible {
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: white;
+            cursor: pointer;
+            padding: 15px 25px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            transition: filter 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .collapsible:hover {
+            filter: brightness(1.15);
+        }
+
+        .collapsible.active {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .collapsible-content {
+            padding: 0 22px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out, background-color 0.3s;
+            background-color: var(--collapsible-content-bg);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            margin-bottom: 1.2rem;
+            border: 1px solid var(--border-color);
+            border-top: none;
+        }
+
+        .collapsible-content>div {
+            padding: 20px 0;
+        }
+
+        .collapsible .icon::before {
+            content: '\f078';
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible.active .icon::before {
+            transform: rotate(-180deg);
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 10px var(--card-shadow-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .custom-table th,
+        .custom-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        .custom-table th {
+            background-color: var(--table-header-bg);
+            color: var(--table-header-text);
+            font-weight: 600;
+        }
+
+        .custom-table tr:nth-child(even) {
+            background-color: var(--table-row-even-bg);
+        }
+
+        .custom-table tr:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark-mode .custom-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .custom-table .code-cell {
+            font-family: 'Fira Code', monospace;
+            color: var(--accent-color);
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted var(--accent-color);
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: max-content;
+            max-width: 250px;
+            background-color: var(--tooltip-bg);
+            color: var(--tooltip-text);
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .definition {
+            background-color: var(--definition-bg);
+            border-left: 5px solid var(--primary-color);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+            font-style: normal;
+        }
+
+        .definition strong {
+            color: var(--primary-color);
+        }
+
+        .page-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            margin-bottom: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s, color 0.2s;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            font-size: 1rem;
+        }
+
+        .nav-button i.fa-arrow-left {
+            margin-right: 0.5em;
+        }
+
+        .nav-button i.fa-arrow-right {
+            margin-left: 0.5em;
+        }
+
+        .back-button {
+            background-color: var(--card-bg);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .back-button:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+        }
+
+        .next-button {
+            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+            color: white;
+        }
+
+        .next-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+            filter: brightness(1.1);
+        }
+
+        .page-footer {
+            text-align: center;
+            padding: 2.5rem 0;
+            margin-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: #6b7280;
+            transition: border-top-color 0.3s;
+        }
+
+        body.dark-mode .page-footer {
+            color: #9ca3af;
+        }
+
+        .diagram-container {
+            background-color: var(--diagram-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem auto;
+            text-align: center;
+            border: 1px solid var(--diagram-border);
+            max-width: 800px;
+            /* Can be wider for compilation flow */
+        }
+
+        .diagram-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+        }
+
+        .diagram-container h4 {
+            margin-top: 0;
+            color: var(--accent-color);
+        }
+
+        .syntax-box {
+            background-color: var(--collapsible-content-bg);
+            padding: 1em;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            margin: 1em 0;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            font-size: 0.9em;
+            color: var(--text-color);
+        }
+
+        body.dark-mode .syntax-box {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .directive-list li {
+            font-family: 'Fira Code', monospace;
+            color: var(--accent-color);
+            padding: 0.25rem 0;
+        }
+
+        .directive-list li::before {
+            content: "#";
+            /* Prepend hash to list items */
+            color: var(--primary-color);
+            margin-right: 4px;
+        }
+
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.4rem;
+            }
+
+            .content-section h2 {
+                font-size: 1.7rem;
+            }
+
+            .content-section h2 i {
+                font-size: 1.5rem;
+            }
+
+            #theme-toggle {
+                top: 15px;
+                right: 15px;
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+
+            .eduvision-logo {
+                top: 15px;
+                left: 15px;
+            }
+
+            .eduvision-logo .text-2xl {
+                font-size: 1.5rem;
+            }
+
+            .page-header {
+                margin-top: 70px;
+                padding: 1.5rem 0.5rem;
+            }
+
+            .content-section {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .page-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-button {
+                width: 100%;
+                justify-content: center;
+                padding: 15px 20px;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../../index.html" class="flex items-center group">
+                <span class="logo-text">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="logo-text">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>Preprocessor Directives in C</h1>
+            <p>Instructing the compiler before actual compilation begins.</p>
+        </header>
+
+        <section class="content-section" id="intro-preprocessor">
+            <h2><i class="fas fa-cogs"></i>1. Introduction to the C Preprocessor</h2>
+            <p>The C Preprocessor is <strong class="highlight">not a part of the compiler itself</strong>, but a
+                separate step in the compilation process. In simple terms, a C Preprocessor is a <strong
+                    class="tooltip">text substitution tool<span class="tooltiptext">It performs lexical replacements and
+                        manipulations on the source code.</span></strong>. It instructs the compiler to do required
+                pre-processing (like including files, expanding macros, conditional compilation) <strong
+                    class="highlight">before</strong> the actual compilation of the source code begins.</p>
+            <p>All preprocessor commands (directives) begin with a hash symbol (`#`).</p>
+            <div class="diagram-container">
+                <h4>Program Process Flow (Simplified):</h4>
+                <img src="https://i.imgur.com/oQ8g2fC.png" alt="C Program Compilation Flow">
+                <p>The preprocessor takes the source code (e.g., `sample.c`) and produces an "expanded source code"
+                    (often with a `.i` extension). This expanded code is then passed to the compiler.</p>
+            </div>
+            <h4>List of Common Preprocessor Directives:</h4>
+            <ul class="directive-list">
+                <li>include</li>
+                <li>define</li>
+                <li>undef</li>
+                <li>ifdef</li>
+                <li>ifndef</li>
+                <li>if</li>
+                <li>else</li>
+                <li>elif</li>
+                <li>endif</li>
+                <li>error</li>
+                <li>pragma</li>
+            </ul>
+        </section>
+
+        <section class="content-section" id="macros">
+            <h2><i class="fas fa-magic"></i>2. C Macros (`#define`, `#undef`)</h2>
+            <p>A <strong class="tooltip">macro<span class="tooltiptext">A fragment of code that has been given a
+                        name.</span></strong> is a segment of code which is replaced by its value (or expansion) by the
+                preprocessor. Macros are defined using the `#define` directive.</p>
+            <h4>Types of Macros:</h4>
+            <ol>
+                <li><strong>Object-like Macros:</strong> Used to define constants or simple replacements.</li>
+                <li><strong>Function-like Macros:</strong> Look and act somewhat like function calls but are expanded
+                    inline by the preprocessor.</li>
+            </ol>
+
+            <button type="button" class="collapsible">A. `#define` Directive (Macro Substitution) <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>The `#define` preprocessor directive is used to define symbolic constants or macros. It can
+                        define simple constants or more complex function-like substitutions.</p>
+                    <h4>1. Object-like Macros (Defining Constants):</h4>
+                    <p>An object-like macro is an identifier that is replaced by its defined value during preprocessing.
+                        It's widely used to represent numeric constants or other fixed values.</p>
+                    <div class="syntax-box">#define IDENTIFIER value_or_expression</div>
+                    <pre><code class="language-c">
+#include <stdio.h>
+
+#define PI 3.14159
+#define MAX_LIMIT 100
+#define GREETING "Hello, Eduvision!"
+
+int main() {
+    double radius = 5.0;
+    double area = PI * radius * radius; // PI is replaced by 3.14159
+
+    printf("Area of circle: %f\n", area);
+    printf("Max Limit: %d\n", MAX_LIMIT); // MAX_LIMIT replaced by 100
+    printf("%s\n", GREETING);           // GREETING replaced by "Hello, Eduvision!"
+    
+    return 0;
+}
+                    </code></pre>
+
+                    <h4>2. Function-like Macros (Macros with Arguments):</h4>
+                    <p>These macros look like function calls and can take arguments. The preprocessor replaces the macro
+                        call with its definition, substituting the arguments.</p>
+                    <div class="syntax-box">#define MACRO_NAME(param1, param2, ...) (replacement_text_using_params)
+                    </div>
+                    <p><strong class="highlight">Important:</strong> There should be <strong class="highlight">no
+                            space</strong> between the macro name and the opening parenthesis `(` of the parameter list.
+                    </p>
+                    <pre><code class="language-c">
+#include <stdio.h>
+
+#define SQUARE(x) ((x) * (x)) // Note: Parentheses are crucial around x and the whole expression
+#define MIN(a,b) (((a) < (b)) ? (a) : (b))
+#define PRINT_VAL(val) printf("Value is: %d\n", val)
+
+int main() {
+    int num = 5;
+    printf("Square of %d is %d\n", num, SQUARE(num)); // Expands to ((5) * (5))
+
+    int x = 10, y = 20;
+    printf("Minimum of %d and %d is %d\n", x, y, MIN(x,y)); // Expands to (((10) < (20)) ? (10) : (20))
+
+    PRINT_VAL(x + y); // Expands to printf("Value is: %d\n", x + y)
+    
+    // Pitfall without enough parentheses in SQUARE(x) x*x
+    // SQUARE(num+1) would expand to num+1*num+1 = 5+1*5+1 = 5+5+1 = 11 (wrong)
+    // With ((x)*(x)), SQUARE(num+1) expands to ((num+1)*(num+1)) = ((5+1)*(5+1)) = 36 (correct)
+
+    return 0;
+}
+                    </code></pre>
+                    <p><strong>Caution with Function-like Macros:</strong>
+                    <ul>
+                        <li>Always enclose macro parameters and the entire macro body in parentheses to avoid operator
+                            precedence issues.</li>
+                        <li>Be careful with side effects. If an argument with a side effect (e.g., `x++`) is used
+                            multiple times in the macro expansion, the side effect will occur multiple times.</li>
+                        <li>They don't have type checking like real functions.</li>
+                    </ul>
+                    </p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">B. `#undef` Directive <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>The `#undef` preprocessor directive is used to "undefine" a constant or macro that was previously
+                        defined by `#define`. After `#undef`, the macro name is no longer recognized by the
+                        preprocessor.</p>
+                    <h4>Syntax:</h4>
+                    <div class="syntax-box">#undef IDENTIFIER</div>
+                    <h4>Example:</h4>
+                    <pre><code class="language-c">
+#include <stdio.h>
+
+#define PI 3.14
+// #define NUMBER 15 // Defined for a moment
+
+int main() {
+    printf("PI initially: %f\n", PI);
+
+    #undef PI // PI is now undefined
+
+    // printf("PI after undef: %f\n", PI); // COMPILE TIME ERROR: 'PI' undeclared
+
+    #define PI 3.14159265 // PI can be redefined
+    printf("PI redefined: %f\n", PI);
+
+    // Example from image
+    #define NUMBER 15
+    int square = NUMBER * NUMBER;
+    #undef NUMBER
+    // int new_val = NUMBER; // This would cause an error
+    printf("Square based on NUMBER (before undef): %d\n", square); // Output: 225
+
+    return 0;
+}
+                    </code></pre>
+                    <p>The `#undef` directive can be used to limit the scope of a macro definition or to allow
+                        redefinition of a macro with a different value later in the code (though this is less common and
+                        can be confusing).</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">C. Predefined Macros <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>C provides several standard predefined macros that are readily available for use. These macros
+                        provide information about the compilation process, date, time, etc. They all start and end with
+                        double underscores.</p>
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Macro</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td class="code-cell">`__DATE__`</td>
+                                <td>Represents the current date of compilation in "MMM DD YYYY" format (e.g., "Jun 2
+                                    2012").</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td class="code-cell">`__TIME__`</td>
+                                <td>Represents the current time of compilation in "HH:MM:SS" format (e.g., "03:36:24").
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td class="code-cell">`__FILE__`</td>
+                                <td>Represents the current file name as a string literal.</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td class="code-cell">`__LINE__`</td>
+                                <td>Represents the current line number in the source file as an integer constant.</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td class="code-cell">`__STDC__`</td>
+                                <td>Defined as 1 if the compiler complies with the ANSI C standard. Its presence and
+                                    value can vary with compiler and compilation flags.</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td class="code-cell">`__func__` (C99)</td>
+                                <td>Represents the name of the current function as a string literal. (Technically a
+                                    predefined identifier, not a macro)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <pre><code class="language-c">
+#include <stdio.h>
+
+void testFunction() {
+    printf("Inside function: %s\n", __func__); // C99+
+}
+
+int main() {
+    printf("File : %s\n", __FILE__);
+    printf("Date : %s\n", __DATE__);
+    printf("Time : %s\n", __TIME__);
+    printf("Line : %d\n", __LINE__);
+    
+    #if defined(__STDC__)
+        printf("ANSI C : %d (Compiler claims ANSI C compliance)\n", __STDC__);
+    #else
+        printf("ANSI C : Not strictly defined by __STDC__\n");
+    #endif
+
+    testFunction();
+    printf("Current line after testFunction call: %d\n", __LINE__);
+
+    return 0;
+}
+                    </code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="file-inclusion">
+            <h2><i class="fas fa-file-import"></i>3. File Inclusion (`#include`)</h2>
+            <p>The `#include` preprocessor directive is used to insert the content of another file (typically a header
+                file) into the current source file at the point where the directive appears. This is primarily used to
+                include declarations of library functions, user-defined functions, and macro definitions.</p>
+            <h4>Syntax:</h4>
+            There are two common forms:
+            <ol>
+                <li>
+                    <strong>`#include <filename>` (Angle Brackets):</strong>
+                    <p>Tells the preprocessor to look for the `filename` in a set of standard, system-defined
+                        directories (e.g., `/usr/include` on UNIX-like systems, or directories specified by the
+                        compiler's include path). This form is typically used for including standard library header
+                        files like `<stdio.h>`, `<stdlib.h>`, `<math.h>`.</p>
+                </li>
+                <li>
+                    <strong>`#include "filename"` (Double Quotes):</strong>
+                    <p>Tells the preprocessor to look for the `filename` first in the current directory (where the
+                        source file containing the directive is located). If not found there, it then searches the
+                        standard system directories (same as the angle bracket form). This form is typically used for
+                        including user-defined header files that are part of the current project.</p>
+                </li>
+            </ol>
+            <h4>Example:</h4>
+            <pre><code class="language-c">
+#include <stdio.h>   // Includes standard input/output header for printf, scanf etc.
+#include "myheader.h" // Includes a user-defined header file "myheader.h" from current directory
+
+int main() {
+    printf("Hello C!\n");
+    // Assuming myFunction() is declared in "myheader.h"
+    // myFunction(); 
+    return 0;
+}
+            </code></pre>
+            <h4>Notes on `#include`:</h4>
+            <ul>
+                <li>Comments are generally not recognized within the filename part of an `#include` directive (e.g.,
+                    `#include <a //comment /b>` might treat "a //comment /b" as the filename).</li>
+                <li>Backslashes (`\`) in filenames are usually treated as normal characters, not escape sequences, but
+                    it's safer to use forward slashes (`/`) for portability, especially in paths.</li>
+                <li>You can usually only have comments *after* the complete `#include <filename>` or `#include
+                        "filename"` directive on the same line.</li>
+            </ul>
+        </section>
+
+        <section class="content-section" id="conditional-compilation">
+            <h2><i class="fas fa-code-branch"></i>4. Conditional Compilation Directives</h2>
+            <p>Conditional compilation directives allow you to include or exclude parts of your source code from
+                compilation based on certain conditions evaluated at preprocessing time. This is useful for writing code
+                that can adapt to different environments, enable/disable debugging features, or prevent multiple
+                inclusions of header files.</p>
+            <p>Common conditional compilation directives include:</p>
+            <ul class="directive-list" style="columns: 2; -webkit-columns: 2; -moz-columns: 2;">
+                <li>ifdef</li>
+                <li>ifndef</li>
+                <li>if</li>
+                <li>else</li>
+                <li>elif</li>
+                <li>endif</li>
+            </ul>
+
+
+            <button type="button" class="collapsible">A. `#ifdef` and `#ifndef` <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>`#ifdef MACRO_NAME`</h4>
+                    <p>Checks if `MACRO_NAME` has been defined (usually by a `#define` directive). If yes, the code
+                        block following it (up to `#else`, `#elif`, or `#endif`) is included in the compilation.
+                        Otherwise, it's skipped.</p>
+                    <h4>`#ifndef MACRO_NAME`</h4>
+                    <p>Checks if `MACRO_NAME` has <strong class="highlight">not</strong> been defined. If yes (it's not
+                        defined), the code block following it is included. Otherwise, it's skipped.</p>
+                    <h4>Syntax (with optional `#else`):</h4>
+                    <div class="syntax-box">
+                        #ifdef MACRO_NAME
+                        // code to compile if MACRO_NAME is defined
+                        #else // optional
+                        // code to compile if MACRO_NAME is NOT defined
+                        #endif
+                    </div>
+                    <div class="syntax-box">
+                        #ifndef MACRO_NAME
+                        // code to compile if MACRO_NAME is NOT defined
+                        #else // optional
+                        // code to compile if MACRO_NAME IS defined
+                        #endif
+                    </div>
+                    <h4>Example (`#ifdef`):</h4>
+                    <pre><code class="language-c">
+#include <stdio.h>
+// #include <conio.h>
+
+#define DEBUG_MODE // Comment this line out to see the 'else' part execute
+
+int main() {
+    int a = 0;
+
+    #ifdef DEBUG_MODE
+        printf("Debug mode is ON.\n");
+        a = 2; // Set 'a' to 2 if DEBUG_MODE is defined
+    #else
+        printf("Debug mode is OFF. Enter a number for 'a': ");
+        // scanf("%d", &a); // This part would compile if DEBUG_MODE is not defined
+    #endif
+
+    printf("Value of a: %d\n", a);
+    // getch();
+    return 0;
+}
+                    </code></pre>
+                    <h4>Example (`#ifndef` - commonly used for header guards):</h4>
+                    <p>Header guards prevent issues if a header file is included multiple times in the same translation
+                        unit.</p>
+                    <p><strong>myheader.h:</strong></p>
+                    <pre><code class="language-c">
+#ifndef MY_HEADER_H  // If MY_HEADER_H is not defined
+#define MY_HEADER_H  // Define it now
+
+// Declarations and definitions for this header file
+struct Point { int x; int y; };
+void printPoint(struct Point p);
+
+#endif // MY_HEADER_H
+                    </code></pre>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">B. `#if`, `#else`, `#elif`, `#endif` <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>These directives provide more general conditional compilation based on the evaluation of a
+                        constant integer expression.</p>
+                    <ul>
+                        <li><strong>`#if expression`</strong>: If the `expression` (which must be a constant expression
+                            evaluable at preprocessing time) evaluates to non-zero (true), the subsequent code is
+                            compiled.</li>
+                        <li><strong>`#elif expression`</strong>: "Else if". If the preceding `#if` or `#elif` condition
+                            was false, and this `expression` is true, its code block is compiled.</li>
+                        <li><strong>`#else`</strong>: If all preceding `#if` and `#elif` conditions were false, the code
+                            block under `#else` is compiled.</li>
+                        <li><strong>`#endif`</strong>: Marks the end of the conditional compilation block started by
+                            `#if`, `#ifdef`, or `#ifndef`.</li>
+                    </ul>
+                    <h4>Syntax:</h4>
+                    <div class="syntax-box">
+                        #if constant_expression_1
+                        // code block 1
+                        #elif constant_expression_2 // optional
+                        // code block 2
+                        #else // optional
+                        // code block 3
+                        #endif
+                    </div>
+                    <h4>Example:</h4>
+                    <pre><code class="language-c">
+#include <stdio.h>
+// #include <conio.h>
+
+#define VERSION 2 // Try changing this to 1 or 3
+
+int main() {
+    #if VERSION == 1
+        printf("Running Version 1 features.\n");
+    #elif VERSION == 2
+        printf("Running Version 2 features with enhancements.\n");
+    #elif VERSION > 2 && VERSION < 5
+        printf("Running Beta Version %d.\n", VERSION);
+    #else
+        printf("Unknown or unsupported version.\n");
+    #endif
+
+    #define NUMBER 0 // From your image example
+    #if (NUMBER == 0)
+        printf("Value of Number is: %d\n", NUMBER);
+    #endif
+    // getch();
+    return 0;
+}
+                    </code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="other-directives">
+            <h2><i class="fas fa-ellipsis-h"></i>5. Other Preprocessor Directives</h2>
+
+            <button type="button" class="collapsible">A. `#error` Directive <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>The `#error` directive causes the preprocessor to issue an error message and terminate the
+                        compilation process. It's often used within conditional compilation blocks to signal an invalid
+                        configuration or missing dependency.</p>
+                    <h4>Syntax:</h4>
+                    <div class="syntax-box">#error message_string</div>
+                    <h4>Example:</h4>
+                    <pre><code class="language-c">
+#include <stdio.h>
+// To see the error, DO NOT define _USE_MATH_LIB
+// #define _USE_MATH_LIB // Uncomment this to make it compile successfully
+
+#ifndef _USE_MATH_LIB
+    #error Math library features are required for this module. Please define _USE_MATH_LIB or include math.h.
+#else
+    #include <math.h> // Include math.h only if _USE_MATH_LIB is defined
+#endif
+
+int main() {
+    #ifdef _USE_MATH_LIB
+        float a = sqrt(7.0);
+        printf("sqrt(7) = %f\n", a);
+    #else
+        printf("Math functions are disabled.\n");
+    #endif
+    return 0;
+}
+                    </code></pre>
+                    <p>If `_USE_MATH_LIB` is not defined, the compilation will stop with the specified error message.
+                    </p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">B. `#pragma` Directive <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>The `#pragma` directive is used to provide additional, implementation-defined information or
+                        instructions to the compiler. Its behavior is highly compiler-specific.</p>
+                    <h4>Syntax:</h4>
+                    <div class="syntax-box">#pragma token(s)</div>
+                    <p>Common uses (compiler-dependent):</p>
+                    <ul>
+                        <li>`#pragma once`: Often used as an alternative to header guards to ensure a header file is
+                            included only once. (Widely supported but not standard C).</li>
+                        <li>`#pragma pack(...)`: To control structure member alignment.</li>
+                        <li>`#pragma warning(...)`: To suppress or modify compiler warnings.</li>
+                        <li>`#pragma startup function_name` / `#pragma exit function_name`: (Common in older compilers
+                            like Turbo C/Borland) to specify functions to run before `main()` or before program
+                            termination. These are non-standard.</li>
+                    </ul>
+                    <h4>Example (Illustrative, `#pragma startup/exit` are non-standard):</h4>
+                    <pre><code class="language-c">
+#include <stdio.h>
+// #include <conio.h> // For getch in old compilers
+
+// The following pragmas are typically compiler-specific (e.g., Turbo C)
+// and may not work with modern standard C compilers like GCC/Clang.
+// #pragma startup my_startup_func
+// #pragma exit my_exit_func
+
+void my_startup_func() {
+    printf("Program is starting up (via pragma startup - if supported).\n");
+}
+
+void my_exit_func() {
+    printf("Program is exiting (via pragma exit - if supported).\n");
+}
+
+int main() {
+    printf("Inside main function.\n");
+    // getch();
+    return 0;
+}
+/*
+Expected output (on a compiler supporting these pragmas like Turbo C):
+Program is starting up (via pragma startup - if supported).
+Inside main function.
+Program is exiting (via pragma exit - if supported).
+*/
+                    </code></pre>
+                    <p>For modern C, functions to run before `main` can sometimes be achieved using constructor
+                        attributes (e.g., `__attribute__((constructor))` with GCC/Clang), and `atexit()` can register
+                        functions to run at normal program termination.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="key-points-compilation">
+            <h2><i class="fas fa-info-circle"></i>6. Key Points to Remember (Compilation & Preprocessing)</h2>
+            <ul>
+                <li>Source program is converted into executable code through different processes like preprocessing,
+                    compilation, assembling, and linking.</li>
+                <li>Local variables (typically `auto`) use stack memory.</li>
+                <li>Dynamic memory allocation functions (`malloc`, `calloc`, `realloc`) use heap memory.</li>
+                <li>The C preprocessor is essentially a text substitution tool that runs before the actual compiler.
+                </li>
+            </ul>
+            <div class="definition">
+                <strong>Compilers vs. Interpreters:</strong>
+                <ul>
+                    <li><strong>Compiler:</strong> Reads the entire source code of the program and converts it into
+                        binary/machine code (object code) all at once. This process is called compilation. The resulting
+                        executable can then be run. C and C++ are compiled languages. Program speed is generally fast.
+                    </li>
+                    <li><strong>Interpreter:</strong> Reads the program source code one line at a time and executes that
+                        line immediately. This process is called interpretation. Examples: BASIC, Python (often).
+                        Program speed can be slower due to line-by-line translation during runtime. Interpretation
+                        occurs at every line of the program during execution.</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <div class="page-navigation">
+            <a href="topic-8.html" class="nav-button back-button">
+                <i class="fas fa-arrow-left"></i> Prev: File Handling
+            </a>
+            <a href="../c-programming.html" class="nav-button back-button"
+                style="margin-left: auto; margin-right: auto;">
+                <i class="fas fa-list"></i> Back to Syllabus
+            </a>
+            <a href="topic-10.html" class="nav-button next-button">
+                Next: Advanced Topics <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <footer class="page-footer">
+            © 2024 Eduvision. All rights reserved. Preprocessing your C knowledge.
+        </footer>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script>
+        Prism.plugins.autoloader.languages_path = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/';
+
+        var coll = document.getElementsByClassName("collapsible");
+        for (var i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            });
+        }
+
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+            } else {
+                body.classList.remove('dark-mode');
+            }
+            localStorage.setItem('theme', theme);
+            Prism.highlightAll();
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (body.classList.contains('dark-mode')) {
+                applyTheme('light');
+            } else {
+                applyTheme('dark');
+            }
+        });
+
+        const savedTheme = localStorage.getItem('theme') ||
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        applyTheme(savedTheme);
+    </script>
+</body>
+
+</html>

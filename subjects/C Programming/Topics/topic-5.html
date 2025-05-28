@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arrays and Strings in C - Eduvision</title>
+    <meta name="description"
+        content="Learn about arrays and strings in C programming: one-dimensional, two-dimensional, and multidimensional arrays, string concepts, string handling functions (strlen, strcpy, strcmp, strcat), and array of strings.">
+    <meta name="keywords"
+        content="C arrays, C strings, 1D array, 2D array, multidimensional array, string handling, strlen, strcpy, strcmp, strcat, array of strings, C programming tutorial">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        :root {
+            /* Light Mode Defaults */
+            --bg-color: #f0f4f8;
+            --card-bg: #ffffff;
+            --primary-color: #2563eb;
+            --secondary-color: #4f46e5;
+            --accent-color: #10b981;
+            --text-color: #374151;
+            --heading-color: #111827;
+            --border-color: #d1d5db;
+            --gradient-start: var(--primary-color);
+            --gradient-end: var(--secondary-color);
+            --font-main: 'Poppins', sans-serif;
+            --font-logo: 'Nunito', sans-serif;
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --card-shadow-color: rgba(0, 0, 0, 0.05);
+            --link-color: var(--primary-color);
+            --link-hover-color: #1d4ed8;
+            --link-hover-bg: #eff6ff;
+            --collapsible-content-bg: rgba(0, 0, 0, 0.02);
+            --definition-bg: rgba(37, 99, 235, 0.05);
+            --table-header-bg: var(--primary-color);
+            --table-header-text: white;
+            --table-row-even-bg: rgba(0, 0, 0, 0.015);
+            --theme-toggle-bg: var(--card-bg);
+            --theme-toggle-icon: var(--primary-color);
+            --theme-toggle-hover-bg: var(--primary-color);
+            --theme-toggle-hover-icon: white;
+            --tooltip-bg: #333;
+            --tooltip-text: #fff;
+            --diagram-bg: var(--collapsible-content-bg);
+            --diagram-border: var(--border-color);
+        }
+
+        body.dark-mode {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-color: #c9d1d9;
+            --heading-color: #f0f6fc;
+            --border-color: #30363d;
+            --shadow-color: rgba(0, 0, 0, 0.25);
+            --card-shadow-color: rgba(0, 0, 0, 0.2);
+            --link-color: #58a6ff;
+            --link-hover-color: #80baff;
+            --link-hover-bg: rgba(88, 166, 255, 0.1);
+            --collapsible-content-bg: rgba(255, 255, 255, 0.03);
+            --definition-bg: rgba(88, 166, 255, 0.1);
+            --table-header-bg: var(--primary-color);
+            --table-row-even-bg: rgba(255, 255, 255, 0.03);
+            --theme-toggle-bg: var(--card-bg);
+            --tooltip-bg: #c9d1d9;
+            --tooltip-text: #0d1117;
+            --diagram-bg: rgba(255, 255, 255, 0.05);
+            --diagram-border: #444c56;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .eduvision-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+            font-family: var(--font-logo);
+        }
+
+        .eduvision-logo .logo-text {
+            color: var(--heading-color);
+        }
+
+        body.dark-mode .eduvision-logo .logo-text {
+            color: #f0f6fc;
+        }
+
+        .eduvision-logo .text-yellow-300 {
+            color: #f59e0b !important;
+        }
+
+        .eduvision-logo .group:hover .text-yellow-300 {
+            color: #fcd34d !important;
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+            color: var(--theme-toggle-hover-icon);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-top: 80px;
+            margin-bottom: 2rem;
+            padding: 2rem 1rem;
+            border-radius: 12px;
+            background: var(--card-bg);
+            box-shadow: 0 10px 30px var(--card-shadow-color);
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--heading-color);
+            background: linear-gradient(90deg, var(--gradient-start), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 1.15rem;
+            color: var(--text-color);
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .content-section {
+            background-color: var(--card-bg);
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px var(--card-shadow-color);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s, border-color 0.3s;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px var(--shadow-color);
+        }
+
+        .content-section h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--heading-color);
+            margin-top: 0;
+            margin-bottom: 1.8rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .content-section h2 i {
+            margin-right: 1rem;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section .definition {
+            margin-bottom: 1.2rem;
+            font-size: 1rem;
+        }
+
+        .content-section ul {
+            padding-left: 25px;
+            list-style: none;
+        }
+
+        .content-section ul li::before {
+            content: "\f138";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--primary-color);
+            margin-right: 12px;
+            display: inline-block;
+            font-size: 0.9em;
+        }
+
+        pre[class*="language-"] {
+            padding: 1.5em;
+            margin: 1.5em 0;
+            overflow: auto;
+            border-radius: 8px;
+            background: #2d2d2d;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode pre[class*="language-"] {
+            background: #1e1e1e;
+        }
+
+        code[class*="language-"],
+        pre[class*="language-"] {
+            font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+            font-size: 0.95em;
+        }
+
+        .collapsible {
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: white;
+            cursor: pointer;
+            padding: 15px 25px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            transition: filter 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .collapsible:hover {
+            filter: brightness(1.15);
+        }
+
+        .collapsible.active {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .collapsible-content {
+            padding: 0 22px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out, background-color 0.3s;
+            background-color: var(--collapsible-content-bg);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            margin-bottom: 1.2rem;
+            border: 1px solid var(--border-color);
+            border-top: none;
+        }
+
+        .collapsible-content>div {
+            padding: 20px 0;
+        }
+
+        .collapsible .icon::before {
+            content: '\f078';
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible.active .icon::before {
+            transform: rotate(-180deg);
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 10px var(--card-shadow-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .custom-table th,
+        .custom-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        .custom-table th {
+            background-color: var(--table-header-bg);
+            color: var(--table-header-text);
+            font-weight: 600;
+        }
+
+        .custom-table tr:nth-child(even) {
+            background-color: var(--table-row-even-bg);
+        }
+
+        .custom-table tr:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark-mode .custom-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted var(--accent-color);
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: max-content;
+            max-width: 250px;
+            background-color: var(--tooltip-bg);
+            color: var(--tooltip-text);
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .definition {
+            background-color: var(--definition-bg);
+            border-left: 5px solid var(--primary-color);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+            font-style: normal;
+        }
+
+        .definition strong {
+            color: var(--primary-color);
+        }
+
+        .page-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            margin-bottom: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s, color 0.2s;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            font-size: 1rem;
+        }
+
+        .nav-button i.fa-arrow-left {
+            margin-right: 0.5em;
+        }
+
+        .nav-button i.fa-arrow-right {
+            margin-left: 0.5em;
+        }
+
+        .back-button {
+            background-color: var(--card-bg);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .back-button:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+        }
+
+        .next-button {
+            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+            color: white;
+        }
+
+        .next-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+            filter: brightness(1.1);
+        }
+
+        .page-footer {
+            text-align: center;
+            padding: 2.5rem 0;
+            margin-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: #6b7280;
+            transition: border-top-color 0.3s;
+        }
+
+        body.dark-mode .page-footer {
+            color: #9ca3af;
+        }
+
+        .diagram-container {
+            background-color: var(--diagram-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem auto;
+            text-align: center;
+            border: 1px solid var(--diagram-border);
+            max-width: 700px;
+            /* Adjusted for potentially wider array diagrams */
+        }
+
+        .diagram-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            /* border: 1px solid var(--border-color); /* Removed as image itself might have border */
+        }
+
+        .diagram-container h4 {
+            margin-top: 0;
+            color: var(--accent-color);
+        }
+
+        .array-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 1em 0;
+            flex-wrap: wrap;
+            /* Allow wrapping for many elements */
+        }
+
+        .array-cell {
+            border: 1px solid var(--primary-color);
+            padding: 10px;
+            margin: 2px;
+            min-width: 30px;
+            /* Ensure visibility for single digits */
+            text-align: center;
+            background-color: var(--card-bg);
+            font-family: 'Fira Code', monospace;
+        }
+
+        .array-index {
+            font-size: 0.8em;
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-top: 2px;
+        }
+
+
+        .syntax-box {
+            background-color: var(--collapsible-content-bg);
+            padding: 1em;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            margin: 1em 0;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            font-size: 0.9em;
+            color: var(--text-color);
+        }
+
+        body.dark-mode .syntax-box {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .advantages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .advantage-card {
+            background-color: var(--collapsible-content-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent-color);
+            box-shadow: 0 4px 8px var(--card-shadow-color);
+        }
+
+        .advantage-card h4 {
+            color: var(--accent-color);
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            font-size: 1.15rem;
+        }
+
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.4rem;
+            }
+
+            .content-section h2 {
+                font-size: 1.7rem;
+            }
+
+            .content-section h2 i {
+                font-size: 1.5rem;
+            }
+
+            #theme-toggle {
+                top: 15px;
+                right: 15px;
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+
+            .eduvision-logo {
+                top: 15px;
+                left: 15px;
+            }
+
+            .eduvision-logo .text-2xl {
+                font-size: 1.5rem;
+            }
+
+            .page-header {
+                margin-top: 70px;
+                padding: 1.5rem 0.5rem;
+            }
+
+            .content-section {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .page-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-button {
+                width: 100%;
+                justify-content: center;
+                padding: 15px 20px;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../../index.html" class="flex items-center group">
+                <span class="logo-text">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="logo-text">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>Arrays and Strings in C</h1>
+            <p>Managing collections of data efficiently with arrays and handling text with strings.</p>
+        </header>
+
+        <section class="content-section" id="intro-arrays">
+            <h2><i class="fas fa-th-large"></i>1. Introduction to Arrays</h2>
+            <p>C supports a derived data type known as an <strong class="tooltip">array<span class="tooltiptext">A
+                        collection of elements of the same data type stored in contiguous memory
+                        locations.</span></strong>, which can be used to handle large amounts of related data (multiple
+                values) at a time.</p>
+            <div class="definition">
+                An <strong>array</strong> is a collection or group of elements of the <strong class="highlight">same
+                    data type</strong>. All elements of an array are <strong class="highlight">homogeneous</strong>
+                (similar) and it has <strong class="highlight">contiguous memory locations</strong>. It is a data
+                structure that can store a fixed-size sequential collection of elements of the same data type.
+            </div>
+
+            <h3>What's the need for an array?</h3>
+            <p>Suppose you have to store the marks of 50 students. One way is to declare 50 different variables. This
+                would be very difficult to manage, and accessing these values systematically would require a lot of
+                code.</p>
+            <p>Arrays provide a better way. By using an array, we can store all 50 marks under a single name and access
+                the elements easily using an index. Only a few lines of code (often with loops) are required to access
+                or process all elements of an array.</p>
+
+            <h4>Where arrays are used:</h4>
+            <ul>
+                <li>To store a list of Employee or Student names.</li>
+                <li>To store marks of students.</li>
+                <li>To store lists of numbers, characters, etc.</li>
+                <li>Implementing other data structures like stacks, queues, matrices.</li>
+            </ul>
+
+            <h3>Advantages of C Arrays:</h3>
+            <div class="advantages-grid">
+                <div class="advantage-card">
+                    <h4>1. Code Optimization</h4>
+                    <p>Less code is needed to access and manipulate large amounts of similar data.</p>
+                </div>
+                <div class="advantage-card">
+                    <h4>2. Easy to Traverse Data</h4>
+                    <p>Using loops (like `for` loop), we can easily iterate through and process all elements of an
+                        array.</p>
+                </div>
+                <div class="advantage-card">
+                    <h4>3. Easy to Sort Data</h4>
+                    <p>Sorting algorithms can be efficiently applied to arrays to arrange elements in a specific order.
+                    </p>
+                </div>
+                <div class="advantage-card">
+                    <h4>4. Random Access</h4>
+                    <p>We can access any element in an array directly using its index, without needing to go through
+                        other elements.</p>
+                </div>
+            </div>
+
+            <h3>Disadvantage of Arrays:</h3>
+            <ul>
+                <li><strong>Fixed Size:</strong> The size of an array is defined at the time of declaration and cannot
+                    be changed during runtime. It doesn't grow or shrink dynamically like data structures such as Linked
+                    Lists. (Though dynamic memory allocation can be used to create arrays of variable size at runtime,
+                    the size of that specific allocated block is then fixed).</li>
+            </ul>
+        </section>
+
+        <section class="content-section" id="one-dimensional-arrays">
+            <h2><i class="fas fa-grip-lines"></i>2. One-Dimensional Arrays</h2>
+            <p>A one-dimensional array is the simplest form of an array, representing a linear sequence of elements.</p>
+
+            <button type="button" class="collapsible">A. Declaration of an Array <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>To declare an array in C, you need to specify the data type of its elements, its name, and its
+                        size (length).</p>
+                    <h4>Syntax:</h4>
+                    <div class="syntax-box">data_type array_name[size];</div>
+                    <h4>Example:</h4>
+                    <div class="syntax-box">int arr[10]; // Declares an integer array named 'arr' that can hold 10
+                        integers.</div>
+                    <div class="diagram-container">
+                        <h4>Visual Representation (int arr[10]):</h4>
+                        <img src="https://i.imgur.com/X7nL68v.png" alt="Array declaration int arr[10]">
+                        <p>Here, `int` is the data type, `arr` is the name of the array, and `10` is the size. This
+                            means `arr` can hold 10 elements of type `int`. The <strong class="tooltip">index<span
+                                    class="tooltiptext">A numerical value used to identify a specific element within an
+                                    array.</span></strong> of an array starts from `0` and goes up to `size-1`. So, for
+                            `arr[10]`, valid indices are `0, 1, ..., 9`.</p>
+                    </div>
+                    <div class="diagram-container">
+                        <h4>Visual Representation (int arr[5]):</h4>
+                        <img src="https://i.imgur.com/G0Z2gU2.png" alt="Array declaration int arr[5]">
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">B. Initialization of an Array <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>After an array is declared, it must be initialized. Otherwise, its elements will contain <strong
+                            class="tooltip">garbage values<span class="tooltiptext">Unpredictable, random values left in
+                                memory.</span></strong> (except for static or global arrays, which are initialized to
+                        zero by default). An array can be initialized at either compile time or runtime.</p>
+
+                    <h4>Compile-Time Array Initialization:</h4>
+                    <p>This is done at the time of declaration by providing a list of initial values enclosed in curly
+                        braces `{}`.</p>
+                    <h4>Syntax:</h4>
+                    <div class="syntax-box">data_type array_name[size] = {value1, value2, ..., valueN};</div>
+                    <h4>Example:</h4>
+                    <div class="syntax-box">int age[5] = {22, 25, 30, 32, 35};</div>
+                    <div class="diagram-container">
+                        <h4>Visual Representation (int age[5]):</h4>
+                        <img src="https://i.imgur.com/0UeD4qY.png" alt="Array initialization int age[5]">
+                    </div>
+                    <p>Other examples:</p>
+                    <pre><code class="language-c">
+int marks[4] = {67, 87, 56, 77}; // Integer array initialization
+float area[5] = {23.4, 6.8, 5.5};  // Float array initialization (remaining elements are 0.0)
+// int scores[2] = {10, 20, 30}; // COMPILE TIME ERROR: Too many initializers
+                    </code></pre>
+
+                    <h4>Different Ways of Initializing Arrays (Compile Time):</h4>
+                    <ol>
+                        <li>
+                            <strong>Initializing all specified memory locations:</strong> If the number of initial
+                            values is equal to the array size.
+                            <pre><code class="language-c">int a[5] = {10, 20, 30, 40, 50};</code></pre>
+                            <div class="diagram-container">
+                                <img src="https://i.imgur.com/tQdJk2u.png"
+                                    alt="Full array initialization with memory addresses">
+                            </div>
+                            <pre><code class="language-c">char b[8] = {'C', 'O', 'M', 'P', 'U', 'T', 'E', 'R'};</code></pre>
+                            <div class="diagram-container">
+                                <img src="https://i.imgur.com/jKq3u8Y.png" alt="Character array initialization">
+                            </div>
+                        </li>
+                        <li>
+                            <strong>Partial Array Initialization:</strong> If the number of initial values is less than
+                            the array size, the remaining elements are automatically initialized to zero (for numeric
+                            types) or null characters (for char arrays if interpreted as strings).
+                            <pre><code class="language-c">int a[5] = {10, 15}; // a[0]=10, a[1]=15, a[2]=0, a[3]=0, a[4]=0</code></pre>
+                            <div class="diagram-container">
+                                <img src="https://i.imgur.com/n5m0yH1.png" alt="Partial array initialization">
+                            </div>
+                        </li>
+                        <li>
+                            <strong>Initialization without size:</strong> If you provide initial values but omit the
+                            size in the square brackets, the compiler automatically determines the array size based on
+                            the number of initializers.
+                            <pre><code class="language-c">int scores[] = {90, 85, 92, 78}; // Compiler sets size to 4</code></pre>
+                        </li>
+                        <li>
+                            <strong>String Initialization (for `char` arrays):</strong> A special way to initialize
+                            character arrays using a string literal. The null terminator (`\0`) is automatically added.
+                            <pre><code class="language-c">char name[] = "Alice"; // Equivalent to {'A', 'l', 'i', 'c', 'e', '\0'}, size is 6
+char greeting[10] = "Hello"; // size 10, "Hello\0" followed by 4 more nulls
+                            </code></pre>
+                        </li>
+                    </ol>
+
+                    <h4>Runtime Array Initialization:</h4>
+                    <p>Array elements can be initialized at runtime, typically by reading values from the user using
+                        `scanf()` within a loop.</p>
+                    <pre><code class="language-c">
+#include <stdio.h>
+// #include <conio.h> // For getch
+
+int main() {
+    int arr[4];
+    int i, j;
+
+    printf("Enter array elements:\n");
+    for (i = 0; i < 4; i++) {
+        printf("Enter element arr[%d]: ", i);
+        scanf("%d", &arr[i]); // Runtime array initialization
+    }
+
+    printf("\nArray elements are: ");
+    for (j = 0; j < 4; j++) {
+        printf("%d ", arr[j]);
+    }
+    printf("\n");
+    // getch();
+    return 0;
+}
+                    </code></pre>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">C. Accessing Array Elements <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>Array elements are accessed using their <strong class="tooltip">index (or subscript)<span
+                                class="tooltiptext">A zero-based integer indicating the position of an
+                                element.</span></strong>. The index is placed in square brackets `[]` after the array
+                        name.</p>
+                    <h4>Syntax:</h4>
+                    <div class="syntax-box">array_name[index]</div>
+                    <p>For an array `arr` of size `N`, valid indices range from `0` to `N-1`.</p>
+                    <ul>
+                        <li>`array_name[0]` accesses the first element.</li>
+                        <li>`array_name[N-1]` accesses the last element.</li>
+                    </ul>
+                    <h4>Example:</h4>
+                    <pre><code class="language-c">
+#include <stdio.h>
+// #include <conio.h>
+
+int main() {
+    int arr[] = {2, 3, 4}; // Compile time initialization, size is 3
+    int i;
+
+    printf("Elements of arr: ");
+    for (i = 0; i < 3; i++) { // i goes from 0 to 2
+        printf("%d\t", arr[i]); // Accessing arr[0], arr[1], arr[2]
+    }
+    printf("\n");
+
+    int marks[5] = {20, 30, 40, 50, 60};
+    printf("Marks: ");
+    for(i=0; i<5; i++){
+        printf("%d ", marks[i]);
+    }
+    printf("\n");
+    // getch();
+    return 0;
+}
+// Output for arr: 2   3   4
+// Output for marks: 20 30 40 50 60
+                    </code></pre>
+                    <h4>Key Notes on Accessing:</h4>
+                    <ul>
+                        <li>Array indices are always 0-based.</li>
+                        <li>If the size of an array is `n`, the last element is at index `n-1`.</li>
+                        <li>Accessing an array element outside its valid index range (e.g., `arr[10]` for an array of
+                            size 10) leads to <strong class="highlight">undefined behavior</strong>, which can cause
+                            crashes or incorrect results. C does not perform automatic bounds checking.</li>
+                        <li>Memory addresses: If an array `arr` starts at address `B`, and each element takes `S` bytes,
+                            then `arr[i]` is located at address `B + i * S`.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="multi-dimensional-arrays">
+            <h2><i class="fas fa-table"></i>3. Multi-Dimensional Arrays</h2>
+            <p>C allows arrays of more than one dimension. The most common is the two-dimensional array, often used to
+                represent matrices or tables.</p>
+
+            <button type="button" class="collapsible">A. Two-Dimensional Arrays (2D Arrays) <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>A two-dimensional array can be thought of as an "array of arrays," organized into rows and
+                        columns. It is also known as a matrix.</p>
+                    <h4>Declaration:</h4>
+                    <div class="syntax-box">data_type array_name[number_of_rows][number_of_columns];</div>
+                    <h4>Example:</h4>
+                    <div class="syntax-box">
+                        int matrix[4][3]; // A 2D array (matrix) with 4 rows and 3 columns
+                        int a[3][4]; // A 2D array with 3 rows and 4 columns
+                    </div>
+                    <div class="diagram-container">
+                        <h4>Visual Representation (int a[3][4]):</h4>
+                        <img src="https://i.imgur.com/d1pB311.png" alt="2D Array declaration int a[3][4]">
+                    </div>
+
+                    <h4>Initialization:</h4>
+                    <p>2D arrays can be initialized by providing values for each row enclosed in their own curly braces,
+                        within the main curly braces for the array.</p>
+                    <div class="syntax-box">
+                        int arr[4][3] = {
+                        {1, 2, 3}, // Row 0
+                        {2, 3, 4}, // Row 1
+                        {3, 4, 5}, // Row 2
+                        {4, 5, 6} // Row 3
+                        };
+                    </div>
+                    <p>If inner braces are omitted, initialization happens row by row:
+                        <br><code>int arr[2][2] = {1, 2, 3, 4}; // arr[0][0]=1, arr[0][1]=2, arr[1][0]=3, arr[1][1]=4</code>
+                    </p>
+
+                    <h4>Accessing Elements:</h4>
+                    <p>Elements are accessed using two indices: `array_name[row_index][column_index]`.</p>
+                    <pre><code class="language-c">
+#include <stdio.h>
+// #include <conio.h>
+
+int main() {
+    int arr[4][3] = {{1,2,3}, {2,3,4}, {3,4,5}, {4,5,6}};
+    int i, j;
+
+    printf("Traversing 2D array:\n");
+    for (i = 0; i < 4; i++) {       // Loop for rows
+        for (j = 0; j < 3; j++) {   // Loop for columns
+            printf("arr[%d][%d] = %d\t", i, j, arr[i][j]);
+        }
+        printf("\n"); // Newline after each row
+    }
+    // getch();
+    return 0;
+}
+/*
+Output:
+Traversing 2D array:
+arr[0][0] = 1   arr[0][1] = 2   arr[0][2] = 3
+arr[1][0] = 2   arr[1][1] = 3   arr[1][2] = 4
+arr[2][0] = 3   arr[2][1] = 4   arr[2][2] = 5
+arr[3][0] = 4   arr[3][1] = 5   arr[3][2] = 6
+*/
+                    </code></pre>
+                    <h4>Example: Addition of Two Matrices</h4>
+                    <p>This requires reading two matrices from the user and then adding corresponding elements.</p>
+                    <pre><code class="language-c">
+#include <stdio.h>
+
+int main() {
+    int a[25][25], b[25][25], c[25][25];
+    int i, j, m, n; // m for rows, n for columns
+
+    printf("Enter the number of rows and columns for matrices: ");
+    scanf("%d %d", &m, &n);
+
+    printf("\nEnter elements of matrix A (%d x %d):\n", m, n);
+    for (i = 0; i < m; i++) {
+        for (j = 0; j < n; j++) {
+            printf("A[%d][%d]: ", i, j);
+            scanf("%d", &a[i][j]);
+        }
+    }
+
+    printf("\nEnter elements of matrix B (%d x %d):\n", m, n);
+    for (i = 0; i < m; i++) {
+        for (j = 0; j < n; j++) {
+            printf("B[%d][%d]: ", i, j);
+            scanf("%d", &b[i][j]);
+        }
+    }
+
+    // Adding matrices
+    for (i = 0; i < m; i++) {
+        for (j = 0; j < n; j++) {
+            c[i][j] = a[i][j] + b[i][j];
+        }
+    }
+
+    printf("\nResultant Matrix C (A + B):\n");
+    for (i = 0; i < m; i++) {
+        for (j = 0; j < n; j++) {
+            printf("%d\t", c[i][j]);
+        }
+        printf("\n");
+    }
+    return 0;
+}
+                    </code></pre>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">B. Higher-Dimensional Arrays (e.g., 3D) <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>C supports arrays with more than two dimensions. A three-dimensional array can be thought of as
+                        an array of 2D arrays (or a "cuboid" of elements).</p>
+                    <h4>Declaration (3D Array):</h4>
+                    <div class="syntax-box">data_type array_name[size1][size2][size3];</div>
+                    <h4>Initialization (3D Array):</h4>
+                    <pre><code class="language-c">
+int test[2][3][2] = { // 2 blocks, each with 3 rows and 2 columns
+    { // Block 0
+        {1, 2},   // Block 0, Row 0
+        {3, 4},   // Block 0, Row 1
+        {5, 6}    // Block 0, Row 2
+    },
+    { // Block 1
+        {7, 8},   // Block 1, Row 0
+        {9, 10},  // Block 1, Row 1
+        {11, 12}  // Block 1, Row 2
+    }
+};
+                    </code></pre>
+                    <h4>Example (Input and Display 3D Array):</h4>
+                    <pre><code class="language-c">
+#include <stdio.h>
+
+int main() {
+    // This array can store 2*3*2 = 12 elements
+    int test[2][3][2];
+    int i, j, k;
+
+    printf("Enter 12 values:\n");
+    for (i = 0; i < 2; ++i) {
+        for (j = 0; j < 3; ++j) {
+            for (k = 0; k < 2; ++k) {
+                printf("Enter value for test[%d][%d][%d]: ", i, j, k);
+                scanf("%d", &test[i][j][k]);
+            }
+        }
+    }
+
+    printf("\nDisplaying values:\n");
+    for (i = 0; i < 2; ++i) {
+        for (j = 0; j < 3; ++j) {
+            for (k = 0; k < 2; ++k) {
+                printf("test[%d][%d][%d] = %d\n", i, j, k, test[i][j][k]);
+            }
+        }
+    }
+    return 0;
+}
+/* Example Input (12 values, e.g., 1 to 12):
+1 2 3 4 5 6 7 8 9 10 11 12
+Output:
+Displaying values:
+test[0][0][0] = 1
+test[0][0][1] = 2
+test[0][1][0] = 3
+...
+test[1][2][1] = 12
+*/
+                    </code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="strings">
+            <h2><i class="fas fa-font"></i>4. Strings in C</h2>
+            <p>In C, a string is essentially an <strong class="highlight">array of characters</strong> that is
+                terminated by a special <strong class="tooltip">null character (`\0`)<span class="tooltiptext">A
+                        character with ASCII value 0, marking the end of the string.</span></strong>. This null
+                character indicates the end of the string. Strings are usually enclosed in double quotes (`"`), whereas
+                single characters are enclosed in single quotes (`'`).</p>
+            <p>C does not have a built-in string data type like in some other languages. Instead, strings are handled as
+                character arrays.</p>
+
+            <button type="button" class="collapsible">A. Declaring and Initializing Strings <span
+                    class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>Declaration:</h4>
+                    <p>A string variable is declared as an array of characters.</p>
+                    <div class="syntax-box">char string_name[size];</div>
+                    <p>The `size` determines the maximum number of characters the string can hold, <strong
+                            class="highlight">including the null terminator (`\0`)</strong>. So, `char str[10];` can
+                        hold a string of up to 9 actual characters plus the null terminator.</p>
+                    <p>Invalid declarations (size must be specified unless initialized):</p>
+                    <div class="syntax-box">
+                        char str[]; // Invalid if not initialized
+                        char str[0]; // Invalid or problematic
+                        char str[-1]; // Invalid
+                    </div>
+
+                    <h4>Initialization:</h4>
+                    <p>Strings can be initialized in several ways:</p>
+                    <ol>
+                        <li><strong>Character by character (with explicit null terminator):</strong>
+                            <pre><code class="language-c">char ch[13] = {'c', ' ', 'p', 'r', 'o', 'g', 'r', 'a', 'm', 'm', 'i', 'n', 'g', '\0'};</code></pre>
+                        </li>
+                        <li><strong>Using a string literal (null terminator added automatically):</strong>
+                            <pre><code class="language-c">char ch2[13] = "cprogramming"; // Compiler adds '\0' at the end. Size must be at least length+1.
+char greeting[] = "Hello";   // Size automatically becomes 6 (H,e,l,l,o,\0)
+                            </code></pre>
+                        </li>
+                        <li><strong>Partial initialization (remaining elements are null characters):</strong>
+                            <pre><code class="language-c">char str[5] = {'5', '+', 'A'}; // str[0]='5', str[1]='+', str[2]='A', str[3]='\0', str[4]='\0'</code></pre>
+                        </li>
+                    </ol>
+                    <div class="diagram-container">
+                        <h4>Visual Representation (char name[9] = "COMPUTER"):</h4>
+                        <img src="https://i.imgur.com/rR1Vj4W.png" alt="String initialization with null terminator">
+                        <p>The string "COMPUTER" has 8 characters. The array `name` needs 9 bytes to store these 8
+                            characters plus the null terminator `\0`.</p>
+                    </div>
+                    <p><strong>Note:</strong> In string initialization, you cannot initialize with more characters than
+                        `size - 1` (to leave space for `\0`).</p>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">B. Reading and Writing Strings <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <h4>Using `scanf()` and `printf()` with `%s`:</h4>
+                    <p>The `%s` format specifier is used with `scanf()` to read a string and with `printf()` to display
+                        a string.</p>
+                    <pre><code class="language-c">
+#include <stdio.h>
+
+int main() {
+    char name[20]; // Declare a character array to store the string
+
+    printf("Enter name: ");
+    scanf("%s", name); // Reads string until a whitespace is encountered.
+                       // No '&' needed for char array name with %s.
+
+    printf("Your name is %s.\n", name);
+    return 0;
+}
+/*
+Example Input: Dennis Ritchie
+Output: Your name is Dennis.
+(scanf with %s stops at the space)
+*/
+                    </code></pre>
+                    <p><strong>Caution with `scanf("%s", ...)`:</strong> It does not perform bounds checking, so if the
+                        user enters a string longer than the array size (minus 1 for `\0`), a buffer overflow can occur.
+                        Also, it stops reading at the first whitespace.</p>
+
+                    <h4>Unformatted I/O Functions for Strings:</h4>
+                    <div class="diagram-container">
+                        <h4>String I/O Functions Overview</h4>
+                        <img src="https://i.imgur.com/gYn4L2P.png" alt="String I/O Functions">
+                        <!-- Manually add gets() warning here or ensure it's clear in the text -->
+                    </div>
+                    <ul>
+                        <li>
+                            <strong>`getchar()`:</strong> Reads a single character. Can be used in a loop to read a
+                            string character by character.
+                            <pre><code class="language-c">
+#include <stdio.h>
+#include <ctype.h> // For isalpha, isdigit
+
+int main() {
+    char ch;
+    printf("Enter any character/digit: ");
+    ch = getchar(); // Reads one character
+
+    if (isalpha(ch)) {
+        printf("'%c' is an alphabet.\n", ch);
+    } else if (isdigit(ch)) {
+        printf("'%c' is a digit.\n", ch);
+    } else {
+        printf("'%c' is an alphanumeric or special character.\n", ch);
+    }
+    return 0;
+}
+                            </code></pre>
+                        </li>
+                        <li>
+                            <strong>`putchar()`:</strong> Writes a single character.
+                            <pre><code class="language-c">
+#include <stdio.h>
+#include <ctype.h>
+
+int main() {
+    char ch_input;
+    printf("Enter any alphabet either in lower or uppercase: ");
+    ch_input = getchar();
+
+    if (islower(ch_input)) {
+        putchar(toupper(ch_input));
+    } else {
+        putchar(tolower(ch_input));
+    }
+    putchar('\n'); // Add a newline
+    return 0;
+}
+                            </code></pre>
+                        </li>
+                        <li>
+                            <strong>`gets()`:</strong> Reads a line of text from standard input until a newline
+                            character is encountered (the newline is consumed but not stored).
+                            <p><strong class="highlight" style="color:red;">Warning: `gets()` is DANGEROUS and should
+                                    NOT be used.</strong> It does not check the buffer size and can easily lead to
+                                buffer overflows, a major security vulnerability. It has been removed from recent C
+                                standards (C11 onwards).</p>
+                        </li>
+                        <li>
+                            <strong>`fgets()` (Safer alternative to `gets()`):</strong> Reads a line from a specified
+                            stream (e.g., `stdin`) into a buffer, up to a specified maximum number of characters or
+                            until a newline is found. It's safer because it prevents buffer overflows.
+                            <div class="syntax-box">char *fgets(char *str, int n, FILE *stream);</div>
+                            <ul>
+                                <li>`str`: Pointer to the character array where the string will be stored.</li>
+                                <li>`n`: Maximum number of characters to be read (including the null terminator).</li>
+                                <li>`stream`: The input stream (e.g., `stdin` for keyboard).</li>
+                                <li>`fgets()` includes the newline character (`\n`) in the buffer if it fits, unlike
+                                    `gets()`.</li>
+                            </ul>
+                            <pre><code class="language-c">
+#include <stdio.h>
+#define MAX_LEN 50
+
+int main() {
+    char line[MAX_LEN];
+    printf("Enter a line of text: ");
+    fgets(line, MAX_LEN, stdin); // Reads up to MAX_LEN-1 chars, or until newline
+    printf("You entered: %s", line); // fgets often includes the newline
+    return 0;
+}
+                            </code></pre>
+                        </li>
+                        <li>
+                            <strong>`puts()`:</strong> Writes a string to standard output, followed by a newline
+                            character.
+                            <pre><code class="language-c">
+#include <stdio.h>
+
+int main() {
+    char str[] = "Hello from puts!";
+    puts(str);
+    puts("Another line.");
+    return 0;
+}
+                            </code></pre>
+                        </li>
+                        <li><strong>`getch()`, `getche()`:</strong> (Often in `<conio.h>`, non-standard)
+                                <ul>
+                                    <li>`getch()`: Reads a single character directly from the keyboard without echoing
+                                        it to the screen.</li>
+                                    <li>`getche()`: Reads a single character from the keyboard and echoes it to the
+                                        screen.</li>
+                                </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">C. String Handling Functions (`<string.h>`) <span
+                        class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>C provides a set of standard library functions for manipulating strings, declared in the `
+                        <string.h>` header file.</p>
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Function</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>`strlen(str)`</td>
+                                <td>Returns the length of the string `str` (excluding the null terminator).</td>
+                            </tr>
+                            <tr>
+                                <td>`strcpy(dest, src)`</td>
+                                <td>Copies the string `src` (including `\0`) to `dest`.</td>
+                            </tr>
+                            <tr>
+                                <td>`strncpy(dest, src, n)`</td>
+                                <td>Copies at most `n` characters of `src` to `dest`. Does not guarantee null
+                                    termination if `src` length is `n` or more.</td>
+                            </tr>
+                            <tr>
+                                <td>`strcat(dest, src)`</td>
+                                <td>Appends the string `src` to the end of string `dest`. `dest` must have enough space.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>`strncat(dest, src, n)`</td>
+                                <td>Appends at most `n` characters of `src` to `dest`, and adds a null terminator.</td>
+                            </tr>
+                            <tr>
+                                <td>`strcmp(str1, str2)`</td>
+                                <td>Compares two strings lexicographically. Returns 0 if equal, <0 if str1 < str2,>0 if
+                                        str1 > str2.</td>
+                            </tr>
+                            <tr>
+                                <td>`strncmp(str1, str2, n)`</td>
+                                <td>Compares at most `n` characters of two strings.</td>
+                            </tr>
+                            <tr>
+                                <td>`strchr(str, char)`</td>
+                                <td>Returns a pointer to the first occurrence of `char` in `str`, or `NULL` if not
+                                    found.</td>
+                            </tr>
+                            <tr>
+                                <td>`strstr(haystack, needle)`</td>
+                                <td>Returns a pointer to the first occurrence of string `needle` in string `haystack`,
+                                    or `NULL`.</td>
+                            </tr>
+                            <tr>
+                                <td>`strlwr(str)`</td>
+                                <td>Converts string `str` to lowercase. (Non-standard, use custom or `tolower` loop).
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>`strupr(str)`</td>
+                                <td>Converts string `str` to uppercase. (Non-standard, use custom or `toupper` loop).
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>`strrev(str)`</td>
+                                <td>Reverses the string `str`. (Non-standard, implement manually).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p><em>Note: `strlwr`, `strupr`, and `strrev` are not part of the standard C library but are
+                            available in some compilers (like Turbo C). For portable code, you should implement these
+                            functionalities yourself or use character-by-character conversion with `tolower()` and
+                            `toupper()` from `<ctype.h>`.</em></p>
+
+                    <h4>Examples:</h4>
+                    <pre><code class="language-c">
+#include <stdio.h>
+#include <string.h> // For string functions
+
+int main() {
+    char str1[50] = "Hello";
+    char str2[] = "World";
+    char str3[50];
+    int len;
+
+    // 1. strlen() - String Length
+    len = strlen(str1);
+    printf("Length of \"%s\" is %d\n", str1, len); // Output: 5
+
+    // 2. strcpy() - String Copy
+    strcpy(str3, str1);
+    printf("str3 after strcpy(str3, str1): %s\n", str3); // Output: Hello
+
+    // 3. strcat() - String Concatenation
+    strcat(str1, " ");   // str1 becomes "Hello "
+    strcat(str1, str2);  // str1 becomes "Hello World"
+    printf("str1 after strcat with str2: %s\n", str1);
+
+    // 4. strcmp() - String Comparison
+    char s1[] = "apple";
+    char s2[] = "apply";
+    char s3[] = "apple";
+    if (strcmp(s1, s3) == 0) {
+        printf("\"%s\" and \"%s\" are equal.\n", s1, s3);
+    } else {
+        printf("\"%s\" and \"%s\" are not equal.\n", s1, s3);
+    }
+    if (strcmp(s1, s2) < 0) {
+        printf("\"%s\" comes before \"%s\".\n", s1, s2);
+    }
+
+    return 0;
+}
+                    </code></pre>
+                </div>
+            </div>
+
+            <button type="button" class="collapsible">D. Array of Strings <span class="icon"></span></button>
+            <div class="collapsible-content">
+                <div>
+                    <p>An array of strings can be implemented as a two-dimensional array of characters, where each row
+                        represents a string.</p>
+                    <h4>Declaration and Initialization:</h4>
+                    <pre><code class="language-c">
+#include <stdio.h>
+
+int main() {
+    // Declare an array of 3 strings, each can hold up to 19 chars + null
+    char names[3][20] = {
+        "Alice Wonderland",
+        "Bob The Builder",
+        "Charlie Brown"
+    };
+
+    printf("Names are:\n");
+    for (int i = 0; i < 3; i++) {
+        printf("%d: %s\n", i + 1, names[i]);
+    }
+
+    // Modifying a string in the array
+    strcpy(names[1], "Robert Builder");
+    printf("\nAfter modification:\n");
+    for (int i = 0; i < 3; i++) {
+        printf("%d: %s\n", i + 1, names[i]);
+    }
+
+    return 0;
+}
+/*
+Output:
+Names are:
+1: Alice Wonderland
+2: Bob The Builder
+3: Charlie Brown
+
+After modification:
+1: Alice Wonderland
+2: Robert Builder
+3: Charlie Brown
+*/
+                    </code></pre>
+                    <p>Alternatively, you can use an array of character pointers, where each pointer points to a string
+                        literal (which are typically stored in a read-only memory section). This is often more
+                        memory-efficient if the strings have varying lengths.</p>
+                    <pre><code class="language-c">
+#include <stdio.h>
+
+int main() {
+    const char *colors[] = { // Array of pointers to const char
+        "Red",
+        "Green",
+        "Blue",
+        "Yellow"
+    };
+
+    printf("Colors:\n");
+    for (int i = 0; i < 4; i++) {
+        printf("%s\n", colors[i]);
+    }
+    // Note: You cannot easily modify the content of these string literals
+    // e.g., colors[0][0] = 'B'; would be undefined behavior.
+    return 0;
+}
+                    </code></pre>
+                </div>
+            </div>
+        </section>
+
+
+        <div class="page-navigation">
+            <a href="topic-4.html" class="nav-button back-button">
+                <i class="fas fa-arrow-left"></i> Prev: Functions in C
+            </a>
+            <a href="../c-programming.html" class="nav-button back-button"
+                style="margin-left: auto; margin-right: auto;">
+                <i class="fas fa-list"></i> Back to Syllabus
+            </a>
+            <a href="topic-6.html" class="nav-button next-button">
+                Next: Pointers <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <footer class="page-footer">
+            © 2024 Eduvision. All rights reserved. Organizing data with C.
+        </footer>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script>
+        Prism.plugins.autoloader.languages_path = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/';
+
+        var coll = document.getElementsByClassName("collapsible");
+        for (var i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            });
+        }
+
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+            } else {
+                body.classList.remove('dark-mode');
+            }
+            localStorage.setItem('theme', theme);
+            Prism.highlightAll();
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (body.classList.contains('dark-mode')) {
+                applyTheme('light');
+            } else {
+                applyTheme('dark');
+            }
+        });
+
+        const savedTheme = localStorage.getItem('theme') ||
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        applyTheme(savedTheme);
+    </script>
+</body>
+
+</html>
