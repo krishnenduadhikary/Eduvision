@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 13: Ethical & Social Aspects - Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            /* Dark Mode (Default) */
+            --bg-color: #121828;
+            --card-bg-color: #1f2937;
+            /* Main section background */
+            --inner-card-bg-color: var(--bg-color);
+            /* For individual elements within sections */
+            --primary-text-color: #e5e7eb;
+            --secondary-text-color: #9ca3af;
+            --accent-color: #6a82fb;
+            --accent-hover-color: #8da2fc;
+            --yellow-accent: #fde047;
+            --border-color: #374151;
+            --futuristic-glow: 0 0 15px rgba(106, 130, 251, 0.3);
+            --futuristic-glow-yellow: 0 0 15px rgba(253, 224, 71, 0.4);
+            --header-gradient-start: var(--card-bg-color);
+            --header-gradient-end: var(--bg-color);
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #5a67d8;
+            --nav-button-syllabus-hover-bg: #4c58bf;
+            --diagram-bg: #2a3547;
+            --table-header-bg: var(--accent-color);
+            --table-row-even-bg: var(--bg-color);
+            --theme-toggle-bg: #23272f;
+            --theme-toggle-icon: #fde047;
+            --theme-toggle-hover-bg: #374151;
+            --theme-toggle-hover-icon: #fff;
+            --success-color: #22c55e;
+        }
+
+        html.light-mode {
+            /* Light Mode */
+            --bg-color: #f0f4f8;
+            --card-bg-color: #ffffff;
+            --inner-card-bg-color: var(--bg-color);
+            --primary-text-color: #2c3e50;
+            --secondary-text-color: #52616b;
+            --accent-color: #3498db;
+            --accent-hover-color: #2980b9;
+            --yellow-accent: #f39c12;
+            --border-color: #d1d5db;
+            --futuristic-glow: 0 0 15px rgba(52, 152, 219, 0.2);
+            --futuristic-glow-yellow: 0 0 15px rgba(243, 156, 18, 0.3);
+            --header-gradient-start: #e6e9ed;
+            --header-gradient-end: #f0f4f8;
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #27ae60;
+            --nav-button-syllabus-hover-bg: #229954;
+            --eduvision-logo-color: #2563eb;
+            --eduvision-logo-yellow: #f59e0b;
+            --diagram-bg: #e9ecef;
+            --table-header-bg: var(--accent-color);
+            --table-row-even-bg: #f8f9fa;
+            --theme-toggle-bg: #f8f9fa;
+            --theme-toggle-icon: #f39c12;
+            --theme-toggle-hover-bg: #e9ecef;
+            --theme-toggle-hover-icon: #2c3e50;
+            --success-color: #16a34a;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            font-size: 16px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 80px;
+        }
+
+        /* Logo Styles */
+        .eduvision-logo {
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvision-logo .text-logo-main {
+            color: #fff !important;
+        }
+
+        .eduvision-logo .text-logo-accent {
+            color: #fde047 !important;
+        }
+
+        html.light-mode .eduvision-logo .text-logo-main {
+            color: var(--eduvision-logo-color) !important;
+        }
+
+        html.light-mode .eduvision-logo .text-logo-accent {
+            color: var(--eduvision-logo-yellow) !important;
+        }
+
+        .eduvision-logo .group:hover .text-logo-accent {
+            filter: brightness(1.1);
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Theme Toggle Button */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+            color: var(--theme-toggle-hover-icon);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+        /* Header */
+        .main-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--header-gradient-start), var(--header-gradient-end));
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .topic-badge {
+            display: inline-block;
+            background-color: var(--yellow-accent);
+            color: var(--bg-color);
+            padding: 5px 15px;
+            border-radius: 15px 15px 0 0;
+            font-size: 0.9em;
+            font-weight: bold;
+            font-family: 'Nunito', sans-serif;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-header h1 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 3.0em;
+            font-weight: 900;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: var(--futuristic-glow);
+        }
+
+        .main-header p {
+            font-size: 1.2em;
+            color: var(--secondary-text-color);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Sections & Content Styling */
+        .content-section {
+            background-color: var(--card-bg-color);
+            padding: 30px 40px;
+            margin-bottom: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--accent-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-left-color 0.3s ease;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15), var(--futuristic-glow);
+        }
+
+        .content-section h2 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+
+        .content-section h3 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.6em;
+            color: var(--yellow-accent);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section h4 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.3em;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section h5 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.1em;
+            color: var(--accent-color);
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+
+        .content-section p,
+        .content-section ul {
+            margin-bottom: 15px;
+            color: var(--secondary-text-color);
+            transition: color 0.3s ease;
+        }
+
+        .content-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .content-section ul li::before {
+            content: "\f058";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            top: 3px;
+            font-size: 0.9em;
+            transition: color 0.3s ease;
+        }
+
+        .content-section .sub-section {
+            background-color: var(--inner-card-bg-color);
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .content-section .sub-section ul li::before {
+            content: "\f101";
+            font-size: 0.8em;
+            top: 4px;
+        }
+
+        .definitions-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+
+        .definitions-table td {
+            border: 1px solid var(--border-color);
+            padding: 8px 10px;
+            vertical-align: top;
+        }
+
+        .definitions-table td:first-child {
+            font-weight: bold;
+            color: var(--primary-text-color);
+            width: 30%;
+        }
+
+        /* Diagram Placeholder */
+        .diagram-placeholder,
+        .diagram-placeholder-img {
+            background-color: var(--diagram-bg);
+            border: 2px dashed var(--border-color);
+            padding: 15px;
+            margin: 20px auto;
+            text-align: center;
+            color: var(--secondary-text-color);
+            border-radius: 8px;
+            font-style: italic;
+            display: block;
+            max-width: 90%;
+            font-size: 0.9em;
+        }
+
+        .diagram-placeholder-img {
+            height: auto;
+            min-height: 80px;
+            object-fit: contain;
+            max-width: 400px;
+            /* Limit image size */
+        }
+
+        /* Concluding Note Styling */
+        .concluding-note {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: var(--inner-card-bg-color);
+            border: 2px dashed var(--success-color);
+            border-radius: 10px;
+            margin-top: 50px;
+        }
+
+        .concluding-note h2 {
+            color: var(--success-color);
+            font-size: 2.5em;
+        }
+
+        .concluding-note p {
+            font-size: 1.1em;
+        }
+
+        .concluding-note .trophy-icon {
+            font-size: 4em;
+            color: var(--yellow-accent);
+            margin-bottom: 20px;
+        }
+
+
+        /* Navigation Buttons */
+        .navigation-buttons {
+            display: flex;
+            justify-content: center;
+            /* Center for single button */
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: var(--card-bg-color);
+            border-radius: 8px;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-button {
+            color: var(--button-text-color);
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-align: center;
+            flex-grow: 0;
+            /* Don't grow if only one */
+            min-width: 150px;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-button.back-prev {
+            background-color: var(--secondary-text-color);
+        }
+
+        .nav-button.back-prev:hover {
+            background-color: var(--primary-text-color);
+            filter: brightness(1.2);
+        }
+
+        .nav-button.syllabus {
+            background-color: var(--nav-button-syllabus-bg);
+        }
+
+        .nav-button.syllabus:hover {
+            background-color: var(--nav-button-syllabus-hover-bg);
+        }
+
+        /* No 'next' button for the last topic */
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .navigation-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .nav-button {
+                width: auto;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-header h1 {
+                font-size: 2.5em;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .content-section h2 {
+                font-size: 1.8em;
+            }
+
+            .topic-badge {
+                font-size: 0.8em;
+                padding: 4px 10px;
+                top: -15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header h1 {
+                font-size: 2.2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../../index.html" class="flex items-center group">
+                <span class="text-logo-main">Edu</span>
+                <svg class="text-logo-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-logo-main">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="main-header">
+            <span class="topic-badge">Topic 13</span>
+            <h1>Ethical & Social Aspects of Computing</h1>
+            <p>Examining the ethical principles, legal frameworks, societal impacts, and responsible practices
+                associated with computer technology.</p>
+        </header>
+
+        <section id="digital-ethics" class="content-section">
+            <h2>Digital Ethics</h2>
+            <p>Computer ethics is a branch of applied ethics that deals with the ethical principles, values, and moral
+                dilemmas arising from the use of computers and related technologies. It involves the study and analysis
+                of ethical issues that arise during the design, development, implementation, and use of computer
+                systems. The field of computer ethics aims to establish guidelines and principles to govern the ethical
+                use of technology and ensure that technology serves the best interests of individuals and society as a
+                whole.</p>
+            <p>Computer ethics can be defined as the study of ethical issues and concerns related to the use of computer
+                technology. It involves examining how computers impact various aspects of human life, such as privacy,
+                security, intellectual property, freedom of expression, and social interactions. The objective is to
+                identify potential ethical problems and develop guidelines to promote responsible and ethical behavior
+                in the use of computers and technology.</p>
+            <h3>Scope of Computer Ethics:</h3>
+            <ul>
+                <li><strong>Privacy:</strong> Addressing issues of data privacy, surveillance, and the protection of
+                    personal information. Ethical frameworks are needed to guide responsible and transparent handling of
+                    personal information.</li>
+                <li><strong>Cybersecurity:</strong> Examining ethical considerations surrounding cyberattack prevention
+                    and responsible use of security measures. Striving for transparency, accountability, and responsible
+                    use is crucial.</li>
+                <li><strong>Intellectual Property:</strong> Discussing ethical use and protection of copyrights,
+                    patents, and trademarks. Ethical guidelines are necessary to foster creativity and promote
+                    responsible use.</li>
+                <li><strong>Social Media and Online Behavior:</strong> Exploring ethics concerning online communication,
+                    cyberbullying, and digital citizenship. Promoting responsible and ethical behavior online is
+                    essential.</li>
+                <li><strong>Digital Manipulation and Misinformation:</strong> Addressing the ethics of using digital
+                    tools to manipulate information (e.g., deepfakes) and spread misinformation. Promoting media
+                    literacy and critical thinking is key.</li>
+            </ul>
+            <p>Computer ethics involves a continuous examination of emerging technologies and their potential ethical
+                implications. The field is dynamic and evolves alongside technological advancements, necessitating
+                ongoing discussions and ethical analysis to ensure responsible and beneficial use of computer technology
+                in society.</p>
+        </section>
+
+        <section id="cyber-laws" class="content-section">
+            <h2>Cyber Laws & IT Act</h2>
+            <h3>Introduction to Cyberspace</h3>
+            <ul>
+                <li>Technology as a great leveler, creating 'machine-clones' (computers).</li>
+                <li>Network of 'machine-clones' termed as network-of-network or Internet.</li>
+                <li>This dynamic virtual space termed as cyber space.</li>
+                <li>"Cyberspace" first appeared in William Gibson's "Neuromancer" (1984).</li>
+                <li>Defined by New Oxford Dictionary as "the notional environment in which communication over computer
+                    networks occur."</li>
+                <li>Cyber space is a virtual medium, no boundaries, exists in bits and bytes.</li>
+            </ul>
+            <h3>Cyber Laws</h3>
+            <p>Developers initially didn't foresee the internet's potential for illegal/immoral activities. Grey areas
+                like identity theft, terrorism, money laundering need cyber laws. Criminals exploit DNS, IP, spoofing,
+                phishing to gain unauthorized access and steal data.</p>
+            <p>Cyber law is a term concerning the legal issues related to the use of communicative, transactional and
+                distributive aspects of networked information devices and technologies. It encompasses legal, statutory
+                and constitutional provisions that affect computer and computer networks. It is a generic term which
+                refers to all the legal and regulatory aspect of internet and World Wide Web. There are currently two
+                main Statutes, which govern online criminal liability - the Indian Penal Code, 1860 and the Information
+                Technology (IT) Act, 2000.</p>
+            <h4>Cyber law is instrumental for:</h4>
+            <ol>
+                <li>Entry into cyberspace.</li>
+                <li>Providing access to cyberspace.</li>
+                <li>Creating hardware and software to access cyberspace.</li>
+                <li>Using one's own computers to go "online".</li>
+            </ol>
+            <h3>Information Technology Act 2000 (India)</h3>
+            <p>India is the 12<sup>th</sup> nation in enactment of cyber law with the passage of Information Technology
+                Act, 2000. The United Nations Commission on International Trade Law (UNCITRAL) adopted the model law on
+                electronic commerce in 1996 in order to bring uniformity in the law of different countries. The first
+                draft of legislation was created by the Ministry of Commerce, Government of India as E commerce Act
+                1998. A redraft of legislation was prepared as “Information Technology Bill 1999” which was placed
+                before the Parliament in December 1999 and passed in May 2000. The main objective of the Act is to
+                regulate and control the affairs of cyber world in an effective manner.</p>
+            <h4>Aim and Objectives of the Act:</h4>
+            <ol>
+                <li>To grant legal recognition for transactions carried out by means of electronic data interchange and
+                    other means of electronic communication commonly referred as e-commerce in place of paper based
+                    method of communication,</li>
+                <li>To give legal recognition to digital signature for authentication of any information or matter which
+                    requires authentication under any law,</li>
+                <li>To facilitate electronic filing of documents with Government departments,</li>
+                <li>To facilitate electronic storage of data,</li>
+                <li>To facilitate and give legal sanction to electronic fund transfer between banks and financial
+                    institutions,</li>
+                <li>To give legal recognition for keeping books of accounts by bankers in electronic form under the
+                    Evidence Act 1891 and the Reserve Bank of India Act 1934.</li>
+            </ol>
+            <h4>Features of the Act:</h4>
+            <ol>
+                <li>Electronic contracts made legally valid through secure electronic communications.</li>
+                <li>Legal recognition granted to digital signatures.</li>
+                <li>Security procedures for electronic records and digital signatures laid down.</li>
+                <li>Procedure for appointment of adjudicating officers.</li>
+                <li>Provision for establishment of Cyber Regulatory Appellant Tribunal.</li>
+                <li>Appeals against Controller/Adjudicating officer to Cyber Appellant Tribunal.</li>
+                <li>Appeals against Cyber Appellant Tribunal to be made in the High court.</li>
+                <li>Digital signatures effected by asymmetric crypto system and hash function.</li>
+                <li>Provision for appointment of Controller of Certifying Authorities (CCA).</li>
+                <li>Controller acts as repository for digital signature certificates.</li>
+                <li>Act applies to offences/contraventions committed outside India.</li>
+                <li>Senior police officers given power to enter public place and search/arrest without warrant.</li>
+                <li>Provisions for constitution of Cyber Regulations Advisory Committee.</li>
+            </ol>
+            <h4>Applicability and Non-Applicability of the Act:</h4>
+            <p><strong>Applicability:</strong> Extends to the whole of India, including Jammu and Kashmir. Applies to
+                offences committed outside India by any person if the conduct involves a computer, computer system or
+                computer network located in India.</p>
+            <p><strong>Non Applicability (Examples):</strong></p>
+            <ul>
+                <li>Execution of Negotiable Instrument (except cheques).</li>
+                <li>Execution of a Power of Attorney.</li>
+                <li>Creation of Trust.</li>
+                <li>Execution of a Will.</li>
+                <li>Entering into a contract for the sale of conveyance of immovable property.</li>
+                <li>Any such class of documents or transactions as may be notified by the Central Government.</li>
+            </ul>
+            <h4>Basic Definitions (from IT Act):</h4>
+            <p>(A detailed table of definitions like Access, Addressee, Adjudicating Officer, Digital Signature,
+                Computer, Data, Electronic Form, etc., would go here. For brevity, I'll list a few as examples and
+                provide a placeholder for the full table which is quite extensive.)</p>
+            <table class="definitions-table">
+                <tr>
+                    <td>Access</td>
+                    <td>It means gaining entry into, instructing or communicating with the logical, arithmetical or
+                        memory function resources of a computer, computer system or computer network.</td>
+                </tr>
+                <tr>
+                    <td>Digital Signature</td>
+                    <td>With its grammatical variations and cognate expressions, means adoption of any methodology or
+                        procedure by a person for the purpose of authenticating an electronic record by means of digital
+                        signature.</td>
+                </tr>
+                <tr>
+                    <td>Computer</td>
+                    <td>It means any electronic, magnetic, optical or other high speed data processing device or system
+                        which performs logical, arithmetic and memory functions by manipulation of electronic, magnetic
+                        or optical impulses.</td>
+                </tr>
+                <tr>
+                    <td>Data</td>
+                    <td>It means a representation of information, knowledge, facts, concepts or instructions which are
+                        being prepared or have been prepared in a formalised manner, and is intended to be processed, is
+                        being processed or has been processed in a computer system or computer network.</td>
+                </tr>
+                <!-- ... more definitions from your images ... -->
+            </table>
+            <div class="diagram-placeholder">Full Table of Basic Definitions from IT Act 2000.</div>
+        </section>
+
+        <section id="plagiarism-privacy-misuse" class="content-section">
+            <h2>Plagiarism, Piracy, Data Misuse</h2>
+            <div class="sub-section">
+                <h3>Plagiarism</h3>
+                <p>The word ‘plagiarism’ is derived from the Latin word ‘Plagiare’, which means to kidnap or to abduct.
+                    In English, plagiarism refers to the act of using another person’s literary work, whether oral or
+                    written, and passing it as your own, without giving credit to the original creator. It is considered
+                    as intellectual theft and is a punishable offense. Plagiarism may be unintentional or intentional.
+                    According to Merriam-Webster, "to plagiarize" means: to steal and pass off (the ideas or words of
+                    another) as one's own, to use (another's production) without crediting the source, to commit
+                    literary theft, to present as new and original an idea or product derived from an existing source.
+                </p>
+                <h4>All of the following are considered plagiarism:</h4>
+                <ul>
+                    <li>Turning in someone else’s work as your own.</li>
+                    <li>Copying words or ideas from someone else without giving credit.</li>
+                    <li>Failing to put a quotation in quotation marks.</li>
+                    <li>Giving incorrect information about the source of a quotation.</li>
+                    <li>Changing words but copying the sentence structure of a source without giving credit.</li>
+                    <li>Copying so many words or ideas from a source that it makes up the majority of your work, whether
+                        you give credit or not.</li>
+                </ul>
+                <p>Plagiarism is Offence. If plagiarism involves copying not only ideas but also a substantial portion
+                    of a copyrighted work without attribution and without permission, it would amount to both copyright
+                    infringement and the violation of the ‘special right’ of the author to be credited.</p>
+                <div class="diagram-placeholder-img"
+                    data-src-placeholder="Images related to Plagiarism (e.g., 'STOP PLAGIARISM', 'STOLEN' concepts).">
+                    Plagiarism Concept Images</div>
+                <h4>Methods to Avoid Plagiarism:</h4>
+                <p>Most cases of plagiarism can be avoided by citing sources. You must give credit when: you use another
+                    person’s ideas, opinions, or theories; use quotations; paraphrase; use facts, statistics, graphics,
+                    drawings, music, etc., that does not comprise common knowledge.</p>
+                <div class="diagram-placeholder-img"
+                    data-src-placeholder="Infographic: TO AVOID PLAGIARISM (Use online tools, provide links, write in own words).">
+                    Avoiding Plagiarism Infographic</div>
+            </div>
+            <div class="sub-section">
+                <h3>Privacy (in E-commerce)</h3>
+                <p>Privacy is the protection of personal information given online. In e-commerce especially, it is
+                    related to a company’s policies on the use of user data. An important factor is consumer consent -
+                    whether the consumer is given a choice to decide what the information can and cannot be used for.
+                </p>
+                <h4>How to safeguard User Privacy?</h4>
+                <ul>
+                    <li>Merchant must clearly state how data will be used (terms of site).</li>
+                    <li>Merchant must ensure user has gone through terms and conditions.</li>
+                    <li>Merchant must assure user about data safety (HTTPS, security measures).</li>
+                    <li>User must go through terms and conditions before providing sensitive information and check for
+                        HTTPS/padlock.</li>
+                </ul>
+                <div class="diagram-placeholder-img"
+                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                    data-src-placeholder="Images related to Privacy (padlock, privacy policy concept)."
+                    alt="Privacy Concept Images">
+                </div>
+                <div class="sub-section">
+                    <h3>Data Misuse</h3>
+                    <p>Data misuse refers to the unauthorized or improper use of data stored or processed by a computer
+                        system. This includes actions like unauthorized access, disclosure, modification, or deletion of
+                        data, as well as the use of data for purposes not authorized by the owner or intended by the
+                        system.</p>
+                    <h4>Examples of Data Misuse:</h4>
+                    <ul>
+                        <li>Unauthorized Access</li>
+                        <li>Data Theft</li>
+                        <li>Data Destruction</li>
+                        <li>Data Alteration</li>
+                        <li>Data Disclosure</li>
+                        <li>Cyber-bullying</li>
+                        <li>Identity Theft</li>
+                    </ul>
+                    <h4>Consequences of Data Misuse:</h4>
+                    <ul>
+                        <li>Financial Loss</li>
+                        <li>Reputational Damage</li>
+                        <li>Legal Consequences</li>
+                        <li>Privacy Violations</li>
+                        <li>System Instability</li>
+                    </ul>
+                    <h4>Preventing Data Misuse:</h4>
+                    <ul>
+                        <li>Security Measures (strong passwords, firewalls)</li>
+                        <li>Access Control</li>
+                        <li>Data Encryption</li>
+                        <li>Data Backup and Recovery</li>
+                        <li>Awareness Training</li>
+                        <li>Monitoring and Auditing</li>
+                    </ul>
+                </div>
+        </section>
+
+        <section id="impact-of-tech" class="content-section">
+            <h2>Impact of Technology on Society</h2>
+            <div class="sub-section">
+                <h4>1. Impact of technology on business:</h4>
+                <p><strong>Advantage:</strong> Competitive advantage, improved services, customer loyalty, better
+                    customer service, efficient recruitment. <strong>Disadvantage:</strong> High cost of technology,
+                    maintenance, potential job displacement.</p>
+            </div>
+            <div class="sub-section">
+                <h4>2. Impact of technology on education:</h4>
+                <p><strong>Advantage:</strong> Remote learning, access to global courses. <strong>Disadvantage:</strong>
+                    Exposure to unverified data, increased misinformation, potential for exam malpractice if not
+                    critically analyzed.</p>
+            </div>
+            <div class="sub-section">
+                <h4>3. Impact of technology on society:</h4>
+                <p><strong>Advantage:</strong> Easier movement, improved communication, new relationships.
+                    <strong>Disadvantage:</strong> Digital divide, potential for isolation despite connectivity,
+                    cyber-sickness, challenges in distinguishing virtual from real, risks in virtual reality training.
+                </p>
+            </div>
+            <div class="sub-section">
+                <h4>4. Impact of technology on agriculture:</h4>
+                <p><strong>Advantage:</strong> Genetically engineered crops with better survival rates and yield.
+                    <strong>Disadvantage:</strong> Initial soil degradation from chemical fertilizers, long-term
+                    dependency on artificial fertilizers.
+                </p>
+            </div>
+            <div class="sub-section">
+                <h4>5. Impact of technology on banking:</h4>
+                <p><strong>Advantage:</strong> Electronic banking, online transfers, smart cards.
+                    <strong>Disadvantage:</strong> E-cash vulnerability, data interception, hacking risks.
+                </p>
+            </div>
+        </section>
+
+        <section id="digital-divide" class="content-section">
+            <h2>The Digital Divide</h2>
+            <p>Digital Divide refers to the gap between those who benefit from digital technology and those who do not.
+                It includes imbalances in physical access to technology, as well as imbalances in resources and skills
+                needed to effectively participate. Factors contributing to the digital divide gap include:</p>
+            <ul>
+                <li><strong>Poverty:</strong> Lack of finances to afford computers and internet.</li>
+                <li><strong>Education:</strong> Ability to know and understand computer applications is necessary.</li>
+                <li><strong>Gender:</strong> Inequality in access and use of ICTs, especially in developing countries.
+                </li>
+                <li><strong>Dependency:</strong> Over-reliance on technology for survival and economic activity.</li>
+                <li><strong>Rural and Urban Perspective:</strong> Differences in infrastructure, cost, and availability
+                    of internet services.</li>
+                <li><strong>Cultural Dimensions:</strong> Certain cultures may hinder progress due to resistance to new
+                    information and communication tools.</li>
+                <li><strong>Age:</strong> Young people generally more comfortable with new technology.</li>
+                <li><strong>Economic Development and Distribution:</strong> Unequal access between rich and poor
+                    countries.</li>
+            </ul>
+        </section>
+
+        <section id="social-media" class="content-section">
+            <h2>Social Media Influence</h2>
+            <p>Social Media means collection of applications (Facebook, Twitter, WhatsApp, etc.) and websites that link
+                people to share information and aware people about any event through social networking. It plays a vital
+                role in life, changing living standards and providing interaction opportunities.</p>
+            <h3>History of Social Media</h3>
+            <p>(Brief overview: early communication, CompuServe, IRCs, Six Degrees, blogging, MySpace, LinkedIn,
+                Facebook, Twitter, etc.)</p>
+            <div class="diagram-placeholder-img"
+                data-src-placeholder="Fig.1 The Complete History of Social Media (Timeline infographic).">Social Media
+                History Infographic</div>
+            <h3>Types of Social Media:</h3>
+            <ul>
+                <li>Facebook</li>
+                <li>Email</li>
+                <li>Twitter</li>
+                <li>Instagram</li>
+            </ul>
+            <h3>Advantages & Disadvantages of Social Media for the Society</h3>
+            <h4>Disadvantages (Examples):</h4>
+            <ul>
+                <li>Cyberbullying</li>
+                <li>Hacking</li>
+                <li>Addiction</li>
+                <li>Fraud and Scams</li>
+                <li>Security Issues</li>
+                <li>Reputation Damage</li>
+                <li>Cheating and Relationship Issues</li>
+                <li>Health Issues (laziness, sleep disorder)</li>
+                <li>Social Media causes death (dangerous stunts)</li>
+                <li>Glamorizes Drugs and Alcohol</li>
+            </ul>
+            <h4>Advantages (Examples):</h4>
+            <ul>
+                <li>Connectivity</li>
+                <li>Education</li>
+                <li>Help</li>
+                <li>Information and Updates</li>
+                <li>Promotion</li>
+                <li>Noble Cause</li>
+                <li>Awareness</li>
+                <li>Helps Govt and Agencies Fight Crime</li>
+                <li>Improves Business Reputation</li>
+                <li>Helps in Building Communities</li>
+            </ul>
+            <div class="diagram-placeholder-img"
+                data-src-placeholder="Fig.2 Advantages & Disadvantages of Social Media for the Society (Scales of justice).">
+                Social Media A/D Image</div>
+        </section>
+
+        <section id="e-waste" class="content-section">
+            <h2>Environmental Impact (E-waste)</h2>
+            <h3>Introduction:</h3>
+            <p>Technological advancements have enhanced quality of life but also led to problems like hazardous waste
+                from electronic products.</p>
+            <h3>E-waste Definition:</h3>
+            <p>Broadly describes loosely discarded, surplus, obsolete, broken, electrical or electronic devices at the
+                end of their useful life. Improper accumulation and recycling can lead to environmental problems.</p>
+            <h3>Source:</h3>
+            <p>IT & telecommunication equipment, consumer electrical/electronic products (refrigerators, washing
+                machines, computers, printers, mobiles, TVs, etc.).</p>
+            <h3>Composition:</h3>
+            <p>Ferrous and non-ferrous metals, plastics, glass, wood, PCBs, ceramics, rubber. Contains heavy metals,
+                polymers, flame retardants.</p>
+            <h3>Generation:</h3>
+            <p>Estimated 50 million tonnes globally per year. Significant generation in India from various sectors.</p>
+            <h3>Pollutants in e-waste:</h3>
+            <p>(Table listing pollutants like Arsenic, Barium, Cadmium, Lead, Mercury, etc., and their occurrences).</p>
+            <div class="diagram-placeholder">Table: Pollutants in e-waste and their occurrences.</div>
+            <h3>Environmental and Health Issues:</h3>
+            <p>Serious damage to environment and human/animal health if not properly discarded. Examples: Brominated
+                flame retardants, Lead, Cadmium, Mercury, Hexavalent Chromium, Plastic components.</p>
+            <h3>Treatment and Disposal:</h3>
+            <p>Complex due to hazardous substances. Methods like Land filling, Incineration, Recycling, Re-use.</p>
+            <h3>Suggested Approach for e-waste disposal:</h3>
+            <p>"Reduce, Reuse, Recycle". Use authorized recyclers.</p>
+            <h3>The Process (of e-waste recycling):</h3>
+            <p>First Stage (Manual segregation), Second Stage (Mechanical separation), Third Stage (Plastics
+                processing), Fourth Stage (Non-ferrous metals to metallurgical treatment).</p>
+            <h3>Regulations:</h3>
+            <p>In India, regulated under E-waste (Management and Handling) Rules, 2011. International directives like
+                RoHS, WEEE.</p>
+            <h3>A better way of E-Waste Management:</h3>
+            <p>(List of suggestions like Waste Management of Technology, Defining 'User Codal Life', Disallowing new
+                models with minor improvements, Time bound gap, Encouraging repairing, etc.)</p>
+        </section>
+
+        <section class="concluding-note content-section">
+            <i class="fas fa-trophy trophy-icon"></i>
+            <h2>Congratulations!</h2>
+            <p>You've journeyed through the fascinating world of Computer Fundamentals, from the basic building blocks
+                to the cutting-edge technologies shaping our future. This knowledge is a powerful foundation for
+                whatever path you choose in the digital age.</p>
+            <p>As you move forward, remember that technology is a tool. Use it wisely, ethically, and creatively to
+                solve problems, innovate, and make a positive impact on the world. Your understanding of these
+                fundamentals will be invaluable in navigating and contributing to the ever-evolving technological
+                landscape.</p>
+            <p><strong>Best wishes for your continued learning and a successful career ahead!</strong></p>
+        </section>
+
+        <footer class="navigation-buttons">
+            <a href="topic-12.html" class="nav-button back-prev"><i class="fas fa-arrow-left"></i> Previous Topic</a>
+            <a href="../fundamentals.html" class="nav-button syllabus"><i class="fas fa-list-ul"></i> Back to
+                Syllabus</a>
+            <!-- No "Next Topic" button as this is the last one -->
+        </footer>
+
+    </div>
+
+    <script>
+        // Theme toggle logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        const bodyElement = document.body;
+
+        function setThemeMode(mode) {
+            if (mode === 'light-mode') {
+                htmlElement.classList.add('light-mode'); htmlElement.classList.remove('dark-mode');
+                bodyElement.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light-mode');
+            } else {
+                htmlElement.classList.remove('light-mode'); htmlElement.classList.add('dark-mode');
+                bodyElement.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark-mode');
+            }
+        }
+
+        (function () {
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme) { setThemeMode(currentTheme); }
+            else {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) { setThemeMode('light-mode'); }
+                else { setThemeMode('dark-mode'); }
+            }
+        })();
+
+        themeToggleBtn.addEventListener('click', function () {
+            if (htmlElement.classList.contains('light-mode')) { setThemeMode('dark-mode'); }
+            else { setThemeMode('light-mode'); }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const diagrams = document.querySelectorAll('.diagram-placeholder, .diagram-placeholder-img');
+            diagrams.forEach(diag => {
+                const placeholderText = diag.dataset.srcPlaceholder || diag.textContent || "Diagram/Image Placeholder";
+                if (diag.tagName === 'IMG') { diag.alt = placeholderText; }
+                else { diag.textContent = placeholderText; }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

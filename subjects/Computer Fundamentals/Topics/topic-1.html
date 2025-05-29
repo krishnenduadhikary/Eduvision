@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 1: Introduction to Computers - Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            /* Dark Mode (Default) */
+            --bg-color: #121828;
+            --card-bg-color: #1f2937;
+            /* Main section background */
+            --inner-card-bg-color: var(--bg-color);
+            /* For individual cards like characteristics */
+            --primary-text-color: #e5e7eb;
+            --secondary-text-color: #9ca3af;
+            --accent-color: #6a82fb;
+            --accent-hover-color: #8da2fc;
+            --yellow-accent: #fde047;
+            --border-color: #374151;
+            --futuristic-glow: 0 0 15px rgba(106, 130, 251, 0.3);
+            --futuristic-glow-yellow: 0 0 15px rgba(253, 224, 71, 0.4);
+            --header-gradient-start: var(--card-bg-color);
+            --header-gradient-end: var(--bg-color);
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #5a67d8;
+            --nav-button-syllabus-hover-bg: #4c58bf;
+            --diagram-bg: #2a3547;
+            --theme-toggle-bg: #23272f;
+            --theme-toggle-icon: #fde047;
+            --theme-toggle-hover-bg: #374151;
+            --theme-toggle-hover-icon: #fff;
+        }
+
+        html.light-mode {
+            /* Light Mode */
+            --bg-color: #f0f4f8;
+            --card-bg-color: #ffffff;
+            --inner-card-bg-color: var(--bg-color);
+            --primary-text-color: #2c3e50;
+            --secondary-text-color: #52616b;
+            --accent-color: #3498db;
+            --accent-hover-color: #2980b9;
+            --yellow-accent: #f39c12;
+            --border-color: #d1d5db;
+            --futuristic-glow: 0 0 15px rgba(52, 152, 219, 0.2);
+            --futuristic-glow-yellow: 0 0 15px rgba(243, 156, 18, 0.3);
+            --header-gradient-start: #e6e9ed;
+            --header-gradient-end: #f0f4f8;
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #27ae60;
+            --nav-button-syllabus-hover-bg: #229954;
+            --eduvision-logo-color: #2563eb;
+            --eduvision-logo-yellow: #f59e0b;
+            --diagram-bg: #e9ecef;
+            --theme-toggle-bg: #f8f9fa;
+            --theme-toggle-icon: #f39c12;
+            --theme-toggle-hover-bg: #e9ecef;
+            --theme-toggle-hover-icon: #2c3e50;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            font-size: 16px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 80px;
+        }
+
+        /* Logo Styles */
+        .eduvision-logo {
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvision-logo .text-logo-main {
+            color: #fff !important;
+        }
+
+        .eduvision-logo .text-logo-accent {
+            color: #fde047 !important;
+        }
+
+        html.light-mode .eduvision-logo .text-logo-main {
+            color: var(--eduvision-logo-color) !important;
+        }
+
+        html.light-mode .eduvision-logo .text-logo-accent {
+            color: var(--eduvision-logo-yellow) !important;
+        }
+
+        .eduvision-logo .group:hover .text-logo-accent {
+            filter: brightness(1.1);
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Theme Toggle Button */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+            color: var(--theme-toggle-hover-icon);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+        /* Header */
+        .main-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--header-gradient-start), var(--header-gradient-end));
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .topic-badge {
+            display: inline-block;
+            background-color: var(--yellow-accent);
+            color: var(--bg-color);
+            padding: 5px 15px;
+            border-radius: 15px 15px 0 0;
+            font-size: 0.9em;
+            font-weight: bold;
+            font-family: 'Nunito', sans-serif;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-header h1 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 3.0em;
+            font-weight: 900;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: var(--futuristic-glow);
+        }
+
+        .main-header p.subtitle {
+            font-size: 1.2em;
+            color: var(--secondary-text-color);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Sections & Content Styling */
+        .content-section {
+            background-color: var(--card-bg-color);
+            padding: 30px 40px;
+            margin-bottom: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--accent-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-left-color 0.3s ease;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15), var(--futuristic-glow);
+        }
+
+        .content-section h2 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+
+        .content-section h3 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.6em;
+            color: var(--yellow-accent);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section h4 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.3em;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section p,
+        .content-section ul {
+            margin-bottom: 15px;
+            color: var(--secondary-text-color);
+            transition: color 0.3s ease;
+        }
+
+        .content-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .content-section ul li::before {
+            content: "\f058";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            top: 3px;
+            font-size: 0.9em;
+            transition: color 0.3s ease;
+        }
+
+        .content-section .sub-section {
+            background-color: var(--inner-card-bg-color);
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .content-section .sub-section ul li::before {
+            content: "\f101";
+            font-size: 0.8em;
+            top: 4px;
+        }
+
+        /* Diagram Placeholder */
+        .diagram-placeholder,
+        .diagram-placeholder-img {
+            background-color: var(--diagram-bg);
+            border: 2px dashed var(--border-color);
+            padding: 15px;
+            margin: 20px auto;
+            text-align: center;
+            color: var(--secondary-text-color);
+            border-radius: 8px;
+            font-style: italic;
+            display: block;
+            max-width: 90%;
+            font-size: 0.9em;
+        }
+
+        .diagram-placeholder-img {
+            height: auto;
+            min-height: 80px;
+            object-fit: contain;
+            max-width: 400px;
+        }
+
+        /* IPO Diagram (from original topic-1.html) */
+        .ipo-diagram {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0;
+            padding: 20px;
+            background-color: var(--inner-card-bg-color);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .ipo-block {
+            text-align: center;
+            padding: 15px;
+            background-color: var(--bg-color);
+            border-radius: 8px;
+            width: 120px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .ipo-block:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3), var(--futuristic-glow);
+        }
+
+        .ipo-block i {
+            font-size: 2em;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+        }
+
+        .ipo-block span {
+            font-weight: bold;
+            color: var(--primary-text-color);
+            font-size: 0.9em;
+        }
+
+        .ipo-arrow {
+            font-size: 2em;
+            color: var(--accent-color);
+            animation: pulse-arrow 2s infinite;
+        }
+
+        @keyframes pulse-arrow {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.15);
+            }
+        }
+
+        /* Characteristics Grid (from original topic-1.html) */
+        .characteristics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .characteristic-card {
+            background-color: var(--inner-card-bg-color);
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 4px solid var(--yellow-accent);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .characteristic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15), var(--futuristic-glow-yellow);
+        }
+
+        .characteristic-card h4 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.3em;
+            color: var(--yellow-accent);
+            margin-top: 0;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .characteristic-card h4 i {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .characteristic-card p {
+            font-size: 0.95em;
+            margin-bottom: 5px;
+        }
+
+        /* History Timeline (from original topic-1.html) */
+        .timeline {
+            position: relative;
+            margin: 50px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+            box-shadow: var(--futuristic-glow);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+            padding-left: 50px;
+        }
+
+        .timeline-content {
+            background-color: var(--inner-card-bg-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            position: relative;
+            border: 1px solid var(--border-color);
+        }
+
+        .timeline-content::after {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 20px;
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-right: 10px solid var(--inner-card-bg-color);
+        }
+
+        .timeline-icon {
+            position: absolute;
+            top: 15px;
+            left: 0px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            z-index: 10;
+            box-shadow: 0 0 0 4px var(--bg-color), var(--futuristic-glow);
+        }
+
+        .timeline-item h4 {
+            margin-top: 0;
+            color: var(--yellow-accent);
+            font-size: 1.2em;
+        }
+
+        .timeline-item p {
+            font-size: 0.95em;
+        }
+
+        /* Applications Grid (from original topic-1.html) */
+        .applications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .application-card {
+            background-color: var(--inner-card-bg-color);
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 4px solid var(--accent-color);
+        }
+
+        .application-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15), var(--futuristic-glow);
+        }
+
+        .application-card i {
+            font-size: 3em;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+        }
+
+        .application-card h4 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.3em;
+            color: var(--primary-text-color);
+            margin-bottom: 10px;
+        }
+
+        /* Navigation Buttons */
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: var(--card-bg-color);
+            border-radius: 8px;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-button {
+            color: var(--button-text-color);
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-align: center;
+            flex-grow: 1;
+            min-width: 150px;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-button.back-prev {
+            background-color: var(--secondary-text-color);
+        }
+
+        /* For the Back to Syllabus button */
+        .nav-button.back-prev:hover {
+            background-color: var(--primary-text-color);
+            filter: brightness(1.2);
+        }
+
+        .nav-button.syllabus {
+            background-color: var(--nav-button-syllabus-bg);
+        }
+
+        /* Distinct color if needed */
+        .nav-button.syllabus:hover {
+            background-color: var(--nav-button-syllabus-hover-bg);
+        }
+
+        .nav-button.next {
+            background-color: var(--accent-color);
+        }
+
+        .nav-button.next:hover {
+            background-color: var(--accent-hover-color);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .navigation-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .nav-button {
+                width: auto;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-header h1 {
+                font-size: 2.5em;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .content-section h2 {
+                font-size: 1.8em;
+            }
+
+            .topic-badge {
+                font-size: 0.8em;
+                padding: 4px 10px;
+                top: -15px;
+            }
+
+            .ipo-diagram {
+                flex-direction: column;
+            }
+
+            .ipo-arrow {
+                transform: rotate(90deg);
+                margin: 15px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header h1 {
+                font-size: 2.2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../../index.html" class="flex items-center group">
+                <span class="text-logo-main">Edu</span>
+                <svg class="text-logo-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-logo-main">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="main-header">
+            <span class="topic-badge">Topic 1</span>
+            <h1>Introduction to Computers</h1>
+            <p class="subtitle">Exploring the definition, core characteristics, historical evolution, and diverse
+                applications of computers in the modern world.</p>
+        </header>
+
+        <section id="introduction-to-computers" class="content-section">
+            <h2>Introduction</h2>
+            <h3>The Present Day computer</h3>
+            <img class="diagram-placeholder-img"
+                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                data-src-placeholder="Image: The Present Day computer (Desktop PC setup)."
+                alt="Modern Desktop Computer">
+            <p>The computer as we know it today had its beginning with a 19th century English mathematics professor name
+                Charles Babbage. He designed the Analytical Engine and it was this design that the basic framework of
+                the computers of today are based on. In the present 21<sup>st</sup> century we depend on computers to
+                fulfill our requirements at a very short period of time.</p>
+            <h4>Some of the many purposes where Computers are used are:</h4>
+            <ol>
+                <li>Email service such as Yahoo, Gmail for quick delivery of messages.</li>
+                <li>In hospitals for the purpose of patient care and hospital billing.</li>
+                <li>Telecommunications in the form of mobile phones.</li>
+                <li>Defense in the form of missile guidance system and other defense activities.</li>
+            </ol>
+        </section>
+
+        <section id="definition-of-computer" class="content-section">
+            <h2>Definition of a Computer</h2>
+            <p>A computer is a device that accepts information (in the form of digitalized data) and manipulates it for
+                some result based on a program or sequence of instructions on how the data is to be processed and give
+                the output.</p>
+            <div class="ipo-diagram">
+                <div class="ipo-block">
+                    <i class="fas fa-download"></i>
+                    <span>INPUT</span>
+                </div>
+                <div class="ipo-arrow">
+                    <i class="fas fa-long-arrow-alt-right"></i>
+                </div>
+                <div class="ipo-block">
+                    <i class="fas fa-cogs"></i>
+                    <span>PROCESSING</span>
+                </div>
+                <div class="ipo-arrow">
+                    <i class="fas fa-long-arrow-alt-right"></i>
+                </div>
+                <div class="ipo-block">
+                    <i class="fas fa-upload"></i>
+                    <span>OUTPUT</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="characteristics-of-computers" class="content-section">
+            <h2>Characteristics of Computers</h2>
+            <div class="characteristics-grid">
+                <div class="characteristic-card">
+                    <h4><i class="fas fa-robot"></i>Automatic</h4>
+                    <p>Computers are automatic machines because it works by itself without human intervention. Once it
+                        started on a job they carry on until the job is finished. Computer cannot start themselves.</p>
+                </div>
+                <div class="characteristic-card">
+                    <h4><i class="fas fa-bullseye"></i>Accuracy</h4>
+                    <p>The accuracy of a computer is very high. The degree of accuracy of a particular computer depends
+                        upon its design. Errors can occur by the computer. But these are due to human weakness, due to
+                        incorrect data, but not due to the technological weakness.</p>
+                </div>
+                <div class="characteristic-card">
+                    <h4><i class="fas fa-tachometer-alt"></i>Speed</h4>
+                    <p>Computer is a very fast device. It can perform the amount of work in few seconds for which a
+                        human can take an entire year. While talking about computer speed we do not talk in terms of
+                        seconds and milliseconds but in microseconds. A powerful computer is capable of performing
+                        several billion (10<sup>9</sup>) simple arithmetic operations per second.</p>
+                </div>
+                <div class="characteristic-card">
+                    <h4><i class="fas fa-battery-full"></i>Diligence</h4>
+                    <p>Unlike human beings, a computer is free from monotony, tiredness & lack of concentration. It can
+                        continuously work for hours without creating any error & without grumbling. If you give ten
+                        million calculations to performed, it will perform with exactly the same accuracy & speed as the
+                        first one.</p>
+                </div>
+                <div class="characteristic-card">
+                    <h4><i class="fas fa-puzzle-piece"></i>Versatility</h4>
+                    <p>It is one of the most wonderful features about the computer. One moment it is preparing the
+                        results of a particular examination, the next moment it is busy with preparing electricity bills
+                        and in between it may be helping an office secretary to trace an important letter in seconds.
+                    </p>
+                </div>
+                <div class="characteristic-card">
+                    <h4><i class="fas fa-memory"></i>Power of Remembering</h4>
+                    <p>Computer can store and recall any amount of data because of its high storage capacity of its
+                        storage devices. Every piece of information can be retained as long as desired by the user and
+                        can be recalled as and when required. Even after several years, if the information recalled, it
+                        will be as accurate as on the day when it was filled to the computers.</p>
+                </div>
+                <div class="characteristic-card">
+                    <h4><i class="fas fa-brain"></i>No I.Q.</h4>
+                    <p>A computer is not a magical device; it processes no intelligence of its own. Its I.Q. is zero. It
+                        has to be told what to do & in what sequence. It cannot take its own decision.</p>
+                </div>
+                <div class="characteristic-card">
+                    <h4><i class="far fa-meh-blank"></i>No Feelings</h4>
+                    <p>A Computer has no feelings because they are machines. Based on our feelings, task, knowledge and
+                        experience we often make certain judgments in our day today life. But Computer goes exactly the
+                        way which we have given the instructions.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="history-of-computers" class="content-section">
+            <h2>History of Computers (Mechanical Age to Present)</h2>
+            <p>Until the development of the first generation computers based on vacuum tubes, there had been several
+                developments in the computing technology related to the mechanical computing devices. The key
+                developments that took place till the first computer was developed are as follows:</p>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-icon"><i class="fas fa-calculator"></i></div>
+                    <div class="timeline-content">
+                        <h4>Calculating Machines: ABACUS</h4>
+                        <p>The first mechanical calculating device for counting of large numbers. The word ABACUS means
+                            calculating board. It consists of bars in horizontal positions on which sets of beads are
+                            inserted. The horizontal bars have 10 beads each, representing units, tens, hundreds, etc.
+                        </p><img class="diagram-placeholder-img"
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                            data-src-placeholder="Figure 1.1 Abacus." alt="Abacus">
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon"><i class="fas fa-bone"></i></div>
+                    <div class="timeline-content">
+                        <h4>Napier's Bones (1617 AD)</h4>
+                        <p>A mechanical device built for the purpose of multiplication by an English mathematician John
+                            Napier.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon"><i class="fas fa-ruler-horizontal"></i></div>
+                    <div class="timeline-content">
+                        <h4>Slide Rule (16th Century)</h4>
+                        <p>Developed by an English mathematician Edmund Gunter. Using the slide rule, one could perform
+                            operations like addition, subtraction, multiplication and division. It was used extensively
+                            till late 1970s.</p><img class="diagram-placeholder-img"
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                            data-src-placeholder="Figure 1.2 Slide rule." alt="Slide Rule">
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon"><i class="fas fa-drafting-compass"></i></div>
+                    <div class="timeline-content">
+                        <h4>Pascal's Adding and Subtraction Machine</h4>
+                        <p>Developed by Blaise Pascal. It could add and subtract. The machine consisted of wheels, gears
+                            and cylinders.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon"><i class="fas fa-cogs"></i></div>
+                    <div class="timeline-content">
+                        <h4>Leibniz's Multiplication and Dividing Machine (around 1673)</h4>
+                        <p>A mechanical device that could both multiply and divide. The German philosopher and
+                            mathematician Gottfried Leibniz built it around 1673.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon"><i class="fas fa-th"></i></div>
+                    <div class="timeline-content">
+                        <h4>Punch Card System (1801)</h4>
+                        <p>Developed by Jacquard to control the power loom in 1801. He invented the punched card reader
+                            that could recognize the presence of hole in the punched card as binary one and the absence
+                            of the hole as binary zero. The 0s and 1s are the basis of the modern digital computer.</p>
+                        <img class="diagram-placeholder-img"
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                            data-src-placeholder="Figure 1.3 Punched card." alt="Punched Card">
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon"><i class="fas fa-laptop-code"></i></div>
+                    <div class="timeline-content">
+                        <h4>Babbage's Analytical Engine</h4>
+                        <p>An English man Charles Babbage built a mechanical machine to do complex mathematical
+                            calculations, in the year 1823. The machine was called as difference engine. Later, Charles
+                            Babbage and Lady Ada Lovelace developed a general-purpose calculating machine, the
+                            analytical engine. Charles Babbage is also called the father of computer.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon"><i class="far fa-file-alt"></i></div>
+                    <div class="timeline-content">
+                        <h4>Hollerith's Punched Card Tabulating Machine</h4>
+                        <p>Invented by Herman Hollerith. The machine could read the information from a punched card and
+                            process it electronically.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="applications-of-computers" class="content-section">
+            <h2>Applications in Various Fields</h2>
+            <p>Computers have proliferated into various areas of our lives. For a user, computer is a tool that provides
+                the desired information, whenever needed. You may use computer to get information about the reservation
+                of tickets (railways, airplanes and cinema halls), books in a library, medical history of a person, a
+                place in a map, or the dictionary meaning of a word. The information may be presented to you in the form
+                of text, images, video clips, etc.</p>
+            <img class="diagram-placeholder-img"
+                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                data-src-placeholder="Figure 1.15 shows some of the applications of computer (Diagram: Applications in Education, Business, Medicine, Entertainment, Science & Eng, Sports, Advertising, Home)."
+                alt="Applications of Computers Diagram">
+
+            <div class="applications-grid">
+                <div class="application-card"><i class="fas fa-graduation-cap"></i>
+                    <h4>Education</h4>
+                    <p>Extensively used as a tool and an aid for imparting education. Used for notes, presentations,
+                        computer-based training, e-learning, online exams, research access.</p>
+                </div>
+                <div class="application-card"><i class="fas fa-briefcase-medical"></i>
+                    <h4>Health / Medicine</h4>
+                    <p>Medical researchers and practitioners use computers to access information about advances in
+                        medical research or to take opinion of doctors globally. Integral part of sophisticated medical
+                        equipments like ultrasound machine, CAT scan machine, MRI scan machine, etc. Computers also
+                        provide assistance to the medical surgeons during critical surgery operations like laparoscopic
+                        operations, etc.</p>
+                </div>
+                <div class="application-card"><i class="fas fa-landmark"></i>
+                    <h4>Banking / Government</h4>
+                    <p>The government uses computers to manage its own operations and also for e-governance. Websites of
+                        different government departments provide information to users. Used for filing income tax
+                        return, paying taxes, online submission of water and electricity bills, access of land record
+                        details, etc. Police department uses computers to search for criminals using fingerprint
+                        matching, etc. (Banking is heavily reliant on computers for transactions, record keeping, ATMs,
+                        online banking).</p>
+                </div>
+                <div class="application-card"><i class="fas fa-industry"></i>
+                    <h4>Industry / Business</h4>
+                    <p>Computers have a major impact on the entertainment industry. Used to download and view movies,
+                        play games, chat, book tickets for cinema halls, use multimedia for making movies, incorporate
+                        visual and sound effects using computers, etc. (Business applications are vast, including
+                        inventory management, accounting, communication, e-commerce, data analysis - implicitly covered
+                        by other sections too like Advertising).</p>
+                </div>
+                <div class="application-card"><i class="fas fa-film"></i>
+                    <h4>Entertainment</h4>
+                    <p>Users can also listen to music, download and share music, create music using computers, etc.</p>
+                </div>
+                <div class="application-card"><i class="fas fa-futbol"></i>
+                    <h4>Sports</h4>
+                    <p>A computer can be used to watch a game, view the scores, improve the game, play games (like
+                        chess, etc.) and create games. They are also used for the purposes of training players.</p>
+                </div>
+                <div class="application-card"><i class="fas fa-bullhorn"></i>
+                    <h4>Advertising</h4>
+                    <p>Computer is a powerful advertising media. Advertisement can be displayed on different websites,
+                        electronic-mails can be sent and reviews of a product by different customers can be posted.
+                        Google's business model is mainly dependent on web advertising for generating revenues.</p>
+                </div>
+                <div class="application-card"><i class="fas fa-flask"></i>
+                    <h4>Science and Engineering</h4>
+                    <p>Scientists and engineers use computers for performing complex scientific calculations, for
+                        designing and making drawings (CAD/CAM applications) and also for simulating and testing the
+                        designs. Computers are used for storing the complex data, performing complex calculations and
+                        for visualizing 3-dimensional objects. Complex scientific applications like the launch of the
+                        rockets, space exploration, etc., are not possible without the computers.</p>
+                </div>
+                <div class="application-card"><i class="fas fa-home"></i>
+                    <h4>Home</h4>
+                    <p>Computers have now become an integral part of home equipment. At home, people use computers to
+                        play games, to maintain the home accounts, for communicating with friends and relatives via
+                        Internet, for paying bills, for education and learning, etc. Microprocessors are embedded in
+                        house hold utilities like, washing machines, TVs, food processors, home theatres, security
+                        devices, etc.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="navigation-buttons">
+            <a href="../fundamentals.html" class="nav-button back-prev syllabus"><i class="fas fa-list-ul"></i> Back to
+                Syllabus</a>
+            <a href="topic-2.html" class="nav-button next">Next: Classification of Computers <i
+                    class="fas fa-arrow-right"></i></a>
+        </footer>
+
+    </div>
+
+    <script>
+        // Theme toggle logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        const bodyElement = document.body;
+
+        function setThemeMode(mode) {
+            if (mode === 'light-mode') {
+                htmlElement.classList.add('light-mode'); htmlElement.classList.remove('dark-mode');
+                bodyElement.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light-mode');
+            } else {
+                htmlElement.classList.remove('light-mode'); htmlElement.classList.add('dark-mode');
+                bodyElement.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark-mode');
+            }
+        }
+
+        (function () {
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme) { setThemeMode(currentTheme); }
+            else {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) { setThemeMode('light-mode'); }
+                else { setThemeMode('dark-mode'); }
+            }
+        })();
+
+        themeToggleBtn.addEventListener('click', function () {
+            if (htmlElement.classList.contains('light-mode')) { setThemeMode('dark-mode'); }
+            else { setThemeMode('light-mode'); }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const diagrams = document.querySelectorAll('.diagram-placeholder, .diagram-placeholder-img');
+            diagrams.forEach(diag => {
+                const placeholderText = diag.dataset.srcPlaceholder || diag.textContent || "Diagram/Image Placeholder";
+                if (diag.tagName === 'IMG') {
+                    diag.alt = placeholderText;
+                    // You would set actual src here, e.g.:
+                    // diag.src = "images/" + placeholderText.toLowerCase().replace(/[^a-z0-9]/g, '_') + ".png";
+                }
+                // For div placeholders, textContent is already set by default or by data-src-placeholder
+            });
+        });
+    </script>
+
+</body>
+
+</html>

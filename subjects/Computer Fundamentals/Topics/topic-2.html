@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 2: Classification & Generations of Computers - Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            /* Dark Mode (Default) */
+            --bg-color: #121828;
+            --card-bg-color: #1f2937;
+            --primary-text-color: #e5e7eb;
+            --secondary-text-color: #9ca3af;
+            --accent-color: #6a82fb;
+            --accent-hover-color: #8da2fc;
+            --yellow-accent: #fde047;
+            --border-color: #374151;
+            --futuristic-glow: 0 0 15px rgba(106, 130, 251, 0.3);
+            --futuristic-glow-yellow: 0 0 15px rgba(253, 224, 71, 0.4);
+            --header-gradient-start: var(--card-bg-color);
+            --header-gradient-end: var(--bg-color);
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #5a67d8;
+            /* A distinct color for syllabus button */
+            --nav-button-syllabus-hover-bg: #4c58bf;
+        }
+
+        html.light-mode {
+            /* Light Mode */
+            --bg-color: #f0f4f8;
+            --card-bg-color: #ffffff;
+            --primary-text-color: #2c3e50;
+            --secondary-text-color: #52616b;
+            --accent-color: #3498db;
+            --accent-hover-color: #2980b9;
+            --yellow-accent: #f39c12;
+            --border-color: #d1d5db;
+            --futuristic-glow: 0 0 15px rgba(52, 152, 219, 0.2);
+            --futuristic-glow-yellow: 0 0 15px rgba(243, 156, 18, 0.3);
+            --header-gradient-start: #e6e9ed;
+            --header-gradient-end: #f0f4f8;
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #27ae60;
+            --nav-button-syllabus-hover-bg: #229954;
+            --eduvision-logo-color: #2563eb;
+            /* EduVision blue for light mode */
+            --eduvision-logo-yellow: #f59e0b;
+            /* EduVision yellow for light mode */
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            font-size: 16px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 80px;
+            /* Space for fixed elements */
+        }
+
+        /* Logo Styles (Provided) */
+        .eduvision-logo {
+            position: fixed;
+            /* Changed to fixed for better visibility */
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvision-logo .text-white {
+            color: #fff !important;
+        }
+
+        .eduvision-logo .text-yellow-300 {
+            color: #fde047 !important;
+        }
+
+        html.light-mode .eduvision-logo .text-white {
+            color: var(--eduvision-logo-color) !important;
+        }
+
+        html.light-mode .eduvision-logo .text-yellow-300 {
+            color: var(--eduvision-logo-yellow) !important;
+        }
+
+        .eduvision-logo .group:hover .text-yellow-300 {
+            color: #fef08a !important;
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Theme Toggle Switch */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg, #23272f);
+            color: var(--theme-toggle-icon, #fde047);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 5px var(--shadow-color, rgba(0, 0, 0, 0.08));
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg, #374151);
+            color: var(--theme-toggle-hover-icon, #fff);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+
+        /* Header */
+        .main-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--header-gradient-start), var(--header-gradient-end));
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .topic-badge {
+            display: inline-block;
+            background-color: var(--yellow-accent);
+            color: var(--bg-color);
+            padding: 5px 15px;
+            border-radius: 15px 15px 0 0;
+            font-size: 0.9em;
+            font-weight: bold;
+            font-family: 'Nunito', sans-serif;
+            position: absolute;
+            top: -20px;
+            /* Adjust to sit nicely above the header */
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-header h1 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 3.2em;
+            font-weight: 900;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            /* Adjust if topic badge is used */
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: var(--futuristic-glow);
+        }
+
+        .main-header p {
+            font-size: 1.2em;
+            color: var(--secondary-text-color);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Sections */
+        .content-section {
+            background-color: var(--card-bg-color);
+            padding: 30px 40px;
+            margin-bottom: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--accent-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-left-color 0.3s ease;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15), var(--futuristic-glow);
+        }
+
+        .content-section h2 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+
+        .content-section h3 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.6em;
+            color: var(--yellow-accent);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section h4 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.3em;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section dl {
+            margin-bottom: 15px;
+            color: var(--secondary-text-color);
+            transition: color 0.3s ease;
+        }
+
+        .content-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .content-section ul li::before {
+            content: "\f105";
+            /* Font Awesome Angle Right */
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            top: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section dl dt {
+            font-weight: bold;
+            color: var(--primary-text-color);
+            margin-top: 10px;
+        }
+
+        .content-section dl dd {
+            margin-left: 20px;
+            margin-bottom: 5px;
+        }
+
+        /* Card Grids (for Classification & Types) */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .info-card {
+            background-color: var(--bg-color);
+            /* Inner card uses main bg for contrast */
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 4px solid var(--yellow-accent);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-left-color 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15), var(--futuristic-glow-yellow);
+        }
+
+        .info-card h3 {
+            margin-top: 0;
+            font-size: 1.5em;
+            color: var(--yellow-accent);
+        }
+
+        .info-card i.card-icon {
+            font-size: 2.5em;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            display: block;
+            text-align: center;
+        }
+
+        .info-card img.card-image {
+            max-width: 100%;
+            height: 150px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto 15px auto;
+            border-radius: 4px;
+            background: var(--card-bg-color);
+            /* Use card bg for image placeholder bg */
+            padding: 5px;
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+
+        /* Tabs for Generations */
+        .tabs-container {
+            margin-top: 30px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 20px;
+            transition: border-bottom-color 0.3s ease;
+        }
+
+        .tab-button {
+            padding: 12px 20px;
+            cursor: pointer;
+            background-color: transparent;
+            border: none;
+            color: var(--secondary-text-color);
+            font-size: 1.1em;
+            font-weight: 500;
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            /* Align with container border */
+        }
+
+        .tab-button:hover {
+            color: var(--primary-text-color);
+        }
+
+        .tab-button.active {
+            color: var(--yellow-accent);
+            border-bottom-color: var(--yellow-accent);
+            font-weight: 700;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background-color: var(--bg-color);
+            /* Inner tab content bg */
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tab-content h4 {
+            color: var(--accent-color);
+            margin-top: 15px;
+            font-size: 1.4em;
+        }
+
+        .tab-content ul li::before {
+            color: var(--yellow-accent);
+        }
+
+        .tech-icon {
+            font-size: 3em;
+            color: var(--yellow-accent);
+            display: block;
+            text-align: center;
+            margin: 10px 0 20px 0;
+        }
+
+        .generation-image-placeholder {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            display: block;
+            margin: 15px auto;
+            background: var(--card-bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 10px;
+            color: var(--secondary-text-color);
+            text-align: center;
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Summary Table for Generations */
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+        }
+
+        .summary-table th,
+        .summary-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px 12px;
+            text-align: left;
+            transition: border-color 0.3s ease;
+        }
+
+        .summary-table th {
+            background-color: var(--accent-color);
+            color: white;
+            /* Keep white for header contrast */
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .summary-table tr:nth-child(even) {
+            background-color: var(--bg-color);
+            /* Use main bg for alternating rows */
+            transition: background-color 0.3s ease;
+        }
+
+        /* Navigation Buttons */
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            /* Allow wrapping on smaller screens */
+            gap: 15px;
+            /* Add gap for wrapped buttons */
+            margin-top: 50px;
+            padding: 20px;
+            background-color: var(--card-bg-color);
+            border-radius: 8px;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-button {
+            color: var(--button-text-color);
+            padding: 12px 20px;
+            /* Reduced padding slightly */
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+            display: inline-flex;
+            /* For icon alignment */
+            align-items: center;
+            gap: 8px;
+            /* Space between icon and text */
+            border: none;
+            cursor: pointer;
+            font-size: 0.95em;
+            /* Slightly smaller font */
+            text-align: center;
+            flex-grow: 1;
+            /* Allow buttons to grow */
+            min-width: 150px;
+            /* Ensure buttons have some minimum width */
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-button.back-prev {
+            background-color: var(--secondary-text-color);
+        }
+
+        .nav-button.back-prev:hover {
+            background-color: var(--primary-text-color);
+            filter: brightness(1.2);
+        }
+
+        .nav-button.syllabus {
+            background-color: var(--nav-button-syllabus-bg);
+        }
+
+        .nav-button.syllabus:hover {
+            background-color: var(--nav-button-syllabus-hover-bg);
+        }
+
+        .nav-button.next {
+            background-color: var(--accent-color);
+        }
+
+        .nav-button.next:hover {
+            background-color: var(--accent-hover-color);
+        }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+
+            /* Adjust breakpoint for 3 buttons */
+            .navigation-buttons {
+                flex-direction: column;
+                /* Stack buttons */
+                align-items: stretch;
+                /* Make buttons full width */
+            }
+
+            .nav-button {
+                width: auto;
+                /* Override flex-grow behavior for stacked buttons */
+                justify-content: center;
+                /* Center content in stacked buttons */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-header h1 {
+                font-size: 2.5em;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .content-section h2 {
+                font-size: 1.8em;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tab-buttons {
+                justify-content: center;
+            }
+
+            .tab-button {
+                font-size: 1em;
+                padding: 10px 15px;
+            }
+
+            .topic-badge {
+                font-size: 0.8em;
+                padding: 4px 10px;
+                top: -15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold" style="font-family: 'Nunito', sans-serif;">
+            <a href="../../../index.html" class="flex items-center group" style="text-decoration: none;">
+                <span class="text-white">Edu</span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-white">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Replace old theme switch with new button -->
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="main-header">
+            <span class="topic-badge">Topic 2</span>
+            <h1>Classification & Generations of Computers</h1>
+            <p>Explore how computers are categorized based on their working principles and size, and trace their
+                evolution through different technological generations.</p>
+        </header>
+
+        <!-- Content sections (Classification, Types, Generations) remain the same as previous version -->
+        <!-- ... -->
+        <section id="classification" class="content-section">
+            <h2>1.6 Classification of Computers (by Working Principle)</h2>
+            <div class="card-grid">
+                <div class="info-card">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                        alt="Analog Computer Schematic" class="card-image"
+                        data-src-placeholder="Image: Analog Computer">
+                    <h3>Analog Computer</h3>
+                    <p>An analog computer is a form of computer that uses the continuously changeable aspects of
+                        physical phenomena such as electrical, mechanical, or hydraulic quantities to model the problem
+                        being solved.</p>
+                </div>
+                <div class="info-card">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                        alt="Digital Computer System" class="card-image" data-src-placeholder="Image: Digital Computer">
+                    <h3>Digital Computer</h3>
+                    <p>A digital computer is a device capable of solving problems by processing information in discrete
+                        form. It operates on data, including magnitudes, letters, and symbols, that are expressed in
+                        binary form—i.e., using only the two digits 0 and 1.</p>
+                </div>
+                <div class="info-card">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                        alt="Hybrid Computer Device" class="card-image"
+                        data-src-placeholder="Image: Hybrid Computer (e.g. advanced PDA-like device)">
+                    <h3>Hybrid Computer</h3>
+                    <p>Hybrid computers are computers that exhibit features of analog computers and digital computers.
+                        The digital component normally serves as the controller and provides logical and numerical
+                        operations, while the analog component often serves as a solver of differential equations and
+                        other mathematically complex equations.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="types" class="content-section">
+            <h2>1.6 Types of Computers (by Size/Power/Purpose)</h2>
+            <p>Present day computers can be categorized as below:</p>
+            <div class="card-grid">
+                <div class="info-card">
+                    <i class="fas fa-rocket card-icon"></i>
+                    <h3>Supercomputer</h3>
+                    <p>Fastest and very expensive. Used for specialized applications requiring immense mathematical
+                        calculations, like weather forecasting, animated graphics, fluid dynamic calculations, nuclear
+                        energy research, and petroleum exploration.</p>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-server card-icon"></i>
+                    <h3>Mainframe Computer</h3>
+                    <p>Very large and expensive, capable of supporting hundreds or thousands of users simultaneously. In
+                        hierarchy, mainframes are just below supercomputers. Mainframes can execute many programs
+                        concurrently, while supercomputers excel at executing a single program faster.</p>
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                        alt="Mainframe Computer Room" class="card-image"
+                        data-src-placeholder="Image: Mainframe Computer">
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-network-wired card-icon"></i>
+                    <h3>Mini Computer</h3>
+                    <p>A mid-sized computer in size and power, lying between workstations and mainframes. A minicomputer
+                        is a multiprocessing system capable of supporting from 4 to about 200 users simultaneously. The
+                        distinction between large minicomputers and small mainframes has blurred.</p>
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                        alt="Minicomputer System" class="card-image" data-src-placeholder="Image: Minicomputer">
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-desktop card-icon"></i>
+                    <h3>Microcomputer: Desktop</h3>
+                    <p>A personal or micro-mini computer sufficient to fit on a desk.</p>
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                        alt="Desktop Computer Setup" class="card-image" data-src-placeholder="Image: Desktop Computer">
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-laptop card-icon"></i>
+                    <h3>Microcomputer: Laptop/Notebook</h3>
+                    <p>A portable computer complete with an integrated screen and keyboard. Generally smaller in size
+                        than a desktop computer and larger than a notebook computer (though terms are often used
+                        interchangeably).</p>
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                        alt="Laptop Computer" class="card-image" data-src-placeholder="Image: Laptop Computer">
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-mobile-alt card-icon"></i>
+                    <h3>Microcomputer: Palmtop/PDA</h3>
+                    <p>Hand-sized computers like Palmtops, Digital Diaries, Notebooks, or Personal Digital Assistants
+                        (PDAs). Their screen often serves as both an input and output device. Some might have a small
+                        keyboard.</p>
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                        alt="Palmtop/PDA Device" class="card-image" data-src-placeholder="Image: Palmtop/PDA">
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-tablet-alt card-icon"></i>
+                    <h3>Microcomputer: Tablet PC</h3>
+                    <p>Mobile PCs combining features of laptops and handhelds. They have a built-in screen and allow
+                        users to write notes or draw pictures with a stylus. Some are "convertibles" with screens that
+                        swivel.</p>
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                        alt="Tablet PC" class="card-image" data-src-placeholder="Image: Tablet PC">
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-display card-icon"></i>
+                    <h3>Workstation</h3>
+                    <p>A terminal or desktop computer in a network. In this context, a workstation is a generic term for
+                        a user's machine (client machine) in contrast to a "server" or "mainframe."</p>
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                        alt="Workstation Environment" class="card-image" data-src-placeholder="Image: Workstation">
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-microchip card-icon"></i>
+                    <h3>Embedded Systems</h3>
+                    <p>Special-purpose devices where the computer is embedded. Examples include video game players,
+                        microwave ovens, smart-watches, programmable thermostats, car engine controllers, CD players.
+                        Typically given one task.</p>
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                        alt="Embedded Systems Examples Diagram" class="card-image"
+                        data-src-placeholder="Image: Embedded Systems Diagram">
+                </div>
+            </div>
+        </section>
+
+        <section id="generations" class="content-section">
+            <h2>1.3 Generations of Computers</h2>
+            <p>Over the years, various computing devices were invented that enabled people to solve different types of
+                problems. These computing devices can be classified into several generations, referring to the phases of
+                improvement made to different computing devices. Technological development in computers refers not only
+                to hardware technologies but also to software technologies. Generation in computer terminology is a
+                change in technology a computer is/was being used. Initially, the term was used to distinguish between
+                varying hardware technologies. But nowadays, generation includes both hardware and software, which
+                together make up an entire computer system.</p>
+            <p>There are totally five computer generations known till date. Here approximate dates against each
+                generation have been mentioned which are normally accepted.</p>
+
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>S.N.</th>
+                        <th>Generation & Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><strong>First Generation</strong><br>The period of first generation: 1946-1959. Vacuum tube
+                            based.</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><strong>Second Generation</strong><br>The period of second generation: 1959-1965. Transistor
+                            based.</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><strong>Third Generation</strong><br>The period of third generation: 1965-1971. Integrated
+                            Circuit based.</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><strong>Fourth Generation</strong><br>The period of fourth generation: 1971-1980. VLSI
+                            microprocessor based.</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td><strong>Fifth Generation</strong><br>The period of fifth generation: 1980-onwards. ULSI
+                            microprocessor based.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="tabs-container">
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="openTab(event, 'gen1')">First Gen</button>
+                    <button class="tab-button" onclick="openTab(event, 'gen2')">Second Gen</button>
+                    <button class="tab-button" onclick="openTab(event, 'gen3')">Third Gen</button>
+                    <button class="tab-button" onclick="openTab(event, 'gen4')">Fourth Gen</button>
+                    <button class="tab-button" onclick="openTab(event, 'gen5')">Fifth Gen</button>
+                </div>
+
+                <div id="gen1" class="tab-content active">
+                    <h3>First Generation (1946-1959)</h3>
+                    <i class="fas fa-lightbulb tech-icon" title="Vacuum Tube"></i>
+                    <p><strong>Key Technology:</strong> Vacuum Tubes. Punched cards, paper tape, and magnetic tape were
+                        used as input/output devices. Programming in machine language.</p>
+                    <div class="generation-image-placeholder"
+                        data-src-placeholder="Diagram: Vacuum Tube & Image: 1st Gen Computer">Placeholder for Vacuum
+                        Tube Diagram & 1st Gen Computer Image</div>
+                    <h4>Main Features:</h4>
+                    <ul>
+                        <li>Vacuum tube technology.</li>
+                        <li>Unreliable and prone to frequent fusing.</li>
+                        <li>Supported machine language only.</li>
+                        <li>Very costly.</li>
+                        <li>Generated a lot of heat, hence A.C. was required.</li>
+                        <li>Slow input and output devices.</li>
+                        <li>Huge size, occupied large rooms.</li>
+                        <li>Non-portable.</li>
+                        <li>Consumed a lot of electricity.</li>
+                        <li>Fastest computing devices of their time; could execute complex math.</li>
+                        <li>Generally special-purpose.</li>
+                        <li>Single tasking.</li>
+                    </ul>
+                    <h4>Examples:</h4>
+                    <p>ENIAC, EDVAC, UNIVAC, EDSAC, IBM-701, IBM-650.</p>
+                </div>
+
+                <div id="gen2" class="tab-content">
+                    <h3>Second Generation (1959-1965)</h3>
+                    <i class="fas fa-microchip tech-icon" style="transform: rotate(45deg);" title="Transistor"></i>
+                    <p><strong>Key Technology:</strong> Transistors. Magnetic cores for primary memory, magnetic tape
+                        and disks for secondary storage. Assembly language and early high-level languages (FORTRAN,
+                        COBOL). Batch processing and multiprogramming operating systems.</p>
+                    <div class="generation-image-placeholder"
+                        data-src-placeholder="Diagram: Transistor & Image: 2nd Gen Computer">Placeholder for Transistor
+                        Diagram & 2nd Gen Computer Image</div>
+                    <h4>Main Features:</h4>
+                    <ul>
+                        <li>Use of transistors.</li>
+                        <li>More reliable in comparison to first-generation computers.</li>
+                        <li>Smaller size as compared to first-generation computers.</li>
+                        <li>Generated less heat.</li>
+                        <li>Consumed less electricity.</li>
+                        <li>Faster than first-generation computers.</li>
+                        <li>Still very costly.</li>
+                        <li>A.C. needed.</li>
+                        <li>Supported machine and assembly languages.</li>
+                        <li>Could be transferred (smaller and lighter).</li>
+                    </ul>
+                    <h4>Limitations:</h4>
+                    <ul>
+                        <li>Input/output media for these computers were not improved to a considerable extent.</li>
+                        <li>Required to be placed in air-conditioned places.</li>
+                    </ul>
+                    <h4>Examples:</h4>
+                    <p>IBM 1620, IBM 7094 (or 7090), CDC 1604, CDC 3600, UNIVAC 1108, PDP-8, IBM 1401.</p>
+                </div>
+
+                <div id="gen3" class="tab-content">
+                    <h3>Third Generation (1965-1971)</h3>
+                    <i class="fas fa-memory tech-icon" title="Integrated Circuit (IC)"></i>
+                    <p><strong>Key Technology:</strong> Integrated Circuits (ICs) - SSI and MSI. Use of ICs led to
+                        smaller, faster, more reliable, and efficient computers. High-level languages (FORTRAN-II TO IV,
+                        COBOL, PASCAL PL/1, BASIC, ALGOL-68). Time-sharing, multi-programming, remote processing
+                        operating systems.</p>
+                    <div class="generation-image-placeholder"
+                        data-src-placeholder="Diagram: IC & Image: 3rd Gen Computer">Placeholder for IC Diagram & 3rd
+                        Gen Computer Image</div>
+                    <h4>Main Features:</h4>
+                    <ul>
+                        <li>IC used.</li>
+                        <li>More reliable in comparison to previous two generations.</li>
+                        <li>Smaller size.</li>
+                        <li>Generated less heat.</li>
+                        <li>Faster (computational time in nanoseconds).</li>
+                        <li>Lesser maintenance.</li>
+                        <li>Still costly.</li>
+                        <li>A.C needed.</li>
+                        <li>Consumed lesser electricity.</li>
+                        <li>Supported high-level language.</li>
+                        <li>General-purpose computers.</li>
+                        <li>Easily transportable.</li>
+                    </ul>
+                    <h4>Disadvantages:</h4>
+                    <ul>
+                        <li>The storage capacity of these computers was still very small.</li>
+                        <li>The performance of these computers degraded while solving complex computations.</li>
+                    </ul>
+                    <h4>Examples:</h4>
+                    <p>IBM-360 series, Honeywell-6000 series, PDP (Personal Data Processor), IBM-370/168, TDC-316, NCR
+                        395, B6500, CDC 7600.</p>
+                </div>
+
+                <div id="gen4" class="tab-content">
+                    <h3>Fourth Generation (1971-1980)</h3>
+                    <i class="fas fa-microchip tech-icon" title="Microprocessor (VLSI)"></i>
+                    <p><strong>Key Technology:</strong> Microprocessors using Large Scale Integration (LSI) and Very
+                        Large Scale Integration (VLSI) technology. Rise of Personal Computers (PC). Development of GUIs,
+                        networks (LANs), and more advanced OS (time-sharing, real-time, distributed). High-level
+                        languages like C, C++, DBASE.</p>
+                    <div class="generation-image-placeholder"
+                        data-src-placeholder="Diagram: Microprocessor & Image: 4th Gen Computer">Placeholder for
+                        Microprocessor Diagram & 4th Gen Computer Image</div>
+                    <h4>Main Features:</h4>
+                    <ul>
+                        <li>VLSI technology used.</li>
+                        <li>Very cheap.</li>
+                        <li>Portable and reliable.</li>
+                        <li>Use of PCs.</li>
+                        <li>Very small size.</li>
+                        <li>Pipeline processing.</li>
+                        <li>No A.C. needed.</li>
+                        <li>Concept of internet was introduced.</li>
+                        <li>Great developments in the fields of networks.</li>
+                        <li>Computers became easily available.</li>
+                        <li>User-friendly environment (GUIs).</li>
+                        <li>Storage capacity very large and fast.</li>
+                    </ul>
+                    <h4>Problems:</h4>
+                    <ul>
+                        <li>Soldering of LSI and VLSI chips on the wiring board was not an easy task and required
+                            complicated technologies to bind these chips on the wiring board.</li>
+                        <li>The working of these computers is still dependent on the instructions given by the
+                            programmer.</li>
+                    </ul>
+                    <h4>Examples:</h4>
+                    <p>DEC 10, STAR 1000, PDP 11, CRAY-1 (Supercomputer), CRAY-X-MP (Supercomputer), IBM PC, Apple
+                        series, Intel 386, 486, Pentium.</p>
+                </div>
+
+                <div id="gen5" class="tab-content">
+                    <h3>Fifth Generation (1980-Onwards)</h3>
+                    <i class="fas fa-brain tech-icon" title="AI & ULSI"></i>
+                    <p><strong>Key Technology:</strong> Ultra Large Scale Integration (ULSI) technology, resulting in
+                        microprocessor chips with ten million electronic components. Focus on Artificial Intelligence
+                        (AI), parallel processing, superconductor technology, optical disk storage, and the Internet.
+                    </p>
+                    <div class="generation-image-placeholder" data-src-placeholder="Image: 5th Gen Concept">Placeholder
+                        for 5th Gen Concept Image</div>
+                    <h4>Main Features & Developments:</h4>
+                    <ul>
+                        <li>ULSI technology.</li>
+                        <li>Development of true artificial intelligence.</li>
+                        <li>Development of Natural language processing.</li>
+                        <li>Advancement in Parallel Processing.</li>
+                        <li>Advancement in superconductor technology.</li>
+                        <li>More user-friendly interfaces with multimedia features.</li>
+                        <li>Availability of very powerful and compact computers at cheaper rates.</li>
+                        <li>Development of portable computers (laptops, PDAs).</li>
+                        <li>Invention of optical disk technology.</li>
+                        <li>Development of the Internet and its services.</li>
+                        <li>Fastest and most powerful computers.</li>
+                    </ul>
+                    <h4>AI Includes:</h4>
+                    <ul>
+                        <li>Robotics</li>
+                        <li>Neural Networks</li>
+                        <li>Game Playing</li>
+                        <li>Development of expert systems to make decisions in real-life situations.</li>
+                        <li>Natural language understanding and generation.</li>
+                    </ul>
+                    <h4>Major Disadvantage:</h4>
+                    <p>They are not provided with an intelligent program that could guide them in performing different
+                        operations. Nowadays, scientists are making some serious efforts in this field and artificial
+                        intelligence and expert system applications are the results of these efforts.</p>
+                    <h4>Examples of Computer Types:</h4>
+                    <p>Desktop, Laptop, Notebook, UltraBook, Chromebooks, Smartphones with advanced computing.</p>
+                </div>
+            </div>
+
+            <h3>Tree of Computer Family (Conceptual)</h3>
+            <p>The "Tree of Computer Family" (often depicted as Fig 1.9 in some texts) illustrates the historical and
+                conceptual development lines of computers, showing how various ideas like calculating devices, programs,
+                logic, electronics, and storage converged to form the generations of computers we know today. It traces
+                roots from early devices like the Abacus, through key inventions and theoretical advancements, to modern
+                computer generations.</p>
+
+        </section>
+
+
+        <footer class="navigation-buttons">
+            <a href="topic-1.html" class="nav-button back-prev"><i class="fas fa-arrow-left"></i> Previous Topic</a>
+            <a href="../fundamentals.html" class="nav-button syllabus"><i class="fas fa-list-ul"></i> Back to
+                Syllabus</a>
+            <a href="topic-3.html" class="nav-button next">Next Topic <i class="fas fa-arrow-right"></i></a>
+        </footer>
+
+    </div>
+
+    <script>
+        // Tabbed interface logic
+        function openTab(evt, tabName) {
+            var i, tabcontent, tabbuttons;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+            tabbuttons = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tabbuttons.length; i++) {
+                tabbuttons[i].classList.remove("active");
+            }
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Theme toggle logic for new button
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        const bodyElement = document.body;
+
+        // Helper to set mode
+        function setThemeMode(mode) {
+            if (mode === 'light-mode') {
+                htmlElement.classList.add('light-mode');
+                htmlElement.classList.remove('dark-mode');
+                bodyElement.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light-mode');
+            } else {
+                htmlElement.classList.remove('light-mode');
+                htmlElement.classList.add('dark-mode');
+                bodyElement.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark-mode');
+            }
+        }
+
+        // On load, set theme from localStorage or system
+        (function () {
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme) {
+                setThemeMode(currentTheme);
+            } else {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+                    setThemeMode('light-mode');
+                } else {
+                    setThemeMode('dark-mode');
+                }
+            }
+        })();
+
+        themeToggleBtn.addEventListener('click', function () {
+            if (htmlElement.classList.contains('light-mode')) {
+                setThemeMode('dark-mode');
+            } else {
+                setThemeMode('light-mode');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize the first tab
+            const firstTabButton = document.querySelector('.tab-button');
+            if (firstTabButton) {
+                firstTabButton.click();
+            }
+
+
+            // Placeholder for image loading
+            const images = document.querySelectorAll('img.card-image, .generation-image-placeholder');
+            images.forEach(img => {
+                const placeholderText = img.dataset.srcPlaceholder || "Image Placeholder";
+                if (img.tagName === 'IMG' && img.getAttribute('src').includes('data:image/png;base64')) {
+                    const altText = img.getAttribute('alt');
+                    if (!img.getAttribute('aria-label')) {
+                        img.setAttribute('aria-label', altText || placeholderText);
+                    }
+                } else if (img.classList.contains('generation-image-placeholder')) {
+                    img.textContent = placeholderText;
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

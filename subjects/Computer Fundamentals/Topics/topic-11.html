@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 11: Database Fundamentals - Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            /* Dark Mode (Default) */
+            --bg-color: #121828;
+            --card-bg-color: #1f2937;
+            /* Main section background */
+            --inner-card-bg-color: var(--bg-color);
+            /* For individual elements within sections */
+            --primary-text-color: #e5e7eb;
+            --secondary-text-color: #9ca3af;
+            --accent-color: #6a82fb;
+            --accent-hover-color: #8da2fc;
+            --yellow-accent: #fde047;
+            --border-color: #374151;
+            --futuristic-glow: 0 0 15px rgba(106, 130, 251, 0.3);
+            --futuristic-glow-yellow: 0 0 15px rgba(253, 224, 71, 0.4);
+            --header-gradient-start: var(--card-bg-color);
+            --header-gradient-end: var(--bg-color);
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #5a67d8;
+            --nav-button-syllabus-hover-bg: #4c58bf;
+            --diagram-bg: #2a3547;
+            --table-header-bg: var(--accent-color);
+            --table-row-even-bg: var(--bg-color);
+            --code-bg: #282c34;
+            --code-text-color: #abb2bf;
+            --theme-toggle-bg: #23272f;
+            --theme-toggle-icon: #fde047;
+            --theme-toggle-hover-bg: #374151;
+            --theme-toggle-hover-icon: #fff;
+        }
+
+        html.light-mode {
+            /* Light Mode */
+            --bg-color: #f0f4f8;
+            --card-bg-color: #ffffff;
+            --inner-card-bg-color: var(--bg-color);
+            --primary-text-color: #2c3e50;
+            --secondary-text-color: #52616b;
+            --accent-color: #3498db;
+            --accent-hover-color: #2980b9;
+            --yellow-accent: #f39c12;
+            --border-color: #d1d5db;
+            --futuristic-glow: 0 0 15px rgba(52, 152, 219, 0.2);
+            --futuristic-glow-yellow: 0 0 15px rgba(243, 156, 18, 0.3);
+            --header-gradient-start: #e6e9ed;
+            --header-gradient-end: #f0f4f8;
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #27ae60;
+            --nav-button-syllabus-hover-bg: #229954;
+            --eduvision-logo-color: #2563eb;
+            --eduvision-logo-yellow: #f59e0b;
+            --diagram-bg: #e9ecef;
+            --table-header-bg: var(--accent-color);
+            --table-row-even-bg: #f8f9fa;
+            --code-bg: #f5f2f0;
+            --code-text-color: #383a42;
+            --theme-toggle-bg: #f8f9fa;
+            --theme-toggle-icon: #f39c12;
+            --theme-toggle-hover-bg: #e9ecef;
+            --theme-toggle-hover-icon: #2c3e50;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            font-size: 16px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 80px;
+        }
+
+        /* Logo Styles */
+        .eduvision-logo {
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvision-logo .text-logo-main {
+            color: #fff !important;
+        }
+
+        .eduvision-logo .text-logo-accent {
+            color: #fde047 !important;
+        }
+
+        html.light-mode .eduvision-logo .text-logo-main {
+            color: var(--eduvision-logo-color) !important;
+        }
+
+        html.light-mode .eduvision-logo .text-logo-accent {
+            color: var(--eduvision-logo-yellow) !important;
+        }
+
+        .eduvision-logo .group:hover .text-logo-accent {
+            filter: brightness(1.1);
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Theme Toggle Button */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+            color: var(--theme-toggle-hover-icon);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+        /* Header */
+        .main-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--header-gradient-start), var(--header-gradient-end));
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .topic-badge {
+            display: inline-block;
+            background-color: var(--yellow-accent);
+            color: var(--bg-color);
+            padding: 5px 15px;
+            border-radius: 15px 15px 0 0;
+            font-size: 0.9em;
+            font-weight: bold;
+            font-family: 'Nunito', sans-serif;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-header h1 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 3.0em;
+            font-weight: 900;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: var(--futuristic-glow);
+        }
+
+        .main-header p {
+            font-size: 1.2em;
+            color: var(--secondary-text-color);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Sections & Content Styling */
+        .content-section {
+            background-color: var(--card-bg-color);
+            padding: 30px 40px;
+            margin-bottom: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--accent-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-left-color 0.3s ease;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15), var(--futuristic-glow);
+        }
+
+        .content-section h2 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+
+        .content-section h3 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.6em;
+            color: var(--yellow-accent);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section h4 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.3em;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section h5 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.1em;
+            color: var(--accent-color);
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+
+        .content-section p,
+        .content-section ul {
+            margin-bottom: 15px;
+            color: var(--secondary-text-color);
+            transition: color 0.3s ease;
+        }
+
+        .content-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .content-section ul li::before {
+            content: "\f058";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            top: 3px;
+            font-size: 0.9em;
+            transition: color 0.3s ease;
+        }
+
+        .content-section .sub-section {
+            background-color: var(--inner-card-bg-color);
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .content-section .sub-section ul li::before {
+            content: "\f101";
+            font-size: 0.8em;
+            top: 4px;
+        }
+
+        /* Diagram Placeholder */
+        .diagram-placeholder,
+        .diagram-placeholder-img {
+            background-color: var(--diagram-bg);
+            border: 2px dashed var(--border-color);
+            padding: 15px;
+            margin: 20px auto;
+            text-align: center;
+            color: var(--secondary-text-color);
+            border-radius: 8px;
+            font-style: italic;
+            display: block;
+            max-width: 90%;
+            font-size: 0.9em;
+        }
+
+        .diagram-placeholder-img {
+            height: auto;
+            min-height: 80px;
+            object-fit: contain;
+        }
+
+        /* SQL Command Examples */
+        .sql-example {
+            background-color: var(--code-bg);
+            color: var(--code-text-color);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+
+        .sql-example strong {
+            color: var(--yellow-accent);
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.95em;
+            overflow-x: auto;
+            display: block;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px 12px;
+            text-align: left;
+            vertical-align: top;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .comparison-table th {
+            background-color: var(--table-header-bg);
+            color: var(--button-text-color);
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .comparison-table tr:nth-child(even) td {
+            background-color: var(--table-row-even-bg);
+        }
+
+        @media (max-width: 768px) {
+
+            .comparison-table th,
+            .comparison-table td {
+                white-space: normal;
+            }
+        }
+
+        /* Navigation Buttons */
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: var(--card-bg-color);
+            border-radius: 8px;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-button {
+            color: var(--button-text-color);
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-align: center;
+            flex-grow: 1;
+            min-width: 150px;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-button.back-prev {
+            background-color: var(--secondary-text-color);
+        }
+
+        .nav-button.back-prev:hover {
+            background-color: var(--primary-text-color);
+            filter: brightness(1.2);
+        }
+
+        .nav-button.syllabus {
+            background-color: var(--nav-button-syllabus-bg);
+        }
+
+        .nav-button.syllabus:hover {
+            background-color: var(--nav-button-syllabus-hover-bg);
+        }
+
+        .nav-button.next {
+            background-color: var(--accent-color);
+        }
+
+        .nav-button.next:hover {
+            background-color: var(--accent-hover-color);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .navigation-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .nav-button {
+                width: auto;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-header h1 {
+                font-size: 2.5em;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .content-section h2 {
+                font-size: 1.8em;
+            }
+
+            .topic-badge {
+                font-size: 0.8em;
+                padding: 4px 10px;
+                top: -15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header h1 {
+                font-size: 2.2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../../index.html" class="flex items-center group">
+                <span class="text-logo-main">Edu</span>
+                <svg class="text-logo-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-logo-main">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="main-header">
+            <span class="topic-badge">Topic 11</span>
+            <h1>Database Fundamentals</h1>
+            <p>Understanding the core concepts of databases, how they are managed, different types, and the basics of
+                SQL for data manipulation.</p>
+        </header>
+
+        <section id="what-is-database" class="content-section">
+            <h2>What is Database?</h2>
+            <p>The database is a collection of inter-related data which is used to retrieve, insert and delete the data
+                efficiently. It is also used to organize the data in the form of a table, schema, views, and reports,
+                etc. For example: The college Database organizes the data about the admin, staff, students and faculty
+                etc. Using the database, you can easily retrieve, insert, and delete the information.</p>
+
+            <h3>Database Management System (DBMS)</h3>
+            <p>A database-management system (DBMS) is a collection of interrelated data and a set of programs to access
+                those data. The collection of data, usually referred to as the database, contains information relevant
+                to an enterprise. The primary goal of a DBMS is to provide a way to store and retrieve database
+                information that is both convenient and efficient. Database systems are designed to manage large bodies
+                of information. Management of data involves both defining structures for storage of information and
+                providing mechanisms for the manipulation of information. In addition, the database system must ensure
+                the safety of the information stored, despite system crashes or attempts at unauthorized access. If data
+                are to be shared among several users, the system must avoid possible anomalous results.</p>
+            <h4>DBMS allows users the following tasks:</h4>
+            <ul>
+                <li><strong>Data Definition:</strong> It is used for creation, modification, and removal of definition
+                    that defines the organization of data in the database.</li>
+                <li><strong>Data Updation:</strong> It is used for the insertion, modification, and deletion of the
+                    actual data in the database.</li>
+                <li><strong>Data Retrieval:</strong> It is used to retrieve the data from the database which can be used
+                    by applications for various purposes.</li>
+                <li><strong>User Administration:</strong> It is used for registering and monitoring users, maintain data
+                    integrity, enforcing data security, dealing with concurrency control, monitoring performance and
+                    recovering information corrupted by unexpected failure.</li>
+            </ul>
+            <h4>Characteristics of DBMS:</h4>
+            <ul>
+                <li>It uses a digital repository established on a server to store and manage the information.</li>
+                <li>It can provide a clear and logical view of the process that manipulates data.</li>
+                <li>DBMS contains automatic backup and recovery procedures.</li>
+                <li>It contains ACID properties which maintain data in a healthy state in case of failure.</li>
+                <li>It can reduce the complex relationship between data.</li>
+                <li>It is used to support manipulation and processing of data.</li>
+                <li>It is used to provide security of data.</li>
+                <li>It can view the database from different viewpoints according to the requirements of the user.</li>
+            </ul>
+            <h4>Advantages of DBMS:</h4>
+            <ul>
+                <li>Controls database redundancy.</li>
+                <li>Data sharing among multiple users.</li>
+                <li>Easily Maintainable due to centralized nature.</li>
+                <li>Reduce time for development and maintenance.</li>
+                <li>Backup and recovery subsystems.</li>
+                <li>Multiple user interface (GUIs, APIs).</li>
+            </ul>
+            <h4>Disadvantages of DBMS:</h4>
+            <ul>
+                <li>Cost of Hardware and Software.</li>
+                <li>Size (occupies large disk space and memory).</li>
+                <li>Complexity.</li>
+                <li>Higher impact of failure.</li>
+            </ul>
+        </section>
+
+        <section id="view-of-data" class="content-section">
+            <h2>1.3 View of Data</h2>
+            <p>A database system is a collection of interrelated files and a set of programs that allow users to access
+                and modify these files. A major purpose of a database system is to provide users with an abstract view
+                of the data. That is, the system hides certain details of how the data are stored and maintained.</p>
+            <h3>1.3.1 Data Abstraction</h3>
+            <p>For the system to be usable, it must retrieve data efficiently. The need for efficiency has led designers
+                to use complex data structures to represent data in the database. Since many database-systems users are
+                not computer trained, developers hide the complexity from users through several levels of abstraction,
+                to simplify users’ interactions with the system.</p>
+            <h4>The three levels of abstraction:</h4>
+            <ol>
+                <li><strong>Physical level:</strong> The lowest level of abstraction describes how data are stored.</li>
+                <li><strong>Logical level:</strong> The next higher level of abstraction, describes what data are stored
+                    in database and what relationship among those data.</li>
+                <li><strong>View level:</strong> The highest level of abstraction describes only part of entire
+                    database.</li>
+            </ol>
+            <div class="diagram-placeholder-img"
+                data-src-placeholder="Conceptual image of levels of abstraction (Physical, Logical, View levels with Database icons).">
+                Data Abstraction Levels Diagram</div>
+
+            <h3>1.3.2 Instances and Schemas</h3>
+            <p>Databases change over time as information is inserted and deleted. The collection of information stored
+                in the database at a particular moment is called an instance of the database. The overall design of the
+                database is called the database schema. Schemas are changed infrequently, if at all. Database systems
+                have several schemas, partitioned according to the levels of abstraction. The physical schema describes
+                the database design at the physical level, while the logical schema describes the database design at the
+                logical level. A database may also have several schemas at the view level, sometimes called subschemas,
+                that describe different views of the database.</p>
+            <h3>1.2.3 Data Independence</h3>
+            <p>The ability to modify a schema definition in one level without affecting a schema definition in the next
+                higher level is called data independence.</p>
+            <h4>There are two levels of data independence:</h4>
+            <ol>
+                <li><strong>Physical data independence</strong> is the ability to modify the physical schema without
+                    causing application programs to be rewritten. Modifications at the physical level are occasionally
+                    necessary to improve performance.</li>
+                <li><strong>Logical data independence</strong> is the ability to modify the logical schema without
+                    causing application programs to be rewritten. Modifications at the logical level are necessary
+                    whenever the logical structure of the database is altered. Logical data independence is more
+                    difficult to achieve than is physical data independence.</li>
+            </ol>
+        </section>
+
+        <section id="types-databases" class="content-section">
+            <h2>Types of Databases</h2>
+            <p>There are various types of databases used for storing different varieties of data.</p>
+            <div class="diagram-placeholder-img"
+                data-src-placeholder="Diagram: Types of Database (Centralized, Distributed, Cloud, NoSQL, Relational, Network, Object-oriented, Hierarchical in a connected graphic).">
+                Types of Databases Diagram</div>
+
+            <div class="sub-section">
+                <h4>Centralized Database</h4>
+                <p>Stores information and application programs at a central place where it is accessed by users from
+                    different remote locations.</p>
+            </div>
+            <div class="sub-section">
+                <h4>Cloud Database</h4>
+                <p>Has scalable content and runs on cloud computing platform. Provides scalability and availability. Can
+                    be managed by user or provider (DBaaS).</p>
+            </div>
+            <div class="sub-section">
+                <h4>Distributed Database</h4>
+                <p>Processing is replicated among different points of a network. Homogeneous (same underlying
+                    hardware/OS) or Heterogeneous (different hardware/OS).</p>
+            </div>
+            <div class="sub-section">
+                <h4>Document Oriented Database</h4>
+                <p>Special computer program designed to store, retrieve and manage document oriented information. Data
+                    is encoded using XML, JSON, BSON. Example: MongoDB.</p>
+            </div>
+            <div class="sub-section">
+                <h4>Navigational Database</h4>
+                <p>Objects are found by following references from other objects. Common when data stored on magnetic
+                    tapes. Associated with hierarchical and network models.</p>
+            </div>
+            <div class="sub-section">
+                <h4>Object Oriented Database</h4>
+                <p>Organized around objects. Suited for items created by object oriented programming languages. A record
+                    can be a data object rather than alphanumeric values. Objects consist of attributes and methods.</p>
+            </div>
+            <div class="sub-section">
+                <h4>Operational Database (OLTP)</h4>
+                <p>Contains information pertaining to operations of an enterprise. Organized on functional lines
+                    (marketing, production, etc.). Can be SQL-based or NoSQL-based.</p>
+            </div>
+
+            <div class="sub-section">
+                <h3>Relational Database (SQL)</h3>
+                <p>Invented in 1970’s by E.F. Codd at IBM. Relational database management systems (RDBMS) are meant for
+                    better performance to manage data in desktop database applications especially due to their multiple
+                    user access who can work with data simultaneously. The data is stored in tabular form so that it can
+                    easily be accessed. These are made with set of tables. The set of tables makes a schema and a number
+                    of schemas create a database. These databases are easy to extend and a new category can be added to
+                    existing database without modifying all existing applications. The standard interface for relational
+                    database is Structured Query Language(SQL).</p>
+                <h4>Main Focus of RDBMS is on ACID properties:</h4>
+                <ul>
+                    <li><strong>Atomicity</strong> – Each transaction is atomic. If one part of it fails, the entire
+                        transaction fails (and is rolled back).</li>
+                    <li><strong>Consistency</strong> – Every transaction is subject to a consistent set of rules
+                        (constraints, triggers, cascades).</li>
+                    <li><strong>Isolation</strong> – No transaction should interfere with another transaction.</li>
+                    <li><strong>Durability</strong> – Once a transaction is committed, it remains committed.</li>
+                </ul>
+            </div>
+
+            <div class="sub-section">
+                <h3>Non-relational (NoSQL) Database</h3>
+                <p>RDBMS doesn’t quite fit for some requirements like: Distributed, Scalability, Control over
+                    performance, High availability, Low Latency, Cheap. Hence the concept of NoSQL came into existence.
+                </p>
+                <p>The main motivation behind this approach include: simplicity of design, simpler “horizontal” scaling
+                    to clusters of machines, and finer control over availability. The data structures used in NoSQL
+                    databases (e.g. key-value, graph, or document) differs slightly from those used by default in
+                    relational databases, making some operations faster in NoSQL. NoSQL systems are also sometimes
+                    called "Not only SQL" to emphasize that they may support SQL-like query languages.</p>
+                <h4>3.1 NoSQL Database Types:</h4>
+                <ul>
+                    <li><strong>A. Document stores:</strong> Central concept is "documents" (collections of records).
+                        Examples: MongoDB, CouchDB.</li>
+                    <li><strong>B. Graph stores:</strong> Used to store information about networks, such as social
+                        connections. Examples: Neo4J, HyperGraphDB.</li>
+                    <li><strong>C. Key-value stores:</strong> Simplest NoSQL. Every single item stored as an attribute
+                        name (or "key"), together with its value. Examples: MemcachedDB, Azure Table Storage.</li>
+                    <li><strong>D. Wide-column stores:</strong> Such as Cassandra and HBase are optimized for queries
+                        over large datasets, and store columns of data together, instead of rows. Examples: Hadoop,
+                        Cassandra, Hypertable.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="sql-commands" class="content-section">
+            <h2>SQL Commands</h2>
+            <p>SQL commands are instructions. It is used to communicate with the database. It is also used to perform
+                specific tasks, functions, and queries of data. SQL can perform various tasks like create a table, add
+                data to tables, drop the table, modify the table, set permission for users.</p>
+            <h3>Types of SQL Commands</h3>
+            <p>There are five types of SQL commands: DDL, DML, DCL, TCL, and DQL.</p>
+            <div class="diagram-placeholder-img"
+                data-src-placeholder="Diagram: SQL Command types branching from 'SQL Command' to DDL, DML, DCL, TCL, DQL, with example commands under each.">
+                SQL Command Types Diagram</div>
+
+            <div class="sub-section">
+                <h4>1. Data Definition Language (DDL)</h4>
+                <p>DDL changes the structure of the table like creating a table, deleting a table, altering a table,
+                    etc. All the command of DDL are auto-committed that means it permanently saves all the changes in
+                    the database. Examples: CREATE, ALTER, DROP, TRUNCATE.</p>
+                <div class="sql-example"><strong>CREATE:</strong> CREATE TABLE TABLE_NAME (COLUMN_NAME1 DATATYPES(size),
+                    ...);</div>
+                <div class="sql-example"><strong>DROP:</strong> DROP TABLE TableName; / DROP DATABASE DatabaseName;
+                </div>
+                <div class="sql-example"><strong>ALTER:</strong> ALTER TABLE TableName ADD ColumnName Datatype; / ALTER
+                    TABLE TableName DROP COLUMN ColumnName;</div>
+                <div class="sql-example"><strong>TRUNCATE:</strong> TRUNCATE TABLE table_name; (Deletes data, not table
+                    structure)</div>
+            </div>
+            <div class="sub-section">
+                <h4>2. Data Manipulation Language (DML)</h4>
+                <p>DML commands are used to modify the database. It is responsible for all form of changes in the
+                    database. The command of DML is not auto-committed that means it can't permanently save all the
+                    changes in the database. They can be rollback. Examples: INSERT, UPDATE, DELETE.</p>
+                <div class="sql-example"><strong>INSERT:</strong> INSERT INTO TABLE_NAME (col1, col2,...) VALUES
+                    (value1, value2,...);</div>
+                <div class="sql-example"><strong>UPDATE:</strong> UPDATE table_name SET column1 = value1,... WHERE
+                    CONDITION;</div>
+                <div class="sql-example"><strong>DELETE:</strong> DELETE FROM table_name WHERE condition;</div>
+            </div>
+            <div class="sub-section">
+                <h4>3. Data Control Language (DCL)</h4>
+                <p>DCL commands are used to grant and take back authority from any database user. Examples: GRANT,
+                    REVOKE.</p>
+                <div class="sql-example"><strong>GRANT:</strong> GRANT SELECT, UPDATE ON MY_TABLE TO SOME_USER,
+                    ANOTHER_USER;</div>
+                <div class="sql-example"><strong>REVOKE:</strong> REVOKE SELECT, UPDATE ON MY_TABLE FROM USER1, USER2;
+                </div>
+            </div>
+            <div class="sub-section">
+                <h4>4. Transaction Control Language (TCL)</h4>
+                <p>TCL commands can only use with DML commands like INSERT, DELETE and UPDATE only. These operations are
+                    automatically committed in the database that's why they cannot be used while creating tables or
+                    dropping them. Examples: COMMIT, ROLLBACK, SAVEPOINT.</p>
+                <div class="sql-example"><strong>COMMIT:</strong> COMMIT;</div>
+                <div class="sql-example"><strong>ROLLBACK:</strong> ROLLBACK;</div>
+                <div class="sql-example"><strong>SAVEPOINT:</strong> SAVEPOINT SAVEPOINT_NAME;</div>
+            </div>
+            <div class="sub-section">
+                <h4>5. Data Query Language (DQL)</h4>
+                <p>DQL is used to fetch the data from the database. Example: SELECT.</p>
+                <div class="sql-example"><strong>SELECT:</strong> SELECT Column1, Column2,...ColumnN FROM TableName;
+                    <br>SELECT * FROM table_name;<br>SELECT DISTINCT Column1 FROM TableName;<br>SELECT Column1 FROM
+                    TableName ORDER BY Column1 ASC|DESC;<br>SELECT COUNT(ColumnName), AggregationColumn FROM TableName
+                    GROUP BY AggregationColumn;<br>SELECT Column1 FROM TableName WHERE Condition GROUP BY GroupColumn
+                    HAVING Condition ORDER BY OrderColumn;<br>SELECT * INTO NewTable IN ExternalDB FROM OldTable WHERE
+                    Condition;
+                </div>
+            </div>
+        </section>
+
+        <section id="dbms-vs-rdbms" class="content-section">
+            <h2>DBMS vs RDBMS</h2>
+            <h4>Key Differences:</h4>
+            <ul>
+                <li>DBMS stores data as a file whereas in RDBMS, data is stored in the form of tables.</li>
+                <li>DBMS supports single users, while RDBMS supports multiple users.</li>
+                <li>DBMS does not support client-server architecture but RDBMS supports client-server architecture.</li>
+                <li>DBMS has low software and hardware requirements whereas RDBMS has higher hardware and software
+                    requirements.</li>
+                <li>In DBMS, data redundancy is common while in RDBMS, keys and indexes do not allow data redundancy.
+                </li>
+            </ul>
+            <div class="diagram-placeholder-img" data-src-placeholder="Image: DBMS vs RDBMS arrows pointing at 'VS'.">
+                DBMS vs RDBMS Visual</div>
+
+            <h4>Detailed Comparison: DBMS vs RDBMS</h4>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>DBMS</th>
+                        <th>RDBMS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Storage</td>
+                        <td>DBMS stores data as a file.</td>
+                        <td>Data is stored in the form of tables.</td>
+                    </tr>
+                    <tr>
+                        <td>Database structure</td>
+                        <td>DBMS system stores data in either a navigational or hierarchical form.</td>
+                        <td>RDBMS uses a tabular structure where the headers are the column names, and the rows contain
+                            corresponding values.</td>
+                    </tr>
+                    <tr>
+                        <td>Number of Users</td>
+                        <td>DBMS supports single user only.</td>
+                        <td>It supports multiple users.</td>
+                    </tr>
+                    <tr>
+                        <td>ACID</td>
+                        <td>In a regular database, the data may not be stored following the ACID model. This can develop
+                            inconsistencies in the database.</td>
+                        <td>Relational databases are harder to construct, but they are consistent and well structured.
+                            They obey ACID (Atomicity, Consistency, Isolation, Durability).</td>
+                    </tr>
+                    <tr>
+                        <td>Type of program</td>
+                        <td>It is the program for managing the databases on the computer networks and the system hard
+                            disks.</td>
+                        <td>It is the database systems which are used for maintaining the relationships among the
+                            tables.</td>
+                    </tr>
+                    <tr>
+                        <td>Hardware and software needs</td>
+                        <td>Low software and hardware needs.</td>
+                        <td>Higher hardware and software need.</td>
+                    </tr>
+                    <tr>
+                        <td>Integrity constraints</td>
+                        <td>DBMS does not support the integrity constants. The integrity constants are not imposed at
+                            the file level.</td>
+                        <td>RDBMS supports the integrity constraints at the schema level. Values beyond a defined range
+                            cannot be stored into the particular RDBMS column.</td>
+                    </tr>
+                    <tr>
+                        <td>Normalization</td>
+                        <td>DBMS does not support Normalization.</td>
+                        <td>RDBMS can be Normalized.</td>
+                    </tr>
+                    <tr>
+                        <td>Distributed Databases</td>
+                        <td>DBMS does not support distributed database.</td>
+                        <td>RBMS offers support for distributed databases.</td>
+                    </tr>
+                    <tr>
+                        <td>Ideally suited for</td>
+                        <td>DBMS system mainly deals with small quantity of data.</td>
+                        <td>RDMS is designed to handle a large amount of data.</td>
+                    </tr>
+                    <tr>
+                        <td>Dr. E.F. Codd Rules</td>
+                        <td>DBMS satisfy less than seven of Dr. E.F. Codd Rules.</td>
+                        <td>DBMS satisfy 8 to 10 Dr. E.F. Codd Rules.</td>
+                    </tr>
+                    <tr>
+                        <td>Client Server</td>
+                        <td>DBMS does not support client-server architecture.</td>
+                        <td>RDBMS supports client-server architecture.</td>
+                    </tr>
+                    <tr>
+                        <td>Data Fetching</td>
+                        <td>Data fetching is slower for the complex and large amount of data.</td>
+                        <td>Data fetching is rapid because of its relational approach.</td>
+                    </tr>
+                    <tr>
+                        <td>Data Redundancy</td>
+                        <td>Data redundancy is common in this model.</td>
+                        <td>Keys and indexes do not allow Data redundancy.</td>
+                    </tr>
+                    <tr>
+                        <td>Data Relationship</td>
+                        <td>No relationship between data.</td>
+                        <td>Data is stored in the form of tables which are related to each other with the help of
+                            foreign keys.</td>
+                    </tr>
+                    <tr>
+                        <td>Security</td>
+                        <td>There is no security.</td>
+                        <td>Multiple levels of security. Log files are created at OS, Command, and object level.</td>
+                    </tr>
+                    <tr>
+                        <td>Data Access</td>
+                        <td>Data elements need to access individually.</td>
+                        <td>Data can be easily accessed using SQL query. Multiple data elements can be accessed at the
+                            same time.</td>
+                    </tr>
+                    <tr>
+                        <td>Examples</td>
+                        <td>Examples of DBMS are a file system, XML, Windows Registry, etc.</td>
+                        <td>Example of RDBMS is MySQL, Oracle, SQL Server, etc.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <footer class="navigation-buttons">
+            <a href="topic-10.html" class="nav-button back-prev"><i class="fas fa-arrow-left"></i> Previous Topic</a>
+            <a href="../fundamentals.html" class="nav-button syllabus"><i class="fas fa-list-ul"></i> Back to
+                Syllabus</a>
+            <a href="topic-12.html" class="nav-button next">Next Topic <i class="fas fa-arrow-right"></i></a>
+        </footer>
+
+    </div>
+
+    <script>
+        // Theme toggle logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        const bodyElement = document.body;
+
+        function setThemeMode(mode) {
+            if (mode === 'light-mode') {
+                htmlElement.classList.add('light-mode'); htmlElement.classList.remove('dark-mode');
+                bodyElement.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light-mode');
+            } else {
+                htmlElement.classList.remove('light-mode'); htmlElement.classList.add('dark-mode');
+                bodyElement.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark-mode');
+            }
+        }
+
+        (function () {
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme) { setThemeMode(currentTheme); }
+            else {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) { setThemeMode('light-mode'); }
+                else { setThemeMode('dark-mode'); }
+            }
+        })();
+
+        themeToggleBtn.addEventListener('click', function () {
+            if (htmlElement.classList.contains('light-mode')) { setThemeMode('dark-mode'); }
+            else { setThemeMode('light-mode'); }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const diagrams = document.querySelectorAll('.diagram-placeholder, .diagram-placeholder-img');
+            diagrams.forEach(diag => {
+                const placeholderText = diag.dataset.srcPlaceholder || diag.textContent || "Diagram/Image Placeholder";
+                if (diag.tagName === 'IMG') { diag.alt = placeholderText; }
+                else { diag.textContent = placeholderText; }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 7: Software and Hardware - Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            /* Dark Mode (Default) */
+            --bg-color: #121828;
+            --card-bg-color: #1f2937;
+            /* Main section background */
+            --inner-card-bg-color: var(--bg-color);
+            /* For individual elements within sections */
+            --primary-text-color: #e5e7eb;
+            --secondary-text-color: #9ca3af;
+            --accent-color: #6a82fb;
+            --accent-hover-color: #8da2fc;
+            --yellow-accent: #fde047;
+            --border-color: #374151;
+            --futuristic-glow: 0 0 15px rgba(106, 130, 251, 0.3);
+            --futuristic-glow-yellow: 0 0 15px rgba(253, 224, 71, 0.4);
+            --header-gradient-start: var(--card-bg-color);
+            --header-gradient-end: var(--bg-color);
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #5a67d8;
+            --nav-button-syllabus-hover-bg: #4c58bf;
+            --diagram-bg: #2a3547;
+            --table-header-bg: var(--accent-color);
+            --table-row-even-bg: var(--bg-color);
+            --code-bg: #282c34;
+            --code-text-color: #abb2bf;
+            --theme-toggle-bg: #23272f;
+            --theme-toggle-icon: #fde047;
+            --theme-toggle-hover-bg: #374151;
+            --theme-toggle-hover-icon: #fff;
+        }
+
+        html.light-mode {
+            /* Light Mode */
+            --bg-color: #f0f4f8;
+            --card-bg-color: #ffffff;
+            --inner-card-bg-color: var(--bg-color);
+            --primary-text-color: #2c3e50;
+            --secondary-text-color: #52616b;
+            --accent-color: #3498db;
+            --accent-hover-color: #2980b9;
+            --yellow-accent: #f39c12;
+            --border-color: #d1d5db;
+            --futuristic-glow: 0 0 15px rgba(52, 152, 219, 0.2);
+            --futuristic-glow-yellow: 0 0 15px rgba(243, 156, 18, 0.3);
+            --header-gradient-start: #e6e9ed;
+            --header-gradient-end: #f0f4f8;
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #27ae60;
+            --nav-button-syllabus-hover-bg: #229954;
+            --eduvision-logo-color: #2563eb;
+            --eduvision-logo-yellow: #f59e0b;
+            --diagram-bg: #e9ecef;
+            --table-header-bg: var(--accent-color);
+            --table-row-even-bg: #f8f9fa;
+            --code-bg: #f5f2f0;
+            --code-text-color: #383a42;
+            --theme-toggle-bg: #f8f9fa;
+            --theme-toggle-icon: #f39c12;
+            --theme-toggle-hover-bg: #e9ecef;
+            --theme-toggle-hover-icon: #2c3e50;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            font-size: 16px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 80px;
+        }
+
+        /* Logo Styles */
+        .eduvision-logo {
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvision-logo .text-logo-main {
+            color: #fff !important;
+        }
+
+        .eduvision-logo .text-logo-accent {
+            color: #fde047 !important;
+        }
+
+        html.light-mode .eduvision-logo .text-logo-main {
+            color: var(--eduvision-logo-color) !important;
+        }
+
+        html.light-mode .eduvision-logo .text-logo-accent {
+            color: var(--eduvision-logo-yellow) !important;
+        }
+
+        .eduvision-logo .group:hover .text-logo-accent {
+            filter: brightness(1.1);
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Theme Toggle Button */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+            color: var(--theme-toggle-hover-icon);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+        /* Header */
+        .main-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--header-gradient-start), var(--header-gradient-end));
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .topic-badge {
+            display: inline-block;
+            background-color: var(--yellow-accent);
+            color: var(--bg-color);
+            padding: 5px 15px;
+            border-radius: 15px 15px 0 0;
+            font-size: 0.9em;
+            font-weight: bold;
+            font-family: 'Nunito', sans-serif;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-header h1 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 3.0em;
+            font-weight: 900;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: var(--futuristic-glow);
+        }
+
+        .main-header p {
+            font-size: 1.2em;
+            color: var(--secondary-text-color);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Sections & Content Styling */
+        .content-section {
+            background-color: var(--card-bg-color);
+            padding: 30px 40px;
+            margin-bottom: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--accent-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-left-color 0.3s ease;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15), var(--futuristic-glow);
+        }
+
+        .content-section h2 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+
+        .content-section h3 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.6em;
+            color: var(--yellow-accent);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section h4 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.3em;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section h5 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.1em;
+            color: var(--accent-color);
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+
+        .content-section p,
+        .content-section ul {
+            margin-bottom: 15px;
+            color: var(--secondary-text-color);
+            transition: color 0.3s ease;
+        }
+
+        .content-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .content-section ul li::before {
+            content: "\f105";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            top: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section .sub-section {
+            background-color: var(--inner-card-bg-color);
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Diagram Placeholder */
+        .diagram-placeholder,
+        .diagram-placeholder-img {
+            background-color: var(--diagram-bg);
+            border: 2px dashed var(--border-color);
+            padding: 15px;
+            margin: 20px auto;
+            text-align: center;
+            color: var(--secondary-text-color);
+            border-radius: 8px;
+            font-style: italic;
+            display: block;
+            max-width: 90%;
+            font-size: 0.9em;
+        }
+
+        .diagram-placeholder-img {
+            height: auto;
+            min-height: 80px;
+        }
+
+        /* Specific styling for firmware section */
+        .firmware-points ol {
+            padding-left: 20px;
+        }
+
+        .firmware-points ol li {
+            padding-left: 0;
+            margin-bottom: 10px;
+        }
+
+        .firmware-points ol li::before {
+            display: none;
+        }
+
+        /* Remove default ::before */
+        .firmware-points ol li strong {
+            color: var(--primary-text-color);
+        }
+
+        /* Navigation Buttons */
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: var(--card-bg-color);
+            border-radius: 8px;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-button {
+            color: var(--button-text-color);
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-align: center;
+            flex-grow: 1;
+            min-width: 150px;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-button.back-prev {
+            background-color: var(--secondary-text-color);
+        }
+
+        .nav-button.back-prev:hover {
+            background-color: var(--primary-text-color);
+            filter: brightness(1.2);
+        }
+
+        .nav-button.syllabus {
+            background-color: var(--nav-button-syllabus-bg);
+        }
+
+        .nav-button.syllabus:hover {
+            background-color: var(--nav-button-syllabus-hover-bg);
+        }
+
+        .nav-button.next {
+            background-color: var(--accent-color);
+        }
+
+        .nav-button.next:hover {
+            background-color: var(--accent-hover-color);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .navigation-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .nav-button {
+                width: auto;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-header h1 {
+                font-size: 2.5em;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .content-section h2 {
+                font-size: 1.8em;
+            }
+
+            .topic-badge {
+                font-size: 0.8em;
+                padding: 4px 10px;
+                top: -15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header h1 {
+                font-size: 2.2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../../index.html" class="flex items-center group">
+                <span class="text-logo-main">Edu</span>
+                <svg class="text-logo-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-logo-main">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="main-header">
+            <span class="topic-badge">Topic 7</span>
+            <h1>Software and Hardware</h1>
+            <p>Delving into the essential components that make a computer function: the physical hardware and the
+                instructive software, including their types and interplay.</p>
+        </header>
+
+        <section id="intro-hw-sw" class="content-section">
+            <h2>Introduction</h2>
+            <p>A computer is an electronic device that accepts data (input) and, processes data arithmetically and
+                logically, to produce information (output). It is divided into two main categories – Hardware &
+                Software.</p>
+
+            <h3>Relationship between Hardware and Software</h3>
+            <ul>
+                <li>Hardware and software are mutually dependent on each other. Both of them must work together to make
+                    a computer produce a useful output.</li>
+                <li>Software cannot be utilized without supporting hardware.</li>
+                <li>Hardware without a set of programs to operate upon cannot be utilized and is useless.</li>
+                <li>To get a particular job done on the computer, relevant software should be loaded into the hardware.
+                </li>
+                <li>Hardware is a one-time expense.</li>
+                <li>Software development is very expensive and is a continuing expense.</li>
+                <li>Different software applications can be loaded on a hardware to run different jobs.</li>
+                <li>A software acts as an interface between the user and the hardware.</li>
+                <li>If the hardware is the ‘heart’ of a computer system, then the software is its ‘soul’. Both are
+                    complementary to each other.</li>
+            </ul>
+        </section>
+
+        <section id="hardware" class="content-section">
+            <h2>Hardware</h2>
+            <p>Hardware is the physical aspect of computers, telecommunications, and other devices. It includes not only
+                the computer proper but also the cables, connectors, power supply units, and peripheral devices such as
+                the keyboard, mouse, audio speakers, and printers.</p>
+            <h3>Types of Hardware</h3>
+            <div class="sub-section">
+                <h4>Internal Hardware (Components)</h4>
+                <p>Internal hardware includes:</p>
+                <ul>
+                    <li><strong>a) Central Processing Unit (CPU):</strong> It is the brain of the computer. Most of
+                        calculations take place here. Two typical components of a CPU are - Arithmetic Logic Unit (ALU)
+                        and Control Unit (CU).</li>
+                    <li><strong>b) Motherboard:</strong> Is the main circuit board of a microcomputer. It contains the
+                        CPU, memory, expansion slots and all the controllers required to control standard hardware
+                        devices.</li>
+                    <li><strong>c) Random Access Memory (RAM):</strong> RAM is the place in a computer where the
+                        operating system, application programs, and data in current use are kept. It is a temporary
+                        memory and can be compared to a person’s short-term memory.</li>
+                    <li><strong>d) Read Only Memory (ROM):</strong> It is a technology that allows you to write data
+                        only once. After the data has been written, you can read it an unlimited number of times.</li>
+                </ul>
+            </div>
+            <div class="sub-section">
+                <h4>Input Hardware</h4>
+                <p>Input hardware consists of external devices by which we give information and instructions to the
+                    computer. Common input hardware are:</p>
+                <ul>
+                    <li><strong>a) Keyboard:</strong> The set of typewriter-like keys that enables you to enter data
+                        into a computer.</li>
+                    <li><strong>b) Mouse:</strong> A device that controls the movement of the cursor or pointer on a
+                        display screen.</li>
+                    <li><strong>c) Scanner:</strong> A device that can read text or illustrations printed on paper and
+                        translate the information into a form the computer can use.</li>
+                </ul>
+            </div>
+            <div class="sub-section">
+                <h4>Output Hardware</h4>
+                <p>Output hardware consists of internal and external devices that transfer information from the
+                    computer’s CPU to the computer user. Common output hardware are:</p>
+                <ul>
+                    <li><strong>a) Monitor:</strong> A display screen used to present output from a computer, video
+                        camera, VCR or other video generator.</li>
+                    <li><strong>b) Printer:</strong> In computers, a printer is a device that accepts text and graphic
+                        output from a computer and transfers the information to paper.</li>
+                    <li><strong>c) Speaker:</strong> Speakers or headphones to an output port to hear the audio produced
+                        by the computer.</li>
+                </ul>
+            </div>
+            <div class="sub-section">
+                <h4>Connecting Hardware</h4>
+                <p>Connecting devices allow hardware devices to communicate with each other. Common devices are:</p>
+                <ul>
+                    <li><strong>a) Modem:</strong> Modems connect a personal or portable computer to dial-up networks
+                        through a regular telephone line.</li>
+                    <li><strong>b) LAN Card:</strong> A Local Area Network (LAN) card is used to provide wireless
+                        Internet access to computer users in home or roaming networks.</li>
+                </ul>
+            </div>
+            <div class="sub-section">
+                <h4>Storage Hardware</h4>
+                <p>A computer storage device is any type of hardware that stores data. Some common storage devices are:
+                </p>
+                <ul>
+                    <li><strong>a) Hard Disc:</strong> A magnetic disk on which you can store computer data. The term
+                        hard is used to distinguish it from a soft, or Floppy disk.</li>
+                    <li><strong>b) Floppy Disc:</strong> A flexible plastic disk coated with magnetic material and
+                        covered by a protective jacket, used primarily by computers to store data magnetically.</li>
+                    <li><strong>c) CD ROM:</strong> A CD-ROM is a CD that can be read by a computer with an optical
+                        drive.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="software" class="content-section">
+            <h2>Software</h2>
+            <p>A set of instructions that enables physical components of a computer to work in a synchronized way is
+                known as Software. This set of instructions is often called a program. Computers cannot do any useful
+                work without instructions from software.</p>
+            <h3>Types of Software</h3>
+            <p>Computer software is also divided in four major types:</p>
+            <ul>
+                <li>a) System Software</li>
+                <li>b) Programming Software</li>
+                <li>c) Application Software</li>
+                <li>d) Utility Software</li>
+            </ul>
+
+            <div class="sub-section">
+                <h4>a) System Software</h4>
+                <p>System software helps in running the computer hardware and the computer system. Main system softwares
+                    are:</p>
+                <ul>
+                    <li><strong>i) Device Drivers:</strong> In computing, a device driver is a computer program allowing
+                        higher-level computer programs to interact with a hardware device.</li>
+                    <li><strong>ii) Operating System:</strong> An operating system is an interface between hardware and
+                        user; it is responsible for the management and coordination of activities and the sharing of the
+                        limited resources of the computer.</li>
+                </ul>
+            </div>
+            <div class="sub-section">
+                <h4>b) Application Software</h4>
+                <p>It enables the users to accomplish certain specific tasks. Following are the types of application
+                    software:</p>
+                <ul>
+                    <li><strong>i) Web Browsing Software:</strong> It allows one to surf the Web. Example: MS Internet
+                        Explorer.</li>
+                    <li><strong>ii) Word Processing Software:</strong> Allows users to create, edit a document. Example:
+                        MS Word.</li>
+                    <li><strong>iii) Spreadsheet Software:</strong> Allows users to create document and perform
+                        calculation. Example: MS Excel etc.</li>
+                    <li><strong>iv) Database Software:</strong> Allows users to store and retrieve vast amount of data.
+                        Example: MS Access etc. (Note: Roman numeral iv was used in image, consistent here)</li>
+                    <li><strong>v) Presentation Graphics Software:</strong> Allows users to create visual presentation.
+                        Example: MS PowerPoint. (Note: Changed from ii to v based on apparent sequence in image)</li>
+                </ul>
+            </div>
+            <div class="sub-section">
+                <h4>c) Utility Software</h4>
+                <p>Utility software helps in the management of computer hardware and application software. It performs a
+                    small range of tasks. Some typical examples of utility software are:</p>
+                <ul>
+                    <li><strong>i) Disk Defragmentors:</strong> It detects computer files whose contents are stored on
+                        the hard disk in disjointed fragments, and moves the fragments together to increase efficiency.
+                    </li>
+                    <li><strong>ii) Backup:</strong> This utility makes a copy of all information stored on a disk, and
+                        restores either the entire disk or selected files.</li>
+                    <li><strong>iii) Disk Partitioner:</strong> It divides an individual drive into multiple logical
+                        drives, each with its own file system which can be mounted by the operating system and treated
+                        as an individual drive.</li>
+                    <li><strong>iv) Anti-Virus:</strong> These utilities scan computer for viruses.</li>
+                </ul>
+            </div>
+            <div class="sub-section">
+                <h4>d) Programming Software</h4>
+                <p>This is one of the most commonly known and popularly used forms of computer software. These software
+                    come in forms of tools that assist a programmer in writing computer Programs. The tools that help
+                    the programmers in instructing a computer system include:</p>
+                <ul>
+                    <li><strong>a) Text Editor</strong></li>
+                    <li><strong>b) Compilers</strong></li>
+                    <li><strong>c) Interpreters</strong></li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="openvsclosed" class="content-section">
+            <h2>Open Source vs Proprietary Software</h2>
+            <div class="sub-section">
+                <h3>Open Source Software (OSS)</h3>
+                <p>Open source software (OSS) is distributed under a licensing agreement which allows computer code to
+                    be shared, viewed and modified by other users and organizations. Open Source is when the source code
+                    is available for anyone to use. They can change and share it. Everyone has access to open-source
+                    software and it is free to download. This means anyone can use the software, modify it and then
+                    share it among the community.</p>
+                <h4>Examples of Open Source:</h4>
+                <ul>
+                    <li>WordPress - A Content Management System (CMS) used for blogs and creating our websites.</li>
+                    <li>GitHub - A hosting service that has many of its features.</li>
+                    <li>Mozilla Firefox - A web browser and one of the most popular browsers available.</li>
+                    <li>Linux - One of the most commonly used operating systems. Linux is found on desktops, mobile
+                        phones and a large number of servers.</li>
+                    <li>Android - An operating system that controls the majority of the world’s smartphones, it is also
+                        based on Linux.</li>
+                    <li>GIMP - An example of a free alternative to proprietary software, GIMP is a popular alternative
+                        to Adobe Photoshop.</li>
+                </ul>
+            </div>
+            <div class="sub-section">
+                <h3>Proprietary Software ("Closed Source")</h3>
+                <p>Proprietary Software or “Closed Source” is different to open source. Instead of being free for anyone
+                    to use, proprietary software is owned by an individual or company. The source code is usually kept
+                    secret. This means only people with access to the code, can modify and change it. Proprietary
+                    software is also, but not always, paid software.</p>
+                <h4>Examples of Proprietary Software:</h4>
+                <ul>
+                    <li>Microsoft Office – Productivity software including a text editor, powerpoint creator and more.
+                    </li>
+                    <li>Adobe Photoshop – An image creation and manipulation program used for digital artwork.</li>
+                    <li>Windows – The most widely used operating system in the world.</li>
+                    <li>Internet Security Programs – Designed to keep our computer safe from online threats.</li>
+                    <li>Shopify – An eCommerce website where we can build your online shop.</li>
+                    <li>Big Commerce – Like Shopify, it is an online store builder.</li>
+                    <li>EKM – Platform for creating an online shop.</li>
+                </ul>
+            </div>
+            <div class="sub-section">
+                <h3>Differences between Open Source and Closed Source Software</h3>
+                <ul>
+                    <li><strong>Price Policy:</strong> OSS often free, may have costs for extras. Closed source usually
+                        paid, higher price but often more features/support.</li>
+                    <li><strong>Security:</strong> OSS code viewable/modifiable by community (quick bug fixes). Closed
+                        source fixed by vendor (can take longer).</li>
+                    <li><strong>Quality of Support:</strong> Closed source usually offers direct support. OSS support
+                        via forums, articles, hired help (can be less direct).</li>
+                    <li><strong>Source Code Availability:</strong> OSS allows source code changes. Closed source
+                        restricted.</li>
+                    <li><strong>Usability:</strong> OSS guides can be developer-focused. Closed source often has better
+                        user-focused documentation.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="firmware" class="content-section">
+            <h2>Firmware Basics</h2>
+            <p>Firmware is a type of software embedded within hardware devices, acting as a bridge between the hardware
+                and the operating system. It provides low-level control over hardware, enabling devices to function,
+                communicate, and perform basic tasks. Think of it as the instructions that tell a printer how to print,
+                or a hard drive how to store data.</p>
+            <div class="firmware-points">
+                <ol>
+                    <li><strong>What is Firmware?</strong>
+                        <p>Firmware is software that is stored in a device’s non-volatile memory (like ROM, EPROM, or
+                            flash memory). It’s designed to control the hardware of a specific device, rather than being
+                            general-purpose software like applications. It’s crucial for device functionality, including
+                            starting up, communicating with other devices, and performing basic input/output operations.
+                        </p>
+                    </li>
+                    <li><strong>Examples of Firmware:</strong>
+                        <ul>
+                            <li>BIOS/UEFI: Found on computer motherboards, manages initial startup and hardware
+                                configuration.</li>
+                            <li>Printer Firmware: Controls how a printer interacts with the computer and performs
+                                printing tasks.</li>
+                            <li>Hard Drive/SSD Firmware: Manages the storage and retrieval of data on hard drives and
+                                SSDs.</li>
+                            <li>Network Device Firmware: Controls the functionality of routers, switches, and other
+                                network hardware.</li>
+                            <li>Peripheral Device Firmware: Found in devices like USB flash drives, keyboards, mice, and
+                                sound cards.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Key Differences Between Firmware and Software:</strong>
+                        <ul>
+                            <li><strong>Location:</strong> Firmware is embedded within the hardware, while software is
+                                generally stored separately on a storage device like a hard drive.</li>
+                            <li><strong>Functionality:</strong> Firmware focuses on low-level hardware control, while
+                                software handles more general-purpose tasks and applications.</li>
+                            <li><strong>Modifiability:</strong> Firmware is usually less easily updated than software,
+                                though it can be updated through firmware upgrades.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Why is Firmware Important?</strong>
+                        <ul>
+                            <li><strong>Hardware Initialization:</strong> Firmware initializes the hardware when a
+                                device starts up.</li>
+                            <li><strong>Device Communication:</strong> It enables devices to communicate with each other
+                                and with the operating system.</li>
+                            <li><strong>Basic Input/Output:</strong> Firmware handles essential input/output tasks, like
+                                reading data from a keyboard or sending data to a monitor.</li>
+                            <li><strong>Device Control:</strong> It provides low-level control over the device’s
+                                hardware components.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+            <div class="diagram-placeholder-img"
+                data-src-placeholder="Diagram: Software stack (Application -> Middleware -> OS UI -> OS services -> OS drivers and runtimes -> Hypervisor (optional) -> Firmware (BIOS)). Firmware is the foundation.">
+                Software Stack Diagram</div>
+            <p>In essence, firmware is the unsung hero that makes our devices work seamlessly by providing the essential
+                instructions for hardware operation.</p>
+        </section>
+
+
+        <footer class="navigation-buttons">
+            <a href="topic-6.html" class="nav-button back-prev"><i class="fas fa-arrow-left"></i> Previous Topic</a>
+            <a href="../fundamentals.html" class="nav-button syllabus"><i class="fas fa-list-ul"></i> Back to
+                Syllabus</a>
+            <a href="topic-8.html" class="nav-button next">Next Topic <i class="fas fa-arrow-right"></i></a>
+        </footer>
+
+    </div>
+
+    <script>
+        // Theme toggle logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        const bodyElement = document.body;
+
+        function setThemeMode(mode) {
+            if (mode === 'light-mode') {
+                htmlElement.classList.add('light-mode'); htmlElement.classList.remove('dark-mode');
+                bodyElement.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light-mode');
+            } else {
+                htmlElement.classList.remove('light-mode'); htmlElement.classList.add('dark-mode');
+                bodyElement.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark-mode');
+            }
+        }
+
+        (function () {
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme) { setThemeMode(currentTheme); }
+            else {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) { setThemeMode('light-mode'); }
+                else { setThemeMode('dark-mode'); }
+            }
+        })();
+
+        themeToggleBtn.addEventListener('click', function () {
+            if (htmlElement.classList.contains('light-mode')) { setThemeMode('dark-mode'); }
+            else { setThemeMode('light-mode'); }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const diagrams = document.querySelectorAll('.diagram-placeholder, .diagram-placeholder-img');
+            diagrams.forEach(diag => {
+                const placeholderText = diag.dataset.srcPlaceholder || diag.textContent || "Diagram/Image Placeholder";
+                if (diag.tagName === 'IMG') { diag.alt = placeholderText; }
+                else { diag.textContent = placeholderText; }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

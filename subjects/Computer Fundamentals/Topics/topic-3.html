@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 3: Computer Components & Architecture - Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            /* Dark Mode (Default) */
+            --bg-color: #121828;
+            --card-bg-color: #1f2937;
+            --primary-text-color: #e5e7eb;
+            --secondary-text-color: #9ca3af;
+            --accent-color: #6a82fb;
+            --accent-hover-color: #8da2fc;
+            --yellow-accent: #fde047;
+            --border-color: #374151;
+            --futuristic-glow: 0 0 15px rgba(106, 130, 251, 0.3);
+            --futuristic-glow-yellow: 0 0 15px rgba(253, 224, 71, 0.4);
+            --header-gradient-start: var(--card-bg-color);
+            --header-gradient-end: var(--bg-color);
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #5a67d8;
+            --nav-button-syllabus-hover-bg: #4c58bf;
+            --diagram-bg: #2a3547;
+            --table-header-bg: var(--accent-color);
+            --table-row-even-bg: var(--bg-color);
+            --theme-toggle-bg: #23272f;
+            --theme-toggle-icon: #fde047;
+            --theme-toggle-hover-bg: #374151;
+            --theme-toggle-hover-icon: #fff;
+        }
+
+        html.light-mode {
+            /* Light Mode */
+            --bg-color: #f0f4f8;
+            --card-bg-color: #ffffff;
+            --primary-text-color: #2c3e50;
+            --secondary-text-color: #52616b;
+            --accent-color: #3498db;
+            --accent-hover-color: #2980b9;
+            --yellow-accent: #f39c12;
+            --border-color: #d1d5db;
+            --futuristic-glow: 0 0 15px rgba(52, 152, 219, 0.2);
+            --futuristic-glow-yellow: 0 0 15px rgba(243, 156, 18, 0.3);
+            --header-gradient-start: #e6e9ed;
+            --header-gradient-end: #f0f4f8;
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #27ae60;
+            --nav-button-syllabus-hover-bg: #229954;
+            --eduvision-logo-color: #2563eb;
+            --eduvision-logo-yellow: #f59e0b;
+            --diagram-bg: #e9ecef;
+            --table-header-bg: var(--accent-color);
+            --table-row-even-bg: #f8f9fa;
+            --theme-toggle-bg: #f8f9fa;
+            --theme-toggle-icon: #f39c12;
+            --theme-toggle-hover-bg: #e9ecef;
+            --theme-toggle-hover-icon: #2c3e50;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            font-size: 16px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 80px;
+        }
+
+        /* Logo Styles */
+        .eduvision-logo {
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvision-logo .text-logo-main {
+            color: #fff !important;
+        }
+
+        .eduvision-logo .text-logo-accent {
+            color: #fde047 !important;
+        }
+
+        html.light-mode .eduvision-logo .text-logo-main {
+            color: var(--eduvision-logo-color) !important;
+        }
+
+        html.light-mode .eduvision-logo .text-logo-accent {
+            color: var(--eduvision-logo-yellow) !important;
+        }
+
+        .eduvision-logo .group:hover .text-logo-accent {
+            filter: brightness(1.1);
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Theme Toggle Button */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+            color: var(--theme-toggle-hover-icon);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+        /* Header */
+        .main-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--header-gradient-start), var(--header-gradient-end));
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .topic-badge {
+            display: inline-block;
+            background-color: var(--yellow-accent);
+            color: var(--bg-color);
+            padding: 5px 15px;
+            border-radius: 15px 15px 0 0;
+            font-size: 0.9em;
+            font-weight: bold;
+            font-family: 'Nunito', sans-serif;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-header h1 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 3.0em;
+            font-weight: 900;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: var(--futuristic-glow);
+        }
+
+        .main-header p {
+            font-size: 1.2em;
+            color: var(--secondary-text-color);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Sections & Content Styling */
+        .content-section {
+            background-color: var(--card-bg-color);
+            padding: 30px 40px;
+            margin-bottom: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--accent-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-left-color 0.3s ease;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15), var(--futuristic-glow);
+        }
+
+        .content-section h2 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+
+        .content-section h3 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.6em;
+            color: var(--yellow-accent);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section h4 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.3em;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section p,
+        .content-section ul,
+        .content-section dl {
+            margin-bottom: 15px;
+            color: var(--secondary-text-color);
+            transition: color 0.3s ease;
+        }
+
+        .content-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .content-section ul li::before {
+            content: "\f105";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            top: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section dl dt {
+            font-weight: bold;
+            color: var(--primary-text-color);
+            margin-top: 10px;
+        }
+
+        .content-section dl dd {
+            margin-left: 20px;
+            margin-bottom: 5px;
+        }
+
+        /* Diagram Placeholder */
+        .diagram-placeholder,
+        .diagram-placeholder-img {
+            background-color: var(--diagram-bg);
+            border: 2px dashed var(--border-color);
+            padding: 20px;
+            margin: 20px auto;
+            text-align: center;
+            color: var(--secondary-text-color);
+            border-radius: 8px;
+            font-style: italic;
+            display: block;
+            /* for img to behave like block */
+            max-width: 80%;
+            /* prevent overly wide placeholders */
+        }
+
+        .diagram-placeholder-img {
+            height: auto;
+            /* maintain aspect ratio if actual image path is used */
+            min-height: 100px;
+            /* ensure some visible height for placeholders */
+        }
+
+        /* Table for Hardware/Software differences */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px 12px;
+            text-align: left;
+            vertical-align: top;
+            transition: border-color 0.3s ease;
+        }
+
+        .comparison-table th {
+            background-color: var(--table-header-bg);
+            color: var(--button-text-color);
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .comparison-table tr:nth-child(even) td {
+            background-color: var(--table-row-even-bg);
+            transition: background-color 0.3s ease;
+        }
+
+        .comparison-table ul {
+            margin-top: 5px;
+            margin-bottom: 0;
+            padding-left: 18px;
+        }
+
+        .comparison-table ul li {
+            margin-bottom: 3px;
+            padding-left: 0;
+        }
+
+        .comparison-table ul li::before {
+            display: none;
+        }
+
+        /* Override general li style for table */
+
+
+        /* Navigation Buttons */
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: var(--card-bg-color);
+            border-radius: 8px;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-button {
+            color: var(--button-text-color);
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-align: center;
+            flex-grow: 1;
+            min-width: 150px;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-button.back-prev {
+            background-color: var(--secondary-text-color);
+        }
+
+        .nav-button.back-prev:hover {
+            background-color: var(--primary-text-color);
+            filter: brightness(1.2);
+        }
+
+        .nav-button.syllabus {
+            background-color: var(--nav-button-syllabus-bg);
+        }
+
+        .nav-button.syllabus:hover {
+            background-color: var(--nav-button-syllabus-hover-bg);
+        }
+
+        .nav-button.next {
+            background-color: var(--accent-color);
+        }
+
+        .nav-button.next:hover {
+            background-color: var(--accent-hover-color);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .navigation-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .nav-button {
+                width: auto;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-header h1 {
+                font-size: 2.5em;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .content-section h2 {
+                font-size: 1.8em;
+            }
+
+            .topic-badge {
+                font-size: 0.8em;
+                padding: 4px 10px;
+                top: -15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header h1 {
+                font-size: 2.2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../../index.html" class="flex items-center group">
+                <span class="text-logo-main">Edu</span>
+                <svg class="text-logo-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-logo-main">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="main-header">
+            <span class="topic-badge">Topic 3</span>
+            <h1>Computer Components & Architecture</h1>
+            <p>Understanding the core building blocks of a computer, their functions, and how they interact, including
+                the foundational Von Neumann architecture and the distinction between hardware and software.</p>
+        </header>
+
+        <section id="basic-architecture" class="content-section">
+            <h2>Basic Computer Architecture</h2>
+            <h3>1.9 Components of Computer (Broad Overview)</h3>
+            <p>The components of a computer work together to process data. The main components include:</p>
+            <ul>
+                <li><strong>Input Unit:</strong> Used to input data into the computer. Example: Keyboard.</li>
+                <li><strong>Processing Unit (CPU):</strong> Used to process the data. The CPU is comprised of 3 main
+                    units.</li>
+                <li><strong>Output Unit:</strong> A device which generates the output. Example: Printer.</li>
+            </ul>
+            <div class="diagram-placeholder">Diagram: Input Unit, CPU (Memory Unit, Control Unit, Arithmetic & Logic
+                Unit), Output Unit connected.</div>
+
+            <h3>The Von Neumann Architecture</h3>
+            <p>The task of entering and altering programs for early computers like ENIAC was extremely tedious. The
+                programming process can be easy if the program could be represented in a form suitable for storing in
+                memory alongside the data. Then, a computer could get its instructions by reading them from memory, and
+                a program could be set or altered by setting the values of a portion of memory. This idea is known as
+                the <strong>stored-program concept</strong>. The first publication of the idea was in a 1945 proposal by
+                von Neumann for a new computer, the EDVAC (Electronic Discrete Variable Computer).</p>
+            <p>In 1946, von Neumann and his colleagues began the design of a new stored-program computer, referred to as
+                the IAS computer, at the Princeton Institute for Advanced Studies. The IAS computer, although not
+                completed until 1952, is the prototype of all subsequent general-purpose computers.</p>
+            <div class="diagram-placeholder">Figure: General structure of Von Neumann Architecture showing CPU
+                (Arithmetic and Logic Unit, Program Control Unit) connected to Main Memory, and Input/Output Equipment.
+            </div>
+            <p>It consists of:</p>
+            <ul>
+                <li>A main memory, which stores both data and instructions.</li>
+                <li>An arithmetic and logic unit (ALU) capable of operating on binary data.</li>
+                <li>A control unit, which interprets the instructions in memory and causes them to be executed.</li>
+                <li>Input and output (I/O) equipment operated by the control unit.</li>
+            </ul>
+        </section>
+
+        <section id="cpu" class="content-section">
+            <h2>Central Processing Unit (CPU)</h2>
+            <p>The Central Processing Unit (CPU) or the processor is also often called the brain of the computer. CPU
+                (Figure 2.1) consists of Arithmetic Logic Unit (ALU) and Control Unit (CU). In addition, CPU also has a
+                set of registers which are temporary storage areas for holding data, and instructions. ALU performs the
+                arithmetic and logic operations on the data that is made available to it. CU is responsible for
+                organizing the processing of data and instructions. CU controls and coordinates the activity of the
+                other units of computer. CPU uses the registers to store the data, instructions during processing.</p>
+            <p>CPU executes the stored program instructions, i.e. instructions and data are stored in memory before
+                execution. For processing, CPU gets data and instructions from the memory. It interprets the program
+                instructions and performs the arithmetic and logic operations required for the processing of data. Then,
+                it sends the processed data or result to the memory. CPU also acts as an administrator and is
+                responsible for supervising operations of other parts of the computer.</p>
+            <p>The CPU is fabricated as a single Integrated Circuit (IC) chip, and is also known as the microprocessor.
+                The microprocessor is plugged into the motherboard of the computer (Motherboard is a circuit board that
+                has electronic circuit etched on it and connects the microprocessor with the other hardware components).
+            </p>
+            <div class="diagram-placeholder">Figure 2.1 CPU: Block diagram showing Control Unit, Arithmetic Logic Unit,
+                and Registers.</div>
+
+            <h3>2.2.1 Arithmetic Logic Unit (ALU)</h3>
+            <p>ALU consists of two units—arithmetic unit and logic unit.</p>
+            <ul>
+                <li>The <strong>Arithmetic unit</strong> performs arithmetic operations on the data that is made
+                    available to it. Some of the arithmetic operations supported by the arithmetic unit are—addition,
+                    subtraction, multiplication and division.</li>
+                <li>The <strong>Logic unit</strong> of ALU is responsible for performing logic operations. Logic unit
+                    performs comparisons of numbers, letters and special characters. Logic operations include testing
+                    for greater than, less than or equal to condition.</li>
+            </ul>
+            <p>ALU performs arithmetic and logic operations, and uses registers to hold the data that is being
+                processed.</p>
+
+            <h3>2.2.2 Registers</h3>
+            <p>Registers are high-speed storage areas within the CPU, but have the least storage capacity. Registers are
+                not referenced by their address, but are directly accessed and manipulated by the CPU during instruction
+                execution. Registers store data, instructions, addresses and intermediate results of processing.
+                Registers are often referred to as the CPU’s working memory. The data and instructions that require
+                processing must be brought in the registers of CPU before they can be processed. For example, if two
+                numbers are to be added, both numbers are brought in the registers, added and the result is also placed
+                in a register.</p>
+            <p>Registers are used for different purposes, with each register serving a specific purpose. Some of the
+                important registers in CPU (Figure 2.2) are as follows—</p>
+            <ul>
+                <li><strong>Accumulator (ACC)</strong> stores the result of arithmetic and logic operations.</li>
+                <li><strong>Instruction Register (IR)</strong> contains the current instruction most recently fetched.
+                </li>
+                <li><strong>Program Counter (PC)</strong> contains the address of next instruction to be processed.</li>
+                <li><strong>Memory Address Register (MAR)</strong> contains the address of next location in the memory
+                    to be accessed.</li>
+                <li><strong>Memory Buffer Register (MBR)</strong> temporarily stores data from memory or the data to be
+                    sent to memory.</li>
+                <li><strong>Data Register (DR)</strong> stores the operands and any other data.</li>
+            </ul>
+            <div class="diagram-placeholder">Figure 2.2 CPU registers: Blocks for PC, IR, MAR, ACC, MBR, DR.</div>
+            <p>The number of registers and the size of each (number of bits) register in a CPU helps to determine the
+                power and the speed of a CPU. The overall number of registers can vary from about ten to many hundreds,
+                depending on the type and complexity of the processor. The size of the register, also called word size,
+                indicates the amount of data with which the computer can work at any given time. The bigger the size,
+                the more quickly it can process data. The size of a register may be 8, 16, 32 or 64 bits. For example, a
+                32-bit CPU is one in which each register is 32 bits wide and its CPU can manipulate 32 bits of data at a
+                time. Nowadays, PCs have 32-bit or 64-bit registers. 32-bit processor and 64-bit processor are the terms
+                used to refer to the size of the registers. Other factors remaining the same, a 64-bit processor can
+                process the data twice as fast as one with 32-bit processor.</p>
+
+            <h3>2.2.3 Control Unit (CU)</h3>
+            <p>The control unit of a computer does not do any actual processing of data. It organizes the processing of
+                data and instructions. It acts as a supervisor and, controls and coordinates the activity of the other
+                units of computer. CU coordinates the input and output devices of a computer. It directs the computer to
+                carry out stored program instructions by communicating with the ALU and the registers. CU uses the
+                instructions in the Instruction Register (IR) to decide which circuit needs to be activated. It also
+                instructs the ALU to perform the arithmetic or logic operations. When a program is run, the Program
+                Counter (PC) register keeps track of the program instruction to be executed next. CU tells when to fetch
+                the data and instructions, what to do, where to store the results, the sequencing of events during
+                processing etc. CU also holds the CPU’s Instruction Set, which is a list of all operations that the CPU
+                can perform.</p>
+            <h4>Key functions of the Control Unit:</h4>
+            <ul>
+                <li>Responsible for controlling all parts of the computer.</li>
+                <li>Responsible in managing and coordinating with all the units of the computer.</li>
+                <li>Gets instructions from the memory, interprets them, and accordingly directs the operation of the
+                    computer.</li>
+                <li>Responsible in communication with input/output devices for transfer of data or results from storage.
+                </li>
+                <li>Does not process or store data.</li>
+            </ul>
+        </section>
+
+        <section id="memory-system" class="content-section">
+            <h2>Memory System</h2>
+            <h3>2.3 Memory Unit</h3>
+            <p>The memory unit consists of cache memory and primary memory. Primary memory or main memory of the
+                computer is used to store the data and instructions during execution of the instructions. Random Access
+                Memory (RAM) and Read Only Memory (ROM) are the primary memory. In addition to the main memory, there is
+                another kind of storage device known as the secondary memory. Secondary memory is non-volatile and is
+                used for permanent storage of data and programs. A program or data that has to be executed is brought
+                into the RAM from the secondary memory.</p>
+            <div class="diagram-placeholder">Diagram: Types of memory (Primary Memory [CPU, Register, On Chip Cache, RAM
+                {DRAM, SRAM}], ROM {PROM, EPROM, EEPROM}), Secondary Memory [Magnetic Tape, Magnetic Disk, Optical
+                Disk]).</div>
+
+            <h3>A Brief Overview How Processing Takes Place in Computer to Give Output:</h3>
+            <p>During the time of processing raw data from the RAM, some data from RAM is brought to cache memory prior
+                to processing to increase processing speed. This memory keeps on filling up and gets emptied by the
+                control unit till all the instructions and raw data from the RAM get emptied. RAM on the other hand gets
+                filled up with instructions and raw data from the virtual memory (A Portion occupied in the hard disk)
+                by the control unit till the program is completely executed.</p>
+            <div class="diagram-placeholder">Diagram: Hard Disk -> Control Unit -> Virtual Memory -> Input -> RAM
+                (Random Access Memory) -> Cache -> ALU (Arithmetic logic unit) -> Output. Arrows show data flow.</div>
+            <p>Hard disk: A device to store huge amount of data and instructions. Data from the input unit is taken by
+                the control unit and stored in hard disk or sent to RAM for processing. When working with heavy data and
+                instruction from hard disk RAM is a small place and so when data and instructions are too heavy to be
+                stored in RAM and so they are stored in the virtual memory a Portion of hard disk for faster execution.
+                Instructions and data in RAM (Random Access Memory) go to the cache memory for processing. Instructions
+                and data from cache memory go to the ALU for processing. After processing from ALU the output is
+                generated on printer/ monitor or stored to a hard drive. Once instruction in RAM are over they are
+                filled from virtual memory. The cycle continues till all instructions are executed.</p>
+
+            <h3>Primary Memory</h3>
+            <p>Primary memory is the memory that is accessed by the processor directly. It is also known as main memory
+                or internal memory. It helps in executing applications that are temporarily stored in a specific memory
+                location. Primary memory is of two types – RAM and ROM.</p>
+            <ul>
+                <li><strong>RAM (Random Access Memory):</strong> Volatile memory used to store data and programs
+                    currently being used by the CPU. Data is lost when power is turned off.</li>
+                <li><strong>ROM (Read-Only Memory):</strong> Non-volatile memory containing pre-written instructions
+                    essential for booting up the computer. Data persists even when power is off. Sub-types include PROM,
+                    EPROM, EEPROM.</li>
+            </ul>
+
+            <h3>Cache Memory</h3>
+            <p>Caching is a technology based on the memory subsystem of the computer. The main purpose of a cache is to
+                accelerate the computer while keeping the price of the computer low. Caching allows to do the computer
+                tasks more rapidly. Cache technology is the use of a faster but smaller memory type to accelerate a
+                slower but larger memory type. When using a cache, we must check the cache to see if an item is in
+                there. If it is there, it’s called a cache hit. If not, it is called a cache miss and the computer must
+                wait for a round trip from the larger, slower memory area. A cache has some maximum size that is much
+                smaller than the larger storage area. It is possible to have multiple layers of cache.</p>
+            <p>There are a lot of subsystems in a computer; one can put cache between many of them to improve
+                performance. Here’s an example. We have the microprocessor (the fastest thing in the computer). Then
+                there’s the L1 cache that caches the L2 cache that caches the main memory which can be used (and is
+                often used) as a cache for even slower peripherals like hard disks and CD-ROMs. The hard disks are also
+                used to cache an even slower medium – Internet connection. A list of different types of cache is given
+                as follows:</p>
+            <ul>
+                <li><strong>L1 cache</strong> - Memory accesses at full microprocessor speed (10 nanoseconds, 4
+                    kilobytes to 16 kilobytes in size)</li>
+                <li><strong>L2 cache</strong> - Memory access of type SRAM (around 20 to 30 nanoseconds, 128 kilobytes
+                    to 512 kilobytes in size)</li>
+                <li><strong>Main memory</strong> - Memory access of type RAM (around 60 nanoseconds, 32 megabytes to 128
+                    megabytes in size)</li>
+                <li><strong>Hard disk</strong> - Mechanical, slow (around 12 milliseconds, 1 gigabyte to 10 gigabytes in
+                    size)</li>
+            </ul>
+        </section>
+
+        <section id="storage-devices" class="content-section">
+            <h2>Storage Devices (Secondary Memory)</h2>
+            <p>The secondary memory stores data and instructions permanently. The information can be stored in secondary
+                memory for a long time (years), and is generally permanent in nature unless erased by the user. It is a
+                non-volatile memory. It provides back-up storage for data and instructions. Hard disk drive, floppy
+                drive and optical disk drives are some examples of storage devices. The data and instructions that are
+                currently not being used by CPU, but may be required later for processing, are stored in secondary
+                memory. Secondary memory has a high storage capacity than the primary memory. Secondary memory is also
+                cheaper than the primary memory. It takes longer time to access the data and instructions stored in
+                secondary memory than in primary memory. Magnetic tape drives, disk drives and optical disk drives are
+                the different types of storage devices.</p>
+
+            <h3>3.5 Storage Systems Classification</h3>
+            <p>Storage systems are the devices—such as hard disks, optical disks and magnetic disks—used for data
+                storage. The main objective of the storage system is to permanently store data—which can be of any type,
+                such as images, videos and text—for future use. The storage systems provide the facility to use the data
+                at any time. Different storage systems have varying storage capacities. For example, the normal storage
+                capacity of Compact Disk (CD) is 700 Megabytes (MB).</p>
+            <div class="diagram-placeholder">Fig. 3.7 Classification of storage systems: Storage Devices branching into
+                Magnetic, Solid state, Optical, Magneto Optical. Magnetic into Tapes, Disks. Optical into Read only
+                Disks, Read once Write Many Disks.</div>
+
+            <h3>3.6 Magnetic Storage Systems</h3>
+            <p>Magnetic storage systems can be defined as the storage systems that store the data on a magnetised
+                medium, with the help of magnetised particles. Magnetic tapes, magnetic disks, hard disks, floppy disks
+                are examples of magnetic storage systems. The magnetic storage systems are non-volatile and provide the
+                facility to store any type of data, such as text, audio, video, image, etc. In case of magnetic storage
+                systems, data can be accessed randomly as well as sequentially. For example, we can access data
+                sequentially from a magnetic tape and randomly from a magnetic disk. When data is accessed sequentially,
+                the access time is directly proportional to the searching point. In other words, if the searching point
+                is near, then the access time is less, and if the searching point is far, then the access time is more.
+                On the other hand, when data is accessed randomly, the access time is less.</p>
+            <h4>3.6.1 Magnetic Tapes</h4>
+            <p>Magnetic tapes are the plastic tapes with magnetic coating that are used for storing the data, such as
+                text, audio or video. Performance is not a major issue. Magnetic tapes are best suited as the backup
+                devices for storing a large amount of data.</p>
+            <div class="diagram-placeholder">Fig. 3.8 Magnetic tape: Illustration of a magnetic tape reel.</div>
+            <p>Major advantages: Low cost, Large storage capacity, Easily transportable, Easy to handle and store.</p>
+            <p>Major disadvantages: Low data transmission speed due to sequential access, Not suitable for random
+                access, Requires protected environment, Updating is difficult, Fast wear-out.</p>
+            <h4>3.6.2 Magnetic Disks</h4>
+            <p>Magnetic disk is a flat disk that is covered with magnetic coating for holding information. It allows
+                random access of data. Two popular types: Hard disks, Floppy disks.</p>
+            <div class="diagram-placeholder">Fig. 3.9 Magnetic disk surface: Illustration showing Tracks and Sectors.
+            </div>
+            <p>Major advantages: High storage capacity, Easy, direct access to data, Easily movable, Better data
+                transfer rate, Low cost compared to RAM, Less prone to corruption.</p>
+            <p>Major disadvantages: More expensive than tapes, More susceptible to data corruption when used online, Not
+                ideally suitable when data files are to be read sequentially, Require dust-free environment.</p>
+
+            <h3>3.7 Optical Storage Systems</h3>
+            <p>Optical storage systems use laser light as the optical medium to read and write data. Examples: CD-ROM,
+                DVD, CD-R, DVD-R, CD-RW, DVD-RW.</p>
+            <div class="diagram-placeholder">Fig. 3.10 Optical disk: Illustration of laser beam reflecting off an
+                optical disk.</div>
+            <p>Properties: Storage capacity, Data transfer rate, Access time.</p>
+            <p>Major advantages: Large storage capacity, Longer life span, Low cost per bit, Easily portable.</p>
+            <p>Disadvantages: Low data access speed compared to magnetic disks, Drive mechanism more complicated.</p>
+            <h4>3.7.1 Read-only Optical Disks (e.g., CD-ROM)</h4>
+            <h4>3.7.2 Write Once, Read Many Disks (WORM) (e.g., CD-R)</h4>
+
+            <h3>3.8 Magneto Optical (MO) Systems</h3>
+            <p>MO storage systems include features of both magnetic and optical disks. Reads/writes data by making use
+                of laser and optical technologies. Not very popular due to slower speed and higher manufacturing cost.
+                Available in 3.5 inch and 5.5 inch form factors.</p>
+            <div class="diagram-placeholder">Fig. 3.11 Principle used in recording data (MO disk with laser, magnet,
+                media).</div>
+            <div class="diagram-placeholder">Fig. 3.12 Architecture of MO disks (layers: reflective, protective,
+                dielectric, substrate, lens).</div>
+
+            <h3>3.9 Solid-State Storage (SSD) Devices</h3>
+            <p>SSD can be defined as the device that contains all the properties of hard disk drives to store the data
+                and use solid-state memory. These devices do not use magnetic and optical medium to store data. The main
+                objective of these devices is to process the instructions electronically. SSDs have no mechanical parts
+                due to which access time in case of SSDs is less. Examples are flash memory cards and Universal Serial
+                Bus (USB) devices. SSDs are widely used in laptops to store data.</p>
+            <h4>3.9.1 Structure of SSD</h4>
+            <p>Based on DRAM and NAND flash memory. Flash memory based SSD is slower, as compared to the DRAM volatile
+                memory.</p>
+            <h4>3.9.2 Advantages of SSD</h4>
+            <p>Better performance (random access, searching, spin-up), Low power and heat, High reliability (no moving
+                parts), Small dimension, Small form factor.</p>
+            <h4>3.9.3 Disadvantages of SSD</h4>
+            <p>High price, Low storage capacity (compared to HDD cost), Low writing speed (flash memory), Low storage
+                density, Vulnerable to power loss, electrostatic discharge, magnetic fields.</p>
+
+            <h3>USB (Universal Serial Bus)</h3>
+            <p>USB, short for Universal Serial Bus. USB was designed to standardize the connection of computer
+                peripherals (including keyboards, pointing devices, digital cameras, printers, Portable media players,
+                disk drives and network adapters) to personal computers, both to communicate and to supply electric
+                power. It has become commonplace on other devices, such as smartphones, PDAs and video game consoles.
+                USB has effectively replaced a variety of earlier interfaces, such as serial and parallel Ports, as well
+                as separate power chargers for Portable devices.</p>
+            <div class="diagram-placeholder">Table/Diagram: USB Ports (Male ports: USB-A, USB-A-male(mini),
+                USB-A-male(micro), USB-B-male, USB-B-male(mini); Female ports: corresponding female versions).</div>
+
+            <h3>Storage Evaluation Criteria</h3>
+            <ul>
+                <li><strong>Access mode:</strong> Random access mode, sequential access mode and direct access mode.
+                </li>
+                <li><strong>Access time:</strong> Time taken by the processor in completing the requests.</li>
+                <li><strong>Storage capacity:</strong> Storage space available in the computer system for holding the
+                    data.</li>
+                <li><strong>Storage type:</strong> Temporary memory (volatile) and permanent memory (non-volatile).</li>
+                <li><strong>Cost:</strong> Cost of the storage device used in the computer system for storing the data.
+                </li>
+            </ul>
+        </section>
+
+        <section id="hardware-software" class="content-section">
+            <h2>Computer Hardware and Software</h2>
+            <p>Hardware represents the physical and tangible components of a computer, i.e. the components that can be
+                seen and touched.</p>
+            <h4>Examples of Hardware:</h4>
+            <ul>
+                <li>Input devices - keyboard, mouse, etc.</li>
+                <li>Output devices - printer, monitor, etc.</li>
+                <li>Secondary storage devices - Hard disk, CD, DVD, etc.</li>
+                <li>Internal components - CPU, motherboard, RAM, etc.</li>
+            </ul>
+            <div class="diagram-placeholder">Visual: Components of Computer (Mainboard, Monitor, CPU, DVD-RW, CD-RW,
+                RAM, VGA Card, Sound Card, Harddisk, Mouse, Speaker, Keyboard, Power Supply, DVD ROM Drive, Reader
+                all-in-one Internal - all radiating from a central PC Tower).</div>
+
+            <p>Software is a set of programs, which is designed to perform a well-defined function. A program is a
+                sequence of instructions written to solve a particular problem.</p>
+
+            <h3>Relationship between Hardware and Software</h3>
+            <ul>
+                <li>Hardware and software are mutually dependent on each other. Both of them must work together to make
+                    a computer produce a useful output.</li>
+                <li>Software cannot be utilized without supporting hardware.</li>
+                <li>Hardware without a set of programs to operate upon cannot be utilized and is useless.</li>
+                <li>To get a particular job done on the computer, relevant software should be loaded into the hardware.
+                </li>
+                <li>Hardware is a one-time expense. Software development is very expensive and is a continuing expense.
+                </li>
+                <li>Different software applications can be loaded on a hardware to run different jobs.</li>
+                <li>A software acts as an interface between the user and the hardware.</li>
+                <li>If the hardware is the ‘heart’ of a computer system, then the software is its ‘soul’. Both are
+                    complementary to each other.</li>
+            </ul>
+
+            <h3>Types of Software</h3>
+            <p>There are two types of software – System Software and Application Software.</p>
+            <h4>System Software</h4>
+            <p>The system software is a collection of programs designed to operate, control, and extend the processing
+                capabilities of the computer itself. System software is generally prepared by the computer
+                manufacturers. These software products comprise of programs written in low-level languages, which
+                interact with the hardware at a very basic level. System software serves as the interface between the
+                hardware and the end users. Some examples of system software are Operating System, Compilers,
+                Interpreter, Assemblers, etc.</p>
+            <h5>Features of System Software:</h5>
+            <ul>
+                <li>Close to the system.</li>
+                <li>Fast in speed.</li>
+                <li>Difficult to design.</li>
+                <li>Difficult to understand.</li>
+                <li>Less interactive.</li>
+                <li>Smaller in size.</li>
+                <li>Difficult to manipulate.</li>
+                <li>Generally written in low-level language.</li>
+            </ul>
+
+            <h4>Application Software</h4>
+            <p>Application software products are designed to satisfy a particular need of a particular environment. All
+                software applications prepared in the computer lab can come under the category of Application software.
+                Application software may consist of a single program, such as Microsoft’s notepad for writing and
+                editing a simple text. It may also consist of a collection of programs, often called a software package,
+                which work together to accomplish a task, such as a spreadsheet package.</p>
+            <h5>Examples of Application Software:</h5>
+            <ul>
+                <li>Payroll Software</li>
+                <li>Student Record Software</li>
+                <li>Inventory Management Software</li>
+                <li>Income Tax Software</li>
+                <li>Railways Reservation Software</li>
+                <li>Microsoft Office Suite Software (Word, Excel, PowerPoint)</li>
+            </ul>
+            <h5>Features of Application Software:</h5>
+            <ul>
+                <li>Close to the user.</li>
+                <li>Easy to design.</li>
+                <li>More interactive.</li>
+                <li>Slow in speed.</li>
+                <li>Generally written in high-level language.</li>
+                <li>Easy to understand.</li>
+                <li>Easy to manipulate and use.</li>
+                <li>Bigger in size and requires large storage space.</li>
+            </ul>
+
+            <h3>Difference Between Hardware and Software</h3>
+            <p>A computer system is divided into two categories: Hardware and Software. Hardware refers to the physical
+                and visible components of the system such as a monitor, CPU, keyboard and mouse. Software, on the other
+                hand, refers to a set of instructions which enable the hardware to perform a specific set of tasks. The
+                software must be installed in the hardware to function properly and similarly, the hardware must be
+                present for the software to perform. Both are interdependent, yet they are also different from each
+                other.</p>
+            <div class="diagram-placeholder">Diagram: Analyze the Difference Between Software and Hardware (Software:
+                Google Chrome, Intangible, Affected by Virus. Hardware: Laptops, Tangible, Affected by Wear and Tear).
+                (BYJU's example)</div>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Hardware</th>
+                        <th>Software</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Hardware is further divided into four main categories: Input Devices, Output Devices,
+                            Secondary Storage Devices, Internal Components.</td>
+                        <td>Software is further divided into two main categories: Application Software, System Software.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Developed using electronic and other materials.</td>
+                        <td>Developed writing using instructions using a programming language.</td>
+                    </tr>
+                    <tr>
+                        <td>When damaged, it can be replaced with a new component.</td>
+                        <td>When damaged, it can be installed once more using a backup copy.</td>
+                    </tr>
+                    <tr>
+                        <td>Hardware is physical in nature and hence one can touch and see hardware.</td>
+                        <td>The software cannot be physically touched but still can be used and seen.</td>
+                    </tr>
+                    <tr>
+                        <td>Hardware cannot be infected by Viruses.</td>
+                        <td>The software can be infected by Viruses.</td>
+                    </tr>
+                    <tr>
+                        <td>Hardware will physically wear out over time.</td>
+                        <td>A software does not wear out but it can be affected by bugs and glitches.</td>
+                    </tr>
+                    <tr>
+                        <td>An example of Hardware is hard drives, monitors, CPU, scanners, printers etc.</td>
+                        <td>An example of software is Windows 10, Adobe Photoshop, Google Chrome etc.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <footer class="navigation-buttons">
+            <a href="topic-2.html" class="nav-button back-prev"><i class="fas fa-arrow-left"></i> Previous Topic</a>
+            <a href="../fundamentals.html" class="nav-button syllabus"><i class="fas fa-list-ul"></i> Back to
+                Syllabus</a>
+            <a href="topic-4.html" class="nav-button next">Next Topic <i class="fas fa-arrow-right"></i></a>
+        </footer>
+
+    </div>
+
+    <script>
+        // Theme toggle logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        const bodyElement = document.body;
+
+        function setThemeMode(mode) {
+            if (mode === 'light-mode') {
+                htmlElement.classList.add('light-mode'); htmlElement.classList.remove('dark-mode');
+                bodyElement.classList.remove('dark-mode'); // For specific body styles if needed
+                localStorage.setItem('theme', 'light-mode');
+            } else {
+                htmlElement.classList.remove('light-mode'); htmlElement.classList.add('dark-mode');
+                bodyElement.classList.add('dark-mode'); // For specific body styles if needed
+                localStorage.setItem('theme', 'dark-mode');
+            }
+        }
+
+        (function () {
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme) {
+                setThemeMode(currentTheme);
+            } else {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+                    setThemeMode('light-mode');
+                } else {
+                    setThemeMode('dark-mode'); // Default to dark
+                }
+            }
+        })();
+
+        themeToggleBtn.addEventListener('click', function () {
+            if (htmlElement.classList.contains('light-mode')) {
+                setThemeMode('dark-mode');
+            } else {
+                setThemeMode('light-mode');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Placeholder for image loading in actual implementation
+            const diagrams = document.querySelectorAll('.diagram-placeholder, .diagram-placeholder-img');
+            diagrams.forEach(diag => {
+                const placeholderText = diag.dataset.srcPlaceholder || diag.textContent || "Diagram/Image Placeholder";
+                if (diag.tagName === 'IMG') {
+                    diag.alt = placeholderText; // Set alt for images
+                }
+                // You might want to add more sophisticated placeholder handling here
+            });
+        });
+    </script>
+
+</body>
+
+</html>

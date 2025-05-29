@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 5: Memory and Storage - Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            /* Dark Mode (Default) */
+            --bg-color: #121828;
+            --card-bg-color: #1f2937;
+            /* Main section background */
+            --inner-card-bg-color: var(--bg-color);
+            /* For individual device cards */
+            --primary-text-color: #e5e7eb;
+            --secondary-text-color: #9ca3af;
+            --accent-color: #6a82fb;
+            --accent-hover-color: #8da2fc;
+            --yellow-accent: #fde047;
+            --border-color: #374151;
+            --futuristic-glow: 0 0 15px rgba(106, 130, 251, 0.3);
+            --futuristic-glow-yellow: 0 0 15px rgba(253, 224, 71, 0.4);
+            --header-gradient-start: var(--card-bg-color);
+            --header-gradient-end: var(--bg-color);
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #5a67d8;
+            --nav-button-syllabus-hover-bg: #4c58bf;
+            --diagram-bg: #2a3547;
+            --table-header-bg: var(--accent-color);
+            --table-row-even-bg: var(--bg-color);
+            --theme-toggle-bg: #23272f;
+            --theme-toggle-icon: #fde047;
+            --theme-toggle-hover-bg: #374151;
+            --theme-toggle-hover-icon: #fff;
+        }
+
+        html.light-mode {
+            /* Light Mode */
+            --bg-color: #f0f4f8;
+            --card-bg-color: #ffffff;
+            --inner-card-bg-color: var(--bg-color);
+            --primary-text-color: #2c3e50;
+            --secondary-text-color: #52616b;
+            --accent-color: #3498db;
+            --accent-hover-color: #2980b9;
+            --yellow-accent: #f39c12;
+            --border-color: #d1d5db;
+            --futuristic-glow: 0 0 15px rgba(52, 152, 219, 0.2);
+            --futuristic-glow-yellow: 0 0 15px rgba(243, 156, 18, 0.3);
+            --header-gradient-start: #e6e9ed;
+            --header-gradient-end: #f0f4f8;
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #27ae60;
+            --nav-button-syllabus-hover-bg: #229954;
+            --eduvision-logo-color: #2563eb;
+            --eduvision-logo-yellow: #f59e0b;
+            --diagram-bg: #e9ecef;
+            --table-header-bg: var(--accent-color);
+            --table-row-even-bg: #f8f9fa;
+            --theme-toggle-bg: #f8f9fa;
+            --theme-toggle-icon: #f39c12;
+            --theme-toggle-hover-bg: #e9ecef;
+            --theme-toggle-hover-icon: #2c3e50;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            font-size: 16px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 80px;
+        }
+
+        /* Logo Styles */
+        .eduvision-logo {
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvision-logo .text-logo-main {
+            color: #fff !important;
+        }
+
+        .eduvision-logo .text-logo-accent {
+            color: #fde047 !important;
+        }
+
+        html.light-mode .eduvision-logo .text-logo-main {
+            color: var(--eduvision-logo-color) !important;
+        }
+
+        html.light-mode .eduvision-logo .text-logo-accent {
+            color: var(--eduvision-logo-yellow) !important;
+        }
+
+        .eduvision-logo .group:hover .text-logo-accent {
+            filter: brightness(1.1);
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Theme Toggle Button */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+            color: var(--theme-toggle-hover-icon);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+        /* Header */
+        .main-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--header-gradient-start), var(--header-gradient-end));
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .topic-badge {
+            display: inline-block;
+            background-color: var(--yellow-accent);
+            color: var(--bg-color);
+            padding: 5px 15px;
+            border-radius: 15px 15px 0 0;
+            font-size: 0.9em;
+            font-weight: bold;
+            font-family: 'Nunito', sans-serif;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-header h1 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 3.0em;
+            font-weight: 900;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: var(--futuristic-glow);
+        }
+
+        .main-header p {
+            font-size: 1.2em;
+            color: var(--secondary-text-color);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Sections & Content Styling */
+        .content-section {
+            background-color: var(--card-bg-color);
+            padding: 30px 40px;
+            margin-bottom: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--accent-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-left-color 0.3s ease;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15), var(--futuristic-glow);
+        }
+
+        .content-section h2 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+
+        .content-section h3 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.6em;
+            color: var(--yellow-accent);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section h4 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.3em;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section p,
+        .content-section ul {
+            margin-bottom: 15px;
+            color: var(--secondary-text-color);
+            transition: color 0.3s ease;
+        }
+
+        .content-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .content-section ul li::before {
+            content: "\f105";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            top: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section .sub-section {
+            background-color: var(--inner-card-bg-color);
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Diagram Placeholder */
+        .diagram-placeholder,
+        .diagram-placeholder-img {
+            background-color: var(--diagram-bg);
+            border: 2px dashed var(--border-color);
+            padding: 15px;
+            margin: 20px auto;
+            text-align: center;
+            color: var(--secondary-text-color);
+            border-radius: 8px;
+            font-style: italic;
+            display: block;
+            max-width: 90%;
+            font-size: 0.9em;
+        }
+
+        .diagram-placeholder-img {
+            height: auto;
+            min-height: 80px;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.95em;
+            overflow-x: auto;
+            display: block;
+            /* for responsiveness */
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px 12px;
+            text-align: left;
+            vertical-align: top;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+            white-space: nowrap;
+            /* Prevent text wrapping in cells initially */
+        }
+
+        .comparison-table th {
+            background-color: var(--table-header-bg);
+            color: var(--button-text-color);
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .comparison-table tr:nth-child(even) td {
+            background-color: var(--table-row-even-bg);
+        }
+
+        @media (max-width: 768px) {
+
+            .comparison-table th,
+            .comparison-table td {
+                white-space: normal;
+                /* Allow wrapping on smaller screens */
+            }
+        }
+
+        /* Navigation Buttons */
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: var(--card-bg-color);
+            border-radius: 8px;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-button {
+            color: var(--button-text-color);
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-align: center;
+            flex-grow: 1;
+            min-width: 150px;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-button.back-prev {
+            background-color: var(--secondary-text-color);
+        }
+
+        .nav-button.back-prev:hover {
+            background-color: var(--primary-text-color);
+            filter: brightness(1.2);
+        }
+
+        .nav-button.syllabus {
+            background-color: var(--nav-button-syllabus-bg);
+        }
+
+        .nav-button.syllabus:hover {
+            background-color: var(--nav-button-syllabus-hover-bg);
+        }
+
+        .nav-button.next {
+            background-color: var(--accent-color);
+        }
+
+        .nav-button.next:hover {
+            background-color: var(--accent-hover-color);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .navigation-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .nav-button {
+                width: auto;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-header h1 {
+                font-size: 2.5em;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .content-section h2 {
+                font-size: 1.8em;
+            }
+
+            .topic-badge {
+                font-size: 0.8em;
+                padding: 4px 10px;
+                top: -15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header h1 {
+                font-size: 2.2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../../index.html" class="flex items-center group">
+                <span class="text-logo-main">Edu</span>
+                <svg class="text-logo-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-logo-main">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="main-header">
+            <span class="topic-badge">Topic 5</span>
+            <h1>Memory and Storage</h1>
+            <p>Understanding how computers store data and instructions, from fast, temporary primary memory to
+                capacious, permanent secondary storage.</p>
+        </header>
+
+        <section id="memory-intro" class="content-section">
+            <h2>Introduction to Computer Memory</h2>
+            <p>The computer's memory stores data, instructions required during the processing of data, and output
+                results. Storage may be required for a limited period of time, instantly, or for an extended period of
+                time. Different types of memories, each having its own unique features, are available for use in a
+                computer. The cache memory, registers, and RAM are fast memories and store the data and instructions
+                temporarily during the processing of data and instructions. The secondary memory like magnetic disks and
+                optical disks have large storage capacities and store the data and instructions permanently, but are
+                slow memory devices. The memories are organized in the computer in a manner to achieve high levels of
+                performance at the minimum cost.</p>
+        </section>
+
+        <section id="memory-hierarchy" class="content-section">
+            <h2>3.3 Memory Hierarchy</h2>
+            <p>The memory is characterized on the basis of two key factors—capacity and access time.
+                <strong>Capacity</strong> is the amount of information (in bits) that a memory can store. <strong>Access
+                    time</strong> is the time interval between the read/write request and the availability of data. The
+                lesser the access time, the faster is the speed of memory. Ideally, we want the memory with fastest
+                speed and largest capacity. However, the cost of fast memory is very high. The computer uses a hierarchy
+                of memory that is organized in a manner to enable the fastest speed and largest capacity of memory. The
+                hierarchy of the different memory types is shown in Figure 3.2.
+            </p>
+            <div class="diagram-placeholder-img"
+                data-src-placeholder="Figure 3.2 Memory hierarchy pyramid: Registers (top, fastest, smallest, highest cost) -> Cache -> Primary/Main Memory -> Magnetic Disk/Optical Disk -> Magnetic Tape (bottom, slowest, largest, lowest cost). Axes: Cost, Access Speed, Storage Capacity.">
+                Memory Hierarchy Diagram</div>
+            <p>The internal memory and external memory are the two broad categories of memory used in the computer. The
+                internal memory consists of the CPU registers, cache memory and primary memory. The internal memory is
+                used by the CPU to perform the computing tasks. The external memory is also called the secondary memory.
+                The secondary memory is used to store the large amount of data and the software.</p>
+        </section>
+
+        <section id="primary-memory" class="content-section">
+            <h2>Primary Memory</h2>
+            <p>Primary memory is the main memory of computer. It is a chip mounted on the motherboard of computer.
+                Primary memory is categorized into two main types: Random Access Memory (RAM) and Read Only Memory
+                (ROM).</p>
+            <p>RAM is used for the temporary storage of input data, output data and intermediate results. The input data
+                entered into the computer using the input device, is stored in RAM for processing. After processing, the
+                output data is stored in RAM before being sent to the output device. Any intermediate results generated
+                during the processing of program are also stored in RAM. Unlike RAM, the data once stored in ROM either
+                cannot be changed or can only be changed using some special operations. Therefore, ROM is used to store
+                the data that does not require a change. Flash memory is another form of rewritable read-only memory
+                that is compact, portable, and requires little energy.</p>
+
+            <div class="sub-section">
+                <h3>3.3 Random Access Memory (RAM)</h3>
+                <p>Random Access Memory (RAM) is a volatile memory and loses all its data when the power is switched
+                    off. It is the main memory of the computer system that stores the data temporarily and allows the
+                    data to be accessed in any order. As compared to the secondary storage, the data can be accessed at
+                    a faster speed in RAM because it is the internal memory of the computer. Figure 3.3 shows RAM with
+                    ICs.</p>
+                <div class="diagram-placeholder-img"
+                    data-src-placeholder="Figure 3.3 Random access memory with ICs (Image of a RAM stick with chips labeled).">
+                    RAM Stick Image</div>
+                <p>RAM is made up of different ICs, which are mounted on a printed circuit board. RAM stores the
+                    application programs and the data on which the user is currently working so that the processor can
+                    easily access the required application program and data in a less amount of time. RAM is also known
+                    as read/write memory because it can perform both read as well as write operations. The speed of RAM
+                    is faster than the other memory devices, such as hard disk, floppy disk, etc.</p>
+                <p>The programs, which are being currently executed by the computer system, are stored in RAM. RAM is
+                    volatile and, therefore, the programs and the data stored in the RAM get lost when the power supply
+                    is switched off. The storage capacity of RAM is usually less than the secondary storage device. RAM
+                    can be categorised into two main types, namely, Static RAM (SRAM) and Dynamic RAM (DRAM), which can
+                    be further divided into various types for storing data. Figure 3.4 shows the hierarchy of RAM
+                    memory.</p>
+                <div class="diagram-placeholder-img"
+                    data-src-placeholder="Figure 3.4 Types of random access memory (Hierarchy: RAM -> SRAM {ASRAM, BSRAM, PBSRAM}, DRAM {FPMDRAM, EDODRAM, RDRAM, SDRAM}).">
+                    RAM Types Hierarchy Diagram</div>
+
+                <h4>3.3.1 Static RAM (SRAM)</h4>
+                <p>Static RAM (SRAM) is a type of RAM in which data is stored till the power of the computer system is
+                    switched on. SRAM uses a number of transistors to store a single bit of digital information. Figure
+                    3.5 shows the organisation of data in a cell of SRAM.</p>
+                <div class="diagram-placeholder-img"
+                    data-src-placeholder="Figure 3.5 Organisation of data in a cell of static random access memory (Circuit diagram of an SRAM cell with transistors, bit lines b1, b2, and word line Wx).">
+                    SRAM Cell Diagram</div>
+                <p>SRAM can be divided into the following three types: Asynchronous SRAM (ASRAM), Burst SRAM (BSRAM),
+                    and Pipeline Burst SRAM (PBSRAM).</p>
+                <ul>
+                    <li><strong>Asynchronous SRAM (ASRAM):</strong> Performs its operations without the use of system
+                        clock. Uses signals like Chip Select (CS), Write Enable (WE), and Output Enable (OE).</li>
+                    <li><strong>Burst SRAM (BSRAM):</strong> Works in association with the system clock and is also
+                        known as synchronous SRAM. Commonly used with high-speed applications.</li>
+                    <li><strong>Pipeline Burst SRAM (PBSRAM):</strong> Makes use of the pipeline technology in which a
+                        large amount of data is broken up in the form of different packets containing data. Can operate
+                        at bus rates as high as 66 MHz.</li>
+                </ul>
+
+                <h4>3.3.2 Dynamic RAM (DRAM)</h4>
+                <p>DRAM is the RAM in which data is stored in a storage cell, consisting of a transistor and a
+                    capacitor. Unlike SRAM, the DRAM needs to be continuously refreshed with power supply because the
+                    capacitor has the tendency to get discharged. DRAM retains the data for a very short span of time,
+                    even after the power supply is switched off. Figure 3.6 shows the organisation of data in a cell of
+                    DRAM.</p>
+                <div class="diagram-placeholder-img"
+                    data-src-placeholder="Figure 3.6 Organisation of data in a cell of dynamic random access memory (Circuit diagram of a DRAM cell with a transistor, capacitor, bit line b1, and word line Wx).">
+                    DRAM Cell Diagram</div>
+                <p>DRAM can be divided into the following types:</p>
+                <ul>
+                    <li><strong>Synchronous DRAM (SDRAM):</strong> Performs its operations in the synchronous mode,
+                        i.e., in association with the clock cycle of the processor bus.</li>
+                    <li><strong>Rambus DRAM (RDRAM):</strong> Designed by Rambus Inc. works at a faster speed, as
+                        compared to SDRAM. Compact in size and uses 16-bit address bus.</li>
+                    <li><strong>Extended Data Out DRAM (EDODRAM):</strong> Can access more than one bit of data at one
+                        time which helps in achieving faster data access rates.</li>
+                    <li><strong>Fast Page Mode DRAM (FPMDRAM):</strong> Makes use of paging in which read or write
+                        operation is performed by selecting the address of the data from the rows and the columns of a
+                        matrix.</li>
+                </ul>
+            </div>
+
+            <div class="sub-section">
+                <h3>3.4 Read Only Memory (ROM)</h3>
+                <p>ROM is the memory that stores the data permanently, i.e., it can retain the data even when the power
+                    of the computer system is switched off. The data can be easily read from this type of memory but
+                    cannot be changed. ROM is most commonly used in devices such as calculators, laser printers, etc.
+                    ROM does not allow the random access of data rather it allows sequential access of data. It is less
+                    expensive as compared to RAM and other storage devices, such as magnetic disk, etc. ROM is divided
+                    into four types, which are as follows: Programmable ROM (PROM), Erasable PROM (EPROM), Electrically
+                    Erasable PROM (EEPROM), Flash ROM.</p>
+                <ul>
+                    <li><strong>3.4.1 Programmable ROM (PROM):</strong> A memory chip on which the write operation of
+                        data can be performed only once. Once programmed, it cannot be erased or destroyed.</li>
+                    <li><strong>3.4.2 Erasable PROM (EPROM):</strong> Can be erased or destroyed using Ultraviolet Light
+                        (UL). Can be reprogrammed.</li>
+                    <li><strong>3.4.3 Electrically Erasable PROM (EEPROM):</strong> Can be erased or destroyed by
+                        exposing it to an electric charge. Stores data permanently but allows changes. Can be erased one
+                        byte at a time.</li>
+                    <li><strong>3.4.4 Flash ROM (Flash Memory):</strong> A type of EEPROM that stores information using
+                        floating-gate transistors. Faster speed of reading data. Used in mobile phones, digital cameras,
+                        iPods. Memory cells are made of floating-gate transistors.
+                        <ul>
+                            <li><strong>NAND flash:</strong> Each cell behaves like a MOSFET.</li>
+                            <li><strong>NOR flash:</strong> Provides facility to write data using tunnel injection and
+                                erase using tunnel release.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="secondary-memory" class="content-section">
+            <h2>Secondary Memory (Storage)</h2>
+            <p>Secondary memory, also known as secondary storage, refers to the storage devices and systems used to
+                store data persistently, even when the computer is powered off. Unlike primary memory (RAM), which is
+                fast and temporary, secondary memory is slower but offers much larger storage capacities. These devices
+                are essential for long-term data storage and retrieval.</p>
+            <div class="diagram-placeholder-img"
+                data-src-placeholder="Image: Examples of Secondary Memory (HDD, SD Card, PenDrive, SSD (NVME)).">
+                Secondary Memory Examples Image</div>
+
+            <h3>Use of Secondary Memory</h3>
+            <ul>
+                <li><strong>Permanent storage:</strong> Stores data permanently, even if power is off.</li>
+                <li><strong>Large Storage:</strong> Provides large space for videos, images, audios, files, etc.</li>
+                <li><strong>Portable:</strong> Some devices are removable for easy data transfer.</li>
+            </ul>
+
+            <h3>Types of Secondary Memory</h3>
+            <p>There are two types of secondary memory: Fixed Devices and Removable Devices.</p>
+            <div class="diagram-placeholder-img"
+                data-src-placeholder="Diagram: Types of secondary memory (Fixed Devices {Hard Disk Drive, CD/DVD Drive}, Removable Devices {Pen Drive, Blu Ray Disk}). Note: CD/DVD are typically removable.">
+                Secondary Memory Types Diagram</div>
+
+            <div class="sub-section">
+                <h4>1. Fixed Devices</h4>
+                <p>Permanently installed storage devices, like internal hard drives or SSDs. Data is always accessible.
+                </p>
+                <ul>
+                    <li><strong>Hard Disk Drive (HDD):</strong> Traditional storage, data on spinning magnetic disks.
+                        Slower, but offers large space at low cost.</li>
+                    <li><strong>Solid-State Drive (SSD):</strong> Faster, newer type using flash memory. No moving
+                        parts, more reliable and faster.</li>
+                    <li><strong>External Hard Drives (if kept permanently connected):</strong> Technically external, but
+                        can be considered fixed if always connected.</li>
+                    <li><strong>Network Attached Storage (NAS):</strong> Storage device connected to a network, allowing
+                        multiple users access. Used for backups and file sharing.</li>
+                </ul>
+            </div>
+            <div class="sub-section">
+                <h4>2. Removable Devices</h4>
+                <p>Can be easily disconnected and used on different systems. Allow for easy data transfer and backup.
+                </p>
+                <ul>
+                    <li><strong>Optical Discs (CD, DVD, Blu-ray):</strong>
+                        <ul>
+                            <li>CD (Compact Disc): Holds up to 700 MB.</li>
+                            <li>DVD (Digital Versatile Disc): Typically 4.7 GB or more.</li>
+                            <li>Blu-ray Disc: 25 GB (single layer) to 50 GB (dual layer).</li>
+                        </ul>
+                    </li>
+                    <li><strong>USB Flash Drives (Pen Drives):</strong> Small, portable, use flash memory. Capacities
+                        from gigabytes to terabytes.</li>
+                    <li><strong>Magnetic Tapes:</strong> Older form, thin tapes. Still used for large-scale data storage
+                        and archiving.</li>
+                    <li><strong>Flash Memory Cards (SD Cards, MicroSD Cards):</strong> Tiny, portable, used in cameras,
+                        smartphones, etc.</li>
+                    <li><strong>External Hard Drives (if used as removable):</strong> Commonly used for backup or
+                        transferring large files.</li>
+                    <li><strong>Cloud Storage:</strong> Not a physical device but a service (Google Drive, Dropbox)
+                        storing data online on servers.</li>
+                </ul>
+            </div>
+            <div class="sub-section">
+                <h3>Applications of Secondary Memory</h3>
+                <ul>
+                    <li>Data Storage & Archiving</li>
+                    <li>Backup & Recovery</li>
+                    <li>Software & OS Storage</li>
+                    <li>Media & Content Storage</li>
+                    <li>Database Management</li>
+                    <li>Virtual Memory</li>
+                    <li>Cloud Storage (as an extension)</li>
+                    <li>File Sharing</li>
+                    <li>Gaming</li>
+                    <li>Business & Research</li>
+                </ul>
+            </div>
+            <div class="sub-section">
+                <h3>Advantages of Secondary Memory</h3>
+                <ul>
+                    <li>Large storage capacity</li>
+                    <li>Non-volatile storage</li>
+                    <li>Portability (for many types)</li>
+                    <li>Cost-effective (generally)</li>
+                </ul>
+                <h3>Disadvantages of Secondary Memory</h3>
+                <ul>
+                    <li>Slower access times (than primary memory)</li>
+                    <li>Mechanical failures (e.g., HDDs)</li>
+                    <li>Limited lifespan (write cycles)</li>
+                    <li>Data corruption (EMI, viruses, physical damage)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="comparison-charts" class="content-section">
+            <h2>Memory Comparison Charts</h2>
+
+            <h3>Difference Between Primary Memory and Secondary Memory</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>BASIS FOR COMPARISON</th>
+                        <th>PRIMARY MEMORY</th>
+                        <th>SECONDARY MEMORY</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Basic</td>
+                        <td>Primary memory is directly accessible by Processor/CPU.</td>
+                        <td>Secondary memory is not directly accessible by CPU.</td>
+                    </tr>
+                    <tr>
+                        <td>Altered Name</td>
+                        <td>Main memory.</td>
+                        <td>Auxiliary memory.</td>
+                    </tr>
+                    <tr>
+                        <td>Data</td>
+                        <td>Instructions or data to be currently executed are copied to main memory.</td>
+                        <td>Data to be permanently stored is kept in secondary memory.</td>
+                    </tr>
+                    <tr>
+                        <td>Volatility</td>
+                        <td>Primary memory is usually volatile.</td>
+                        <td>Secondary memory is non-volatile.</td>
+                    </tr>
+                    <tr>
+                        <td>Formation</td>
+                        <td>Primary memories are made of semiconductors.</td>
+                        <td>Secondary memories are made of magnetic and optical material.</td>
+                    </tr>
+                    <tr>
+                        <td>Access Speed</td>
+                        <td>Accessing data from primary memory is faster.</td>
+                        <td>Accessing data from secondary memory is slower.</td>
+                    </tr>
+                    <tr>
+                        <td>Access</td>
+                        <td>Primary memory is accessed by the data bus.</td>
+                        <td>Secondary memory is accessed by input-output channels.</td>
+                    </tr>
+                    <tr>
+                        <td>Size</td>
+                        <td>The computer has a small primary memory.</td>
+                        <td>The computer has a larger secondary memory.</td>
+                    </tr>
+                    <tr>
+                        <td>Expense</td>
+                        <td>Primary memory is costlier than Secondary.</td>
+                        <td>Secondary Memory is cheaper than primary.</td>
+                    </tr>
+                    <tr>
+                        <td>Examples</td>
+                        <td>RAM, ROM, Cache memory</td>
+                        <td>Hard Disk, Magnetic tape, CD, DVD</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Difference Between Static RAM and Dynamic RAM</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Static RAM</th>
+                        <th>Dynamic RAM</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><i class="fas fa-angle-right"></i> SRAM uses transistor to store a single bit of data.</td>
+                        <td><i class="fas fa-angle-right"></i> DRAM uses a separate capacitor to store each bit of data.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-angle-right"></i> SRAM does not need periodic refreshment to maintain data.
+                        </td>
+                        <td><i class="fas fa-angle-right"></i> DRAM needs periodic refreshment to maintain the charge in
+                            the capacitors for data.</td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-angle-right"></i> SRAM's structure is complex.</td>
+                        <td><i class="fas fa-angle-right"></i> DRAM's structure is simplex than SRAM.</td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-angle-right"></i> SRAM are expensive as compared to DRAM.</td>
+                        <td><i class="fas fa-angle-right"></i> DRAM's are less expensive as compared to SRAM.</td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-angle-right"></i> SRAM are faster than DRAM.</td>
+                        <td><i class="fas fa-angle-right"></i> DRAM's are slower than SRAM.</td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-angle-right"></i> SRAM are used in Cache memory.</td>
+                        <td><i class="fas fa-angle-right"></i> DRAM are used in Main memory.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>Static RAM consumes more power because of low chip density whereas Dynamic RAM consumes less power
+                because of simple circuitry.</p>
+        </section>
+
+
+        <footer class="navigation-buttons">
+            <a href="topic-4.html" class="nav-button back-prev"><i class="fas fa-arrow-left"></i> Previous Topic</a>
+            <a href="../fundamentals.html" class="nav-button syllabus"><i class="fas fa-list-ul"></i> Back to
+                Syllabus</a>
+            <a href="topic-6.html" class="nav-button next">Next Topic <i class="fas fa-arrow-right"></i></a>
+        </footer>
+
+    </div>
+
+    <script>
+        // Theme toggle logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        const bodyElement = document.body;
+
+        function setThemeMode(mode) {
+            if (mode === 'light-mode') {
+                htmlElement.classList.add('light-mode'); htmlElement.classList.remove('dark-mode');
+                bodyElement.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light-mode');
+            } else {
+                htmlElement.classList.remove('light-mode'); htmlElement.classList.add('dark-mode');
+                bodyElement.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark-mode');
+            }
+        }
+
+        (function () {
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme) { setThemeMode(currentTheme); }
+            else {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) { setThemeMode('light-mode'); }
+                else { setThemeMode('dark-mode'); }
+            }
+        })();
+
+        themeToggleBtn.addEventListener('click', function () {
+            if (htmlElement.classList.contains('light-mode')) { setThemeMode('dark-mode'); }
+            else { setThemeMode('light-mode'); }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const diagrams = document.querySelectorAll('.diagram-placeholder, .diagram-placeholder-img');
+            diagrams.forEach(diag => {
+                const placeholderText = diag.dataset.srcPlaceholder || diag.textContent || "Diagram/Image Placeholder";
+                if (diag.tagName === 'IMG') { diag.alt = placeholderText; }
+                else { diag.textContent = placeholderText; }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 4: Input and Output Devices - Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            /* Dark Mode (Default) */
+            --bg-color: #121828;
+            --card-bg-color: #1f2937;
+            /* Main section background */
+            --inner-card-bg-color: var(--bg-color);
+            /* For individual device cards */
+            --primary-text-color: #e5e7eb;
+            --secondary-text-color: #9ca3af;
+            --accent-color: #6a82fb;
+            --accent-hover-color: #8da2fc;
+            --yellow-accent: #fde047;
+            --border-color: #374151;
+            --futuristic-glow: 0 0 15px rgba(106, 130, 251, 0.3);
+            --futuristic-glow-yellow: 0 0 15px rgba(253, 224, 71, 0.4);
+            --header-gradient-start: var(--card-bg-color);
+            --header-gradient-end: var(--bg-color);
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #5a67d8;
+            --nav-button-syllabus-hover-bg: #4c58bf;
+            --diagram-bg: #2a3547;
+            --theme-toggle-bg: #23272f;
+            --theme-toggle-icon: #fde047;
+            --theme-toggle-hover-bg: #374151;
+            --theme-toggle-hover-icon: #fff;
+        }
+
+        html.light-mode {
+            /* Light Mode */
+            --bg-color: #f0f4f8;
+            --card-bg-color: #ffffff;
+            --inner-card-bg-color: var(--bg-color);
+            --primary-text-color: #2c3e50;
+            --secondary-text-color: #52616b;
+            --accent-color: #3498db;
+            --accent-hover-color: #2980b9;
+            --yellow-accent: #f39c12;
+            --border-color: #d1d5db;
+            --futuristic-glow: 0 0 15px rgba(52, 152, 219, 0.2);
+            --futuristic-glow-yellow: 0 0 15px rgba(243, 156, 18, 0.3);
+            --header-gradient-start: #e6e9ed;
+            --header-gradient-end: #f0f4f8;
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #27ae60;
+            --nav-button-syllabus-hover-bg: #229954;
+            --eduvision-logo-color: #2563eb;
+            --eduvision-logo-yellow: #f59e0b;
+            --diagram-bg: #e9ecef;
+            --theme-toggle-bg: #f8f9fa;
+            --theme-toggle-icon: #f39c12;
+            --theme-toggle-hover-bg: #e9ecef;
+            --theme-toggle-hover-icon: #2c3e50;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            font-size: 16px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 80px;
+        }
+
+        /* Logo Styles */
+        .eduvision-logo {
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvision-logo .text-logo-main {
+            color: #fff !important;
+        }
+
+        .eduvision-logo .text-logo-accent {
+            color: #fde047 !important;
+        }
+
+        html.light-mode .eduvision-logo .text-logo-main {
+            color: var(--eduvision-logo-color) !important;
+        }
+
+        html.light-mode .eduvision-logo .text-logo-accent {
+            color: var(--eduvision-logo-yellow) !important;
+        }
+
+        .eduvision-logo .group:hover .text-logo-accent {
+            filter: brightness(1.1);
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Theme Toggle Button */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+            color: var(--theme-toggle-hover-icon);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+        /* Header */
+        .main-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--header-gradient-start), var(--header-gradient-end));
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .topic-badge {
+            display: inline-block;
+            background-color: var(--yellow-accent);
+            color: var(--bg-color);
+            padding: 5px 15px;
+            border-radius: 15px 15px 0 0;
+            font-size: 0.9em;
+            font-weight: bold;
+            font-family: 'Nunito', sans-serif;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-header h1 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 3.0em;
+            font-weight: 900;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: var(--futuristic-glow);
+        }
+
+        .main-header p {
+            font-size: 1.2em;
+            color: var(--secondary-text-color);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Sections & Content Styling */
+        .content-section {
+            background-color: var(--card-bg-color);
+            padding: 30px 40px;
+            margin-bottom: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--accent-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-left-color 0.3s ease;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15), var(--futuristic-glow);
+        }
+
+        .content-section h2 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+
+        .content-section h3 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.6em;
+            color: var(--yellow-accent);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section h4 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.3em;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section p,
+        .content-section ul {
+            margin-bottom: 15px;
+            color: var(--secondary-text-color);
+            transition: color 0.3s ease;
+        }
+
+        .content-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .content-section ul li::before {
+            content: "\f105";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            top: 1px;
+            transition: color 0.3s ease;
+        }
+
+        /* Device Card Layout */
+        .device-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .device-card {
+            background-color: var(--inner-card-bg-color);
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 4px solid var(--yellow-accent);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+        }
+
+        .device-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15), var(--futuristic-glow-yellow);
+        }
+
+        .device-card h4 {
+            margin-top: 0;
+            color: var(--yellow-accent);
+        }
+
+        /* Override for card title */
+        .device-card .device-icon {
+            font-size: 2em;
+            color: var(--accent-color);
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        /* Diagram Placeholder */
+        .diagram-placeholder,
+        .diagram-placeholder-img {
+            background-color: var(--diagram-bg);
+            border: 2px dashed var(--border-color);
+            padding: 15px;
+            margin: 15px auto;
+            text-align: center;
+            color: var(--secondary-text-color);
+            border-radius: 8px;
+            font-style: italic;
+            display: block;
+            max-width: 90%;
+            font-size: 0.9em;
+        }
+
+        .diagram-placeholder-img {
+            height: auto;
+            min-height: 80px;
+        }
+
+        .device-card .diagram-placeholder,
+        .device-card .diagram-placeholder-img {
+            max-width: 100%;
+            margin-top: 10px;
+            font-size: 0.85em;
+            padding: 10px;
+        }
+
+
+        /* Navigation Buttons */
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: var(--card-bg-color);
+            border-radius: 8px;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-button {
+            color: var(--button-text-color);
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-align: center;
+            flex-grow: 1;
+            min-width: 150px;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-button.back-prev {
+            background-color: var(--secondary-text-color);
+        }
+
+        .nav-button.back-prev:hover {
+            background-color: var(--primary-text-color);
+            filter: brightness(1.2);
+        }
+
+        .nav-button.syllabus {
+            background-color: var(--nav-button-syllabus-bg);
+        }
+
+        .nav-button.syllabus:hover {
+            background-color: var(--nav-button-syllabus-hover-bg);
+        }
+
+        .nav-button.next {
+            background-color: var(--accent-color);
+        }
+
+        .nav-button.next:hover {
+            background-color: var(--accent-hover-color);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .navigation-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .nav-button {
+                width: auto;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-header h1 {
+                font-size: 2.5em;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .content-section h2 {
+                font-size: 1.8em;
+            }
+
+            .topic-badge {
+                font-size: 0.8em;
+                padding: 4px 10px;
+                top: -15px;
+            }
+
+            .device-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header h1 {
+                font-size: 2.2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../../index.html" class="flex items-center group">
+                <span class="text-logo-main">Edu</span>
+                <svg class="text-logo-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-logo-main">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="main-header">
+            <span class="topic-badge">Topic 4</span>
+            <h1>Input and Output Devices</h1>
+            <p>Exploring the various devices used to interact with computers, providing data and instructions (input)
+                and receiving processed information (output).</p>
+        </header>
+
+        <section id="input-devices" class="content-section">
+            <h2>Input Devices</h2>
+            <p>An input device is used to get data or instructions from the user. This data is then passed on to CPU for
+                processing so as to produce the desired result. Although keyboard and mouse are the two common input
+                devices, other devices such as Optical Character Recognition (OCR), Magnetic Ink Character Recognition
+                (MICR), and mark sense reader, etc., are also used as per our requirement.</p>
+
+            <div class="device-grid">
+                <div class="device-card">
+                    <h4><i class="fas fa-keyboard device-icon"></i>Keyboard</h4>
+                    <p>The most commonly used input device. Used to type data, text, and execute commands. Consists of
+                        groups of keys:</p>
+                    <ul>
+                        <li><strong>Alphanumeric keys:</strong> Number and alphabet keys (QWERTY layout).</li>
+                        <li><strong>Function keys:</strong> Arranged in a row on top (e.g., F1-F12) for specific tasks.
+                        </li>
+                        <li><strong>Central keys:</strong> For cursor control (arrow keys) and modification (SHIFT, ALT,
+                            CTRL).</li>
+                        <li><strong>Numeric keypad:</strong> On the right side, like a calculator.</li>
+                        <li><strong>Special purpose keys:</strong> Escape, Insert, Delete, Print Screen, Pause, Tab,
+                            Spacebar, etc.</li>
+                    </ul>
+                    <p>A standard keyboard has about 100 keys. Keyboards connect via cable or wirelessly (batteries).
+                        Types include multimedia and gaming keyboards based on additional keys.</p>
+                    <div class="diagram-placeholder-img"
+                        data-src-placeholder="Fig. 4.1 The presently used keyboard layout with key groups labeled.">
+                        Keyboard Layout Diagram</div>
+                </div>
+
+                <div class="device-card">
+                    <h4><i class="fas fa-mouse device-icon"></i>Mouse</h4>
+                    <p>Controls the cursor/pointer on a display screen. A small object that can roll along a hard flat
+                        surface. Contains at least one button, sometimes up to three. Commonly connected via USB.</p>
+                    <p>Invented by Douglas Engelbart in 1963. Important for GUIs (point-and-click). Also used for
+                        graphics programs.</p>
+                    <h5>Types of Mouse:</h5>
+                    <ul>
+                        <li><strong>Mechanical:</strong> Has a rubber or metal ball on its underside. Mechanical sensors
+                            detect ball movement.</li>
+                        <li><strong>Optomechanical:</strong> Similar to mechanical, but uses optical sensors to detect
+                            ball motion.</li>
+                        <li><strong>Optical:</strong> Uses a laser to detect movement. Often requires a special mat with
+                            a grid. No mechanical moving parts, more responsive and precise but more expensive.</li>
+                    </ul>
+                    <div class="diagram-placeholder-img"
+                        data-src-placeholder="Fig. 2.1.2 Mouse. Fig. 2.1.3 Trackball (showing ball on top).">Mouse and
+                        Trackball Images</div>
+                </div>
+
+                <div class="device-card">
+                    <h4><i class="fas fa-scanner device-icon"></i>Scanner</h4>
+                    <p>Reads text or illustrations printed on paper and translates the information into a form the
+                        computer can use. Works by digitizing an image (dividing into a grid of boxes, representing each
+                        box with 0 or 1). The resulting matrix of bits is a bitmap.</p>
+                    <p>Optical scanners often need an Optical Character Recognition (OCR) system to translate scanned
+                        text images into ASCII characters for editing. Most scanners come with OCR packages.</p>
+                    <h5>Scanner Differences:</h5>
+                    <ul>
+                        <li><strong>Scanning Technology:</strong> Most use Charge-Coupled Device (CCD) arrays. Drum
+                            scanners use Photo Multiplier Tube (PMT) (more expensive).</li>
+                        <li><strong>Resolution:</strong> Denser bit map = higher resolution (DPI - Dots Per Inch).</li>
+                        <li><strong>Bit depth:</strong> Number of bits per pixel (e.g., 24-bit for 16.7 million colors).
+                        </li>
+                        <li><strong>Size and shape:</strong> Hand-held (half-page), sheet-fed (for loose paper), flatbed
+                            (like photocopier).</li>
+                    </ul>
+                    <div class="diagram-placeholder-img"
+                        data-src-placeholder="Fig. 2.1.7 CCD Based Scanner and a generic flatbed scanner image.">Scanner
+                        Images</div>
+                </div>
+
+                <div class="device-card">
+                    <h4><i class="fas fa-microphone-alt device-icon"></i>Microphone</h4>
+                    <p>An input device used to store voice data into the computer system. A type of transducer (converts
+                        energy). Converts sound waves into electrical energy. The diaphragm vibrates when struck by
+                        sound waves, causing an electrical current (audio signal).</p>
+                    <h5>Microphone Types:</h5>
+                    <ul>
+                        <li><strong>Conversion Technology:</strong> Dynamic, condenser, ribbon, crystal.</li>
+                        <li><strong>Application Design:</strong> General use or specialized purpose.</li>
+                    </ul>
+                    <div class="diagram-placeholder-img"
+                        data-src-placeholder="Diagram of a microphone showing Sound Waves, Diaphragm, Audio Signal.">
+                        Microphone Diagram</div>
+                </div>
+
+                <div class="device-card">
+                    <h4><i class="fas fa-video device-icon"></i>Web Camera (Webcam)</h4>
+                    <p>A hardware camera connected to a computer, allowing internet connection to view pictures or
+                        motion video. Often embedded in laptops or connected via USB/Wi-Fi. The camera part is a digital
+                        camera. Comes with software for preset interval capture and transfer. Allows video use (high
+                        frame rate needed for good quality). Captures images repeatedly, stores them in built-in memory,
+                        and software converts data to JPEG (compressing format).</p>
+                </div>
+
+                <div class="device-card">
+                    <h4><i class="fas fa-bowling-ball device-icon"></i>Trackball</h4>
+                    <p>A pointing device similar to a mouse. A ball is placed on the trackball device, used to move the
+                        graphic cursor. Contains buttons for selection. The ball is rolled with fingers or thumb. The
+                        device itself doesn't need to move. Often attached to some keyboards. Comes in various shapes
+                        (ABALL, SQUARE, A SQUARE).</p>
+                    <h5>Advantages:</h5>
+                    <ul>
+                        <li>Takes less desk space.</li>
+                        <li>Takes less arm movements.</li>
+                        <li>Doesn't require a mouse pad.</li>
+                        <li>Less strain on the wrist.</li>
+                        <li>Finger trip control may offer more accuracy.</li>
+                    </ul>
+                    <div class="diagram-placeholder-img"
+                        data-src-placeholder="Diagram of a trackball with click buttons and ball.">Trackball Diagram
+                    </div>
+                </div>
+
+                <div class="device-card">
+                    <h4><i class="fas fa-gamepad device-icon"></i>Joystick</h4>
+                    <p>A pointing device working on the same principle as a trackball. Contains a stick placed on a
+                        spherical ball, used to move the cursor. Also has buttons for selection. Pointer moves in the
+                        direction the joystick is pointing. Must return joystick to upright position to stop pointer
+                        movement.</p>
+                    <h5>Systems using joysticks:</h5>
+                    <ul>
+                        <li>Aircrafts, UAVs for flight control.</li>
+                        <li>Motorized Wheelchairs as input device.</li>
+                        <li>Microscopes.</li>
+                        <li>Submarines.</li>
+                        <li>Security Systems.</li>
+                        <li>Video Games (widely used).</li>
+                    </ul>
+                    <h5>Advantages:</h5>
+                    <ul>
+                        <li>It is very easy to learn to use.</li>
+                        <li>Very simple design so they can be inexpensive.</li>
+                        <li>It has a big analogue stick in the middle so it's easier to control.</li>
+                    </ul>
+                    <div class="diagram-placeholder-img"
+                        data-src-placeholder="Diagram of a joystick with stick, ball, socket, click button, light indicator.">
+                        Joystick Diagram</div>
+                </div>
+
+                <div class="device-card">
+                    <h4><i class="fas fa-eye device-icon"></i>Optical Character Recognition (OCR)</h4>
+                    <p>A device used for reading text from paper and translating the images into a form the computer can
+                        understand. Used to convert books, magazines, and other printed information into digital form.
+                    </p>
+                </div>
+                <div class="device-card">
+                    <h4><i class="fas fa-magnet device-icon"></i>Magnetic Ink Character Recognition (MICR)</h4>
+                    <p>Identifies characters printed with a special magnetic ink. Finds applications in the banking
+                        industry (e.g., MICR codes on cheques).</p>
+                </div>
+                <div class="device-card">
+                    <h4><i class="fas fa-check-square device-icon"></i>Optical Mark Recognition (OMR)</h4>
+                    <p>Also called mark sense reader. Senses the presence or absence of a mark (e.g., pencil mark).
+                        Widely used for assessing objective examinations involving multiple choice questions.</p>
+                </div>
+                <div class="device-card">
+                    <h4><i class="fas fa-barcode device-icon"></i>Bar Code Reader</h4>
+                    <p>Photographic scanner that translates bar codes (vertical zebra striped marks) on product
+                        containers into codes the computer can understand (Universal Product Code - UPC). Used in
+                        supermarkets to automatically tell the Point of Sales (POS) terminal the product and price.</p>
+                    <div class="diagram-placeholder-img"
+                        data-src-placeholder="Fig. 2.1.9 Bar Code Reader scanning a barcode.">Barcode Reader Image</div>
+                </div>
+                <div class="device-card">
+                    <h4><i class="fas fa-assistive-listening-systems device-icon"></i>Speech Input Devices</h4>
+                    <p>Convert a person's speech into digital form. With appropriate software, form voice recognition
+                        systems. Some systems must be 'trained'. Types: Continuous-speech (e.g., Dragon Computer's
+                        NaturallySpeaking), Discrete-Word (e.g., IBM VoiceType Simply Speaking).</p>
+                    <div class="diagram-placeholder-img"
+                        data-src-placeholder="Fig. 2.1.10 Speech input device (person with headset).">Speech Input Image
+                    </div>
+                </div>
+                <div class="device-card">
+                    <h4><i class="fas fa-hand-pointer device-icon"></i>Touch Screen</h4>
+                    <p>A type of display screen that has a touch sensitive transparent panel covering the screen.
+                        Instead of using a pointing device, users can point directly to objects on the screen. Provide
+                        natural interface for computer novices.</p>
+                    <div class="diagram-placeholder-img"
+                        data-src-placeholder="Fig. 2.1.11 Touch Screen (finger touching screen), Microsoft Fingerprint scanner (likely a mislabel in source for general touch).">
+                        Touch Screen Image</div>
+                </div>
+                <div class="device-card">
+                    <h4><i class="fas fa-tablet-alt device-icon"></i>Touch Pad</h4>
+                    <p>A small, touch-sensitive pad used as a pointing device on some portable computers. Moving a
+                        finger or other object along the pad can move the pointer on the screen.</p>
+                </div>
+                <div class="device-card">
+                    <h4><i class="fas fa-pen-fancy device-icon"></i>Light Pen</h4>
+                    <p>An input device that utilizes a light-sensitive detector to select objects on a display screen.
+                        Similar to a mouse, except that with a light pen we can move the pointer and select objects
+                        directly on the display screen by directly pointing to the objects with the light pen.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="output-devices" class="content-section">
+            <h2>Output Devices</h2>
+            <p>Output is anything that comes out of a computer. Output can be meaningful information or gibberish and it
+                can appear in a variety of forms - as binary numbers, as characters, as pictures and as printed pages.
+                An output device is any machine capable of representing information from a computer. Output devices
+                include display screens, loudspeakers, printers, plotters etc.</p>
+
+            <div class="device-grid">
+                <div class="device-card">
+                    <h4><i class="fas fa-desktop device-icon"></i>Monitors (Visual Display Unit)</h4>
+                    <p>Technically termed as a visual display unit. An electronic device that transmits information from
+                        the computer onto a screen. Available in various shapes, designs, and colors. Two types
+                        typically used with PCs: CRT (Cathode Ray Tube - older, like a TV screen) and Flat-panel display
+                        (used with portable computers, now popular for desktops).</p>
+                    <h5>Color Display Categories:</h5>
+                    <ul>
+                        <li><strong>Monochrome:</strong> Display only one color (e.g., green, amber, white) against a
+                            contrasting background (usually black). For text-only displays.</li>
+                        <li><strong>Grayscale:</strong> Display varying intensities of gray. Essentially a type of
+                            monochrome. Used in low-end portable systems.</li>
+                        <li><strong>Color:</strong> Can display between 16 and 16 million colors. Most new monitors
+                            display in color.</li>
+                    </ul>
+                </div>
+
+                <div class="device-card">
+                    <h4><i class="fas fa-tv device-icon"></i>LCD Monitors</h4>
+                    <p>Liquid Crystal Display (or Diode). Consists of a layer of color or monochrome pixels arranged
+                        schematically between transparent electrodes and polarizing filters. Optical effect achieved by
+                        polarizing light. Two types of LCD technology: Active matrix (TFT - secure, reliable, better
+                        picture) and Passive matrix (slower response, becoming outdated).</p>
+                    <h5>Advantages:</h5>
+                    <ul>
+                        <li>Compact, lightweight, less desk space.</li>
+                        <li>Consume less electricity, can be battery operated.</li>
+                        <li>Images do not get geometrically distorted and have little flicker.</li>
+                    </ul>
+                    <h5>Disadvantages:</h5>
+                    <ul>
+                        <li>More expensive.</li>
+                        <li>Image quality not constant when viewed from different angles.</li>
+                        <li>Resolution is always constant; alterations can reduce performance.</li>
+                    </ul>
+                    <div class="diagram-placeholder-img" data-src-placeholder="Image of an LCD Monitor.">LCD Monitor
+                        Image</div>
+                </div>
+
+                <div class="device-card">
+                    <h4><i class="fas fa-object-group device-icon"></i>LED Monitors</h4>
+                    <p>Light Emitting Diodes. Latest type. A flat panel display using light-emitting diodes for
+                        back-lighting instead of Cold Cathode Fluorescent (CCFL) used in LCDs. Primarily, display is
+                        LCD, back-lighting is LED.</p>
+                    <h5>Advantages:</h5>
+                    <ul>
+                        <li>Use much lesser power than CRT and LCD (environmentally friendly).</li>
+                        <li>Less negative environmental impact when disposed.</li>
+                        <li>Lifespan and durability more than CRT or LCD.</li>
+                        <li>Monitor panels can be made very thin.</li>
+                        <li>Do not produce much heat.</li>
+                        <li>Little expensive than former types.</li>
+                    </ul>
+                    <h5>Types of LED Back-lighting:</h5>
+                    <ul>
+                        <li><strong>White-edge LEDs:</strong> Fixed around the rim, use diffusion panel.</li>
+                        <li><strong>Array of LEDs:</strong> Placed behind screen, brightness not controlled
+                            individually.</li>
+                        <li><strong>Array of LEDs (individual control):</strong> Brightness of each LED controlled
+                            separately.</li>
+                    </ul>
+                    <div class="diagram-placeholder-img" data-src-placeholder="Image of an LED Monitor.">LED Monitor
+                        Image</div>
+                </div>
+
+                <div class="device-card">
+                    <h4><i class="fas fa-print device-icon"></i>Printers</h4>
+                    <p>Produces output on paper (hard copy), in text or graphics. Vary in size, speed, and quality.</p>
+                    <h5>Types of Printers:</h5>
+                    <ul>
+                        <li><strong>Dot Matrix Printer:</strong> Uses a print head that moves and strikes an inked
+                            ribbon against paper. Characters formed from dots.</li>
+                        <li><strong>Ink-jet Printer:</strong> Sprays ionized ink on paper. Magnetized plates direct ink.
+                            Better print than dot matrix (e.g., 300 dpi). Slower than laser, special paper for no
+                            smudging. Popular as portable printers. Good for full-colour documents.</li>
+                        <li><strong>Laser Printer:</strong> Works on photocopier principle. Laser alters electrical
+                            charge on a drum, toner picked up by charged portions, transferred to paper with
+                            heat/pressure. Often called page printers. Good for graphics. Speed: 4-20 ppm.</li>
+                        <li><strong>Thermal Printer:</strong> Pushes electrically heated pins against special
+                            heat-sensitive paper. Inexpensive. Used in calculators, fax machines. Low-quality print,
+                            paper curls/fades.</li>
+                    </ul>
+                    <div class="diagram-placeholder-img" data-src-placeholder="Fig. 1.7: Ink-jet printer.">Ink-jet
+                        Printer Image</div>
+                </div>
+
+                <div class="device-card">
+                    <h4><i class="fas fa-volume-up device-icon"></i>Speakers</h4>
+                    <p>Used to produce audio output. Computers have sound cards to enable audio output through speakers.
+                        3D audio gives more depth to traditional stereo by placing a device in a room with stereo
+                        speakers; device dynamically analyses sound and sends feedback to sound system.</p>
+                    <div class="diagram-placeholder-img" data-src-placeholder="Fig. 1.9: Sound Card and Speakers.">Sound
+                        Card and Speakers Image</div>
+                </div>
+
+                <div class="device-card">
+                    <h4><i class="fas fa-video-camera device-icon"></i>Projectors</h4>
+                    <!-- Using video-camera as a stand-in for projector icon -->
+                    <p>A device connected to a computer or video device for projecting an image onto a big white screen.
+                        Images are larger than original. Consists of an optic system, light source, and displays.
+                        Classified into three categories:</p>
+                    <ul>
+                        <li>Ultralight portable projectors</li>
+                        <li>Conference room projectors</li>
+                        <li>Fixed installation projectors</li>
+                    </ul>
+                    <p>Initially for films, now for presentations, business organizations, home theatres. Fixed
+                        installation projectors are most expensive, used for projecting in bright light.</p>
+                    <div class="diagram-placeholder-img"
+                        data-src-placeholder="Fig. 5.15 A portable projector showing lens and control buttons.">
+                        Projector Image</div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="navigation-buttons">
+            <a href="topic-3.html" class="nav-button back-prev"><i class="fas fa-arrow-left"></i> Previous Topic</a>
+            <a href="../fundamentals.html" class="nav-button syllabus"><i class="fas fa-list-ul"></i> Back to
+                Syllabus</a>
+            <a href="topic-5.html" class="nav-button next">Next Topic <i class="fas fa-arrow-right"></i></a>
+        </footer>
+    </div>
+
+    <script>
+        // Theme toggle logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        const bodyElement = document.body;
+
+        function setThemeMode(mode) {
+            if (mode === 'light-mode') {
+                htmlElement.classList.add('light-mode'); htmlElement.classList.remove('dark-mode');
+                bodyElement.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light-mode');
+            } else {
+                htmlElement.classList.remove('light-mode'); htmlElement.classList.add('dark-mode');
+                bodyElement.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark-mode');
+            }
+        }
+
+        (function () {
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme) {
+                setThemeMode(currentTheme);
+            } else {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+                    setThemeMode('light-mode');
+                } else {
+                    setThemeMode('dark-mode'); // Default to dark
+                }
+            }
+        })();
+
+        themeToggleBtn.addEventListener('click', function () {
+            if (htmlElement.classList.contains('light-mode')) {
+                setThemeMode('dark-mode');
+            } else {
+                setThemeMode('light-mode');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Placeholder for image loading in actual implementation
+            const diagrams = document.querySelectorAll('.diagram-placeholder, .diagram-placeholder-img');
+            diagrams.forEach(diag => {
+                const placeholderText = diag.dataset.srcPlaceholder || diag.textContent || "Diagram/Image Placeholder";
+                if (diag.tagName === 'IMG') {
+                    diag.alt = placeholderText;
+                    // For actual image, you'd set: diag.src = "path/to/image/" + placeholderText.replace(/Fig\. \d+\.\d+\.?\d* /i, '').replace(/[^a-zA-Z0-9]/g, '_') + ".png";
+                } else {
+                    diag.textContent = placeholderText; // For div placeholders
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

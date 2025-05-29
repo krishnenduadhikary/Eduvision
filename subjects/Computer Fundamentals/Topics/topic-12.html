@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 12: Emerging Technologies - Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            /* Dark Mode (Default) */
+            --bg-color: #121828;
+            --card-bg-color: #1f2937;
+            /* Main section background */
+            --inner-card-bg-color: var(--bg-color);
+            /* For individual elements within sections */
+            --primary-text-color: #e5e7eb;
+            --secondary-text-color: #9ca3af;
+            --accent-color: #6a82fb;
+            --accent-hover-color: #8da2fc;
+            --yellow-accent: #fde047;
+            --border-color: #374151;
+            --futuristic-glow: 0 0 15px rgba(106, 130, 251, 0.3);
+            --futuristic-glow-yellow: 0 0 15px rgba(253, 224, 71, 0.4);
+            --header-gradient-start: var(--card-bg-color);
+            --header-gradient-end: var(--bg-color);
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #5a67d8;
+            --nav-button-syllabus-hover-bg: #4c58bf;
+            --diagram-bg: #2a3547;
+            --table-header-bg: var(--accent-color);
+            --table-row-even-bg: var(--bg-color);
+            --code-bg: #282c34;
+            --code-text-color: #abb2bf;
+            --theme-toggle-bg: #23272f;
+            --theme-toggle-icon: #fde047;
+            --theme-toggle-hover-bg: #374151;
+            --theme-toggle-hover-icon: #fff;
+        }
+
+        html.light-mode {
+            /* Light Mode */
+            --bg-color: #f0f4f8;
+            --card-bg-color: #ffffff;
+            --inner-card-bg-color: var(--bg-color);
+            --primary-text-color: #2c3e50;
+            --secondary-text-color: #52616b;
+            --accent-color: #3498db;
+            --accent-hover-color: #2980b9;
+            --yellow-accent: #f39c12;
+            --border-color: #d1d5db;
+            --futuristic-glow: 0 0 15px rgba(52, 152, 219, 0.2);
+            --futuristic-glow-yellow: 0 0 15px rgba(243, 156, 18, 0.3);
+            --header-gradient-start: #e6e9ed;
+            --header-gradient-end: #f0f4f8;
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #27ae60;
+            --nav-button-syllabus-hover-bg: #229954;
+            --eduvision-logo-color: #2563eb;
+            --eduvision-logo-yellow: #f59e0b;
+            --diagram-bg: #e9ecef;
+            --table-header-bg: var(--accent-color);
+            --table-row-even-bg: #f8f9fa;
+            --code-bg: #f5f2f0;
+            --code-text-color: #383a42;
+            --theme-toggle-bg: #f8f9fa;
+            --theme-toggle-icon: #f39c12;
+            --theme-toggle-hover-bg: #e9ecef;
+            --theme-toggle-hover-icon: #2c3e50;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            font-size: 16px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 80px;
+        }
+
+        /* Logo Styles */
+        .eduvision-logo {
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvision-logo .text-logo-main {
+            color: #fff !important;
+        }
+
+        .eduvision-logo .text-logo-accent {
+            color: #fde047 !important;
+        }
+
+        html.light-mode .eduvision-logo .text-logo-main {
+            color: var(--eduvision-logo-color) !important;
+        }
+
+        html.light-mode .eduvision-logo .text-logo-accent {
+            color: var(--eduvision-logo-yellow) !important;
+        }
+
+        .eduvision-logo .group:hover .text-logo-accent {
+            filter: brightness(1.1);
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Theme Toggle Button */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+            color: var(--theme-toggle-hover-icon);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+        /* Header */
+        .main-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--header-gradient-start), var(--header-gradient-end));
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .topic-badge {
+            display: inline-block;
+            background-color: var(--yellow-accent);
+            color: var(--bg-color);
+            padding: 5px 15px;
+            border-radius: 15px 15px 0 0;
+            font-size: 0.9em;
+            font-weight: bold;
+            font-family: 'Nunito', sans-serif;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-header h1 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 3.0em;
+            font-weight: 900;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: var(--futuristic-glow);
+        }
+
+        .main-header p {
+            font-size: 1.2em;
+            color: var(--secondary-text-color);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Sections & Content Styling */
+        .content-section {
+            background-color: var(--card-bg-color);
+            padding: 30px 40px;
+            margin-bottom: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--accent-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-left-color 0.3s ease;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15), var(--futuristic-glow);
+        }
+
+        .content-section h2 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+
+        .content-section h3 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.6em;
+            color: var(--yellow-accent);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section h4 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.3em;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section h5 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.1em;
+            color: var(--accent-color);
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+
+        .content-section p,
+        .content-section ul {
+            margin-bottom: 15px;
+            color: var(--secondary-text-color);
+            transition: color 0.3s ease;
+        }
+
+        .content-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .content-section ul li::before {
+            content: "\f058";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            top: 3px;
+            font-size: 0.9em;
+            transition: color 0.3s ease;
+        }
+
+        .content-section .sub-section {
+            background-color: var(--inner-card-bg-color);
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .content-section .sub-section ul li::before {
+            content: "\f101";
+            font-size: 0.8em;
+            top: 4px;
+        }
+
+        /* Diagram Placeholder */
+        .diagram-placeholder,
+        .diagram-placeholder-img {
+            background-color: var(--diagram-bg);
+            border: 2px dashed var(--border-color);
+            padding: 15px;
+            margin: 20px auto;
+            text-align: center;
+            color: var(--secondary-text-color);
+            border-radius: 8px;
+            font-style: italic;
+            display: block;
+            max-width: 90%;
+            font-size: 0.9em;
+        }
+
+        .diagram-placeholder-img {
+            height: auto;
+            min-height: 80px;
+            object-fit: contain;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.95em;
+            overflow-x: auto;
+            display: block;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px 12px;
+            text-align: left;
+            vertical-align: top;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .comparison-table th {
+            background-color: var(--table-header-bg);
+            color: var(--button-text-color);
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .comparison-table tr:nth-child(even) td {
+            background-color: var(--table-row-even-bg);
+        }
+
+        @media (max-width: 768px) {
+
+            .comparison-table th,
+            .comparison-table td {
+                white-space: normal;
+            }
+        }
+
+        /* Navigation Buttons */
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: var(--card-bg-color);
+            border-radius: 8px;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-button {
+            color: var(--button-text-color);
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-align: center;
+            flex-grow: 1;
+            min-width: 150px;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-button.back-prev {
+            background-color: var(--secondary-text-color);
+        }
+
+        .nav-button.back-prev:hover {
+            background-color: var(--primary-text-color);
+            filter: brightness(1.2);
+        }
+
+        .nav-button.syllabus {
+            background-color: var(--nav-button-syllabus-bg);
+        }
+
+        .nav-button.syllabus:hover {
+            background-color: var(--nav-button-syllabus-hover-bg);
+        }
+
+        .nav-button.next {
+            background-color: var(--accent-color);
+        }
+
+        .nav-button.next:hover {
+            background-color: var(--accent-hover-color);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .navigation-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .nav-button {
+                width: auto;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-header h1 {
+                font-size: 2.5em;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .content-section h2 {
+                font-size: 1.8em;
+            }
+
+            .topic-badge {
+                font-size: 0.8em;
+                padding: 4px 10px;
+                top: -15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header h1 {
+                font-size: 2.2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../../index.html" class="flex items-center group">
+                <span class="text-logo-main">Edu</span>
+                <svg class="text-logo-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-logo-main">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="main-header">
+            <span class="topic-badge">Topic 12</span>
+            <h1>Emerging Technologies</h1>
+            <p>Exploring the forefront of technological innovation, including Artificial Intelligence, Machine Learning,
+                Internet of Things, and Blockchain, and their real-world impact.</p>
+        </header>
+
+        <section id="intro-emerging-tech" class="content-section">
+            <h2>Emerging Technology</h2>
+            <p>Emerging Technology is a term generally used to describe a new technology. It also refers to the
+                continuing development of an existing technology. The term commonly refers to technologies that are
+                currently developing, or that are expected to be available within the next five to ten years, and is
+                usually reserved for technologies that are creating, or are expected to create, significant social or
+                economic effects.</p>
+            <p>Emerging Technologies are those technical innovations which represent progressive developments within a
+                field for competitive advantage.</p>
+            <h3>Characteristics of Emerging Technologies</h3>
+            <p>The five main characteristics of emerging technologies are as follows:</p>
+            <ul>
+                <li><strong>Radical novelty</strong> – emerging technologies are radically novel, i.e., they fulfil a
+                    given function by using a different basic principle as compared to what was used before to achieve a
+                    similar purpose. Emerging technologies are always new and unique as it keeps changing its
+                    technologies and characteristics.</li>
+                <li><strong>Relatively fast growth</strong> – emerging technologies show relatively fast growth rates
+                    compared to non-emerging technologies. Technologies are developed on daily basis and the growth rate
+                    is at its peak.</li>
+                <li><strong>Coherence</strong> – emerging technologies are consistent in development and progress.</li>
+                <li><strong>Prominent impact</strong>- the impact of emerging technologies in today’s world is immense
+                    and prominent. World without technologies are nowhere imaginable in the present world.</li>
+                <li><strong>Uncertainty</strong> – emerging technologies are characterised by uncertainty in their
+                    possible outcomes and uses which may be unintended and undesirable.</li>
+            </ul>
+        </section>
+
+        <section id="ai" class="content-section">
+            <h2>Artificial Intelligence (AI)</h2>
+            <p>Artificial Intelligence is not a new word and not a new technology for researchers. The word Artificial
+                Intelligence was first adopted by American Computer scientist John McCarthy at the Dartmouth Conference.
+                AI was coined as an academic field for the first time. The father of AI is Alan Turing.</p>
+            <p>Artificial Intelligence is a wide ranging branch of computer science or science and engineering concerned
+                with building smart machines capable of performing tasks that typically require human intelligence such
+                as visual perception, speech recognition, decision-making, and translation between languages. It is a
+                branch of computer science that aims to develop intelligent com machines.</p>
+            <p>AI refers to computer software that engages in human like activities, such as learning, planning, and
+                problem-solving. AI underpins most of what is going to happen in our new world. A working understanding
+                of AI is critical for just about every career because machines can learn and make decisions much quicker
+                and more accurately than humans. There are many types of AI, where instead of being programmed what to
+                think, machines can observe, analyses and learn from data and mistakes just like our human brains do.
+            </p>
+            <p>AI makes every process better, faster and more accurate. It has some very crucial applications as well,
+                such as identifying and predicting fraudulent transactions, faster and accurate credit scoring,
+                automating manually intense data management practices.</p>
+
+            <h3>Goals of Artificial Intelligence</h3>
+            <ul>
+                <li>Replicate or reproduce human intelligence.</li>
+                <li>Solve knowledge intensive tasks.</li>
+                <li>Allow continuous learning.</li>
+                <li>Encourage social intelligence.</li>
+                <li>Promote creativity.</li>
+                <li>An intelligent connection of perception and action.</li>
+                <li>Building a machine which can perform tasks that requires human intelligence such as: Playing chess,
+                    Plan surgical operation, Driving a car in traffic, Proving a theorem.</li>
+                <li>Creating systems which can exhibit intelligent behaviour, learn new things by itself, demonstrate,
+                    explain and can advise to its user.</li>
+            </ul>
+
+            <h3>Scope of Artificial Intelligence</h3>
+            <p>Artificial Intelligence has undergone a fast growth in the recent years. Artificial Intelligence has
+                immense potential to change each sector of the economy for the benefit of society. The ultimate goal of
+                AI is to make the computer programs that can solve the problems and achieve goals in the world, as well
+                as humans.</p>
+            <ol>
+                <li><strong>AI in Data Analysis:</strong> Perceive patterns in data, process large volumes easily.</li>
+                <li><strong>AI in Cyber Security:</strong> Help organizations get rid of cyber issues.</li>
+                <li><strong>AI in Science and Research:</strong> Handle large quantities of data and process it quicker
+                    than human minds.</li>
+                <li><strong>AI in Transport:</strong> Self-driving cars gaining popularity, autopilot in airplanes.</li>
+                <li><strong>AI in Healthcare:</strong> Advanced equipment, collaborative cancer cloud for better
+                    diagnosis.</li>
+            </ol>
+
+            <h3>Types of Artificial Intelligence</h3>
+            <div class="diagram-placeholder-img"
+                data-src-placeholder="Diagram: Types of AI (Type 1: Capabilities - Narrow, General, Strong/Super; Type 2: Functionality - Reactive, Limited Memory, Theory of Mind, Self Awareness).">
+                AI Types Diagram</div>
+            <div class="sub-section">
+                <h4>Type 1 AI- Based on Capabilities</h4>
+                <ul>
+                    <li><strong>Narrow AI (Weak AI):</strong> Performs only a single task within a limited, pre-defined
+                        set of parameters. Examples: Apple's Siri, Netflix, E-commerce sites.</li>
+                    <li><strong>General AI:</strong> AI version that performs any intellectual task with human-like
+                        efficiency. Still under research.</li>
+                    <li><strong>Strong AI (Super AI):</strong> AI version that surpasses human intelligence and can
+                        perform any task better than a human. Still world-changing task.</li>
+                </ul>
+            </div>
+            <div class="sub-section">
+                <h4>Type 2 AI- Based on Functionality</h4>
+                <ul>
+                    <li><strong>Reactive Machines:</strong> Basic AI, do not store past experiences for future actions.
+                        React to current scenarios. Example: IBM's Deep Blue.</li>
+                    <li><strong>Limited Memory Machines:</strong> Can store and use past experiences or data for a short
+                        period. Example: Self-driving cars.</li>
+                    <li><strong>Theory of Mind:</strong> AI that can understand human emotions and beliefs and socially
+                        interact like humans. Not yet developed.</li>
+                    <li><strong>Self Awareness:</strong> Super intelligent machines with consciousness, sentiments,
+                        emotions and beliefs. Still a distant reality.</li>
+                </ul>
+            </div>
+
+            <h3>Applications of Artificial Intelligence</h3>
+            <p>AI is making our daily life more comfortable and fast.</p>
+            <ol>
+                <li><strong>AI in Astronomy:</strong> Solve complex universe problems.</li>
+                <li><strong>AI in Healthcare:</strong> Better and faster diagnosis, help doctors.</li>
+                <li><strong>AI in Gaming:</strong> Strategic games like chess.</li>
+                <li><strong>AI in Finance:</strong> Automation, chatbot, adaptive intelligence, algorithm trading,
+                    machine learning in financial processes.</li>
+                <li><strong>AI in Data Security:</strong> Make data more safe and secure. Example: AEG bot, Ai2
+                    Platform.</li>
+                <li><strong>AI in Social Media:</strong> Organize and manage massive amounts of data, identify trends.
+                </li>
+                <li><strong>AI in Travel and Transport:</strong> Suggesting hotels, flights, best routes. AI-powered
+                    chatbots.</li>
+                <li><strong>AI in Automotive Industry:</strong> Virtual assistants (Tesla Bot), self-driven cars.</li>
+                <li><strong>AI in Robotics:</strong> Intelligent robots for tasks without pre-programming. Humanoid
+                    robots (Erica, Sophia).</li>
+                <li><strong>AI in Entertainment:</strong> AI based applications like Netflix or Amazon showing
+                    recommendations.</li>
+                <li><strong>AI in Agriculture:</strong> Robotics, solid and crop monitoring, predictive analysis.</li>
+                <li><strong>AI in E-commerce:</strong> Helping shoppers discover products with recommended size, colour,
+                    or brand.</li>
+                <li><strong>AI in Education:</strong> Automate grading, AI chatbot as teaching assistant, personal
+                    virtual tutor.</li>
+            </ol>
+
+            <h3>Advantages of Artificial Intelligence</h3>
+            <ul>
+                <li>Reduction in human error</li>
+                <li>Reduce the risk (zero risk)</li>
+                <li>24/7 support</li>
+                <li>Perform repetitive job</li>
+                <li>Faster decision</li>
+                <li>New Inventions</li>
+                <li>Digital assistance</li>
+            </ul>
+            <h3>Disadvantages of Artificial Intelligence</h3>
+            <ul>
+                <li>High Costs</li>
+                <li>No Creativity</li>
+                <li>Unemployment</li>
+                <li>Make humans lazy</li>
+                <li>No ethics</li>
+                <li>Emotionless</li>
+            </ul>
+        </section>
+
+        <section id="ml" class="content-section">
+            <h2>Machine Learning (ML)</h2>
+            <p>Machine learning is a branch of the broader field of artificial intelligence that makes use of
+                statistical models to develop predictions. Machine learning is a part of AI which provides intelligence
+                to machines with the ability to automatically learn with experiences without being explicitly
+                programmed. It is based on the idea that machines can learn from past data, identify patterns, and make
+                decisions using algorithms. It does not require specific programming to carry out an activity. The
+                primary objective of ML is to allow the system to learn automatically without human intervention.</p>
+            <h3>Types of Machine Learning</h3>
+            <p>There are three main approaches to ML. They are as follows, (plus Reinforcement Learning):</p>
+            <ol>
+                <li>Supervised Learning</li>
+                <li>Unsupervised Learning</li>
+                <li>Semi-Supervised Learning</li>
+                <li>Reinforcement Learning</li>
+            </ol>
+            <div class="sub-section">
+                <h4>Supervised Learning</h4>
+                <p>Based on supervision. Machines are trained using labelled dataset. The machine predicts the output
+                    based on the training. Example: Classifying shapes.</p>
+                <div class="diagram-placeholder-img"
+                    data-src-placeholder="Diagram: Supervised Learning (Labeled Data -> Model Training -> Prediction -> Test Data -> Output Square/Triangle).">
+                    Supervised Learning Diagram</div>
+            </div>
+            <div class="sub-section">
+                <h4>Unsupervised Learning</h4>
+                <p>No need for supervision. Machine trained using unlabelled dataset. Machine predicts output without
+                    supervision, finding hidden patterns. Example: Grouping cats and dogs from raw images.</p>
+                <div class="diagram-placeholder-img"
+                    data-src-placeholder="Diagram: Unsupervised Learning (Input Raw Data (cats/dogs) -> Algorithm (Interpretation, Processing) -> Output (Grouped Dogs, Grouped Cats)).">
+                    Unsupervised Learning Diagram</div>
+            </div>
+            <div class="sub-section">
+                <h4>Semi-Supervised Learning</h4>
+                <p>Falls between supervised and unsupervised. Uses both labelled (small amount) and unlabelled data
+                    (large amount).</p>
+            </div>
+            <div class="sub-section">
+                <h4>Reinforcement Learning (RL)</h4>
+                <p>Science of decision making. Learning optimal behaviour in an environment to obtain maximum reward.
+                    Uses trial-and-error. Input: initial state. Output: many possibilities, model returns state and user
+                    decides to reward/punish. Model learns based on maximum reward.</p>
+            </div>
+
+            <h3>Applications of Machine Learning</h3>
+            <ol>
+                <li><strong>Image Recognition:</strong> Identify digital images, objects, persons, places, etc.
+                    Automatic friend tagging.</li>
+                <li><strong>Speech Recognition:</strong> Converting voice instructions into text ("Speech to Text").
+                    Google Assistant, Siri, Alexa.</li>
+                <li><strong>Traffic Prediction:</strong> Google maps showing shortest route and predicting traffic.</li>
+                <li><strong>Product Recommendations:</strong> Used by e-commerce (Amazon, Flipkart) and entertainment
+                    (Netflix) companies.</li>
+                <li><strong>Self driving cars:</strong> Tesla using unsupervised learning to detect people/objects.</li>
+                <li><strong>Email Spam and Malware filtering:</strong> Filtering important mails, spam mails.</li>
+                <li><strong>Virtual Personal Assistant:</strong> Google Assistant, Alexa, Siri.</li>
+                <li><strong>Online Fraud Detection:</strong> Making online transactions safe and secure.</li>
+                <li><strong>Stock Market Trading:</strong> Widely used. Long short-term neutral network for prediction.
+                </li>
+                <li><strong>Medical Diagnosis:</strong> Used for diseases diagnoses. 3D models for tumour prediction.
+                </li>
+                <li><strong>Automatic Language Translation:</strong> Converting text into our known language. Google's
+                    GNMT.</li>
+            </ol>
+        </section>
+
+        <section id="iot" class="content-section">
+            <h2>Internet of Things (IoT)</h2>
+            <h3>Introduction</h3>
+            <p>Today the internet has become universal, has touched almost every corner of the globe. It is affecting
+                human life in unimaginable ways. The IoT refers to a new kind of world where almost all the devices and
+                appliances are connected to a web.</p>
+            <h3>Meaning</h3>
+            <p>The internet of things describe the network of physical objects—“things”—that are embedded with sensors,
+                software and other technology for the purpose of connecting and exchange data with other devices and
+                systems over the internet. In other words, Internet of Thing (IoT) is a global technology that creates a
+                global network of machines and devices that are capable of communicating and exchanging data with each
+                other through the Internet.</p>
+            <h4>Need:</h4>
+            <p>IoT wants to connect all potential objects to interact each other on the internet to provide secure,
+                comfort life for human.</p>
+            <h4>Examples of Internet of Things:</h4>
+            <ul>
+                <li>Connected appliances</li>
+                <li>Smartphone security systems</li>
+                <li>Autonomous farming equipment</li>
+                <li>Wearable health monitors</li>
+                <li>Smart factory equipment</li>
+                <li>Wireless inventory trackers</li>
+                <li>Ultra high speed wireless internet</li>
+                <li>Biometric cyber security scanners</li>
+            </ul>
+            <h4>IoT - Internet of Thing / IIoT - Industrial Internet of Thing</h4>
+            <h4>What are the benefits of IoT to organizations?</h4>
+            <ul>
+                <li>Monitor their overall business processes</li>
+                <li>Improve the customer experience</li>
+                <li>Save time and money</li>
+                <li>Enhance employee productivity</li>
+                <li>Integrate and adapt business models</li>
+                <li>Make better business decisions</li>
+                <li>Generate more revenue.</li>
+            </ul>
+
+            <h3>Uses/Applications of IoT are:</h3>
+            <ul>
+                <li><strong>Smart phone:</strong> Revolutionary ladder of success in residential space.</li>
+                <li><strong>Wearables:</strong> Explosive demand, devices collect data and information about users.</li>
+                <li><strong>Connected cars:</strong> Optimising vehicles internal functions and enhancing in car
+                    experience.</li>
+                <li><strong>Industrial Internet:</strong> Empowering industrial engineering with sensor software and Big
+                    Data analytics.</li>
+                <li><strong>Smart cities:</strong> IoT engineering curiosity among world’s population (survivalence,
+                    automatic transportation, smarter energy etc.).</li>
+                <li><strong>IoT in agriculture:</strong> Helping farmers use advance techniques and research to increase
+                    food production.</li>
+                <li><strong>Smart Retail:</strong> Way for retailers to remain connected with consumers.</li>
+                <li><strong>Retail Engagement:</strong> Smart grids collecting data for automated fashion, analyse
+                    behaviour.</li>
+                <li><strong>IoT in health care:</strong> Smart medical devices for well being.</li>
+                <li><strong>IoT in poultry & farming:</strong> Livestock monitoring, animal husbandry, cost saving.</li>
+            </ul>
+
+            <h3>Characteristics of IoT:</h3>
+            <ul>
+                <li>Connectivity</li>
+                <li>Things</li>
+                <li>Data</li>
+                <li>Communication</li>
+                <li>Intelligence</li>
+                <li>Action</li>
+                <li>Ecosystem</li>
+            </ul>
+
+            <h3>Uses of IoT in BANKING:</h3>
+            <ul>
+                <li>Improved financial practices for customers.</li>
+                <li>Enhanced banking experience</li>
+                <li>Expanded range of service beyond banking</li>
+                <li>Efficient branch banking</li>
+                <li>Improve credit card experience</li>
+            </ul>
+
+            <h3>Industrial Internet of Things (IIoT)</h3>
+            <p>IIoT is part of bigger IoT system which focuses on devices and objects used in business environment. It
+                is the IoT technology in industrial settings. It refers to the interconnected sensors, controllers and
+                other devices networked together in an industrial setting. It allows for data collection, exchange and
+                analysis of different data sources.</p>
+            <h4>Purpose of Industrial IoT:</h4>
+            <ul>
+                <li>IIOT is the application of connected smart devices to monitor, automate & predict all kinds of
+                    industrial processes & outcomes.</li>
+                <li>It focus is on industrial application such as manufacturing , power plants, oil and gas etc.</li>
+                <li>It uses more sensitive and precise sensors.</li>
+                <li>It deals with large scale networks.</li>
+                <li>It can be programmed remotely that is offers remote on-site program.</li>
+                <li>It handles data ranging from medium to high.</li>
+                <li>It requires robust security to protect the data.</li>
+                <li>It needs stringent requirements.</li>
+                <li>It is having very longlife cycles.</li>
+                <li>It has high-reliability.</li>
+            </ul>
+            <h4>Difference between IIoT & IoT:</h4>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>IIoT</th>
+                        <th>IoT</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>It focuses on industrial applications such as manufacturing, power plants, oil and gas etc
+                        </td>
+                        <td>It focus is on general applications ranging from wearables to robots and machines.</td>
+                    </tr>
+                    <tr>
+                        <td>It uses critical equipment and devices connected over and network which will cause a life
+                            threatening or other emergency situations on failure there for uses more sensitive and
+                            precise sensors.</td>
+                        <td>It’s implementation starts with small scale level so there is no need to worry about life
+                            threatening situations.</td>
+                    </tr>
+                    <tr>
+                        <td>It deals with large scale networks</td>
+                        <td>It deals with small scale networks.</td>
+                    </tr>
+                    <tr>
+                        <td>It can be programmed remotely that is offers remote on- site programming.</td>
+                        <td>It offers easy off-site programming</td>
+                    </tr>
+                    <tr>
+                        <td>It handles data ranging from medium to high</td>
+                        <td>It handles very high volume of data.</td>
+                    </tr>
+                    <tr>
+                        <td>It requires robust security to protect the data</td>
+                        <td>It requires identity and privacy</td>
+                    </tr>
+                    <tr>
+                        <td>It needs stringent requirements</td>
+                        <td>It needs moderate requirements</td>
+                    </tr>
+                    <tr>
+                        <td>It is having very long life cycle</td>
+                        <td>It is having short product life cycle</td>
+                    </tr>
+                    <tr>
+                        <td>It has high reliability</td>
+                        <td>It is less reliable</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="blockchain" class="content-section">
+            <h2>Blockchain</h2>
+            <p>A Blockchain is based on distributed ledger technology (DLT) that stores transactions in “blocks” and
+                then links and sequences the transactions using cryptography. Distributed Technologies enable real-time
+                access to immutable data from any network node. Blockchain is a peer-to-peer network with redundant
+                blocks and consensus processes to prevent tampering. In a blockchain, every transaction is traceable,
+                and instead of rather than one-to-one interactions, peer-to-peer interactions are established.</p>
+            <p>Blockchain technology involves cryptographically signed, immutable transactional records shared by all
+                participants in a network using distributed ledger technology with shared control. Banks are exploring
+                and implementing blockchain to address the increased need to secure and manage transactions across the
+                Internet. Blockchain technology can be used in banking activities like secure document management,
+                reporting, payments, treasury & securities, and trade finance.</p>
+            <p>Blockchain is a distributed database that allows the stakeholders to record and verify transactions
+                without the need for a central authority. It uses advanced cryptographic techniques to ensure the
+                security and integrity of the data stored on the blockchain.</p>
+
+            <h3>8.5.1 Transaction flow in a Blockchain</h3>
+            <p>In a blockchain, a transaction is a record of an exchange of value between two parties. When a
+                transaction is initiated, it is broadcast to the network, which is verified by multiple nodes
+                (computers) to ensure that the sender has the necessary funds and that the transaction is valid. Once
+                the transaction is verified, it is added to a block, a collection of transactions that the network has
+                recently verified. The block is then added to the chain of blocks that make up the blockchain, a
+                decentralized and distributed database that is stored on multiple computers (nodes) around the world.
+            </p>
+            <p>In the context of cryptocurrency, “mining” refers to the process of solving complex mathematical problems
+                to validate transactions on a blockchain network. Miners use special software to solve these problems,
+                and when they successfully validate a transaction, they are paid a reward in terms of cryptocurrency.
+                The process of mining helps to secure the blockchain network by ensuring that transactions are valid and
+                can’t be tampered with. It also serves as a way to introduce new units of cryptocurrency into
+                circulation. As miners compete to solve the mathematical problems and validate transactions, the
+                difficulty of the problems increases to ensure that the rate at which new blocks are added to the
+                blockchain remains constant. This process is known as “mining difficulty.”</p>
+            <div class="diagram-placeholder-img"
+                data-src-placeholder="Figure 8.3: Transaction Flow in a Blockchain (diagram showing steps from initiation to completion and block addition).">
+                Blockchain Transaction Flow Diagram</div>
+            <p>Once a block has been added to the blockchain, its transactions are considered complete and irreversible,
+                ensuring the integrity and security of the blockchain, as it is extremely difficult for a transaction to
+                be altered or removed once it has been added to the chain.</p>
+
+            <h3>8.5.2 Consensus mechanisms in a Blockchain</h3>
+            <p>A consensus mechanism is a process to achieve agreement among the nodes in a blockchain network. It is
+                used to ensure that all nodes in the network have a copy of the same database and to prevent
+                unauthorized changes to the database. The goal of a consensus mechanism is to achieve distributed
+                consensus, which is the agreement of all nodes on the network about the current state of the blockchain.
+            </p>
+            <ul>
+                <li><strong>Proof of Work (PoW):</strong> Miners use computing power to solve complex mathematical
+                    problems. First to solve adds block, gets reward (e.g., Bitcoin).</li>
+                <li><strong>Proof of Stake (PoS):</strong> Creator of new block chosen based on stake (how many coins
+                    they hold). More energy efficient.</li>
+            </ul>
+
+            <h3>8.5.3 Cryptocurrency</h3>
+            <p>A digital or virtual currency using cryptography for secure financial transactions. Decentralized systems
+                using DLT (like blockchain) to maintain a secure and transparent record. No single entity controls them.
+                Examples: Bitcoin, Ethereum, Litecoin, XRP, Monero.</p>
+            <h4>Blockchain vs Cryptocurrencies</h4>
+            <p>Blockchain technology is used to create and maintain a permanent, public, transparent ledger of
+                cryptocurrency transactions. Cryptocurrencies are digital assets built on top of the blockchain.</p>
+
+            <h3>8.5.4 Uses of Blockchain in Banking</h3>
+            <ul>
+                <li>Cross-border payments</li>
+                <li>Trade finance</li>
+                <li>Identity verification</li>
+                <li>Loan origination</li>
+                <li>Asset custody</li>
+            </ul>
+        </section>
+
+
+        <footer class="navigation-buttons">
+            <a href="topic-11.html" class="nav-button back-prev"><i class="fas fa-arrow-left"></i> Previous Topic</a>
+            <a href="../fundamentals.html" class="nav-button syllabus"><i class="fas fa-list-ul"></i> Back to
+                Syllabus</a>
+            <a href="topic-13.html" class="nav-button next">Next Topic <i class="fas fa-arrow-right"></i></a>
+        </footer>
+
+    </div>
+
+    <script>
+        // Theme toggle logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        const bodyElement = document.body;
+
+        function setThemeMode(mode) {
+            if (mode === 'light-mode') {
+                htmlElement.classList.add('light-mode'); htmlElement.classList.remove('dark-mode');
+                bodyElement.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light-mode');
+            } else {
+                htmlElement.classList.remove('light-mode'); htmlElement.classList.add('dark-mode');
+                bodyElement.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark-mode');
+            }
+        }
+
+        (function () {
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme) { setThemeMode(currentTheme); }
+            else {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) { setThemeMode('light-mode'); }
+                else { setThemeMode('dark-mode'); }
+            }
+        })();
+
+        themeToggleBtn.addEventListener('click', function () {
+            if (htmlElement.classList.contains('light-mode')) { setThemeMode('dark-mode'); }
+            else { setThemeMode('light-mode'); }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const diagrams = document.querySelectorAll('.diagram-placeholder, .diagram-placeholder-img');
+            diagrams.forEach(diag => {
+                const placeholderText = diag.dataset.srcPlaceholder || diag.textContent || "Diagram/Image Placeholder";
+                if (diag.tagName === 'IMG') { diag.alt = placeholderText; }
+                else { diag.textContent = placeholderText; }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

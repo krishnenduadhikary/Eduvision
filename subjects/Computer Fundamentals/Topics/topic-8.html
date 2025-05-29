@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 8: Operating Systems Basics - Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            /* Dark Mode (Default) */
+            --bg-color: #121828;
+            --card-bg-color: #1f2937;
+            /* Main section background */
+            --inner-card-bg-color: var(--bg-color);
+            /* For individual elements within sections */
+            --primary-text-color: #e5e7eb;
+            --secondary-text-color: #9ca3af;
+            --accent-color: #6a82fb;
+            --accent-hover-color: #8da2fc;
+            --yellow-accent: #fde047;
+            --border-color: #374151;
+            --futuristic-glow: 0 0 15px rgba(106, 130, 251, 0.3);
+            --futuristic-glow-yellow: 0 0 15px rgba(253, 224, 71, 0.4);
+            --header-gradient-start: var(--card-bg-color);
+            --header-gradient-end: var(--bg-color);
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #5a67d8;
+            --nav-button-syllabus-hover-bg: #4c58bf;
+            --diagram-bg: #2a3547;
+            --table-header-bg: var(--accent-color);
+            --table-row-even-bg: var(--bg-color);
+            --code-bg: #282c34;
+            --code-text-color: #abb2bf;
+            --theme-toggle-bg: #23272f;
+            --theme-toggle-icon: #fde047;
+            --theme-toggle-hover-bg: #374151;
+            --theme-toggle-hover-icon: #fff;
+        }
+
+        html.light-mode {
+            /* Light Mode */
+            --bg-color: #f0f4f8;
+            --card-bg-color: #ffffff;
+            --inner-card-bg-color: var(--bg-color);
+            --primary-text-color: #2c3e50;
+            --secondary-text-color: #52616b;
+            --accent-color: #3498db;
+            --accent-hover-color: #2980b9;
+            --yellow-accent: #f39c12;
+            --border-color: #d1d5db;
+            --futuristic-glow: 0 0 15px rgba(52, 152, 219, 0.2);
+            --futuristic-glow-yellow: 0 0 15px rgba(243, 156, 18, 0.3);
+            --header-gradient-start: #e6e9ed;
+            --header-gradient-end: #f0f4f8;
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #27ae60;
+            --nav-button-syllabus-hover-bg: #229954;
+            --eduvision-logo-color: #2563eb;
+            --eduvision-logo-yellow: #f59e0b;
+            --diagram-bg: #e9ecef;
+            --table-header-bg: var(--accent-color);
+            --table-row-even-bg: #f8f9fa;
+            --code-bg: #f5f2f0;
+            --code-text-color: #383a42;
+            --theme-toggle-bg: #f8f9fa;
+            --theme-toggle-icon: #f39c12;
+            --theme-toggle-hover-bg: #e9ecef;
+            --theme-toggle-hover-icon: #2c3e50;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            font-size: 16px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 80px;
+        }
+
+        /* Logo Styles */
+        .eduvision-logo {
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvision-logo .text-logo-main {
+            color: #fff !important;
+        }
+
+        .eduvision-logo .text-logo-accent {
+            color: #fde047 !important;
+        }
+
+        html.light-mode .eduvision-logo .text-logo-main {
+            color: var(--eduvision-logo-color) !important;
+        }
+
+        html.light-mode .eduvision-logo .text-logo-accent {
+            color: var(--eduvision-logo-yellow) !important;
+        }
+
+        .eduvision-logo .group:hover .text-logo-accent {
+            filter: brightness(1.1);
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Theme Toggle Button */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+            color: var(--theme-toggle-hover-icon);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+        /* Header */
+        .main-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--header-gradient-start), var(--header-gradient-end));
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .topic-badge {
+            display: inline-block;
+            background-color: var(--yellow-accent);
+            color: var(--bg-color);
+            padding: 5px 15px;
+            border-radius: 15px 15px 0 0;
+            font-size: 0.9em;
+            font-weight: bold;
+            font-family: 'Nunito', sans-serif;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-header h1 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 3.0em;
+            font-weight: 900;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: var(--futuristic-glow);
+        }
+
+        .main-header p {
+            font-size: 1.2em;
+            color: var(--secondary-text-color);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Sections & Content Styling */
+        .content-section {
+            background-color: var(--card-bg-color);
+            padding: 30px 40px;
+            margin-bottom: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--accent-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-left-color 0.3s ease;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15), var(--futuristic-glow);
+        }
+
+        .content-section h2 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+
+        .content-section h3 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.6em;
+            color: var(--yellow-accent);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section h4 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.3em;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section h5 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.1em;
+            color: var(--accent-color);
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+
+        .content-section p,
+        .content-section ul {
+            margin-bottom: 15px;
+            color: var(--secondary-text-color);
+            transition: color 0.3s ease;
+        }
+
+        .content-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .content-section ul li::before {
+            content: "\f058";
+            /* Font Awesome check-circle, or \f105 for angle-right */
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            top: 3px;
+            font-size: 0.9em;
+            transition: color 0.3s ease;
+        }
+
+        .content-section .sub-section {
+            background-color: var(--inner-card-bg-color);
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .content-section .sub-section ul li::before {
+            content: "\f101";
+            font-size: 0.8em;
+            top: 4px;
+        }
+
+        /* Different icon for nested lists */
+
+        /* Diagram Placeholder */
+        .diagram-placeholder,
+        .diagram-placeholder-img {
+            background-color: var(--diagram-bg);
+            border: 2px dashed var(--border-color);
+            padding: 15px;
+            margin: 20px auto;
+            text-align: center;
+            color: var(--secondary-text-color);
+            border-radius: 8px;
+            font-style: italic;
+            display: block;
+            max-width: 90%;
+            font-size: 0.9em;
+        }
+
+        .diagram-placeholder-img {
+            height: auto;
+            min-height: 80px;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.95em;
+            overflow-x: auto;
+            display: block;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px 12px;
+            text-align: left;
+            vertical-align: top;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .comparison-table th {
+            background-color: var(--table-header-bg);
+            color: var(--button-text-color);
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .comparison-table tr:nth-child(even) td {
+            background-color: var(--table-row-even-bg);
+        }
+
+        @media (max-width: 768px) {
+
+            .comparison-table th,
+            .comparison-table td {
+                white-space: normal;
+            }
+        }
+
+        /* Navigation Buttons */
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: var(--card-bg-color);
+            border-radius: 8px;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-button {
+            color: var(--button-text-color);
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-align: center;
+            flex-grow: 1;
+            min-width: 150px;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-button.back-prev {
+            background-color: var(--secondary-text-color);
+        }
+
+        .nav-button.back-prev:hover {
+            background-color: var(--primary-text-color);
+            filter: brightness(1.2);
+        }
+
+        .nav-button.syllabus {
+            background-color: var(--nav-button-syllabus-bg);
+        }
+
+        .nav-button.syllabus:hover {
+            background-color: var(--nav-button-syllabus-hover-bg);
+        }
+
+        .nav-button.next {
+            background-color: var(--accent-color);
+        }
+
+        .nav-button.next:hover {
+            background-color: var(--accent-hover-color);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .navigation-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .nav-button {
+                width: auto;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-header h1 {
+                font-size: 2.5em;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .content-section h2 {
+                font-size: 1.8em;
+            }
+
+            .topic-badge {
+                font-size: 0.8em;
+                padding: 4px 10px;
+                top: -15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header h1 {
+                font-size: 2.2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../../index.html" class="flex items-center group">
+                <span class="text-logo-main">Edu</span>
+                <svg class="text-logo-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-logo-main">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="main-header">
+            <span class="topic-badge">Topic 8</span>
+            <h1>Operating Systems Basics</h1>
+            <p>Exploring the fundamental concepts of Operating Systems, their crucial functions, different types,
+                popular examples, and how they manage file systems.</p>
+        </header>
+
+        <section id="what-is-os" class="content-section">
+            <h2>What is an Operating System?</h2>
+            <p>An operating system (OS) is system software that manages computer hardware, software resources, and
+                provides common services for computer programs. Operating systems are found on many devices that contain
+                a computer – from cellular phones and video game consoles to web servers and supercomputers. It is
+                software that controls the operation of a computer and directs the processing of programs (as by
+                assigning storage space in memory and controlling input and output functions). An operating system is a
+                big piece of software that acts as an interface between the user and the computer hardware, which does
+                multiple functions.</p>
+            <div class="diagram-placeholder-img"
+                data-src-placeholder="Diagram: OS interaction layer (Users -> System & Application Programs -> Operating System -> Computer Hardware)">
+                OS Interaction Layer Diagram</div>
+        </section>
+
+        <section id="functions-os" class="content-section">
+            <h2>Functions of Operating System</h2>
+            <ul>
+                <li><strong>Process Management:</strong>
+                    <div class="sub-section">
+                        <p>A process is a program in execution. It needs resources like CPU time, memory, files, and I/O
+                            devices. The OS is responsible for:</p>
+                        <ul>
+                            <li>Process creation and deletion.</li>
+                            <li>Process suspension and resumption.</li>
+                            <li>Provision of mechanisms for: process synchronization, process communication.</li>
+                        </ul>
+                    </div>
+                </li>
+                <li><strong>Main-Memory Management:</strong>
+                    <div class="sub-section">
+                        <p>Memory is a large array of words or bytes, each with its own address. Main memory is
+                            volatile. The OS is responsible for:</p>
+                        <ul>
+                            <li>Keeping track of which parts of memory are currently being used and by whom.</li>
+                            <li>Deciding which processes to load when memory space becomes available.</li>
+                            <li>Allocating and de-allocating memory space as needed.</li>
+                        </ul>
+                    </div>
+                </li>
+                <li><strong>File Management:</strong>
+                    <div class="sub-section">
+                        <p>A file is a collection of related information. The OS is responsible for:</p>
+                        <ul>
+                            <li>File creation and deletion.</li>
+                            <li>Directory creation and deletion.</li>
+                            <li>Support of primitives for manipulating files and directories.</li>
+                            <li>Mapping files onto secondary storage.</li>
+                            <li>File backup on stable (nonvolatile) storage media.</li>
+                        </ul>
+                    </div>
+                </li>
+                <li><strong>I/O System Management:</strong>
+                    <div class="sub-section">
+                        <p>The I/O system consists of:</p>
+                        <ul>
+                            <li>A buffer-caching system.</li>
+                            <li>A general device-driver interface.</li>
+                            <li>Drivers for specific hardware devices.</li>
+                        </ul>
+                    </div>
+                </li>
+                <li><strong>Secondary-Storage Management:</strong>
+                    <div class="sub-section">
+                        <p>Since main memory is volatile and too small, the OS manages secondary storage (e.g., disks)
+                            for backup. The OS is responsible for:</p>
+                        <ul>
+                            <li>Free space management.</li>
+                            <li>Storage allocation.</li>
+                            <li>Disk scheduling.</li>
+                        </ul>
+                    </div>
+                </li>
+                <li><strong>Protection System:</strong>
+                    <div class="sub-section">
+                        <p>Protection refers to a mechanism for controlling access by programs, processes, or users to
+                            both system and user resources. The protection mechanism must:</p>
+                        <ul>
+                            <li>Distinguish between authorized and unauthorized usage.</li>
+                            <li>Specify the controls to be imposed.</li>
+                            <li>Provide a means of enforcement.</li>
+                        </ul>
+                    </div>
+                </li>
+                <li><strong>Command-Interpreter System:</strong>
+                    <div class="sub-section">
+                        <p>Many commands are given to the OS by control statements dealing with process creation, I/O
+                            handling, memory management, file access, protection, networking. The program that reads and
+                            interprets these is called a command-line interpreter or shell (in UNIX).</p>
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <section id="types-os" class="content-section">
+            <h2>Types of Operating Systems</h2>
+            <div class="sub-section">
+                <h3>Single-User Operating System</h3>
+                <p>Designed for use on a single computer by one user at a time. Common for home computers and some
+                    office environments. Can connect to a network but is only ever used by one person directly.</p>
+                <div class="diagram-placeholder-img"
+                    data-src-placeholder="Fig) Example of Single-User Operating System (User 1 <-> System)">Single-User
+                    OS Diagram</div>
+                <h4>Types of Single-User OS:</h4>
+                <ul>
+                    <li><strong>a. Single user/single tasking:</strong> Can run only one program at a time. Used on
+                        simpler devices or older systems like MS-DOS, Palm OS.</li>
+                    <li><strong>b. Single user/multi-tasking:</strong> Can run multiple applications simultaneously for
+                        one user. Examples include Microsoft Windows and macOS.</li>
+                </ul>
+            </div>
+
+            <div class="sub-section">
+                <h3>Multiuser Operating System</h3>
+                <p>Allows many different users to take advantage of the computer's resources simultaneously. Ensures
+                    that the requirements of various users are balanced, and each user has sufficient resources. Can
+                    serve multiple end-users at the same point in time, managing hardware resources so one user's task
+                    doesn't affect another's.</p>
+                <div class="diagram-placeholder-img"
+                    data-src-placeholder="Diagram: Multi-user OS (Server connected to User 1, User 2, User 3, User 4, User 5 workstations)">
+                    Multi-User OS Diagram</div>
+                <h4>Types of Multi-User Operating System:</h4>
+                <ul>
+                    <li><strong>Distributed System:</strong> Multiple components on different computers interact and
+                        coordinate as a single coherent system. Spreads load over multiple servers. Example: Electronic
+                        banking, Mobile Apps on Distributed OS.</li>
+                    <li><strong>Time-sliced System:</strong> Each user task is allocated a short span of CPU time (time
+                        slice). A scheduler identifies and executes tasks based on priority. Users take turns, and the
+                        OS handles requests. Example: Mainframe.</li>
+                    <li><strong>Multi-processor System:</strong> (Covered in more detail below)</li>
+                </ul>
+                <h4>Examples of Multiuser operating system:</h4>
+                <p>Linux, Windows (Server editions), IBM AS400, Ubuntu, macOS (Server), Unix.</p>
+            </div>
+
+            <div class="sub-section">
+                <h4>Comparison: Single User vs. Multi User Operating System</h4>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Single User Operating System</th>
+                            <th>Multi User Operating System</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Only one user can access the computer at the same time.</td>
+                            <td>More than one user can access a computer at the same time.</td>
+                        </tr>
+                        <tr>
+                            <td>The bootloader loads all the resources of the CPU in the profile of a single superuser.
+                            </td>
+                            <td>The bootloader distributes the resources of the CPU based on the priority of the users.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>A Single Super User is allocated all the resources of the CPU, and only the super user
+                                controls the operating system.</td>
+                            <td>The Concept of Super User Does not exist, instead, role-based entities exist, such that,
+                                upper roles hierarchy can manage the lower roles hierarchy permission and settings.</td>
+                        </tr>
+                        <tr>
+                            <td>As all the resources are dedicated to a single superuser, therefore, faster processing
+                                of instruction in the operating system occurs.</td>
+                            <td>The resources are divided among multiple users therefore the processing slower
+                                processing of instructions in the operating system occurs.</td>
+                        </tr>
+                        <tr>
+                            <td>The Single User Operating systems are simplistic and easy to design.</td>
+                            <td>The Multiuser Operating systems are complicated as they have to apply complex logic.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="multiprocessor-os" class="content-section">
+            <h2>Multiprocessor Operating Systems</h2>
+            <p>Also known as parallel OS or tightly coupled OS. Have more than one processor in close communication,
+                sharing the computer bus, clock, and sometimes memory and peripheral devices. Executes multiple jobs at
+                the same time, making processing faster.</p>
+            <h4>Main Advantages:</h4>
+            <ul>
+                <li><strong>Increased throughput:</strong> More work in less time.</li>
+                <li><strong>Economy of scale:</strong> Can be more cost-effective than multiple single-processor systems
+                    by sharing peripherals, storage, power.</li>
+                <li><strong>Increased reliability (Fault Tolerance):</strong> If one processor fails, others can pick up
+                    the work (graceful degradation).</li>
+            </ul>
+            <h4>Classification:</h4>
+            <ul>
+                <li><strong>1. Symmetric multiprocessing system (SMP):</strong> Each processor runs an identical copy of
+                    the OS, and they communicate as needed.</li>
+                <li><strong>2. Asymmetric multiprocessing system:</strong> One processor is a master processor
+                    controlling others (slave processors). Master schedules jobs and manages memory for the entire
+                    system.</li>
+            </ul>
+        </section>
+
+        <section id="user-interfaces" class="content-section">
+            <h2>User Interface (UI)</h2>
+            <p>User Interface (UI) facilitates communication between an application and its users by acting as an
+                intermediary. Each application, including the OS, is provided with a specific UI. The UI can be
+                classified into:</p>
+            <div class="sub-section">
+                <h3>11.10.1 Graphical User Interface (GUI)</h3>
+                <p>Enables users to interact with the OS via point-and-click operations. Contains icons representing
+                    objects like files, directories, devices. Manipulated using a pointing device (mouse, trackball,
+                    touch screen, light pen). User-friendly because each object is represented with a corresponding
+                    icon. Users need not provide text commands.</p>
+                <div class="diagram-placeholder-img"
+                    data-src-placeholder="Fig. 11.14 The user interface of Windows XP operating system.">Windows XP GUI
+                    Screenshot</div>
+                <h4>Advantages of GUI:</h4>
+                <ul>
+                    <li>Easy to understand and use, even for new users.</li>
+                    <li>Visually acknowledges and confirms actions.</li>
+                    <li>Enables performing number of tasks at the same time (multitasking).</li>
+                </ul>
+            </div>
+            <div class="sub-section">
+                <h3>11.10.2 Command Line Interface (CLI)</h3>
+                <p>Enables users to interact by issuing specific commands. User types a command at the command line,
+                    presses Enter. The command line interpreter receives, processes, and displays output or a new
+                    prompt. Disadvantage: User needs to remember many commands. Not considered very user-friendly.</p>
+                <div class="diagram-placeholder-img"
+                    data-src-placeholder="Fig. 11.15 The command line interface of MS-DOS.">MS-DOS CLI Screenshot</div>
+            </div>
+        </section>
+
+        <section id="popular-os" class="content-section">
+            <h2>Popular OS Examples</h2>
+            <div class="sub-section">
+                <h4>4.3.1 Microsoft Windows</h4>
+                <p>Most popular OS for home PCs. Recent versions include Windows 10, 8, 7, Vista. GUI based, supports
+                    multiprogramming and multitasking. Eliminates need to memorize commands.</p>
+                <div class="diagram-placeholder-img"
+                    data-src-placeholder="Fig. 4.4: Windows 10 Operating system screenshot.">Windows 10 Screenshot</div>
+            </div>
+            <div class="sub-section">
+                <h4>Linux</h4>
+                <p>An open-source OS. Source code freely available. Typically provides GUIs like KDE and Gnome. Various
+                    distributions (Red Hat, SuSE, Ubuntu, Xandros). Three main components: Kernel (core), System library
+                    (special functions), System utility (specialized tasks).</p>
+                <div class="diagram-placeholder-img"
+                    data-src-placeholder="Fig. 4.5: Linux operating system screenshot (Ubuntu Desktop).">Linux Desktop
+                    Screenshot</div>
+                <h5>Features:</h5>
+                <ul>
+                    <li>Open source.</li>
+                    <li>Multi-user system.</li>
+                    <li>Customizable UI.</li>
+                </ul>
+            </div>
+            <div class="sub-section">
+                <h4>UNIX</h4>
+                <p>Developed in the 1960s. Stable, multi-user, multi-tasking system for servers, desktops, laptops. Many
+                    different versions. Popular versions: Sun Solaris, macOS X.</p>
+                <h5>Features:</h5>
+                <ul>
+                    <li>Flexible, can be installed on various machines.</li>
+                    <li>Better built-in security and permissions than Windows (traditionally).</li>
+                </ul>
+            </div>
+            <div class="sub-section">
+                <h4>Macintosh (macOS)</h4>
+                <p>Introduced in 1984 by Apple, first widely-sold personal computer with a GUI. Designed for natural,
+                    intuitive use. Has its own OS (macOS, formerly Mac OS X). Originally built on Motorola 68000, then
+                    PowerPC, now Apple Silicon (ARM-based). Popular among graphic designers and visual artists.</p>
+            </div>
+            <div class="sub-section">
+                <h4>Android</h4>
+                <p>Open source mobile OS owned by Google. Used on smartphones, tablets, Android TV's. Source code
+                    available for viewing, alteration, sharing. Fully customizable, unlimited access for app
+                    development, less restrictive licensing. Millions of apps available.</p>
+                <div class="diagram-placeholder-img" data-src-placeholder="Fig. 4.7: Android based smart phones.">
+                    Android Phones Screenshot</div>
+            </div>
+        </section>
+
+        <section id="file-systems" class="content-section">
+            <h2>File Systems</h2>
+            <div class="sub-section">
+                <h3>Windows OS File Systems</h3>
+                <p>MS-DOS, Windows 95/98/NT/2000/XP allow use of FAT-16 or FAT-32. Windows NT/2000/XP uses NTFS. Windows
+                    2000 also supports read-only file systems for CD-ROMs and DVDs.</p>
+                <ul>
+                    <li><strong>A. FAT (File Allocation Table):</strong> Simple. Consists of file system descriptor,
+                        sector, file system block allocation table, plain storage space. Originated with MS-DOS in 1977.
+                        <ul>
+                            <li>FAT12 (floppy disks, small SD cards)</li>
+                            <li>FAT16 (drives up to 2GB, smaller clusters)</li>
+                            <li>FAT32 (larger drives, supports up to 2TB in size, 4GB file size limit)</li>
+                        </ul>
+                    </li>
+                    <li><strong>B. NTFS (New Technology File System):</strong> Standard for modern Windows. More secure,
+                        supports larger files and drives. Special disk format for management (MFT - Master File Table).
+                        Supports Unicode file names, POSIX requirements.</li>
+                </ul>
+                <div class="diagram-placeholder-img" data-src-placeholder="Table: Comparison between FAT, FAT32, NTFS.">
+                    FAT/NTFS Comparison Table</div>
+            </div>
+            <div class="sub-section">
+                <h3>Linux File Systems</h3>
+                <p>Typically provide several different filesystems (Ext2, Ext3, Ext4). Ext2, Ext3, Ext4 are popular,
+                    stable, widely used candidates in Linux servers. Designed with different principles.</p>
+                <ul>
+                    <li><strong>A. Ext2 (Second extended file system):</strong> First commercial-grade file system for
+                        Linux. Max file size 16GB to 2TB. Overall file system size 2TB to 32TB. No journaling.</li>
+                    <li><strong>B. Ext3 (Third extended file system):</strong> Extension of Ext2, introduced journaling.
+                        Max file size 16GB to 2TB. Overall 2TB to 32TB.</li>
+                    <li><strong>C. Ext4 (Fourth extended file system):</strong> Backward-compatible extensions to Ext3.
+                        Supports multiblock allocation, delayed allocation, journal checksum. Max file size 16GB to
+                        16TB. Overall up to 1 EB (exabyte).</li>
+                </ul>
+                <div class="diagram-placeholder-img"
+                    data-src-placeholder="Table: Comparison Between Ext2, Ext3, Ext4 as Below.">Ext2/3/4 Comparison
+                    Table</div>
+            </div>
+        </section>
+
+
+        <footer class="navigation-buttons">
+            <a href="topic-7.html" class="nav-button back-prev"><i class="fas fa-arrow-left"></i> Previous Topic</a>
+            <a href="../fundamentals.html" class="nav-button syllabus"><i class="fas fa-list-ul"></i> Back to
+                Syllabus</a>
+            <a href="topic-9.html" class="nav-button next">Next Topic <i class="fas fa-arrow-right"></i></a>
+        </footer>
+
+    </div>
+
+    <script>
+        // Theme toggle logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        const bodyElement = document.body;
+
+        function setThemeMode(mode) {
+            if (mode === 'light-mode') {
+                htmlElement.classList.add('light-mode'); htmlElement.classList.remove('dark-mode');
+                bodyElement.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light-mode');
+            } else {
+                htmlElement.classList.remove('light-mode'); htmlElement.classList.add('dark-mode');
+                bodyElement.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark-mode');
+            }
+        }
+
+        (function () {
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme) { setThemeMode(currentTheme); }
+            else {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) { setThemeMode('light-mode'); }
+                else { setThemeMode('dark-mode'); }
+            }
+        })();
+
+        themeToggleBtn.addEventListener('click', function () {
+            if (htmlElement.classList.contains('light-mode')) { setThemeMode('dark-mode'); }
+            else { setThemeMode('light-mode'); }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const diagrams = document.querySelectorAll('.diagram-placeholder, .diagram-placeholder-img');
+            diagrams.forEach(diag => {
+                const placeholderText = diag.dataset.srcPlaceholder || diag.textContent || "Diagram/Image Placeholder";
+                if (diag.tagName === 'IMG') { diag.alt = placeholderText; }
+                else { diag.textContent = placeholderText; }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

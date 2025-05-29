@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 9: Computer Networks & Internet - Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            /* Dark Mode (Default) */
+            --bg-color: #121828;
+            --card-bg-color: #1f2937;
+            /* Main section background */
+            --inner-card-bg-color: var(--bg-color);
+            /* For individual elements within sections */
+            --primary-text-color: #e5e7eb;
+            --secondary-text-color: #9ca3af;
+            --accent-color: #6a82fb;
+            --accent-hover-color: #8da2fc;
+            --yellow-accent: #fde047;
+            --border-color: #374151;
+            --futuristic-glow: 0 0 15px rgba(106, 130, 251, 0.3);
+            --futuristic-glow-yellow: 0 0 15px rgba(253, 224, 71, 0.4);
+            --header-gradient-start: var(--card-bg-color);
+            --header-gradient-end: var(--bg-color);
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #5a67d8;
+            --nav-button-syllabus-hover-bg: #4c58bf;
+            --diagram-bg: #2a3547;
+            --table-header-bg: var(--accent-color);
+            --table-row-even-bg: var(--bg-color);
+            --code-bg: #282c34;
+            --code-text-color: #abb2bf;
+            --theme-toggle-bg: #23272f;
+            --theme-toggle-icon: #fde047;
+            --theme-toggle-hover-bg: #374151;
+            --theme-toggle-hover-icon: #fff;
+        }
+
+        html.light-mode {
+            /* Light Mode */
+            --bg-color: #f0f4f8;
+            --card-bg-color: #ffffff;
+            --inner-card-bg-color: var(--bg-color);
+            --primary-text-color: #2c3e50;
+            --secondary-text-color: #52616b;
+            --accent-color: #3498db;
+            --accent-hover-color: #2980b9;
+            --yellow-accent: #f39c12;
+            --border-color: #d1d5db;
+            --futuristic-glow: 0 0 15px rgba(52, 152, 219, 0.2);
+            --futuristic-glow-yellow: 0 0 15px rgba(243, 156, 18, 0.3);
+            --header-gradient-start: #e6e9ed;
+            --header-gradient-end: #f0f4f8;
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #27ae60;
+            --nav-button-syllabus-hover-bg: #229954;
+            --eduvision-logo-color: #2563eb;
+            --eduvision-logo-yellow: #f59e0b;
+            --diagram-bg: #e9ecef;
+            --table-header-bg: var(--accent-color);
+            --table-row-even-bg: #f8f9fa;
+            --code-bg: #f5f2f0;
+            --code-text-color: #383a42;
+            --theme-toggle-bg: #f8f9fa;
+            --theme-toggle-icon: #f39c12;
+            --theme-toggle-hover-bg: #e9ecef;
+            --theme-toggle-hover-icon: #2c3e50;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            font-size: 16px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 80px;
+        }
+
+        /* Logo Styles */
+        .eduvision-logo {
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvision-logo .text-logo-main {
+            color: #fff !important;
+        }
+
+        .eduvision-logo .text-logo-accent {
+            color: #fde047 !important;
+        }
+
+        html.light-mode .eduvision-logo .text-logo-main {
+            color: var(--eduvision-logo-color) !important;
+        }
+
+        html.light-mode .eduvision-logo .text-logo-accent {
+            color: var(--eduvision-logo-yellow) !important;
+        }
+
+        .eduvision-logo .group:hover .text-logo-accent {
+            filter: brightness(1.1);
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Theme Toggle Button */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+            color: var(--theme-toggle-hover-icon);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+        /* Header */
+        .main-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--header-gradient-start), var(--header-gradient-end));
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .topic-badge {
+            display: inline-block;
+            background-color: var(--yellow-accent);
+            color: var(--bg-color);
+            padding: 5px 15px;
+            border-radius: 15px 15px 0 0;
+            font-size: 0.9em;
+            font-weight: bold;
+            font-family: 'Nunito', sans-serif;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-header h1 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.8em;
+            font-weight: 900;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: var(--futuristic-glow);
+        }
+
+        .main-header p {
+            font-size: 1.2em;
+            color: var(--secondary-text-color);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Sections & Content Styling */
+        .content-section {
+            background-color: var(--card-bg-color);
+            padding: 30px 40px;
+            margin-bottom: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--accent-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-left-color 0.3s ease;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15), var(--futuristic-glow);
+        }
+
+        .content-section h2 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+
+        .content-section h3 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.6em;
+            color: var(--yellow-accent);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section h4 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.3em;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section h5 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.1em;
+            color: var(--accent-color);
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+
+        .content-section p,
+        .content-section ul {
+            margin-bottom: 15px;
+            color: var(--secondary-text-color);
+            transition: color 0.3s ease;
+        }
+
+        .content-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .content-section ul li::before {
+            content: "\f058";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            top: 3px;
+            font-size: 0.9em;
+            transition: color 0.3s ease;
+        }
+
+        .content-section .sub-section {
+            background-color: var(--inner-card-bg-color);
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .content-section .sub-section ul li::before {
+            content: "\f101";
+            font-size: 0.8em;
+            top: 4px;
+        }
+
+        /* Diagram Placeholder */
+        .diagram-placeholder,
+        .diagram-placeholder-img {
+            background-color: var(--diagram-bg);
+            border: 2px dashed var(--border-color);
+            padding: 15px;
+            margin: 20px auto;
+            text-align: center;
+            color: var(--secondary-text-color);
+            border-radius: 8px;
+            font-style: italic;
+            display: block;
+            max-width: 90%;
+            font-size: 0.9em;
+        }
+
+        .diagram-placeholder-img {
+            height: auto;
+            min-height: 80px;
+        }
+
+        /* Comparison Table (Generic for IP/MAC diff etc) */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.95em;
+            overflow-x: auto;
+            display: block;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px 12px;
+            text-align: left;
+            vertical-align: top;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .comparison-table th {
+            background-color: var(--table-header-bg);
+            color: var(--button-text-color);
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .comparison-table tr:nth-child(even) td {
+            background-color: var(--table-row-even-bg);
+        }
+
+        @media (max-width: 768px) {
+
+            .comparison-table th,
+            .comparison-table td {
+                white-space: normal;
+            }
+        }
+
+        /* Navigation Buttons */
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: var(--card-bg-color);
+            border-radius: 8px;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-button {
+            color: var(--button-text-color);
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-align: center;
+            flex-grow: 1;
+            min-width: 150px;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-button.back-prev {
+            background-color: var(--secondary-text-color);
+        }
+
+        .nav-button.back-prev:hover {
+            background-color: var(--primary-text-color);
+            filter: brightness(1.2);
+        }
+
+        .nav-button.syllabus {
+            background-color: var(--nav-button-syllabus-bg);
+        }
+
+        .nav-button.syllabus:hover {
+            background-color: var(--nav-button-syllabus-hover-bg);
+        }
+
+        .nav-button.next {
+            background-color: var(--accent-color);
+        }
+
+        .nav-button.next:hover {
+            background-color: var(--accent-hover-color);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .navigation-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .nav-button {
+                width: auto;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-header h1 {
+                font-size: 2.5em;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .content-section h2 {
+                font-size: 1.8em;
+            }
+
+            .topic-badge {
+                font-size: 0.8em;
+                padding: 4px 10px;
+                top: -15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header h1 {
+                font-size: 2.2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../../index.html" class="flex items-center group">
+                <span class="text-logo-main">Edu</span>
+                <svg class="text-logo-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-logo-main">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="main-header">
+            <span class="topic-badge">Topic 9</span>
+            <h1>Computer Networks & Internet</h1>
+            <p>Exploring how computers connect, share information, and access global resources through networks, the
+                internet, and cloud services.</p>
+        </header>
+
+        <section id="computer-networks" class="content-section">
+            <h2>Computer Network</h2>
+            <p>A network is a set of devices (often referred to as nodes) connected by communication links. A node can
+                be a computer, printer, or any other device capable of sending and/or receiving data generated by other
+                nodes on the network.</p>
+            <p>Software modules in one system are used to communicate with one or more software modules in the distance
+                System. Such interfaces across a distance are termed as “peer-to-peer” interfaces; and the local
+                interfaces are termed as “service” interfaces. The modules on each end are organized as a sequence of
+                functions called “layers”. The set of modules organized as layers is also commonly called a “protocol
+                stack”.</p>
+            <p>Over the years, some layered models have been standardized. The ISO Open Systems Interconnection
+                (ISO/OSI) layered model has seven layers and was developed by a set of committees under the auspices of
+                International Standards Organization (ISO).</p>
+
+            <h3>Classification of computer networks:</h3>
+            <p>Based on geographical area:</p>
+            <ul>
+                <li>Local Area Networks (LANs)</li>
+                <li>Wide Area Networks (WANs)</li>
+                <li>Metropolitan Area Networks (MANs)</li>
+            </ul>
+            <div class="sub-section">
+                <h4>Local Area Network (LAN)</h4>
+                <p>LAN is a group of computers, as shown in Fig. 14.4, that are connected in a small area such as
+                    building, home, etc. Through this type of network, users can easily communicate with each other by
+                    sending and receiving messages. LAN is generally used for connecting two or more personal computers
+                    through some medium such as twisted pair, coaxial cable etc. Though the number of computers
+                    connected in a LAN is limited, the data is transferred at an extremely faster rate.</p>
+                <div class="diagram-placeholder-img"
+                    data-src-placeholder="Fig. 14.4 A LAN (4 laptops connected in a square/diamond shape).">LAN Diagram
+                </div>
+            </div>
+            <div class="sub-section">
+                <h4>Wide Area Network (WAN)</h4>
+                <p>WAN is a group of computers that are connected in a large area such as continent, country, etc. WAN
+                    is generally used for connecting two or more LANs through some medium such as leased telephone
+                    lines, microwaves, etc. In WAN, data is transferred at slow rate. A typical WAN network is shown in
+                    Fig. 14.5.</p>
+                <div class="diagram-placeholder-img"
+                    data-src-placeholder="Fig. 14.5 A WAN system (Multiple LANs interconnected to form a WAN).">WAN
+                    Diagram</div>
+            </div>
+            <div class="sub-section">
+                <h4>Metropolitan Area Network (MAN)</h4>
+                <p>MAN is a network of computers that covers a large area like a city. The size of the MAN generally
+                    lies between that of LAN and WAN, typically covering a distance of 5 Km to 50 Km. The geographical
+                    area covered by MAN is comparatively larger than LAN but smaller than WAN. MAN is generally owned by
+                    private organisations. MAN is generally connected with the help of optical fibres, copper wires etc.
+                    One of the most common example of MAN is cable television network within a city as shown in Fig.
+                    14.6. A network device known as router is used to connect the LANs together. The router directs the
+                    information packets to the desired destination.</p>
+                <div class="diagram-placeholder-img"
+                    data-src-placeholder="Fig. (unlabeled, refers to 14.6) A typical MAN system (Multiple LANs connected via Routers, forming a larger network, possibly including a cable television network link).">
+                    MAN Diagram</div>
+            </div>
+        </section>
+
+        <section id="network-devices" class="content-section">
+            <h2>Network Devices</h2>
+            <p>Cables transmit data as signals. A concentrator (e.g., hub, switch) amplifies signals and provides an
+                interface to connect multiple devices. Repeater, hub, switch, bridge, and gateway are examples. Devices
+                like Bridge, Router, and Gateway are used to interconnect LANs, especially if they use different
+                protocols.</p>
+            <div class="sub-section">
+                <h4>Router</h4>
+                <p>Used to connect heterogeneous networks (different technologies, media, addressing). Can connect LANs,
+                    a LAN and a WAN, or two WANs. Operates at OSI Layer 3 (Network Layer). Determines the
+                    shortest/fastest path and routes packets based on IP addresses.</p>
+                <div class="diagram-placeholder-img"
+                    data-src-placeholder="Figure 9.32 Router (Router connecting laptops to Cable Modem and Internet).">
+                    Router Diagram</div>
+            </div>
+            <div class="sub-section">
+                <h4>Switch</h4>
+                <p>Connects multiple computers or network segments. Smarter than a hub; a switch creates a direct
+                    connection (simulated LAN segment) between the source and destination. Works at OSI Layer 2 (Data
+                    Link Layer), using MAC addresses to forward frames. Can extend network distance and filter traffic.
+                </p>
+                <div class="diagram-placeholder-img"
+                    data-src-placeholder="Figure (unlabeled) Switch (Switch connecting multiple hubs/workstations to servers).">
+                    Switch Diagram</div>
+            </div>
+            <div class="sub-section">
+                <h4>Modem (Modulator-Demodulator)</h4>
+                <p>Converts digital data to analog signals for transmission (modulation) and vice-versa (demodulation).
+                    Enables communication over various media.</p>
+                <div class="diagram-placeholder-img"
+                    data-src-placeholder="Diagram: Modem modulating digital to analog for telephone network and demodulating analog to digital.">
+                    Modem Function Diagram</div>
+                <h5>Functions:</h5>
+                <ul>
+                    <li>Modulation & Demodulation</li>
+                    <li>Signal Encoding</li>
+                    <li>Error Correction</li>
+                </ul>
+                <h5>Types:</h5>
+                <ul>
+                    <li>Dial-Up Modem</li>
+                    <li>Cable Modem</li>
+                    <li>DSL Modem</li>
+                    <li>Fiber Modem (ONTs)</li>
+                </ul>
+            </div>
+            <div class="sub-section">
+                <h4>Hub</h4>
+                <p>Like a repeater with multiple ports. Does not amplify signals. Operates at OSI Layer 1 (Physical
+                    Layer), treating data as signals. Connects multiple segments of the same network, often in a star
+                    topology. Broadcasts data to all connected devices, increasing traffic. Best for small LANs (8-10
+                    computers).</p>
+                <div class="diagram-placeholder-img"
+                    data-src-placeholder="Figure 9.30 Hub (Hubs connecting workstations to servers).">Hub Diagram</div>
+            </div>
+        </section>
+
+        <section id="internet-basics" class="content-section">
+            <h2>Internet Basics</h2>
+            <h3>Internet Overview</h3>
+            <p>The Internet is a giant network of networks. It may include PCs, servers, printers, etc. Connected
+                through communication channels. Early research by US Department of Defense (1962) led to ARPAnet
+                (Advanced Research Project Agency) to connect US Defense Department network.</p>
+            <h4>What did the Internet come from?</h4>
+            <ul>
+                <li>Original aim: Allow university research computers to 'talk' to each other.</li>
+                <li>ARPAnet's design allowed messages to be rerouted, ensuring network function even if parts were
+                    destroyed.</li>
+                <li>Users of the Internet took a direction of their own.</li>
+            </ul>
+            <h4>History of the Internet:</h4>
+            <ul>
+                <li>1965: First long-distance communication (MIT and California).</li>
+                <li>1969: Four computers connected via ARPAnet.</li>
+            </ul>
+
+            <h3>IP Addressing</h3>
+            <p>An Internet Protocol (IP) Address is a numerical label assigned to each device connected to a computer
+                network that uses the Internet Protocol for communication. It serves two principal functions: host or
+                network interface identification and location addressing. An IP Address is a 32-bit unique address (for
+                IPv4). Always consists of 4 numbers separated by periods, with numbers ranging from 0 to 255. Example:
+                192.168.12.1</p>
+            <h4>Format of an IP address:</h4>
+            <ul>
+                <li>Dotted decimal notation</li>
+                <li>Hexadecimal notation (less common for IPv4 display)</li>
+            </ul>
+            <p>The IP address (32 bits for IPv4) is divided into network part (Network ID) and host part (Host ID). Each
+                octet (8 bits) is converted to decimal. The format of the IP address differs with the class (A, B, C, D,
+                E).</p>
+            <div class="diagram-placeholder-img"
+                data-src-placeholder="Diagram: IP Address Octets (1st, 2nd, 3rd, 4th Octet) showing example 192.168.1.152.">
+                IP Octet Diagram</div>
+            <h4>Classes of networks (IPv4):</h4>
+            <ul>
+                <li><strong>Class A:</strong> 1-126 in first octet. First 8 bits network, next 24 hosts. For large
+                    networks. Range: 1.0.0.1 - 126.255.255.254.</li>
+                <li><strong>Class B:</strong> 128-191 in first octet. First 16 bits network, next 16 hosts. For medium
+                    networks. Range: 128.1.0.1 - 191.255.255.254.</li>
+                <li><strong>Class C:</strong> 192-223 in first octet. First 24 bits network, next 8 hosts. For small
+                    networks. Range: 192.0.1.1 - 223.255.254.254.</li>
+                <li><strong>Class D:</strong> For multicasting. 224-239 in first octet. Range: 224.0.0.0 -
+                    239.255.255.255.</li>
+                <li><strong>Class E:</strong> Reserved for future use/experimenting. 240-255 in first octet. Range:
+                    240.0.0.0 - 255.255.255.254.</li>
+            </ul>
+            <div class="diagram-placeholder-img"
+                data-src-placeholder="Diagram: IP Address Classes showing Net ID and Node ID bits for Class A, B, C, D, E.">
+                IP Class Structure Diagram</div>
+            <h4>Types of IP Addresses: IPv4 and IPv6</h4>
+            <ul>
+                <li><strong>IPv4 Addresses:</strong> 32-bit. Limited to ~4.29 billion unique addresses. Example:
+                    12.244.233.165.</li>
+                <li><strong>IPv6 Addresses:</strong> 128-bit. Accommodates many more addresses. Example:
+                    2001:0db8:0000:0000:0000:ff00:0042:7879. Can coexist with IPv4 (Dual Stack).</li>
+            </ul>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>IPv4 address</th>
+                        <th>IPv6 address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>32-bit address</td>
+                        <td>128-bit address</td>
+                    </tr>
+                    <tr>
+                        <td>Supports limited IP addresses</td>
+                        <td>Support unlimited IP addresses</td>
+                    </tr>
+                    <tr>
+                        <td>It is an alphanumeric address e.g. 12.244.233.165</td>
+                        <td>It is an alphanumeric address e.g. 2001:0db8::ff00:42:7879</td>
+                    </tr>
+                    <tr>
+                        <td>Address is separated by dots (.)</td>
+                        <td>Address is separated by semi colons (:)</td>
+                    </tr>
+                    <tr>
+                        <td>Commonly used IP address</td>
+                        <td>Not commonly used IP address</td>
+                    </tr>
+                    <tr>
+                        <td>Easy to remember</td>
+                        <td>Difficulty to remember</td>
+                    </tr>
+                    <tr>
+                        <td>It has checksum fields</td>
+                        <td>Has no checksum fields</td>
+                    </tr>
+                    <tr>
+                        <td>It supports broadcasting</td>
+                        <td>Does not support broadcasting</td>
+                    </tr>
+                    <tr>
+                        <td>Built without security in mind</td>
+                        <td>IPSec (Internet Protocol Security) is built into the IPv6 protocol</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h4>Special IP Addresses:</h4>
+            <ul>
+                <li>0.0.0.0 (default network)</li>
+                <li>255.255.255.255 (broadcast)</li>
+                <li>127.0.0.1 (loopback address)</li>
+            </ul>
+            <h4>Private (Local) IP Address vs Public (Global) IP address</h4>
+            <p>Private IPs are for internal networks (LANs), not routable on the internet. Public IPs are provided by
+                ISPs, globally unique, and routable. NAT (Network Address Translation) translates private IPs to public
+                IPs for internet access.</p>
+            <div class="diagram-placeholder-img"
+                data-src-placeholder="Diagram: Private Network (192.168.0.x) connected to Internet (Public IP 202.60.23.x) via NAT Server.">
+                Private/Public IP with NAT Diagram</div>
+            <h4>Subnet mask</h4>
+            <p>A 32-bit combination helping identify which part of an IP address is network and which is host. Used by
+                TCP/IP to determine if a host is local or remote. Example: 255.0.0.0 for Class A default.</p>
+            <h4>Media Access Control (MAC) / Physical Address</h4>
+            <p>A 48-bit address uniquely coded into a device during manufacturing (identifies network adapter). Used for
+                communication on the same LAN. Not sent to gateway. If a machine needs to communicate outside its
+                network, an IP address is required.</p>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>IP Address</th>
+                        <th>MAC address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>32-bits (IPv4) or 128-bits (IPv6) address</td>
+                        <td>48-bits address</td>
+                    </tr>
+                    <tr>
+                        <td>Set by the ISP</td>
+                        <td>Set during manufacture of the machine</td>
+                    </tr>
+                    <tr>
+                        <td>Logical address of the computer</td>
+                        <td>Ensure the physical address of computer</td>
+                    </tr>
+                    <tr>
+                        <td>Identifies the connection of the device on the network.</td>
+                        <td>Simply identifies the device</td>
+                    </tr>
+                    <tr>
+                        <td>Operates in the network layer</td>
+                        <td>Operates in the data link layer.</td>
+                    </tr>
+                    <tr>
+                        <td>Modifies with time and environment</td>
+                        <td>Cannot be changed with time and environment.</td>
+                    </tr>
+                    <tr>
+                        <td>Can be found easily with a third party</td>
+                        <td>Cannot be found easily by a third party</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h4>Default gateways</h4>
+            <p>A router specified on a host that links the host's subnet to other networks.</p>
+
+            <h3>Domain Name System (DNS)</h3>
+            <p>Human-readable website addresses (e.g., google.com). DNS is like the internet's phonebook, translating
+                domain names to numeric IP addresses. Also provides mail server lists. Hierarchical system for domain
+                names (e.g., .com, .gov, .uk).</p>
+            <h4>DNS Servers</h4>
+            <p>Keep files (zone files) mapping domain names to IPs. Provided by ISPs or can be specific servers. Your
+                computer queries DNS servers to resolve domain names to IPs for connection.</p>
+            <h4>How DNS Servers speed up search</h4>
+            <p>Caching DNS records to avoid repeated lookups (cached DNS record).</p>
+            <h4>Uniform Resource Locator (URL)</h4>
+            <p>Standard address to find a webpage, webserver, or other internet devices. Typical format:
+                `http://www.payne-gallway.co.uk/computing/student_resources.html` (Protocol | Host | Domain Name |
+                Folder | Document Name).</p>
+            <div class="diagram-placeholder-img"
+                data-src-placeholder="Diagram: Parts of a URL (Protocol, Host, Domain Name, Folder, Document Name).">URL
+                Parts Diagram</div>
+
+            <h3>World Wide Web (WWW or Web)</h3>
+            <p>An information space where documents (URLs) are interlinked by hypertext, accessible via the Internet.
+                Invented by Tim Berners-Lee (1989). Web pages are primarily text documents formatted with HTML. May
+                contain images, video, audio, software components. Hyperlinks permit navigation. Client/server computing
+                model.</p>
+            <div class="diagram-placeholder-img"
+                data-src-placeholder="Image: Globe with computer terminals connected, representing WWW.">WWW Concept
+                Image</div>
+            <h4>Browsers</h4>
+            <p>Program to access the WWW (e.g., Chrome, Firefox, Safari, Internet Explorer). "Browses" the WWW, requests
+                documents. Can be graphical or text-only.</p>
+            <h5>Comparison of Major Web Browsers (Advantages/Limitations):</h5>
+            <ul>
+                <li>Google Chrome</li>
+                <li>Firefox</li>
+                <li>Internet Explorer</li>
+                <li>Safari</li>
+            </ul>
+            <!-- Detailed A/L for each browser can be added here if needed, or kept as implied from source -->
+
+            <h3>Search Engines</h3>
+            <p>Programs that search documents for keywords and return a list. Often used for World Wide Web. They search
+                a database of web pages harvested and cached by "spiders" or "crawlers".</p>
+            <h4>How do Search Engines Work?</h4>
+            <p>Spiders crawl the web, finding pages by following links. An "indexing" program identifies text, links,
+                and other content, storing it for fast searching.</p>
+            <h4>Different Search engines and their description:</h4>
+            <p>(List of various search engines like Google, Bing, Yahoo, AltaVista, Cuil, Excite, etc., categorized by
+                type - All-Purpose, Books, Business, Games, Human Search, Job.)</p>
+            <div class="diagram-placeholder">Table/List: Types of Search Engines with examples and descriptions.</div>
+        </section>
+
+        <section id="cloud-computing" class="content-section">
+            <h2>Cloud Computing</h2>
+            <h3>Introduction</h3>
+            <p>Cloud computing relies on shared computing resources rather than local servers or personal devices to
+                handle applications.</p>
+            <h4>Definition by NIST:</h4>
+            <p>"A model for enabling ubiquitous, convenient, on-demand network access to a shared pool of configurable
+                computing resources (e.g., networks, servers, storage, applications and services) that can be rapidly
+                provisioned and released with minimal management effort or service provider interaction."</p>
+            <ul>
+                <li>Ability / space where you store your data, process it and can access anywhere from the world.</li>
+                <li>As a metaphor for the internet.</li>
+                <li>Cloud computing is: Storing/Processing Data/Applications on remote servers, Accessing
+                    Data/Applications via internet.</li>
+            </ul>
+            <h4>What is a cloud service?</h4>
+            <p>Taking services and moving them outside an organization's firewall. Delivered over the Web, paid for on
+                an as-needed or pay-per-use basis. Service: Reusable, fine-grained components across a vendor's network.
+                (IaaS, PaaS, SaaS, DaaS, NaaS, CaaS are some services).</p>
+
+            <h3>1.1 Characteristics (OR) Features of Cloud Environments (NIST):</h3>
+            <ol>
+                <li><strong>On-demand self-service:</strong> Customers can sign up, pay for, and start using resources
+                    without help from a sales agent.</li>
+                <li><strong>Broad network access:</strong> Access cloud services via the Internet.</li>
+                <li><strong>Resource pooling:</strong> Many customers (individuals, organizations) use the same servers,
+                    storage, or computing resources.</li>
+                <li><strong>Rapid elasticity or expansion:</strong> Customers can easily scale their use of resources up
+                    or down.</li>
+                <li><strong>Measured service:</strong> Pay for the amount of resources used in a given period.</li>
+            </ol>
+
+            <h3>1.2 Applications:</h3>
+            <ul>
+                <li><strong>i) Storage:</strong> Cloud keeps many copies of storage. Using these copies, it extracts
+                    another resource if one fails.</li>
+                <li><strong>ii) Database:</strong> Repositories for information with links, helping make data
+                    searchable.</li>
+            </ul>
+            <h4>Advantages (of cloud databases/storage):</h4>
+            <ul>
+                <li>Improved availability</li>
+                <li>Improved performance</li>
+                <li>Price (less expensive than network of smaller computers)</li>
+                <li>Flexibility</li>
+            </ul>
+            <h4>Disadvantages (of cloud databases/storage):</h4>
+            <ul>
+                <li>Complexity</li>
+                <li>Labor costs</li>
+                <li>Security (data fragments, site housing)</li>
+                <li>Integrity</li>
+            </ul>
+
+            <h3>Types of Clouds</h3>
+            <ol>
+                <li><strong>Public Cloud:</strong> Established by any subscriber with an internet connection, access to
+                    the cloud space.</li>
+                <li><strong>Private Cloud:</strong> Established for a specific group or organization, limits access.
+                </li>
+                <li><strong>Community Cloud:</strong> Shared among two or more organizations that have similar cloud
+                    requirements.</li>
+                <li><strong>Hybrid Cloud:</strong> Essentially a combination of at least two clouds, where the clouds
+                    included are a mixture of public, private, or community.</li>
+            </ol>
+
+            <h3>Choosing a Cloud Provider & Service Types</h3>
+            <p>Consider control vs. convenience. Three main types of cloud services:</p>
+            <ul>
+                <li><strong>Software as a Service (SaaS):</strong> Provider gives access to both resources and
+                    applications. Makes it unnecessary to have a physical copy of software on your devices. Least
+                    control for user.</li>
+                <li><strong>Platform as a Service (PaaS):</strong> Provider gives access to components required to
+                    develop and operate applications over the internet. More control than SaaS.</li>
+                <li><strong>Infrastructure as a Service (IaaS):</strong> Subscriber completely outsources storage and
+                    resources, such as hardware and software. Most control for user (over OS, storage, deployed apps).
+                </li>
+            </ul>
+
+            <h3>Security</h3>
+            <p>Information in the cloud is often valuable. Potentially secure data stored on shared computers.
+                Understand provider's security measures (encryption, protection methods, firewalls, backups). Consider
+                negotiation terms for small businesses. Giving up direct control of data requires trust in provider's
+                expertise.</p>
+        </section>
+
+
+        <footer class="navigation-buttons">
+            <a href="topic-8.html" class="nav-button back-prev"><i class="fas fa-arrow-left"></i> Previous Topic</a>
+            <a href="../fundamentals.html" class="nav-button syllabus"><i class="fas fa-list-ul"></i> Back to
+                Syllabus</a>
+            <a href="topic-10.html" class="nav-button next">Next Topic <i class="fas fa-arrow-right"></i></a>
+        </footer>
+
+    </div>
+
+    <script>
+        // Theme toggle logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        const bodyElement = document.body;
+
+        function setThemeMode(mode) {
+            if (mode === 'light-mode') {
+                htmlElement.classList.add('light-mode'); htmlElement.classList.remove('dark-mode');
+                bodyElement.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light-mode');
+            } else {
+                htmlElement.classList.remove('light-mode'); htmlElement.classList.add('dark-mode');
+                bodyElement.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark-mode');
+            }
+        }
+
+        (function () {
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme) { setThemeMode(currentTheme); }
+            else {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) { setThemeMode('light-mode'); }
+                else { setThemeMode('dark-mode'); }
+            }
+        })();
+
+        themeToggleBtn.addEventListener('click', function () {
+            if (htmlElement.classList.contains('light-mode')) { setThemeMode('dark-mode'); }
+            else { setThemeMode('light-mode'); }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const diagrams = document.querySelectorAll('.diagram-placeholder, .diagram-placeholder-img');
+            diagrams.forEach(diag => {
+                const placeholderText = diag.dataset.srcPlaceholder || diag.textContent || "Diagram/Image Placeholder";
+                if (diag.tagName === 'IMG') { diag.alt = placeholderText; }
+                else { diag.textContent = placeholderText; }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

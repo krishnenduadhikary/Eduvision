@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 10: Data Security & Privacy - Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            /* Dark Mode (Default) */
+            --bg-color: #121828;
+            --card-bg-color: #1f2937;
+            /* Main section background */
+            --inner-card-bg-color: var(--bg-color);
+            /* For individual elements within sections */
+            --primary-text-color: #e5e7eb;
+            --secondary-text-color: #9ca3af;
+            --accent-color: #6a82fb;
+            --accent-hover-color: #8da2fc;
+            --yellow-accent: #fde047;
+            --border-color: #374151;
+            --futuristic-glow: 0 0 15px rgba(106, 130, 251, 0.3);
+            --futuristic-glow-yellow: 0 0 15px rgba(253, 224, 71, 0.4);
+            --header-gradient-start: var(--card-bg-color);
+            --header-gradient-end: var(--bg-color);
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #5a67d8;
+            --nav-button-syllabus-hover-bg: #4c58bf;
+            --diagram-bg: #2a3547;
+            --table-header-bg: var(--accent-color);
+            --table-row-even-bg: var(--bg-color);
+            --code-bg: #282c34;
+            --code-text-color: #abb2bf;
+            --theme-toggle-bg: #23272f;
+            --theme-toggle-icon: #fde047;
+            --theme-toggle-hover-bg: #374151;
+            --theme-toggle-hover-icon: #fff;
+            --danger-color: #ef4444;
+            /* Red for threat emphasis */
+            --success-color: #22c55e;
+            /* Green for safety emphasis */
+        }
+
+        html.light-mode {
+            /* Light Mode */
+            --bg-color: #f0f4f8;
+            --card-bg-color: #ffffff;
+            --inner-card-bg-color: var(--bg-color);
+            --primary-text-color: #2c3e50;
+            --secondary-text-color: #52616b;
+            --accent-color: #3498db;
+            --accent-hover-color: #2980b9;
+            --yellow-accent: #f39c12;
+            --border-color: #d1d5db;
+            --futuristic-glow: 0 0 15px rgba(52, 152, 219, 0.2);
+            --futuristic-glow-yellow: 0 0 15px rgba(243, 156, 18, 0.3);
+            --header-gradient-start: #e6e9ed;
+            --header-gradient-end: #f0f4f8;
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #27ae60;
+            --nav-button-syllabus-hover-bg: #229954;
+            --eduvision-logo-color: #2563eb;
+            --eduvision-logo-yellow: #f59e0b;
+            --diagram-bg: #e9ecef;
+            --table-header-bg: var(--accent-color);
+            --table-row-even-bg: #f8f9fa;
+            --code-bg: #f5f2f0;
+            --code-text-color: #383a42;
+            --theme-toggle-bg: #f8f9fa;
+            --theme-toggle-icon: #f39c12;
+            --theme-toggle-hover-bg: #e9ecef;
+            --theme-toggle-hover-icon: #2c3e50;
+            --danger-color: #dc2626;
+            --success-color: #16a34a;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            font-size: 16px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 80px;
+        }
+
+        /* Logo Styles */
+        .eduvision-logo {
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvision-logo .text-logo-main {
+            color: #fff !important;
+        }
+
+        .eduvision-logo .text-logo-accent {
+            color: #fde047 !important;
+        }
+
+        html.light-mode .eduvision-logo .text-logo-main {
+            color: var(--eduvision-logo-color) !important;
+        }
+
+        html.light-mode .eduvision-logo .text-logo-accent {
+            color: var(--eduvision-logo-yellow) !important;
+        }
+
+        .eduvision-logo .group:hover .text-logo-accent {
+            filter: brightness(1.1);
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Theme Toggle Button */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+            color: var(--theme-toggle-hover-icon);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+        /* Header */
+        .main-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--header-gradient-start), var(--header-gradient-end));
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .topic-badge {
+            display: inline-block;
+            background-color: var(--yellow-accent);
+            color: var(--bg-color);
+            padding: 5px 15px;
+            border-radius: 15px 15px 0 0;
+            font-size: 0.9em;
+            font-weight: bold;
+            font-family: 'Nunito', sans-serif;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-header h1 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 3.0em;
+            font-weight: 900;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: var(--futuristic-glow);
+        }
+
+        .main-header p {
+            font-size: 1.2em;
+            color: var(--secondary-text-color);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Sections & Content Styling */
+        .content-section {
+            background-color: var(--card-bg-color);
+            padding: 30px 40px;
+            margin-bottom: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--accent-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-left-color 0.3s ease;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15), var(--futuristic-glow);
+        }
+
+        .content-section h2 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+
+        .content-section h3 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.6em;
+            color: var(--yellow-accent);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section h4 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.3em;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section h5 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.1em;
+            color: var(--accent-color);
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+
+        .content-section p,
+        .content-section ul {
+            margin-bottom: 15px;
+            color: var(--secondary-text-color);
+            transition: color 0.3s ease;
+        }
+
+        .content-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .content-section ul li::before {
+            content: "\f058";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            top: 3px;
+            font-size: 0.9em;
+            transition: color 0.3s ease;
+        }
+
+        .content-section .sub-section {
+            background-color: var(--inner-card-bg-color);
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .content-section .sub-section ul li::before {
+            content: "\f101";
+            font-size: 0.8em;
+            top: 4px;
+        }
+
+        /* Diagram Placeholder */
+        .diagram-placeholder,
+        .diagram-placeholder-img {
+            background-color: var(--diagram-bg);
+            border: 2px dashed var(--border-color);
+            padding: 15px;
+            margin: 20px auto;
+            text-align: center;
+            color: var(--secondary-text-color);
+            border-radius: 8px;
+            font-style: italic;
+            display: block;
+            max-width: 90%;
+            font-size: 0.9em;
+        }
+
+        .diagram-placeholder-img {
+            height: auto;
+            min-height: 80px;
+            object-fit: contain;
+        }
+
+        .threat-card {
+            border-left-color: var(--danger-color) !important;
+        }
+
+        .measure-card {
+            border-left-color: var(--success-color) !important;
+        }
+
+        /* Navigation Buttons */
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: var(--card-bg-color);
+            border-radius: 8px;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-button {
+            color: var(--button-text-color);
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-align: center;
+            flex-grow: 1;
+            min-width: 150px;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-button.back-prev {
+            background-color: var(--secondary-text-color);
+        }
+
+        .nav-button.back-prev:hover {
+            background-color: var(--primary-text-color);
+            filter: brightness(1.2);
+        }
+
+        .nav-button.syllabus {
+            background-color: var(--nav-button-syllabus-bg);
+        }
+
+        .nav-button.syllabus:hover {
+            background-color: var(--nav-button-syllabus-hover-bg);
+        }
+
+        .nav-button.next {
+            background-color: var(--accent-color);
+        }
+
+        .nav-button.next:hover {
+            background-color: var(--accent-hover-color);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .navigation-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .nav-button {
+                width: auto;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-header h1 {
+                font-size: 2.5em;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .content-section h2 {
+                font-size: 1.8em;
+            }
+
+            .topic-badge {
+                font-size: 0.8em;
+                padding: 4px 10px;
+                top: -15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header h1 {
+                font-size: 2.2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../../index.html" class="flex items-center group">
+                <span class="text-logo-main">Edu</span>
+                <svg class="text-logo-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-logo-main">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="main-header">
+            <span class="topic-badge">Topic 10</span>
+            <h1>Data Security & Privacy</h1>
+            <p>Understanding the importance of protecting data, common cyber threats, security measures, safe internet
+                practices, and managing your digital footprint.</p>
+        </header>
+
+        <section id="data-security-privacy" class="content-section">
+            <h2>What is Data Security?</h2>
+            <p>Data security is the process of protecting corporate data and preventing data loss through unauthorized
+                access. This includes protecting your data from attacks that can encrypt or destroy data, such as
+                ransomware, as well as attacks that can modify or corrupt your data. Data security also ensures data is
+                available to anyone in the organization who has access to it. Some industries require a high level of
+                data security to comply with data protection regulations. For example, organizations that process
+                payment card information must use and store payment card data securely, and healthcare organizations in
+                the USA must secure private health information (PHI) in line with the HIPAA standard.</p>
+            <h3>Data Security vs Data Privacy</h3>
+            <p>Data privacy is the distinction between data in a computer system that can be shared with third parties
+                (non-private data), and data that cannot be shared with third parties (private data). There are two main
+                aspects to enforcing data privacy:</p>
+            <ul>
+                <li><strong>Access control—</strong> ensuring that anyone who tries to access the data is authenticated
+                    to confirm their identity, and authorized to access only the data they are allowed to access.</li>
+                <li><strong>Data protection—</strong> ensuring that even if unauthorized parties manage to access the
+                    data, they cannot view it or cause damage to it. Data protection methods ensure encryption, which
+                    prevents anyone from viewing data if they do not have a private encryption key, and data loss
+                    prevention mechanisms which prevent users from transferring sensitive data outside the organization.
+                </li>
+            </ul>
+            <p>Data security has many overlaps with data privacy. The same mechanisms used to ensure data privacy are
+                also part of an organization's data security strategy. The primary difference is that data privacy
+                mainly focuses on keeping data confidential, while data security mainly focuses on protecting from
+                malicious activity. For example, encryption could be a sufficient measure to protect privacy, but may
+                not be sufficient as a data security measure. Attackers could still cause damage by erasing the data or
+                double-encrypting it to prevent access by authorized parties.</p>
+        </section>
+
+        <section id="cyber-threats" class="content-section threat-card">
+            <h2>Cybersecurity Threats</h2>
+            <p>Cybersecurity threats are acts performed by individuals with harmful intent, whose goal is to steal data,
+                cause damage to or disrupt computing systems. Common categories of cyber threats include malware, social
+                engineering, man in the middle (MitM) attacks, denial of service (DoS), and injection attacks.</p>
+            <h3>Common Sources of Cyber Threats</h3>
+            <ul>
+                <li><strong>Nation states—</strong> hostile countries can launch cyber attacks against local companies
+                    and institutions, aiming to interfere with communications, cause disorder, and inflict damage.</li>
+                <li><strong>Terrorist organizations—</strong> terrorists conduct cyber attacks aimed at destroying or
+                    abusing critical infrastructure, threaten national security, disrupt economies, and cause bodily
+                    harm to citizens.</li>
+                <li><strong>Criminal groups—</strong> organized groups of hackers aim to break into computing systems
+                    for economic benefit. These groups use phishing, spam, spyware and malware for extortion, theft of
+                    private information, and online scams.</li>
+                <li><strong>Hackers—</strong> individual hackers target organizations using a variety of attack
+                    techniques. They are usually motivated by personal gain, revenge, financial gain, or political
+                    activity. Hackers often develop new threats, to advance their criminal ability and improve their
+                    personal standing in the hacker community.</li>
+                <li><strong>Malicious insiders—</strong> an employee who has legitimate access to company assets, and
+                    abuses their privileges to steal information or damage computing systems for economic or personal
+                    gain. Insiders may be employees, contractors, suppliers, or partners of the target organization.
+                    They can also be outsiders who have compromised a privileged account and are impersonating its
+                    owner.</li>
+            </ul>
+            <h3>Types of Cybersecurity Threats</h3>
+            <div class="sub-section">
+                <h4>Malware Attacks</h4>
+                <p>Malware is an abbreviation of “malicious software”, which includes viruses, worms, trojans, spyware,
+                    and ransomware, and is the most common type of cyberattack. Malware infiltrates a system, usually
+                    via a link on an untrusted website or email or an unwanted software download. It deploys on the
+                    target system, collects sensitive data, manipulates and blocks access to network components, and may
+                    destroy data or shut down the system altogether.</p>
+                <ul>
+                    <li><strong>Computer virus:</strong> A software program that attaches itself to other software
+                        programs or data files in order to be executed. It does not seek any permission of the user
+                        before execution. Viruses may be highly destructive.
+                        <img class="diagram-placeholder-img"
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                            data-src-placeholder="Fig 11.3: Computer Virus (laptop with skull, laptop with virus detected)"
+                            alt="Computer Virus Illustrations">
+                    </li>
+                    <li><strong>Worms:</strong> Independent computer programs which use a computer network to copy
+                        themselves from one computer to other human intervention. They can operate on their own without
+                        any human intervention and there is no need to attach it to any computer program files. Worms
+                        spread much more promptly than computer viruses and are very harmful for data and programs,
+                        potentially choking the whole computer network.
+                        <img class="diagram-placeholder-img"
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                            data-src-placeholder="Fig 11.4: Computer Worms (magnifying glass over code, bug on document)"
+                            alt="Computer Worms Illustrations">
+                    </li>
+                    <li><strong>Trojan horse:</strong> Malware which attacks on the data silently. Not a virus itself,
+                        but gives a path to viruses to enter into the systems. For example, ZeuS (Zot) Trojan which
+                        infected more than 3.6 million computers in past years and still poses a threat. This software
+                        helped the unauthorized person to steal the bank login credentials of the customers secretly by
+                        catching their passcode keystrokes as they used in their computers. Zeus is spread through
+                        phishing.
+                        <img class="diagram-placeholder-img"
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                            data-src-placeholder="Fig 11.5: Trojan Horse (stylized trojan horse, alert icons)"
+                            alt="Trojan Horse Illustrations">
+                    </li>
+                    <li><strong>SQL injection attacks:</strong> Take benefit of weak points of web application software
+                        which are not robust in terms of security check or which do not have sufficient code written
+                        into them for data security. Such attacks introduce malicious programs into system and networks.
+                        <img class="diagram-placeholder-img"
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                            data-src-placeholder="Fig 11.6: SQL Injection (database with syringe, SQL text with syringe)"
+                            alt="SQL Injection Illustrations">
+                    </li>
+                    <li><strong>Ransomware:</strong> Malware which blocks access to files and displays pop-up messages,
+                        extracting money from users by taking control of their systems. For example, 'WannaCry'. It
+                        encrypts files and then asks users to pay lots of money to recover access. May enter via
+                        unauthorized email attachments or downloads from unsafe links. Some are spywares.
+                        <img class="diagram-placeholder-img"
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                            data-src-placeholder="Fig 11.7: Ransomware (computer with warning, ransom message)"
+                            alt="Ransomware Illustrations">
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="cybersecurity-measures" class="content-section measure-card">
+            <h2>11.2 Cybersecurity Measures</h2>
+            <p>Computer security, cyber security or information technology security is the practice of defending
+                computers, servers, mobile devices, electronic systems, networks, and data from malicious attacks.</p>
+            <h3>11.2.1 Role of Cyber Security Analysts</h3>
+            <p>Monitoring security access, assessing passwords/badges/log-ins, mapping computer networks, taking care of
+                threats, and supervising network for breaches.</p>
+            <h4>Major roles:</h4>
+            <ul>
+                <li>Set and implement user access controls and distinctiveness and access management systems.</li>
+                <li>Monitor network and application performance to categorize and lopsided activity.</li>
+                <li>Carry out regular audits to ensure security practices are compliant.</li>
+            </ul>
+            <h3>11.2.2 Essential Cyber Security Measures</h3>
+            <ul>
+                <li>Use strong passwords</li>
+                <li>Control access</li>
+                <li>Put up a firewall</li>
+                <li>Use security software</li>
+                <li>Update programs and systems regularly</li>
+                <li>Monitor for intrusion</li>
+                <li>Raise awareness</li>
+            </ul>
+            <h3>11.2.3 Precautionary Cyber-Security Measures Enterprise Takes</h3>
+            <ul>
+                <li><strong>A Unified Threat Management (UTM) System:</strong> Combination of security appliances acting
+                    as gateway.</li>
+                <li><strong>A Spam Filter:</strong> Detects unsolicited and unwanted email.</li>
+                <li><strong>Antivirus/anti-malware software:</strong> Prevents, detects, and removes malware. (Examples:
+                    Bitdefender, AVG, Kaspersky, McAfee, Norton, etc.)
+                    <img class="diagram-placeholder-img"
+                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                        data-src-placeholder="Figure 6: Different antivirus available on the market (logos of antivirus software)."
+                        alt="Antivirus Software Logos">
+                </li>
+                <li><strong>Patch Management System:</strong> Manages installation of software updates.</li>
+                <li><strong>2-Factor Authentication:</strong> Second level of authentication.</li>
+                <li><strong>Device Encryption:</strong> Makes data on machine useless to criminals.</li>
+                <li><strong>Routine Data Backup:</strong> Keeps a copy of business data off-site.</li>
+                <li><strong>Content Filtering:</strong> Prevents access to hazardous/prohibited websites.</li>
+                <li><strong>Disaster Recovery Plan:</strong> Outlines how to recover from fire/cyber-attack.</li>
+            </ul>
+            <div class="sub-section">
+                <h4>Firewall</h4>
+                <p>Hardware/software shield between organization's network and internet. Limits access, protects from
+                    threats. Monitors inbound/outbound traffic. Can be hardware (routers) or software. Configured with
+                    rules/policies (Proxy, Packet Filtering, Stateful Inspection).</p>
+                <img class="diagram-placeholder-img"
+                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                    data-src-placeholder="Figure 7: Firewall (LAN -> Firewall (brick wall) -> WAN)."
+                    alt="Firewall Diagram">
+            </div>
+            <div class="sub-section">
+                <h4>Encryption</h4>
+                <p>Technique to convert data into unreadable form. Only person with key can convert it back
+                    (decryption). Symmetric key (same key for lock/unlock) vs. Asymmetric key (public/private key pair).
+                </p>
+                <img class="diagram-placeholder-img"
+                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                    data-src-placeholder="Figure 4: Encryption (Hello! -> Key -> Encrypted Text -> Key -> Hello!)."
+                    alt="Encryption Diagram">
+            </div>
+        </section>
+
+        <section id="safe-internet" class="content-section measure-card">
+            <h2>Safety and Security When Using Computers</h2>
+            <h3>Why personal data should be kept confidential?</h3>
+            <p>As use of computers continues to expand, health and security risks increase. Vigilance is key. E-safety
+                refers to keeping personal data safe online and applies to mobile phones, computers, game consoles,
+                wireless tech.</p>
+            <h4>Examples of personal data:</h4>
+            <ul>
+                <li>Name, Address, Date of birth, Medical history, Banking details.</li>
+            </ul>
+            <h4>Sensitive personal data:</h4>
+            <ul>
+                <li>Ethnic origin, Political views, Religion, Criminal activity.</li>
+            </ul>
+            <h4>E-safety issues and tips:</h4>
+            <ul>
+                <li>Don’t give out personal information to unknown people.</li>
+                <li>Don’t send people photos of yourself online or via mobile.</li>
+                <li>Always maintain your privacy settings.</li>
+                <li>Ensure websites visited are trusted.</li>
+                <li>Only open emails from known sources.</li>
+                <li>Be vigilant on social networking, instant messaging, chat rooms.</li>
+            </ul>
+            <h3>Security of data</h3>
+            <p>Range of security risks to data:</p>
+            <ul>
+                <li>Hacking</li>
+                <li>Phishing</li>
+                <li>Pharming</li>
+                <li>Smishing</li>
+                <li>Vishing</li>
+                <li>Spyware</li>
+                <li>Viruses</li>
+                <li>Spam</li>
+            </ul>
+            <!-- Detailed descriptions for each risk type -->
+            <div class="sub-section">
+                <h5>Hacking</h5>
+                <p>Act of gaining unauthorized access. Effects: Identity theft, data deletion/corruption. Prevention:
+                    Firewalls, strong passwords.</p>
+            </div>
+            <div class="sub-section">
+                <h5>Phishing</h5>
+                <p>Legitimate-looking email to trick users into giving personal data. Effects: Data theft, fraud.
+                    Prevention: Filter emails, cautious opening, don't click executables.</p>
+            </div>
+            <div class="sub-section">
+                <h5>Pharming</h5>
+                <p>Malicious code redirects user to fake website. Effects: Data theft. Prevention: Anti-spyware, be
+                    alert for redirects.</p>
+            </div>
+            <div class="sub-section">
+                <h5>Smishing</h5>
+                <p>SMS phishing. Effects: Data theft via URL/call. Prevention: Be wary of unsolicited SMS.</p>
+            </div>
+            <div class="sub-section">
+                <h5>Vishing</h5>
+                <p>Voice mail phishing. Effects: Data theft via phone call. Prevention: Verify callers.</p>
+            </div>
+            <div class="sub-section">
+                <h5>Spyware</h5>
+                <p>Gathers data by monitoring key presses. Effects: Access to all typed data, can install more spyware.
+                    Prevention: Anti-spyware, monitor keyboard activity.</p>
+            </div>
+            <div class="sub-section">
+                <h5>Viruses</h5>
+                <p>Replicates/copies with intent to delete/corrupt files. Effects: Crash, malfunction, data loss.
+                    Prevention: Antivirus, avoid unknown software/emails.</p>
+            </div>
+            <div class="sub-section">
+                <h5>Spam</h5>
+                <p>Junk email. Effects: Harvest email addresses, denial of service, spread viruses. Prevention: ISP
+                    filters, high junk filter protection, don't reply, be wary of pre-checked boxes.</p>
+            </div>
+        </section>
+
+        <section id="privacy-concerns" class="content-section">
+            <h2>Privacy Concerns</h2>
+            <p>Privacy concerns revolve around protecting sensitive information from unauthorized access, use,
+                disclosure, or modification. This includes safeguarding personal data, financial information, and other
+                sensitive details from being compromised by cyber threats, breaches, or misuse.</p>
+            <ol>
+                <li><strong>What are Privacy Concerns?</strong>
+                    <ul>
+                        <li>Data Protection</li>
+                        <li>Cyber Threats</li>
+                        <li>Identity Theft</li>
+                        <li>Ethical Considerations</li>
+                    </ul>
+                </li>
+                <li><strong>Why are Privacy Concerns Important?</strong>
+                    <ul>
+                        <li>Individual Rights</li>
+                        <li>Economic Impact</li>
+                        <li>Reputation Damage</li>
+                        <li>Legal and Regulatory Compliance (e.g., GDPR)</li>
+                    </ul>
+                </li>
+                <li><strong>How to Address Privacy Concerns?</strong>
+                    <ul>
+                        <li>Security Measures (encryption, firewalls)</li>
+                        <li>Awareness and Training</li>
+                        <li>Ethical Frameworks</li>
+                        <li>Data Minimization and Purpose Limitation</li>
+                        <li>Transparency and Consent</li>
+                    </ul>
+                </li>
+                <li><strong>Examples of Privacy Concerns in Computer Fundamentals:</strong>
+                    <ul>
+                        <li>Password Security</li>
+                        <li>Data Backup and Recovery</li>
+                        <li>Software Updates</li>
+                        <li>Network Security</li>
+                        <li>Cloud Computing Security</li>
+                    </ul>
+                </li>
+                <li><strong>Key Concepts Related to Privacy:</strong>
+                    <ul>
+                        <li>Confidentiality</li>
+                        <li>Integrity</li>
+                        <li>Availability</li>
+                        <li>Anonymity</li>
+                        <li>Data Breach</li>
+                    </ul>
+                </li>
+            </ol>
+        </section>
+
+        <section id="digital-footprint" class="content-section">
+            <h2>Digital Footprint</h2>
+            <p>What is digital footprint? The data that's left behind whenever we use a digital service, or whenever
+                someone posts information about us onto a digital forum, such as a social network. Digital footprint is
+                all the stuff we leave our behind while we use the Internet. Comments on social media, Skype calls, app
+                use and email records- it’s part of our online history and can potentially be seen by other people, or
+                tracked in a database.</p>
+            <img class="diagram-placeholder-img"
+                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+                data-src-placeholder="Image: Various social media and internet icons forming a footprint shape."
+                alt="Digital Footprint Concept">
+            <h4>Type of digital footprint: Active and Passive.</h4>
+            <ul>
+                <li><strong>Active Footprint:</strong> Information that an individual purposely shares with the public
+                    or network of contacts such as a blog post, comment on social media etc. known as active footprint.
+                </li>
+                <li><strong>Passive Footprint:</strong> A passive digital footprint is unintended by the user. For
+                    example, a shopper on an ecommerce site inadvertently provides the site information about their
+                    preferences and lifestyle by the products they browse.</li>
+            </ul>
+            <h4>Examples of digital footprints:</h4>
+            <ul>
+                <li>Our search history.</li>
+                <li>Text messages, including deleted messages.</li>
+                <li>Photos and videos, including deleted ones.</li>
+                <li>Tagged photos, even those you never wanted online.</li>
+                <li>Likes/loves on sites like Facebook and Instagram.</li>
+                <li>Browsing history, even when we are on ‘Incognito’ mode.</li>
+            </ul>
+            <h4>Dangers of digital footprint:</h4>
+            <p>Risks that can be mitigated through digital footprint monitoring:</p>
+            <ul>
+                <li>Cyber Threats.</li>
+                <li>Executive Threats.</li>
+                <li>Data Exposure.</li>
+                <li>Domain Phishing.</li>
+                <li>Brand Impersonation.</li>
+                <li>Location Threats.</li>
+            </ul>
+            <h4>Benefits of digital footprints:</h4>
+            <ul>
+                <li>Fraudulent activities can be tracked down.</li>
+                <li>Companies can recommend items based on customers' preferences.</li>
+                <li>Personalization.</li>
+                <li>Convenience of stored information that can be retrieved quickly.</li>
+                <li>Recruiters can find the right candidates.</li>
+            </ul>
+            <h4>Pros (similar to benefits):</h4>
+            <ul>
+                <li>Fraudulent activities can be tracked down.</li>
+                <li>Companies can recommend items.</li>
+                <li>Personalization.</li>
+                <li>Convenience of stored information.</li>
+                <li>Recruiters can find candidates.</li>
+            </ul>
+            <h4>Tips for protection of digital footprint:</h4>
+            <ul>
+                <li>Limit the types of data we share.</li>
+                <li>Don’t enter personal data on public Wi-Fi.</li>
+                <li>Delete old accounts.</li>
+                <li>Don’t login any site with social media account like Facebook.</li>
+                <li>Use an identity protection service.</li>
+                <li>Limit sharing on social media.</li>
+                <li>Always update the software.</li>
+                <li>Act fast after a breach.</li>
+            </ul>
+        </section>
+
+        <footer class="navigation-buttons">
+            <a href="topic-9.html" class="nav-button back-prev"><i class="fas fa-arrow-left"></i> Previous Topic</a>
+            <a href="../fundamentals.html" class="nav-button syllabus"><i class="fas fa-list-ul"></i> Back to
+                Syllabus</a>
+            <a href="topic-11.html" class="nav-button next">Next Topic <i class="fas fa-arrow-right"></i></a>
+        </footer>
+
+    </div>
+
+    <script>
+        // Theme toggle logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        const bodyElement = document.body;
+
+        function setThemeMode(mode) {
+            if (mode === 'light-mode') {
+                htmlElement.classList.add('light-mode'); htmlElement.classList.remove('dark-mode');
+                bodyElement.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light-mode');
+            } else {
+                htmlElement.classList.remove('light-mode'); htmlElement.classList.add('dark-mode');
+                bodyElement.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark-mode');
+            }
+        }
+
+        (function () {
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme) { setThemeMode(currentTheme); }
+            else {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) { setThemeMode('light-mode'); }
+                else { setThemeMode('dark-mode'); }
+            }
+        })();
+
+        themeToggleBtn.addEventListener('click', function () {
+            if (htmlElement.classList.contains('light-mode')) { setThemeMode('dark-mode'); }
+            else { setThemeMode('light-mode'); }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const diagrams = document.querySelectorAll('.diagram-placeholder, .diagram-placeholder-img');
+            diagrams.forEach(diag => {
+                const placeholderText = diag.dataset.srcPlaceholder || diag.textContent || "Diagram/Image Placeholder";
+                if (diag.tagName === 'IMG') {
+                    diag.alt = placeholderText;
+                    // Example for actual image: diag.src = "path/to/images/" + placeholderText.toLowerCase().replace(/[^a-z0-9]/g, '_') + ".png";
+                }
+                else { diag.textContent = placeholderText; }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

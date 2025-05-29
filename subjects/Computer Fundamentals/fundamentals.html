@@ -3,24 +3,459 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Computer Fundamentals - EduVision</title>
-  <link rel="stylesheet" href="fundamentals-style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Roboto:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #3b82f6;
+      --accent: #f59e0b;
+      --accent-hover: #fbbf24;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 100px 20px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 20%);
+    }
+
+    #main-title {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 2.8rem;
+      margin-bottom: 0.5rem;
+      position: relative;
+    }
+
+    #subtitle {
+      font-weight: 300;
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .overview {
+      padding: 2rem 1.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .overview h2 {
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .topics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .topic-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topic-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .topic-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--primary);
+      color: white;
+      font-size: 0.8rem;
+      font-weight: bold;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      margin-bottom: 1rem;
+    }
+
+    .topic-title {
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.75rem;
+      line-height: 1.4;
+    }
+
+    .topic-desc {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      margin-bottom: 1.25rem;
+      flex-grow: 1;
+    }
+
+    .explore-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.6rem 1.25rem;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      font-size: 0.9rem;
+      margin-top: auto;
+      width: fit-content;
+    }
+
+    .explore-btn:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .explore-btn svg {
+      margin-left: 0.5rem;
+      transition: transform 0.2s ease;
+    }
+
+    .explore-btn:hover svg {
+      transform: translateX(3px);
+    }
+
+    /* Logo Styles */
+    .eduvision-logo {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      z-index: 100;
+      text-shadow: 0 2px 12px rgba(106, 130, 251, 0.2);
+    }
+
+    .eduvision-logo .text-2xl {
+      font-size: 1.7rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      letter-spacing: 0.01em;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .eduvision-logo .text-white {
+      color: #fff !important;
+    }
+
+    .eduvision-logo .text-yellow-300 {
+      color: #fde047 !important;
+    }
+
+    .eduvision-logo .group:hover .text-yellow-300 {
+      color: #fef08a !important;
+    }
+
+    .eduvision-logo a {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .eduvision-logo svg {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .header {
+        padding: 80px 20px 50px;
+      }
+
+      #main-title {
+        font-size: 2rem;
+      }
+
+      #subtitle {
+        font-size: 1rem;
+      }
+
+      .overview h2 {
+        font-size: 1.5rem;
+      }
+
+      .topics-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 
 <body>
+  <div class="eduvision-logo">
+    <div class="text-2xl font-bold">
+      <a href="../../index.html" class="flex items-center group">
+        <span class="text-white">Edu</span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 mx-0.5 text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300" fill="none"
+          viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+          style="height: 1.5em; width: 1.5em; margin: 0 2px; vertical-align: middle;">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+        </svg>
+        <span class="text-white">ision</span>
+      </a>
+    </div>
+  </div>
+
   <header class="header">
     <h1 id="main-title">Computer Fundamentals</h1>
-    <p id="subtitle">Understand the basics of computer systems and operations</p>
+    <p id="subtitle">A complete guide to understanding computer systems and operations</p>
   </header>
 
   <section class="overview">
     <h2>📌 Syllabus Overview</h2>
     <div class="topics-grid" id="topics-container">
-      <!-- Cards will appear here -->
+      <!-- Cards will be generated by JavaScript -->
     </div>
   </section>
 
-  <script src="funadmentals-script.js"></script>
+  <script>
+    const topicsData = {
+      "title": "Computer Fundamentals",
+      "subtitle": "A complete guide to understanding computer systems and operations",
+      "topics": [
+        {
+          "title": "Introduction to Computers",
+          "description": "Definition, characteristics, history, and applications of computers.",
+          "resources": [],
+          "subtopics": [
+            "Definition of a Computer",
+            "Characteristics of Computers (Speed, Accuracy, Automation, etc.)",
+            "History of Computers (Mechanical Age to Present)",
+            "Applications in various fields: Education, Health, Banking, Industry, etc."
+          ]
+        },
+        {
+          "title": "Classification of Computers",
+          "description": "Types of computers (Supercomputers, Mainframes, PCs, etc.) and generations.",
+          "resources": [],
+          "subtopics": [
+            "Types of Computers: Supercomputers, Mainframe Computers, Mini Computers, Microcomputers (Desktops, Laptops), Embedded Systems",
+            "Generations of Computers: First to Fifth Generation – Characteristics & Technology Used"
+          ]
+        },
+        {
+          "title": "Computer Components & Architecture",
+          "description": "Hardware vs. Software, CPU, Memory (RAM/ROM), Storage Devices.",
+          "resources": [],
+          "subtopics": [
+            "Basic Architecture (Von Neumann Architecture)",
+            "Hardware vs Software",
+            "Central Processing Unit (CPU) – ALU, CU, Registers",
+            "Memory Types: Primary Memory (RAM, ROM), Cache Memory",
+            "Storage Devices: Magnetic (HDD), Optical (CD/DVD), Solid-State (SSD, USB)"
+          ]
+        },
+        {
+          "title": "Input and Output Devices",
+          "description": "Keyboard, mouse, scanners, monitors, printers, etc.",
+          "resources": [],
+          "subtopics": [
+            "Input Devices: Keyboard, Mouse, Scanner, Webcam, Microphone, etc.",
+            "Output Devices: Monitor (LCD, LED), Printers (Laser, Inkjet), Speakers, Projectors"
+          ]
+        },
+        {
+          "title": "Memory and Storage",
+          "description": "Primary (RAM, ROM) & Secondary (HDD, SSD, USB) memory.",
+          "resources": [],
+          "subtopics": [
+            "Primary Memory: RAM (Volatile), ROM (Non-volatile)",
+            "Secondary Memory: HDD, SSD, USB, Memory Cards",
+            "Comparison Chart: Speed, Cost, Capacity, Volatility"
+          ]
+        },
+        {
+          "title": "Number Systems & Data Representation",
+          "description": "Binary, Decimal, Octal, Hexadecimal conversions. ASCII & Unicode.",
+          "resources": [],
+          "subtopics": [
+            "Number Systems: Binary, Decimal, Octal, Hexadecimal",
+            "Conversions between number systems",
+            "Character Encoding Standards: ASCII, Unicode",
+            "Data Representation: Integers, Floating Point, Text"
+          ]
+        },
+        {
+          "title": "Software and Hardware",
+          "description": "System vs Application Software, Open Source vs Proprietary.",
+          "resources": [],
+          "subtopics": [
+            "Hardware: Physical components of a computer",
+            "Software: System Software (Operating Systems, Drivers), Application Software (Word Processors, Browsers), Utility Software",
+            "Open Source vs Proprietary Software",
+            "Firmware basics"
+          ]
+        },
+        {
+          "title": "Operating Systems Basics",
+          "description": "Functions of OS, types (Windows, Linux, macOS), file systems.",
+          "resources": [],
+          "subtopics": [
+            "Definition & Functions of an OS",
+            "Types of OS: Single-user, Multi-user, GUI vs CLI",
+            "Popular OS Examples: Windows, Linux, macOS, Android",
+            "File Systems: FAT, NTFS, ext3/ext4"
+          ]
+        },
+        {
+          "title": "Computer Networks & Internet",
+          "description": "LAN/WAN, IP Addresses, DNS, Cloud Computing basics.",
+          "resources": [],
+          "subtopics": [
+            "Network Types: LAN, MAN, WAN",
+            "Network Devices: Router, Switch, Modem, Hub",
+            "IP Addressing & DNS",
+            "Internet Basics: WWW, Browsers, Search Engines",
+            "Cloud Computing Basics"
+          ]
+        },
+        {
+          "title": "Data Security & Privacy",
+          "description": "Viruses, Encryption, Firewalls, Cybersecurity best practices.",
+          "resources": [],
+          "subtopics": [
+            "Cyber Threats: Viruses, Worms, Trojans, Ransomware",
+            "Cybersecurity Measures: Antivirus, Firewalls, Encryption",
+            "Safe Internet Practices",
+            "Privacy Concerns and Digital Footprint"
+          ]
+        },
+        {
+          "title": "Database Fundamentals",
+          "description": "What is a Database? Types (SQL/NoSQL), Basic SQL commands.",
+          "resources": [],
+          "subtopics": [
+            "What is a Database?",
+            "Types of Databases: Relational (SQL), Non-relational (NoSQL)",
+            "Basic SQL Commands: SELECT, INSERT, UPDATE, DELETE",
+            "DBMS vs RDBMS"
+          ]
+        },
+        {
+          "title": "Emerging Technologies",
+          "description": "AI, ML, IoT, Blockchain - Basic concepts and applications.",
+          "resources": [],
+          "subtopics": [
+            "Artificial Intelligence (AI)",
+            "Machine Learning (ML)",
+            "Internet of Things (IoT)",
+            "Blockchain Technology",
+            "Applications and Real-world Use Cases"
+          ]
+        },
+        {
+          "title": "Ethical & Social Aspects",
+          "description": "Digital Ethics, Cyber Laws, Societal Impact of Computers.",
+          "resources": [],
+          "subtopics": [
+            "Digital Ethics",
+            "Cyber Laws & IT Act",
+            "Plagiarism, Piracy, Data Misuse",
+            "Impact of Technology on Society",
+            "Digital Divide",
+            "Social Media Influence",
+            "Environmental Impact (E-waste)"
+          ]
+        }
+      ]
+    };
+
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById("main-title").textContent = topicsData.title;
+      document.getElementById("subtitle").textContent = topicsData.subtitle;
+
+      const container = document.getElementById("topics-container");
+
+      topicsData.topics.forEach((topic, index) => {
+        const card = document.createElement("div");
+        card.className = "topic-card";
+
+        // Build subtopics as bullet list
+        const subtopicsList = topic.subtopics && topic.subtopics.length
+          ? `<ul style="margin-bottom:1.25rem; padding-left:1.2em; color:var(--text-light); font-size:0.95rem;">
+              ${topic.subtopics.map(sub => `<li style="margin-bottom:0.3em;">${sub}</li>`).join('')}
+            </ul>`
+          : "";
+
+        card.innerHTML = `
+          <div class="topic-number">${index + 1}</div>
+          <div class="topic-title">${topic.title}</div>
+          ${subtopicsList}
+          <a href="Topics/topic-${index + 1}.html" class="explore-btn">
+            Explore
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+            </svg>
+          </a>
+        `;
+
+        container.appendChild(card);
+      });
+    });
+  </script>
 </body>
 
 </html>

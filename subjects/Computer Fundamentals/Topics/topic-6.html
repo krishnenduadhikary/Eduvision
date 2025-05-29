@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 6: Number Systems & Data Representation - Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            /* Dark Mode (Default) */
+            --bg-color: #121828;
+            --card-bg-color: #1f2937;
+            /* Main section background */
+            --inner-card-bg-color: var(--bg-color);
+            /* For individual elements within sections */
+            --primary-text-color: #e5e7eb;
+            --secondary-text-color: #9ca3af;
+            --accent-color: #6a82fb;
+            --accent-hover-color: #8da2fc;
+            --yellow-accent: #fde047;
+            --border-color: #374151;
+            --futuristic-glow: 0 0 15px rgba(106, 130, 251, 0.3);
+            --futuristic-glow-yellow: 0 0 15px rgba(253, 224, 71, 0.4);
+            --header-gradient-start: var(--card-bg-color);
+            --header-gradient-end: var(--bg-color);
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #5a67d8;
+            --nav-button-syllabus-hover-bg: #4c58bf;
+            --diagram-bg: #2a3547;
+            --table-header-bg: var(--accent-color);
+            --table-row-even-bg: var(--bg-color);
+            --code-bg: #282c34;
+            /* A common dark code editor background */
+            --code-text-color: #abb2bf;
+            --theme-toggle-bg: #23272f;
+            --theme-toggle-icon: #fde047;
+            --theme-toggle-hover-bg: #374151;
+            --theme-toggle-hover-icon: #fff;
+        }
+
+        html.light-mode {
+            /* Light Mode */
+            --bg-color: #f0f4f8;
+            --card-bg-color: #ffffff;
+            --inner-card-bg-color: var(--bg-color);
+            --primary-text-color: #2c3e50;
+            --secondary-text-color: #52616b;
+            --accent-color: #3498db;
+            --accent-hover-color: #2980b9;
+            --yellow-accent: #f39c12;
+            --border-color: #d1d5db;
+            --futuristic-glow: 0 0 15px rgba(52, 152, 219, 0.2);
+            --futuristic-glow-yellow: 0 0 15px rgba(243, 156, 18, 0.3);
+            --header-gradient-start: #e6e9ed;
+            --header-gradient-end: #f0f4f8;
+            --button-text-color: #ffffff;
+            --nav-button-syllabus-bg: #27ae60;
+            --nav-button-syllabus-hover-bg: #229954;
+            --eduvision-logo-color: #2563eb;
+            --eduvision-logo-yellow: #f59e0b;
+            --diagram-bg: #e9ecef;
+            --table-header-bg: var(--accent-color);
+            --table-row-even-bg: #f8f9fa;
+            --code-bg: #f5f2f0;
+            /* Light code editor background */
+            --code-text-color: #383a42;
+            --theme-toggle-bg: #f8f9fa;
+            --theme-toggle-icon: #f39c12;
+            --theme-toggle-hover-bg: #e9ecef;
+            --theme-toggle-hover-icon: #2c3e50;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            font-size: 16px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 80px;
+        }
+
+        /* Logo Styles */
+        .eduvision-logo {
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            text-shadow: 0 2px 12px #6a82fb33;
+        }
+
+        .eduvision-logo .text-2xl {
+            font-size: 1.7rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            letter-spacing: 0.01em;
+        }
+
+        .eduvision-logo .text-logo-main {
+            color: #fff !important;
+        }
+
+        .eduvision-logo .text-logo-accent {
+            color: #fde047 !important;
+        }
+
+        html.light-mode .eduvision-logo .text-logo-main {
+            color: var(--eduvision-logo-color) !important;
+        }
+
+        html.light-mode .eduvision-logo .text-logo-accent {
+            color: var(--eduvision-logo-yellow) !important;
+        }
+
+        .eduvision-logo .group:hover .text-logo-accent {
+            filter: brightness(1.1);
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .eduvision-logo svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 1.5em;
+            width: 1.5em;
+            margin: 0 2px;
+        }
+
+        /* Theme Toggle Button */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s, border-color 0.3s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+            color: var(--theme-toggle-hover-icon);
+            transform: scale(1.1);
+        }
+
+        #theme-toggle .icon-sun {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-moon {
+            display: none;
+        }
+
+        body.dark-mode #theme-toggle .icon-sun {
+            display: inline-block;
+        }
+
+        /* Header */
+        .main-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--header-gradient-start), var(--header-gradient-end));
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .topic-badge {
+            display: inline-block;
+            background-color: var(--yellow-accent);
+            color: var(--bg-color);
+            padding: 5px 15px;
+            border-radius: 15px 15px 0 0;
+            font-size: 0.9em;
+            font-weight: bold;
+            font-family: 'Nunito', sans-serif;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-header h1 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.8em;
+            font-weight: 900;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: var(--futuristic-glow);
+        }
+
+        .main-header p {
+            font-size: 1.2em;
+            color: var(--secondary-text-color);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Sections & Content Styling */
+        .content-section {
+            background-color: var(--card-bg-color);
+            padding: 30px 40px;
+            margin-bottom: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--accent-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-left-color 0.3s ease;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15), var(--futuristic-glow);
+        }
+
+        .content-section h2 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+
+        .content-section h3 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.6em;
+            color: var(--yellow-accent);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section h4 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.3em;
+            color: var(--primary-text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section h5 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.1em;
+            color: var(--accent-color);
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+
+        .content-section p,
+        .content-section ul {
+            margin-bottom: 15px;
+            color: var(--secondary-text-color);
+            transition: color 0.3s ease;
+        }
+
+        .content-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .content-section ul li::before {
+            content: "\f105";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            top: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .content-section .sub-section {
+            background-color: var(--inner-card-bg-color);
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Diagram Placeholder */
+        .diagram-placeholder,
+        .diagram-placeholder-img {
+            background-color: var(--diagram-bg);
+            border: 2px dashed var(--border-color);
+            padding: 15px;
+            margin: 20px auto;
+            text-align: center;
+            color: var(--secondary-text-color);
+            border-radius: 8px;
+            font-style: italic;
+            display: block;
+            max-width: 90%;
+            font-size: 0.9em;
+        }
+
+        .diagram-placeholder-img {
+            height: auto;
+            min-height: 80px;
+        }
+
+        .ascii-table-placeholder {
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre;
+            overflow-x: auto;
+            background-color: var(--code-bg);
+            color: var(--code-text-color);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-size: 0.85em;
+        }
+
+        /* Conversion Table Styling */
+        .conversion-table {
+            width: auto;
+            border-collapse: collapse;
+            margin: 15px auto;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        .conversion-table th,
+        .conversion-table td {
+            border: 1px solid var(--border-color);
+            padding: 6px 10px;
+        }
+
+        .conversion-table th {
+            background-color: var(--table-header-bg);
+            color: var(--button-text-color);
+        }
+
+        .conversion-table tr:nth-child(even) td {
+            background-color: var(--table-row-even-bg);
+        }
+
+        .conversion-example {
+            margin-top: 10px;
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--code-bg);
+            color: var(--code-text-color);
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+
+        .important-note {
+            background-color: var(--yellow-accent)20;
+            border-left: 4px solid var(--yellow-accent);
+            padding: 10px 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: var(--primary-text-color);
+        }
+
+        /* Navigation Buttons */
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: var(--card-bg-color);
+            border-radius: 8px;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-button {
+            color: var(--button-text-color);
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-align: center;
+            flex-grow: 1;
+            min-width: 150px;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-button.back-prev {
+            background-color: var(--secondary-text-color);
+        }
+
+        .nav-button.back-prev:hover {
+            background-color: var(--primary-text-color);
+            filter: brightness(1.2);
+        }
+
+        .nav-button.syllabus {
+            background-color: var(--nav-button-syllabus-bg);
+        }
+
+        .nav-button.syllabus:hover {
+            background-color: var(--nav-button-syllabus-hover-bg);
+        }
+
+        .nav-button.next {
+            background-color: var(--accent-color);
+        }
+
+        .nav-button.next:hover {
+            background-color: var(--accent-hover-color);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .navigation-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .nav-button {
+                width: auto;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-header h1 {
+                font-size: 2.5em;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .content-section h2 {
+                font-size: 1.8em;
+            }
+
+            .topic-badge {
+                font-size: 0.8em;
+                padding: 4px 10px;
+                top: -15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header h1 {
+                font-size: 2.2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="eduvision-logo">
+        <div class="text-2xl font-bold">
+            <a href="../../../index.html" class="flex items-center group">
+                <span class="text-logo-main">Edu</span>
+                <svg class="text-logo-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="text-logo-main">ision</span>
+            </a>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle dark/light mode">
+        <i class="fas fa-moon icon-moon"></i>
+        <i class="fas fa-sun icon-sun"></i>
+    </button>
+
+    <div class="container">
+        <header class="main-header">
+            <span class="topic-badge">Topic 6</span>
+            <h1>Number Systems & Data Representation</h1>
+            <p>Understanding how computers interpret and process numbers and characters through various encoding schemes
+                and representational formats.</p>
+        </header>
+
+        <section id="introduction" class="content-section">
+            <h2>Introduction to Data Encoding</h2>
+            <p>All digital computers store numbers, letters, and other characters in coded form. The code used to
+                represent characters is the Binary Code – i.e. a code made up of bits called Binary Digits. Every
+                character is represented by a string of "0s" and "1s" – the only digits found in the binary numbering
+                system.</p>
+            <ul>
+                <li>"0" or "1" = 1 bit (Binary Digit)</li>
+                <li>8 bits = 1 Byte (1 Character)</li>
+                <li>1024 Bytes = 1 KB (Kilo Bytes)</li>
+                <li>1024 KB = 1 MB (Mega Byte)</li>
+                <li>1024 MB = 1 GB (Giga Byte)</li>
+                <li>1024 GB = 1 TB (Terra Byte)</li>
+            </ul>
+            <p>When data is typed into a computer, the keyboard converts each key stroke into a binary character code.
+                This code is then transmitted to the computer. When the computer transmits the data to any device, each
+                individual character is communicated in binary code. It is then converted back to the specific character
+                while displaying or printing the data.</p>
+        </section>
+
+        <section id="number-systems" class="content-section">
+            <h2>Number Systems</h2>
+            <p>Numbers earlier consisted of symbols like I for 1, II for 2, III for 3 etc. Each symbol represented the
+                same value irrespective of its position in the number. This approach is called an additive approach. As
+                time passed positional numbering systems were developed. In such a system the number of symbols is few
+                and they represent different values depending on the position they occupy. Now we know that numbers can
+                be represented by arranging symbols in various positions. These kinds of number systems are therefore
+                called positional number systems. The value of each digit in the number system is determined by: the
+                digit itself, the position of the digit in the number itself, and the base of the system.</p>
+
+            <div class="sub-section">
+                <h3>Decimal Number System (Base 10)</h3>
+                <p>In the decimal system the successive positions to the left of the decimal point represent units,
+                    tens, hundreds, thousands etc. For example if we consider the number 7762, the digit 2 represents
+                    the number of units, 6 represents the number of tens, 7 the number of hundreds and 7 the number of
+                    thousands. (7 x 1000) + (7 x 100) + (6 x 10) + (2 x 1) = 7762. Thus as we move one position to the
+                    left, the value of the digit increases by ten times. We can see that the position of the number
+                    affects its value.</p>
+            </div>
+
+            <div class="sub-section">
+                <h3>Binary Number System (Base 2)</h3>
+                <p>Among all the positional number systems, the binary system is the most dominant number system that is
+                    employed by almost all the modern digital computer systems. The binary system uses base 2 to
+                    represent different values. Therefore, the binary system is also known as base-2 system. As this
+                    system uses base 2, only two symbols are available for representing the different values in this
+                    system. These symbols are 0 and 1, which are also known as bits in computer terminology. Using
+                    binary system, the computer systems can store and process each type of data in terms of 0s and 1s
+                    only.</p>
+                <h4>Technical terms used in binary system:</h4>
+                <ul>
+                    <li><strong>Bit:</strong> Smallest unit of information. Value 0 or 1. (Derived from Binary digiT).
+                    </li>
+                    <li><strong>Nibble:</strong> Combination of 4 bits.</li>
+                    <li><strong>Byte:</strong> Combination of 8 bits. (Derived from words 'by eight').</li>
+                    <li><strong>Word:</strong> Combination of 16 bits.</li>
+                    <li><strong>Double word:</strong> Combination of 32 bits.</li>
+                    <li><strong>Kilobyte (KB):</strong> 1024 bytes.</li>
+                    <li><strong>Megabyte (MB):</strong> 1024 KBs.</li>
+                    <li><strong>Gigabyte (GB):</strong> 1024 MBs.</li>
+                </ul>
+                <h4>Characteristics of binary number system:</h4>
+                <ul>
+                    <li>Uses two digits such as 0 and 1.</li>
+                    <li>Binary called base 2 number system.</li>
+                    <li>Each position in a binary number represents a 0 power of the base (2). Example 2<sup>0</sup>.
+                    </li>
+                    <li>Last position in a binary number represents a power of the base (2). Example 2<sup>m</sup> where
+                        m represents the last position - 1.</li>
+                </ul>
+            </div>
+
+            <div class="sub-section">
+                <h3>Octal Number System (Base 8)</h3>
+                <h4>Characteristics:</h4>
+                <ul>
+                    <li>Uses eight digits, 0,1,2,3,4,5,6,7.</li>
+                    <li>Also known as base 8 number system.</li>
+                    <li>Each position in an octal number represents a power of the base (8). Example 8<sup>t</sup>.</li>
+                </ul>
+                <p>Example: Octal Number: 13472<sub>8</sub></p>
+                <h5>Calculating Decimal Equivalent (Example: 13472<sub>8</sub>):</h5>
+                <div class="conversion-example">
+                    Step 1: (1 x 8<sup>4</sup>) + (3 x 8<sup>3</sup>) + (4 x 8<sup>2</sup>) + (7 x 8<sup>1</sup>) + (2 x
+                    8<sup>0</sup>)<sub>10</sub><br>
+                    Step 2: (4096 + 1536 + 256 + 56 + 2)<sub>10</sub><br>
+                    Step 3: 5496<sub>10</sub>
+                </div>
+            </div>
+
+            <div class="sub-section">
+                <h3>Hexadecimal Number System (Base 16)</h3>
+                <h4>Characteristics:</h4>
+                <ul>
+                    <li>Uses 10 digits (0-9) and 6 letters (A,B,C,D,E,F).</li>
+                    <li>Letters represent numbers: A=10, B=11, C=12, D=13, E=14, F=15.</li>
+                    <li>Also known as base 16 number system.</li>
+                    <li>Each position represents a power of the base (16). Example 16<sup>t</sup>.</li>
+                </ul>
+                <p>Example: Hexadecimal Number: 25ADE<sub>16</sub></p>
+                <h5>Calculating Decimal Equivalent (Example from image: 19FDE<sub>16</sub>, original example was 25ADE):
+                </h5>
+                <p>Let's use 25ADE<sub>16</sub> for consistency with the example text:</p>
+                <div class="conversion-example">
+                    Step 1 (Using 25ADE<sub>16</sub>): (2 x 16<sup>4</sup>) + (5 x 16<sup>3</sup>) + (A x
+                    16<sup>2</sup>) + (D x 16<sup>1</sup>) + (E x 16<sup>0</sup>)<sub>10</sub><br>
+                    Step 2: (2 x 65536) + (5 x 4096) + (10 x 256) + (13 x 16) + (14 x 1)<sub>10</sub><br>
+                    Step 3: (131072 + 20480 + 2560 + 208 + 14)<sub>10</sub><br>
+                    Step 4: 154334<sub>10</sub>
+                </div>
+                <p class="important-note">Note: The image provided for Hexadecimal to Decimal conversion seems to have a
+                    calculation error or uses a different initial number (19FDE) for the sum. The example above
+                    calculates for 25ADE.</p>
+            </div>
+        </section>
+
+        <section id="number-conversions" class="content-section">
+            <h2>Conversions Between Number Systems</h2>
+
+            <div class="sub-section">
+                <h4>Converting Decimal To Binary</h4>
+                <p>Divide the decimal number by the base of 2. Note the remainder and divide the quotient again with the
+                    base. Repeat until the quotient is zero. The binary number is the sequence of remainders read from
+                    bottom to top.</p>
+                <p>Example: Decimal number is 65</p>
+                <table class="conversion-table">
+                    <tr>
+                        <td>2</td>
+                        <td>65</td>
+                        <td>1 (LSB)</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>32</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>16</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>8</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>4</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>2</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>1</td>
+                        <td>1 (MSB)</td>
+                    </tr>
+                </table>
+                <p>The binary number of 65 is 1000001<sub>2</sub>.</p>
+
+                <h4>Converting Binary To Decimal</h4>
+                <p>Example: Binary number 1000001<sub>2</sub></p>
+                <div class="conversion-example">
+                    = (1*2<sup>6</sup>) + (0*2<sup>5</sup>) + (0*2<sup>4</sup>) + (0*2<sup>3</sup>) + (0*2<sup>2</sup>)
+                    + (0*2<sup>1</sup>) + (1*2<sup>0</sup>)<br>
+                    = (1*64) + (0*32) + (0*16) + (0*8) + (0*4) + (0*2) + (1*1)<br>
+                    = 64 + 0 + 0 + 0 + 0 + 0 + 1<br>
+                    = 65<sub>10</sub>
+                </div>
+            </div>
+
+            <div class="sub-section">
+                <h4>Converting Decimal To Octal</h4>
+                <p>Divide the decimal number by the base of 8.</p>
+                <p>Example: Decimal number is 224</p>
+                <table class="conversion-table">
+                    <tr>
+                        <td>8</td>
+                        <td>224</td>
+                        <td>0 (LSB)</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>28</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>3</td>
+                        <td>3 (MSB)</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>0</td>
+                        <td></td>
+                    </tr>
+                </table>
+                <p>The octal number of 224 is 340<sub>8</sub>.</p>
+
+                <h4>Converting Octal To Decimal</h4>
+                <p>Example: Octal number 340<sub>8</sub></p>
+                <div class="conversion-example">
+                    = (3*8<sup>2</sup>) + (4*8<sup>1</sup>) + (0*8<sup>0</sup>)<br>
+                    = (3*64) + (4*8) + (0*1)<br>
+                    = 192 + 32 + 0<br>
+                    = 224<sub>10</sub>
+                </div>
+
+                <h4>Converting Binary to Octal</h4>
+                <p>Divide the binary number into groups of three from the octal point (right for fractional, left for
+                    integer). Replace each group with its octal equivalent. Add leading zeros if needed.</p>
+                <p>Example: Binary 1010101010100<sub>2</sub></p>
+                <div class="conversion-example">
+                    <u>010</u> <u>101</u> <u>010</u> <u>101</u> <u>000</u> (grouped)<br>
+                     2   5   2   5   0<br>
+                    So, 25250<sub>8</sub> is the Octal equivalent. (Note: Image example was 101010101010100 -> 101 010
+                    101 010 100 -> 5 2 5 2 4. The example above uses a slightly different binary number for
+                    demonstration based on text)
+                </div>
+
+                <h4>Converting Octal to Binary</h4>
+                <p>Replace each octal digit with its 3-bit binary equivalent.</p>
+                <p>Example: Octal 65<sub>8</sub></p>
+                <div class="conversion-example">
+                    6   5<br>
+                    110 101<br>
+                    The binary equivalent is 110101<sub>2</sub>.
+                </div>
+            </div>
+
+            <div class="sub-section">
+                <h4>Converting Decimal To Hexadecimal</h4>
+                <p>Divide the decimal number by the base of 16.</p>
+                <p>Example: Decimal number is 370</p>
+                <table class="conversion-table">
+                    <tr>
+                        <td>16</td>
+                        <td>370</td>
+                        <td>2 (LSB)</td>
+                    </tr>
+                    <tr>
+                        <td>16</td>
+                        <td>23</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td>16</td>
+                        <td>1</td>
+                        <td>1 (MSB)</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>0</td>
+                        <td></td>
+                    </tr>
+                </table>
+                <p>The hexadecimal number of 370 is 172<sub>16</sub>.</p>
+
+                <h4>Converting Hexadecimal To Decimal</h4>
+                <p>Example: Hexadecimal number 172<sub>16</sub></p>
+                <div class="conversion-example">
+                    = (1*16<sup>2</sup>) + (7*16<sup>1</sup>) + (2*16<sup>0</sup>)<br>
+                    = (1*256) + (7*16) + (2*1)<br>
+                    = 256 + 112 + 2<br>
+                    = 370<sub>10</sub>
+                </div>
+
+                <h4>Converting Binary to Hexadecimal</h4>
+                <p>Split the binary number into groups of four from the binary point. Replace each group with its
+                    hexadecimal equivalent. Add leading zeros if necessary.</p>
+                <p>Example: Binary 101011000010<sub>2</sub></p>
+                <div class="conversion-example">
+                    <u>1010</u> <u>1100</u> <u>0010</u><br>
+                      A   C   2<br>
+                    So, AC2<sub>16</sub> is the Hexadecimal equivalent.
+                </div>
+
+                <h4>Converting Hexadecimal to Binary</h4>
+                <p>Replace each hexadecimal digit with its 4-bit binary equivalent.</p>
+                <p>Example: Hexadecimal 1901A0412C<sub>16</sub></p>
+                <div class="conversion-example">
+                    1 9 0 1 A 0 4 1 2 C<br>
+                    0001 1001 0000 0001 1010 0000 0100 0001 0010 1100<br>
+                    Binary: 0001100100000001101000000100000100101100<sub>2</sub>
+                </div>
+            </div>
+
+            <div class="sub-section">
+                <h4>Converting Hexadecimal to Octal</h4>
+                <p>Write 4-digit binary numbers for each hexadecimal digit. Arrange the entire number sequence into
+                    groups of 3 bits. Add leading zeros if any bit is missing. Write down the octal equivalent of each
+                    3-bit section.</p>
+                <p>Example: Hexadecimal 2A35<sub>16</sub></p>
+                <div class="conversion-example">
+                    2   A   3   5<br>
+                    0010 1010 0011 0101 (Binary)<br>
+                    <u>000</u> <u>101</u> <u>010</u> <u>001</u> <u>101</u> <u>01</u> (Grouped by 3, add leading zero to
+                    last group if needed: 010)<br>
+                     0   5   2   1   5   2 (if 010)<br>
+                    Actual grouping: <u>001</u> <u>010</u> <u>100</u> <u>011</u> <u>010</u> <u>1</u> (Need to group
+                    correctly)
+                    Binary: 0010 1010 0011 0101 -> <u>0</u>10 101 000 110 101 (group from right)<br>
+                    -> <u>000</u> <u>010</u> <u>101</u> <u>000</u> <u>110</u> <u>101</u><br>
+                      0   2   5   0   6   5 <br>
+                    The octal number is 25065<sub>8</sub>.
+                </div>
+
+                <h4>Converting Octal to Hexadecimal</h4>
+                <p>Write 3-digit binary numbers for each octal digit. Arrange the entire number sequence into groups of
+                    4 bits. Add leading zeros if any bit is missing. Write down the hexadecimal equivalent of each 4-bit
+                    section.</p>
+                <p>Example: Octal 25065<sub>8</sub></p>
+                <div class="conversion-example">
+                    2   5   0   6   5<br>
+                    010 101 000 110 101 (Binary)<br>
+                    <u>0010</u> <u>1010</u> <u>0011</u> <u>0101</u> (Grouped by 4)<br>
+                      2   A   3   5<br>
+                    The hexadecimal number is 2A35<sub>16</sub>.
+                </div>
+            </div>
+        </section>
+
+        <section id="binary-arithmetic" class="content-section">
+            <h2>Binary Arithmetic</h2>
+            <p>All arithmetic operations are possible in binary numbering system like addition, subtraction,
+                multiplication and division.</p>
+            <div class="sub-section">
+                <h4>Addition</h4>
+                <p>Rules: 0+0=0, 0+1=1, 1+0=1, 1+1=0 (carry 1), 1+1+1=1 (carry 1).</p>
+            </div>
+            <div class="sub-section">
+                <h4>Subtraction (using Complements)</h4>
+                <p>Find complement of subtrahend, add to minuend. If carry, add carry to result. If no carry, complement
+                    result and attach negative sign.</p>
+            </div>
+            <div class="sub-section">
+                <h4>Multiplication</h4>
+                <p>Follows same rules as decimal. Table: 0x0=0, 0x1=0, 1x0=0, 1x1=1.</p>
+            </div>
+            <div class="sub-section">
+                <h4>Division</h4>
+                <p>Steps: Start from left of dividend, perform subtraction, put 1 in quotient if possible, else 0. Bring
+                    down next digit.</p>
+            </div>
+
+            <h3>Complement of Binary Numbers</h3>
+            <p>Complements are used for subtraction. Two types: 1's complement and 2's complement.</p>
+            <ul>
+                <li><strong>1's Complement:</strong> Change bits 1 to 0 and 0 to 1. Ex: 101 -> 010.</li>
+                <li><strong>2's Complement:</strong> Add 1 to the 1's complement. Ex: 101 -> (010 + 1) = 011.</li>
+            </ul>
+            <p>Table of Complements Possible: Binary (1's, 2's), Octal (7's, 8's), Decimal (9's, 10's), Hexadecimal
+                (15's, 16's).</p>
+        </section>
+
+        <section id="data-representation" class="content-section">
+            <h2>Data Representation</h2>
+            <p>Data refers to symbols that represent people, events, things, and ideas. Data Representation refers to
+                the form in which data is stored, processed, and transmitted. Devices such as smartphones, iPods, and
+                computers store data in digital formats. Digitization is the process of converting information into
+                digital data. In the computer system, data is always represented in a binary format.</p>
+            <div class="diagram-placeholder-img"
+                data-src-placeholder="Diagram: Classification of Data Representation (Fixed point data {Magnitude format [Unsigned, Signed], Complement format [1's, 2's]}, Floating point data {Single precision, Double precision}).">
+                Data Representation Classification Diagram</div>
+            <div class="diagram-placeholder-img"
+                data-src-placeholder="Visual: Data Representation (0s and 1s, circuit board pulses, CD/DVD spots, disk magnetized particles).">
+                Visual Data Representation Examples</div>
+
+            <h3>5.9 Binary Data Representation</h3>
+            <p>Fixed point number representation and floating point number representation.</p>
+            <h4>5.9.1 Fixed Point Number Representation (Integers)</h4>
+            <ul>
+                <li>Positive integer: sign bit 0, magnitude is positive binary.</li>
+                <li>Negative integer: sign bit 1. Magnitude represented by:
+                    <ul>
+                        <li>Signed Magnitude Representation</li>
+                        <li>Signed 1's Complement Representation</li>
+                        <li>Signed 2's Complement Representation (most common for arithmetic)</li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="diagram-placeholder-img"
+                data-src-placeholder="Table 5.6: Fixed point representation of the signed number 18.">Signed Number
+                Representation Table</div>
+
+            <h5>Addition and Subtraction of Signed Binary Numbers</h5>
+            <p>Typically performed using 2's complement representation to simplify hardware (subtraction becomes
+                addition of a negative number).</p>
+            <div class="conversion-example">
+                Example 1: Add +5 and +10<br>
+                +5: 0000 0101<br>
+                +10: 0000 1010<br>
+                Result: 0000 1111 (+15)
+            </div>
+
+            <h4>5.9.2 Floating Point Number Representation</h4>
+            <p>Has two parts: mantissa and exponent. Mantissa is a signed fixed point number. Exponent shows the
+                position of the binary point in the mantissa. Used for very large or very small numbers, and numbers
+                with fractional parts. Operations are more complex.</p>
+        </section>
+
+        <section id="character-encoding" class="content-section">
+            <h2>Character Encoding Standards</h2>
+            <p>Encoding is a method of converting data from one format to another. Character encoding standardizes this
+                by defining sets of rules for representing character data. It consists of code pages that adhere to its
+                rules. Characters are represented using ASCII, ISII, and Unicode.</p>
+
+            <div class="sub-section">
+                <h3>ASCII (American Standard Code for Information Interchange)</h3>
+                <p>Most widely used Alphanumeric code. 7 bits for each character (2<sup>7</sup> = 128 possible
+                    characters). Represents standard keyboard characters, control functions, punctuation, numbers 0-9,
+                    lowercase a-z, uppercase A-Z. Extended ASCII uses 8 bits (256 characters).</p>
+                <div class="ascii-table-placeholder"
+                    data-src-placeholder="ASCII Table: Decimal, Hexadecimal, Binary, Octal, Character representations.">
+                    ASCII Table Placeholder (Full table is very large)</div>
+            </div>
+
+            <div class="sub-section">
+                <h3>Unicode (Universal coding Standard)</h3>
+                <p>New universal coding standard adopted by all new platforms. Promoted by Unicode consortium. Provides
+                    a unique number for every character irrespective of platform, program, or language. Supports
+                    worldwide interchange, processing, display of diverse languages.</p>
+                <h4>Significance of Unicode:</h4>
+                <ul>
+                    <li>Unique code for all characters in all languages.</li>
+                    <li>Supports around 100,000 characters. Uses maximum of 4 bytes per character.</li>
+                    <li>Easily typed in all languages on all computer platforms.</li>
+                    <li>Provision of 'Devanagari Unicode' for Hindi and other Indian languages.</li>
+                    <li>Text can be in multiple languages in the same document without changing.</li>
+                    <li>Can be read all over the world without being corrupted.</li>
+                </ul>
+                <h4>Encoding Scheme in UNICODE (UTF-8, UTF-16, UTF-32)</h4>
+                <p>UTF stands for Unicode Transformation Format.</p>
+                <ul>
+                    <li><strong>UTF-8:</strong> Variable size encoding (1, 2, 3, or 4 bytes). Common ASCII characters
+                        use 1 byte.</li>
+                    <li><strong>UTF-16:</strong> Variable byte encoding (2 or 4 bytes). Most modern languages
+                        represented using 2 bytes.</li>
+                    <li><strong>UTF-32:</strong> Fixed byte encoding (4 bytes per code point).</li>
+                </ul>
+            </div>
+            <div class="sub-section">
+                <h3>Other Codes (BCD, Excess-3, Gray Code)</h3>
+                <h4>6.6 4-BIT BINARY CODED DECIMAL (BCD) SYSTEMS</h4>
+                <p>Employed by computer systems to encode the decimal number into its equivalent binary number. Main
+                    advantage: fast and efficient to convert decimal numbers into binary. Most popular is Weighted 8421
+                    BCD code (each decimal digit encoded into its 4-bit binary number).</p>
+                <div class="diagram-placeholder-img" data-src-placeholder="Table 6.7 Weighted 4-bit BCD codes.">Weighted
+                    BCD Table</div>
+                <h4>6.6.2 Excess-3 BCD Code</h4>
+                <p>Non-weighted BCD code. Decimal number transformed to 4-bit BCD by first adding 3 to all digits, then
+                    converting to 4-bit 8421 BCD.</p>
+                <div class="diagram-placeholder-img" data-src-placeholder="Table 6.8 Excess-3 BCD codes.">Excess-3 BCD
+                    Table</div>
+                <h4>Gray Code</h4>
+                <p>Important code also used to convert decimal to binary. Contiguous digits differ from each other by
+                    one bit only.</p>
+                <div class="diagram-placeholder-img"
+                    data-src-placeholder="Table 6.11 8-Bit Gray code for decimal numbers 0-9.">Gray Code Table</div>
+            </div>
+        </section>
+
+        <footer class="navigation-buttons">
+            <a href="topic-5.html" class="nav-button back-prev"><i class="fas fa-arrow-left"></i> Previous Topic</a>
+            <a href="../fundamentals.html" class="nav-button syllabus"><i class="fas fa-list-ul"></i> Back to
+                Syllabus</a>
+            <a href="topic-7.html" class="nav-button next">Next Topic <i class="fas fa-arrow-right"></i></a>
+        </footer>
+
+    </div>
+
+    <script>
+        // Theme toggle logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        const bodyElement = document.body;
+
+        function setThemeMode(mode) {
+            if (mode === 'light-mode') {
+                htmlElement.classList.add('light-mode'); htmlElement.classList.remove('dark-mode');
+                bodyElement.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light-mode');
+            } else {
+                htmlElement.classList.remove('light-mode'); htmlElement.classList.add('dark-mode');
+                bodyElement.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark-mode');
+            }
+        }
+
+        (function () {
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme) { setThemeMode(currentTheme); }
+            else {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) { setThemeMode('light-mode'); }
+                else { setThemeMode('dark-mode'); }
+            }
+        })();
+
+        themeToggleBtn.addEventListener('click', function () {
+            if (htmlElement.classList.contains('light-mode')) { setThemeMode('dark-mode'); }
+            else { setThemeMode('light-mode'); }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const diagrams = document.querySelectorAll('.diagram-placeholder, .diagram-placeholder-img, .ascii-table-placeholder');
+            diagrams.forEach(diag => {
+                const placeholderText = diag.dataset.srcPlaceholder || diag.textContent || "Diagram/Table Placeholder";
+                if (diag.tagName === 'IMG') { diag.alt = placeholderText; }
+                else if (!diag.classList.contains('ascii-table-placeholder')) { // Avoid overwriting pre-formatted ASCII table text
+                    diag.textContent = placeholderText;
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
