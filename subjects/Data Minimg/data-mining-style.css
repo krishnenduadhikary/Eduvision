@@ -65,3 +65,30 @@ body {
     background-color: #12876f;
   }
   
+  .eduvision-logo .text-2xl {
+  font-size: 1.7rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  letter-spacing: 0.01em;
+}
+.eduvision-logo .text-white {
+  color: #fff !important;
+}
+.eduvision-logo .text-yellow-300 {
+  color: #fde047 !important;
+}
+.eduvision-logo .group:hover .text-yellow-300 {
+  color: #fef08a !important;
+}
+.eduvision-logo a {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.eduvision-logo svg {
+  display: inline-block;
+  vertical-align: middle;
+}
