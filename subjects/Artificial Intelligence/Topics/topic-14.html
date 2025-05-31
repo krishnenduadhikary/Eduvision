@@ -590,16 +590,6 @@
             outline-offset: 2px;
         }
 
-        .new-footer-print-link {
-            margin-top: 1rem;
-            color: var(--primary-color);
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-
-        .new-footer-print-link:hover {
-            text-decoration: underline;
-        }
 
         @media (min-width: 640px) {
             .new-footer-buttons-wrapper {
@@ -1417,7 +1407,8 @@ if st.button("Predict"):
     result = "Failure predicted" if prediction[0] == 1 else "No failure predicted"
     st.write(result)</code></pre>
             <p>Running the Streamlit App: Save as <code>app_streamlit.py</code> and run:
-                <code>streamlit run app_streamlit.py</code>. This will launch an interactive web app.</p>
+                <code>streamlit run app_streamlit.py</code>. This will launch an interactive web app.
+            </p>
 
             <h3 id="docker">Docker</h3>
             <p>Docker is a platform for developing, shipping, and running applications in containers. Containers package
@@ -1457,7 +1448,8 @@ if st.button("Predict"):
             <h4>Approaches To Use Git For Version Control:</h4>
             <ol>
                 <li><strong>Git via Command Line:</strong> The most common method, using terminal commands (e.g.,
-                    <code>git init</code>, <code>git add</code>, <code>git commit</code>, <code>git push</code>).</li>
+                    <code>git init</code>, <code>git add</code>, <code>git commit</code>, <code>git push</code>).
+                </li>
                 <li><strong>Git with GUI Clients:</strong> Visual interfaces like GitHub Desktop, Sourcetree, and
                     GitKraken.</li>
                 <li><strong>Git in Integrated Development Environments (IDEs):</strong> IDEs like VS Code, IntelliJ
@@ -1542,7 +1534,7 @@ if st.button("Predict"):
                     Next Topic: Future of AI & Emerging Trends →
                 </a>
             </div>
-            <a href="#" onclick="window.print(); return false;" class="new-footer-print-link">Print this page</a>
+
             <p style="font-size: 0.9rem; color: var(--text-color); margin-top: 0.5rem;">© <span id="currentYear"></span>
                 AI Tools & Frameworks. All rights reserved.</p>
         </footer>

@@ -520,16 +520,6 @@
             outline-offset: 2px;
         }
 
-        .new-footer-print-link {
-            margin-top: 1rem;
-            color: var(--primary-color);
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-
-        .new-footer-print-link:hover {
-            text-decoration: underline;
-        }
 
         @media (min-width: 640px) {
             .new-footer-buttons-wrapper {
@@ -1005,7 +995,8 @@
                 <summary>2. A* Search</summary>
                 <p>A\* search is one of the most widely used best-first search algorithms. It evaluates nodes by
                     combining g(n) (the cost to reach the node) and h(n) (the estimated cost from the node to the goal):
-                    <strong class="highlight">f(n) = g(n) + h(n)</strong>.</p>
+                    <strong class="highlight">f(n) = g(n) + h(n)</strong>.
+                </p>
                 <div class="diagram">
                     <h4>A\* Search Formula</h4>
                     <div class="diagram-placeholder">Image: f(n) = g(n) + h(n) breakdown diagram.</div>
@@ -1232,7 +1223,7 @@ M O N E Y
                     Next Topic: Game Playing & Adversarial Search →
                 </a>
             </div>
-            <a href="#" onclick="window.print(); return false;" class="new-footer-print-link">Print this page</a>
+
             <p style="font-size: 0.9rem; color: var(--text-color); margin-top: 0.5rem;">© <span id="currentYear"></span>
                 Problem Solving & Search. All rights reserved.</p>
         </footer>

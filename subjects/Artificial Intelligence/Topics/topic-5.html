@@ -520,16 +520,7 @@
             outline-offset: 2px;
         }
 
-        .new-footer-print-link {
-            margin-top: 1rem;
-            color: var(--primary-color);
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
 
-        .new-footer-print-link:hover {
-            text-decoration: underline;
-        }
 
         @media (min-width: 640px) {
             .new-footer-buttons-wrapper {
@@ -994,17 +985,20 @@
                 <li><strong>Constants:</strong> Specific objects (e.g., Marcus, Rome, 2).</li>
                 <li><strong>Variables:</strong> Refer to an object without naming it (e.g., x, y).</li>
                 <li><strong>Predicates (Relations):</strong> Refer to properties or relations (e.g.,
-                    <code>man(Marcus)</code>, <code>loyalto(Marcus, Caesar)</code>).</li>
+                    <code>man(Marcus)</code>, <code>loyalto(Marcus, Caesar)</code>).
+                </li>
                 <li><strong>Functions:</strong> Refer to objects (e.g., <code>father_of(John)</code>).</li>
                 <li><strong>Connectives:</strong> ∧ (and), ∨ (or), ¬ (not), → (implies), ↔ (equivalent).</li>
                 <li><strong>Quantifiers:</strong>
                     <ul>
                         <li><strong>Universal Quantifier (∀):</strong> "For all..." Example: <code
                                 class="highlight">∀x P(x)</code> means P holds for all x.  
-                            <code>∀x dolphin(x) → mammal(x)</code>.</li>
+                            <code>∀x dolphin(x) → mammal(x)</code>.
+                        </li>
                         <li><strong>Existential Quantifier (∃):</strong> "There exists..." Example: <code
                                 class="highlight">∃x P(x)</code> means P holds for some x.  
-                            <code>∃x mammal(x) ∧ lays_eggs(x)</code> (platypus).</li>
+                            <code>∃x mammal(x) ∧ lays_eggs(x)</code> (platypus).
+                        </li>
                     </ul>
                 </li>
                 <li><strong>Well-Formed Formulas (wffs):</strong> Sentences containing no "free" variables (all
@@ -1018,10 +1012,12 @@
                     <li>All Pompeians were Romans. → <code>∀x: Pompeian(x) → Roman(x)</code></li>
                     <li>Caesar was a ruler. → <code>ruler(Caesar)</code></li>
                     <li>All Pompeians were either loyal to Caesar or hated him. (inclusive-or) →
-                        <code>∀x: Pompeian(x) → loyalto(x, Caesar) ∨ hate(x, Caesar)</code></li>
+                        <code>∀x: Pompeian(x) → loyalto(x, Caesar) ∨ hate(x, Caesar)</code>
+                    </li>
                     <li>Everyone is loyal to someone. → <code>∀x ∃y: loyalto(x, y)</code></li>
                     <li>People only try to assassinate rulers they are not loyal to. →
-                        <code>∀x ∀y: person(x) ∧ ruler(y) ∧ try_assassinate(x, y) → ¬loyalto(x, y)</code></li>
+                        <code>∀x ∀y: person(x) ∧ ruler(y) ∧ try_assassinate(x, y) → ¬loyalto(x, y)</code>
+                    </li>
                     <li>Marcus tried to assassinate Caesar. → <code>try_assassinate(Marcus, Caesar)</code></li>
                 </ol>
                 <div class="diagram">
@@ -1251,7 +1247,7 @@
                     Next Topic: Machine Learning Fundamentals →
                 </a>
             </div>
-            <a href="#" onclick="window.print(); return false;" class="new-footer-print-link">Print this page</a>
+
             <p style="font-size: 0.9rem; color: var(--text-color); margin-top: 0.5rem;">© <span id="currentYear"></span>
                 Knowledge Representation & Reasoning. All rights reserved.</p>
         </footer>

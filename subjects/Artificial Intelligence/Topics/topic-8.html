@@ -578,16 +578,7 @@
             outline-offset: 2px;
         }
 
-        .new-footer-print-link {
-            margin-top: 1rem;
-            color: var(--primary-color);
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
 
-        .new-footer-print-link:hover {
-            text-decoration: underline;
-        }
 
         @media (min-width: 640px) {
             .new-footer-buttons-wrapper {
@@ -1913,7 +1904,8 @@ plt.show()</code></pre>
                 items in large datasets which is particularly valuable in market basket analysis.</p>
             <p>For example, if a grocery store finds that customers who buy <strong>bread</strong> often also buy
                 <strong>butter</strong>, it can use this information to optimise product placement or marketing
-                strategies.</p>
+                strategies.
+            </p>
             <h4>How the Apriori Algorithm Works?</h4>
             <p>The Apriori Algorithm operates through a systematic process that involves several key steps:</p>
             <ol>
@@ -1931,7 +1923,8 @@ plt.show()</code></pre>
                 <li><strong>Generating Association Rules:</strong> After identifying frequent itemsets, the algorithm
                     generates association rules that illustrate how items relate to one another, using metrics like
                     <strong>support, confidence,</strong> and <strong>lift</strong> to evaluate the strength of these
-                    relationships.</li>
+                    relationships.
+                </li>
             </ol>
 
             <h4>Key Metrics of Apriori Algorithm</h4>
@@ -2126,7 +2119,8 @@ plt.show()</code></pre>
                     <p>Below are some applications of Apriori algorithm used in today's companies and startups</p>
                     <ol>
                         <li><strong>E-commerce:</strong> Used to recommend products that are often bought together, like
-                            <strong>laptop + laptop bag</strong>, increasing sales.</li>
+                            <strong>laptop + laptop bag</strong>, increasing sales.
+                        </li>
                         <li><strong>Food Delivery Services:</strong> Identifies popular combos, such as <strong>burger +
                                 fries</strong>, to offer <strong>combo deals</strong> to customers.</li>
                         <li><strong>Streaming Services:</strong> Recommends related movies or shows based on what users
@@ -2153,7 +2147,8 @@ plt.show()</code></pre>
                     <p>These two properties inevitably make the algorithm slower. To overcome these redundant steps a
                         new association-rule mining algorithm was developed named Frequent Pattern Growth Algorithm. It
                         overcomes the disadvantages of the Apriori algorithm by storing all the transactions in a
-                        <strong>Tree Data Structure</strong>.</p>
+                        <strong>Tree Data Structure</strong>.
+                    </p>
                     <p>The FP-Growth algorithm is a method used to find frequent patterns in large datasets. It is
                         faster and more efficient than the Apriori algorithm because it avoids repeatedly scanning the
                         entire database.</p>
@@ -2858,7 +2853,8 @@ plt.show()</code></pre>
                     dimensionality</strong>, where more features exponentially increase the data needed for reliable
                 results.</p>
             <p>The explosion of feature combinations makes sampling harder In high-dimensional data and tasks like
-                <strong>clustering or classification</strong> more complex and slow.</p>
+                <strong>clustering or classification</strong> more complex and slow.
+            </p>
             <p>To tackle this problem, we use Feature engineering Techniques, such as <strong>feature selection</strong>
                 (choosing the most important features) and <strong>feature extraction</strong> (creating new features
                 from the original ones). One popular feature extraction method is <strong>dimensionality
@@ -2922,7 +2918,8 @@ plt.show()</code></pre>
                     each captures).</li>
             </ul>
             <p>For a square matrix A, an <strong>eigenvector</strong> X (a non-zero vector) and its corresponding
-                <strong>eigenvalue</strong> &lambda; (a scalar) satisfy:</p>
+                <strong>eigenvalue</strong> &lambda; (a scalar) satisfy:
+            </p>
             <p style="text-align:center;">AX = &lambda;X</p>
             <p>This means:</p>
             <ul>
@@ -2954,7 +2951,8 @@ plt.show()</code></pre>
             </ul>
             <p>PCA is an <strong>unsupervised learning algorithm</strong>, meaning it doesn't require prior knowledge of
                 target variables. It's commonly used in exploratory data analysis and machine learning to
-                <strong>simplify datasets without losing critical information</strong>.</p>
+                <strong>simplify datasets without losing critical information</strong>.
+            </p>
             <p>We know everything sound complicated, let's understand again with help of visual image where, x-axis
                 (Radius) and y-axis (Area) represent two original features in the dataset.</p>
             <div class="algorithm-diagram">
@@ -3127,7 +3125,8 @@ print(pca.components_)</code></pre>
                 <em>x<sub>i</sub></em> would pick <em>x<sub>j</sub></em> as its neighbor if neighbors were picked in
                 proportion to their probability density under a Gaussian centered at <em>x<sub>i</sub></em>. It then
                 tries to find a low-dimensional embedding of the points that minimizes the divergence between these two
-                distributions of probabilities (one in high-dim space, one in low-dim space).</p>
+                distributions of probabilities (one in high-dim space, one in low-dim space).
+            </p>
             <p>It uses a Student's t-distribution to compute the similarity of points in the low-dimensional space to
                 allow dissimilar objects to be modeled far apart in the map.</p>
             <h4>Use Cases</h4>
@@ -3238,7 +3237,7 @@ print(pca.components_)</code></pre>
                     Next Topic: Reinforcement Learning →
                 </a>
             </div>
-            <a href="#" onclick="window.print(); return false;" class="new-footer-print-link">Print this page</a>
+
             <p style="font-size: 0.9rem; color: var(--text-color); margin-top: 0.5rem;">© <span id="currentYear"></span>
                 Unsupervised Learning Algorithms. All rights reserved.</p>
         </footer>

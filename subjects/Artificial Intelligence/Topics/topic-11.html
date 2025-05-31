@@ -590,16 +590,7 @@
             outline-offset: 2px;
         }
 
-        .new-footer-print-link {
-            margin-top: 1rem;
-            color: var(--primary-color);
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
 
-        .new-footer-print-link:hover {
-            text-decoration: underline;
-        }
 
         @media (min-width: 640px) {
             .new-footer-buttons-wrapper {
@@ -1024,14 +1015,16 @@
             <p>It involves breaking down the text into words.</p>
             <div class="callout info">
                 <p>Example: "I study Machine Learning on GeeksforGeeks." will be word-tokenized as
-                    <br><code>['I', 'study', 'Machine', 'Learning', 'on', 'GeeksforGeeks', '.']</code></p>
+                    <br><code>['I', 'study', 'Machine', 'Learning', 'on', 'GeeksforGeeks', '.']</code>
+                </p>
             </div>
             <h4>Sentence Tokenization</h4>
             <p>It involves breaking down the text into individual sentences.</p>
             <div class="callout info">
                 <p>Example: "I study Machine learning on GeeksforGeeks. Currently, I'm studying NLP." will be
                     sentence-tokenized as
-                    <br><code>['I study Machine learning on GeeksforGeeks.', "Currently, I'm studying NLP." ]</code></p>
+                    <br><code>['I study Machine learning on GeeksforGeeks.', "Currently, I'm studying NLP." ]</code>
+                </p>
             </div>
             <h5>Python Implementation (NLTK):</h5>
             <pre><code>from nltk.tokenize import word_tokenize, sent_tokenize
@@ -1494,7 +1487,7 @@ London GPE</code></pre>
                     Next Topic: Computer Vision →
                 </a>
             </div>
-            <a href="#" onclick="window.print(); return false;" class="new-footer-print-link">Print this page</a>
+
             <p style="font-size: 0.9rem; color: var(--text-color); margin-top: 0.5rem;">© <span id="currentYear"></span>
                 Natural Language Processing (NLP). All rights reserved.</p>
         </footer>

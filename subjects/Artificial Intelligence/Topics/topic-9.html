@@ -590,16 +590,7 @@
             outline-offset: 2px;
         }
 
-        .new-footer-print-link {
-            margin-top: 1rem;
-            color: var(--primary-color);
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
 
-        .new-footer-print-link:hover {
-            text-decoration: underline;
-        }
 
         @media (min-width: 640px) {
             .new-footer-buttons-wrapper {
@@ -1011,7 +1002,8 @@
                 to determine which actions result in rewards (good outcomes) or penalties (bad outcomes).</p>
             <p>Over time, it improves its decision-making by updating a <strong>Q-table</strong>, which stores
                 <strong>Q-values</strong> representing the expected rewards for taking particular actions in given
-                states.</p>
+                states.
+            </p>
 
             <h4>Key Components of Q-learning</h4>
             <h5>1. Q-Values or Action-Values</h5>
@@ -1086,10 +1078,12 @@
             <ul>
                 <li><strong>Q(s, a)</strong> is the Q-value for a given state-action pair.</li>
                 <li><strong>R(s, a)</strong> is the immediate reward for taking action <strong>a</strong> in state
-                    <strong>s</strong>.</li>
+                    <strong>s</strong>.
+                </li>
                 <li><strong>γ</strong> is the discount factor, representing the importance of future rewards.</li>
                 <li><strong>max<sub>a'</sub> Q(s', a')</strong> is the maximum Q-value for the next state
-                    <strong>s'</strong> and all possible actions.</li>
+                    <strong>s'</strong> and all possible actions.
+                </li>
             </ul>
 
             <h4>What is a Q-table?</h4>
@@ -1566,7 +1560,8 @@ def epsilon_greedy_policy(Q, state, epsilon):
                 <li>s' represents the next state.</li>
             </ul>
             <p>Once the value function converges, the optimal policy can be derived by selecting the action
-                <strong>a</strong> that maximizes the value function:</p>
+                <strong>a</strong> that maximizes the value function:
+            </p>
             <div class="formula">π<sup>*</sup>(s) = arg max<sub>a</sub> [R(s, a) + γ Σ<sub>s'</sub> P(s'|s,
                 a)V<sup>*</sup>(s')]</div>
 
@@ -1833,7 +1828,7 @@ def epsilon_greedy_policy(Q, state, epsilon):
                     Next Topic: Neural Networks & Deep Learning →
                 </a>
             </div>
-            <a href="#" onclick="window.print(); return false;" class="new-footer-print-link">Print this page</a>
+
             <p style="font-size: 0.9rem; color: var(--text-color); margin-top: 0.5rem;">© <span id="currentYear"></span>
                 Reinforcement Learning. All rights reserved.</p>
         </footer>
