@@ -12,6 +12,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* Make the "Learning Today, Leading Tomorrow." text visible in dark mode */
+        .dark-theme .learning-quote {
+            color: #f3f3f3 !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -37,7 +43,8 @@
             </div>
             <div
                 style="text-align: center; padding: 30px;  border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
-                <div style="font-family: 'Baskerville'; font-size: 2.1em; color: #222; font-style: italic;">
+                <div class="learning-quote"
+                    style="font-family: 'Baskerville'; font-size: 2.1em; color: #222; font-style: italic;">
                     <span style="font-weight: 400;">Learning Today,</span>
                     <span style="font-weight: 600;"> Leading Tomorrow.</span>
                 </div>

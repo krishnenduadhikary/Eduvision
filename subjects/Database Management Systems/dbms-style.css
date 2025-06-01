@@ -39,6 +39,22 @@ body {
     transform: translateY(-5px);
   }
   
+  .topic-card .explore-btn {
+    margin-top: 12px;
+    padding: 8px 18px;
+    background: #6a82fb;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .topic-card .explore-btn:hover {
+    background: #4f5bd5;
+  }
+  
   .topic-title {
     font-size: 18px;
     font-weight: bold;

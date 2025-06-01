@@ -11,14 +11,16 @@
                 "Applications of DBMS",
                 "Types of DBMS (Hierarchical, Network, Relational, Object-oriented)",
                 "DBMS vs File System",
+                "Data Abstraction and Data Independence",
                 "DBMS Architecture (Three-level architecture)",
                 "Database Users and Roles"
             ],
-            "resources": ["Notes", "Video"]
+            "resources": [],
+            "exploreLink": "Topics/topic-1.html"
         },
         {
             "title": "Relational Model",
-            "description": "Concepts of relations, schema, keys, integrity constraints, relational algebra, and relational calculus.",
+            "description": "Concepts of relations, schema and instance, keys, integrity constraints,Logical Database Design,Views, relational algebra, joins, and relational calculus, Comparison of Algebra and Calculus.",
             "subtopics": [
                 "Basic Concepts: Relation, Tuple, Attribute",
                 "Schema and Instance",
@@ -27,7 +29,8 @@
                 "Relational Algebra (Selection, Projection, Union, Intersection, Difference, Join, Division)",
                 "Relational Calculus (Tuple and Domain)"
             ],
-            "resources": ["Examples", "Practice"]
+            "resources": [],
+            "exploreLink": "Topics/topic-2.html"
         },
         {
             "title": "Entity-Relationship Model",
@@ -41,11 +44,12 @@
                 "Weak Entities and Identifying Relationships",
                 "Enhanced ER Model (Generalization, Specialization, Aggregation)"
             ],
-            "resources": ["Diagram", "Notes"]
+            "resources": [],
+            "exploreLink": "Topics/topic-3.html"
         },
         {
             "title": "SQL",
-            "description": "SQL basics, DDL, DML, DCL, constraints, aggregate functions, joins, subqueries, views, indexes, triggers, and stored procedures.",
+            "description": "SQL basics, DDL, DML, DCL, constraints, aggregate functions, SQL Queries, joins, subqueries, views, TCL, indexes, triggers, and stored procedures.",
             "subtopics": [
                 "SQL Basics (Syntax, Data Types)",
                 "Data Definition Language (DDL): CREATE, ALTER, DROP",
@@ -57,11 +61,12 @@
                 "Nested and Correlated Subqueries",
                 "Views, Indexes, Triggers, Stored Procedures"
             ],
-            "resources": ["Practice", "Code"]
+            "resources": [],
+            "exploreLink": "Topics/topic-4.html"
         },
         {
             "title": "Normalization",
-            "description": "Introduction to normalization, functional dependencies, 1NF to 5NF, BCNF, and decomposition.",
+            "description": "Introduction to normalization, functional dependencies, 1NF to 5NF, BCNF, and decomposition, Examples and Practice of Normalization.",
             "subtopics": [
                 "Introduction to Normalization",
                 "Functional Dependencies",
@@ -72,7 +77,8 @@
                 "4NF and 5NF (Overview)",
                 "Decomposition (Lossless Join, Dependency Preservation)"
             ],
-            "resources": ["Examples", "Notes"]
+            "resources": [],
+            "exploreLink": "Topics/topic-5.html"
         },
         {
             "title": "Transactions and Concurrency",
@@ -86,11 +92,12 @@
                 "Deadlock Handling",
                 "Recovery Techniques (Log-based, Checkpoints)"
             ],
-            "resources": ["Diagram", "Practice"]
+            "resources": [],
+            "exploreLink": "Topics/topic-6.html"
         },
         {
             "title": "Indexing and File Organization",
-            "description": "File organization methods, indexing basics, primary and secondary indexes, dense and sparse indexes, B-trees, B+ trees, and query optimization.",
+            "description": "File organization methods, indexing basics, primary and secondary indexes, dense and sparse indexes, B-trees, B+ trees, and query optimization, Join Algorithms Overview.",
             "subtopics": [
                 "File Organization (Heap, Sorted, Hashed)",
                 "Indexing Basics",
@@ -101,7 +108,8 @@
                 "B+ Trees",
                 "Index Usage in Query Optimization"
             ],
-            "resources": ["Diagram", "Notes"]
+            "resources": [],
+            "exploreLink": "Topics/topic-7.html"
         },
         {
             "title": "NoSQL and Modern Databases",
@@ -117,7 +125,8 @@
                 "NoSQL vs Relational Databases",
                 "Use Cases and Applications"
             ],
-            "resources": ["Notes", "Video"]
+            "resources": [],
+            "exploreLink": "Topics/topic-8.html"
         }
     ]
 }

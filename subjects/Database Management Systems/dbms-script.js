@@ -16,6 +16,7 @@ fetch("dbms-topics.json")
         <div class="resource-buttons">
           ${topic.resources.map(resource => `<button>${resource}</button>`).join("")}
         </div>
+        <button class="explore-btn" onclick="location.href='${topic.exploreLink}'">Explore</button>
       `;
 
       container.appendChild(card);
