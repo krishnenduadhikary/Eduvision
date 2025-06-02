@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 7: Indexing and File Organization - EduVision</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            /* Dark Blue-Grey */
+            --primary-light: #3d566e;
+            --primary-dark: #1a252f;
+
+            --secondary-color: #3498db;
+            /* Bright Blue */
+            --secondary-light: #5dade2;
+            --secondary-dark: #2980b9;
+
+            --accent-color: #e74c3c;
+            /* Red */
+
+            --light-bg: #f8f9fa;
+            /* Off-white */
+            --light-text: #495057;
+            /* Dark Grey */
+            --light-card: #ffffff;
+            --light-border: #e0e0e0;
+
+            --dark-bg: #1a252f;
+            /* Very Dark Blue-Grey */
+            --dark-text: #f8f9fa;
+            /* Light Grey */
+            --dark-card: #2c3e50;
+            /* Dark Blue-Grey (same as light primary) */
+            --dark-border: #3d566e;
+            /* Lighter than dark card */
+
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #3498db;
+
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.1);
+
+            --transition: all 0.3s ease-in-out;
+        }
+
+        /* Dark mode overrides for semantic colors if they were defined with light/dark specifics */
+        html.dark-mode {
+            --primary-color: #5dade2;
+            /* Light Blue for dark mode primary */
+            --primary-light: #85c1e9;
+            --primary-dark: #3498db;
+
+            --secondary-color: #bdc3c7;
+            /* Light Grey for dark mode secondary */
+            --secondary-light: #ecf0f1;
+            --secondary-dark: #95a5a6;
+        }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+            line-height: 1.7;
+            color: var(--light-text);
+            background-color: var(--light-bg);
+            padding-top: 80px;
+            /* Height of the fixed header */
+            transition: var(--transition);
+        }
+
+        html.dark-mode body {
+            color: var(--dark-text);
+            background-color: var(--dark-bg);
+        }
+
+        /* Typography */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Nunito Sans', 'Inter', sans-serif;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+            /* Use darker primary for headings in light mode */
+        }
+
+        html.dark-mode h1,
+        html.dark-mode h2,
+        html.dark-mode h3,
+        html.dark-mode h4,
+        html.dark-mode h5,
+        html.dark-mode h6 {
+            color: var(--primary-light);
+            /* Use lighter primary for headings in dark mode */
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 0.6rem;
+            margin-top: 2.5rem;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            margin-top: 2rem;
+        }
+
+        h4 {
+            font-size: 1.5rem;
+        }
+
+        h5 {
+            font-size: 1.25rem;
+            color: var(--secondary-dark);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        html.dark-mode h5 {
+            color: var(--secondary-light);
+        }
+
+
+        p {
+            margin-bottom: 1.25rem;
+            font-size: 1.05rem;
+        }
+
+        p.lead {
+            font-size: 1.2rem;
+            color: var(--light-text);
+            opacity: 0.9;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        html.dark-mode p.lead {
+            color: var(--dark-text);
+        }
+
+
+        a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        a:hover {
+            color: var(--secondary-dark);
+            text-decoration: underline;
+        }
+
+        ul,
+        ol {
+            padding-left: 20px;
+            margin-bottom: 1.25rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Layout */
+        .page-container {
+            /* Renamed from .container to avoid conflict if bootstrap is ever used */
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            /* Slightly wider sidebar */
+            gap: 2.5rem;
+            max-width: 1500px;
+            /* Wider max-width for larger screens */
+            margin: 0 auto;
+            padding: 2.5rem;
+        }
+
+        @media (max-width: 1024px) {
+
+            /* Adjusted breakpoint */
+            .page-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+                /* Hide sidebar on smaller screens, rely on scrolling */
+            }
+        }
+
+        /* Header */
+        header.main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2.5rem;
+            box-shadow: var(--shadow-md);
+            z-index: 1000;
+        }
+
+        html.dark-mode header.main-header {
+            background-color: var(--dark-card);
+            /* Match dark card for header in dark mode */
+            color: var(--dark-text);
+        }
+
+        .header-topic-title {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: white;
+            /* Ensure this text is white on dark header */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding: 0 15px;
+            /* Space around title */
+        }
+
+        html.dark-mode .header-topic-title {
+            color: var(--dark-text);
+            /* Ensure this text is light on light header (dark mode) */
+        }
+
+
+        .eduvision-logo-header {
+            /* Specific class for header logo */
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            /* Remove underline from logo link */
+        }
+
+        .eduvision-logo-header svg {
+            width: 36px;
+            /* Slightly larger logo SVG */
+            height: 36px;
+            color: var(--secondary-light);
+        }
+
+        html.dark-mode .eduvision-logo-header svg {
+            color: var(--primary-color);
+            /* Use dark mode primary for SVG */
+        }
+
+
+        .logo-text {
+            font-size: 1.7rem;
+            /* Larger logo text */
+            font-weight: 800;
+            /* Bolder */
+            font-family: 'Nunito Sans', sans-serif;
+            color: white;
+        }
+
+        html.dark-mode .logo-text {
+            color: var(--dark-text);
+        }
+
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 1.8rem;
+            /* More space between nav items */
+        }
+
+        .header-nav a {
+            color: white;
+            font-weight: 500;
+            font-size: 1rem;
+            position: relative;
+            /* For underline effect */
+            padding-bottom: 4px;
+        }
+
+        .header-nav a::after {
+            /* Underline effect */
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--secondary-light);
+            transition: width 0.3s ease;
+        }
+
+        .header-nav a:hover::after {
+            width: 100%;
+        }
+
+        html.dark-mode .header-nav a {
+            color: var(--dark-text);
+        }
+
+        html.dark-mode .header-nav a:hover {
+            color: var(--primary-color);
+        }
+
+        html.dark-mode .header-nav a::after {
+            background-color: var(--primary-color);
+        }
+
+
+        .theme-toggle {
+            background: transparent;
+            border: 1px solid var(--secondary-light);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-lg);
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--secondary-light);
+            color: var(--primary-color);
+        }
+
+        .theme-toggle svg {
+            margin-right: 0.3rem;
+        }
+
+        html.dark-mode .theme-toggle {
+            border-color: var(--primary-color);
+            color: var(--dark-text);
+        }
+
+        html.dark-mode .theme-toggle:hover {
+            background-color: var(--primary-color);
+            color: var(--dark-card);
+            /* Text color for contrast */
+        }
+
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            /* Header height + 20px margin */
+            align-self: start;
+            background-color: var(--light-card);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        html.dark-mode .sidebar {
+            background-color: var(--dark-card);
+        }
+
+        .sidebar-title {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-dark);
+            border-bottom: 2px solid var(--secondary-light);
+            padding-bottom: 0.5rem;
+        }
+
+        html.dark-mode .sidebar-title {
+            color: var(--primary-light);
+            border-bottom-color: var(--primary-dark);
+        }
+
+        .toc {
+            list-style: none;
+            padding-left: 0;
+            /* Remove default padding for ul */
+        }
+
+        .toc li {
+            margin-bottom: 0.75rem;
+        }
+
+        .toc a {
+            display: block;
+            padding: 0.6rem 0;
+            color: var(--light-text);
+            border-left: 4px solid transparent;
+            padding-left: 1.2rem;
+            transition: var(--transition);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .toc a:hover {
+            color: var(--secondary-color);
+            border-left-color: var(--secondary-color);
+            background-color: rgba(52, 152, 219, 0.05);
+            text-decoration: none;
+            transform: translateX(5px);
+        }
+
+        .toc a.active {
+            color: var(--secondary-dark);
+            border-left-color: var(--secondary-dark);
+            font-weight: 700;
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        html.dark-mode .toc a {
+            color: var(--dark-text);
+        }
+
+        html.dark-mode .toc a:hover {
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
+            background-color: rgba(93, 173, 226, 0.1);
+        }
+
+        html.dark-mode .toc a.active {
+            color: var(--primary-light);
+            border-left-color: var(--primary-light);
+            background-color: rgba(93, 173, 226, 0.15);
+        }
+
+
+        /* Main Content */
+        .main-content {
+            background-color: var(--light-card);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-lg);
+            /* More prominent shadow for main content */
+        }
+
+        html.dark-mode .main-content {
+            background-color: var(--dark-card);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumb-nav {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb-nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        .breadcrumb-nav li a {
+            color: var(--secondary-color);
+        }
+
+        .breadcrumb-nav li a:hover {
+            color: var(--secondary-dark);
+        }
+
+        .breadcrumb-nav li+li::before {
+            content: ">";
+            margin: 0 0.75rem;
+            color: var(--light-text);
+            opacity: 0.7;
+        }
+
+        html.dark-mode .breadcrumb-nav li+li::before {
+            color: var(--dark-text);
+        }
+
+        .breadcrumb-nav li[aria-current="page"] {
+            color: var(--light-text);
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        html.dark-mode .breadcrumb-nav li[aria-current="page"] {
+            color: var(--dark-text);
+        }
+
+
+        /* Content Card (used for sections) */
+        section.content-section {
+            /* Renamed from .content-card to be more specific */
+            background-color: transparent;
+            /* Sections don't need their own card bg if main-content is a card */
+            border-radius: var(--radius-md);
+            padding: 1rem 0;
+            /* Vertical padding for sections */
+            margin-bottom: 2.5rem;
+            border: none;
+            /* No border for sections within main content card */
+            box-shadow: none;
+            /* No shadow for sections */
+        }
+
+
+        /* Definition Boxes */
+        .definition {
+            background-color: rgba(52, 152, 219, 0.08);
+            /* Softer bg */
+            border-left: 5px solid var(--secondary-color);
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+        }
+
+        .definition strong {
+            color: var(--secondary-dark);
+            font-weight: 600;
+            display: block;
+            /* Label on its own line */
+            margin-bottom: 0.3rem;
+        }
+
+        .example {
+            font-style: italic;
+            color: var(--light-text);
+            opacity: 0.85;
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+            padding-left: 0.5rem;
+            /* Indent example slightly */
+            display: block;
+            /* Ensure it takes its own line if needed */
+        }
+
+        .example ol,
+        .example ul {
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-style: normal;
+            /* If list items shouldn't be italic */
+        }
+
+
+        html.dark-mode .example {
+            color: var(--dark-text);
+        }
+
+        .image-container {
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--light-border);
+        }
+
+        html.dark-mode .image-container img {
+            border-color: var(--dark-border);
+        }
+
+        .image-container figcaption {
+            font-size: 0.9rem;
+            color: var(--light-text);
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+
+        html.dark-mode .image-container figcaption {
+            color: var(--dark-text);
+        }
+
+
+        /* Tables */
+        .styled-table {
+            /* Changed from .comparison-table to a more generic name */
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            box-shadow: var(--shadow-sm);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            /* To make border-radius work with th */
+            border: 1px solid var(--light-border);
+        }
+
+        .styled-table th,
+        .styled-table td {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid var(--light-border);
+        }
+
+        html.dark-mode .styled-table th,
+        html.dark-mode .styled-table td {
+            border-bottom-color: var(--dark-border);
+            border-left-color: var(--dark-border);
+            /* Ensure all borders use dark mode color */
+        }
+
+        .styled-table th {
+            background-color: var(--secondary-light);
+            color: var(--primary-dark);
+            /* Text color for contrast on light blue */
+            font-weight: 600;
+        }
+
+        html.dark-mode .styled-table th {
+            background-color: var(--primary-dark);
+            /* Darker header for table in dark mode */
+            color: var(--secondary-light);
+        }
+
+        .styled-table tr:nth-child(even) {
+            background-color: rgba(52, 152, 219, 0.03);
+            /* Very subtle striping */
+        }
+
+        html.dark-mode .styled-table tr:nth-child(even) {
+            background-color: rgba(93, 173, 226, 0.05);
+        }
+
+        .styled-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Code */
+        code,
+        .code-block {
+            /* Apply similar styling to inline code and code blocks */
+            font-family: 'Fira Code', monospace;
+            background-color: rgba(231, 76, 60, 0.08);
+            /* Softer accent color bg */
+            color: var(--accent-color);
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            border: 1px solid rgba(231, 76, 60, 0.2);
+        }
+
+        html.dark-mode code,
+        html.dark-mode .code-block {
+            background-color: rgba(231, 76, 60, 0.15);
+            border-color: rgba(231, 76, 60, 0.3);
+        }
+
+
+        pre {
+            /* Wrapper for multiple code blocks or larger examples */
+            background-color: var(--primary-dark);
+            /* Dark bg for code blocks */
+            color: #f8f9fa;
+            /* Light text */
+            padding: 1.25rem;
+            border-radius: var(--radius-md);
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            box-shadow: var(--shadow-sm);
+        }
+
+        pre code {
+            /* Reset for code inside pre */
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            border-radius: 0;
+            border: none;
+            font-size: inherit;
+        }
+
+        html.dark-mode pre {
+            background-color: #1c1c1c;
+            /* Even darker for dark mode code blocks */
+            border: 1px solid var(--dark-border);
+        }
+
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            /* Allow buttons to wrap on smaller screens */
+            gap: 1rem;
+            /* Add gap for wrapping */
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--light-border);
+        }
+
+        html.dark-mode .nav-buttons {
+            border-top-color: var(--dark-border);
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            /* More gap */
+            padding: 0.85rem 1.8rem;
+            /* Slightly larger */
+            background-color: var(--secondary-color);
+            color: white !important;
+            /* Ensure text is white */
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            /* Bolder */
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            text-decoration: none !important;
+            /* Ensure no underline */
+            flex-grow: 1;
+            /* Allow buttons to grow if space allows */
+            text-align: center;
+            justify-content: center;
+            min-width: 200px;
+            /* Minimum width for buttons */
+        }
+
+        .nav-button:hover {
+            background-color: var(--secondary-dark);
+            text-decoration: none !important;
+            color: white !important;
+            transform: translateY(-3px);
+            /* More pronounced lift */
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-button svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Details/Summary for Collapsible Sections */
+        details {
+            background-color: var(--light-card);
+            border: 1px solid var(--light-border);
+            border-radius: var(--radius-md);
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        summary {
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            cursor: pointer;
+            list-style-position: inside;
+            /* Keeps marker aligned */
+            transition: background-color 0.2s ease;
+            display: block;
+            /* Make summary full width to click anywhere */
+        }
+
+        summary strong {
+            /* If strong tag is used within summary */
+            color: inherit;
+        }
+
+
+        summary:hover {
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+
+        details[open] summary {
+            background-color: rgba(52, 152, 219, 0.1);
+            border-bottom: 1px solid var(--light-border);
+        }
+
+        details>div {
+            /* Content of details */
+            padding: 1.5rem;
+        }
+
+        html.dark-mode details {
+            background-color: var(--dark-card);
+            border-color: var(--dark-border);
+        }
+
+        html.dark-mode summary {
+            color: var(--primary-light);
+        }
+
+        html.dark-mode summary:hover {
+            background-color: rgba(93, 173, 226, 0.1);
+        }
+
+        html.dark-mode details[open] summary {
+            background-color: rgba(93, 173, 226, 0.15);
+            border-bottom-color: var(--dark-border);
+        }
+
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 70px;
+            }
+
+            header.main-header {
+                height: 70px;
+                padding: 0 1.5rem;
+            }
+
+            .header-topic-title {
+                font-size: 1em;
+            }
+
+            .logo-text {
+                font-size: 1.5rem;
+            }
+
+            .eduvision-logo-header svg {
+                width: 30px;
+                height: 30px;
+            }
+
+            .header-nav {
+                gap: 1rem;
+            }
+
+            .header-nav a {
+                font-size: 0.9rem;
+            }
+
+            .theme-toggle {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            .page-container {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            h2 {
+                font-size: 1.9rem;
+            }
+
+            h3 {
+                font-size: 1.6rem;
+            }
+
+            .main-content {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+
+            /* Further adjustments for smaller screens */
+            .nav-buttons {
+                flex-direction: column;
+                /* Stack buttons vertically */
+            }
+
+            .nav-button {
+                width: 100%;
+                /* Make buttons full width */
+            }
+        }
+
+
+        @media (max-width: 480px) {
+            .header-nav a:not(.theme-toggle) {
+                display: none;
+            }
+
+            /* Hide text links, keep toggle */
+            .header-nav {
+                justify-content: flex-end;
+            }
+
+            .header-topic-title {
+                display: none;
+            }
+
+            /* Push toggle to right */
+            .breadcrumb-nav {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito+Sans:wght@700;800;900&family=Fira+Code&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header class="main-header">
+        <a href="../../../index.html" class="eduvision-logo-header">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM12 6.5c-3.03 0-5.5 2.47-5.5 5.5s2.47 5.5 5.5 5.5 5.5-2.47 5.5-5.5-2.47-5.5-5.5-5.5zm0 9c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" />
+            </svg>
+            <span class="logo-text">EduVision</span>
+        </a>
+        <div class="header-topic-title">Topic 7: Indexing & File Org.</div>
+        <nav class="header-nav">
+            <a href="../../../index.html">Home</a>
+            <a href="../dbms.html">Syllabus</a>
+            <a href="../../../MCQ/">Mock Test</a>
+            <a href="../../../About/about.html">About</a>
+            <button class="theme-toggle" id="themeToggle">
+                <!-- Icon and text will be set by JS -->
+            </button>
+        </nav>
+    </header>
+
+    <div class="page-container">
+        <aside class="sidebar">
+            <h3 class="sidebar-title">On This Page</h3>
+            <ul class="toc" id="tocList">
+                <!-- TOC items will be generated by JS -->
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb-nav">
+                    <li><a href="../../../index.html">Home</a></li>
+                    <li><a href="../dbms.html">Database Systems</a></li>
+                    <li aria-current="page">Topic 7: Indexing & File Organization</li>
+                </ol>
+            </nav>
+
+            <h1>Topic 7: Indexing and File Organization</h1>
+            <p class="lead">Learn how data is physically stored and organized in databases and how indexing mechanisms
+                are used to optimize data retrieval performance for efficient query processing.</p>
+
+            <section id="file-org-intro" class="content-section">
+                <h2>Introduction to File Organization & Indexing</h2>
+                <p>A database consists of a huge amount of data, typically grouped within tables in an RDBMS. While
+                    users perceive data in tabular form, this data is physically stored in memory, often as files on
+                    secondary storage devices like magnetic disks or optical disks.</p>
+                <div class="definition">
+                    <strong>File:</strong> A named collection of related information that is recorded on secondary
+                    storage.
+                </div>
+                <div class="definition">
+                    <strong>File Organization:</strong> Refers to the logical relationships among various records that
+                    constitute the file, particularly concerning the means of identification and access to any specific
+                    record. In simple terms, it's about storing files in a certain order. File Structure refers to the
+                    format of labels, data blocks, and any logical control records.
+                </div>
+                <p>File organization is a technique to organize data in secondary memory. It's a way of arranging
+                    records in a file when it's stored on disk to facilitate access and ensure efficient storage. DBMS
+                    supports several file organization techniques.</p>
+                <div class="image-container">
+                    <img src="https://i.imgur.com/sJ7J8U7.png" alt="File Organization Techniques Tree"
+                        style="max-width: 700px;">
+                    <figcaption>Overview of File Organization Techniques.</figcaption>
+                </div>
+            </section>
+
+            <section id="file-organization-methods" class="content-section">
+                <h2>7.1 File Organization Methods</h2>
+                <details>
+                    <summary><strong>Sequential File Organization</strong></summary>
+                    <div>
+                        <p>The easiest method, where files are stored one after another in a sequential manner.</p>
+                        <h5>1. Pile File Method:</h5>
+                        <p>Records are stored in sequence, one after another, in the order they are inserted into the
+                            tables. New records are simply placed at the end of the file.</p>
+                        <div class="image-container"><img src="https://i.imgur.com/uQkF67K.png"
+                                alt="Pile File Method - Insertion" style="max-width:500px;"></div>
+
+                        <h5>2. Sorted File Method:</h5>
+                        <p>Whenever a new record has to be inserted, it is always inserted in a sorted (ascending or
+                            descending) manner. Sorting may be based on any primary key or any other key. When a new
+                            record is added, it's placed at the end and then the file is re-sorted, or inserted into its
+                            correct sorted position (which can be inefficient for large files).</p>
+                        <div class="image-container"><img src="https://i.imgur.com/8sO6M7S.png"
+                                alt="Sorted File Method - Insertion" style="max-width:500px;"></div>
+                        <strong>Pros:</strong>
+                        <ul>
+                            <li>Fast and efficient for processing huge amounts of data sequentially.</li>
+                            <li>Simple design.</li>
+                            <li>Files can be easily stored on magnetic tapes.</li>
+                        </ul>
+                        <strong>Cons:</strong>
+                        <ul>
+                            <li>Time wastage as we cannot jump to a particular record; must read sequentially.</li>
+                            <li>Sorted file method is inefficient as it takes time and space for sorting records,
+                                especially for insertions and deletions.</li>
+                        </ul>
+                    </div>
+                </details>
+                <details>
+                    <summary><strong>Heap File Organization (Unordered)</strong></summary>
+                    <div>
+                        <p>Works with data blocks. Records are inserted at the end of the file, into the data block that
+                            has space. No specific ordering or sorting is required. If the last data block is full, the
+                            new record is stored in any available data block in memory. The DBMS manages the storage of
+                            new records.</p>
+                        <div class="image-container"><img src="https://i.imgur.com/6z9U5gO.png"
+                                alt="Heap File Organization - Insertion" style="max-width:500px;"></div>
+                        <p>Searching, deleting, or updating data requires traversing the data from the beginning of the
+                            file until the requested record is found, which can be slow for large databases.</p>
+                        <strong>Pros:</strong>
+                        <ul>
+                            <li>Fetching and retrieving records can be faster than sequential for specific operations,
+                                but mainly in small databases or when loading large amounts of data at once.</li>
+                        </ul>
+                        <strong>Cons:</strong>
+                        <ul>
+                            <li>Problem of unused memory blocks (internal fragmentation if blocks aren't full).</li>
+                            <li>Inefficient for searching in large databases.</li>
+                        </ul>
+                    </div>
+                </details>
+                <details>
+                    <summary><strong>Hashed File Organization (Direct File Organization)</strong></summary>
+                    <div>
+                        <p>Hashing is the most common form of purely random access to a file or database. A hash
+                            function calculates the address of the page (bucket) in which the record is to be stored,
+                            based on one or more fields in the record (the hash key, often the primary key). Records
+                            appear randomly distributed across the available space.</p>
+                        <strong>Advantages:</strong>
+                        <ul>
+                            <li>Fast insertion or search on the hash key.</li>
+                            <li>Best if equality search is needed on the hash key.</li>
+                        </ul>
+                        <strong>Disadvantages:</strong>
+                        <ul>
+                            <li>Complex file organization method.</li>
+                            <li>Search is slow if not on the hash key.</li>
+                            <li>Suffers from disk space overhead (due to collisions and overflow handling).</li>
+                            <li>Unbalanced buckets (due to non-uniform hash function or skewed key distribution) degrade
+                                performance.</li>
+                            <li>Range search is slow as records are not physically ordered.</li>
+                        </ul>
+                    </div>
+                </details>
+                <p>Other methods include Indexed Sequential File Organization (ISAM), which combines sequential access
+                    with an index for direct access, and Multi-key organization (e.g., inverted file structure,
+                    multi-list file structure) for files needing access based on multiple keys.</p>
+            </section>
+
+            <section id="indexing-basics" class="content-section">
+                <h2>7.2 Indexing Basics</h2>
+                <div class="definition">
+                    <strong>Indexing:</strong> A way to optimize database performance by minimizing the number of disk
+                    accesses required when a query is processed. An index is a data structure (like a lookup table) used
+                    to quickly locate and access data in a database table.
+                </div>
+                <p>Indexes are created using some database columns. The structure of an index typically consists of:</p>
+                <ul>
+                    <li><strong>Search Key:</strong> Contains a copy of the primary key or candidate key (or other
+                        indexed columns) of the table. These values are often stored in sorted order.</li>
+                    <li><strong>Data Reference (Pointer):</strong> Contains a set of pointers holding the address of the
+                        disk block where that particular key value can be found in the actual data file.</li>
+                </ul>
+                <div class="image-container"><img src="https://i.imgur.com/pP0wU1N.png"
+                        alt="Structure of an Index Entry" style="max-width:300px;"></div>
+                <h5>Factors for Evaluating Indexing Methods:</h5>
+                <ul>
+                    <li><strong>Access Types:</strong> Supported search types (e.g., value-based search, range access).
+                    </li>
+                    <li><strong>Access Time:</strong> Time to find a particular data element or set of elements.</li>
+                    <li><strong>Insertion Time:</strong> Time to find space and insert a new data element (and update
+                        index).</li>
+                    <li><strong>Deletion Time:</strong> Time to find an item, delete it, and update the index structure.
+                    </li>
+                    <li><strong>Space Overhead:</strong> Additional space required by the index.</li>
+                </ul>
+            </section>
+
+            <section id="ordered-indices" class="content-section">
+                <h2>Ordered Indices</h2>
+                <p>Indices are usually sorted so that searching is faster. Indices based on a sorted ordering of values
+                    are known as ordered indices.</p>
+                <details>
+                    <summary><strong>Clustered Indexing (Primary Index)</strong></summary>
+                    <div>
+                        <p>A clustered index defines the physical order of data in a table. Therefore, a table can have
+                            only one clustered index. The data file itself is ordered on a non-key field (clustering
+                            field). If the search key of an index specifies the same order as the sequential order of
+                            the file, it is called the primary index or clustering index. If the search key specifies an
+                            order different from the sequential order of the file, it is called the secondary index or
+                            non-clustering index.</p>
+                        <p>Clustering index is defined on an ordered data file. The data file is ordered on a non-key
+                            field (clustering field). In some cases, the index is created on non-primary key columns
+                            which may not be unique for each record. To identify records faster, we group two or more
+                            columns together to get unique values and create an index out of them. Basically, records
+                            with similar characteristics are grouped together, and indexes are created for these groups.
+                        </p>
+                        <span class="example">Students studying in each semester are grouped together (e.g., 1st
+                            Semester students, 2nd Semester students, etc.).</span>
+                        <div class="image-container"><img src="https://i.imgur.com/V9I0b2C.png"
+                                alt="Clustered Index Example" style="max-width:600px;"></div>
+                    </div>
+                </details>
+                <details>
+                    <summary>
+                        <h3>7.3 Primary Index</h3>
+                    </summary>
+                    <div>
+                        <p>A primary index is an ordered file whose records are of fixed length with two fields: the
+                            primary key of the data file and a pointer to a disk block (block address). The ordering key
+                            field is the primary key of the data file. There is one index entry in the index file for
+                            each block in the data file. Each index entry has the value of the primary key for the first
+                            record in a block and a pointer to that block.</p>
+                        <p>The first record of each block of the data file is known as an anchor record of the block. A
+                            primary index is an example of a non-dense (sparse) index.</p>
+                        <p>A major problem with a primary index, as with any ordered file, is insertion and deletion of
+                            records. If a record is inserted in its correct position in the data file, not only do
+                            records have to be moved, but index entries may also need to be changed.</p>
+                        <div class="image-container"><img src="https://i.imgur.com/d9hN04s.png"
+                                alt="Primary Index Example" style="max-width:500px;"></div>
+                    </div>
+                </details>
+                <details>
+                    <summary>
+                        <h3>7.4 Secondary Index</h3>
+                    </summary>
+                    <div>
+                        <p>A secondary index is used to optimize query processing and access records in a database based
+                            on some attribute other than the primary key (or ordering field). It can be created on a
+                            field which is a candidate key or a non-key field. Multiple secondary indexes can exist for
+                            a table.</p>
+                        <p>Two levels of indexing are often used to reduce the mapping size of the first level.
+                            Initially, for the first level, a large range of numbers is selected. Then, each range is
+                            divided into further sub-ranges. For quick memory access, the first level is stored in
+                            primary memory, and the actual physical location of the data is determined by the second
+                            mapping level.</p>
+                        <div class="image-container"><img src="https://i.imgur.com/6v7VqCj.png"
+                                alt="Secondary Level Indexing" style="max-width:600px;"></div>
+                    </div>
+                </details>
+                <details>
+                    <summary><strong>Non-Clustered Indexing</strong></summary>
+                    <div>
+                        <p>A non-clustered index does not alter the physical order of the data in the table. Instead, it
+                            creates a separate structure that contains the index key values, and each key value has a
+                            pointer (row locator) to the actual data row. This is like the index at the back of a book;
+                            the index is sorted, but the book pages are not reordered based on the index.</p>
+                        <p>Data is present in leaf nodes of the index. It might require more time as compared to a
+                            clustered index because some amount of extra work (following pointers) is done to extract
+                            the data. In a clustered index, data is directly present in front of the index entry (at the
+                            leaf level).</p>
+                        <div class="image-container"><img src="https://i.imgur.com/nK1mO4V.png"
+                                alt="Non-Clustered Index Example" style="max-width:600px;"></div>
+                    </div>
+                </details>
+            </section>
+
+            <section id="dense-sparse-indexes" class="content-section">
+                <h2>7.5 Dense and Sparse Indexes</h2>
+                <details>
+                    <summary><strong>Dense Index</strong></summary>
+                    <div>
+                        <p>An index record appears for every search key value in the data file. This record contains the
+                            search key and also a reference (pointer) to the first data record with that search key
+                            value.</p>
+                        <p>If the index is on a non-key field, a dense index points to the first record in a list of
+                            records with that key value.</p>
+                        <div class="image-container"><img src="https://i.imgur.com/D1xL6L8.png" alt="Dense Index"
+                                style="max-width:400px;"></div>
+                    </div>
+                </details>
+                <details>
+                    <summary><strong>Sparse Index (Non-Dense Index)</strong></summary>
+                    <div>
+                        <p>An index record appears only for some of the items (search key values) in the data file,
+                            typically for the first record of each disk block. Each item points to a block.</p>
+                        <p>To locate a record, we find the index record with the largest search key value less than or
+                            equal to the search key value we are looking for. We start at that record pointed to by the
+                            index record and proceed along the pointers in the file (that is, sequentially) until we
+                            find the desired record.</p>
+                        <p>Primary indexes are often sparse indexes.</p>
+                        <div class="image-container"><img src="https://i.imgur.com/i0r7v8A.png" alt="Sparse Index"
+                                style="max-width:400px;"></div>
+                    </div>
+                </details>
+            </section>
+
+            <section id="b-trees" class="content-section">
+                <h2>7.6 B-Trees</h2>
+                <p>B-Trees are self-balancing tree data structures that maintain sorted data and allow searches,
+                    sequential access, insertions, and deletions in logarithmic time. They are commonly used to
+                    implement indexes in databases.</p>
+                <h5>B-Tree Index Files:</h5>
+                <ol>
+                    <li>Similar to B+-Tree, but B-Tree allows search-key values to appear only once, eliminating
+                        redundant storage of search keys (data pointers are stored at internal nodes as well as leaf
+                        nodes).</li>
+                    <li>Search keys in non-leaf nodes appear nowhere else in the B-tree; an additional pointer field for
+                        each search key in a non-leaf node must be included.</li>
+                    <li>Generalized B-tree leaf node structure is similar to internal nodes.</li>
+                    <li>Non-leaf node pointers (B<sub>i</sub>) are bucket or file record pointers.</li>
+                </ol>
+                <div class="image-container">
+                    <img src="https://i.imgur.com/Vd3tE7b.png" alt="B-Tree Index File Example" style="max-width:550px;">
+                    <figcaption>Example of a B-Tree Index File Structure.</figcaption>
+                </div>
+                <h5>Advantages of B-Tree Indices:</h5>
+                <ul>
+                    <li>May use less tree nodes than a corresponding B+-Tree (as data pointers can be at internal
+                        nodes).</li>
+                    <li>Sometimes possible to find a search-key value before reaching a leaf node.</li>
+                </ul>
+                <h5>Disadvantages of B-Tree Indices:</h5>
+                <ul>
+                    <li>Only a small fraction of all search-key values are found early.</li>
+                    <li>Non-leaf nodes are larger, so fan-out is reduced. Thus, B-Trees typically have greater depth
+                        than corresponding B+-Tree.</li>
+                    <li>Insertion and deletion are more complicated than in B+-Trees.</li>
+                    <li>Implementation is harder than B+-Trees.</li>
+                </ul>
+                <p>Typically, the advantages of B+-Trees (discussed next) outweigh these specific B-Tree advantages for
+                    database indexing.</p>
+            </section>
+
+            <section id="b-plus-trees" class="content-section">
+                <h2>7.7 B+ Trees</h2>
+                <p>B+-Tree index files are an alternative to indexed-sequential files, commonly used for dynamic
+                    indexing in databases. They are multi-level, balanced search trees.</p>
+                <h5>Properties of B+ Trees:</h5>
+                <ol>
+                    <li>All paths from the root to any leaf node are of the same length.</li>
+                    <li>Each node that is not a root or a leaf has between ⌈n/2⌉ and n children (where n is the order of
+                        the tree).</li>
+                    <li>A leaf node has between ⌈(n-1)/2⌉ and n-1 values (search key values).</li>
+                    <li>Special cases for the root node:
+                        <ul>
+                            <li>If the root is not a leaf, it has at least 2 children.</li>
+                            <li>If the root is a leaf (i.e., there are no other nodes in the tree), it can have between
+                                0 and (n-1) values.</li>
+                        </ul>
+                    </li>
+                    <li>All data pointers are stored only at the leaf nodes. Leaf nodes are often linked together to
+                        provide sequential access.</li>
+                    <li>Internal (non-leaf) nodes store only search key values which act as routers to guide the search
+                        to the correct leaf node.</li>
+                </ol>
+                <div class="image-container">
+                    <img src="https://i.imgur.com/Yk7UeXk.png" alt="B+ Tree Node Structure and Example"
+                        style="max-width:600px;">
+                    <figcaption>Typical B+ Tree Node Structure and an Example.</figcaption>
+                </div>
+                <h5>B+-Tree File Organization:</h5>
+                <ol>
+                    <li>Index file degradation problem (of static indexed-sequential files) is solved by using B+-Tree
+                        indices. Data file degradation problem is solved by using B+-Tree File Organization.</li>
+                    <li>The leaf nodes in a B+-tree file organization store actual records, instead of just pointers (as
+                        in a B+-tree index on a separate data file).</li>
+                    <li>Since records are larger than pointers, the maximum number of records that can be stored in a
+                        leaf node is less than the number of pointers in a non-leaf node.</li>
+                    <li>Leaf nodes are still required to be half full.</li>
+                    <li>Insertion and deletion are handled in the same way as insertion and deletion of entries in a
+                        B+-tree index.</li>
+                </ol>
+                <h5>Advantages of B+-Tree Index Files:</h5>
+                <ul>
+                    <li>Performance does not degrade as the file grows, since many overflow blocks are not created.
+                        Periodic reorganization of the entire file is not required.</li>
+                    <li>Automatically reorganizes itself with small, local changes, in the face of insertions and
+                        deletions, maintaining performance.</li>
+                </ul>
+                <h5>Disadvantages of B+-Tree Index Files:</h5>
+                <ul>
+                    <li>Extra insertion and deletion overhead.</li>
+                    <li>Space overhead for storing index structure.</li>
+                </ul>
+                <p>Despite some overhead, the advantages of B+-trees generally outweigh disadvantages, and they are used
+                    extensively in RDBMS for indexing.</p>
+            </section>
+
+
+            <section id="query-optimization" class="content-section">
+                <h2>7.8 Index Usage in Query Optimization</h2>
+                <p>A query optimizer is a component of a DBMS that attempts to determine the most efficient way to
+                    execute a given query by considering possible query plans. Indexes play a crucial role in this
+                    process.</p>
+                <h5>How Indexes Help:</h5>
+                <ul>
+                    <li><strong>Faster Data Retrieval:</strong> Indexes allow the DBMS to directly locate rows matching
+                        query conditions (e.g., in <code>WHERE</code> clauses or <code>JOIN</code> conditions) without
+                        scanning the entire table.</li>
+                    <li><strong>Efficient Joins:</strong> Indexes on join columns can significantly speed up join
+                        operations (e.g., by using Index Nested Loop Join or Merge Join variants).</li>
+                    <li><strong>Sorting and Grouping:</strong> If an index exists on columns used in
+                        <code>ORDER BY</code> or <code>GROUP BY</code> clauses, the DBMS might be able to avoid a
+                        separate sort operation.</li>
+                    <li><strong>Covering Indexes:</strong> If all columns requested by a query are present in the index
+                        itself, the DBMS can satisfy the query by only reading the index, without accessing the table
+                        data (this is called a covering index).</li>
+                </ul>
+                <p>The query optimizer uses statistics about the data (e.g., table size, data distribution, index
+                    selectivity) to estimate the cost of different execution plans (e.g., using an index scan vs. a full
+                    table scan) and chooses the one with the lowest estimated cost.</p>
+                <h5>Join Algorithms Overview (and Index Impact):</h5>
+                <ul>
+                    <li><strong>Nested Loop Join:</strong> For each row in the outer table, scan the inner table.
+                        Indexes on the inner table's join column can make the inner scan very fast (Index Nested Loop
+                        Join).</li>
+                    <li><strong>Merge Join:</strong> Requires both tables to be sorted on the join attribute. If indexes
+                        exist and provide sorted order, this can be efficient.</li>
+                    <li><strong>Hash Join:</strong> Builds a hash table on one table and probes it with rows from the
+                        other. Less directly benefited by B-tree indexes but useful for large, unsorted inputs.</li>
+                </ul>
+                <p>Choosing the right indexes is a critical part of database design and performance tuning. Too few
+                    indexes can lead to slow queries, while too many indexes can slow down DML operations
+                    (<code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>) due to the overhead of maintaining
+                    them.</p>
+            </section>
+
+
+            <div class="nav-buttons">
+                <a href="topic-6.html" class="nav-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    Previous: Transactions & Concurrency
+                </a>
+                <a href="../dbms.html" class="nav-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="feather feather-list">
+                        <line x1="8" y1="6" x2="21" y2="6"></line>
+                        <line x1="8" y1="12" x2="21" y2="12"></line>
+                        <line x1="8" y1="18" x2="21" y2="18"></line>
+                        <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                        <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                        <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                    </svg>
+                    Back to Syllabus
+                </a>
+                <a href="topic-8.html" class="nav-button">
+                    Next: NoSQL & Modern DBs
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggleButton = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                htmlElement.classList.add('dark-mode');
+                themeToggleButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <span>Light Mode</span>`;
+            } else {
+                htmlElement.classList.remove('dark-mode');
+                themeToggleButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <span>Dark Mode</span>`;
+            }
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        applyTheme(savedTheme);
+
+        themeToggleButton.addEventListener('click', () => {
+            const newTheme = htmlElement.classList.contains('dark-mode') ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        // Table of Contents (TOC) Generator and Active Link Highlighting
+        document.addEventListener('DOMContentLoaded', () => {
+            const tocList = document.getElementById('tocList');
+            const mainHeader = document.querySelector('header.main-header');
+            const headerHeight = mainHeader ? mainHeader.offsetHeight : 80;
+            const sections = document.querySelectorAll('.main-content section[id]');
+            let tocLinks = [];
+
+            if (tocList && sections.length > 0) {
+                sections.forEach(section => {
+                    const titleElement = section.querySelector('h2');
+                    if (titleElement) {
+                        const titleText = titleElement.textContent;
+                        const sectionId = section.id;
+
+                        const listItem = document.createElement('li');
+                        const link = document.createElement('a');
+                        link.href = `#${sectionId}`;
+                        link.textContent = titleText;
+                        link.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const targetElement = document.getElementById(sectionId);
+                            if (targetElement) {
+                                const scrollToPosition = targetElement.offsetTop - headerHeight - 20; // 20px offset
+                                window.scrollTo({
+                                    top: scrollToPosition,
+                                    behavior: 'smooth'
+                                });
+                                updateActiveTocLink(sectionId);
+                            }
+                        });
+                        listItem.appendChild(link);
+                        tocList.appendChild(listItem);
+                        tocLinks.push(link);
+                    }
+                });
+
+                function updateActiveTocLink(activeId) {
+                    tocLinks.forEach(link => {
+                        if (link.getAttribute('href') === `#${activeId}`) {
+                            link.classList.add('active');
+                        } else {
+                            link.classList.remove('active');
+                        }
+                    });
+                }
+
+                const observerOptions = {
+                    root: null,
+                    rootMargin: `-${headerHeight + 20}px 0px -60% 0px`,
+                    threshold: 0
+                };
+
+                let lastIntersectingSectionId = null;
+
+                const observer = new IntersectionObserver(entries => {
+                    let currentIntersectingEntry = null;
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            if (!currentIntersectingEntry || entry.intersectionRatio > currentIntersectingEntry.intersectionRatio) {
+                                currentIntersectingEntry = entry;
+                            }
+                        }
+                    });
+
+                    if (currentIntersectingEntry) {
+                        lastIntersectingSectionId = currentIntersectingEntry.target.id;
+                        updateActiveTocLink(lastIntersectingSectionId);
+                    } else if (entries.length > 0 && !entries.some(e => e.isIntersecting) && lastIntersectingSectionId) {
+                        updateActiveTocLink(lastIntersectingSectionId);
+                    }
+
+                }, observerOptions);
+
+                sections.forEach(section => {
+                    observer.observe(section);
+                });
+                const currentHash = window.location.hash.substring(1);
+                if (currentHash) {
+                    updateActiveTocLink(currentHash);
+                } else if (sections.length > 0) {
+                    updateActiveTocLink(sections[0].id);
+                }
+
+
+            } else if (tocList) {
+                const sidebar = document.querySelector('.sidebar');
+                if (sidebar) sidebar.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -12,12 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
-    <style>
-        /* Make the "Learning Today, Leading Tomorrow." text visible in dark mode */
-        .dark-theme .learning-quote {
-            color: #f3f3f3 !important;
-        }
-    </style>
+
 </head>
 
 <body>
@@ -41,12 +36,48 @@
                     <span class="text-white" style="color: #fff;">ision</span>
                 </a>
             </div>
-            <div
-                style="text-align: center; padding: 30px;  border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
-                <div class="learning-quote"
-                    style="font-family: 'Baskerville'; font-size: 2.1em; color: #222; font-style: italic;">
-                    <span style="font-weight: 400;">Learning Today,</span>
-                    <span style="font-weight: 600;"> Leading Tomorrow.</span>
+            <div style="
+    background: linear-gradient(135deg, #eceff1 0%, #cfd8dc 100%); /* Light Slate Gray */
+    border-radius: 6px;
+    padding: 20px;
+    margin: 30px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    display: inline-block;
+">
+                <div style="
+        font-family: 'Lato', sans-serif;
+        font-size: 1.8rem;
+        line-height: 1.3;
+        color: #263238; /* Dark Slate */
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    ">
+                    <span style="font-weight: 400; color: #00796b;">Learning Today,</span>
+                    <span style="
+            font-weight: 700;
+            background: linear-gradient(90deg, #ff8f00, #ffb300); /* Slate Blue Gradient */
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+        ">
+                        Leading Tomorrow.
+                        <span style="
+                position: absolute;
+                bottom: -5px;
+                left: 0;
+                width: 100%;
+                height: 2px;
+                background: linear-gradient(90deg, #546e7a, #78909c); /* Slate Blue Gradient */
+                border-radius: 2px;
+            "></span>
+                    </span>
                 </div>
             </div>
             <div class="header-actions">
@@ -156,7 +187,90 @@
 
         <!-- Subject Categories -->
         <section class="subject-category">
-            <h2>Beginner Level</h2>
+            <div style="
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+    border-radius: 16px;
+    padding: 30px;
+    max-width: 600px;
+    margin: 20px auto;
+    text-align: center;
+    box-shadow: 
+        0 10px 20px rgba(0, 0, 0, 0.05),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+    position: relative;
+    overflow: hidden;
+">
+                <!-- Shimmer Effect -->
+                <div style="
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to bottom right,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.8) 50%,
+            rgba(255, 255, 255, 0) 100%
+        );
+        transform: rotate(30deg);
+        opacity: 0.3;
+        animation: shimmer 8s infinite linear;
+    "></div>
+
+                <!-- Level Badge -->
+                <div style="
+        display: inline-block;
+        background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    ">
+                    🔰 Beginner Level
+                </div>
+
+                <!-- Quote -->
+                <p style="
+        font-family: 'Georgia', serif;
+        font-size: 1.4rem;
+        line-height: 1.6;
+        color: #333;
+        margin: 0;
+        font-style: italic;
+        position: relative;
+    ">
+                    “You don’t need to be perfect to start. You just need the ego to believe you can.”
+                </p>
+
+                <!-- Decorative Dots -->
+                <div style="
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        background-image: radial-gradient(#d1d5db 2px, transparent 2px);
+        background-size: 12px 12px;
+        opacity: 0.3;
+    "></div>
+            </div>
+
+            <style>
+                @keyframes shimmer {
+                    0% {
+                        transform: translateX(-100%) rotate(30deg);
+                    }
+
+                    100% {
+                        transform: translateX(100%) rotate(30deg);
+                    }
+                }
+            </style>
             <div class="subject-cards">
                 <div class="subject-card" data-aos="fade-up">
                     <h3>Computer Fundamentals</h3>
@@ -180,7 +294,123 @@
         </section>
 
         <section class="subject-category">
-            <h2>Intermediate Level</h2>
+            <div style="
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    border-radius: 14px;
+    padding: 32px;
+    max-width: 650px;
+    margin: 25px auto;
+    text-align: center;
+    box-shadow: 
+        0 12px 24px rgba(0, 0, 0, 0.05),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.9);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+">
+                <!-- Animated Lightning Effect -->
+                <div style="
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 2px;
+        height: 100%;
+        background: linear-gradient(to bottom, 
+            transparent 0%, 
+            #fbbf24 20%, 
+            transparent 100%);
+        transform: translateX(-50%);
+        opacity: 0.7;
+        animation: lightning 8s infinite;
+    "></div>
+
+                <!-- Level Badge -->
+                <div style="
+        display: inline-block;
+        background: linear-gradient(90deg, #f59e0b, #ef4444);
+        color: white;
+        padding: 8px 24px;
+        border-radius: 50px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 700;
+        font-size: 0.95rem;
+        margin-bottom: 20px;
+        box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        position: relative;
+        z-index: 2;
+    ">
+                    ⚡ Intermediate Level
+                </div>
+
+                <!-- Quote -->
+                <p style="
+        font-family: 'DM Sans', sans-serif;
+        font-size: 1.5rem;
+        line-height: 1.6;
+        color: #1f2937;
+        margin: 0;
+        position: relative;
+        z-index: 2;
+        font-weight: 500;
+    ">
+                    "Once your confidence starts speaking, even challenges lose their voice."
+                </p>
+
+                <!-- Decorative Corner Elements -->
+                <div style="
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+        border-top: 2px solid #f59e0b;
+        border-right: 2px solid #f59e0b;
+        border-radius: 0 14px 0 0;
+    "></div>
+                <div style="
+        position: absolute;
+        bottom: 15px;
+        left: 15px;
+        width: 40px;
+        height: 40px;
+        border-bottom: 2px solid #ef4444;
+        border-left: 2px solid #ef4444;
+        border-radius: 0 0 0 14px;
+    "></div>
+            </div>
+
+            <style>
+                @keyframes lightning {
+
+                    0%,
+                    100% {
+                        opacity: 0;
+                        height: 0;
+                    }
+
+                    5% {
+                        opacity: 0.7;
+                        height: 100%;
+                    }
+
+                    10% {
+                        opacity: 0;
+                        height: 100%;
+                    }
+
+                    15% {
+                        opacity: 0.4;
+                        height: 80%;
+                    }
+
+                    20% {
+                        opacity: 0;
+                        height: 80%;
+                    }
+                }
+            </style>
             <div class="subject-cards">
                 <div class="subject-card" data-aos="fade-up">
                     <h3>Discrete Structures</h3>
@@ -212,8 +442,8 @@
                         STARTED</button>
                 </div>
                 <div class="subject-card" data-aos="fade-up" data-aos-delay="350">
-                    <h3>R Programming</h3>
-                    <button onclick="location.href='subjects/R-programming/r-programming.html'">GET STARTED</button>
+                    <h3>Java Programming</h3>
+                    <button onclick="location.href='Subjects/Java Programming/java.html'">GET STARTED</button>
                 </div>
                 <div class="subject-card" data-aos="fade-up" data-aos-delay="400">
                     <h3>Python Programming</h3>
@@ -232,7 +462,103 @@
         </section>
 
         <section class="subject-category">
-            <h2>Advanced Level</h2>
+            <div style="
+    background: linear-gradient(152deg, #111827 0%, #1f2937 100%);
+    border-radius: 0 20px 20px 20px;
+    padding: 40px;
+    max-width: 700px;
+    margin: 30px auto;
+    text-align: center;
+    box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.25),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+    border-left: 4px solid #ef4444;
+">
+
+                <!-- Fire Glow Effect -->
+                <div style="
+        position: absolute;
+        bottom: -50px;
+        left: 50%;
+        width: 200%;
+        height: 100px;
+        background: radial-gradient(ellipse at center, 
+            rgba(239, 68, 68, 0.4) 0%, 
+            transparent 70%);
+        transform: translateX(-50%);
+        animation: fireGlow 3s infinite alternate;
+    "></div>
+
+                <!-- Level Badge -->
+                <div style="
+        display: inline-block;
+        background: linear-gradient(90deg, #ef4444, #f59e0b);
+        color: #111827;
+        padding: 10px 28px;
+        border-radius: 0 50px 50px 50px;
+        font-family: 'Bebas Neue', sans-serif;
+        font-weight: 700;
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        position: absolute;
+        top: 0;
+        left: 0;
+        box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+    ">
+                    🔥 Advanced Level
+                </div>
+
+                <!-- Quote -->
+                <p style="
+        font-family: 'Montserrat', sans-serif;
+        font-size: 1.8rem;
+        line-height: 1.5;
+        color: #f3f4f6;
+        margin: 40px 0 20px;
+        font-weight: 600;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    ">
+                    "When your aura leads, knowledge follows.<br>
+                    <span style="
+            display: inline-block;
+            margin-top: 15px;
+            font-size: 1.4rem;
+            color: #f59e0b;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        ">Stay sharp. Stay dominant.</span>"
+                </p>
+
+                <!-- Decorative Corner -->
+                <div style="
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 0 0 60px 60px;
+        border-color: transparent transparent #ef4444 transparent;
+    "></div>
+            </div>
+
+            <style>
+                @keyframes fireGlow {
+                    0% {
+                        opacity: 0.7;
+                        transform: translateX(-50%) scale(1);
+                    }
+
+                    100% {
+                        opacity: 1;
+                        transform: translateX(-50%) scale(1.1);
+                    }
+                }
+            </style>
             <div class="subject-cards">
                 <div class="subject-card" data-aos="fade-up">
                     <h3>Design and Analysis of Algorithms</h3>
@@ -278,7 +604,129 @@
         </section>
 
         <section class="subject-category">
-            <h2>Pro Level</h2>
+            <div style="
+    background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 20px;
+    padding: 50px 40px 40px;
+    max-width: 750px;
+    margin: 40px auto;
+    text-align: center;
+    box-shadow: 
+        0 30px 60px -10px rgba(0, 0, 0, 0.35),
+        inset 0 0 0 1px rgba(255, 215, 0, 0.15);
+    position: relative;
+    overflow: hidden;
+    border-top: 4px solid #ffd700;
+">
+
+                <!-- Crown Glow Effect -->
+                <div style="
+        position: absolute;
+        top: -100px;
+        left: 50%;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle at center, 
+            rgba(255, 215, 0, 0.2) 0%, 
+            transparent 70%);
+        transform: translateX(-50%);
+        animation: crownPulse 4s infinite alternate;
+    "></div>
+
+                <!-- Diamond Particles -->
+                <div style="
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: 
+            radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.1) 1px, transparent 1px),
+            radial-gradient(circle at 80% 70%, rgba(255, 215, 0, 0.1) 1px, transparent 1px);
+        background-size: 30px 30px;
+        opacity: 0.5;
+    "></div>
+
+                <!-- Level Badge -->
+                <div style="
+        display: inline-flex;
+        align-items: center;
+        background: linear-gradient(135deg, #ffd700, #c0c0c0);
+        color: #1a1a2e;
+        padding: 12px 35px;
+        border-radius: 50px;
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 1.3rem;
+        margin-bottom: 40px;
+        letter-spacing: 1px;
+        box-shadow: 0 15px 30px rgba(255, 215, 0, 0.2);
+        position: relative;
+        z-index: 2;
+    ">
+                    <span style="margin-right: 12px; font-size: 1.5rem;">👑</span> Pro Level
+                </div>
+
+                <!-- Quote -->
+                <p style="
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 2rem;
+        line-height: 1.5;
+        color: #ffffff;
+        margin: 0;
+        font-weight: 600;
+        position: relative;
+        z-index: 2;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    ">
+                    "Now you don't just learn the game —<br>
+                    <span style="
+            display: inline-block;
+            margin-top: 15px;
+            font-size: 2.2rem;
+            background: linear-gradient(90deg, #ffd700, #ffffff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        ">you rewrite the rules.</span>"
+                </p>
+
+                <!-- Decorative Elements -->
+                <div style="
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        border-right: 2px solid #ffd700;
+        border-bottom: 2px solid #ffd700;
+    "></div>
+                <div style="
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        width: 40px;
+        height: 40px;
+        border-left: 2px solid #ffd700;
+        border-bottom: 2px solid #ffd700;
+    "></div>
+            </div>
+
+            <style>
+                @keyframes crownPulse {
+                    0% {
+                        opacity: 0.3;
+                        transform: translateX(-50%) scale(0.95);
+                    }
+
+                    100% {
+                        opacity: 0.6;
+                        transform: translateX(-50%) scale(1.05);
+                    }
+                }
+            </style>
             <div class="subject-cards">
                 <div class="subject-card" data-aos="fade-up">
                     <h3>Internet Technology</h3>

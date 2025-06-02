@@ -6,7 +6,7 @@ fetch("java-topics.json")
 
     const container = document.getElementById("topics-container");
 
-    data.topics.forEach(topic => {
+    data.topics.forEach((topic, idx) => {
       const card = document.createElement("div");
       card.className = "topic-card";
 
@@ -15,6 +15,7 @@ fetch("java-topics.json")
         <div class="topic-desc">${topic.description}</div>
         <div class="resource-buttons">
           ${topic.resources.map(resource => `<button>${resource}</button>`).join("")}
+          <a href="Topics/topic-${idx + 1}.html"><button class="explore-btn">Explore</button></a>
         </div>
       `;
 

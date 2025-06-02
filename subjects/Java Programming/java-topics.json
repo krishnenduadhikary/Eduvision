@@ -4,44 +4,103 @@
     "topics": [
       {
         "title": "Introduction to Java",
-        "description": "History, features of Java, JDK, JVM, and basic syntax.",
-        "resources": ["Notes", "Video"]
+        "description": "History, features, JVM, JRE, JDK, Java Editions, setting up environment, writing/compiling/running your first Java program.",
+        "resources": []
       },
       {
-        "title": "Data Types and Variables",
-        "description": "Primitive data types, variables, constants, type casting.",
-        "resources": ["Examples", "Code"]
+        "title": "Java Basics",
+        "description": "Keywords, identifiers, data types, variables, type casting, operators, input/output, comments, command line arguments.",
+        "resources": []
       },
       {
-        "title": "Control Statements",
-        "description": "if-else, switch-case, loops (for, while, do-while).",
-        "resources": ["Practice", "Notes"]
+        "title": "Control Flow Statements",
+        "description": "Decision-making (if, if-else, nested if, switch-case), looping (for, while, do-while), jump statements (break, continue, return).",
+        "resources": []
       },
       {
-        "title": "Object-Oriented Programming",
-        "description": "Classes, objects, constructors, inheritance, polymorphism.",
-        "resources": ["Code", "Video"]
+        "title": "Object-Oriented Programming in Java",
+        "description": "Classes, objects, constructors, method overloading, this/static/super/final keywords, encapsulation, inheritance, polymorphism, object class.",
+        "resources": []
+      },
+      {
+        "title": "Packages and Access Modifiers",
+        "description": "Creating/using packages, built-in packages (java.lang, java.util), access modifiers (private, default, protected, public).",
+        "resources": []
+      },
+      {
+        "title": "Interfaces and Abstract Classes",
+        "description": "Abstract class/methods, interfaces, multiple inheritance, functional interfaces, default/static methods in interfaces.",
+        "resources": []
       },
       {
         "title": "Exception Handling",
-        "description": "Try-catch block, throw, throws, and custom exceptions.",
-        "resources": ["Examples", "Diagram"]
+        "description": "Types of errors, try/catch/finally, throw/throws, built-in and custom exceptions.",
+        "resources": []
       },
       {
-        "title": "Packages and Interfaces",
-        "description": "Java packages, access modifiers, interfaces and implementation.",
-        "resources": ["Notes", "Code"]
+        "title": "Strings in Java",
+        "description": "String class/methods, StringBuffer, StringBuilder, immutable strings, string manipulation.",
+        "resources": []
       },
       {
-        "title": "File I/O and Streams",
-        "description": "Reading and writing files using FileReader, FileWriter, Buffered streams.",
-        "resources": ["Code", "Practice"]
+        "title": "Arrays and Collections",
+        "description": "Arrays (1D/2D), array operations, enhanced for-loop, wrapper classes, collections (List, Set, Map), ArrayList, LinkedList, HashSet, TreeSet, HashMap, TreeMap, Collections utility.",
+        "resources": []
       },
       {
-        "title": "Multithreading in Java",
-        "description": "Thread class, Runnable interface, thread lifecycle, synchronization.",
-        "resources": ["Examples", "Video"]
+        "title": "Java I/O (Input/Output)",
+        "description": "Byte/character streams, file handling, BufferedReader/Writer, serialization, Scanner, object streams.",
+        "resources": []
+      },
+      {
+        "title": "Multithreading and Concurrency",
+        "description": "Creating threads, thread lifecycle/methods, synchronization, inter-thread communication, priorities, executor framework.",
+        "resources": []
+      },
+      {
+        "title": "Java Applets (Legacy)",
+        "description": "Applet lifecycle, creating applets, graphics class, event handling in applets.",
+        "resources": []
+      },
+      {
+        "title": "GUI Programming with Java (AWT & Swing)",
+        "description": "AWT components, event handling, layout managers, Swing components, dialogs, menus, panels.",
+        "resources": []
+      },
+      {
+        "title": "JDBC (Java Database Connectivity)",
+        "description": "JDBC intro/architecture, connecting to DB, driver types, CRUD operations, PreparedStatement, transactions, connection pooling.",
+        "resources": []
+      },
+      {
+        "title": "Java 8+ Features (Modern Java)",
+        "description": "Lambda expressions, functional interfaces, Stream API, method references, default/static methods, Optional, Date/Time API.",
+        "resources": []
+      },
+      {
+        "title": "Java Networking",
+        "description": "Networking basics, socket programming (TCP/UDP), URL/InetAddress classes, client-server communication.",
+        "resources": []
+      },
+      {
+        "title": "Java Annotations and Reflection",
+        "description": "Built-in/custom annotations, Reflection API (Class, Method, Field), use cases.",
+        "resources": []
+      },
+      {
+        "title": "Java Memory Management",
+        "description": "Stack vs heap, garbage collection, finalize(), memory leaks and prevention.",
+        "resources": []
+      },
+      {
+        "title": "Java Security (Basics)",
+        "description": "Access modifiers, secure coding, exception handling for security, basics of cryptography (java.security).",
+        "resources": []
+      },
+      {
+        "title": "Java Frameworks (Introductory Overview)",
+        "description": "Spring/Spring Boot basics, Hibernate ORM, Maven/Gradle, Java EE (Servlets, JSP) introduction.",
+        "resources": []
       }
     ]
   }
-  

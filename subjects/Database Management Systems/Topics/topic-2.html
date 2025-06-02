@@ -1,0 +1,1642 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 2: Relational Model - EduVision</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            /* Dark Blue-Grey */
+            --primary-light: #3d566e;
+            --primary-dark: #1a252f;
+
+            --secondary-color: #3498db;
+            /* Bright Blue */
+            --secondary-light: #5dade2;
+            --secondary-dark: #2980b9;
+
+            --accent-color: #e74c3c;
+            /* Red */
+
+            --light-bg: #f8f9fa;
+            /* Off-white */
+            --light-text: #495057;
+            /* Dark Grey */
+            --light-card: #ffffff;
+            --light-border: #e0e0e0;
+
+            --dark-bg: #1a252f;
+            /* Very Dark Blue-Grey */
+            --dark-text: #f8f9fa;
+            /* Light Grey */
+            --dark-card: #2c3e50;
+            /* Dark Blue-Grey (same as light primary) */
+            --dark-border: #3d566e;
+            /* Lighter than dark card */
+
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #3498db;
+
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.1);
+
+            --transition: all 0.3s ease-in-out;
+        }
+
+        /* Dark mode overrides for semantic colors if they were defined with light/dark specifics */
+        html.dark-mode {
+            --primary-color: #5dade2;
+            /* Light Blue for dark mode primary */
+            --primary-light: #85c1e9;
+            --primary-dark: #3498db;
+
+            --secondary-color: #bdc3c7;
+            /* Light Grey for dark mode secondary */
+            --secondary-light: #ecf0f1;
+            --secondary-dark: #95a5a6;
+        }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+            line-height: 1.7;
+            color: var(--light-text);
+            background-color: var(--light-bg);
+            padding-top: 80px;
+            /* Height of the fixed header */
+            transition: var(--transition);
+        }
+
+        html.dark-mode body {
+            color: var(--dark-text);
+            background-color: var(--dark-bg);
+        }
+
+        /* Typography */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Nunito Sans', 'Inter', sans-serif;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+            /* Use darker primary for headings in light mode */
+        }
+
+        html.dark-mode h1,
+        html.dark-mode h2,
+        html.dark-mode h3,
+        html.dark-mode h4,
+        html.dark-mode h5,
+        html.dark-mode h6 {
+            color: var(--primary-light);
+            /* Use lighter primary for headings in dark mode */
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 0.6rem;
+            margin-top: 2.5rem;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            margin-top: 2rem;
+        }
+
+        h4 {
+            font-size: 1.5rem;
+        }
+
+        h5 {
+            font-size: 1.25rem;
+            color: var(--secondary-dark);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        html.dark-mode h5 {
+            color: var(--secondary-light);
+        }
+
+
+        p {
+            margin-bottom: 1.25rem;
+            font-size: 1.05rem;
+        }
+
+        p.lead {
+            font-size: 1.2rem;
+            color: var(--light-text);
+            opacity: 0.9;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        html.dark-mode p.lead {
+            color: var(--dark-text);
+        }
+
+
+        a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        a:hover {
+            color: var(--secondary-dark);
+            text-decoration: underline;
+        }
+
+        ul,
+        ol {
+            padding-left: 20px;
+            margin-bottom: 1.25rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Layout */
+        .page-container {
+            /* Renamed from .container to avoid conflict if bootstrap is ever used */
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            /* Slightly wider sidebar */
+            gap: 2.5rem;
+            max-width: 1500px;
+            /* Wider max-width for larger screens */
+            margin: 0 auto;
+            padding: 2.5rem;
+        }
+
+        @media (max-width: 1024px) {
+
+            /* Adjusted breakpoint */
+            .page-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+                /* Hide sidebar on smaller screens, rely on scrolling */
+            }
+        }
+
+        /* Header */
+        header.main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2.5rem;
+            box-shadow: var(--shadow-md);
+            z-index: 1000;
+        }
+
+        html.dark-mode header.main-header {
+            background-color: var(--dark-card);
+            /* Match dark card for header in dark mode */
+            color: var(--dark-text);
+        }
+
+        .header-topic-title {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: white;
+            /* Ensure this text is white on dark header */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding: 0 15px;
+            /* Space around title */
+        }
+
+        html.dark-mode .header-topic-title {
+            color: var(--dark-text);
+            /* Ensure this text is light on light header (dark mode) */
+        }
+
+
+        .eduvision-logo-header {
+            /* Specific class for header logo */
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            /* Remove underline from logo link */
+        }
+
+        .eduvision-logo-header svg {
+            width: 36px;
+            /* Slightly larger logo SVG */
+            height: 36px;
+            color: var(--secondary-light);
+        }
+
+        html.dark-mode .eduvision-logo-header svg {
+            color: var(--primary-color);
+            /* Use dark mode primary for SVG */
+        }
+
+
+        .logo-text {
+            font-size: 1.7rem;
+            /* Larger logo text */
+            font-weight: 800;
+            /* Bolder */
+            font-family: 'Nunito Sans', sans-serif;
+            color: white;
+        }
+
+        html.dark-mode .logo-text {
+            color: var(--dark-text);
+        }
+
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 1.8rem;
+            /* More space between nav items */
+        }
+
+        .header-nav a {
+            color: white;
+            font-weight: 500;
+            font-size: 1rem;
+            position: relative;
+            /* For underline effect */
+            padding-bottom: 4px;
+        }
+
+        .header-nav a::after {
+            /* Underline effect */
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--secondary-light);
+            transition: width 0.3s ease;
+        }
+
+        .header-nav a:hover::after {
+            width: 100%;
+        }
+
+        html.dark-mode .header-nav a {
+            color: var(--dark-text);
+        }
+
+        html.dark-mode .header-nav a:hover {
+            color: var(--primary-color);
+        }
+
+        html.dark-mode .header-nav a::after {
+            background-color: var(--primary-color);
+        }
+
+
+        .theme-toggle {
+            background: transparent;
+            border: 1px solid var(--secondary-light);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-lg);
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--secondary-light);
+            color: var(--primary-color);
+        }
+
+        .theme-toggle svg {
+            margin-right: 0.3rem;
+        }
+
+        html.dark-mode .theme-toggle {
+            border-color: var(--primary-color);
+            color: var(--dark-text);
+        }
+
+        html.dark-mode .theme-toggle:hover {
+            background-color: var(--primary-color);
+            color: var(--dark-card);
+            /* Text color for contrast */
+        }
+
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            /* Header height + 20px margin */
+            align-self: start;
+            background-color: var(--light-card);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            /* max-height: calc(100vh - 120px); */
+            /* Remove this line to prevent scroll */
+            /* overflow-y: auto; */
+            /* Remove this line to prevent scroll */
+        }
+
+        html.dark-mode .sidebar {
+            background-color: var(--dark-card);
+        }
+
+        .sidebar-title {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-dark);
+            border-bottom: 2px solid var(--secondary-light);
+            padding-bottom: 0.5rem;
+        }
+
+        html.dark-mode .sidebar-title {
+            color: var(--primary-light);
+            border-bottom-color: var(--primary-dark);
+        }
+
+        .toc {
+            list-style: none;
+            padding-left: 0;
+            /* Remove default padding for ul */
+        }
+
+        .toc li {
+            margin-bottom: 0.75rem;
+        }
+
+        .toc a {
+            display: block;
+            padding: 0.6rem 0;
+            color: var(--light-text);
+            border-left: 4px solid transparent;
+            padding-left: 1.2rem;
+            transition: var(--transition);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .toc a:hover {
+            color: var(--secondary-color);
+            border-left-color: var(--secondary-color);
+            background-color: rgba(52, 152, 219, 0.05);
+            text-decoration: none;
+            transform: translateX(5px);
+        }
+
+        .toc a.active {
+            color: var(--secondary-dark);
+            border-left-color: var(--secondary-dark);
+            font-weight: 700;
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        html.dark-mode .toc a {
+            color: var(--dark-text);
+        }
+
+        html.dark-mode .toc a:hover {
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
+            background-color: rgba(93, 173, 226, 0.1);
+        }
+
+        html.dark-mode .toc a.active {
+            color: var(--primary-light);
+            border-left-color: var(--primary-light);
+            background-color: rgba(93, 173, 226, 0.15);
+        }
+
+
+        /* Main Content */
+        .main-content {
+            background-color: var(--light-card);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-lg);
+            /* More prominent shadow for main content */
+        }
+
+        html.dark-mode .main-content {
+            background-color: var(--dark-card);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumb-nav {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb-nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        .breadcrumb-nav li a {
+            color: var(--secondary-color);
+        }
+
+        .breadcrumb-nav li a:hover {
+            color: var(--secondary-dark);
+        }
+
+        .breadcrumb-nav li+li::before {
+            content: ">";
+            margin: 0 0.75rem;
+            color: var(--light-text);
+            opacity: 0.7;
+        }
+
+        html.dark-mode .breadcrumb-nav li+li::before {
+            color: var(--dark-text);
+        }
+
+        .breadcrumb-nav li[aria-current="page"] {
+            color: var(--light-text);
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        html.dark-mode .breadcrumb-nav li[aria-current="page"] {
+            color: var(--dark-text);
+        }
+
+
+        /* Content Card (used for sections) */
+        section.content-section {
+            /* Renamed from .content-card to be more specific */
+            background-color: transparent;
+            /* Sections don't need their own card bg if main-content is a card */
+            border-radius: var(--radius-md);
+            padding: 1rem 0;
+            /* Vertical padding for sections */
+            margin-bottom: 2.5rem;
+            border: none;
+            /* No border for sections within main content card */
+            box-shadow: none;
+            /* No shadow for sections */
+        }
+
+
+        /* Definition Boxes */
+        .definition {
+            background-color: rgba(52, 152, 219, 0.08);
+            /* Softer bg */
+            border-left: 5px solid var(--secondary-color);
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+        }
+
+        .definition strong {
+            color: var(--secondary-dark);
+            font-weight: 600;
+            display: block;
+            /* Label on its own line */
+            margin-bottom: 0.3rem;
+        }
+
+        .example {
+            font-style: italic;
+            color: var(--light-text);
+            opacity: 0.85;
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+            padding-left: 0.5rem;
+            /* Indent example slightly */
+            display: block;
+            /* Ensure it takes its own line if needed */
+        }
+
+        html.dark-mode .example {
+            color: var(--dark-text);
+        }
+
+        .image-container {
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--light-border);
+        }
+
+        html.dark-mode .image-container img {
+            border-color: var(--dark-border);
+        }
+
+        .image-container figcaption {
+            font-size: 0.9rem;
+            color: var(--light-text);
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+
+        html.dark-mode .image-container figcaption {
+            color: var(--dark-text);
+        }
+
+
+        /* Tables */
+        .styled-table {
+            /* Changed from .comparison-table to a more generic name */
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            box-shadow: var(--shadow-sm);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            /* To make border-radius work with th */
+            border: 1px solid var(--light-border);
+        }
+
+        .styled-table th,
+        .styled-table td {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid var(--light-border);
+        }
+
+        html.dark-mode .styled-table th,
+        html.dark-mode .styled-table td {
+            border-bottom-color: var(--dark-border);
+            border-left-color: var(--dark-border);
+            /* Ensure all borders use dark mode color */
+        }
+
+        .styled-table th {
+            background-color: var(--secondary-light);
+            color: var(--primary-dark);
+            /* Text color for contrast on light blue */
+            font-weight: 600;
+        }
+
+        html.dark-mode .styled-table th {
+            background-color: var(--primary-dark);
+            /* Darker header for table in dark mode */
+            color: var(--secondary-light);
+        }
+
+        .styled-table tr:nth-child(even) {
+            background-color: rgba(52, 152, 219, 0.03);
+            /* Very subtle striping */
+        }
+
+        html.dark-mode .styled-table tr:nth-child(even) {
+            background-color: rgba(93, 173, 226, 0.05);
+        }
+
+        .styled-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Code */
+        code {
+            font-family: 'Fira Code', monospace;
+            background-color: rgba(231, 76, 60, 0.1);
+            /* Accent color bg */
+            color: var(--accent-color);
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+        }
+
+        pre {
+            background-color: var(--primary-dark);
+            /* Dark bg for code blocks */
+            color: #f8f9fa;
+            /* Light text */
+            padding: 1.25rem;
+            border-radius: var(--radius-md);
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            box-shadow: var(--shadow-sm);
+        }
+
+        html.dark-mode pre {
+            background-color: #1c1c1c;
+            /* Even darker for dark mode code blocks */
+            border: 1px solid var(--dark-border);
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            /* Allow buttons to wrap on smaller screens */
+            gap: 1rem;
+            /* Add gap for wrapping */
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--light-border);
+        }
+
+        html.dark-mode .nav-buttons {
+            border-top-color: var(--dark-border);
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            /* More gap */
+            padding: 0.85rem 1.8rem;
+            /* Slightly larger */
+            background-color: var(--secondary-color);
+            color: white !important;
+            /* Ensure text is white */
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            /* Bolder */
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            text-decoration: none !important;
+            /* Ensure no underline */
+            flex-grow: 1;
+            /* Allow buttons to grow if space allows */
+            text-align: center;
+            justify-content: center;
+            min-width: 200px;
+            /* Minimum width for buttons */
+        }
+
+        .nav-button:hover {
+            background-color: var(--secondary-dark);
+            text-decoration: none !important;
+            color: white !important;
+            transform: translateY(-3px);
+            /* More pronounced lift */
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-button svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Details/Summary for Collapsible Sections */
+        details {
+            background-color: var(--light-card);
+            border: 1px solid var(--light-border);
+            border-radius: var(--radius-md);
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        summary {
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            cursor: pointer;
+            list-style-position: inside;
+            /* Keeps marker aligned */
+            transition: background-color 0.2s ease;
+            display: block;
+            /* Make summary full width to click anywhere */
+        }
+
+        summary strong {
+            /* If strong tag is used within summary */
+            color: inherit;
+        }
+
+
+        summary:hover {
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+
+        details[open] summary {
+            background-color: rgba(52, 152, 219, 0.1);
+            border-bottom: 1px solid var(--light-border);
+        }
+
+        details>div {
+            /* Content of details */
+            padding: 1.5rem;
+        }
+
+        html.dark-mode details {
+            background-color: var(--dark-card);
+            border-color: var(--dark-border);
+        }
+
+        html.dark-mode summary {
+            color: var(--primary-light);
+        }
+
+        html.dark-mode summary:hover {
+            background-color: rgba(93, 173, 226, 0.1);
+        }
+
+        html.dark-mode details[open] summary {
+            background-color: rgba(93, 173, 226, 0.15);
+            border-bottom-color: var(--dark-border);
+        }
+
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 70px;
+            }
+
+            header.main-header {
+                height: 70px;
+                padding: 0 1.5rem;
+            }
+
+            .header-topic-title {
+                font-size: 1em;
+            }
+
+            .logo-text {
+                font-size: 1.5rem;
+            }
+
+            .eduvision-logo-header svg {
+                width: 30px;
+                height: 30px;
+            }
+
+            .header-nav {
+                gap: 1rem;
+            }
+
+            .header-nav a {
+                font-size: 0.9rem;
+            }
+
+            .theme-toggle {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            .page-container {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            h2 {
+                font-size: 1.9rem;
+            }
+
+            h3 {
+                font-size: 1.6rem;
+            }
+
+            .main-content {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+
+            /* Further adjustments for smaller screens */
+            .nav-buttons {
+                flex-direction: column;
+                /* Stack buttons vertically */
+            }
+
+            .nav-button {
+                width: 100%;
+                /* Make buttons full width */
+            }
+        }
+
+
+        @media (max-width: 480px) {
+            .header-nav a:not(.theme-toggle) {
+                display: none;
+            }
+
+            /* Hide text links, keep toggle */
+            .header-nav {
+                justify-content: flex-end;
+            }
+
+            .header-topic-title {
+                display: none;
+            }
+
+            /* Push toggle to right */
+            .breadcrumb-nav {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito+Sans:wght@700;800;900&family=Fira+Code&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header class="main-header">
+        <a href="../../../index.html" class="eduvision-logo-header">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM12 6.5c-3.03 0-5.5 2.47-5.5 5.5s2.47 5.5 5.5 5.5 5.5-2.47 5.5-5.5-2.47-5.5-5.5-5.5zm0 9c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" />
+            </svg>
+            <span class="logo-text">EduVision</span>
+        </a>
+        <div class="header-topic-title">Topic 2: Relational Model</div>
+        <nav class="header-nav">
+            <a href="../../../index.html">Home</a>
+            <a href="../dbms.html">Syllabus</a>
+            <a href="../../../MCQ/">Mock Test</a>
+            <a href="../../../About/about.html">About</a>
+            <button class="theme-toggle" id="themeToggle">
+                <!-- Icon and text will be set by JS -->
+            </button>
+        </nav>
+    </header>
+
+    <div class="page-container">
+        <aside class="sidebar">
+            <h3 class="sidebar-title">On This Page</h3>
+            <ul class="toc" id="tocList">
+                <!-- TOC items will be generated by JS -->
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb-nav">
+                    <li><a href="../../../index.html">Home</a></li>
+                    <li><a href="../dbms.html">Database Systems</a></li>
+                    <li aria-current="page">Topic 2: Relational Model</li>
+                </ol>
+            </nav>
+
+            <h1>Topic 2: Relational Model</h1>
+            <p class="lead">Dive into the foundational principles of the Relational Model, the most widely adopted
+                database model. Explore its structure, key concepts, integrity rules, and the powerful languages used to
+                query and manipulate relational data.</p>
+
+            <section id="intro-relational-model" class="content-section">
+                <h2>Introduction to the Relational Model</h2>
+                <p>In the relational model, data and the relationships among data are represented by a collection of
+                    inter-related tables. Each table is a group of columns and rows, where a column represents an
+                    attribute of an entity and rows represent records. The table name and column names are helpful to
+                    interpret the meaning of values in each row. In the formal relational model terminology, a row is
+                    called a tuple, a column header is called an attribute, and the table is called a relation. The data
+                    type describing the types of values that can appear in each column is represented by a domain of
+                    possible values.</p>
+                <div class="image-container">
+                    <img src="https://i.imgur.com/R9L3kQW.png" alt="Table (Relation) with components labeled"
+                        style="max-width: 600px;">
+                    <figcaption>Components of a Relational Table.</figcaption>
+                </div>
+            </section>
+
+            <section id="structure-relational-model" class="content-section">
+                <h2>Structure of Relational Model</h2>
+                <div class="definition">
+                    <strong>Domains:</strong> A set of permitted, atomic values for an attribute in a table. Each domain
+                    has a specified data type or format.
+                    <span class="example">Example: The domain for `Employee_age` might be positive integers. Mobile
+                        numbers (set of ten-digit phone numbers), Social_security_numbers (set of nine-digit
+                        numbers).</span>
+                </div>
+                <div class="definition">
+                    <strong>Attribute:</strong> A property that defines a relation (table). Each column in a table
+                    represents an attribute.
+                    <span class="example">Example: Student_Rollno, NAME, etc.</span>
+                </div>
+                <div class="definition">
+                    <strong>Tuple:</strong> A single row in a table, which contains a single record.
+                </div>
+                <div class="definition">
+                    <strong>Relation (Table):</strong> A two-dimensional table format stored with its entities. It has
+                    rows (records) and columns (attributes).
+                </div>
+                <div class="definition">
+                    <strong>Relation Schema:</strong> The design or blueprint for a table. It includes the relation name
+                    and a list of attributes (A1, A2, ..., An) with their respective domains D(Ai). It describes what
+                    columns are on the table and their data types, but not the actual data.
+                    <span class="example">R(A1, A2, ..., An) or Student(RollNo: Integer, Name: String, Age:
+                        Integer).</span>
+                </div>
+                <div class="definition">
+                    <strong>Degree (or Arity):</strong> The number of attributes (columns) in a relation's schema.
+                </div>
+                <div class="definition">
+                    <strong>Cardinality:</strong> The total number of tuples (rows) present in a table at a particular
+                    instance.
+                </div>
+                <div class="definition">
+                    <strong>Relation Instance:</strong> A finite set of tuples in the RDBMS system for a given relation
+                    schema. Relation instances never have duplicate tuples. It represents the data in the table at a
+                    specific point in time.
+                </div>
+                <div class="definition">
+                    <strong>Column:</strong> Represents the set of values for a specific attribute across all tuples in
+                    a relation.
+                </div>
+
+            </section>
+
+            <section id="keys" class="content-section">
+                <h2>Keys in Relational Model</h2>
+                <p>A key is a set of one or more attributes that uniquely identify each row (tuple) in a table. Keys are
+                    crucial for establishing relationships between tables and ensuring data integrity.</p>
+                <div class="image-container">
+                    <img src="https://i.imgur.com/sE0LhT2.png" alt="Different Kinds of Keys" style="max-width: 550px;">
+                    <figcaption>Different Types of Keys in a Relational Database.</figcaption>
+                </div>
+                <details>
+                    <summary><strong>1. Super Key</strong></summary>
+                    <div>
+                        <p>A super key is a set of one or more attributes that, taken collectively, allow us to identify
+                            uniquely a tuple in a relation.</p>
+                        <span class="example">Example: In an Employee table with (Emp_ID, Emp_Number, Emp_Name):
+                            <ul>
+                                <li>{Emp_ID} is a super key.</li>
+                                <li>{Emp_Number} is a super key.</li>
+                                <li>{Emp_ID, Emp_Name} is a super key.</li>
+                                <li>{Emp_ID, Emp_Number, Emp_Name} is a super key.</li>
+                            </ul>
+                        </span>
+                    </div>
+                </details>
+                <details>
+                    <summary><strong>2. Candidate Key</strong></summary>
+                    <div>
+                        <p>A candidate key is a minimal super key, i.e., a super key from which no attribute can be
+                            removed without losing the unique identification property. A relation can have multiple
+                            candidate keys.</p>
+                        <span class="example">From the Employee table example, if Emp_ID and Emp_Number are individually
+                            unique:
+                            <ul>
+                                <li>{Emp_ID} is a candidate key.</li>
+                                <li>{Emp_Number} is a candidate key.</li>
+                            </ul>
+                            {Emp_ID, Emp_Name} is a super key but not a candidate key if {Emp_ID} alone is unique
+                            (because Emp_Name is redundant for unique identification if Emp_ID is already a candidate
+                            key).
+                        </span>
+                    </div>
+                </details>
+                <details>
+                    <summary><strong>3. Primary Key</strong></summary>
+                    <div>
+                        <p>The primary key is one of the candidate keys chosen by the database designer to uniquely
+                            identify tuples in a relation. It must contain unique values and cannot contain NULL values.
+                            A table can have only one primary key.</p>
+                        <ul>
+                            <li>Uniquely identifies each record in the table.</li>
+                            <li>Cannot contain NULL values.</li>
+                            <li>A table can have only one primary key, which may consist of single or multiple fields
+                                (composite primary key).</li>
+                        </ul>
+                        <span class="example">Example: "rollno" can be considered as primary key in a Student
+                            table.</span>
+                    </div>
+                </details>
+                <details>
+                    <summary><strong>4. Foreign Key</strong></summary>
+                    <div>
+                        <p>A foreign key is an attribute (or a collection of attributes) in one table that uniquely
+                            identifies a row of another table or the same table. It is used to link two tables together
+                            and enforce referential integrity. The foreign key in one table refers to the primary key in
+                            another table.</p>
+                        <span class="example">Consider two tables: "Persons" (PersonID PK, LastName, FirstName, Age) and
+                            "Orders" (OrderID PK, OrderNumber, PersonID FK). The "PersonID" in the "Orders" table is a
+                            foreign key referencing the "PersonID" in the "Persons" table.</span>
+                    </div>
+                </details>
+                <details>
+                    <summary><strong>5. Alternate Key (Secondary Key)</strong></summary>
+                    <div>
+                        <p>Any candidate key that is not chosen as the primary key is called an alternate key or
+                            secondary key. These keys can also be used to uniquely identify a record.</p>
+                        <span class="example">If a Student table has {Student_ID}, {Student_Enroll}, {Student_Email} as
+                            candidate keys, and {Student_ID} is chosen as the primary key, then {Student_Enroll} and
+                            {Student_Email} are alternate keys.</span>
+                    </div>
+                </details>
+                <details>
+                    <summary><strong>6. Unique Key</strong></summary>
+                    <div>
+                        <p>A unique key constraint ensures that all values in a column (or a set of columns) are unique.
+                            Unlike a primary key, a unique key constraint can allow one NULL value (in most DBMS
+                            implementations). A table can have multiple unique keys.</p>
+                        <span class="example">An `Email` column in a user table might have a unique key
+                            constraint.</span>
+                    </div>
+                </details>
+                <details>
+                    <summary><strong>7. Composite Key</strong></summary>
+                    <div>
+                        <p>A composite key is a primary key that consists of two or more attributes to uniquely identify
+                            a record. Each attribute in the composite key may not be unique by itself.</p>
+                        <span class="example">In an "OrderDetails" table, {OrderID, ProductID} could form a composite
+                            primary key.</span>
+                    </div>
+                </details>
+                <details>
+                    <summary><strong>8. Surrogate Key</strong></summary>
+                    <div>
+                        <p>A surrogate key is an artificial key (often an auto-incrementing integer) added to a relation
+                            to serve as the primary key. It has no business meaning and is used solely for unique
+                            identification, especially when natural keys are complex, long, or subject to change.</p>
+                        <span class="example">An auto-generated `ProductID` in a products table.</span>
+                    </div>
+                </details>
+                <details>
+                    <summary><strong>9. Partial Key (Discriminator)</strong></summary>
+                    <div>
+                        <p>A partial key is a set of attributes that can uniquely identify weak entities that are
+                            related to the same owner entity. It is used in conjunction with the primary key of the
+                            strong entity to uniquely identify tuples of the weak entity.</p>
+                        <span class="example">In a `Dependents` table for employees, `Dependent_Name` might be a partial
+                            key, unique for each employee but not across all dependents. It would be combined with
+                            `Emp_ID` (from Employee table) to form a unique identifier for a dependent.</span>
+                    </div>
+                </details>
+
+                <h5>Key Comparisons:</h5>
+                <table class="styled-table">
+                    <caption>Primary Key vs. Candidate Key</caption>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Primary Key</th>
+                            <th>Candidate Key</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Definition</td>
+                            <td>A unique and non-null key to identify a record uniquely.</td>
+                            <td>A unique key to identify a record uniquely.</td>
+                        </tr>
+                        <tr>
+                            <td>Count</td>
+                            <td>A table can have only one primary key.</td>
+                            <td>A table can have multiple candidate keys.</td>
+                        </tr>
+                        <tr>
+                            <td>Null Values</td>
+                            <td>Cannot contain null values.</td>
+                            <td>Can contain one null value (typically if not part of PK).</td>
+                        </tr>
+                        <tr>
+                            <td>Selection</td>
+                            <td>It is one of the candidate keys.</td>
+                            <td>Signifies which keys *can* be used as a Primary Key.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="styled-table">
+                    <caption>Super Key vs. Candidate Key</caption>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Super Key</th>
+                            <th>Candidate Key</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Definition</td>
+                            <td>Set of attributes to identify all records uniquely.</td>
+                            <td>A minimal super key (no redundant attributes).</td>
+                        </tr>
+                        <tr>
+                            <td>Subset</td>
+                            <td>Candidate key is a subset of Super Key.</td>
+                            <td>All candidate keys are super keys.</td>
+                        </tr>
+                        <tr>
+                            <td>Minimality</td>
+                            <td>May contain redundant attributes.</td>
+                            <td>No redundant attributes.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="integrity-constraints" class="content-section">
+                <h2>Integrity Constraints</h2>
+                <p>Integrity constraints are rules that ensure the accuracy and consistency of data in a relational
+                    database. They guard against accidental damage to the database.</p>
+                <div class="image-container">
+                    <img src="https://i.imgur.com/zR4mYgW.png" alt="Types of Integrity Constraints"
+                        style="max-width: 600px;">
+                    <figcaption>Types of Integrity Constraints.</figcaption>
+                </div>
+                <details>
+                    <summary><strong>1. Domain Constraints</strong></summary>
+                    <div>
+                        <p>Specify that the value of an attribute must be an atomic value from its domain (i.e., of the
+                            correct data type and within any specified range or set of values).</p>
+                        <span class="example">If `Age` attribute has a domain of positive integers, a value like
+                            "Twenty" or -5 would violate this constraint.</span>
+                    </div>
+                </details>
+                <details>
+                    <summary><strong>2. Entity Integrity Constraint</strong></summary>
+                    <div>
+                        <p>States that no primary key value can be NULL. This is because the primary key is used to
+                            identify individual tuples in a relation; if it were NULL, we couldn't uniquely identify
+                            some tuples.</p>
+                        <span class="example">If `EMP_ID` is the primary key of an EMPLOYEE table, no employee record
+                            can have a NULL value for `EMP_ID`.</span>
+                    </div>
+                </details>
+                <details>
+                    <summary><strong>3. Referential Integrity Constraint</strong></summary>
+                    <div>
+                        <p>Ensures consistency among tuples in two relations (tables). It is specified between two
+                            relations and is used to maintain the consistency among tuples of the two relations. If a
+                            foreign key in Table1 refers to the Primary Key of Table2, then every value of the Foreign
+                            Key in Table1 must either be NULL or be available in the Primary Key of Table2.</p>
+                        <span class="example">If an `Orders` table has a `CustomerID` (FK) referencing the `Customers`
+                            table's `CustomerID` (PK), then any `CustomerID` in `Orders` must exist in `Customers` or be
+                            NULL (if allowed).</span>
+                    </div>
+                </details>
+                <details>
+                    <summary><strong>4. Key Constraints</strong></summary>
+                    <div>
+                        <p>Specify that an attribute or set of attributes forming a key (e.g., primary key, unique key)
+                            must have unique values within the relation. For a primary key, it also implies
+                            non-nullability (covered by entity integrity).</p>
+                        <span class="example">If `StudentID` is a primary key, no two students can have the same
+                            `StudentID`.</span>
+                    </div>
+                </details>
+            </section>
+
+            <section id="logical-design-views" class="content-section">
+                <h2>Logical Database Design and Views</h2>
+                <h3>Logical Database Design</h3>
+                <p>Logical database design involves defining the structure of the database based on the relational
+                    model. This includes identifying entities, attributes, relationships, and then translating them into
+                    a set of relations (tables) with appropriate keys and constraints. The Entity-Relationship (ER)
+                    Model (covered in the next topic) is a common tool used for conceptual and logical database design.
+                </p>
+                <h3>Views</h3>
+                <p>A view in a relational database is a virtual table based on the result-set of a stored query. A view
+                    contains rows and columns, just like a real table. The fields in a view are fields from one or more
+                    real tables in the database.</p>
+                <p>Advantages of views:</p>
+                <ul>
+                    <li><strong>Simplicity:</strong> Users can query a simplified representation of data without needing
+                        to understand complex underlying table structures and joins.</li>
+                    <li><strong>Security:</strong> Restrict access to sensitive data by only showing specific columns or
+                        rows to certain users.</li>
+                    <li><strong>Data Independence:</strong> Application programs can be based on views. If the
+                        underlying table structures change, the view definition can sometimes be modified to maintain
+                        the same interface to the application, thus providing logical data independence.</li>
+                    <li><strong>Consistency:</strong> Present data in a consistent format, even if the underlying data
+                        comes from multiple tables or has different representations.</li>
+                </ul>
+            </section>
+
+
+            <section id="relational-algebra" class="content-section">
+                <h2>Relational Algebra</h2>
+                <p>Relational Algebra is a procedural query language that takes instances of relations as input and
+                    yields instances of relations as output. It consists of a set of operations that are used to
+                    manipulate relations. These operations can be combined to form complex queries.</p>
+                <h4>Basic Operations:</h4>
+                <h5>Unary Relational Operations (operate on a single relation):</h5>
+                <ul>
+                    <li><strong>SELECT (σ):</strong> Selects tuples (rows) that satisfy a given predicate (condition).
+                        <pre><code>σ<sub>condition</sub>(Relation)</code></pre>
+                        <span class="example">σ<sub>Age > 30</sub>(Employee) - Selects employees older than 30.</span>
+                    </li>
+                    <li><strong>PROJECT (π):</strong> Selects certain columns (attributes) from a relation and discards
+                        the others.
+                        <pre><code>π<sub>AttributeList</sub>(Relation)</code></pre>
+                        <span class="example">π<sub>Name, Salary</sub>(Employee) - Selects Name and Salary of all
+                            employees.</span>
+                    </li>
+                    <li><strong>RENAME (ρ):</strong> Renames a relation or its attributes.
+                        <pre><code>ρ<sub>NewName</sub>(Relation)  OR  ρ<sub>NewName(NewAttr1, NewAttr2,...)</sub>(Relation)</code></pre>
+                    </li>
+                </ul>
+
+                <h5>Relational Algebra Operations from Set Theory (operate on two relations):</h5>
+                <p>(For these operations, the relations must be union-compatible, i.e., have the same number of
+                    attributes and corresponding attributes must have the same domain).</p>
+                <ul>
+                    <li><strong>UNION (∪):</strong> Returns a relation containing all tuples that appear in either or
+                        both of the two specified relations. Duplicate tuples are eliminated.
+                        <pre><code>Relation1 ∪ Relation2</code></pre>
+                    </li>
+                    <li><strong>INTERSECTION (∩):</strong> Returns a relation containing all tuples that appear in both
+                        of the two specified relations.
+                        <pre><code>Relation1 ∩ Relation2</code></pre>
+                    </li>
+                    <li><strong>DIFFERENCE (- or \):</strong> Returns a relation containing all tuples that appear in
+                        the first relation but not in the second.
+                        <pre><code>Relation1 - Relation2</code></pre>
+                    </li>
+                </ul>
+
+                <h5>Binary Relational Operations (typically operate on two relations):</h5>
+                <ul>
+                    <li><strong>CARTESIAN PRODUCT (×) (or CROSS PRODUCT):</strong> Combines each tuple of the first
+                        relation with each tuple of the second relation.
+                        <pre><code>Relation1 × Relation2</code></pre>
+                    </li>
+                    <li><strong>JOIN (⨝):</strong> Combines tuples from two relations based on a related column between
+                        them. There are several types of joins:
+                        <ul>
+                            <li><strong>Theta Join (θ-join):</strong> A join that links tuples based on a condition
+                                (predicate).
+                                <pre><code>Relation1 ⨝<sub>condition</sub> Relation2</code></pre>
+                            </li>
+                            <li><strong>Equijoin:</strong> A theta join where the condition only involves equality
+                                comparisons.</li>
+                            <li><strong>Natural Join (⨝):</strong> An equijoin on all attributes that have the same name
+                                in both relations. Duplicate columns are eliminated.
+                                <pre><code>Relation1 ⨝ Relation2</code></pre>
+                            </li>
+                            <li><strong>Outer Joins:</strong>
+                                <ul>
+                                    <li><strong>Left Outer Join (⟕):</strong> Includes all tuples from the left relation
+                                        and matching tuples from the right. If no match, attributes from the right are
+                                        NULL.</li>
+                                    <li><strong>Right Outer Join (⟖):</strong> Includes all tuples from the right
+                                        relation and matching tuples from the left. If no match, attributes from the
+                                        left are NULL.</li>
+                                    <li><strong>Full Outer Join (⟗):</strong> Includes all tuples from both relations.
+                                        If no match, attributes from the non-matching side are NULL.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><strong>DIVISION (÷):</strong> Used for queries like "Find entities that are related to *all*
+                        entities in another set."
+                        <span class="example">Find students who have taken *all* courses listed in the 'CoreCourses'
+                            table.</span>
+                    </li>
+                </ul>
+                <h5>Aggregate Functions:</h5>
+                <p>Relational algebra can be extended with aggregate functions that take a collection of values and
+                    return a single summary value. Common aggregate functions include:</p>
+                <ul>
+                    <li><code>SUM</code>: Calculates the sum of values.</li>
+                    <li><code>AVG</code>: Calculates the average of values.</li>
+                    <li><code>COUNT</code> or <code>COUNT_DISTINCT</code>: Counts the number of tuples or distinct
+                        values.</li>
+                    <li><code>MAX</code>: Finds the maximum value.</li>
+                    <li><code>MIN</code>: Finds the minimum value.</li>
+                </ul>
+                <p>These are often used with a grouping operator (<code><sub>G</sub></code> or <code>γ</code>).</p>
+                <pre><code><sub>AttributeToGroupBy G Function(AttributeToAggregate)</sub> (Relation)</code></pre>
+                <span class="example"><sub>Dept_ID G AVG(Salary)</sub> (Employee) - Calculates average salary for each
+                    department.</span>
+            </section>
+
+            <section id="relational-calculus" class="content-section">
+                <h2>Relational Calculus</h2>
+                <p>Relational Calculus is a non-procedural (declarative) query language. Unlike relational algebra where
+                    the user specifies *how* to retrieve the data (sequence of operations), in relational calculus, the
+                    user specifies *what* data is to be retrieved without specifying the procedure. It is based on
+                    predicate calculus.</p>
+                <p>There are two main forms of relational calculus:</p>
+                <details>
+                    <summary><strong>1. Tuple Relational Calculus (TRC)</strong></summary>
+                    <div>
+                        <p>In TRC, the variables range over tuples of relations. A TRC query is of the form:</p>
+                        <pre><code>{ t | P(t) }</code></pre>
+                        <p>This means "retrieve all tuples 't' such that predicate P(t) is true for 't'."</p>
+                        <span class="example">To find names and ages of sailors with a rating above 7:
+                            <pre><code>{ P | ∃S ∈ Sailors (S.rating > 7 ∧ P.name = S.sname ∧ P.age = S.age) }</code></pre>
+                        </span>
+                    </div>
+                </details>
+                <details>
+                    <summary><strong>2. Domain Relational Calculus (DRC)</strong></summary>
+                    <div>
+                        <p>In DRC, the variables range over the domains of attributes (i.e., individual values) rather
+                            than entire tuples. A DRC query is of the form:</p>
+                        <pre><code>{ <x1, x2, ..., xn> | P(x1, x2, ..., xn) }</code></pre>
+                        <p>This means "retrieve all tuples of attributes <x1, ..., xn> such that predicate P is true for
+                                these attribute values."</p>
+                        <span class="example">To find names of sailors who have reserved boat 103:
+                            <pre><code>{ <N> | ∃I, A ( <I, N, A> ∈ Sailors ∧ ∃S, D ( <S, I, 103, D> ∈ Reserves ) ) }</code></pre>
+                            (Assuming Sailors(sid, sname, age) and Reserves(sid, bid, day))
+                        </span>
+                    </div>
+                </details>
+            </section>
+
+            <section id="algebra-vs-calculus" class="content-section">
+                <h2>Comparison of Relational Algebra and Calculus</h2>
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Relational Algebra</th>
+                            <th>Relational Calculus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Nature</td>
+                            <td>Procedural</td>
+                            <td>Non-procedural (Declarative)</td>
+                        </tr>
+                        <tr>
+                            <td>Focus</td>
+                            <td>Specifies *how* to get the result (sequence of operations)</td>
+                            <td>Specifies *what* result is desired (conditions the result must satisfy)</td>
+                        </tr>
+                        <tr>
+                            <td>Order of Operations</td>
+                            <td>Order is important and specified by the user.</td>
+                            <td>Order of evaluation is not specified by the user (left to DBMS optimizer).</td>
+                        </tr>
+                        <tr>
+                            <td>Level of Abstraction</td>
+                            <td>Considered lower level than calculus.</td>
+                            <td>Considered higher level, closer to natural language.</td>
+                        </tr>
+                        <tr>
+                            <td>Foundation For</td>
+                            <td>Internal representation and optimization of queries in DBMS.</td>
+                            <td>User-facing query languages like SQL and QBE (Query-By-Example).</td>
+                        </tr>
+                        <tr>
+                            <td>Variables</td>
+                            <td>Operates on relations.</td>
+                            <td>TRC: Variables range over tuples. <br>DRC: Variables range over attribute domains.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Both relational algebra and "safe" relational calculus (calculus expressions guaranteed to yield
+                    finite results) have the same expressive power. SQL is largely based on relational calculus
+                    (specifically, a form of tuple relational calculus).</p>
+            </section>
+
+            <section id="advantages-disadvantages" class="content-section">
+                <h2>Advantages and Disadvantages of Relational Model</h2>
+                <h3>Advantages:</h3>
+                <ul>
+                    <li><strong>Simplicity:</strong> Easier to understand and use compared to hierarchical or network
+                        models due to its tabular structure.</li>
+                    <li><strong>Structural Independence:</strong> Changes in database structure (e.g., adding a column)
+                        do not necessarily affect existing applications that don't use that part of the structure.</li>
+                    <li><strong>Easy to Use:</strong> The table format (rows and columns) is natural and intuitive.</li>
+                    <li><strong>Query Capability:</strong> Powerful query languages like SQL allow for flexible and
+                        complex data retrieval.</li>
+                    <li><strong>Data Independence:</strong> (Logical and Physical) Allows changes to schema levels
+                        without impacting others.</li>
+                    <li><strong>Scalable:</strong> Can be scaled to handle large numbers of records and fields.</li>
+                    <li><strong>Data Integrity:</strong> Strong enforcement of data consistency through constraints.
+                    </li>
+                    <li><strong>Well-defined Theory:</strong> Based on mathematical set theory and predicate calculus,
+                        providing a solid theoretical foundation.</li>
+                </ul>
+                <h3>Disadvantages:</h3>
+                <ul>
+                    <li><strong>Performance for Complex Relationships:</strong> Retrieving data from many highly
+                        interrelated tables (requiring many joins) can sometimes be slower than in other models
+                        optimized for such structures (e.g., graph databases).</li>
+                    <li><strong>Field Length Limits:</strong> Some older RDBMS had fixed limits on field lengths, though
+                        modern systems are more flexible.</li>
+                    <li><strong>Complexity with Large Data Growth:</strong> As the amount of data and the number of
+                        relations grow, managing relationships and optimizing queries can become complex.</li>
+                    <li><strong>Potential for Isolated Databases:</strong> Complex relational systems might sometimes
+                        lead to data being "siloed" if not designed for inter-system sharing carefully. (This is more of
+                        a design/architecture issue than an inherent model flaw).</li>
+                    <li><strong>Impedance Mismatch:</strong> The difference between the set-oriented relational model
+                        and object-oriented programming languages can lead to complexities when mapping data (often
+                        addressed by ORMs).</li>
+                </ul>
+            </section>
+
+            <div class="nav-buttons">
+                <a href="topic-1.html" class="nav-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    Previous: Intro to DBMS
+                </a>
+                <a href="../dbms.html" class="nav-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="feather feather-list">
+                        <line x1="8" y1="6" x2="21" y2="6"></line>
+                        <line x1="8" y1="12" x2="21" y2="12"></line>
+                        <line x1="8" y1="18" x2="21" y2="18"></line>
+                        <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                        <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                        <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                    </svg>
+                    Back to Syllabus
+                </a>
+                <a href="topic-3.html" class="nav-button">
+                    Next: ER Model
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggleButton = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                htmlElement.classList.add('dark-mode');
+                themeToggleButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <span>Light Mode</span>`;
+            } else {
+                htmlElement.classList.remove('dark-mode');
+                themeToggleButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <span>Dark Mode</span>`;
+            }
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        applyTheme(savedTheme);
+
+        themeToggleButton.addEventListener('click', () => {
+            const newTheme = htmlElement.classList.contains('dark-mode') ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        // Table of Contents (TOC) Generator and Active Link Highlighting
+        document.addEventListener('DOMContentLoaded', () => {
+            const tocList = document.getElementById('tocList');
+            const mainHeader = document.querySelector('header.main-header');
+            const headerHeight = mainHeader ? mainHeader.offsetHeight : 80;
+            const sections = document.querySelectorAll('.main-content section[id]');
+            let tocLinks = [];
+
+            if (tocList && sections.length > 0) {
+                sections.forEach(section => {
+                    const titleElement = section.querySelector('h2');
+                    if (titleElement) {
+                        const titleText = titleElement.textContent;
+                        const sectionId = section.id;
+
+                        const listItem = document.createElement('li');
+                        const link = document.createElement('a');
+                        link.href = `#${sectionId}`;
+                        link.textContent = titleText;
+                        link.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const targetElement = document.getElementById(sectionId);
+                            if (targetElement) {
+                                const scrollToPosition = targetElement.offsetTop - headerHeight - 20; // 20px offset
+                                window.scrollTo({
+                                    top: scrollToPosition,
+                                    behavior: 'smooth'
+                                });
+                                updateActiveTocLink(sectionId);
+                            }
+                        });
+                        listItem.appendChild(link);
+                        tocList.appendChild(listItem);
+                        tocLinks.push(link);
+                    }
+                });
+
+                function updateActiveTocLink(activeId) {
+                    tocLinks.forEach(link => {
+                        if (link.getAttribute('href') === `#${activeId}`) {
+                            link.classList.add('active');
+                        } else {
+                            link.classList.remove('active');
+                        }
+                    });
+                }
+
+                const observerOptions = {
+                    root: null,
+                    rootMargin: `-${headerHeight + 20}px 0px -60% 0px`,
+                    threshold: 0
+                };
+
+                let lastIntersectingSectionId = null;
+
+                const observer = new IntersectionObserver(entries => {
+                    let currentIntersectingEntry = null;
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            if (!currentIntersectingEntry || entry.intersectionRatio > currentIntersectingEntry.intersectionRatio) {
+                                currentIntersectingEntry = entry;
+                            }
+                        }
+                    });
+
+                    if (currentIntersectingEntry) {
+                        lastIntersectingSectionId = currentIntersectingEntry.target.id;
+                        updateActiveTocLink(lastIntersectingSectionId);
+                    } else if (entries.length > 0 && !entries.some(e => e.isIntersecting) && lastIntersectingSectionId) {
+                        updateActiveTocLink(lastIntersectingSectionId);
+                    }
+
+                }, observerOptions);
+
+                sections.forEach(section => {
+                    observer.observe(section);
+                });
+                const currentHash = window.location.hash.substring(1);
+                if (currentHash) {
+                    updateActiveTocLink(currentHash);
+                } else if (sections.length > 0) {
+                    updateActiveTocLink(sections[0].id);
+                }
+
+
+            } else if (tocList) {
+                const sidebar = document.querySelector('.sidebar');
+                if (sidebar) sidebar.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+
+</html>

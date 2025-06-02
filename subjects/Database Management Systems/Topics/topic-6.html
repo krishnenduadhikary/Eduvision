@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 6: Transactions and Concurrency - EduVision</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            /* Dark Blue-Grey */
+            --primary-light: #3d566e;
+            --primary-dark: #1a252f;
+
+            --secondary-color: #3498db;
+            /* Bright Blue */
+            --secondary-light: #5dade2;
+            --secondary-dark: #2980b9;
+
+            --accent-color: #e74c3c;
+            /* Red */
+
+            --light-bg: #f8f9fa;
+            /* Off-white */
+            --light-text: #495057;
+            /* Dark Grey */
+            --light-card: #ffffff;
+            --light-border: #e0e0e0;
+
+            --dark-bg: #1a252f;
+            /* Very Dark Blue-Grey */
+            --dark-text: #f8f9fa;
+            /* Light Grey */
+            --dark-card: #2c3e50;
+            /* Dark Blue-Grey (same as light primary) */
+            --dark-border: #3d566e;
+            /* Lighter than dark card */
+
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #3498db;
+
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.1);
+
+            --transition: all 0.3s ease-in-out;
+        }
+
+        /* Dark mode overrides for semantic colors if they were defined with light/dark specifics */
+        html.dark-mode {
+            --primary-color: #5dade2;
+            /* Light Blue for dark mode primary */
+            --primary-light: #85c1e9;
+            --primary-dark: #3498db;
+
+            --secondary-color: #bdc3c7;
+            /* Light Grey for dark mode secondary */
+            --secondary-light: #ecf0f1;
+            --secondary-dark: #95a5a6;
+        }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+            line-height: 1.7;
+            color: var(--light-text);
+            background-color: var(--light-bg);
+            padding-top: 80px;
+            /* Height of the fixed header */
+            transition: var(--transition);
+        }
+
+        html.dark-mode body {
+            color: var(--dark-text);
+            background-color: var(--dark-bg);
+        }
+
+        /* Typography */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Nunito Sans', 'Inter', sans-serif;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+            /* Use darker primary for headings in light mode */
+        }
+
+        html.dark-mode h1,
+        html.dark-mode h2,
+        html.dark-mode h3,
+        html.dark-mode h4,
+        html.dark-mode h5,
+        html.dark-mode h6 {
+            color: var(--primary-light);
+            /* Use lighter primary for headings in dark mode */
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 0.6rem;
+            margin-top: 2.5rem;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            margin-top: 2rem;
+        }
+
+        h4 {
+            font-size: 1.5rem;
+        }
+
+        h5 {
+            font-size: 1.25rem;
+            color: var(--secondary-dark);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        html.dark-mode h5 {
+            color: var(--secondary-light);
+        }
+
+
+        p {
+            margin-bottom: 1.25rem;
+            font-size: 1.05rem;
+        }
+
+        p.lead {
+            font-size: 1.2rem;
+            color: var(--light-text);
+            opacity: 0.9;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        html.dark-mode p.lead {
+            color: var(--dark-text);
+        }
+
+
+        a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        a:hover {
+            color: var(--secondary-dark);
+            text-decoration: underline;
+        }
+
+        ul,
+        ol {
+            padding-left: 20px;
+            margin-bottom: 1.25rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Layout */
+        .page-container {
+            /* Renamed from .container to avoid conflict if bootstrap is ever used */
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            /* Slightly wider sidebar */
+            gap: 2.5rem;
+            max-width: 1500px;
+            /* Wider max-width for larger screens */
+            margin: 0 auto;
+            padding: 2.5rem;
+        }
+
+        @media (max-width: 1024px) {
+
+            /* Adjusted breakpoint */
+            .page-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+                /* Hide sidebar on smaller screens, rely on scrolling */
+            }
+        }
+
+        /* Header */
+        header.main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2.5rem;
+            box-shadow: var(--shadow-md);
+            z-index: 1000;
+        }
+
+        html.dark-mode header.main-header {
+            background-color: var(--dark-card);
+            /* Match dark card for header in dark mode */
+            color: var(--dark-text);
+        }
+
+        .header-topic-title {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: white;
+            /* Ensure this text is white on dark header */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding: 0 15px;
+            /* Space around title */
+        }
+
+        html.dark-mode .header-topic-title {
+            color: var(--dark-text);
+            /* Ensure this text is light on light header (dark mode) */
+        }
+
+
+        .eduvision-logo-header {
+            /* Specific class for header logo */
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            /* Remove underline from logo link */
+        }
+
+        .eduvision-logo-header svg {
+            width: 36px;
+            /* Slightly larger logo SVG */
+            height: 36px;
+            color: var(--secondary-light);
+        }
+
+        html.dark-mode .eduvision-logo-header svg {
+            color: var(--primary-color);
+            /* Use dark mode primary for SVG */
+        }
+
+
+        .logo-text {
+            font-size: 1.7rem;
+            /* Larger logo text */
+            font-weight: 800;
+            /* Bolder */
+            font-family: 'Nunito Sans', sans-serif;
+            color: white;
+        }
+
+        html.dark-mode .logo-text {
+            color: var(--dark-text);
+        }
+
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 1.8rem;
+            /* More space between nav items */
+        }
+
+        .header-nav a {
+            color: white;
+            font-weight: 500;
+            font-size: 1rem;
+            position: relative;
+            /* For underline effect */
+            padding-bottom: 4px;
+        }
+
+        .header-nav a::after {
+            /* Underline effect */
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--secondary-light);
+            transition: width 0.3s ease;
+        }
+
+        .header-nav a:hover::after {
+            width: 100%;
+        }
+
+        html.dark-mode .header-nav a {
+            color: var(--dark-text);
+        }
+
+        html.dark-mode .header-nav a:hover {
+            color: var(--primary-color);
+        }
+
+        html.dark-mode .header-nav a::after {
+            background-color: var(--primary-color);
+        }
+
+
+        .theme-toggle {
+            background: transparent;
+            border: 1px solid var(--secondary-light);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-lg);
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--secondary-light);
+            color: var(--primary-color);
+        }
+
+        .theme-toggle svg {
+            margin-right: 0.3rem;
+        }
+
+        html.dark-mode .theme-toggle {
+            border-color: var(--primary-color);
+            color: var(--dark-text);
+        }
+
+        html.dark-mode .theme-toggle:hover {
+            background-color: var(--primary-color);
+            color: var(--dark-card);
+            /* Text color for contrast */
+        }
+
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            /* Header height + 20px margin */
+            align-self: start;
+            background-color: var(--light-card);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        html.dark-mode .sidebar {
+            background-color: var(--dark-card);
+        }
+
+        .sidebar-title {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-dark);
+            border-bottom: 2px solid var(--secondary-light);
+            padding-bottom: 0.5rem;
+        }
+
+        html.dark-mode .sidebar-title {
+            color: var(--primary-light);
+            border-bottom-color: var(--primary-dark);
+        }
+
+        .toc {
+            list-style: none;
+            padding-left: 0;
+            /* Remove default padding for ul */
+        }
+
+        .toc li {
+            margin-bottom: 0.75rem;
+        }
+
+        .toc a {
+            display: block;
+            padding: 0.6rem 0;
+            color: var(--light-text);
+            border-left: 4px solid transparent;
+            padding-left: 1.2rem;
+            transition: var(--transition);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .toc a:hover {
+            color: var(--secondary-color);
+            border-left-color: var(--secondary-color);
+            background-color: rgba(52, 152, 219, 0.05);
+            text-decoration: none;
+            transform: translateX(5px);
+        }
+
+        .toc a.active {
+            color: var(--secondary-dark);
+            border-left-color: var(--secondary-dark);
+            font-weight: 700;
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        html.dark-mode .toc a {
+            color: var(--dark-text);
+        }
+
+        html.dark-mode .toc a:hover {
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
+            background-color: rgba(93, 173, 226, 0.1);
+        }
+
+        html.dark-mode .toc a.active {
+            color: var(--primary-light);
+            border-left-color: var(--primary-light);
+            background-color: rgba(93, 173, 226, 0.15);
+        }
+
+
+        /* Main Content */
+        .main-content {
+            background-color: var(--light-card);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-lg);
+            /* More prominent shadow for main content */
+        }
+
+        html.dark-mode .main-content {
+            background-color: var(--dark-card);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumb-nav {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb-nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        .breadcrumb-nav li a {
+            color: var(--secondary-color);
+        }
+
+        .breadcrumb-nav li a:hover {
+            color: var(--secondary-dark);
+        }
+
+        .breadcrumb-nav li+li::before {
+            content: ">";
+            margin: 0 0.75rem;
+            color: var(--light-text);
+            opacity: 0.7;
+        }
+
+        html.dark-mode .breadcrumb-nav li+li::before {
+            color: var(--dark-text);
+        }
+
+        .breadcrumb-nav li[aria-current="page"] {
+            color: var(--light-text);
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        html.dark-mode .breadcrumb-nav li[aria-current="page"] {
+            color: var(--dark-text);
+        }
+
+
+        /* Content Card (used for sections) */
+        section.content-section {
+            /* Renamed from .content-card to be more specific */
+            background-color: transparent;
+            /* Sections don't need their own card bg if main-content is a card */
+            border-radius: var(--radius-md);
+            padding: 1rem 0;
+            /* Vertical padding for sections */
+            margin-bottom: 2.5rem;
+            border: none;
+            /* No border for sections within main content card */
+            box-shadow: none;
+            /* No shadow for sections */
+        }
+
+
+        /* Definition Boxes */
+        .definition {
+            background-color: rgba(52, 152, 219, 0.08);
+            /* Softer bg */
+            border-left: 5px solid var(--secondary-color);
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+        }
+
+        .definition strong {
+            color: var(--secondary-dark);
+            font-weight: 600;
+            display: block;
+            /* Label on its own line */
+            margin-bottom: 0.3rem;
+        }
+
+        .example {
+            font-style: italic;
+            color: var(--light-text);
+            opacity: 0.85;
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+            padding-left: 0.5rem;
+            /* Indent example slightly */
+            display: block;
+            /* Ensure it takes its own line if needed */
+        }
+
+        .example ol,
+        .example ul {
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-style: normal;
+            /* If list items shouldn't be italic */
+        }
+
+
+        html.dark-mode .example {
+            color: var(--dark-text);
+        }
+
+        .image-container {
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--light-border);
+        }
+
+        html.dark-mode .image-container img {
+            border-color: var(--dark-border);
+        }
+
+        .image-container figcaption {
+            font-size: 0.9rem;
+            color: var(--light-text);
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+
+        html.dark-mode .image-container figcaption {
+            color: var(--dark-text);
+        }
+
+
+        /* Tables */
+        .styled-table {
+            /* Changed from .comparison-table to a more generic name */
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            box-shadow: var(--shadow-sm);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            /* To make border-radius work with th */
+            border: 1px solid var(--light-border);
+        }
+
+        .styled-table th,
+        .styled-table td {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid var(--light-border);
+        }
+
+        html.dark-mode .styled-table th,
+        html.dark-mode .styled-table td {
+            border-bottom-color: var(--dark-border);
+            border-left-color: var(--dark-border);
+            /* Ensure all borders use dark mode color */
+        }
+
+        .styled-table th {
+            background-color: var(--secondary-light);
+            color: var(--primary-dark);
+            /* Text color for contrast on light blue */
+            font-weight: 600;
+        }
+
+        html.dark-mode .styled-table th {
+            background-color: var(--primary-dark);
+            /* Darker header for table in dark mode */
+            color: var(--secondary-light);
+        }
+
+        .styled-table tr:nth-child(even) {
+            background-color: rgba(52, 152, 219, 0.03);
+            /* Very subtle striping */
+        }
+
+        html.dark-mode .styled-table tr:nth-child(even) {
+            background-color: rgba(93, 173, 226, 0.05);
+        }
+
+        .styled-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Code */
+        code,
+        .code-block {
+            /* Apply similar styling to inline code and code blocks */
+            font-family: 'Fira Code', monospace;
+            background-color: rgba(231, 76, 60, 0.08);
+            /* Softer accent color bg */
+            color: var(--accent-color);
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            border: 1px solid rgba(231, 76, 60, 0.2);
+        }
+
+        html.dark-mode code,
+        html.dark-mode .code-block {
+            background-color: rgba(231, 76, 60, 0.15);
+            border-color: rgba(231, 76, 60, 0.3);
+        }
+
+
+        pre {
+            /* Wrapper for multiple code blocks or larger examples */
+            background-color: var(--primary-dark);
+            /* Dark bg for code blocks */
+            color: #f8f9fa;
+            /* Light text */
+            padding: 1.25rem;
+            border-radius: var(--radius-md);
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            box-shadow: var(--shadow-sm);
+        }
+
+        pre code {
+            /* Reset for code inside pre */
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            border-radius: 0;
+            border: none;
+            font-size: inherit;
+        }
+
+        html.dark-mode pre {
+            background-color: #1c1c1c;
+            /* Even darker for dark mode code blocks */
+            border: 1px solid var(--dark-border);
+        }
+
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            /* Allow buttons to wrap on smaller screens */
+            gap: 1rem;
+            /* Add gap for wrapping */
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--light-border);
+        }
+
+        html.dark-mode .nav-buttons {
+            border-top-color: var(--dark-border);
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            /* More gap */
+            padding: 0.85rem 1.8rem;
+            /* Slightly larger */
+            background-color: var(--secondary-color);
+            color: white !important;
+            /* Ensure text is white */
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            /* Bolder */
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            text-decoration: none !important;
+            /* Ensure no underline */
+            flex-grow: 1;
+            /* Allow buttons to grow if space allows */
+            text-align: center;
+            justify-content: center;
+            min-width: 200px;
+            /* Minimum width for buttons */
+        }
+
+        .nav-button:hover {
+            background-color: var(--secondary-dark);
+            text-decoration: none !important;
+            color: white !important;
+            transform: translateY(-3px);
+            /* More pronounced lift */
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-button svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Details/Summary for Collapsible Sections */
+        details {
+            background-color: var(--light-card);
+            border: 1px solid var(--light-border);
+            border-radius: var(--radius-md);
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        summary {
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            cursor: pointer;
+            list-style-position: inside;
+            /* Keeps marker aligned */
+            transition: background-color 0.2s ease;
+            display: block;
+            /* Make summary full width to click anywhere */
+        }
+
+        summary strong {
+            /* If strong tag is used within summary */
+            color: inherit;
+        }
+
+
+        summary:hover {
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+
+        details[open] summary {
+            background-color: rgba(52, 152, 219, 0.1);
+            border-bottom: 1px solid var(--light-border);
+        }
+
+        details>div {
+            /* Content of details */
+            padding: 1.5rem;
+        }
+
+        html.dark-mode details {
+            background-color: var(--dark-card);
+            border-color: var(--dark-border);
+        }
+
+        html.dark-mode summary {
+            color: var(--primary-light);
+        }
+
+        html.dark-mode summary:hover {
+            background-color: rgba(93, 173, 226, 0.1);
+        }
+
+        html.dark-mode details[open] summary {
+            background-color: rgba(93, 173, 226, 0.15);
+            border-bottom-color: var(--dark-border);
+        }
+
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 70px;
+            }
+
+            header.main-header {
+                height: 70px;
+                padding: 0 1.5rem;
+            }
+
+            .header-topic-title {
+                font-size: 1em;
+            }
+
+            .logo-text {
+                font-size: 1.5rem;
+            }
+
+            .eduvision-logo-header svg {
+                width: 30px;
+                height: 30px;
+            }
+
+            .header-nav {
+                gap: 1rem;
+            }
+
+            .header-nav a {
+                font-size: 0.9rem;
+            }
+
+            .theme-toggle {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            .page-container {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            h2 {
+                font-size: 1.9rem;
+            }
+
+            h3 {
+                font-size: 1.6rem;
+            }
+
+            .main-content {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+
+            /* Further adjustments for smaller screens */
+            .nav-buttons {
+                flex-direction: column;
+                /* Stack buttons vertically */
+            }
+
+            .nav-button {
+                width: 100%;
+                /* Make buttons full width */
+            }
+        }
+
+
+        @media (max-width: 480px) {
+            .header-nav a:not(.theme-toggle) {
+                display: none;
+            }
+
+            /* Hide text links, keep toggle */
+            .header-nav {
+                justify-content: flex-end;
+            }
+
+            .header-topic-title {
+                display: none;
+            }
+
+            /* Push toggle to right */
+            .breadcrumb-nav {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito+Sans:wght@700;800;900&family=Fira+Code&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header class="main-header">
+        <a href="../../../index.html" class="eduvision-logo-header">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM12 6.5c-3.03 0-5.5 2.47-5.5 5.5s2.47 5.5 5.5 5.5 5.5-2.47 5.5-5.5-2.47-5.5-5.5-5.5zm0 9c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" />
+            </svg>
+            <span class="logo-text">EduVision</span>
+        </a>
+        <div class="header-topic-title">Topic 6: Transactions & Concurrency</div>
+        <nav class="header-nav">
+            <a href="../../../index.html">Home</a>
+            <a href="../dbms.html">Syllabus</a>
+            <a href="../../../MCQ/">Mock Test</a>
+            <a href="../../../About/about.html">About</a>
+            <button class="theme-toggle" id="themeToggle">
+                <!-- Icon and text will be set by JS -->
+            </button>
+        </nav>
+    </header>
+
+    <div class="page-container">
+        <aside class="sidebar">
+            <h3 class="sidebar-title">On This Page</h3>
+            <ul class="toc" id="tocList">
+                <!-- TOC items will be generated by JS -->
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb-nav">
+                    <li><a href="../../../index.html">Home</a></li>
+                    <li><a href="../dbms.html">Database Systems</a></li>
+                    <li aria-current="page">Topic 6: Transactions & Concurrency</li>
+                </ol>
+            </nav>
+
+            <h1>Topic 6: Transactions and Concurrency</h1>
+            <p class="lead">Explore the critical concepts of database transactions, the ACID properties that guarantee
+                their reliability, and the mechanisms for managing concurrent access and ensuring data consistency in
+                multi-user environments.</p>
+
+            <section id="transaction-concepts" class="content-section">
+                <h2>6.1 Transaction Concepts</h2>
+                <div class="definition">
+                    <strong>Transaction:</strong> A transaction is a set of logically related operations, forming a
+                    single logical unit of work. It is an action or series of actions performed by a single user or
+                    application program to access or modify the contents of the database.
+                </div>
+                <p>A transaction must be executed entirely or not at all. If any part of the transaction fails, the
+                    entire transaction is rolled back to its original state.</p>
+                <div class="example">
+                    <strong>Bank Transfer Example:</strong> Suppose an employee of a bank transfers Rs 800 from X's
+                    account to Y's account. This small transaction contains several low-level tasks:
+                    <br><strong>X's Account Operations:</strong>
+                    <ol>
+                        <li>Open_Account(X)</li>
+                        <li>Old_Balance = X.balance</li>
+                        <li>New_Balance = Old_Balance - 800</li>
+                        <li>X.balance = New_Balance</li>
+                        <li>Close_Account(X)</li>
+                    </ol>
+                    <strong>Y's Account Operations:</strong>
+                    <ol>
+                        <li>Open_Account(Y)</li>
+                        <li>Old_Balance = Y.balance</li>
+                        <li>New_Balance = Old_Balance + 800</li>
+                        <li>Y.balance = New_Balance</li>
+                        <li>Close_Account(Y)</li>
+                    </ol>
+                </div>
+                <h5>Basic Operations of a Transaction:</h5>
+                <ul>
+                    <li><strong>Read(X):</strong> Read operation is used to read the value of data item X from the
+                        database and store it in a buffer in main memory.</li>
+                    <li><strong>Write(X):</strong> Write operation is used to write the value back to the database from
+                        the buffer.</li>
+                </ul>
+                <h5>Transaction Failure:</h5>
+                <p>The main problem during a transaction is that it can fail before finishing all operations due to
+                    power failure, system crash, etc. This can leave the database in an inconsistent state (e.g., amount
+                    deducted from X but not credited to Y).</p>
+                To solve this, two operations are crucial:
+                <ul>
+                    <li><strong>Commit:</strong> If all operations in a transaction are completed successfully, commit
+                        those changes to the database permanently.</li>
+                    <li><strong>Rollback:</strong> If any operation fails, rollback all changes made by previous
+                        operations of that transaction, restoring the database to its state before the transaction
+                        began.</li>
+                </ul>
+            </section>
+
+            <section id="acid-properties" class="content-section">
+                <h2>6.2 ACID Properties</h2>
+                <p>Transactions adhere to four critical properties, collectively known as ACID properties, to ensure
+                    data consistency and reliability before, during, and after the transaction.</p>
+                <div class="image-container">
+                    <img src="https://i.imgur.com/0Qf1kGv.png" alt="ACID Properties Diagram" style="max-width: 500px;">
+                    <figcaption>ACID Properties in DBMS.</figcaption>
+                </div>
+                <ol>
+                    <li>
+                        <strong>Atomicity ("All or Nothing"):</strong>
+                        <ul>
+                            <li>All operations of a transaction take place at once. If not, the transaction is aborted.
+                            </li>
+                            <li>There is no midway; the transaction cannot occur partially. It's treated as a single,
+                                indivisible unit.</li>
+                            <li>Involves two operations: <code>Abort</code> (if a transaction aborts, changes are not
+                                visible) and <code>Commit</code> (if a transaction commits, all changes are visible and
+                                permanent).</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Consistency:</strong>
+                        <ul>
+                            <li>Ensures that a transaction brings the database from one valid state to another.</li>
+                            <li>Integrity constraints are maintained before and after the transaction.</li>
+                            <li>The execution of a transaction will leave the database in either its prior stable state
+                                or a new stable state.</li>
+                            <li>The consistent property of database states that every transaction sees a consistent
+                                database instance.</li>
+                        </ul>
+                        <span class="example">If a transaction transfers funds, the total amount in both accounts must
+                            remain the same before and after the transfer (assuming no service fees).</span>
+                    </li>
+                    <li>
+                        <strong>Isolation:</strong>
+                        <ul>
+                            <li>Ensures that concurrent transactions execute independently without interfering with each
+                                other.</li>
+                            <li>The data used by one transaction cannot be accessed or modified by another transaction
+                                until the first one is completed.</li>
+                            <li>The concurrency control subsystem of the DBMS enforces the isolation property. It should
+                                appear as if transactions are running serially, one after another.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Durability:</strong>
+                        <ul>
+                            <li>Ensures that once a transaction has been committed, its changes are permanent and will
+                                survive any subsequent system failures (e.g., power outages, crashes).</li>
+                            <li>Committed changes cannot be lost by erroneous operations or system failures.</li>
+                            <li>The recovery subsystem of the DBMS is responsible for durability.</li>
+                        </ul>
+                    </li>
+                </ol>
+                <h5>Advantages of ACID Properties:</h5>
+                <ul>
+                    <li><strong>Data Consistency:</strong> Ensures data remains consistent and accurate.</li>
+                    <li><strong>Data Integrity:</strong> Maintains the integrity of the database.</li>
+                    <li><strong>Concurrency Control:</strong> Helps manage multiple transactions occurring concurrently.
+                    </li>
+                    <li><strong>Recovery:</strong> Allows the system to recover data up to the point of failure.</li>
+                </ul>
+                <h5>Disadvantages of ACID Properties:</h5>
+                <ul>
+                    <li><strong>Performance Overhead:</strong> Additional processing is required to ensure consistency
+                        and integrity, which can impact performance.</li>
+                    <li><strong>Scalability Issues:</strong> Can cause scalability problems in large distributed systems
+                        with high concurrency.</li>
+                    <li><strong>Complexity:</strong> Implementing ACID properties can increase system complexity.</li>
+                </ul>
+                <p>Overall, the advantages of ACID properties generally outweigh the disadvantages as they provide a
+                    reliable and consistent approach to data management.</p>
+            </section>
+
+            <section id="transaction-states" class="content-section">
+                <h2>6.3 Transaction States</h2>
+                <p>A transaction goes through several states during its lifecycle:</p>
+                <div class="image-container">
+                    <img src="https://i.imgur.com/H9xR12Y.png" alt="Transaction States Diagram"
+                        style="max-width: 600px;">
+                    <figcaption>Lifecycle of a Transaction.</figcaption>
+                </div>
+                <ul>
+                    <li><strong>Active State:</strong> The initial state; the transaction is being executed. Changes are
+                        typically stored in a buffer in main memory.</li>
+                    <li><strong>Partially Committed State:</strong> Entered after the last instruction of the
+                        transaction has been executed. Changes are still in the buffer and not yet permanently written
+                        to the database.</li>
+                    <li><strong>Committed State:</strong> Entered after all changes made by the transaction have been
+                        successfully stored in the database. The transaction is now considered fully completed.</li>
+                    <li><strong>Failed State:</strong> Entered if a transaction cannot continue execution due to some
+                        failure during the active or partially committed state.</li>
+                    <li><strong>Aborted State:</strong> Entered after a transaction has failed and all its changes have
+                        been undone (rolled back).</li>
+                    <li><strong>Terminated State:</strong> The final state, reached after the transaction is either
+                        committed or aborted. Its lifecycle ends here.</li>
+                </ul>
+            </section>
+
+            <section id="schedules" class="content-section">
+                <h2>6.4 Schedules (Serial, Serializability)</h2>
+                <div class="definition">
+                    <strong>Schedule:</strong> A sequence of operations (Read, Write, Abort, Commit) from one or more
+                    transactions, as executed by the DBMS. When multiple transactions run concurrently, their operations
+                    are interleaved in the schedule.
+                </div>
+                <div class="image-container">
+                    <img src="https://i.imgur.com/PqWk5d4.png" alt="Types of Schedules in DBMS"
+                        style="max-width: 600px;">
+                    <figcaption>Classification of Schedules.</figcaption>
+                </div>
+                <h5>Types of Schedules:</h5>
+                <ul>
+                    <li>
+                        <strong>Serial Schedule:</strong> Transactions are executed non-interleaved, one after another.
+                        Each transaction completes before the next one begins. Serial schedules always maintain database
+                        consistency.
+                        <span class="example">T1: R(A), W(A), Commit; T2: R(B), W(B), Commit. (T1 executes fully, then
+                            T2 executes fully).</span>
+                    </li>
+                    <li>
+                        <strong>Non-Serial (Concurrent/Interleaved) Schedule:</strong> Operations of multiple
+                        transactions are interleaved. This improves system throughput and resource utilization but can
+                        lead to consistency problems if not managed correctly.
+                    </li>
+                </ul>
+
+                <h5>Serializability:</h5>
+                <p>A non-serial schedule is considered **serializable** if it is equivalent to some serial schedule of
+                    the same set of transactions. Serializable schedules guarantee database consistency. The goal of
+                    concurrency control is to ensure that all schedules are serializable.</p>
+                <h6>Types of Serializability:</h6>
+                <ul>
+                    <li>
+                        <strong>Conflict Serializability:</strong> A schedule is conflict serializable if it can be
+                        transformed into a serial schedule by a series of non-conflicting swaps of adjacent operations.
+                        <br>Two operations conflict if they belong to different transactions, access the same data item,
+                        and at least one of them is a Write operation. Conflicting pairs are:
+                        <ul>
+                            <li>Read(A) - Write(A)</li>
+                            <li>Write(A) - Read(A)</li>
+                            <li>Write(A) - Write(A)</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>View Serializability:</strong> A schedule S is view serializable if it is view
+                        equivalent to some serial schedule S'. Two schedules S1 and S2 are view equivalent if:
+                        <ol>
+                            <li><strong>Initial Read:</strong> If a transaction Ti reads the initial value of a data
+                                item A in S1, it must also read the initial value of A in S2.</li>
+                            <li><strong>Reads-From:</strong> If Ti reads a value of A written by Tj in S1, Ti must also
+                                read the value of A written by Tj in S2.</li>
+                            <li><strong>Final Write:</strong> The transaction that performs the final write on data item
+                                A in S1 must also perform the final write on A in S2.</li>
+                        </ol>
+                        <p>View serializability is a more general concept than conflict serializability but harder to
+                            check.</p>
+                    </li>
+                </ul>
+                <h5>Non-Serializable Schedules:</h5>
+                <ul>
+                    <li>May not be consistent or recoverable.</li>
+                    <li><strong>Irrecoverable Schedule:</strong> If a transaction T2 reads data written by an
+                        uncommitted transaction T1, and T1 aborts, T2 has read a "dirty" value, leading to an
+                        irrecoverable state if T2 commits before T1 aborts.</li>
+                    <li><strong>Recoverable Schedule:</strong> If a transaction T2 reads from T1, T2 commits only after
+                        T1 commits.
+                        <ul>
+                            <li><strong>Cascading Schedule (Cascading Rollback/Abort):</strong> Failure of one
+                                transaction causes several other dependent transactions to roll back.</li>
+                            <li><strong>Cascadeless Schedule:</strong> Avoids cascading rollbacks. A transaction is not
+                                allowed to read a data item until the last transaction that has written it is committed
+                                or aborted.</li>
+                            <li><strong>Strict Schedule:</strong> A transaction is neither allowed to read nor write a
+                                data item until the last transaction that has written it is committed or aborted.
+                                Strictest form, ensures easy recovery.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section id="concurrency-control" class="content-section">
+                <h2>6.5 Concurrency Control</h2>
+                <p>The fundamental goal of concurrency control is to ensure that concurrent execution of transactions
+                    results in a consistent database state and produces serializable schedules. It manages simultaneous
+                    operations to prevent interference.</p>
+                <h5>Concurrency Control Problems:</h5>
+                <ul>
+                    <li><strong>Dirty Read Problem (Write-Read Conflict):</strong> Occurs when one transaction reads a
+                        data item that has been modified by another transaction which has not yet committed. If the
+                        modifying transaction then aborts, the first transaction has read a "dirty" or invalid value.
+                    </li>
+                    <li><strong>Lost Update Problem (Write-Write Conflict):</strong> Occurs when two or more
+                        transactions modify the same data item, and the update of one transaction is overwritten by
+                        another, leading to the loss of an update.</li>
+                    <li><strong>Incorrect Summary Problem (Unrepeatable Read / Phantom Read):</strong> Occurs when a
+                        transaction reads a data item multiple times and gets different values because another
+                        transaction has modified it in between, or if a transaction performing an aggregate function
+                        sees inconsistent data due to concurrent updates.</li>
+                </ul>
+
+                <h5>Concurrency Control Techniques:</h5>
+                <details>
+                    <summary><strong>1. Lock-Based Protocols</strong></summary>
+                    <div>
+                        <p>Locking guarantees exclusive use of data items to a current transaction. A transaction
+                            acquires a lock before accessing a data item and releases it after completion.</p>
+                        <h6>Types of Locks:</h6>
+                        <ul>
+                            <li><strong>Shared Lock (S-lock / Read Lock):</strong> Allows a transaction to read a data
+                                item. Multiple transactions can hold S-locks on the same item simultaneously.</li>
+                            <li><strong>Exclusive Lock (X-lock / Write Lock):</strong> Allows a transaction to read and
+                                write a data item. Only one transaction can hold an X-lock on an item at a time; no
+                                other locks (S or X) are permitted.</li>
+                        </ul>
+                        <h6>Lock Protocols:</h6>
+                        <ul>
+                            <li><strong>Simplistic Lock Protocol:</strong> Simplest way, transactions lock data, perform
+                                operations, then unlock.</li>
+                            <li><strong>Pre-claiming Lock Protocol:</strong> Transactions list all required data items
+                                and request locks before execution. If all granted, it proceeds; otherwise, it waits or
+                                rolls back.</li>
+                            <li>
+                                <strong>Two-Phase Locking (2PL):</strong> Divides transaction execution into two phases:
+                                <ol>
+                                    <li><strong>Growing Phase:</strong> Transaction can acquire locks but cannot release
+                                        any locks.</li>
+                                    <li><strong>Shrinking Phase:</strong> Transaction can release locks but cannot
+                                        acquire any new locks.</li>
+                                </ol>
+                                2PL ensures conflict serializability but can lead to deadlocks. Variants include Strict
+                                2PL (holds all exclusive locks until commit/abort) and Rigorous 2PL (holds all locks
+                                until commit/abort).
+                                <div class="image-container"><img src="https://i.imgur.com/yV9xP0X.png"
+                                        alt="Two-Phase Locking Diagram" style="max-width:400px;"></div>
+                            </li>
+                        </ul>
+                    </div>
+                </details>
+                <details>
+                    <summary><strong>2. Timestamp-Based Protocols</strong></summary>
+                    <div>
+                        <p>Assigns a unique timestamp to each transaction, indicating its relative starting time.
+                            Operations are ordered based on these timestamps to ensure serializability. The priority of
+                            older transactions (smaller timestamp) is higher.</p>
+                        <p>Each data item X has two timestamps: R_TS(X) (largest timestamp of any transaction that read
+                            X) and W_TS(X) (largest timestamp of any transaction that wrote X).</p>
+                        <ul>
+                            <li><strong>Read Operation (by T<sub>i</sub> on X):</strong>
+                                <ul>
+                                    <li>If TS(T<sub>i</sub>) < W_TS(X): T<sub>i</sub> tries to read a value already
+                                            overwritten by a younger transaction. Operation is rejected, T<sub>i</sub>
+                                            rolls back.</li>
+                                    <li>If TS(T<sub>i</sub>) ≥ W_TS(X): Operation is executed. R_TS(X) = max(R_TS(X),
+                                        TS(T<sub>i</sub>)).</li>
+                                </ul>
+                            </li>
+                            <li><strong>Write Operation (by T<sub>i</sub> on X):</strong>
+                                <ul>
+                                    <li>If TS(T<sub>i</sub>) < R_TS(X): T<sub>i</sub> tries to write a value that has
+                                            already been read by a younger transaction. Operation rejected,
+                                            T<sub>i</sub> rolls back.</li>
+                                    <li>If TS(T<sub>i</sub>) < W_TS(X): T<sub>i</sub> tries to write an obsolete value
+                                            (Thomas's Write Rule might allow ignoring this write). Operation rejected,
+                                            T<sub>i</sub> rolls back (or write ignored).</li>
+                                    <li>Otherwise: Operation executed. W_TS(X) = TS(T<sub>i</sub>).</li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <p>Ensures serializability and freedom from deadlock but schedules may not be recoverable or
+                            cascadeless.</p>
+                    </div>
+                </details>
+                <details>
+                    <summary><strong>3. Validation-Based Protocols (Optimistic Concurrency Control)</strong></summary>
+                    <div>
+                        <p>Assumes conflicts are rare. Transactions execute without checking for conflicts, performing
+                            updates on local copies. At the end, a validation phase checks if any updates violate
+                            serializability. If so, the transaction is rolled back; otherwise, it's committed and local
+                            copies are written to the database.</p>
+                        <h6>Three Phases:</h6>
+                        <ol>
+                            <li><strong>Read Phase:</strong> Transaction reads data items and stores values in temporary
+                                local variables. Writes are performed on these temporary variables.</li>
+                            <li><strong>Validation Phase:</strong> The temporary variable values are validated against
+                                the actual database to check for serializability violations.</li>
+                            <li><strong>Write Phase:</strong> If validated, temporary results are written to the
+                                database; otherwise, the transaction is rolled back.</li>
+                        </ol>
+                        <p>This protocol ensures a greater degree of concurrency and fewer conflicts if interference is
+                            low, leading to fewer rollbacks compared to pessimistic approaches in such scenarios.</p>
+                    </div>
+                </details>
+            </section>
+
+            <section id="deadlock-handling" class="content-section">
+                <h2>6.6 Deadlock Handling</h2>
+                <div class="definition">
+                    <strong>Deadlock:</strong> A condition where two or more transactions are waiting indefinitely for
+                    one another to release resources (locks) that they need. No transaction can proceed.
+                </div>
+                <div class="image-container">
+                    <img src="https://i.imgur.com/F7e0d9C.png" alt="Deadlock Example Diagram" style="max-width:400px;">
+                    <figcaption>Example of Deadlock in DBMS.</figcaption>
+                </div>
+                <h5>Conditions for Deadlock:</h5>
+                <ul>
+                    <li><strong>Mutual Exclusion:</strong> Resources are held in an exclusive mode.</li>
+                    <li><strong>Hold and Wait:</strong> A transaction holds at least one resource and is waiting to
+                        acquire additional resources held by other transactions.</li>
+                    <li><strong>No Preemption:</strong> Resources cannot be forcibly taken away from a transaction; they
+                        must be released voluntarily.</li>
+                    <li><strong>Circular Wait:</strong> A set of waiting transactions {T<sub>0</sub>, T<sub>1</sub>,
+                        ..., T<sub>n</sub>} exists such that T<sub>0</sub> is waiting for a resource held by
+                        T<sub>1</sub>, T<sub>1</sub> is waiting for T<sub>2</sub>, ..., T<sub>n-1</sub> is waiting for
+                        T<sub>n</sub>, and T<sub>n</sub> is waiting for T<sub>0</sub>.</li>
+                </ul>
+                <h5>Deadlock Handling Strategies:</h5>
+                <ul>
+                    <li>
+                        <strong>Deadlock Prevention:</strong> Design the system so that deadlocks can never occur. This
+                        can be done by preventing one of the four necessary conditions (e.g., pre-claiming all
+                        resources, imposing an order on resource acquisition). Often too restrictive.
+                        <ul>
+                            <li><strong>Wait-Die Scheme:</strong> If an older transaction T<sub>i</sub> requests a
+                                resource held by a younger transaction T<sub>j</sub>, T<sub>i</sub> waits. If
+                                T<sub>j</sub> (younger) requests a resource held by T<sub>i</sub> (older), T<sub>j</sub>
+                                is killed (dies) and restarted.</li>
+                            <li><strong>Wound-Wait Scheme:</strong> If an older T<sub>i</sub> requests a resource held
+                                by younger T<sub>j</sub>, T<sub>i</sub> forces T<sub>j</sub> to abort (wounds
+                                T<sub>j</sub>) and release the resource. If T<sub>j</sub> (younger) requests a resource
+                                held by T<sub>i</sub> (older), T<sub>j</sub> waits.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Deadlock Avoidance:</strong> The DBMS checks in advance if a resource allocation could
+                        lead to a deadlock. If so, the transaction waits. This requires knowledge of future resource
+                        requests, which is often impractical.</li>
+                    <li><strong>Deadlock Detection and Recovery:</strong> Allow deadlocks to occur, detect them, and
+                        then recover.
+                        <ul>
+                            <li><strong>Detection:</strong> Use a Wait-for Graph (WFG) where nodes are transactions and
+                                a directed edge T<sub>i</sub> → T<sub>j</sub> means T<sub>i</sub> is waiting for
+                                T<sub>j</sub>. A cycle in the WFG indicates a deadlock.</li>
+                            <li><strong>Recovery:</strong>
+                                <ul>
+                                    <li>Select a victim transaction to abort and roll back.</li>
+                                    <li>Rollback the victim transaction to break the deadlock.</li>
+                                    <li>The choice of victim can be based on factors like age, number of resources held,
+                                        progress made.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <h5>Disadvantages of Deadlock:</h5>
+                <ul>
+                    <li>System downtime, loss of productivity.</li>
+                    <li>Resource waste (resources held by waiting transactions).</li>
+                    <li>Reduced concurrency and throughput.</li>
+                    <li>Complex resolution.</li>
+                    <li>Increased system overhead for detection/prevention mechanisms.</li>
+                </ul>
+            </section>
+
+            <section id="recovery-techniques" class="content-section">
+                <h2>6.7 Recovery Techniques</h2>
+                <p>Recovery techniques ensure database consistency, atomicity, and durability despite failures (system
+                    crashes, transaction errors). When a DBMS recovers from a crash, it must maintain the ACID
+                    properties.</p>
+                <h5>Log-Based Recovery:</h5>
+                <p>The most widely used structure for recording database modifications is the <strong>log</strong>. The
+                    log is a sequence of log records, stored on stable storage, maintaining a history of all update
+                    activities.
+                    Types of log records:</p>
+                <ul>
+                    <li><code><T<sub>i</sub> start></code>: Transaction T<sub>i</sub> has started.</li>
+                    <li><code><T<sub>i</sub>, X, V<sub>old</sub>, V<sub>new</sub>></code>: T<sub>i</sub> has performed a
+                        write on data item X. X had value V<sub>old</sub> before, and will have value V<sub>new</sub>
+                        after. (Update log record)</li>
+                    <li><code><T<sub>i</sub> commit></code>: T<sub>i</sub> has committed.</li>
+                    <li><code><T<sub>i</sub> abort></code>: T<sub>i</sub> has aborted.</li>
+                </ul>
+                <p>The log record for a write must be created and written to stable storage *before* the database is
+                    modified (Write-Ahead Logging - WAL protocol).</p>
+                <h5>Checkpoints:</h5>
+                <p>A checkpoint is a point in time at which a record is written onto the database from the buffers, and
+                    a checkpoint record is written to the log. It shortens the recovery process by reducing the amount
+                    of log that needs to be scanned and reprocessed after a crash.</p>
+                <p>When a checkpoint occurs:</p>
+                <ol>
+                    <li>All log records currently in memory are written to stable storage.</li>
+                    <li>All modified data blocks in memory buffers are written to disk.</li>
+                    <li>A <code><checkpoint L></code> record (where L is a list of active transactions at the time of
+                        the checkpoint) is written to the log and then to stable storage.</li>
+                </ol>
+                <p><strong>Restart Recovery (after a crash):</strong></p>
+                <ol>
+                    <li>The system scans the log backward from the end to find the last <code><checkpoint L></code>
+                        record.</li>
+                    <li>It creates two lists: an <strong>undo-list</strong> (transactions to be rolled back) and a
+                        <strong>redo-list</strong> (transactions whose changes need to be reapplied).
+                        <ul>
+                            <li>Initially, undo-list = L (transactions active at checkpoint). Redo-list is empty.</li>
+                        </ul>
+                    </li>
+                    <li>Scan log backward from checkpoint:
+                        <ul>
+                            <li>If <code><T<sub>i</sub> commit></code> is found, move T<sub>i</sub> from undo-list to
+                                redo-list.</li>
+                            <li>If <code><T<sub>i</sub> start></code> is found and T<sub>i</sub> is in undo-list, do
+                                nothing (it will be undone).</li>
+                        </ul>
+                    </li>
+                    <li>Scan log forward from checkpoint (or earliest start of a transaction in undo-list):
+                        <ul>
+                            <li>Redo operations for transactions in redo-list by applying their update log records
+                                (V<sub>new</sub>).</li>
+                        </ul>
+                    </li>
+                    <li>Undo operations for transactions remaining in undo-list by applying their update log records in
+                        reverse, restoring V<sub>old</sub> values. Write <code><T<sub>i</sub> abort></code> for these.
+                    </li>
+                </ol>
+                <h5>Other Recovery Techniques (Briefly):</h5>
+                <ul>
+                    <li><strong>Shadow Paging:</strong> Maintains two page tables during transaction execution: current
+                        and shadow. Updates are made to a copy of the database pages. If transaction commits, shadow
+                        page table is discarded. If it aborts or crashes, the current page table (with uncommitted
+                        changes) is discarded, and the shadow page table (original state) is reinstated. Less overhead
+                        for logging individual writes but can be complex.</li>
+                </ul>
+            </section>
+
+
+            <div class="nav-buttons">
+                <a href="topic-5.html" class="nav-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    Previous: Normalization
+                </a>
+                <a href="../dbms.html" class="nav-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="feather feather-list">
+                        <line x1="8" y1="6" x2="21" y2="6"></line>
+                        <line x1="8" y1="12" x2="21" y2="12"></line>
+                        <line x1="8" y1="18" x2="21" y2="18"></line>
+                        <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                        <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                        <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                    </svg>
+                    Back to Syllabus
+                </a>
+                <a href="topic-7.html" class="nav-button">
+                    Next: Indexing & File Org.
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggleButton = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                htmlElement.classList.add('dark-mode');
+                themeToggleButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <span>Light Mode</span>`;
+            } else {
+                htmlElement.classList.remove('dark-mode');
+                themeToggleButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <span>Dark Mode</span>`;
+            }
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        applyTheme(savedTheme);
+
+        themeToggleButton.addEventListener('click', () => {
+            const newTheme = htmlElement.classList.contains('dark-mode') ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        // Table of Contents (TOC) Generator and Active Link Highlighting
+        document.addEventListener('DOMContentLoaded', () => {
+            const tocList = document.getElementById('tocList');
+            const mainHeader = document.querySelector('header.main-header');
+            const headerHeight = mainHeader ? mainHeader.offsetHeight : 80;
+            const sections = document.querySelectorAll('.main-content section[id]');
+            let tocLinks = [];
+
+            if (tocList && sections.length > 0) {
+                sections.forEach(section => {
+                    const titleElement = section.querySelector('h2');
+                    if (titleElement) {
+                        const titleText = titleElement.textContent;
+                        const sectionId = section.id;
+
+                        const listItem = document.createElement('li');
+                        const link = document.createElement('a');
+                        link.href = `#${sectionId}`;
+                        link.textContent = titleText;
+                        link.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const targetElement = document.getElementById(sectionId);
+                            if (targetElement) {
+                                const scrollToPosition = targetElement.offsetTop - headerHeight - 20; // 20px offset
+                                window.scrollTo({
+                                    top: scrollToPosition,
+                                    behavior: 'smooth'
+                                });
+                                updateActiveTocLink(sectionId);
+                            }
+                        });
+                        listItem.appendChild(link);
+                        tocList.appendChild(listItem);
+                        tocLinks.push(link);
+                    }
+                });
+
+                function updateActiveTocLink(activeId) {
+                    tocLinks.forEach(link => {
+                        if (link.getAttribute('href') === `#${activeId}`) {
+                            link.classList.add('active');
+                        } else {
+                            link.classList.remove('active');
+                        }
+                    });
+                }
+
+                const observerOptions = {
+                    root: null,
+                    rootMargin: `-${headerHeight + 20}px 0px -60% 0px`,
+                    threshold: 0
+                };
+
+                let lastIntersectingSectionId = null;
+
+                const observer = new IntersectionObserver(entries => {
+                    let currentIntersectingEntry = null;
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            if (!currentIntersectingEntry || entry.intersectionRatio > currentIntersectingEntry.intersectionRatio) {
+                                currentIntersectingEntry = entry;
+                            }
+                        }
+                    });
+
+                    if (currentIntersectingEntry) {
+                        lastIntersectingSectionId = currentIntersectingEntry.target.id;
+                        updateActiveTocLink(lastIntersectingSectionId);
+                    } else if (entries.length > 0 && !entries.some(e => e.isIntersecting) && lastIntersectingSectionId) {
+                        updateActiveTocLink(lastIntersectingSectionId);
+                    }
+
+                }, observerOptions);
+
+                sections.forEach(section => {
+                    observer.observe(section);
+                });
+                const currentHash = window.location.hash.substring(1);
+                if (currentHash) {
+                    updateActiveTocLink(currentHash);
+                } else if (sections.length > 0) {
+                    updateActiveTocLink(sections[0].id);
+                }
+
+
+            } else if (tocList) {
+                const sidebar = document.querySelector('.sidebar');
+                if (sidebar) sidebar.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+
+</html>

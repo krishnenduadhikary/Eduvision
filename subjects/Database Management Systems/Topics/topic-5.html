@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Topic 1: Introduction to DBMS - EduVision</title>
+    <title>Topic 5: Normalization - EduVision</title>
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -63,9 +63,6 @@
             /* Light Grey for dark mode secondary */
             --secondary-light: #ecf0f1;
             --secondary-dark: #95a5a6;
-
-            /* Backgrounds and Text are already handled by light-bg/dark-bg etc. */
-            /* This ensures that h1-h6, links etc. use the dark mode primary/secondary */
         }
 
 
@@ -137,6 +134,18 @@
             font-size: 1.5rem;
         }
 
+        h5 {
+            font-size: 1.25rem;
+            color: var(--secondary-dark);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        html.dark-mode h5 {
+            color: var(--secondary-light);
+        }
+
+
         p {
             margin-bottom: 1.25rem;
             font-size: 1.05rem;
@@ -164,6 +173,16 @@
         a:hover {
             color: var(--secondary-dark);
             text-decoration: underline;
+        }
+
+        ul,
+        ol {
+            padding-left: 20px;
+            margin-bottom: 1.25rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
         }
 
         /* Layout */
@@ -220,13 +239,20 @@
             text-align: center;
             font-size: 1.1em;
             font-weight: 600;
-            color: var(--header-text);
+            color: white;
+            /* Ensure this text is white on dark header */
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
             padding: 0 15px;
             /* Space around title */
         }
+
+        html.dark-mode .header-topic-title {
+            color: var(--dark-text);
+            /* Ensure this text is light on light header (dark mode) */
+        }
+
 
         .eduvision-logo-header {
             /* Specific class for header logo */
@@ -355,10 +381,8 @@
             border-radius: var(--radius-lg);
             padding: 2rem;
             box-shadow: var(--shadow-md);
-            /* max-height: calc(100vh - 120px); */
-            /* Remove this line to prevent scroll */
-            /* overflow-y: auto; */
-            /* Remove this line to prevent scroll */
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
         }
 
         html.dark-mode .sidebar {
@@ -380,6 +404,8 @@
 
         .toc {
             list-style: none;
+            padding-left: 0;
+            /* Remove default padding for ul */
         }
 
         .toc li {
@@ -501,19 +527,6 @@
             /* No shadow for sections */
         }
 
-        /* If you want individual cards per section: */
-        /* section.content-card {
-            background-color: var(--light-card);
-            border: 1px solid var(--light-border);
-            border-radius: var(--radius-md);
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            box-shadow: var(--shadow-sm);
-        }
-        html.dark-mode section.content-card {
-            background-color: var(--dark-card);
-            border-color: var(--dark-border);
-        } */
 
         /* Definition Boxes */
         .definition {
@@ -541,15 +554,46 @@
             font-size: 0.95rem;
             padding-left: 0.5rem;
             /* Indent example slightly */
+            display: block;
+            /* Ensure it takes its own line if needed */
         }
 
         html.dark-mode .example {
             color: var(--dark-text);
         }
 
+        .image-container {
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--light-border);
+        }
+
+        html.dark-mode .image-container img {
+            border-color: var(--dark-border);
+        }
+
+        .image-container figcaption {
+            font-size: 0.9rem;
+            color: var(--light-text);
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+
+        html.dark-mode .image-container figcaption {
+            color: var(--dark-text);
+        }
+
 
         /* Tables */
-        .comparison-table {
+        .styled-table {
+            /* Changed from .comparison-table to a more generic name */
             width: 100%;
             border-collapse: collapse;
             margin: 2rem 0;
@@ -560,58 +604,69 @@
             border: 1px solid var(--light-border);
         }
 
-        .comparison-table th,
-        .comparison-table td {
+        .styled-table th,
+        .styled-table td {
             padding: 1rem 1.25rem;
             text-align: left;
             border-bottom: 1px solid var(--light-border);
         }
 
-        html.dark-mode .comparison-table th,
-        html.dark-mode .comparison-table td {
+        html.dark-mode .styled-table th,
+        html.dark-mode .styled-table td {
             border-bottom-color: var(--dark-border);
             border-left-color: var(--dark-border);
             /* Ensure all borders use dark mode color */
         }
 
-        .comparison-table th {
+        .styled-table th {
             background-color: var(--secondary-light);
             color: var(--primary-dark);
             /* Text color for contrast on light blue */
             font-weight: 600;
         }
 
-        html.dark-mode .comparison-table th {
+        html.dark-mode .styled-table th {
             background-color: var(--primary-dark);
             /* Darker header for table in dark mode */
             color: var(--secondary-light);
         }
 
-        .comparison-table tr:nth-child(even) {
+        .styled-table tr:nth-child(even) {
             background-color: rgba(52, 152, 219, 0.03);
             /* Very subtle striping */
         }
 
-        html.dark-mode .comparison-table tr:nth-child(even) {
+        html.dark-mode .styled-table tr:nth-child(even) {
             background-color: rgba(93, 173, 226, 0.05);
         }
 
-        .comparison-table tr:last-child td {
+        .styled-table tr:last-child td {
             border-bottom: none;
         }
 
         /* Code */
-        code {
+        code,
+        .code-block {
+            /* Apply similar styling to inline code and code blocks */
             font-family: 'Fira Code', monospace;
-            background-color: rgba(231, 76, 60, 0.1);
-            /* Accent color bg */
+            background-color: rgba(231, 76, 60, 0.08);
+            /* Softer accent color bg */
             color: var(--accent-color);
             padding: 0.25rem 0.5rem;
             border-radius: var(--radius-sm);
             font-size: 0.9rem;
+            border: 1px solid rgba(231, 76, 60, 0.2);
         }
 
+        html.dark-mode code,
+        html.dark-mode .code-block {
+            background-color: rgba(231, 76, 60, 0.15);
+            border-color: rgba(231, 76, 60, 0.3);
+        }
+
+
         pre {
+            /* Wrapper for multiple code blocks or larger examples */
             background-color: var(--primary-dark);
             /* Dark bg for code blocks */
             color: #f8f9fa;
@@ -626,30 +681,20 @@
             box-shadow: var(--shadow-sm);
         }
 
+        pre code {
+            /* Reset for code inside pre */
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            border-radius: 0;
+            border: none;
+            font-size: inherit;
+        }
+
         html.dark-mode pre {
             background-color: #1c1c1c;
             /* Even darker for dark mode code blocks */
             border: 1px solid var(--dark-border);
-        }
-
-        /* Interactive Placeholders */
-        .interactive-placeholder {
-            border: 2px dashed var(--secondary-color);
-            padding: 2rem;
-            margin: 2rem 0;
-            text-align: center;
-            background-color: rgba(52, 152, 219, 0.05);
-            border-radius: var(--radius-md);
-        }
-
-        .interactive-placeholder h4 {
-            color: var(--secondary-dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .interactive-placeholder p {
-            opacity: 0.7;
-            font-style: italic;
         }
 
 
@@ -657,6 +702,10 @@
         .nav-buttons {
             display: flex;
             justify-content: space-between;
+            flex-wrap: wrap;
+            /* Allow buttons to wrap on smaller screens */
+            gap: 1rem;
+            /* Add gap for wrapping */
             margin-top: 3rem;
             padding-top: 2rem;
             border-top: 1px solid var(--light-border);
@@ -674,18 +723,27 @@
             padding: 0.85rem 1.8rem;
             /* Slightly larger */
             background-color: var(--secondary-color);
-            color: white;
+            color: white !important;
+            /* Ensure text is white */
             border-radius: var(--radius-md);
             font-weight: 600;
             /* Bolder */
             transition: var(--transition);
             box-shadow: var(--shadow-sm);
+            text-decoration: none !important;
+            /* Ensure no underline */
+            flex-grow: 1;
+            /* Allow buttons to grow if space allows */
+            text-align: center;
+            justify-content: center;
+            min-width: 200px;
+            /* Minimum width for buttons */
         }
 
         .nav-button:hover {
             background-color: var(--secondary-dark);
-            text-decoration: none;
-            color: white;
+            text-decoration: none !important;
+            color: white !important;
             transform: translateY(-3px);
             /* More pronounced lift */
             box-shadow: var(--shadow-md);
@@ -713,7 +771,15 @@
             list-style-position: inside;
             /* Keeps marker aligned */
             transition: background-color 0.2s ease;
+            display: block;
+            /* Make summary full width to click anywhere */
         }
+
+        summary strong {
+            /* If strong tag is used within summary */
+            color: inherit;
+        }
+
 
         summary:hover {
             background-color: rgba(52, 152, 219, 0.05);
@@ -759,6 +825,10 @@
                 padding: 0 1.5rem;
             }
 
+            .header-topic-title {
+                font-size: 1em;
+            }
+
             .logo-text {
                 font-size: 1.5rem;
             }
@@ -800,17 +870,22 @@
             .main-content {
                 padding: 1.5rem;
             }
+        }
 
+        @media (max-width: 576px) {
+
+            /* Further adjustments for smaller screens */
             .nav-buttons {
                 flex-direction: column;
-                gap: 1rem;
+                /* Stack buttons vertically */
             }
 
             .nav-button {
                 width: 100%;
-                justify-content: center;
+                /* Make buttons full width */
             }
         }
+
 
         @media (max-width: 480px) {
             .header-nav a:not(.theme-toggle) {
@@ -820,6 +895,10 @@
             /* Hide text links, keep toggle */
             .header-nav {
                 justify-content: flex-end;
+            }
+
+            .header-topic-title {
+                display: none;
             }
 
             /* Push toggle to right */
@@ -844,9 +923,7 @@
             </svg>
             <span class="logo-text">EduVision</span>
         </a>
-
-        <div class="header-topic-title">Topic 1: Introduction to DBMS</div>
-
+        <div class="header-topic-title">Topic 5: Normalization</div>
         <nav class="header-nav">
             <a href="../../../index.html">Home</a>
             <a href="../dbms.html">Syllabus</a>
@@ -871,330 +948,412 @@
                 <ol class="breadcrumb-nav">
                     <li><a href="../../../index.html">Home</a></li>
                     <li><a href="../dbms.html">Database Systems</a></li>
-                    <li aria-current="page">Topic 1: Introduction to DBMS</li>
+                    <li aria-current="page">Topic 5: Normalization</li>
                 </ol>
             </nav>
 
-            <h1>Topic 1: Introduction to DBMS</h1>
-            <p class="lead">Understand the core concepts of Database Management Systems, their significance, different
-                types, architectural layers, and their role in modern data management.</p>
+            <h1>Topic 5: Normalization</h1>
+            <p class="lead">Normalization is a systematic process of organizing data in a database to reduce redundancy
+                and improve data integrity by eliminating undesirable characteristics like insertion, update, and
+                deletion anomalies.</p>
 
-            <section id="intro-dbms" class="content-section">
-                <h2>What is a DBMS?</h2>
-                <div class="definition">
-                    <strong>DATA:</strong> Raw facts or figures related to any object, which individually might not
-                    identify the object clearly.
-                    <span class="example">Example: Emp_No, Name, Salary of an employee, considered separately.</span>
-                </div>
-                <div class="definition">
-                    <strong>INFORMATION:</strong> Data that has been organized and processed to provide meaning and
-                    context, allowing for clear identification or understanding of an object or concept.
-                    <span class="example">Example: Emp_No, Name, and Salary combined to describe a specific
-                        employee.</span>
-                </div>
-                <div class="definition">
-                    <strong>DATA FILE:</strong> An organized collection of related information, typically maintained by
-                    a department or for a specific purpose.
-                    <span class="example">Example: A sales department's file containing all sales transactions.</span>
-                </div>
-                <div class="definition">
-                    <strong>DATABASE:</strong> An integrated and organized collection of related data files or
-                    information, representing coherent and meaningful data.
-                    <span class="example">Example: An address book storing multiple postal addresses, where each address
-                        is a piece of data.</span>
-                </div>
-                <div class="definition">
-                    <strong>DBMS (Database Management System):</strong> A software system consisting of a collection of
-                    interrelated data (the database) and a set of programs to access, manage, and update that data
-                    efficiently and conveniently.
-                </div>
-                <div class="definition">
-                    <strong>DATABASE SYSTEM:</strong> The combination of the database itself, the DBMS software, and
-                    potentially associated applications. It's designed for managing large volumes of information,
-                    defining storage structures, and providing mechanisms for data manipulation, while ensuring data
-                    safety and integrity.
-                </div>
-            </section>
-
-            <section id="need-for-dbms" class="content-section">
-                <h2>Need for DBMS (Advantages)</h2>
-                <p>A DBMS provides significant advantages over traditional file-based data management approaches:</p>
+            <section id="intro-normalization" class="content-section">
+                <h2>5.1 Introduction to Normalization</h2>
+                <p>Normalization is the process of structuring and handling the relationship between data to minimize
+                    redundancy in the relational table and avoid unnecessary anomalies like insertion, update, and
+                    delete. It helps to divide large database tables into smaller tables and make a relationship between
+                    them. It can remove redundant data and ease the process to add, manipulate, or delete table fields.
+                </p>
+                <p>A normalization defines rules for the relational table to assess whether it satisfies the normal
+                    form. A normal form is a process that evaluates each relation against defined criteria and removes
+                    multivalued attributes, joins, functional, and trivial dependencies from a relation. If any data is
+                    updated, deleted, or inserted, it does not cause any problem for database tables and helps to
+                    improve the relational table's integrity and efficiency.</p>
+                <h5>Purpose of Normalization:</h5>
+                <ul>
+                    <li>To minimize data redundancy from a relation or set of relations.</li>
+                    <li>To eliminate undesirable characteristics like Insertion, Update, and Deletion Anomalies.</li>
+                    <li>To divide larger tables into smaller, more manageable tables and link them using relationships.
+                    </li>
+                    <li>To reduce the chances for anomalies to occur in a database.</li>
+                </ul>
+                <h5>Objective of Normalization:</h5>
                 <ol>
-                    <li><strong>Reduction of Redundancy & Inconsistency:</strong> Centralized data control minimizes
-                        data duplication, saving space and preventing conflicting versions of the same data.</li>
-                    <li><strong>Data Sharing:</strong> Allows multiple users and applications to access and share data
-                        concurrently under controlled conditions.</li>
-                    <li><strong>Data Independence:</strong> Separates data storage details from application programs.
-                        Changes in data storage or representation don't necessarily require modifications to
-                        applications.</li>
-                    <li><strong>Improved Data Integrity:</strong> Enforces constraints and rules to ensure data
-                        accuracy, validity, and consistency.</li>
-                    <li><strong>Enhanced Data Security:</strong> Provides mechanisms to control access, ensuring that
-                        only authorized users can view or modify specific data.</li>
-                    <li><strong>Efficient Data Access:</strong> Offers sophisticated query languages and indexing
-                        techniques for fast and flexible data retrieval.</li>
-                    <li><strong>Backup and Recovery:</strong> Includes facilities for backing up data and recovering
-                        from hardware or software failures, ensuring data durability.</li>
-                    <li><strong>Concurrent Access Support:</strong> Manages simultaneous access by multiple users,
-                        preventing conflicts and ensuring data consistency.</li>
+                    <li>It is used to remove duplicate data and database anomalies from the relational table.</li>
+                    <li>Normalization helps to reduce redundancy and complexity by examining new data types used in the
+                        table.</li>
+                    <li>It is helpful to divide the large database table into smaller tables and link them using
+                        relationships.</li>
+                    <li>It avoids duplicate data or no repeating groups in a table.</li>
+                    <li>It reduces the chances for anomalies to occur in a database.</li>
+                </ol>
+                <h5>Types of Anomalies:</h5>
+                <ol>
+                    <li><strong>Data Redundancy:</strong> Occurs in a relational database when two or more rows or
+                        columns have the same value or repetitive value leading to unnecessary utilization of memory.
+                    </li>
+                    <li><strong>Insert Anomaly:</strong> Occurs when certain attributes or data items are to be inserted
+                        into the database without the existence of other attributes. For example, if we want to insert a
+                        new `CourseID` but no student is yet enrolled, it might be difficult if the table requires
+                        student information.</li>
+                    <li><strong>Update Anomaly:</strong> Occurs when duplicate data is updated only in one place and not
+                        in all instances, making the data inconsistent. For example, if a student's course is updated in
+                        one record but not others where it appears.</li>
+                    <li><strong>Delete Anomaly:</strong> Occurs when some records are lost or deleted from the database
+                        table due to the deletion of other records. For example, deleting a student might also remove
+                        their course details if all information is in one table.</li>
                 </ol>
             </section>
 
-            <section id="dbms-vs-file-system" class="content-section">
-                <h2>DBMS vs. File System</h2>
-                <details>
-                    <summary><strong>Drawbacks of Traditional File Processing Systems</strong></summary>
-                    <div>
-                        <ul>
-                            <li><strong>Data Redundancy and Inconsistency:</strong> Data often duplicated across
-                                different files, leading to inconsistencies if updates are not synchronized.</li>
-                            <li><strong>Difficulty in Accessing Data:</strong> Retrieving specific information can be
-                                complex and inefficient, often requiring custom programs.</li>
-                            <li><strong>Data Isolation:</strong> Data scattered in various files with different formats
-                                makes it hard to integrate and write new applications.</li>
-                            <li><strong>Integrity Problems:</strong> Enforcing data consistency rules (e.g., age must be
-                                positive) is difficult.</li>
-                            <li><strong>Atomicity Issues:</strong> Failures during multi-step operations can leave data
-                                in an inconsistent state (e.g., money debited but not credited).</li>
-                            <li><strong>Concurrent Access Anomalies:</strong> Simultaneous updates by multiple users can
-                                lead to incorrect data without proper management.</li>
-                            <li><strong>Security Problems:</strong> Implementing granular access control for different
-                                users is challenging.</li>
-                        </ul>
-                    </div>
-                </details>
+            <section id="functional-dependencies" class="content-section">
+                <h2>5.2 Functional Dependencies (FD)</h2>
+                <div class="definition">
+                    <strong>Functional Dependency (FD):</strong> A constraint between two attributes (or sets of
+                    attributes) in a relation. An FD, denoted as X → Y, states that if two tuples have the same values
+                    for attributes X, then they must also have the same values for attributes Y. X functionally
+                    determines Y.
+                </div>
+                <p>Functional dependency is represented by an arrow sign (→). The left-hand side attributes
+                    (determinant) determine the values of attributes on the right-hand side (dependent).</p>
 
-                <h4>Key Differences Summarized:</h4>
-                <table class="comparison-table">
+                <h5>Armstrong's Axioms (Inference Rules for FDs):</h5>
+                <p>If F is a set of functional dependencies, then the closure of F, denoted as F<sup>+</sup>, is the set
+                    of all functional dependencies logically implied by F. Armstrong's Axioms are a set of rules that,
+                    when applied repeatedly, generate F<sup>+</sup>.</p>
+                <ul>
+                    <li><strong>Reflexive Rule:</strong> If Y is a subset of X (Y ⊆ X), then X → Y holds. (Trivial FD)
+                    </li>
+                    <li><strong>Augmentation Rule:</strong> If X → Y holds and Z is any set of attributes, then XZ → YZ
+                        holds.</li>
+                    <li><strong>Transitivity Rule:</strong> If X → Y holds and Y → Z holds, then X → Z also holds.</li>
+                </ul>
+                <h5>Additional (Derived) Inference Rules:</h5>
+                <ul>
+                    <li><strong>Union Rule:</strong> If X → Y holds and X → Z holds, then X → YZ holds.</li>
+                    <li><strong>Decomposition Rule:</strong> If X → YZ holds, then X → Y holds and X → Z holds.</li>
+                    <li><strong>Pseudo Transitivity Rule:</strong> If X → Y holds and WY → Z holds, then WX → Z holds.
+                    </li>
+                </ul>
+
+                <h5>Types of Functional Dependencies:</h5>
+                <ul>
+                    <li><strong>Trivial Functional Dependency:</strong> An FD X → Y is trivial if Y is a subset of X (Y
+                        ⊆ X). Trivial FDs always hold.</li>
+                    <li><strong>Non-trivial Functional Dependency:</strong> An FD X → Y is non-trivial if Y is not a
+                        subset of X (Y <binary data, 1 bytes> X).</li>
+                    <li><strong>Completely Non-trivial Functional Dependency:</strong> An FD X → Y is completely
+                        non-trivial if X intersect Y = ∅ (X and Y have no common attributes).</li>
+                </ul>
+                <h5>Closure of a Set of Functional Dependencies (F<sup>+</sup>):</h5>
+                <p>Given a relational schema R, a functional dependency f on R is logically implied by a set of
+                    functional dependencies F on R if every relation instance r(R) that satisfies F also satisfies f.
+                    The closure of F, denoted by F<sup>+</sup>, is the set of all functional dependencies logically
+                    implied by F. It can be found by applying Armstrong's axioms.</p>
+                <span class="example">
+                    Suppose we have a relation schema R=(A,B,C,G,H,I) and the set of functional dependencies F = {A→B,
+                    A→C, CG→H, CG→I, B→H}.
+                    <ol>
+                        <li>A→H, since A→B and B→H (Transitivity rule).</li>
+                        <li>CG→HI, since CG→H and CG→I (Union rule).</li>
+                        <li>AG→I, since A→C and CG→I (Pseudo transitivity rule, where W=G, X=A, Y=C, Z=I. Here, A→C
+                            means AC→C. And GAC→I). This example might be a bit complex for pseudo-transitivity as
+                            written, a simpler interpretation is needed or a direct application. A more direct example
+                            for pseudo-transitivity: if A→B and CB→D, then AC→D. In the given FDs for AG→I, it implies
+                            A→C, so AG determines CG, and CG→I implies AG→I.</li>
+                    </ol>
+                </span>
+                <h5>Full Functional Dependency:</h5>
+                <p>An attribute Y is fully functionally dependent on a set of attributes X if Y is functionally
+                    dependent on X (X → Y), and Y is not functionally dependent on any proper subset of X.</p>
+                <h5>Partial Dependency:</h5>
+                <p>A partial dependency occurs when a non-prime attribute is functionally dependent on only a part of a
+                    composite candidate key.</p>
+                <h5>Prime and Non-Prime Attributes:</h5>
+                <ul>
+                    <li><strong>Prime Attribute:</strong> An attribute that is part of any candidate key of a relation.
+                    </li>
+                    <li><strong>Non-Prime Attribute:</strong> An attribute that is not part of any candidate key.</li>
+                </ul>
+            </section>
+
+            <section id="normal-forms" class="content-section">
+                <h2>Types of Normal Forms</h2>
+                <p>Normalization is achieved by applying a series of tests to relations to determine if they satisfy
+                    certain "normal forms." The most common normal forms are 1NF, 2NF, 3NF, and BCNF. Higher normal
+                    forms (4NF, 5NF) address more complex dependencies.</p>
+                <div class="image-container">
+                    <img src="https://i.imgur.com/Y4e6A2x.png" alt="Types of Normal Forms Diagram"
+                        style="max-width: 500px;">
+                    <figcaption>Hierarchy of Normal Forms.</figcaption>
+                </div>
+                <table class="styled-table">
                     <thead>
                         <tr>
-                            <th>Feature</th>
-                            <th>File System</th>
-                            <th>DBMS</th>
+                            <th>Normal Form</th>
+                            <th>Description</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Data Redundancy</td>
-                            <td>High</td>
-                            <td>Reduced / Controlled</td>
+                            <td><strong>1NF (First Normal Form)</strong></td>
+                            <td>A relation is in 1NF if all its attributes contain only atomic (indivisible) values.
+                                Each cell should hold a single value. It disallows multi-valued attributes, composite
+                                attributes, and their combinations as direct cell values.</td>
                         </tr>
                         <tr>
-                            <td>Data Inconsistency</td>
-                            <td>High Risk</td>
-                            <td>Low Risk (due to reduced redundancy)</td>
+                            <td><strong>2NF (Second Normal Form)</strong></td>
+                            <td>A relation is in 2NF if it is in 1NF and all non-key (non-prime) attributes are fully
+                                functionally dependent on the entire primary key. It eliminates partial dependencies on
+                                composite primary keys.</td>
                         </tr>
                         <tr>
-                            <td>Data Security</td>
-                            <td>Limited / Difficult to implement</td>
-                            <td>Comprehensive security mechanisms</td>
+                            <td><strong>3NF (Third Normal Form)</strong></td>
+                            <td>A relation is in 3NF if it is in 2NF and there are no transitive dependencies for
+                                non-key attributes. This means no non-key attribute is functionally dependent on another
+                                non-key attribute.</td>
                         </tr>
                         <tr>
-                            <td>Data Independence</td>
-                            <td>Low (Program-data dependent)</td>
-                            <td>High (Program-data independence)</td>
+                            <td><strong>BCNF (Boyce-Codd Normal Form)</strong></td>
+                            <td>A stricter version of 3NF. A relation is in BCNF if for every non-trivial functional
+                                dependency X → Y, X is a superkey.</td>
                         </tr>
                         <tr>
-                            <td>Data Integrity</td>
-                            <td>Difficult to enforce</td>
-                            <td>Enforced via constraints</td>
+                            <td><strong>4NF (Fourth Normal Form)</strong></td>
+                            <td>A relation is in 4NF if it is in BCNF and has no multi-valued dependencies (MVDs).</td>
                         </tr>
                         <tr>
-                            <td>Data Sharing</td>
-                            <td>Limited / Complex</td>
-                            <td>Easy and controlled</td>
-                        </tr>
-                        <tr>
-                            <td>Concurrent Access</td>
-                            <td>Difficult to manage, prone to anomalies</td>
-                            <td>Managed with concurrency control mechanisms</td>
-                        </tr>
-                        <tr>
-                            <td>Backup & Recovery</td>
-                            <td>Manual / Basic</td>
-                            <td>Sophisticated, automated</td>
-                        </tr>
-                        <tr>
-                            <td>Data Access & Retrieval</td>
-                            <td>Often inefficient, custom programs</td>
-                            <td>Efficient, flexible (e.g., SQL)</td>
-                        </tr>
-                        <tr>
-                            <td>Standardization</td>
-                            <td>No standard data representation</td>
-                            <td>Standardized data models (e.g., relational)</td>
+                            <td><strong>5NF (Fifth Normal Form / PJNF - Project-Join Normal Form)</strong></td>
+                            <td>A relation is in 5NF if it is in 4NF and does not contain any join dependencies, and
+                                joining should be lossless.</td>
                         </tr>
                     </tbody>
                 </table>
+
+                <details id="1nf">
+                    <summary>
+                        <h3>5.3 First Normal Form (1NF)</h3>
+                    </summary>
+                    <div>
+                        <p>A relation is in 1NF if all its attributes contain atomic values, meaning each cell contains
+                            a single value. It prohibits multi-valued attributes and composite attributes from being
+                            stored directly in a single cell.</p>
+                        <span class="example">Consider an EMPLOYEE table:
+                            <table class="styled-table">
+                                <tr>
+                                    <th>EMP_ID</th>
+                                    <th>EMP_NAME</th>
+                                    <th>EMP_PHONE</th>
+                                    <th>EMP_STATE</th>
+                                </tr>
+                                <tr>
+                                    <td>14</td>
+                                    <td>John</td>
+                                    <td>7272826395, 9064738238</td>
+                                    <td>UP</td>
+                                </tr>
+                                <tr>
+                                    <td>20</td>
+                                    <td>Harry</td>
+                                    <td>8574783832</td>
+                                    <td>Bihar</td>
+                                </tr>
+                            </table>
+                            This is not in 1NF because EMP_PHONE is multi-valued. To convert to 1NF:
+                            <table class="styled-table">
+                                <tr>
+                                    <th>EMP_ID</th>
+                                    <th>EMP_NAME</th>
+                                    <th>EMP_PHONE</th>
+                                    <th>EMP_STATE</th>
+                                </tr>
+                                <tr>
+                                    <td>14</td>
+                                    <td>John</td>
+                                    <td>7272826395</td>
+                                    <td>UP</td>
+                                </tr>
+                                <tr>
+                                    <td>14</td>
+                                    <td>John</td>
+                                    <td>9064738238</td>
+                                    <td>UP</td>
+                                </tr>
+                                <tr>
+                                    <td>20</td>
+                                    <td>Harry</td>
+                                    <td>8574783832</td>
+                                    <td>Bihar</td>
+                                </tr>
+                            </table>
+                        </span>
+                    </div>
+                </details>
+
+                <details id="2nf">
+                    <summary>
+                        <h3>5.4 Second Normal Form (2NF)</h3>
+                    </summary>
+                    <div>
+                        <p>A relation is in 2NF if it is in 1NF and every non-prime attribute is fully functionally
+                            dependent on the entire primary key. This means there should be no partial dependencies
+                            (where a non-prime attribute depends on only a part of a composite primary key).</p>
+                        <span class="example">Assume a TEACHER_SUBJECT table with (<u>TEACHER_ID</u>, <u>SUBJECT</u>,
+                            TEACHER_AGE). Here, (TEACHER_ID, SUBJECT) is the primary key. TEACHER_AGE depends only on
+                            TEACHER_ID (a part of the PK), which is a partial dependency.
+                            <br>Decomposition to 2NF:
+                            <br><strong>TEACHER_DETAIL</strong> (<u>TEACHER_ID</u>, TEACHER_AGE)
+                            <br><strong>TEACHER_SUBJECT_MAPPING</strong> (<u>TEACHER_ID</u>, <u>SUBJECT</u>)
+                        </span>
+                    </div>
+                </details>
+
+                <details id="3nf">
+                    <summary>
+                        <h3>5.5 Third Normal Form (3NF)</h3>
+                    </summary>
+                    <div>
+                        <p>A relation is in 3NF if it is in 2NF and there are no transitive dependencies. A transitive
+                            dependency exists when a non-prime attribute depends on another non-prime attribute, rather
+                            than directly on the primary key.</p>
+                        <p>Formally, a relation R is in 3NF if for every non-trivial FD X → A, either:</p>
+                        <ol>
+                            <li>X is a superkey of R, OR</li>
+                            <li>A is a prime attribute of R.</li>
+                        </ol>
+                        <span class="example">Consider EMPLOYEE_DETAIL (<u>EMP_ID</u>, EMP_NAME, EMP_ZIP, EMP_STATE,
+                            EMP_CITY).
+                            <br>FDs: EMP_ID → EMP_NAME, EMP_ID → EMP_ZIP, EMP_ZIP → EMP_STATE, EMP_ZIP → EMP_CITY.
+                            <br>Here, EMP_STATE and EMP_CITY depend on EMP_ZIP (non-prime) which depends on EMP_ID (PK).
+                            This is a transitive dependency.
+                            <br>Decomposition to 3NF:
+                            <br><strong>EMPLOYEE</strong> (<u>EMP_ID</u>, EMP_NAME, EMP_ZIP)
+                            <br><strong>EMPLOYEE_ZIP</strong> (<u>EMP_ZIP</u>, EMP_STATE, EMP_CITY)
+                        </span>
+                    </div>
+                </details>
+
+                <details id="bcnf">
+                    <summary>
+                        <h3>5.6 Boyce-Codd Normal Form (BCNF)</h3>
+                    </summary>
+                    <div>
+                        <p>BCNF is a stricter version of 3NF. A relation is in BCNF if for every non-trivial functional
+                            dependency X → Y, X must be a superkey of the table. Most relations in 3NF are also in BCNF.
+                            BCNF addresses certain anomalies not handled by 3NF, especially when there are multiple
+                            overlapping candidate keys.</p>
+                        <span class="example">Consider a table (EMP_ID, EMP_COUNTRY, EMP_DEPT, DEPT_TYPE, EMP_DEPT_NO)
+                            <br>FDs: EMP_ID → EMP_COUNTRY; EMP_DEPT → {DEPT_TYPE, EMP_DEPT_NO}
+                            <br>Candidate Key: (EMP_ID, EMP_DEPT)
+                            <br>The table is not in BCNF because in EMP_DEPT → {DEPT_TYPE, EMP_DEPT_NO}, EMP_DEPT is not
+                            a superkey.
+                            <br>Decomposition to BCNF:
+                            <br><strong>EMP_COUNTRY_TABLE</strong> (<u>EMP_ID</u>, EMP_COUNTRY)
+                            <br><strong>EMP_DEPT_TABLE</strong> (<u>EMP_DEPT</u>, DEPT_TYPE, EMP_DEPT_NO)
+                            <br><strong>EMP_DEPT_MAPPING_TABLE</strong> (<u>EMP_ID</u>, <u>EMP_DEPT</u>)
+                        </span>
+                    </div>
+                </details>
+
+                <details id="higher-nf">
+                    <summary>
+                        <h3>5.7 4NF and 5NF (Overview)</h3>
+                    </summary>
+                    <div>
+                        <h5>Fourth Normal Form (4NF):</h5>
+                        <p>A relation is in 4NF if it is in BCNF and has no multi-valued dependencies (MVDs). An MVD X
+                            →→ Y exists if for a given value of X, there is a set of values for Y, and this set is
+                            independent of the values of other attributes Z in the relation R(X,Y,Z).</p>
+                        <span class="example">A table (Vendor, ItemCode, ProjectNo) where a vendor supplies multiple
+                            items, a project uses multiple items, and an item may be supplied by many vendors. This can
+                            lead to MVDs if not structured properly, e.g., Vendor →→ ItemCode and Vendor →→ ProjectNo
+                            might exist independently. 4NF would decompose this.</span>
+
+                        <h5>Fifth Normal Form (5NF) / Project-Join Normal Form (PJNF):</h5>
+                        <p>A relation is in 5NF if it is in 4NF and every join dependency (JD) is implied by the
+                            candidate keys of the relation. A join dependency specifies that a relation can be
+                            losslessly reconstructed by joining certain projections of it. 5NF deals with cases where
+                            information can be reconstructed from smaller pieces of information that can be maintained
+                            with less redundancy.</p>
+                        <p>5NF aims to eliminate redundancy due to join dependencies where the join of certain
+                            projections of the table is equal to the original table, but this join is not implied by a
+                            candidate key.</p>
+                    </div>
+                </details>
             </section>
 
-            <section id="applications-dbms" class="content-section">
-                <h2>Applications of DBMS</h2>
-                <p>DBMS are ubiquitous and power countless applications across various industries:</p>
+            <section id="decomposition" class="content-section">
+                <h2>5.8 Decomposition</h2>
+                <p>Decomposition is the process of breaking down a single relation (table) into two or more
+                    sub-relations (smaller tables) to achieve higher normal forms and reduce anomalies.</p>
+                <h5>Properties of Good Decomposition:</h5>
                 <ul>
-                    <li><strong>Banking & Finance:</strong> Customer accounts, transactions, loans, stock trading.</li>
-                    <li><strong>Airlines & Travel:</strong> Reservations, flight scheduling, customer loyalty programs.
-                    </li>
-                    <li><strong>Education:</strong> Student records, course registration, grades, library management.
-                    </li>
-                    <li><strong>E-commerce & Retail:</strong> Product catalogs, customer orders, inventory management,
-                        sales analytics.</li>
-                    <li><strong>Telecommunications:</strong> Call records, customer billing, network management.</li>
-                    <li><strong>Healthcare:</strong> Patient records, appointment scheduling, medical history, billing.
-                    </li>
-                    <li><strong>Manufacturing:</strong> Supply chain management, production tracking, inventory control.
-                    </li>
-                    <li><strong>Human Resources:</strong> Employee records, payroll, benefits administration.</li>
-                    <li><strong>Social Media:</strong> User profiles, posts, connections, activity feeds.</li>
-                    <li><strong>Scientific Research:</strong> Storing and analyzing large experimental datasets.</li>
+                    <li><strong>Lossless Join Decomposition:</strong> Ensures that no information is lost from the
+                        original relation during decomposition. When the sub-relations are joined back together using a
+                        natural join, the original relation must be obtained. For a decomposition of R into R1 and R2 to
+                        be lossless, (R1 ∩ R2) must be a superkey for either R1 or R2.</li>
+                    <li><strong>Dependency Preservation:</strong> Ensures that all functional dependencies that hold on
+                        the original relation are either directly present in one of the sub-relations or can be inferred
+                        from the dependencies within the sub-relations.</li>
+                </ul>
+                <h5>Types of Decomposition:</h5>
+                <ul>
+                    <li><strong>Lossless Join Decomposition:</strong> As defined above, the join of sub-relations
+                        results in the same relation that was decomposed. For R decomposed into R1, R2, ..., Rn, the
+                        natural join R1 ⨝ R2 ⨝ ... ⨝ Rn = R.</li>
+                    <li><strong>Lossy Join Decomposition:</strong> The join of sub-relations results in a relation that
+                        contains spurious (extra, incorrect) tuples that were not in the original relation. This is
+                        undesirable.</li>
                 </ul>
             </section>
 
-            <section id="dbms-architecture" class="content-section">
-                <h2>DBMS Architecture (3-Tier)</h2>
-                <p>DBMS architecture is typically described in terms of three levels of abstraction, which provide data
-                    independence:</p>
-                <div class="dbms-system-diagram interactive-placeholder"> <!-- Placeholder for image -->
-                    <img src="https://i.imgur.com/wV1Z02f.png" alt="Levels of Abstraction in DBMS"
-                        style="max-width: 600px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm);">
-                    <p><em>Levels of Abstraction: Physical, Logical, and View.</em></p>
-                </div>
+            <section id="normalization-advantages-disadvantages" class="content-section">
+                <h2>Advantages and Disadvantages of Normalization</h2>
+                <h3>Advantages:</h3>
                 <ul>
-                    <li><strong>Physical Level (Internal Schema):</strong> The lowest level, describing *how* the data
-                        is physically stored (e.g., file organization, data structures, disk layout). Concerned with
-                        storage efficiency.</li>
-                    <li><strong>Logical Level (Conceptual Schema):</strong> Describes *what* data is stored in the
-                        database and the relationships between data items. Defines the overall database structure (e.g.,
-                        tables, columns, data types, relationships). Hides physical storage details.</li>
-                    <li><strong>View Level (External Schema):</strong> The highest level, describing only a part of the
-                        database relevant to specific users or applications. Provides customized views of the data,
-                        enhancing security and simplifying user interaction. Multiple views can exist for a single
-                        database.</li>
+                    <li>Minimizes data redundancy.</li>
+                    <li>Greater overall database organization and clarity.</li>
+                    <li>Improved data consistency within the database.</li>
+                    <li>More flexible database design, easier to modify.</li>
+                    <li>Enforces the concept of relational integrity.</li>
+                    <li>Reduces the risk of data anomalies (insertion, update, deletion).</li>
+                    <li>Smaller tables can lead to more efficient data access for certain queries.</li>
                 </ul>
-                <h3>Data Independence</h3>
+                <h3>Disadvantages:</h3>
                 <ul>
-                    <li><strong>Logical Data Independence:</strong> The ability to modify the logical schema (e.g., add
-                        new tables or attributes) without requiring changes to existing external schemas (views) or
-                        application programs.</li>
-                    <li><strong>Physical Data Independence:</strong> The ability to modify the physical schema (e.g.,
-                        change storage structures or indexing) without requiring changes to the logical schema or
-                        application programs.</li>
+                    <li>Requires a good understanding of data and user needs before building the database.</li>
+                    <li>Performance can sometimes degrade for queries requiring joins across many normalized tables
+                        (denormalization is sometimes used for performance-critical applications).</li>
+                    <li>Can be time-consuming and complex to normalize relations to higher normal forms.</li>
+                    <li>Careless decomposition can lead to a bad database design or lossy joins.</li>
+                    <li>Increased number of tables can make some queries more complex to write.</li>
                 </ul>
             </section>
 
-            <section id="types-dbms" class="content-section">
-                <h2>Types of DBMS</h2>
-                <p>Databases can be categorized based on their data model, distribution, and other characteristics:</p>
-                <ol>
-                    <li><strong>Hierarchical Databases:</strong> Data organized in a tree-like structure with
-                        parent-child relationships. Each child record has only one parent. (e.g., IBM IMS).</li>
-                    <li><strong>Network Databases:</strong> Similar to hierarchical but allows a child record to have
-                        multiple parents, forming a graph-like structure. (e.g., IDMS).</li>
-                    <li><strong>Relational Databases (RDBMS):</strong> Data stored in tables (relations) consisting of
-                        rows and columns. Uses SQL for data manipulation. Most widely used type. (e.g., MySQL,
-                        PostgreSQL, Oracle, SQL Server).</li>
-                    <li><strong>Object-Oriented Databases (OODBMS):</strong> Data stored as objects, similar to
-                        object-oriented programming concepts. Supports complex data types and inheritance. (e.g.,
-                        GemStone, ObjectDB).</li>
-                    <li><strong>NoSQL Databases:</strong> A broad category of databases that don't primarily use the
-                        relational model. Designed for scalability, flexibility, and specific data types.
-                        <ul>
-                            <li><strong>Document Databases:</strong> Store data in document formats like JSON or BSON
-                                (e.g., MongoDB, Couchbase).</li>
-                            <li><strong>Key-Value Stores:</strong> Simple model storing data as key-value pairs (e.g.,
-                                Redis, Amazon DynamoDB).</li>
-                            <li><strong>Column-Family Stores:</strong> Store data in columns rather than rows, good for
-                                analytical workloads (e.g., Apache Cassandra, HBase).</li>
-                            <li><strong>Graph Databases:</strong> Store data as nodes and edges, optimized for
-                                relationship-heavy data (e.g., Neo4j, Amazon Neptune).</li>
-                        </ul>
-                    </li>
-                    <li><strong>NewSQL Databases:</strong> Aim to combine the scalability of NoSQL with the ACID
-                        properties of relational databases.</li>
-                    <li><strong>Cloud Databases:</strong> Databases hosted and managed on cloud platforms (DBaaS -
-                        Database as a Service), offering scalability and managed services. (e.g., Amazon RDS, Azure SQL
-                        Database, Google Cloud SQL).</li>
-                </ol>
-            </section>
-
-            <section id="db-users-roles" class="content-section">
-                <h2>Database Users and Roles</h2>
-                <h3>Database Users</h3>
-                <ul>
-                    <li><strong>Naive Users:</strong> End-users interacting with the database through pre-built
-                        application interfaces (e.g., ATM users, customers on a website). They typically have no
-                        knowledge of the underlying DBMS.</li>
-                    <li><strong>Application Programmers:</strong> Professionals who write application programs that
-                        interact with the database using APIs or query languages.</li>
-                    <li><strong>Sophisticated Users:</strong> Users who interact with the database directly using query
-                        languages (like SQL) or data analysis tools, without writing full applications (e.g., data
-                        analysts, scientists).</li>
-                    <li><strong>Specialized Users:</strong> Users who write specialized database applications for
-                        complex data types or requirements (e.g., CAD systems, GIS, multimedia databases).</li>
-                </ul>
-                <h3>Database Administrator (DBA)</h3>
-                <p>A crucial role responsible for the overall management of the database system. Key responsibilities
-                    include:</p>
-                <ul>
-                    <li><strong>Schema Definition & Modification:</strong> Designing and modifying the database
-                        structure.</li>
-                    <li><strong>Storage Structure & Access Method Definition:</strong> Deciding how data is stored and
-                        accessed.</li>
-                    <li><strong>Granting User Authorization:</strong> Managing user accounts and access permissions.
-                    </li>
-                    <li><strong>Monitoring Performance & Tuning:</strong> Ensuring the database runs efficiently and
-                        optimizing queries.</li>
-                    <li><strong>Backup and Recovery:</strong> Implementing strategies for data backup and disaster
-                        recovery.</li>
-                    <li><strong>Security Enforcement:</strong> Implementing and maintaining security policies.</li>
-                    <li><strong>Routine Maintenance:</strong> Patching, upgrades, and other operational tasks.</li>
-                </ul>
-            </section>
-
-            <section id="interactive-zone" class="content-section">
-                <h2>Interactive Learning Zone</h2>
-                <div class="interactive-placeholder">
-                    <h4>SQL Query Playground</h4>
-                    <p>[Future: A sandbox to write and execute simple SQL queries against a sample database.]</p>
-                </div>
-                <div class="interactive-placeholder">
-                    <h4>ER Diagram Builder</h4>
-                    <p>[Future: A tool to visually design simple Entity-Relationship diagrams.]</p>
-                </div>
-            </section>
-
-            <section id="learning-pathways" class="content-section">
-                <h2>Learning Pathways</h2>
-                <p>Depending on your goals, you might focus on different aspects of DBMS:</p>
-                <ul>
-                    <li><strong>For Developers:</strong> Focus on SQL, database design, ORM tools, and specific DBMS
-                        APIs.</li>
-                    <li><strong>For Data Analysts:</strong> Master advanced SQL, data warehousing concepts, and BI
-                        tools.</li>
-                    <li><strong>For Aspiring DBAs:</strong> Deep dive into database administration, performance tuning,
-                        security, backup/recovery for specific DBMS (e.g., Oracle, PostgreSQL).</li>
-                </ul>
-            </section>
-
-            <section id="technology-showcase" class="content-section">
-                <h2>Technology Showcase</h2>
-                <div class="interactive-placeholder">
-                    <h4>Popular DBMS Comparison</h4>
-                    <p>[Future: An interactive table comparing features of MySQL, PostgreSQL, MongoDB, etc.]</p>
-                </div>
-            </section>
 
             <div class="nav-buttons">
-                <a href="../dbms.html" class="nav-button">
+                <a href="topic-4.html" class="nav-button">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="19" y1="12" x2="5" y2="12"></line>
                         <polyline points="12 19 5 12 12 5"></polyline>
                     </svg>
+                    Previous: SQL
+                </a>
+                <a href="../dbms.html" class="nav-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="feather feather-list">
+                        <line x1="8" y1="6" x2="21" y2="6"></line>
+                        <line x1="8" y1="12" x2="21" y2="12"></line>
+                        <line x1="8" y1="18" x2="21" y2="18"></line>
+                        <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                        <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                        <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                    </svg>
                     Back to Syllabus
                 </a>
-                <a href="topic-2.html" class="nav-button">
-                    Next: Relational Model
+                <a href="topic-6.html" class="nav-button">
+                    Next: Transactions & Concurrency
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -1269,7 +1428,6 @@
                                     top: scrollToPosition,
                                     behavior: 'smooth'
                                 });
-                                // Manually update active state on click for immediate feedback
                                 updateActiveTocLink(sectionId);
                             }
                         });
@@ -1290,9 +1448,9 @@
                 }
 
                 const observerOptions = {
-                    root: null, // viewport
-                    rootMargin: `-${headerHeight + 20}px 0px -60% 0px`, // Adjust margins for when a section is "active"
-                    threshold: 0 // Trigger as soon as any part enters the margin-adjusted viewport
+                    root: null,
+                    rootMargin: `-${headerHeight + 20}px 0px -60% 0px`,
+                    threshold: 0
                 };
 
                 let lastIntersectingSectionId = null;
@@ -1301,7 +1459,6 @@
                     let currentIntersectingEntry = null;
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
-                            // Prioritize the entry that is most visible or first in the viewport
                             if (!currentIntersectingEntry || entry.intersectionRatio > currentIntersectingEntry.intersectionRatio) {
                                 currentIntersectingEntry = entry;
                             }
@@ -1312,9 +1469,6 @@
                         lastIntersectingSectionId = currentIntersectingEntry.target.id;
                         updateActiveTocLink(lastIntersectingSectionId);
                     } else if (entries.length > 0 && !entries.some(e => e.isIntersecting) && lastIntersectingSectionId) {
-                        // If nothing is intersecting, keep the last one active or find the topmost visible one.
-                        // This part might need refinement based on desired behavior when scrolling quickly past sections.
-                        // For now, it keeps the last active one highlighted if nothing new becomes active.
                         updateActiveTocLink(lastIntersectingSectionId);
                     }
 
@@ -1323,18 +1477,17 @@
                 sections.forEach(section => {
                     observer.observe(section);
                 });
-                // Set initial active link based on URL hash or first section
                 const currentHash = window.location.hash.substring(1);
                 if (currentHash) {
                     updateActiveTocLink(currentHash);
                 } else if (sections.length > 0) {
-                    updateActiveTocLink(sections[0].id); // Default to first section
+                    updateActiveTocLink(sections[0].id);
                 }
 
 
             } else if (tocList) {
                 const sidebar = document.querySelector('.sidebar');
-                if (sidebar) sidebar.style.display = 'none'; // Hide sidebar if no TOC items
+                if (sidebar) sidebar.style.display = 'none';
             }
         });
     </script>

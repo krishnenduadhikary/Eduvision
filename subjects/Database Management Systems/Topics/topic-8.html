@@ -1,0 +1,1658 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 8: NoSQL and Modern Databases - EduVision</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            /* Dark Blue-Grey */
+            --primary-light: #3d566e;
+            --primary-dark: #1a252f;
+
+            --secondary-color: #3498db;
+            /* Bright Blue */
+            --secondary-light: #5dade2;
+            --secondary-dark: #2980b9;
+
+            --accent-color: #e74c3c;
+            /* Red */
+
+            --light-bg: #f8f9fa;
+            /* Off-white */
+            --light-text: #495057;
+            /* Dark Grey */
+            --light-card: #ffffff;
+            --light-border: #e0e0e0;
+
+            --dark-bg: #1a252f;
+            /* Very Dark Blue-Grey */
+            --dark-text: #f8f9fa;
+            /* Light Grey */
+            --dark-card: #2c3e50;
+            /* Dark Blue-Grey (same as light primary) */
+            --dark-border: #3d566e;
+            /* Lighter than dark card */
+
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #3498db;
+
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.1);
+
+            --transition: all 0.3s ease-in-out;
+        }
+
+        /* Dark mode overrides for semantic colors if they were defined with light/dark specifics */
+        html.dark-mode {
+            --primary-color: #5dade2;
+            /* Light Blue for dark mode primary */
+            --primary-light: #85c1e9;
+            --primary-dark: #3498db;
+
+            --secondary-color: #bdc3c7;
+            /* Light Grey for dark mode secondary */
+            --secondary-light: #ecf0f1;
+            --secondary-dark: #95a5a6;
+        }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+            line-height: 1.7;
+            color: var(--light-text);
+            background-color: var(--light-bg);
+            padding-top: 80px;
+            /* Height of the fixed header */
+            transition: var(--transition);
+        }
+
+        html.dark-mode body {
+            color: var(--dark-text);
+            background-color: var(--dark-bg);
+        }
+
+        /* Typography */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Nunito Sans', 'Inter', sans-serif;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+            /* Use darker primary for headings in light mode */
+        }
+
+        html.dark-mode h1,
+        html.dark-mode h2,
+        html.dark-mode h3,
+        html.dark-mode h4,
+        html.dark-mode h5,
+        html.dark-mode h6 {
+            color: var(--primary-light);
+            /* Use lighter primary for headings in dark mode */
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 0.6rem;
+            margin-top: 2.5rem;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            margin-top: 2rem;
+        }
+
+        h4 {
+            font-size: 1.5rem;
+        }
+
+        h5 {
+            font-size: 1.25rem;
+            color: var(--secondary-dark);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        html.dark-mode h5 {
+            color: var(--secondary-light);
+        }
+
+
+        p {
+            margin-bottom: 1.25rem;
+            font-size: 1.05rem;
+        }
+
+        p.lead {
+            font-size: 1.2rem;
+            color: var(--light-text);
+            opacity: 0.9;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        html.dark-mode p.lead {
+            color: var(--dark-text);
+        }
+
+
+        a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        a:hover {
+            color: var(--secondary-dark);
+            text-decoration: underline;
+        }
+
+        ul,
+        ol {
+            padding-left: 20px;
+            margin-bottom: 1.25rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Layout */
+        .page-container {
+            /* Renamed from .container to avoid conflict if bootstrap is ever used */
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            /* Slightly wider sidebar */
+            gap: 2.5rem;
+            max-width: 1500px;
+            /* Wider max-width for larger screens */
+            margin: 0 auto;
+            padding: 2.5rem;
+        }
+
+        @media (max-width: 1024px) {
+
+            /* Adjusted breakpoint */
+            .page-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+                /* Hide sidebar on smaller screens, rely on scrolling */
+            }
+        }
+
+        /* Header */
+        header.main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2.5rem;
+            box-shadow: var(--shadow-md);
+            z-index: 1000;
+        }
+
+        html.dark-mode header.main-header {
+            background-color: var(--dark-card);
+            /* Match dark card for header in dark mode */
+            color: var(--dark-text);
+        }
+
+        .header-topic-title {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: white;
+            /* Ensure this text is white on dark header */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding: 0 15px;
+            /* Space around title */
+        }
+
+        html.dark-mode .header-topic-title {
+            color: var(--dark-text);
+            /* Ensure this text is light on light header (dark mode) */
+        }
+
+
+        .eduvision-logo-header {
+            /* Specific class for header logo */
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            /* Remove underline from logo link */
+        }
+
+        .eduvision-logo-header svg {
+            width: 36px;
+            /* Slightly larger logo SVG */
+            height: 36px;
+            color: var(--secondary-light);
+        }
+
+        html.dark-mode .eduvision-logo-header svg {
+            color: var(--primary-color);
+            /* Use dark mode primary for SVG */
+        }
+
+
+        .logo-text {
+            font-size: 1.7rem;
+            /* Larger logo text */
+            font-weight: 800;
+            /* Bolder */
+            font-family: 'Nunito Sans', sans-serif;
+            color: white;
+        }
+
+        html.dark-mode .logo-text {
+            color: var(--dark-text);
+        }
+
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 1.8rem;
+            /* More space between nav items */
+        }
+
+        .header-nav a {
+            color: white;
+            font-weight: 500;
+            font-size: 1rem;
+            position: relative;
+            /* For underline effect */
+            padding-bottom: 4px;
+        }
+
+        .header-nav a::after {
+            /* Underline effect */
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--secondary-light);
+            transition: width 0.3s ease;
+        }
+
+        .header-nav a:hover::after {
+            width: 100%;
+        }
+
+        html.dark-mode .header-nav a {
+            color: var(--dark-text);
+        }
+
+        html.dark-mode .header-nav a:hover {
+            color: var(--primary-color);
+        }
+
+        html.dark-mode .header-nav a::after {
+            background-color: var(--primary-color);
+        }
+
+
+        .theme-toggle {
+            background: transparent;
+            border: 1px solid var(--secondary-light);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-lg);
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--secondary-light);
+            color: var(--primary-color);
+        }
+
+        .theme-toggle svg {
+            margin-right: 0.3rem;
+        }
+
+        html.dark-mode .theme-toggle {
+            border-color: var(--primary-color);
+            color: var(--dark-text);
+        }
+
+        html.dark-mode .theme-toggle:hover {
+            background-color: var(--primary-color);
+            color: var(--dark-card);
+            /* Text color for contrast */
+        }
+
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            /* Header height + 20px margin */
+            align-self: start;
+            background-color: var(--light-card);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        html.dark-mode .sidebar {
+            background-color: var(--dark-card);
+        }
+
+        .sidebar-title {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-dark);
+            border-bottom: 2px solid var(--secondary-light);
+            padding-bottom: 0.5rem;
+        }
+
+        html.dark-mode .sidebar-title {
+            color: var(--primary-light);
+            border-bottom-color: var(--primary-dark);
+        }
+
+        .toc {
+            list-style: none;
+            padding-left: 0;
+            /* Remove default padding for ul */
+        }
+
+        .toc li {
+            margin-bottom: 0.75rem;
+        }
+
+        .toc a {
+            display: block;
+            padding: 0.6rem 0;
+            color: var(--light-text);
+            border-left: 4px solid transparent;
+            padding-left: 1.2rem;
+            transition: var(--transition);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .toc a:hover {
+            color: var(--secondary-color);
+            border-left-color: var(--secondary-color);
+            background-color: rgba(52, 152, 219, 0.05);
+            text-decoration: none;
+            transform: translateX(5px);
+        }
+
+        .toc a.active {
+            color: var(--secondary-dark);
+            border-left-color: var(--secondary-dark);
+            font-weight: 700;
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        html.dark-mode .toc a {
+            color: var(--dark-text);
+        }
+
+        html.dark-mode .toc a:hover {
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
+            background-color: rgba(93, 173, 226, 0.1);
+        }
+
+        html.dark-mode .toc a.active {
+            color: var(--primary-light);
+            border-left-color: var(--primary-light);
+            background-color: rgba(93, 173, 226, 0.15);
+        }
+
+
+        /* Main Content */
+        .main-content {
+            background-color: var(--light-card);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-lg);
+            /* More prominent shadow for main content */
+        }
+
+        html.dark-mode .main-content {
+            background-color: var(--dark-card);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumb-nav {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb-nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        .breadcrumb-nav li a {
+            color: var(--secondary-color);
+        }
+
+        .breadcrumb-nav li a:hover {
+            color: var(--secondary-dark);
+        }
+
+        .breadcrumb-nav li+li::before {
+            content: ">";
+            margin: 0 0.75rem;
+            color: var(--light-text);
+            opacity: 0.7;
+        }
+
+        html.dark-mode .breadcrumb-nav li+li::before {
+            color: var(--dark-text);
+        }
+
+        .breadcrumb-nav li[aria-current="page"] {
+            color: var(--light-text);
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        html.dark-mode .breadcrumb-nav li[aria-current="page"] {
+            color: var(--dark-text);
+        }
+
+
+        /* Content Card (used for sections) */
+        section.content-section {
+            /* Renamed from .content-card to be more specific */
+            background-color: transparent;
+            /* Sections don't need their own card bg if main-content is a card */
+            border-radius: var(--radius-md);
+            padding: 1rem 0;
+            /* Vertical padding for sections */
+            margin-bottom: 2.5rem;
+            border: none;
+            /* No border for sections within main content card */
+            box-shadow: none;
+            /* No shadow for sections */
+        }
+
+
+        /* Definition Boxes */
+        .definition {
+            background-color: rgba(52, 152, 219, 0.08);
+            /* Softer bg */
+            border-left: 5px solid var(--secondary-color);
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+        }
+
+        .definition strong {
+            color: var(--secondary-dark);
+            font-weight: 600;
+            display: block;
+            /* Label on its own line */
+            margin-bottom: 0.3rem;
+        }
+
+        .example {
+            font-style: italic;
+            color: var(--light-text);
+            opacity: 0.85;
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+            padding-left: 0.5rem;
+            /* Indent example slightly */
+            display: block;
+            /* Ensure it takes its own line if needed */
+        }
+
+        .example ol,
+        .example ul {
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-style: normal;
+            /* If list items shouldn't be italic */
+        }
+
+
+        html.dark-mode .example {
+            color: var(--dark-text);
+        }
+
+        .image-container {
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--light-border);
+        }
+
+        html.dark-mode .image-container img {
+            border-color: var(--dark-border);
+        }
+
+        .image-container figcaption {
+            font-size: 0.9rem;
+            color: var(--light-text);
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+
+        html.dark-mode .image-container figcaption {
+            color: var(--dark-text);
+        }
+
+
+        /* Tables */
+        .styled-table {
+            /* Changed from .comparison-table to a more generic name */
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            box-shadow: var(--shadow-sm);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            /* To make border-radius work with th */
+            border: 1px solid var(--light-border);
+        }
+
+        .styled-table th,
+        .styled-table td {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid var(--light-border);
+        }
+
+        html.dark-mode .styled-table th,
+        html.dark-mode .styled-table td {
+            border-bottom-color: var(--dark-border);
+            border-left-color: var(--dark-border);
+            /* Ensure all borders use dark mode color */
+        }
+
+        .styled-table th {
+            background-color: var(--secondary-light);
+            color: var(--primary-dark);
+            /* Text color for contrast on light blue */
+            font-weight: 600;
+        }
+
+        html.dark-mode .styled-table th {
+            background-color: var(--primary-dark);
+            /* Darker header for table in dark mode */
+            color: var(--secondary-light);
+        }
+
+        .styled-table tr:nth-child(even) {
+            background-color: rgba(52, 152, 219, 0.03);
+            /* Very subtle striping */
+        }
+
+        html.dark-mode .styled-table tr:nth-child(even) {
+            background-color: rgba(93, 173, 226, 0.05);
+        }
+
+        .styled-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Code */
+        code,
+        .code-block {
+            /* Apply similar styling to inline code and code blocks */
+            font-family: 'Fira Code', monospace;
+            background-color: rgba(231, 76, 60, 0.08);
+            /* Softer accent color bg */
+            color: var(--accent-color);
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            border: 1px solid rgba(231, 76, 60, 0.2);
+        }
+
+        html.dark-mode code,
+        html.dark-mode .code-block {
+            background-color: rgba(231, 76, 60, 0.15);
+            border-color: rgba(231, 76, 60, 0.3);
+        }
+
+
+        pre {
+            /* Wrapper for multiple code blocks or larger examples */
+            background-color: var(--primary-dark);
+            /* Dark bg for code blocks */
+            color: #f8f9fa;
+            /* Light text */
+            padding: 1.25rem;
+            border-radius: var(--radius-md);
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            box-shadow: var(--shadow-sm);
+        }
+
+        pre code {
+            /* Reset for code inside pre */
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            border-radius: 0;
+            border: none;
+            font-size: inherit;
+        }
+
+        html.dark-mode pre {
+            background-color: #1c1c1c;
+            /* Even darker for dark mode code blocks */
+            border: 1px solid var(--dark-border);
+        }
+
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            /* Allow buttons to wrap on smaller screens */
+            gap: 1rem;
+            /* Add gap for wrapping */
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--light-border);
+        }
+
+        html.dark-mode .nav-buttons {
+            border-top-color: var(--dark-border);
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            /* More gap */
+            padding: 0.85rem 1.8rem;
+            /* Slightly larger */
+            background-color: var(--secondary-color);
+            color: white !important;
+            /* Ensure text is white */
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            /* Bolder */
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            text-decoration: none !important;
+            /* Ensure no underline */
+            flex-grow: 1;
+            /* Allow buttons to grow if space allows */
+            text-align: center;
+            justify-content: center;
+            min-width: 200px;
+            /* Minimum width for buttons */
+        }
+
+        .nav-button:hover {
+            background-color: var(--secondary-dark);
+            text-decoration: none !important;
+            color: white !important;
+            transform: translateY(-3px);
+            /* More pronounced lift */
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-button svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Details/Summary for Collapsible Sections */
+        details {
+            background-color: var(--light-card);
+            border: 1px solid var(--light-border);
+            border-radius: var(--radius-md);
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        summary {
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            cursor: pointer;
+            list-style-position: inside;
+            /* Keeps marker aligned */
+            transition: background-color 0.2s ease;
+            display: block;
+            /* Make summary full width to click anywhere */
+        }
+
+        summary strong {
+            /* If strong tag is used within summary */
+            color: inherit;
+        }
+
+
+        summary:hover {
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+
+        details[open] summary {
+            background-color: rgba(52, 152, 219, 0.1);
+            border-bottom: 1px solid var(--light-border);
+        }
+
+        details>div {
+            /* Content of details */
+            padding: 1.5rem;
+        }
+
+        html.dark-mode details {
+            background-color: var(--dark-card);
+            border-color: var(--dark-border);
+        }
+
+        html.dark-mode summary {
+            color: var(--primary-light);
+        }
+
+        html.dark-mode summary:hover {
+            background-color: rgba(93, 173, 226, 0.1);
+        }
+
+        html.dark-mode details[open] summary {
+            background-color: rgba(93, 173, 226, 0.15);
+            border-bottom-color: var(--dark-border);
+        }
+
+        /* Completion Message Specific Styles */
+        .completion-message-container {
+            background: linear-gradient(135deg, var(--secondary-light) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            margin-top: 3rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        html.dark-mode .completion-message-container {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
+            color: var(--dark-text);
+        }
+
+        .completion-message-container h2 {
+            color: white;
+            /* Ensure h2 is white on gradient */
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            border-bottom: none;
+            /* No border for this h2 */
+        }
+
+        html.dark-mode .completion-message-container h2 {
+            color: var(--dark-text);
+        }
+
+        .completion-message-container p {
+            font-size: 1.15rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .completion-message-container .cta-button {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white !important;
+            /* Important to override general link color */
+            padding: 0.8rem 2rem;
+            border-radius: var(--radius-md);
+            text-decoration: none !important;
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: var(--shadow-md);
+        }
+
+        .completion-message-container .cta-button:hover {
+            background-color: var(--danger-color);
+            /* Darker red */
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        html.dark-mode .completion-message-container .cta-button {
+            background-color: var(--accent-color);
+        }
+
+        html.dark-mode .completion-message-container .cta-button:hover {
+            background-color: #c0392b;
+            /* Darker red for dark mode too */
+        }
+
+
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 70px;
+            }
+
+            header.main-header {
+                height: 70px;
+                padding: 0 1.5rem;
+            }
+
+            .header-topic-title {
+                font-size: 1em;
+            }
+
+            .logo-text {
+                font-size: 1.5rem;
+            }
+
+            .eduvision-logo-header svg {
+                width: 30px;
+                height: 30px;
+            }
+
+            .header-nav {
+                gap: 1rem;
+            }
+
+            .header-nav a {
+                font-size: 0.9rem;
+            }
+
+            .theme-toggle {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            .page-container {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            h2 {
+                font-size: 1.9rem;
+            }
+
+            h3 {
+                font-size: 1.6rem;
+            }
+
+            .main-content {
+                padding: 1.5rem;
+            }
+
+            .completion-message-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .completion-message-container h2 {
+                font-size: 2rem;
+            }
+
+        }
+
+        @media (max-width: 576px) {
+
+            /* Further adjustments for smaller screens */
+            .nav-buttons {
+                flex-direction: column;
+                /* Stack buttons vertically */
+            }
+
+            .nav-button {
+                width: 100%;
+                /* Make buttons full width */
+            }
+        }
+
+
+        @media (max-width: 480px) {
+            .header-nav a:not(.theme-toggle) {
+                display: none;
+            }
+
+            /* Hide text links, keep toggle */
+            .header-nav {
+                justify-content: flex-end;
+            }
+
+            .header-topic-title {
+                display: none;
+            }
+
+            /* Push toggle to right */
+            .breadcrumb-nav {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito+Sans:wght@700;800;900&family=Fira+Code&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header class="main-header">
+        <a href="../../../index.html" class="eduvision-logo-header">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM12 6.5c-3.03 0-5.5 2.47-5.5 5.5s2.47 5.5 5.5 5.5 5.5-2.47 5.5-5.5-2.47-5.5-5.5-5.5zm0 9c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" />
+            </svg>
+            <span class="logo-text">EduVision</span>
+        </a>
+        <div class="header-topic-title">Topic 8: NoSQL & Modern DBs</div>
+        <nav class="header-nav">
+            <a href="../../../index.html">Home</a>
+            <a href="../dbms.html">Syllabus</a>
+            <a href="../../../MCQ/">Mock Test</a>
+            <a href="../../../About/about.html">About</a>
+            <button class="theme-toggle" id="themeToggle">
+                <!-- Icon and text will be set by JS -->
+            </button>
+        </nav>
+    </header>
+
+    <div class="page-container">
+        <aside class="sidebar">
+            <h3 class="sidebar-title">On This Page</h3>
+            <ul class="toc" id="tocList">
+                <!-- TOC items will be generated by JS -->
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb-nav">
+                    <li><a href="../../../index.html">Home</a></li>
+                    <li><a href="../dbms.html">Database Systems</a></li>
+                    <li aria-current="page">Topic 8: NoSQL & Modern Databases</li>
+                </ol>
+            </nav>
+
+            <h1>Topic 8: NoSQL and Modern Databases</h1>
+            <p class="lead">Explore the world beyond traditional relational databases with NoSQL. Understand its core
+                principles, various types, the CAP theorem, BASE properties, and how it compares to RDBMS, along with
+                its diverse applications.</p>
+
+            <section id="intro-nosql" class="content-section">
+                <h2>8.1 Introduction to NoSQL</h2>
+                <div class="definition">
+                    <strong>NoSQL ("Not Only SQL"):</strong> Represents a completely different database framework
+                    designed for high-performance and agile processing of large-scale, often unstructured or
+                    semi-structured, information. It's a database infrastructure well-suited for big data needs.
+                </div>
+                <ul>
+                    <li>NoSQL databases are inherently less structured than relational databases, which allows for speed
+                        and agility.</li>
+                    <li>They often focus on distributed database concepts, where data can be stored across multiple
+                        processing nodes and servers.</li>
+                    <li>This distributed architecture allows NoSQL databases to scale horizontally (adding more servers)
+                        as data grows, without significant performance degradation.</li>
+                    <li>NoSQL solutions have been key for handling large data warehouses for companies like Google,
+                        Amazon, and the CIA.</li>
+                </ul>
+                <h5>Where is NoSQL Used?</h5>
+                <ul>
+                    <li>Widely used in big data and other real-time web applications.</li>
+                    <li>Storing stock log data for analysis.</li>
+                    <li>Storing social media data and other unstructured data that cannot be comfortably stored and
+                        analyzed in RDBMS.</li>
+                </ul>
+                <h5>Features and Advantages of NoSQL:</h5>
+                <div class="image-container">
+                    <img src="https://i.imgur.com/lQ8fB7i.png" alt="NoSQL Features and Use Cases"
+                        style="max-width: 600px;">
+                    <figcaption>Core Features and Common Use Cases for NoSQL Databases.</figcaption>
+                </div>
+                <ul>
+                    <li><strong>Schema Agnostic (Flexible Schema):</strong> NoSQL databases generally do not require a
+                        predefined schema. Data can be inserted without a strict structure, making it easy to evolve
+                        applications. This is a significant difference from relational databases.</li>
+                    <li><strong>Scalability (Horizontal Scaling):</strong> Support horizontal scaling by adding more
+                        commodity servers, eliminating the cost and complexity of manual sharding often needed for RDBMS
+                        at scale.</li>
+                    <li><strong>Performance:</strong> Often designed for specific workloads (e.g., read-heavy,
+                        write-heavy) and can achieve high performance, sometimes with specialized hardware or by adding
+                        cheaper commodity servers.</li>
+                    <li><strong>High Availability:</strong> Generally designed for high availability, often using
+                        masterless architectures and data distribution/replication to ensure an application remains
+                        available even if some nodes fail.</li>
+                    <li>Open source (many are).</li>
+                    <li>Non-relational data models.</li>
+                    <li>Distributed nature.</li>
+                    <li>Cluster friendly.</li>
+                    <li>Born out of 21st-century web application needs.</li>
+                </ul>
+            </section>
+
+            <section id="types-nosql" class="content-section">
+                <h2>8.2 Types of NoSQL Databases</h2>
+                <p>NoSQL is a broad term encompassing various database types that don't adhere to the traditional
+                    relational model. The main types are document, key-value, column-family, and graph databases.</p>
+                <div class="image-container">
+                    <img src="https://i.imgur.com/u8x2P5L.png" alt="Main Types of NoSQL Databases"
+                        style="max-width: 500px;">
+                    <figcaption>Visual representation of NoSQL database types.</figcaption>
+                </div>
+
+                <details id="document-db">
+                    <summary>
+                        <h3>8.2.1 Document-based Databases</h3>
+                    </summary>
+                    <div>
+                        <p>Store data in documents, typically in formats like JSON, BSON, or XML, instead of rows and
+                            columns. Each document can have a different structure (flexible schema). Elements within
+                            documents can often be indexed for faster querying.</p>
+                        <p>Collections are groups of documents that may or may not share a similar schema.</p>
+                        <div class="image-container">
+                            <img src="https://i.imgur.com/T7XvL7q.png" alt="Document Database Example"
+                                style="max-width: 500px;">
+                            <figcaption>Example of data stored in a Document Database.</figcaption>
+                        </div>
+                        <h5>Key Features:</h5>
+                        <ul>
+                            <li>Flexible schema.</li>
+                            <li>Faster creation and maintenance of documents.</li>
+                            <li>Often no requirement for foreign keys, as related data can be embedded within a
+                                document.</li>
+                            <li>Uses open formats like XML, JSON.</li>
+                        </ul>
+                        <h5>Drawbacks:</h5>
+                        <ul>
+                            <li>Weak Atomicity for multi-document transactions.</li>
+                            <li>Consistency check limitations if documents/collections are not well-linked.</li>
+                            <li>Potential security concerns if not properly configured.</li>
+                        </ul>
+                        <h5>Examples:</h5>
+                        <ul>
+                            <li><strong>MongoDB:</strong> Popular JSON-like document store with its own query language.
+                            </li>
+                            <li><strong>Elasticsearch:</strong> Search engine built on document-store architecture,
+                                excellent for searching and indexing.</li>
+                            <li><strong>CouchDB:</strong> Uses JSON for documents, JavaScript for queries, developed in
+                                Erlang.</li>
+                            <li><strong>BaseX:</strong> Open-source, XML-based DBM that uses Java.</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details id="key-value-stores">
+                    <summary>
+                        <h3>8.2.2 Key-Value Stores</h3>
+                    </summary>
+                    <div>
+                        <p>The simplest NoSQL data model. Data is stored as a collection of key-value pairs. Each data
+                            element has a unique key, and the value can be a simple data type (string, number) or a
+                            complex object (e.g., JSON, image).</p>
+                        <div class="image-container">
+                            <img src="https://i.imgur.com/wZ8uA7G.png" alt="Key-Value Store Example"
+                                style="max-width: 500px;">
+                            <figcaption>Conceptual structure of a Key-Value Store.</figcaption>
+                        </div>
+                        <h5>Key Features:</h5>
+                        <ul>
+                            <li>Simplicity.</li>
+                            <li>High Scalability (often horizontal).</li>
+                            <li>Speed (especially for direct key lookups).</li>
+                        </ul>
+                        <h5>Benefits:</h5>
+                        <ul>
+                            <li><strong>Scalability:</strong> Infinitely scalable horizontally.</li>
+                            <li><strong>No/Simpler Querying:</strong> Direct key access is very fast; complex querying
+                                is usually not a primary feature.</li>
+                            <li><strong>Mobility:</strong> Easier to move data between systems due to simpler structure.
+                            </li>
+                            <li><strong>Built-in Redundancy:</strong> Many key-value stores offer built-in data
+                                redundancy.</li>
+                        </ul>
+                        <h5>When to Use:</h5>
+                        <ul>
+                            <li>User profiles and preferences.</li>
+                            <li>Large-scale user session management.</li>
+                            <li>Product suggestions in e-commerce.</li>
+                            <li>Caching frequently updated data.</li>
+                            <li>Personalized ad delivery.</li>
+                            <li>Player sessions in MMOGs.</li>
+                        </ul>
+                        <h5>Examples:</h5>
+                        <ul>
+                            <li><strong>Redis:</strong> In-memory data structure store, used as a database, cache, and
+                                message broker.</li>
+                            <li><strong>Amazon DynamoDB:</strong> Highly scalable key-value and document database
+                                service.</li>
+                            <li><strong>Aerospike:</strong> Designed for high performance with SSDs or in-memory.</li>
+                            <li><strong>Berkeley DB:</strong> High-performance embedded database library.</li>
+                            <li><strong>Memcached:</strong> Distributed memory object caching system.</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details id="column-family-stores">
+                    <summary>
+                        <h3>8.2.3 Column-family (Wide-column) Stores</h3>
+                    </summary>
+                    <div>
+                        <p>Store data in columns rather than rows. This means that when you want to run analytics on a
+                            small number of columns, you can read those columns directly without consuming memory with
+                            unwanted data from other columns. They are designed to read data efficiently and retrieve it
+                            with greater speed, especially for large datasets.</p>
+                        <p>Data is stored in column families, which are groups of related columns. Rows are identified
+                            by a row key, and within each row, data is organized into column families, and then columns
+                            with timestamps.</p>
+                        <div class="image-container">
+                            <img src="https://i.imgur.com/C5sX9qU.png" alt="Column-Family Store Example"
+                                style="max-width: 600px;">
+                            <figcaption>Conceptual structure of a Column-Family Store.</figcaption>
+                        </div>
+                        <h5>Advantages:</h5>
+                        <ul>
+                            <li>Highly effective in compression, making them storage efficient.</li>
+                            <li>Aggregation queries are fairly quick.</li>
+                            <li>Fast load times for large datasets.</li>
+                            <li>Great versatility as columns do not have to resemble one another.</li>
+                            <li>Excellent for analytics and reporting due to quick query response times on massive
+                                volumes.</li>
+                        </ul>
+                        <h5>Disadvantages:</h5>
+                        <ul>
+                            <li>Creating an efficient indexing schema can be complex.</li>
+                            <li>Incremental data loading can be undesirable.</li>
+                            <li>Potential security flaws if not carefully managed (common to many NoSQL types without
+                                robust built-in security).</li>
+                            <li>Generally not suitable for OLTP applications due to the way data is stored.</li>
+                        </ul>
+                        <h5>Examples:</h5>
+                        <ul>
+                            <li><strong>Apache Cassandra:</strong> Highly scalable and available, designed for handling
+                                large amounts of data across many commodity servers.</li>
+                            <li><strong>HBase:</strong> Built on top of Hadoop Distributed File System (HDFS), good for
+                                sparse data sets.</li>
+                            <li><strong>Google Bigtable:</strong> The original wide-column store that inspired HBase.
+                            </li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details id="graph-db">
+                    <summary>
+                        <h3>8.2.4 Graph Databases</h3>
+                    </summary>
+                    <div>
+                        <p>Store data using graph structures: nodes (entities), edges (relationships), and properties
+                            (attributes of nodes and edges). Optimized for data where relationships between entities are
+                            central and complex.</p>
+                        <div class="image-container">
+                            <img src="https://i.imgur.com/mN0cM9s.png" alt="Graph Database Model"
+                                style="max-width: 500px;">
+                            <figcaption>Basic components of a Graph Database: Nodes and Edges.</figcaption>
+                        </div>
+                        <h5>How it Works:</h5>
+                        <ul>
+                            <li><strong>Nodes:</strong> Represent entities (e.g., people, products, accounts).</li>
+                            <li><strong>Edges:</strong> Represent relationships between nodes (e.g., 'FRIEND_OF',
+                                'PURCHASED', 'WORKS_FOR'). Edges can have properties and direction.</li>
+                        </ul>
+                        <h5>When to Use:</h5>
+                        <ul>
+                            <li>Resolving many-to-many relationships (e.g., social networks, recommendation engines).
+                            </li>
+                            <li>When connections between data pieces are more significant than the data pieces
+                                themselves.</li>
+                            <li>Applications requiring low latency traversal of complex relationships with large data
+                                amounts.</li>
+                        </ul>
+                        <h5>Examples:</h5>
+                        <ul>
+                            <li><strong>Neo4j:</strong> Popular open-source graph database with its own query language
+                                (Cypher).</li>
+                            <li><strong>Amazon Neptune:</strong> Managed graph database service.</li>
+                            <li><strong>RedisGraph:</strong> A graph module for Redis.</li>
+                            <li><strong>OrientDB:</strong> Multi-model database that supports graph, document,
+                                key-value, and object models.</li>
+                        </ul>
+                    </div>
+                </details>
+            </section>
+
+            <section id="cap-base" class="content-section">
+                <h2>8.3 CAP Theorem and BASE Properties</h2>
+                <details>
+                    <summary><strong>CAP Theorem Overview</strong></summary>
+                    <div>
+                        <p>Proposed by Eric Brewer, the CAP Theorem states that in a distributed data store, it is
+                            impossible to simultaneously guarantee all three of the following properties:</p>
+                        <ol>
+                            <li><strong>Consistency (C):</strong> All nodes see the same data at the same time. Every
+                                read receives the most recent write or an error.</li>
+                            <li><strong>Availability (A):</strong> Every request (read or write) receives a (non-error)
+                                response, regardless of whether the data is up-to-date.</li>
+                            <li><strong>Partition Tolerance (P):</strong> The system continues to operate despite
+                                network partitions (i.e., communication breaks between nodes).</li>
+                        </ol>
+                        <p>In practice, network partitions (P) are a reality in distributed systems. Therefore,
+                            designers must choose between strong Consistency (CP systems) or high Availability (AP
+                            systems) during a partition.</p>
+                        <div class="image-container">
+                            <img src="https://i.imgur.com/7z2K9w7.png" alt="CAP Theorem Diagram"
+                                style="max-width: 450px;">
+                            <figcaption>The CAP Theorem trade-offs.</figcaption>
+                        </div>
+                        <ul>
+                            <li><strong>CP (Consistency and Partition Tolerance):</strong> Prioritizes consistency and
+                                partition tolerance, potentially sacrificing availability during network partitions
+                                (e.g., HBase, MongoDB in some configurations).</li>
+                            <li><strong>AP (Availability and Partition Tolerance):</strong> Focuses on availability and
+                                partition tolerance, potentially allowing temporary inconsistencies (eventual
+                                consistency) (e.g., Cassandra, DynamoDB).</li>
+                            <li><strong>CA (Consistency and Availability):</strong> Typically not fully achievable in a
+                                distributed system that must also be partition tolerant. Often applies to single-node
+                                (non-distributed) systems.</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details>
+                    <summary><strong>BASE Properties</strong></summary>
+                    <div>
+                        <p>The BASE principles represent a more flexible approach often found in NoSQL databases,
+                            contrasting with the strict ACID properties of relational databases. BASE prioritizes
+                            availability and scalability in distributed systems.</p>
+                        <div class="image-container">
+                            <img src="https://i.imgur.com/lUqD6u5.png" alt="ACID vs BASE comparison"
+                                style="max-width: 600px;">
+                            <figcaption>Comparison of ACID and BASE principles.</figcaption>
+                        </div>
+                        <ol>
+                            <li>
+                                <strong>Basically Available:</strong> The system guarantees availability. It focuses on
+                                keeping services running, even if some nodes fail or the data is not perfectly
+                                consistent at all times.
+                                <span class="example">Systems like Cassandra achieve this through data replication and
+                                    sharding.</span>
+                                <div class="image-container"><img src="https://i.imgur.com/zT7jN8Y.png"
+                                        alt="Sharding Example" style="max-width:500px;"></div>
+                            </li>
+                            <li>
+                                <strong>Soft State:</strong> The state of the system may change over time, even without
+                                new input, due to the eventual consistency model. The system doesn't guarantee immediate
+                                consistency.
+                            </li>
+                            <li>
+                                <strong>Eventually Consistent:</strong> The database will become consistent over time,
+                                but it might allow for temporary inconsistencies. Eventually, after all updates are
+                                synchronized, every node will hold the same data.
+                                <span class="example">If two customers purchase the last item in stock simultaneously,
+                                    the system might show inconsistent results for a short period before reconciling the
+                                    conflict.</span>
+                            </li>
+                        </ol>
+                    </div>
+                </details>
+            </section>
+
+            <section id="nosql-vs-rdbms" class="content-section">
+                <h2>8.4 NoSQL vs. Relational Databases (RDBMS)</h2>
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>RDBMS (SQL)</th>
+                            <th>NoSQL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Data Model</td>
+                            <td>Structured, relational (tables with rows and columns)</td>
+                            <td>Various models (document, key-value, column-family, graph); often unstructured or
+                                semi-structured</td>
+                        </tr>
+                        <tr>
+                            <td>Schema</td>
+                            <td>Fixed schema, defined in advance</td>
+                            <td>Dynamic or flexible schema (schema-on-read)</td>
+                        </tr>
+                        <tr>
+                            <td>Scalability</td>
+                            <td>Typically vertical scaling (scale-up: bigger servers)</td>
+                            <td>Typically horizontal scaling (scale-out: more servers)</td>
+                        </tr>
+                        <tr>
+                            <td>Consistency (ACID vs BASE)</td>
+                            <td>Strong consistency (ACID properties)</td>
+                            <td>Often favors eventual consistency (BASE properties), though some offer tunable
+                                consistency</td>
+                        </tr>
+                        <tr>
+                            <td>Joins</td>
+                            <td>Powerful join capabilities</td>
+                            <td>Generally limited or no direct join support (data often denormalized or joined at
+                                application level)</td>
+                        </tr>
+                        <tr>
+                            <td>Query Language</td>
+                            <td>SQL (standardized)</td>
+                            <td>Varies by database type (e.g., MongoDB Query Language, Cypher for Neo4j); less
+                                standardized</td>
+                        </tr>
+                        <tr>
+                            <td>Transaction Reliability</td>
+                            <td>High (full ACID support)</td>
+                            <td>Varies; may offer ACID for single operations or relax some properties for
+                                scalability/availability</td>
+                        </tr>
+                        <tr>
+                            <td>Data Integrity</td>
+                            <td>High, enforced via constraints and ACID</td>
+                            <td>Can be lower due to denormalization and eventual consistency; application-level
+                                enforcement often needed</td>
+                        </tr>
+                        <tr>
+                            <td>Performance</td>
+                            <td>Good for complex queries and transactions</td>
+                            <td>Often higher performance for specific workloads (e.g., high-volume reads/writes, simple
+                                lookups)</td>
+                        </tr>
+                        <tr>
+                            <td>Use Cases</td>
+                            <td>OLTP, data warehousing, applications requiring strong consistency</td>
+                            <td>Big Data, real-time web apps, IoT, social media, content management, caching</td>
+                        </tr>
+                        <tr>
+                            <td>Query Speed</td>
+                            <td>Can be slower for simple record retrieval due to joins and analysis of multiple tables.
+                            </td>
+                            <td>Often faster for single record retrieval or specific access patterns due to
+                                denormalization.</td>
+                        </tr>
+                        <tr>
+                            <td>Cloud Suitability</td>
+                            <td>Can be challenging to scale beyond a certain point in cloud settings without specialized
+                                solutions.</td>
+                            <td>Often designed for cloud environments, offering on-demand scalability.</td>
+                        </tr>
+                        <tr>
+                            <td>Big Data Handling</td>
+                            <td>Can struggle with massive, unstructured data volumes and real-time processing.</td>
+                            <td>Designed to handle large, diverse data types and distributed processing.</td>
+                        </tr>
+                        <tr>
+                            <td>Crash Recovery</td>
+                            <td>Robust recovery through logs (e.g., ARIES).</td>
+                            <td>Often relies on data replication across clusters for HA and disaster recovery.</td>
+                        </tr>
+                        <tr>
+                            <td>Authentication & Authorization</td>
+                            <td>Mature, built-in mechanisms.</td>
+                            <td>Varies; some have limited built-in security, relying on external methods.</td>
+                        </tr>
+                        <tr>
+                            <td>Auditing</td>
+                            <td>Often provide robust auditing capabilities.</td>
+                            <td>Varies; some generate logs, others have limited or no built-in auditing.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="nosql-use-cases" class="content-section">
+                <h2>8.5 Use Cases and Applications</h2>
+                <p>NoSQL databases excel in various modern application scenarios:</p>
+                <ul>
+                    <li><strong>Personalization & E-commerce:</strong> Storing user profiles, browsing history, product
+                        recommendations, and managing shopping carts with high read/write throughput. (e.g., NoSQL
+                        Database Cloud Service - NDCS for fast JSON data retrieval).</li>
+                    <li><strong>Real-time Fraud Detection:</strong> Processing high-volume transaction data with low
+                        latency to identify fraudulent activities at the point-of-sale.</li>
+                    <li><strong>Internet of Things (IoT):</strong> Handling massive streams of data from various
+                        devices, supporting time-series data, and enabling fast analytic reads.</li>
+                    <li><strong>Gaming:</strong> Managing player profiles, leaderboards, game state, and in-game
+                        attributes with quick access during gameplay.</li>
+                    <li><strong>Content Management & Archives:</strong> Storing and retrieving large amounts of
+                        unstructured or semi-structured content like articles, blogs, user-generated content.</li>
+                    <li><strong>Caching:</strong> Providing fast in-memory caching layers to reduce latency for
+                        frequently accessed data.</li>
+                    <li><strong>Social Media Applications:</strong> Managing user relationships (graph DBs), feeds, and
+                        high-volume posts and interactions.</li>
+                    <li><strong>Log Analysis:</strong> Storing and analyzing large volumes of log data from applications
+                        and systems.</li>
+                </ul>
+                <p>NoSQL Database Cloud Services (NDCS) are often designed for applications requiring flexible data
+                    models, predictable performance with low latency, and easy scalability for demanding workloads.</p>
+            </section>
+
+            <section class="completion-message-container">
+                <h2>Congratulations on Completing the DBMS Journey! 🎉</h2>
+                <p>You've navigated the intricate world of Database Management Systems, from foundational concepts to
+                    modern NoSQL architectures. This knowledge is a powerful asset for any tech career path you choose,
+                    be it software development, data science, database administration, or cloud engineering.</p>
+                <p>The world of data is vast and ever-evolving. Continue to explore, experiment, and build. Your
+                    understanding of DBMS will serve you well as you tackle new challenges and create innovative
+                    solutions. Best of luck in all your future endeavors in the exciting field of data!</p>
+                <a href="../../../MCQ/" class="cta-button">Give Mock Test</a>
+            </section>
+
+
+            <div class="nav-buttons">
+                <a href="topic-7.html" class="nav-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    Previous: Indexing & File Org.
+                </a>
+                <a href="../dbms.html" class="nav-button"> <!-- Assuming dbms.html is the main syllabus page -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="feather feather-list">
+                        <line x1="8" y1="6" x2="21" y2="6"></line>
+                        <line x1="8" y1="12" x2="21" y2="12"></line>
+                        <line x1="8" y1="18" x2="21" y2="18"></line>
+                        <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                        <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                        <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                    </svg>
+                    Back to Syllabus
+                </a>
+                <!-- No "Next" button as this is the last topic -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggleButton = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                htmlElement.classList.add('dark-mode');
+                themeToggleButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <span>Light Mode</span>`;
+            } else {
+                htmlElement.classList.remove('dark-mode');
+                themeToggleButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <span>Dark Mode</span>`;
+            }
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        applyTheme(savedTheme);
+
+        themeToggleButton.addEventListener('click', () => {
+            const newTheme = htmlElement.classList.contains('dark-mode') ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        // Table of Contents (TOC) Generator and Active Link Highlighting
+        document.addEventListener('DOMContentLoaded', () => {
+            const tocList = document.getElementById('tocList');
+            const mainHeader = document.querySelector('header.main-header');
+            const headerHeight = mainHeader ? mainHeader.offsetHeight : 80;
+            const sections = document.querySelectorAll('.main-content section[id]');
+            let tocLinks = [];
+
+            if (tocList && sections.length > 0) {
+                sections.forEach(section => {
+                    const titleElement = section.querySelector('h2');
+                    if (titleElement) {
+                        const titleText = titleElement.textContent;
+                        const sectionId = section.id;
+
+                        const listItem = document.createElement('li');
+                        const link = document.createElement('a');
+                        link.href = `#${sectionId}`;
+                        link.textContent = titleText;
+                        link.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const targetElement = document.getElementById(sectionId);
+                            if (targetElement) {
+                                const scrollToPosition = targetElement.offsetTop - headerHeight - 20; // 20px offset
+                                window.scrollTo({
+                                    top: scrollToPosition,
+                                    behavior: 'smooth'
+                                });
+                                updateActiveTocLink(sectionId);
+                            }
+                        });
+                        listItem.appendChild(link);
+                        tocList.appendChild(listItem);
+                        tocLinks.push(link);
+                    }
+                });
+
+                function updateActiveTocLink(activeId) {
+                    tocLinks.forEach(link => {
+                        if (link.getAttribute('href') === `#${activeId}`) {
+                            link.classList.add('active');
+                        } else {
+                            link.classList.remove('active');
+                        }
+                    });
+                }
+
+                const observerOptions = {
+                    root: null,
+                    rootMargin: `-${headerHeight + 20}px 0px -60% 0px`,
+                    threshold: 0
+                };
+
+                let lastIntersectingSectionId = null;
+
+                const observer = new IntersectionObserver(entries => {
+                    let currentIntersectingEntry = null;
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            if (!currentIntersectingEntry || entry.intersectionRatio > currentIntersectingEntry.intersectionRatio) {
+                                currentIntersectingEntry = entry;
+                            }
+                        }
+                    });
+
+                    if (currentIntersectingEntry) {
+                        lastIntersectingSectionId = currentIntersectingEntry.target.id;
+                        updateActiveTocLink(lastIntersectingSectionId);
+                    } else if (entries.length > 0 && !entries.some(e => e.isIntersecting) && lastIntersectingSectionId) {
+                        updateActiveTocLink(lastIntersectingSectionId);
+                    }
+
+                }, observerOptions);
+
+                sections.forEach(section => {
+                    observer.observe(section);
+                });
+                const currentHash = window.location.hash.substring(1);
+                if (currentHash) {
+                    updateActiveTocLink(currentHash);
+                } else if (sections.length > 0) {
+                    updateActiveTocLink(sections[0].id);
+                }
+
+
+            } else if (tocList) {
+                const sidebar = document.querySelector('.sidebar');
+                if (sidebar) sidebar.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+
+</html>
