@@ -14,7 +14,9 @@ fetch("dimp-topics.json")
         <div class="topic-title">${topic.title}</div>
         <div class="topic-desc">${topic.description}</div>
         <div class="resource-buttons">
-          ${topic.resources.map(resource => `<button>${resource}</button>`).join("")}
+          <a href="${topic.explore_link}" style="text-decoration: none;">
+            <button>Explore</button>
+          </a>
         </div>
       `;
 

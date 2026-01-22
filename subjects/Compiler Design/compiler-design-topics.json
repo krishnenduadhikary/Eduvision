@@ -1,47 +1,62 @@
 {
     "title": "Compiler Design",
-    "subtitle": "Understand the theory and implementation of compilers",
+    "subtitle": "Master the Art of Compiler Construction",
     "topics": [
       {
         "title": "Introduction to Compilers",
+        "icon": "🧭",
         "description": "What is a Compiler?,Compiler vs Interpreter,Phases of a Compiler,Compiler Structure",
+        "details": "Overview of compilers, roles they play, high-level architecture and comparison with interpreters. Learn phases from lexical analysis to code generation.",
         "resources": []
       },
       {
         "title": "Lexical Analysis",
+        "icon": "🔎",
         "description": "Role of Lexical Analyzer,Tokens, Lexemes, and Patterns,Regular Expressions,Finite Automata (NFA & DFA),Lexical Errors and Recovery",
+        "details": "Tokenization, designing scanners using regex and finite automata, handling lexical errors and recovery strategies.",
         "resources": []
       },
       {
         "title": "Syntax Analysis",
+        "icon": "🌲",
         "description": "Context-Free Grammars (CFG),Parse Trees and Derivations,Top-Down Parsing (LL(1)),Bottom-Up Parsing (LR(0), SLR, Canonical LR, LALR),FIRST and FOLLOW Sets,Parser Error Handling",
+        "details": "Parse tree construction, predictive parsing, LR-family parsers, computing FIRST/FOLLOW and common parser error recovery techniques.",
         "resources": []
       },
       {
         "title": "Semantic Analysis",
+        "icon": "🔗",
         "description": "Syntax-Directed Translation,Attributes (Synthesized & Inherited),Type Checking and Type Systems,Symbol Table Management,Static and Dynamic Scoping",
+        "details": "Attribute grammars, type systems and checking, symbol tables, scope resolution and semantic error reporting.",
         "resources": []
       },
       {
         "title": "Intermediate Code Generation",
+        "icon": "🧱",
         "description": "Three-Address Code (TAC),Quadruples and Triples,Syntax Trees and DAGs,Postfix Notation,Backpatching",
+        "details": "Designing intermediate representations like TAC, DAGs for expression optimization and backpatching for control flow.",
         "resources": []
       },
       {
         "title": "Code Optimization",
+        "icon": "⚡",
         "description": "Need for Optimization,Peephole Optimization,Control Flow Graph (CFG),DAGs for Basic Blocks,Loop Optimization (Unrolling, Invariant Code Motion),Data Flow Analysis",
+        "details": "Local and global optimizations, data-flow analyses, loop transformations and common code-improvement techniques.",
         "resources": []
       },
       {
         "title": "Target Code Generation",
+        "icon": "💾",
         "description": "Target Machine Architecture,Instruction Selection,Register Allocation and Assignment,Evaluation Order,Code Emission Techniques",
+        "details": "Mapping intermediate code to machine instructions, register allocation heuristics and strategies for efficient code emission.",
         "resources": []
       },
       {
         "title": "Compiler Tools and Automation",
+        "icon": "🤖",
         "description": "Overview of Lex and YACC,Lexical Analyzer Generation with LEX,Parser Generation with YACC,Integration of LEX & YACC",
+        "details": "Toolchains like Lex/Yacc (Flex/Bison), generating scanners and parsers and integrating phases into a build workflow.",
         "resources": []
       }
     ]
   }
-  

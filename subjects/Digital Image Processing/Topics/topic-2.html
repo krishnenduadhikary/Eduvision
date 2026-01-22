@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 2: Image Enhancement - Eduvision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --primary-color: #3b82f6;
+            --secondary-color: #8b5cf6;
+            --accent-color: #10b981;
+            --text-color: #334155;
+            --heading-color: #1e293b;
+            --border-color: #e2e8f0;
+            --gradient-start: var(--primary-color);
+            --gradient-end: var(--secondary-color);
+            --font-main: 'Poppins', sans-serif;
+            --font-logo: 'Nunito', sans-serif;
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --card-shadow-color: rgba(0, 0, 0, 0.05);
+            --link-color: var(--primary-color);
+            --link-hover-color: #1d4ed8;
+            --link-hover-bg: #eff6ff;
+            --syllabus-bar-bg: var(--card-bg);
+            --collapsible-content-bg: rgba(0, 0, 0, 0.02);
+            --code-bg: #f1f5f9;
+            --code-text: #0f172a;
+            --img-border-color: var(--border-color);
+            --definition-bg: rgba(59, 130, 246, 0.05);
+            --note-bg: #fffbeb;
+            --note-border: #f59e0b;
+        }
+
+        body.dark-mode {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #e2e8f0;
+            --heading-color: #f8fafc;
+            --border-color: #334155;
+            --shadow-color: rgba(0, 0, 0, 0.25);
+            --card-shadow-color: rgba(0, 0, 0, 0.2);
+            --link-color: #60a5fa;
+            --link-hover-bg: rgba(255, 255, 255, 0.1);
+            --collapsible-content-bg: rgba(255, 255, 255, 0.03);
+            --code-bg: #2a3a50;
+            --code-text: #e2e8f0;
+            --definition-bg: rgba(59, 130, 246, 0.15);
+            --note-bg: #2d2a1e;
+            --note-border: #d97706;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Logo and Header */
+        .eduvision-logo {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+        }
+
+        .eduvision-logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-family: var(--font-logo);
+            font-weight: 900;
+            font-size: 1.7rem;
+        }
+
+        .eduvision-logo .text-white {
+            color: var(--heading-color);
+        }
+
+        .eduvision-logo .text-yellow {
+            color: #fde047;
+        }
+
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--card-bg);
+            color: var(--primary-color);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            z-index: 1001;
+            transition: 0.3s;
+        }
+
+        #theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-top: 80px;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+        }
+
+        /* Syllabus Bar */
+        .syllabus-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px var(--card-shadow-color);
+        }
+
+        .back-link {
+            text-decoration: none;
+            color: var(--link-color);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        /* Sections */
+        .content-section {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 24px var(--card-shadow-color);
+        }
+
+        .content-section h2 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--heading-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+            font-size: 1.8rem;
+        }
+
+        .content-section h2 i {
+            color: var(--primary-color);
+        }
+
+        .content-section h3 {
+            color: var(--secondary-color);
+            margin-top: 1.5rem;
+        }
+
+        /* Collapsibles */
+        .collapsible {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            width: 100%;
+            padding: 18px;
+            border: none;
+            text-align: left;
+            font-weight: 600;
+            border-radius: 8px;
+            margin-top: 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.05rem;
+            transition: 0.3s;
+        }
+
+        .collapsible:hover {
+            filter: brightness(1.15);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
+            background: var(--collapsible-content-bg);
+            border-radius: 0 0 8px 8px;
+            border-left: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .collapsible-inner {
+            padding: 1.5rem;
+        }
+
+        /* Formulas and Highlights */
+        .formula {
+            display: block;
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 1.2rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
+            border-left: 5px solid var(--primary-color);
+            overflow-x: auto;
+            font-weight: 600;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .highlight {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .note {
+            background: var(--note-bg);
+            border-left: 4px solid var(--note-border);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 250px;
+            background: var(--code-bg);
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin: 1.5rem 0;
+            color: var(--text-color);
+            opacity: 0.8;
+            transition: 0.3s;
+        }
+
+        .image-placeholder:hover {
+            opacity: 1;
+            border-color: var(--primary-color);
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 18px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            border-radius: 12px;
+            font-weight: 700;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-prev {
+            background: linear-gradient(90deg, #64748b, #334155);
+        }
+
+        .btn-next {
+            background: linear-gradient(90deg, var(--accent-color), #059669);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: 3rem;
+            font-size: 0.95rem;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        ul li {
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-buttons {
+                flex-direction: column;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .content-section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="eduvision-logo">
+        <a href="#">
+            <span class="text-white">Edu</span>
+            <i class="fas fa-eye text-yellow"></i>
+            <span class="text-white">ision</span>
+        </a>
+    </div>
+
+    <button id="theme-toggle" title="Toggle Dark/Light Mode">
+        <i class="fas fa-moon" id="moon-icon"></i>
+        <i class="fas fa-sun" id="sun-icon" style="display:none"></i>
+    </button>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>Module 2: Image Enhancement</h1>
+            <p>Enhancing visual perception and information extraction through Spatial and Frequency Domain techniques.
+            </p>
+        </header>
+
+        <div class="syllabus-bar">
+            <a href="#" class="back-link"><i class="fas fa-arrow-left"></i> Full Syllabus</a>
+            <span class="badge">Core Module</span>
+        </div>
+
+        <!-- 2.1 Spatial Domain Processing -->
+        <section class="content-section">
+            <h2><i class="fas fa-th"></i> 2.1 Spatial Domain Processing</h2>
+            <p>Spatial domain processing refers to operations that manipulate image pixels directly. It is expressed by
+                the mathematical model:
+                <span class="formula">$g(x, y) = T[f(x, y)]$</span>
+                Where $f$ is the input, $g$ is the output, and $T$ is an operator defined over a neighborhood of $(x,
+                y)$.
+            </p>
+
+            <button class="collapsible">Point Operations (Intensity Transformations) <i
+                    class="fas fa-chevron-down"></i></button>
+            <div class="collapsible-content">
+                <div class="collapsible-inner">
+                    <h3>Fundamental Transformations</h3>
+                    <ul>
+                        <li><span class="highlight">Image Negation:</span> Swaps intensities. For an image with range
+                            $[0, L-1]$, the negative is $s = (L-1) - r$.
+                            <div class="note"><strong>Best used for:</strong> Finding hidden white details in massive
+                                dark regions (e.g., medical slides).</div>
+                        </li>
+                        <li><span class="highlight">Thresholding:</span> A segmentation technique. If $r > T$, $s=1$
+                            (White); else $s=0$ (Black).
+                        </li>
+                        <li><span class="highlight">Gray Level Slicing:</span> Highlights specific ranges.
+                            <ul>
+                                <li><em>Approach 1:</em> Display a high value for the range of interest and a low value
+                                    for all others (Binary).</li>
+                                <li><em>Approach 2:</em> Brighten the range of interest but preserve the background
+                                    intensities.</li>
+                            </ul>
+                        </li>
+                        <li><span class="highlight">Bit Plane Slicing:</span> Images are composed of bit planes (8
+                            planes for an 8-bit image). The higher-order bits (7, 6) contain the most significant visual
+                            data, while plane 0 contains noise or fine detail.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button class="collapsible">Intensity Level Curves (Log, Gamma, Exponential) <i
+                    class="fas fa-chevron-down"></i></button>
+            <div class="collapsible-content">
+                <div class="collapsible-inner">
+                    <h3>Non-Linear Transformations</h3>
+                    <p>When an image's dynamic range is too large to display, we use mapping functions:</p>
+                    <ul>
+                        <li><span class="highlight">Log Transformation:</span> $s = c \log(1 + r)$. It expands the
+                            values of dark pixels while compressing high-level intensities. Useful for Fourier
+                            spectrums.</li>
+                        <li><span class="highlight">Power-Law (Gamma) Transformation:</span> $s = c \cdot r^\gamma$.
+                            <ul>
+                                <li>If $\gamma < 1$: Map a narrow range of dark values into a wider range of
+                                        output.</li>
+                                <li>If $\gamma > 1$: Map a narrow range of bright values into a wider output range.</li>
+                                <li>Used for <strong>Gamma Correction</strong> to ensure images look correct on
+                                    monitors.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="image-placeholder">
+                        <i class="fas fa-wave-square fa-3x"></i>
+                        <span>Visualization: Comparison of Log vs Gamma curves</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2.2 Histogram Processing -->
+        <section class="content-section">
+            <h2><i class="fas fa-chart-bar"></i> 2.2 Histogram Processing</h2>
+            <p>The histogram provides a global description of the appearance of an image. A "good" image typically has a
+                histogram that covers the entire range of intensities and is roughly uniform.</p>
+
+            <button class="collapsible">Histogram Equalization & Matching <i class="fas fa-chevron-down"></i></button>
+            <div class="collapsible-content">
+                <div class="collapsible-inner">
+                    <h3>Histogram Equalization (HE)</h3>
+                    <p>HE is a technique for adjusting image intensities to enhance contrast. It uses the Cumulative
+                        Distribution Function (CDF) as a transformation function.</p>
+                    <span class="formula">$s_k = (L-1) \sum_{j=0}^{k} p_r(r_j)$</span>
+                    <p>The result is a flattened histogram where intensities are spread out, increasing visual clarity
+                        in low-contrast images.</p>
+
+                    <h3>Histogram Matching (Specification)</h3>
+                    <p>In Matching, we don't just want a uniform histogram; we want the output to match a <strong>target
+                            histogram</strong>.
+                        <br><em>Steps:</em> Equalize original $\to$ Equalize target $\to$ Inverse map intensities.
+                    </p>
+
+                    <div class="note"><strong>AHE (Adaptive HE):</strong> To prevent over-amplifying noise in
+                        homogeneous areas, AHE operates on local "tiles" rather than the whole image.</div>
+                </div>
+            </div>
+
+            <button class="collapsible">Stretching, Shrinking & Real-World Use <i
+                    class="fas fa-chevron-down"></i></button>
+            <div class="collapsible-content">
+                <div class="collapsible-inner">
+                    <p><span class="highlight">Histogram Stretching:</span> Linearly maps the existing range $[min,
+                        max]$ to $[0, L-1]$. It does not change the shape of the histogram, only its width.</p>
+                    <p><span class="highlight">Medical Imaging:</span> Used to distinguish between very similar
+                        gray-levels in X-rays or CT scans.</p>
+                    <p><span class="highlight">Satellite Imagery:</span> Used to compensate for atmospheric haze or poor
+                        lighting conditions.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2.3 Spatial Filtering -->
+        <section class="content-section">
+            <h2><i class="fas fa-filter"></i> 2.3 Spatial Filtering</h2>
+            <p>Filtering uses a "sliding window" (mask/kernel) to modify pixel values based on their neighbors.</p>
+
+            <button class="collapsible">Convolution, Correlation & Border Handling <i
+                    class="fas fa-chevron-down"></i></button>
+            <div class="collapsible-content">
+                <div class="collapsible-inner">
+                    <p><strong>Correlation:</strong> Sum of products of the mask and the image.
+                        <br><strong>Convolution:</strong> The same, but the kernel is mirrored vertically and
+                        horizontally before multiplication. In symmetric kernels (like Gaussian), they are identical.
+                    </p>
+                    <h3>Border Handling</h3>
+                    <ul>
+                        <li><span class="highlight">Zero Padding:</span> Surround the image with zeros (black border).
+                        </li>
+                        <li><span class="highlight">Replication:</span> Repeat the edge pixels.</li>
+                        <li><span class="highlight">Mirroring:</span> Reflect the image across the boundary.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button class="collapsible">Smoothing vs Sharpening Filters <i class="fas fa-chevron-down"></i></button>
+            <div class="collapsible-content">
+                <div class="collapsible-inner">
+                    <h3>Smoothing (Low-pass)</h3>
+                    <ul>
+                        <li><span class="highlight">Box Filter:</span> Simple average. Blurs significantly.</li>
+                        <li><span class="highlight">Weighted Average:</span> Pixels closer to center have more
+                            influence.</li>
+                        <li><span class="highlight">Median:</span> Non-linear filter. Replaces pixel with the median
+                            value of neighbors. <strong>Effect:</strong> Removes salt-and-pepper noise perfectly without
+                            blurring edges.</li>
+                    </ul>
+                    <h3>Sharpening (High-pass)</h3>
+                    <ul>
+                        <li><span class="highlight">Laplacian:</span> A second-order derivative filter. It detects edges
+                            in all directions.
+                            <span class="formula">$g(x,y) = f(x,y) - \nabla^2 f$</span>
+                        </li>
+                        <li><span class="highlight">Unsharp Masking:</span> Subtract a blurred version of the image from
+                            the original to boost high frequencies.</li>
+                        <li><span class="highlight">Sobel:</span> First-order derivative. Specifically good for
+                            horizontal and vertical edge gradients.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2.4 Frequency Domain -->
+        <section class="content-section">
+            <h2><i class="fas fa-wave-square"></i> 2.4 Frequency Domain Processing</h2>
+            <p>Frequency domain analysis focuses on the <strong>rate</strong> at which intensities change. Fast changes
+                = High Frequency (Edges); Slow changes = Low Frequency (Background).</p>
+
+            <button class="collapsible">The Fourier Transform Pipeline <i class="fas fa-chevron-down"></i></button>
+            <div class="collapsible-content">
+                <div class="collapsible-inner">
+                    <p>To process in the frequency domain, follow these steps:</p>
+                    <ol>
+                        <li>Compute the <strong>DFT</strong> (using FFT) of the image.</li>
+                        <li>Multiply the result by a <strong>Filter Function $H(u,v)$</strong>.</li>
+                        <li>Compute the <strong>Inverse DFT</strong> to get back the image.</li>
+                    </ol>
+                    <div class="formula">$G(u, v) = H(u, v) \cdot F(u, v)$</div>
+                    <div class="note"><strong>Property:</strong> Convolution in the spatial domain is equivalent to
+                        multiplication in the frequency domain.</div>
+                </div>
+            </div>
+
+            <button class="collapsible">Frequency Filters (Ideal, Butterworth, Gaussian) <i
+                    class="fas fa-chevron-down"></i></button>
+            <div class="collapsible-content">
+                <div class="collapsible-inner">
+                    <ul>
+                        <li><span class="highlight">Ideal Low-pass:</span> Perfect cutoff. Results in "Ringing"
+                            artifacts due to the sinc function effect in the spatial domain.</li>
+                        <li><span class="highlight">Butterworth:</span> Has a parameter $n$ (order). It allows for a
+                            smoother transition than Ideal, reducing ringing.</li>
+                        <li><span class="highlight">Gaussian:</span> Perfectly smooth. <strong>Zero Ringing</strong>.
+                            This is why Gaussian blur is standard in photography/UI design.</li>
+                        <li><span class="highlight">Notch Filters:</span> Highly specific filters that remove "spikes"
+                            of periodic noise (like line interference on a screen).</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2.5 Image Restoration -->
+        <section class="content-section">
+            <h2><i class="fas fa-tools"></i> 2.5 Image Restoration</h2>
+            <p><strong>Enhancement vs. Restoration:</strong> Enhancement is subjective (making it look "pretty").
+                Restoration is objective (removing known degradations like blur or noise).</p>
+
+            <button class="collapsible">Noise Models & Reduction Techniques <i class="fas fa-chevron-down"></i></button>
+            <div class="collapsible-content">
+                <div class="collapsible-inner">
+                    <h3>Noise Types</h3>
+                    <ul>
+                        <li><span class="highlight">Gaussian Noise:</span> Mathematical bell curve. Arises from sensor
+                            heat.</li>
+                        <li><span class="highlight">Impulse (Salt-and-Pepper):</span> Black and white dots. Result of
+                            transmission errors.</li>
+                        <li><span class="highlight">Poisson Noise:</span> Quantum nature of light; mostly in
+                            low-light/medical imaging.</li>
+                    </ul>
+                    <h3>Reduction</h3>
+                    <p>We use Mean filters for Gaussian and Order-statistic filters (Median, Max, Min) for impulse
+                        noise. <span class="highlight">Adaptive filters</span> change their behavior based on local
+                        variance.</p>
+                </div>
+            </div>
+
+            <button class="collapsible">Deblurring & The Wiener Filter <i class="fas fa-chevron-down"></i></button>
+            <div class="collapsible-content">
+                <div class="collapsible-inner">
+                    <p>If we know the degradation function $H$ (blur), we can try <span class="highlight">Inverse
+                            Filtering</span>: $F' = G/H$. However, if $H$ is small, noise is amplified infinitely.</p>
+                    <h3>The Wiener Filter</h3>
+                    <p>The Wiener filter is the optimal solution. It incorporates the signal-to-noise ratio (SNR) to
+                        avoid amplifying noise while deblurring.</p>
+                    <span class="formula">Minimize $[f(x,y) - f'(x,y)]^2$</span>
+                    <p>It works best for uniform blurs like motion blur or out-of-focus blur.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="nav-buttons">
+            <a href="#" class="nav-btn btn-prev"><i class="fas fa-arrow-left"></i> Unit I: Fundamentals</a>
+            <a href="#" class="nav-btn btn-next">Unit III: Segmentation <i class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <footer>
+            &copy; 2026 Eduvision Learning Systems. All mathematical notations follow standard DSP protocols.
+        </footer>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeBtn = document.getElementById('theme-toggle');
+        const sunIcon = document.getElementById('sun-icon');
+        const moonIcon = document.getElementById('moon-icon');
+        const body = document.body;
+
+        themeBtn.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            const isDark = body.classList.contains('dark-mode');
+            sunIcon.style.display = isDark ? 'inline-block' : 'none';
+            moonIcon.style.display = isDark ? 'none' : 'inline-block';
+            localStorage.setItem('eduvision-theme', isDark ? 'dark' : 'light');
+        });
+
+        // Load Persisted Theme
+        if (localStorage.getItem('eduvision-theme') === 'dark') {
+            body.classList.add('dark-mode');
+            sunIcon.style.display = 'inline-block';
+            moonIcon.style.display = 'none';
+        }
+
+        // Accordion / Collapsible Logic
+        const colls = document.querySelectorAll('.collapsible');
+        colls.forEach(btn => {
+            btn.addEventListener('click', function () {
+                this.classList.toggle('active');
+                const content = this.nextElementSibling;
+                const icon = this.querySelector('i');
+
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    icon.className = 'fas fa-chevron-down';
+                } else {
+                    // Smooth expand to scrollHeight
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    icon.className = 'fas fa-chevron-up';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

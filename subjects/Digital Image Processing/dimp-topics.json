@@ -1,47 +1,76 @@
 {
-    "title": "Digital Image Processing",
-    "subtitle": "Learn the techniques to process and analyze digital images",
+    "title": "Digital Image Processing – Complete Syllabus",
+    "subtitle": "Comprehensive module-wise syllabus covering fundamentals, methods, applications and tools",
     "topics": [
       {
-        "title": "Introduction to Digital Image Processing",
-        "description": "Fundamentals, applications, and key concepts of image processing.",
-        "resources": ["Notes", "Video"]
+        "title": "Module 1: Introduction to Image Processing",
+        "description": "1.1 Fundamentals of Images\n- Definition of digital image and image processing\n- History and applications of image processing\n- Image formation and acquisition\n- Types of images: grayscale, color, binary, multispectral, hyperspectral\n- Image coordinates and pixel representation\n- Digital image properties: resolution, dynamic range, aspect ratio\n\n1.2 Image Representation\n- Continuous vs. discrete images\n- Sampling and quantization\n- Pixel depth (bit depth)\n- Image file formats (JPEG, PNG, BMP, TIFF, GIF, etc.)\n- Compression techniques (lossy vs. lossless)\n- Image storage and memory requirements\n\n1.3 Color Models and Color Space\n- RGB (Red-Green-Blue) color model\n- CMY/CMYK color model\n- HSV (Hue-Saturation-Value) color space\n- HSI (Hue-Saturation-Intensity) color space\n- YCbCr color space (for compression)\n- Color space conversions\n- Indexed color vs. true color\n\n1.4 Relationship Between Pixels\n- Adjacency (4-connectivity, 8-connectivity, m-connectivity)\n- Distance metrics (Euclidean, Manhattan, Chebyshev)\n- Connectivity and labeling\n- Region and boundary relationships",
+        "explore_link": "Topics/topic-1.html"
       },
       {
-        "title": "Digital Image Fundamentals",
-        "description": "Image representation, resolution, pixel, gray level, and color models.",
-        "resources": ["Examples", "Diagram"]
+        "title": "Module 2: Image Enhancement",
+        "description": "2.1 Spatial Domain Processing (Direct Pixel Manipulation)\n- Point operations (intensity transformations)\n- Image negation\n- Thresholding (binary thresholding)\n- Gray level slicing\n- Bit plane slicing\n- Intensity level transformations: linear, logarithmic, power-law (gamma), exponential\n\n2.2 Histogram Processing\n- Histogram definition and properties\n- Histogram equalization\n- Adaptive histogram equalization\n- Histogram matching/specification\n- Histogram stretching and shrinking\n- Application to medical and satellite imagery\n\n2.3 Spatial Filtering (Convolution and Correlation)\n- Convolution and correlation fundamentals\n- Kernel/mask/filter concept\n- Border handling (padding, replication, wrapping)\n- Smoothing filters: averaging/box filter, weighted averaging, median, bilateral, Gaussian\n- Sharpening filters: Laplacian, unsharp masking, high-pass, high-boost, Sobel\n- Combination filters, band-pass and notch filtering\n\n2.4 Frequency Domain Processing\n- Fourier transform fundamentals (1D, 2D, DFT, FFT)\n- Properties of Fourier transform\n- Frequency domain filtering: low-pass, high-pass, band-pass, notch (Butterworth, Gaussian, ideal)\n- Other transforms: DCT, Wavelet, Radon\n\n2.5 Image Restoration\n- Noise models and types (Gaussian, salt-and-pepper, Poisson, uniform, periodic)\n- Noise reduction techniques: mean, median, morphological opening/closing, Wiener, Kalman\n- Deblurring: inverse filtering, Wiener for blur, constrained least-squares, motion blur removal",
+        "explore_link": "Topics/topic-2.html"
       },
       {
-        "title": "Image Enhancement in Spatial Domain",
-        "description": "Contrast stretching, histogram equalization, and spatial filtering.",
-        "resources": ["Code", "Practice"]
+        "title": "Module 3: Image Segmentation",
+        "description": "3.1 Thresholding\n- Global, local/adaptive, Otsu's method, multi-level, hysteresis thresholding\n\n3.2 Edge Detection\n- Operators: Sobel, Prewitt, Roberts, Laplacian, LoG, Canny\n- Edge linking and boundary tracing, connected component analysis\n- Hough transform for line and circle detection\n- Active contours (snakes)\n\n3.3 Corner Detection\n- Harris corner detector, FAST, SIFT keypoint detection, ORB\n\n3.4 Region-Based Segmentation\n- Region growing, seed selection, similarity criteria\n- Region splitting and merging, quadtree decomposition\n- Clustering: K-means, Fuzzy C-means, Watershed\n- Graph-based methods: min-cut, normalized cut, spectral clustering, MRF\n\n3.5 Morphological Segmentation\n- Binary and gray-scale morphology: erosion, dilation, opening, closing, morphological gradient, top-hat, reconstruction\n\n3.6 Active Contours and Deformable Models\n- Parametric snakes, geodesic active contours, level set methods",
+        "explore_link": "Topics/topic-3.html"
       },
       {
-        "title": "Image Enhancement in Frequency Domain",
-        "description": "Fourier Transform, filtering techniques in frequency domain.",
-        "resources": ["Notes", "Diagram"]
+        "title": "Module 4: Feature Extraction and Representation",
+        "description": "4.1 Texture Analysis\n- Texture features: statistical (mean, variance, skewness, kurtosis), autocorrelation, GLCM, LBP, GLRLM\n- Texture descriptors: Tamura, Gabor responses, wavelet features, fractal dimension\n\n4.2 Shape Analysis\n- Boundary-based descriptors (chain code, Fourier descriptors), region-based (moments, Hu moments)\n- Skeleton/medial axis, shape context, compactness, circularity\n- Shape matching and Procrustes analysis\n\n4.3 Interest Point Detection\n- SIFT, SURF, BRIEF, ORB and descriptor matching\n\n4.4 Object Recognition and Classification\n- Template matching, feature-based recognition, cascaded classifiers, Bag-of-Words, CNNs",
+        "explore_link": "Topics/topic-4.html"
       },
       {
-        "title": "Image Restoration",
-        "description": "Noise models, degradation models, and restoration techniques.",
-        "resources": ["Video", "Examples"]
+        "title": "Module 5: Image Restoration and Reconstruction",
+        "description": "5.1 Image Restoration Models\n- Degradation and noise model assumptions, restoration vs. enhancement, inverse problems\n\n5.2 Restoration Techniques\n- Spatial and frequency domain methods, iterative restoration (Richardson-Lucy), regularization\n\n5.3 Super-Resolution\n- Multi-frame and single-image super-resolution, interpolation (bilinear, bicubic), deep learning-based methods\n\n5.4 Image Inpainting\n- Content-aware, exemplar-based, PDE-based, deep learning approaches\n\n5.5 Image Reconstruction\n- Tomographic reconstruction (CT, MRI), Radon transform and inverse, filtered back-projection, iterative reconstruction",
+        "explore_link": "Topics/topic-5.html"
       },
       {
-        "title": "Color Image Processing",
-        "description": "Color models, color transformations, and enhancements.",
-        "resources": ["Notes", "Diagram"]
+        "title": "Module 6: Image Compression",
+        "description": "6.1 Compression Fundamentals\n- Lossless vs. lossy, entropy concepts, compression ratio, PSNR, SSIM, rate-distortion theory\n\n6.2 Lossless Compression\n- RLE, Huffman, arithmetic coding, Lempel-Ziv families, PNG and TIFF specifics\n\n6.3 Lossy Compression\n- Transform-based compression (DCT/JPEG), wavelet-based (JPEG2000), quantization, JPEG encoding, Huffman in JPEG\n\n6.4 Video Compression\n- Inter-frame/intra-frame coding, motion compensation, MPEG, H.264/AVC\n\n6.5 Image Quality Assessment\n- Objective metrics (PSNR, SSIM, RMSE), subjective assessment, perceptual metrics",
+        "explore_link": "Topics/topic-6.html"
       },
       {
-        "title": "Image Segmentation",
-        "description": "Edge detection, thresholding, region-based segmentation.",
-        "resources": ["Practice", "Code"]
+        "title": "Module 7: Image Matching and Registration",
+        "description": "7.1 Image Registration\n- Feature-based and intensity-based registration, transformation models (rigid, affine, projective, deformable)\n- Algorithms: least-squares, mutual information, optical flow, phase correlation, ICP\n\n7.2 Image Matching\n- Feature and descriptor matching (SIFT, SURF, ORB), distance metrics, RANSAC, feature tracking\n\n7.3 Geometric Transformations\n- Affine and perspective transformations, warping, morphing, perspective correction",
+        "explore_link": "Topics/topic-7.html"
       },
       {
-        "title": "Morphological Image Processing",
-        "description": "Erosion, dilation, opening, and closing operations.",
-        "resources": ["Code", "Examples"]
+        "title": "Module 8: Image Analysis and Understanding",
+        "description": "8.1 Object Detection\n- Cascade classifiers, sliding window, multi-scale, region proposals (R-CNN family), YOLO, SSD\n\n8.2 Object Tracking\n- Centroid tracking, Kalman filtering, mean-shift, Camshift, deep learning trackers\n\n8.3 Scene Understanding\n- Scene classification, context modeling, semantic understanding, 3D reconstruction\n\n8.4 Action and Event Recognition\n- Temporal modeling, motion detection, action recognition, event detection in videos",
+        "explore_link": "Topics/topic-8.html"
+      },
+      {
+        "title": "Module 9: 3D Image Processing",
+        "description": "9.1 3D Imaging Fundamentals\n- 3D image formation, volumetric and surface representations, point clouds, depth/disparity maps\n\n9.2 3D Reconstruction\n- Stereo vision, epipolar geometry, stereo matching, structure from motion, photogrammetry, shape from shading/texture\n\n9.3 3D Segmentation\n- Volumetric and point-cloud segmentation, surface segmentation\n\n9.4 3D Visualization\n- Volume rendering, surface rendering, isosurfaces, VR visualization",
+        "explore_link": "Topics/topic-9.html"
+      },
+      {
+        "title": "Module 10: Specialized Image Processing Applications",
+        "description": "10.1 Medical Image Processing\n- Modalities (X-ray, CT, MRI, ultrasound, PET), organ/tissue segmentation, registration, image-guided surgery\n\n10.2 Remote Sensing Image Processing\n- Satellite imagery, multispectral/hyperspectral analysis, land cover classification, change detection\n\n10.3 Video Processing\n- Motion estimation, optical flow, video segmentation, stabilization, frame interpolation\n\n10.4 Face Recognition\n- Detection, alignment, feature extraction, verification/identification, emotion recognition\n\n10.5 Document Image Processing\n- Binarization, skew correction, layout analysis, OCR, handwriting recognition\n\n10.6 Biometric Image Processing\n- Fingerprint, iris, palmprint, gait recognition",
+        "explore_link": "Topics/topic-10.html"
+      },
+      {
+        "title": "Module 11: Deep Learning for Image Processing",
+        "description": "11.1 Convolutional Neural Networks (CNNs)\n- Architecture, convolution/pooling/FC layers, activations, backpropagation, popular architectures (LeNet, AlexNet, VGG, ResNet, DenseNet, MobileNet)\n\n11.2 Object Detection with Deep Learning\n- R-CNN family, YOLO, SSD, region proposals, bounding box regression\n\n11.3 Semantic and Instance Segmentation\n- FCN, U-Net, DeepLab, SegNet, Mask R-CNN\n\n11.4 Generative Models\n- Autoencoders, GANs, image-to-image translation, super-resolution GANs, style transfer\n\n11.5 Transfer Learning\n- Pre-trained models, fine-tuning, domain adaptation, data augmentation",
+        "explore_link": "Topics/topic-11.html"
+      },
+      {
+        "title": "Module 12: Image Processing Tools and Software",
+        "description": "12.1 Programming Libraries\n- Python libraries: OpenCV, Pillow, NumPy, SciPy, scikit-image, Matplotlib, TensorFlow, PyTorch\n- MATLAB: Image Processing and Computer Vision Toolboxes\n- Other tools: ImageMagick, GIMP, ITK\n\n12.2 Software Platforms\n- Deep learning frameworks, scientific environments, commercial software (Photoshop), medical imaging software (DICOM viewers, Slicer)",
+        "explore_link": "Topics/topic-12.html"
+      },
+      {
+        "title": "Module 13: Performance Evaluation and Benchmarking",
+        "description": "13.1 Evaluation Metrics\n- Accuracy, precision, recall, F1-score, confusion matrix, ROC/AUC, mAP, IoU\n\n13.2 Benchmarking\n- Standard datasets (ImageNet, COCO, Pascal VOC, CIFAR), medical datasets, computational complexity analysis\n\n13.3 Visualization and Interpretation\n- Feature visualization, activation maps, gradient-based methods, explainability",
+        "explore_link": "Topics/topic-13.html"
+      },
+      {
+        "title": "Module 14: Emerging Topics and Future Directions",
+        "description": "14.1 Advanced Topics\n- Computational photography, image forensics, privacy-preserving processing, adversarial robustness, federated learning\n\n14.2 Multimodal Image Processing\n- Image+text, cross-modal retrieval, vision-language models\n\n14.3 Real-Time Processing\n- GPU acceleration, edge computing, mobile image processing, lightweight models\n\n14.4 Quantum Image Processing\n- Quantum image representation, quantum transforms, potential quantum advantages",
+        "explore_link": "Topics/topic-14.html"
       }
     ]
   }
-  
